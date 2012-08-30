@@ -10,8 +10,8 @@
 
 package com.p000ison.dev.simpleclans2.clan;
 
-import com.google.common.collect.Maps;
-import com.p000ison.dev.simpleclans2.clan.Clan;
+import com.p000ison.dev.simpleclans2.SimpleClans;
+import com.p000ison.dev.simpleclans2.database.tables.ClanTable;
 
 import java.util.*;
 
@@ -19,8 +19,14 @@ import java.util.*;
  * The ClanManager handels everything with clans.
  */
 public class ClanManager {
+    private SimpleClans plugin;
     private Map<Long, Clan> clans = new HashMap<Long, Clan>();
 
+
+    public ClanManager(SimpleClans plugin)
+    {
+        this.plugin = plugin;
+    }
 
     /**
      * Returns a unmodifiable Set of all clans.
@@ -71,6 +77,56 @@ public class ClanManager {
     public Clan getClan(long id)
     {
         return clans.get(id);
+    }
+
+    public void createClan(Clan clan)
+    {
+        clans.put(clan.getId(), clan);
+
+        ClanTable clanTable = new ClanTable();
+
+        clanTable.tag = clan.getTag();
+        clanTable.name = clan.getName();
+        clanTable.last_action = System.currentTimeMillis();
+        clanTable.founded = System.currentTimeMillis();
+        clanTable.friendly_fire = clan.isFriendlyFireOn();
+        clanTable.verified = clan.isVerified();
+
+        plugin.getDatabaseManager().getDatabase().save(clanTable);
+
+        clan.setId(getClanId(clan.getTag()));
+    }
+
+    public void createClan(String tag, String name)
+    {
+        Clan clan = new Clan(plugin, tag, name);
+        createClan(clan);
+    }
+
+    public Set<Clan> convertIdSetToClanSet(Set<Long> ids)
+    {
+        HashSet<Clan> allies = new HashSet<Clan>();
+
+        for (long clanId : ids) {
+            Clan ally = plugin.getClanManager().getClan(clanId);
+            allies.add(ally);
+        }
+
+        return allies;
+    }
+
+    public long getClanId(String tag)
+    {
+        ClanTable clanTable = plugin.getDatabaseManager().getDatabase().select(ClanTable.class).where().equal("tag", tag).execute().findOne();
+
+        return clanTable.id;
+    }
+
+    public void importClans(Set<Clan> clans)
+    {
+        for (Clan clan : clans) {
+            this.clans.put(clan.getId(), clan);
+        }
     }
 
     /**

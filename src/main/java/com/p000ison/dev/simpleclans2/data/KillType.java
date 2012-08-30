@@ -8,12 +8,27 @@
  * California, 94105, USA.
  */
 
-package com.p000ison.dev.simpleclans2.clanplayer;
-
-import com.p000ison.dev.simpleclans2.Flags;
+package com.p000ison.dev.simpleclans2.data;
 
 /**
- * Represents a Flag of a player
+ * Represents a KillType
  */
-public class PlayerFlags extends Flags {
+public enum KillType {
+
+    CIVILIAN((byte) 0),
+    NEUTRAL((byte) 1),
+    RIVAL((byte) 2);
+
+    private byte type;
+
+
+    private KillType(byte type)
+    {
+        this.type = type;
+    }
+
+    public byte getType()
+    {
+        return type;
+    }
 }

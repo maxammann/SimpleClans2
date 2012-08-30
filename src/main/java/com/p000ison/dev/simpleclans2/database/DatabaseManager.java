@@ -15,6 +15,7 @@ import com.alta189.simplesave.DatabaseFactory;
 import com.alta189.simplesave.exceptions.ConnectionException;
 import com.alta189.simplesave.exceptions.TableRegistrationException;
 import com.alta189.simplesave.mysql.MySQLConfiguration;
+import com.p000ison.dev.simpleclans2.data.KillEntry;
 import com.p000ison.dev.simpleclans2.database.tables.ClanPlayerTable;
 import com.p000ison.dev.simpleclans2.database.tables.ClanTable;
 
@@ -38,6 +39,7 @@ public class DatabaseManager {
 
         db.registerTable(ClanTable.class);
         db.registerTable(ClanPlayerTable.class);
+        db.registerTable(KillEntry.class);
 
         db.connect();
     }

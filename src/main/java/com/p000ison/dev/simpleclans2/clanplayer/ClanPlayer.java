@@ -13,6 +13,9 @@ package com.p000ison.dev.simpleclans2.clanplayer;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Represents a ClanPlayer
  */
@@ -20,11 +23,19 @@ public class ClanPlayer {
 
     private SimpleClans plugin;
 
-    private long clan;
+    private long id;
+    private String name;
+    private Clan clan;
+    private boolean banned, leader, trusted, friendlyFire;
+    private long lastSeen, joinDate;
+    private int neutralKills, rivalKills, civilianKills, deaths;
+    private PlayerFlags flags;
+    private Set<String> pastClans = new HashSet<String>();
 
-    public ClanPlayer(SimpleClans plugin)
+    public ClanPlayer(SimpleClans plugin, String name)
     {
         this.plugin = plugin;
+        this.name = name;
     }
 
     /**
@@ -34,17 +45,7 @@ public class ClanPlayer {
      */
     public long getClanId()
     {
-        return clan;
-    }
-
-    /**
-     * Sets the clan id of this player.
-     *
-     * @param id The id.
-     */
-    public void setClanId(long id)
-    {
-        this.clan = id;
+        return clan.getId();
     }
 
     /**
@@ -54,7 +55,7 @@ public class ClanPlayer {
      */
     public Clan getClan()
     {
-        return plugin.getClanManager().getClan(clan);
+        return clan;
     }
 
     /**
@@ -64,6 +65,121 @@ public class ClanPlayer {
      */
     public void setClan(Clan clan)
     {
-        this.clan = clan.getId();
+        this.clan = clan;
+    }
+
+    public String getName()
+    {
+        return name;
+    }
+
+    public boolean isBanned()
+    {
+        return banned;
+    }
+
+    public void setBanned(boolean banned)
+    {
+        this.banned = banned;
+    }
+
+    public boolean isLeader()
+    {
+        return leader;
+    }
+
+    public void setLeader(boolean leader)
+    {
+        this.leader = leader;
+    }
+
+    public boolean isTrusted()
+    {
+        return trusted;
+    }
+
+    public void setTrusted(boolean trusted)
+    {
+        this.trusted = trusted;
+    }
+
+    public boolean isFriendlyFireOn()
+    {
+        return friendlyFire;
+    }
+
+    public void setFriendlyFire(boolean friendlyFire)
+    {
+        this.friendlyFire = friendlyFire;
+    }
+
+    public long getLastSeenDate()
+    {
+        return lastSeen;
+    }
+
+    public void setLastSeenDate(long lastSeen)
+    {
+        this.lastSeen = lastSeen;
+    }
+
+    public long getJoinDate()
+    {
+        return joinDate;
+    }
+
+    public void setJoinDate(long joinDate)
+    {
+        this.joinDate = joinDate;
+    }
+
+    public int getNeutralKills()
+    {
+        return neutralKills;
+    }
+
+    public void addNeutralKills(int neutralKills)
+    {
+        this.neutralKills++;
+    }
+
+    public int getRivalKills()
+    {
+        return rivalKills;
+    }
+
+    public void addRivalKills()
+    {
+        this.rivalKills++;
+    }
+
+    public int getCivilianKills()
+    {
+        return civilianKills;
+    }
+
+    public void addCivilianKills()
+    {
+        this.civilianKills++;
+    }
+
+    public int getDeaths()
+    {
+        return deaths;
+    }
+
+    public void addDeath()
+    {
+        this.deaths++;
+    }
+
+    public long getId()
+    {
+        return id;
+    }
+
+    public void setId(long id)
+    {
+        this.id = id;
     }
 }

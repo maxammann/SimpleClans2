@@ -14,12 +14,10 @@ import com.alta189.simplesave.Field;
 import com.alta189.simplesave.Id;
 import com.alta189.simplesave.Table;
 
-import java.sql.Timestamp;
-
 @Table("sc2_clans")
 public class ClanTable {
     @Id
-    public int id;
+    public long id;
 
     @Field
     public String tag;
@@ -37,7 +35,7 @@ public class ClanTable {
     public long last_action;
 
     @Field
-    public String allies;
+    public String flags;
 
     @Field
     public boolean friendly_fire;

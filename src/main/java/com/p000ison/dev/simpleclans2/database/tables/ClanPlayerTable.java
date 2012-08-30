@@ -14,8 +14,6 @@ import com.alta189.simplesave.Field;
 import com.alta189.simplesave.Id;
 import com.alta189.simplesave.Table;
 
-import java.sql.Timestamp;
-
 @Table("sc2_players")
 public class ClanPlayerTable {
 
@@ -38,7 +36,7 @@ public class ClanPlayerTable {
     public long join_date;
 
     @Field
-    public long clan;
+    public long clan = -1L;
 
     @Field
     public boolean friendly_fire;

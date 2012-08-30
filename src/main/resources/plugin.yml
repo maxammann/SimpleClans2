@@ -1,3 +1,5 @@
 name: SimpleClans2
 main: com.p000ison.dev.simpleclans2.SimpleClans
 version: maven-version-number
+commands:
+  sc:

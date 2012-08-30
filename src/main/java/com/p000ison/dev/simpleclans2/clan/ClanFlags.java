@@ -96,4 +96,43 @@ public class ClanFlags extends Flags {
             allies.remove(id);
         }
     }
+
+    public Set<Long> getAllies()
+    {
+        return super.getSet("allies");
+    }
+
+    /**
+     * Adds a rival clan from this clan.
+     *
+     * @param id The id of the clan to add.
+     */
+    public void addRivalClan(long id)
+    {
+        super.getSet("rivals").add(id);
+    }
+
+    /**
+     * Removes a rival clan from this clan.
+     *
+     * @param id The id of the clan to remove.
+     */
+    public void removeRivalClan(long id)
+    {
+        Set rivals = super.getSet("rivals");
+
+        if (rivals.contains(id)) {
+            rivals.remove(id);
+        }
+    }
+
+    public Set<Long> getRivals()
+    {
+        return super.getSet("rivals");
+    }
+
+    public Set<Long> getWarringClans()
+    {
+        return super.getSet("warring");
+    }
 }

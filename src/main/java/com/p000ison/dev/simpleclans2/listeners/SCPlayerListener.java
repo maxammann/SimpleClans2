@@ -8,12 +8,12 @@
  * California, 94105, USA.
  */
 
-package com.p000ison.dev.simpleclans2.clanplayer;
+package com.p000ison.dev.simpleclans2.listeners;
 
-import com.p000ison.dev.simpleclans2.Flags;
+import org.bukkit.event.Listener;
 
 /**
- * Represents a Flag of a player
+ * Represents a SCPlayerListener
  */
-public class PlayerFlags extends Flags {
+public class SCPlayerListener implements Listener {
 }
