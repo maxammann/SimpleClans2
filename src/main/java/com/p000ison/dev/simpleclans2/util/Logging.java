@@ -24,6 +24,11 @@ public class Logging {
         instance = logger;
     }
 
+    public static void close()
+    {
+        instance = null;
+    }
+
     public static void debug(String msg, Object... args)
     {
         debug(Level.INFO, String.format(msg, args), null);

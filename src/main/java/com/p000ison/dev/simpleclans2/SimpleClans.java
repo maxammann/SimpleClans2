@@ -19,6 +19,7 @@ import com.p000ison.dev.simpleclans2.data.DataManager;
 import com.p000ison.dev.simpleclans2.data.KillEntry;
 import com.p000ison.dev.simpleclans2.data.KillType;
 import com.p000ison.dev.simpleclans2.database.DatabaseManager;
+import com.p000ison.dev.simpleclans2.settings.SettingsManager;
 import com.p000ison.dev.simpleclans2.util.Logging;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -30,17 +31,36 @@ public class SimpleClans extends JavaPlugin {
     private ClanManager clanManager;
     private DatabaseManager databaseManager;
     private ClanPlayerManager clanPlayerManager;
+    private SettingsManager settingsManager;
 
     @Override
     public void onEnable()
     {
         new Logging(getLogger());
+        new Language();
 
         loadManagers();
     }
 
+
+    @Override
+    public void onDisable()
+    {
+        Language.clear();
+
+        try {
+            databaseManager.getDatabase().close();
+        } catch (ConnectionException e) {
+            Logging.debug(e);
+        }
+
+        Logging.close();
+    }
+
     private void loadManagers()
     {
+        settingsManager = new SettingsManager(this);
+
         try {
             databaseManager = new DatabaseManager();
         } catch (TableRegistrationException e) {
@@ -115,5 +135,10 @@ public class SimpleClans extends JavaPlugin {
     public ClanPlayerManager getClanPlayerManager()
     {
         return clanPlayerManager;
+    }
+
+    public SettingsManager getSettingsManager()
+    {
+        return settingsManager;
     }
 }
