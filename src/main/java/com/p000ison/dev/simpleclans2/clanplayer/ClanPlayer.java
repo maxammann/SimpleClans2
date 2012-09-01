@@ -30,10 +30,11 @@ public class ClanPlayer {
     private long lastSeen, joinDate;
     private int neutralKills, rivalKills, civilianKills, deaths;
     private PlayerFlags flags;
-    private Set<String> pastClans = new HashSet<String>();
+    private Set<Long> pastClans = new HashSet<Long>();
 
     public ClanPlayer(SimpleClans plugin, String name)
     {
+        flags = new PlayerFlags();
         this.plugin = plugin;
         this.name = name;
     }
@@ -181,5 +182,20 @@ public class ClanPlayer {
     public void setId(long id)
     {
         this.id = id;
+    }
+
+    public PlayerFlags getFlags()
+    {
+        return flags;
+    }
+
+    public void addPastClan(Clan clan)
+    {
+        pastClans.add(clan.getId());
+    }
+
+    public Set<Long> getPastClans()
+    {
+        return pastClans;
     }
 }

@@ -16,4 +16,5 @@ import org.bukkit.event.Listener;
  * Represents a SCPlayerListener
  */
 public class SCPlayerListener implements Listener {
+
 }

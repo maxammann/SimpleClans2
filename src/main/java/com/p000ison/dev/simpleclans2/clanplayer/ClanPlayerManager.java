@@ -15,7 +15,9 @@ import com.p000ison.dev.simpleclans2.database.tables.ClanPlayerTable;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Represents a ClanPlayerManager
@@ -61,6 +63,12 @@ public class ClanPlayerManager {
         return createClanPlayer(name);
     }
 
+
+    public Set<ClanPlayer> getClanPlayers()
+    {
+        return new HashSet<ClanPlayer>(players.values());
+    }
+
     public ClanPlayer getCreateClanPlayerExact(Player player)
     {
         return getCreateClanPlayerExact(player.getName());
@@ -90,7 +98,7 @@ public class ClanPlayerManager {
         return null;
     }
 
-    public ClanPlayer getClanPlayerExact(Player player)
+    public ClanPlayer getClanPlayer(Player player)
     {
         return getClanPlayerExact(player.getName());
     }

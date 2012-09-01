@@ -11,8 +11,10 @@
 package com.p000ison.dev.simpleclans2.clan;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
+import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.util.DateHelper;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -239,7 +241,7 @@ public class Clan {
     }
 
     /**
-     * Checks weather the clan with the id is a ally.
+     * Checks weather the clan is a ally.
      *
      * @param id The id of the other clan.
      * @return Weather they are allies or not.
@@ -253,6 +255,21 @@ public class Clan {
         }
 
         return allies.contains(id);
+    }
+
+    /**
+     * Checks weather the clan  is a ally.
+     *
+     * @param clan The other clan
+     * @return Weather they are allies or not.
+     */
+    public boolean isAlly(Clan clan)
+    {
+        if (clan == null) {
+            return false;
+        }
+
+        return isAlly(clan.getId());
     }
 
     /**
@@ -273,7 +290,7 @@ public class Clan {
     }
 
     /**
-     * Checks weather the clan with the id is warring with this one.
+     * Checks weather the clan is warring with this one.
      *
      * @param id The id of the other clan.
      * @return Weather they are warring or not.
@@ -287,6 +304,22 @@ public class Clan {
         }
 
         return warring.contains(id);
+    }
+
+    /**
+     * Checks weather the clan is warring with this one.
+     *
+     * @param clan The other clan.
+     * @return Weather they are warring or not.
+     */
+    public boolean isWarring(Clan clan)
+    {
+
+        if (clan == null) {
+            return false;
+        }
+
+        return isWarring(clan.getId());
     }
 
     /**
@@ -308,5 +341,91 @@ public class Clan {
     public void setLastActionDate(long lastActionDate)
     {
         this.lastActionDate = lastActionDate;
+    }
+
+    public void setLeader(ClanPlayer clanPlayer)
+    {
+        clanPlayer.setLeader(true);
+    }
+
+    public boolean isMember()
+    {
+        for (ClanPlayer cp : plugin.getClanPlayerManager().getClanPlayers()) {
+            if (cp.getClanId() == id && !cp.isLeader()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public boolean isLeader(ClanPlayer cp)
+    {
+        return cp.getClanId() == id && cp.isLeader();
+    }
+
+    public boolean isAnyMember()
+    {
+        for (ClanPlayer cp : plugin.getClanPlayerManager().getClanPlayers()) {
+            if (cp.getClanId() == id) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public Set<ClanPlayer> getMembers()
+    {
+        Set<ClanPlayer> allMembers = new HashSet<ClanPlayer>();
+
+
+        for (ClanPlayer cp : plugin.getClanPlayerManager().getClanPlayers()) {
+            if (cp.getClanId() == id && !cp.isLeader()) {
+                allMembers.add(cp);
+            }
+        }
+
+        return allMembers;
+    }
+
+    public Set<ClanPlayer> getAllMembers()
+    {
+        Set<ClanPlayer> allMembers = new HashSet<ClanPlayer>();
+
+
+        for (ClanPlayer cp : plugin.getClanPlayerManager().getClanPlayers()) {
+            if (cp.getClanId() == id) {
+                allMembers.add(cp);
+            }
+        }
+
+        return allMembers;
+    }
+
+
+    public Set<ClanPlayer> getLeaders()
+    {
+        Set<ClanPlayer> leaders = new HashSet<ClanPlayer>();
+
+
+        for (ClanPlayer cp : plugin.getClanPlayerManager().getClanPlayers()) {
+            if (cp.getClanId() == id && cp.isLeader()) {
+                leaders.add(cp);
+            }
+        }
+
+        return leaders;
+    }
+
+    public void addMember(ClanPlayer clanPlayer)
+    {
+        Clan previous = clanPlayer.getClan();
+
+        if (previous != null) {
+            clanPlayer.addPastClan(previous);
+        }
+
+        clanPlayer.setClan(this);
     }
 }

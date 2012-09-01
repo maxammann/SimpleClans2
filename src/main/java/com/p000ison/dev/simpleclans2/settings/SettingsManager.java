@@ -16,7 +16,9 @@ import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 
 /**
@@ -31,29 +33,45 @@ public class SettingsManager {
     private double teleportfuzzyness;
     private int timeUntilTeleport;
 
+    private boolean onlyPvPinWar;
+    private boolean saveCivilians;
+    private boolean globalFFForced;
+
     public SettingsManager(SimpleClans plugin)
     {
         this.plugin = plugin;
+        init();
     }
 
     private void init()
     {
         config = plugin.getConfig();
+
+        config.options().copyDefaults(true);
+        save();
+
+        load();
     }
 
     private void load()
     {
 
-        ConfigurationSection settings = config.getConfigurationSection("settings");
+        ConfigurationSection teleportation = config.getConfigurationSection("teleportation");
 
-        drop = settings.getBoolean("drop-items-on-teleport");
-        dropAll = settings.getBoolean("drop-all-items-on-teleport");
-        teleportfuzzyness = settings.getDouble("teleport-fuzzyness");
-        timeUntilTeleport = settings.getInt("teleport-waiting-time");
+        drop = teleportation.getBoolean("drop-items-on-teleport");
+        dropAll = teleportation.getBoolean("drop-all-items-on-teleport");
+        teleportfuzzyness = teleportation.getDouble("teleport-fuzzyness");
+        timeUntilTeleport = teleportation.getInt("teleport-waiting-time");
+
+        ConfigurationSection pvp = config.getConfigurationSection("pvp");
+
+        onlyPvPinWar = pvp.getBoolean("only-pvp-in-war");
+        saveCivilians = pvp.getBoolean("save-civilians");
+        globalFFForced = pvp.getBoolean("global-ff-forced");
 
 
         //prepare variables
-        List<String> keepOnTeleportRaw = settings.getStringList("keep-items-on-teleport");
+        List<String> keepOnTeleportRaw = teleportation.getStringList("keep-items-on-teleport");
 
         //do "magic" stuff to load this
 
@@ -104,5 +122,20 @@ public class SettingsManager {
     public int getTimeUntilTeleport()
     {
         return timeUntilTeleport;
+    }
+
+    public boolean isSaveCivilians()
+    {
+        return saveCivilians;
+    }
+
+    public boolean isOnlyPvPinWar()
+    {
+        return onlyPvPinWar;
+    }
+
+    public boolean isGlobalFFForced()
+    {
+        return globalFFForced;
     }
 }

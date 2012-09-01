@@ -39,6 +39,7 @@ public class SimpleClans extends JavaPlugin {
         new Logging(getLogger());
         new Language();
 
+
         loadManagers();
     }
 
@@ -73,8 +74,8 @@ public class SimpleClans extends JavaPlugin {
         clanPlayerManager = new ClanPlayerManager(this);
     }
 
-//    public static void main(String[] args) throws TableRegistrationException, ConnectionException
-//    {
+    public static void main(String[] args) throws TableRegistrationException, ConnectionException
+    {
 //        Clan clan = new Clan(null, 0);
 //        clan.setTag("test");
 //
@@ -100,7 +101,34 @@ public class SimpleClans extends JavaPlugin {
 ////        DatabaseManager databaseManager = new DatabaseManager();
 ////
 ////        databaseManager.getDatabase().save(clan);
-//    }
+//
+//
+//        Set<ClanPlayer> clanPlayerSet = new HashSet<ClanPlayer>();
+//
+//        for (int i = 0; i < 2000; i++) {
+//            ClanPlayer cp = new ClanPlayer(null, String.valueOf(new Random().nextInt()));
+//
+//            if (i == 1654) {
+//               cp.setId(4L);
+//            }              else {
+//                cp.setId(new Random().nextInt());
+//            }
+//            clanPlayerSet.add(cp);
+//        }
+//
+//        long start = System.currentTimeMillis();
+//
+//        for (ClanPlayer cp : clanPlayerSet) {
+//            if (cp.getId() == 4) {
+//                System.out.println("found");
+//                break;
+//            }
+//        }
+//
+//        long end = System.currentTimeMillis();
+//
+//        System.out.println(end - start );
+    }
 
     @Override
     public boolean onCommand(org.bukkit.command.CommandSender sender, org.bukkit.command.Command command, java.lang.String label, java.lang.String[] args)
