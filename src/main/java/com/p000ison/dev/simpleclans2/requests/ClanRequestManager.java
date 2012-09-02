@@ -18,14 +18,10 @@
  */
 
 
-package com.p000ison.dev.simpleclans2.commands;
+package com.p000ison.dev.simpleclans2.requests;
 
-public abstract class GenericConsoleCommand extends GenericCommand {
-
-    public GenericConsoleCommand(String name)
-    {
-        super(name);
-    }
-
-    public abstract void execute(org.bukkit.command.CommandSender sender, String label, String[] args);
+/**
+ * Represents a ClanRequestManager
+ */
+public class ClanRequestManager extends RequestManager {
 }

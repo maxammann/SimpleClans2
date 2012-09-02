@@ -1,12 +1,22 @@
 /*
- * Copyright (C) 2012 p000ison
+ * This file is part of SimpleClans2 (2012).
  *
- * This work is licensed under the Creative Commons
- * Attribution-NonCommercial-NoDerivs 3.0 Unported License. To view a copy of
- * this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/ or send
- * a letter to Creative Commons, 171 Second Street, Suite 300, San Francisco,
- * California, 94105, USA.
+ *     SimpleClans2 is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     Foobar is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *     Created: 02.09.12 18:29
  */
+
 
 package com.p000ison.dev.simpleclans2.settings;
 
@@ -30,12 +40,13 @@ public class SettingsManager {
 
     private boolean dropAll, drop;
     private Set<Integer> keepOnTeleport = new HashSet<Integer>();
-    private double teleportfuzzyness;
+    private double teleportFuzzyness;
     private int timeUntilTeleport;
 
     private boolean onlyPvPinWar;
     private boolean saveCivilians;
     private boolean globalFFForced;
+    private double killWeightRival, killWeightNeutral, killWeightCivilian;
 
     public SettingsManager(SimpleClans plugin)
     {
@@ -60,14 +71,21 @@ public class SettingsManager {
 
         drop = teleportation.getBoolean("drop-items-on-teleport");
         dropAll = teleportation.getBoolean("drop-all-items-on-teleport");
-        teleportfuzzyness = teleportation.getDouble("teleport-fuzzyness");
+        teleportFuzzyness = teleportation.getDouble("teleport-fuzzyness");
         timeUntilTeleport = teleportation.getInt("teleport-waiting-time");
+
 
         ConfigurationSection pvp = config.getConfigurationSection("pvp");
 
         onlyPvPinWar = pvp.getBoolean("only-pvp-in-war");
         saveCivilians = pvp.getBoolean("save-civilians");
         globalFFForced = pvp.getBoolean("global-ff-forced");
+
+        ConfigurationSection weights = pvp.getConfigurationSection("weights");
+
+        killWeightRival = weights.getDouble("rival");
+        killWeightNeutral = weights.getDouble("neutral");
+        killWeightCivilian = weights.getDouble("civilian");
 
 
         //prepare variables
@@ -116,7 +134,7 @@ public class SettingsManager {
 
     public double getTeleportFuzzyness()
     {
-        return teleportfuzzyness;
+        return teleportFuzzyness;
     }
 
     public int getTimeUntilTeleport()
@@ -137,5 +155,20 @@ public class SettingsManager {
     public boolean isGlobalFFForced()
     {
         return globalFFForced;
+    }
+
+    public double getKillWeightRival()
+    {
+        return killWeightRival;
+    }
+
+    public double getKillWeightNeutral()
+    {
+        return killWeightNeutral;
+    }
+
+    public double getKillWeightCivilian()
+    {
+        return killWeightCivilian;
     }
 }

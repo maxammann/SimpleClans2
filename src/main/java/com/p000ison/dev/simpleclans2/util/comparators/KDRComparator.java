@@ -18,14 +18,23 @@
  */
 
 
-package com.p000ison.dev.simpleclans2.commands;
+package com.p000ison.dev.simpleclans2.util.comparators;
 
-public abstract class GenericConsoleCommand extends GenericCommand {
+import com.p000ison.dev.simpleclans2.clan.Clan;
 
-    public GenericConsoleCommand(String name)
+import java.util.Comparator;
+
+/**
+ * Represents a KDRComparator
+ */
+public class KDRComparator implements Comparator<Clan> {
+
+    @Override
+    public int compare(Clan clan1, Clan clan2)
     {
-        super(name);
-    }
+        Float o1 = clan1.getTotalKDR();
+        Float o2 = clan2.getTotalKDR();
 
-    public abstract void execute(org.bukkit.command.CommandSender sender, String label, String[] args);
+        return o2.compareTo(o1);
+    }
 }

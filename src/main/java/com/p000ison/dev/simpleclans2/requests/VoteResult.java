@@ -18,14 +18,10 @@
  */
 
 
-package com.p000ison.dev.simpleclans2.commands;
+package com.p000ison.dev.simpleclans2.requests;
 
-public abstract class GenericConsoleCommand extends GenericCommand {
-
-    public GenericConsoleCommand(String name)
-    {
-        super(name);
-    }
-
-    public abstract void execute(org.bukkit.command.CommandSender sender, String label, String[] args);
+public enum VoteResult {
+    UNKNOWN,
+    ACCEPT,
+    DENY;
 }

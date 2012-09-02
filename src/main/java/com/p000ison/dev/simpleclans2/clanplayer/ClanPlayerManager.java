@@ -1,12 +1,22 @@
 /*
- * Copyright (C) 2012 p000ison
+ * This file is part of SimpleClans2 (2012).
  *
- * This work is licensed under the Creative Commons
- * Attribution-NonCommercial-NoDerivs 3.0 Unported License. To view a copy of
- * this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/ or send
- * a letter to Creative Commons, 171 Second Street, Suite 300, San Francisco,
- * California, 94105, USA.
+ *     SimpleClans2 is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     Foobar is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *     Created: 02.09.12 18:29
  */
+
 
 package com.p000ison.dev.simpleclans2.clanplayer;
 
@@ -14,9 +24,8 @@ import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.database.tables.ClanPlayerTable;
 import org.bukkit.entity.Player;
 
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -24,12 +33,18 @@ import java.util.Set;
  */
 public class ClanPlayerManager {
 
-    private Map<String, ClanPlayer> players = new HashMap<String, ClanPlayer>();
+    private Set<ClanPlayer> players = new HashSet<ClanPlayer>();
     private SimpleClans plugin;
 
     public ClanPlayerManager(SimpleClans plugin)
     {
         this.plugin = plugin;
+    }
+
+
+    public void importClanPlayers(Set<ClanPlayer> clanPlayers)
+    {
+        this.players = clanPlayers;
     }
 
     public ClanPlayer createClanPlayer(Player player)
@@ -41,7 +56,7 @@ public class ClanPlayerManager {
     {
         ClanPlayer clanPlayer = new ClanPlayer(plugin, name);
 
-        players.put(name, clanPlayer);
+        players.add(clanPlayer);
 
         ClanPlayerTable clanTable = new ClanPlayerTable();
 
@@ -66,7 +81,7 @@ public class ClanPlayerManager {
 
     public Set<ClanPlayer> getClanPlayers()
     {
-        return new HashSet<ClanPlayer>(players.values());
+        return Collections.unmodifiableSet(players);
     }
 
     public ClanPlayer getCreateClanPlayerExact(Player player)
@@ -90,7 +105,7 @@ public class ClanPlayerManager {
 
         String lowerName = name.toLowerCase();
 
-        for (ClanPlayer clanPlayer : players.values()) {
+        for (ClanPlayer clanPlayer : players) {
             if (clanPlayer.getName().toLowerCase().startsWith(lowerName)) {
                 return clanPlayer;
             }
@@ -105,6 +120,15 @@ public class ClanPlayerManager {
 
     public ClanPlayer getClanPlayerExact(String name)
     {
-        return players.get(name);
+        if (name == null) {
+            return null;
+        }
+
+        for (ClanPlayer clanPlayer : players) {
+            if (clanPlayer.getName().equals(name)) {
+                return clanPlayer;
+            }
+        }
+        return null;
     }
 }
