@@ -6,15 +6,15 @@
  *     the Free Software Foundation, either version 3 of the License, or
  *     (at your option) any later version.
  *
- *     Foobar is distributed in the hope that it will be useful,
+ *     SimpleClans2 is distributed in the hope that it will be useful,
  *     but WITHOUT ANY WARRANTY; without even the implied warranty of
  *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *     GNU General Public License for more details.
  *
  *     You should have received a copy of the GNU General Public License
- *     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ *     along with SimpleClans2.  If not, see <http://www.gnu.org/licenses/>.
  *
- *     Created: 02.09.12 18:29
+ *     Created: 02.09.12 18:33
  */
 
 
@@ -23,8 +23,12 @@ package com.p000ison.dev.simpleclans2.clan;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.util.DateHelper;
+import com.p000ison.dev.simpleclans2.util.GeneralHelper;
+import org.bukkit.ChatColor;
 
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Set;
 
 /**
@@ -40,6 +44,10 @@ public class Clan {
     private long foundedDate;
     private long lastActionDate;
     private boolean verified, friendlyFire;
+    private LinkedList<String> bb = new LinkedList<String>();
+    private Set<Clan> allies = new HashSet<Clan>();
+    private Set<Clan> rivals = new HashSet<Clan>();
+    private Set<Clan> warring = new HashSet<Clan>();
 
     /**
      * Creates a new clan
@@ -227,7 +235,7 @@ public class Clan {
      */
     public Set<Clan> getAllies()
     {
-        return plugin.getClanManager().convertIdSetToClanSet(flags.getAllies());
+        return Collections.unmodifiableSet(allies);
     }
 
     /**
@@ -237,7 +245,7 @@ public class Clan {
      */
     public Set<Clan> getRivals()
     {
-        return plugin.getClanManager().convertIdSetToClanSet(flags.getRivals());
+        return Collections.unmodifiableSet(rivals);
     }
 
     /**
@@ -247,7 +255,7 @@ public class Clan {
      */
     public Set<Clan> getWarringClans()
     {
-        return plugin.getClanManager().convertIdSetToClanSet(flags.getWarringClans());
+        return Collections.unmodifiableSet(warring);
     }
 
     /**
@@ -258,13 +266,13 @@ public class Clan {
      */
     public boolean isAlly(long id)
     {
-        Set<Long> allies = flags.getAllies();
-
-        if (allies == null) {
-            return false;
+        for (Clan clan : allies) {
+            if (clan.getId() == id) {
+                return true;
+            }
         }
 
-        return allies.contains(id);
+        return false;
     }
 
     /**
@@ -279,7 +287,7 @@ public class Clan {
             return false;
         }
 
-        return isAlly(clan.getId());
+        return allies.contains(clan);
     }
 
     /**
@@ -290,10 +298,10 @@ public class Clan {
      */
     public boolean isRival(long id)
     {
-        Set<Long> rivals = flags.getAllies();
-
-        if (rivals == null) {
-            return false;
+        for (Clan clan : rivals) {
+            if (clan.getId() == id) {
+                return true;
+            }
         }
 
         return rivals.contains(id);
@@ -307,13 +315,13 @@ public class Clan {
      */
     public boolean isWarring(long id)
     {
-        Set<Long> warring = flags.getWarringClans();
-
-        if (warring == null) {
-            return false;
+        for (Clan clan : warring) {
+            if (clan.getId() == id) {
+                return true;
+            }
         }
 
-        return warring.contains(id);
+        return false;
     }
 
     /**
@@ -324,12 +332,11 @@ public class Clan {
      */
     public boolean isWarring(Clan clan)
     {
-
         if (clan == null) {
             return false;
         }
 
-        return isWarring(clan.getId());
+        return warring.contains(clan);
     }
 
     /**
@@ -460,5 +467,60 @@ public class Clan {
     public int getSize()
     {
         return getAllMembers().size();
+    }
+
+    public void addBBMessage(String announcer, String msg)
+    {
+        if (isVerified()) {
+            addBBMessage(plugin.getSettingsManager().getDefaultBBColor().getChar() + announcer + GeneralHelper.parseColors(msg));
+        }
+    }
+
+    public String getCleanTag()
+    {
+        return ChatColor.stripColor(tag.toLowerCase());
+    }
+
+    public void addBBMessage(String message)
+    {
+        if (isVerified()) {
+            if (bb.size() > plugin.getSettingsManager().getMaxBBLenght()) {
+                bb.pollFirst();
+            }
+
+            bb.add(message);
+        }
+    }
+
+    public void loadBB(LinkedList<String> bb)
+    {
+        this.bb = bb;
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        return obj instanceof Clan && ((Clan) obj).getId() == id;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return (int) id;
+    }
+
+    public void addRival(Clan rival)
+    {
+        rivals.add(rival);
+    }
+
+    public void addAlly(Clan ally)
+    {
+        allies.add(ally);
+    }
+
+    public void addWarringClan(Clan warringClan)
+    {
+        warring.add(warringClan);
     }
 }

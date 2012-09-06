@@ -6,21 +6,20 @@
  *     the Free Software Foundation, either version 3 of the License, or
  *     (at your option) any later version.
  *
- *     Foobar is distributed in the hope that it will be useful,
+ *     SimpleClans2 is distributed in the hope that it will be useful,
  *     but WITHOUT ANY WARRANTY; without even the implied warranty of
  *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *     GNU General Public License for more details.
  *
  *     You should have received a copy of the GNU General Public License
- *     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ *     along with SimpleClans2.  If not, see <http://www.gnu.org/licenses/>.
  *
- *     Created: 02.09.12 18:29
+ *     Created: 02.09.12 18:33
  */
 
 package com.p000ison.dev.simpleclans2.commands;
 
-import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
-import org.bukkit.command.CommandSender;
+import com.p000ison.dev.simpleclans2.SimpleClans;
 
 public abstract class GenericCommand implements Command {
     private String name;
@@ -28,10 +27,12 @@ public abstract class GenericCommand implements Command {
     private int maxArgs;
     private String[] identifiers;
     private String[] usage;
+    protected SimpleClans plugin;
 
-    public GenericCommand(String name)
+    public GenericCommand(String name, SimpleClans plugin)
     {
         this.name = name;
+        this.plugin = plugin;
     }
 
     @Override
@@ -64,9 +65,6 @@ public abstract class GenericCommand implements Command {
     }
 
     @Override
-    public abstract String getMenu(ClanPlayer cp, CommandSender sender);
-
-    @Override
     public String[] getUsages()
     {
         return usage;
@@ -89,5 +87,37 @@ public abstract class GenericCommand implements Command {
     {
         minArgs = min;
         maxArgs = max;
+    }
+
+    public int[] getBoundings(int completeSize, int page)
+    {
+        int numPages = completeSize / plugin.getSettingsManager().getElementsPerPage();
+
+        if (completeSize % plugin.getSettingsManager().getElementsPerPage() != 0) {
+            numPages++;
+        }
+
+        if (page >= numPages || page < 0) {
+            page = 0;
+        }
+
+
+        int start = page * plugin.getSettingsManager().getElementsPerPage();
+        int end = start + plugin.getSettingsManager().getElementsPerPage();
+
+
+        if (end > completeSize) {
+            end = completeSize;
+        }
+
+        System.out.println(start);
+        System.out.println(end);
+
+        //If we are on page 0, we want to display the header
+        if (page == 0) {
+            end++;
+        }
+
+        return new int[]{start, end};
     }
 }

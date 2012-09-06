@@ -6,34 +6,36 @@
  *     the Free Software Foundation, either version 3 of the License, or
  *     (at your option) any later version.
  *
- *     Foobar is distributed in the hope that it will be useful,
+ *     SimpleClans2 is distributed in the hope that it will be useful,
  *     but WITHOUT ANY WARRANTY; without even the implied warranty of
  *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *     GNU General Public License for more details.
  *
  *     You should have received a copy of the GNU General Public License
- *     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ *     along with SimpleClans2.  If not, see <http://www.gnu.org/licenses/>.
  *
- *     Created: 02.09.12 18:29
+ *     Created: 02.09.12 18:33
  */
 
 
 package com.p000ison.dev.simpleclans2;
 
-import com.alta189.simplesave.Database;
-import com.alta189.simplesave.exceptions.ConnectionException;
-import com.alta189.simplesave.exceptions.TableRegistrationException;
 import com.p000ison.dev.simpleclans2.clan.ClanManager;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayerManager;
 import com.p000ison.dev.simpleclans2.commands.CommandManager;
+import com.p000ison.dev.simpleclans2.commands.commands.AlliancesCommand;
+import com.p000ison.dev.simpleclans2.commands.commands.CreateCommand;
+import com.p000ison.dev.simpleclans2.commands.commands.ListCommand;
 import com.p000ison.dev.simpleclans2.data.DataManager;
-import com.p000ison.dev.simpleclans2.data.KillEntry;
-import com.p000ison.dev.simpleclans2.data.KillType;
+import com.p000ison.dev.simpleclans2.database.Database;
 import com.p000ison.dev.simpleclans2.database.DatabaseManager;
-import com.p000ison.dev.simpleclans2.requests.ClanRequestManager;
 import com.p000ison.dev.simpleclans2.settings.SettingsManager;
 import com.p000ison.dev.simpleclans2.util.Logging;
+import net.milkbowl.vault.economy.Economy;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.logging.Level;
 
 /**
  * Represents a SimpleClans
@@ -46,13 +48,19 @@ public class SimpleClans extends JavaPlugin {
     private SettingsManager settingsManager;
     private ClanRequestManager requestManager;
     private CommandManager commandManager;
+    private DataManager dataManager;
+    private static Economy economy;
+
 
     @Override
     public void onEnable()
     {
         new Logging(getLogger());
-        new Language();
+        new Language("en_EN");
 
+        if (!setupEconomy()) {
+            Logging.debug(Level.SEVERE, "Economy features disabled due to no Economy dependency found!");
+        }
 
         loadManagers();
     }
@@ -63,87 +71,50 @@ public class SimpleClans extends JavaPlugin {
     {
         Language.clear();
 
-        try {
-            databaseManager.getDatabase().close();
-        } catch (ConnectionException e) {
-            Logging.debug(e);
-        }
+        databaseManager.getDatabase().close();
 
         Logging.close();
     }
+
+    private boolean setupEconomy()
+    {
+
+        if (getServer().getPluginManager().getPlugin("Vault") == null) {
+            return false;
+        }
+
+        RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
+        if (rsp == null) {
+            return false;
+        }
+
+        economy = rsp.getProvider();
+        return economy != null;
+    }
+
 
     private void loadManagers()
     {
         settingsManager = new SettingsManager(this);
 
-        try {
-            databaseManager = new DatabaseManager();
-        } catch (TableRegistrationException e) {
-            Logging.debug(e);
-        } catch (ConnectionException e) {
-            Logging.debug(e);
-        }
+
+        databaseManager = new DatabaseManager(this);
+
 
         clanManager = new ClanManager(this);
         clanPlayerManager = new ClanPlayerManager(this);
+        dataManager = new DataManager(this);
         requestManager = new ClanRequestManager();
-        commandManager = new CommandManager(this);
+        setupCommands();
     }
 
-    public static void main(String[] args) throws TableRegistrationException, ConnectionException
+    private void setupCommands()
     {
-//        Clan clan = new Clan(null, 0);
-//        clan.setTag("test");
-//
-//        Clan ally = new Clan(null, 5);
-//        clan.setTag("ally");
-//
-//        ClanPlayer cp = new ClanPlayer(null);
-//
-//
-//        ClanManager cm = new ClanManager();
-//
-//        cm.addClan(clan);
-//        cm.addClan(ally);
-//
-//        cp.setClan(cm.getClan(0));
-//
-//        cm.getClan(0).getFlags().addAllyClan(5);
-//
-//        System.out.println(JSONUtil.collectionToJSON("test", cp.getClan().getFlags().getAllies()));
-//
-////        clan.setTag(String.valueOf(new Random().nextInt()));
-////
-////        DatabaseManager databaseManager = new DatabaseManager();
-////
-////        databaseManager.getDatabase().save(clan);
-//
-//
-//        Set<ClanPlayer> clanPlayerSet = new HashSet<ClanPlayer>();
-//
-//        for (int i = 0; i < 2000; i++) {
-//            ClanPlayer cp = new ClanPlayer(null, String.valueOf(new Random().nextInt()));
-//
-//            if (i == 1654) {
-//               cp.setId(4L);
-//            }              else {
-//                cp.setId(new Random().nextInt());
-//            }
-//            clanPlayerSet.add(cp);
-//        }
-//
-//        long start = System.currentTimeMillis();
-//
-//        for (ClanPlayer cp : clanPlayerSet) {
-//            if (cp.getId() == 4) {
-//                System.out.println("found");
-//                break;
-//            }
-//        }
-//
-//        long end = System.currentTimeMillis();
-//
-//        System.out.println(end - start );
+        commandManager = new CommandManager(this);
+
+        commandManager.addCommand(new ListCommand(this));
+        commandManager.addCommand(new CreateCommand(this));
+        commandManager.addCommand(new AlliancesCommand(this));
     }
 
     @Override
@@ -190,4 +161,30 @@ public class SimpleClans extends JavaPlugin {
     {
         return commandManager;
     }
+
+    public DataManager getDataManager()
+    {
+        return dataManager;
+    }
+
+    public static boolean withdrawBalance(String player, double balance)
+    {
+        return economy.withdrawPlayer(player, balance).transactionSuccess();
+    }
+
+    public static void depositBalance(String player, double balance)
+    {
+        economy.withdrawPlayer(player, balance);
+    }
+
+    public static boolean hasEconomy()
+    {
+        return economy != null;
+    }
+
+    public static Economy getEconomy()
+    {
+        return economy;
+    }
+
 }

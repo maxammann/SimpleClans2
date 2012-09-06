@@ -6,17 +6,16 @@
  *     the Free Software Foundation, either version 3 of the License, or
  *     (at your option) any later version.
  *
- *     Foobar is distributed in the hope that it will be useful,
+ *     SimpleClans2 is distributed in the hope that it will be useful,
  *     but WITHOUT ANY WARRANTY; without even the implied warranty of
  *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *     GNU General Public License for more details.
  *
  *     You should have received a copy of the GNU General Public License
- *     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ *     along with SimpleClans2.  If not, see <http://www.gnu.org/licenses/>.
  *
- *     Created: 02.09.12 18:29
+ *     Created: 02.09.12 18:33
  */
-
 
 
 package com.p000ison.dev.simpleclans2;
@@ -32,26 +31,50 @@ import java.util.logging.Level;
  * Represents a Language
  */
 public class Language {
-    public static ResourceBundle language;
+    private static final Locale defaultLocale = Locale.getDefault();
+    private static Locale locale = defaultLocale;
+    private static ResourceBundle bundle = ResourceBundle.getBundle("languages.lang", defaultLocale);
+    private static ResourceBundle defaultBundle = ResourceBundle.getBundle("languages.lang", Locale.ENGLISH);
 
-    public Language()
+    public Language(String loc)
     {
-        language = ResourceBundle.getBundle("languages.lang", Locale.ENGLISH, SimpleClans.class.getClassLoader());
+        String[] parts = loc.split("[_\\.]");
+
+        if (parts.length == 1) {
+            locale = new Locale(parts[0]);
+        } else if (parts.length == 2) {
+            locale = new Locale(parts[0], parts[1]);
+        } else if (parts.length == 3) {
+            locale = new Locale(parts[0], parts[1], parts[2]);
+        }
+
+        bundle = ResourceBundle.getBundle("languages.lang", locale, Language.class.getClassLoader());
+
+        for (String defaultKey : bundle.keySet()) {
+            if (!bundle.containsKey(defaultKey)) {
+                Logging.debug(ChatColor.RED + "The language for the key %s was not found!", Level.WARNING, defaultKey);
+            }
+        }
     }
 
     public static String getTranslation(String key)
     {
-        if (!language.containsKey(key)) {
+        if (!bundle.containsKey(key)) {
             Logging.debug(ChatColor.RED + "The language for the key %s was not found!", Level.WARNING, key);
+
+            if (defaultBundle.containsKey(key)) {
+                Logging.debug(ChatColor.RED + "The language for the key %s was not found in the default bundle!", Level.WARNING, key);
+                return defaultBundle.getString(key);
+            }
+
             return null;
         }
 
-        return language.getString(key);
+        return bundle.getString(key);
     }
 
     public static void clear()
     {
-        ResourceBundle.clearCache(SimpleClans.class.getClassLoader());
-        language = null;
+        ResourceBundle.clearCache(Language.class.getClassLoader());
     }
 }

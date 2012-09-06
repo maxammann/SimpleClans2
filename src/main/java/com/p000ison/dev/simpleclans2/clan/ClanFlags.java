@@ -6,15 +6,15 @@
  *     the Free Software Foundation, either version 3 of the License, or
  *     (at your option) any later version.
  *
- *     Foobar is distributed in the hope that it will be useful,
+ *     SimpleClans2 is distributed in the hope that it will be useful,
  *     but WITHOUT ANY WARRANTY; without even the implied warranty of
  *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *     GNU General Public License for more details.
  *
  *     You should have received a copy of the GNU General Public License
- *     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ *     along with SimpleClans2.  If not, see <http://www.gnu.org/licenses/>.
  *
- *     Created: 02.09.12 18:29
+ *     Created: 02.09.12 18:33
  */
 
 
@@ -59,90 +59,90 @@ public class ClanFlags extends Flags {
         return SerializablePlayerVector.deserialize(locationString).toLocation();
     }
 
-    /**
-     * Adds a warring clan to this clan.
-     *
-     * @param id The id of the clan to add.
-     */
-    public void addWarringClan(long id)
-    {
-        super.getSet("warring").add(id);
-    }
-
-    /**
-     * Removes a warring clan to this clan.
-     *
-     * @param id The id of the clan to remove.
-     */
-    public void removeWarringClan(long id)
-    {
-        Set warring = super.getSet("warring");
-
-        if (warring.contains(id)) {
-            warring.remove(id);
-        }
-    }
-
-    /**
-     * Adds a ally clan from this clan.
-     *
-     * @param id The id of the clan to add.
-     */
-    public void addAllyClan(long id)
-    {
-        super.getSet("allies").add(id);
-    }
-
-    /**
-     * Removes a ally clan from this clan.
-     *
-     * @param id The id of the clan to remove.
-     */
-    public void removeAllyClan(long id)
-    {
-        Set allies = super.getSet("allies");
-
-        if (allies.contains(id)) {
-            allies.remove(id);
-        }
-    }
-
-    public Set<Long> getAllies()
-    {
-        return super.getSet("allies");
-    }
-
-    /**
-     * Adds a rival clan from this clan.
-     *
-     * @param id The id of the clan to add.
-     */
-    public void addRivalClan(long id)
-    {
-        super.getSet("rivals").add(id);
-    }
-
-    /**
-     * Removes a rival clan from this clan.
-     *
-     * @param id The id of the clan to remove.
-     */
-    public void removeRivalClan(long id)
-    {
-        Set rivals = super.getSet("rivals");
-
-        if (rivals.contains(id)) {
-            rivals.remove(id);
-        }
-    }
-
-    public Set<Long> getRivals()
-    {
-        return super.getSet("rivals");
-    }
-
-    public Set<Long> getWarringClans()
-    {
-        return super.getSet("warring");
-    }
+//    /**
+//     * Adds a warring clan to this clan.
+//     *
+//     * @param id The id of the clan to add.
+//     */
+//    public void addWarringClan(long id)
+//    {
+//        super.getSet("warring").add(id);
+//    }
+//
+//    /**
+//     * Removes a warring clan to this clan.
+//     *
+//     * @param id The id of the clan to remove.
+//     */
+//    public void removeWarringClan(long id)
+//    {
+//        Set warring = super.getSet("warring");
+//
+//        if (warring.contains(id)) {
+//            warring.remove(id);
+//        }
+//    }
+//
+//    /**
+//     * Adds a ally clan from this clan.
+//     *
+//     * @param id The id of the clan to add.
+//     */
+//    public void addAllyClan(long id)
+//    {
+//        super.getSet("allies").add(id);
+//    }
+//
+//    /**
+//     * Removes a ally clan from this clan.
+//     *
+//     * @param id The id of the clan to remove.
+//     */
+//    public void removeAllyClan(long id)
+//    {
+//        Set allies = super.getSet("allies");
+//
+//        if (allies.contains(id)) {
+//            allies.remove(id);
+//        }
+//    }
+//
+//    public Set<Long> getAllies()
+//    {
+//        return super.getSet("allies");
+//    }
+//
+//    /**
+//     * Adds a rival clan from this clan.
+//     *
+//     * @param id The id of the clan to add.
+//     */
+//    public void addRivalClan(long id)
+//    {
+//        super.getSet("rivals").add(id);
+//    }
+//
+//    /**
+//     * Removes a rival clan from this clan.
+//     *
+//     * @param id The id of the clan to remove.
+//     */
+//    public void removeRivalClan(long id)
+//    {
+//        Set rivals = super.getSet("rivals");
+//
+//        if (rivals.contains(id)) {
+//            rivals.remove(id);
+//        }
+//    }
+//
+//    public Set<Long> getRivals()
+//    {
+//        return super.getSet("rivals");
+//    }
+//
+//    public Set<Long> getWarringClans()
+//    {
+//        return super.getSet("warring");
+//    }
 }

@@ -1,0 +1,32 @@
+general:
+    elements-per-page: 10
+    clan-command: clan
+    server-name: TestServre
+teleportation:
+    drop-items-on-teleport: false
+    drop-all-items-on-teleport: false
+    keep-items-on-teleport: [ 0, 13456 ]
+    teleport-fuzzyness: 1.5
+    teleport-waiting-time: 10
+pvp:
+    only-pvp-in-war: false
+    save-civilians: true
+    global-ff-forced: false
+    weights:
+        rival: 2
+        neutral: 1
+        civilian: 1
+clan:
+   max-tag-lenght: 3
+   min-tag-lenght: 3
+   purge:
+       inactive-player-data-days: 30
+       inactive-clan-days: 7
+       unverified-clan-days: 2
+   default-bb-color: 3
+   economy:
+       purchase-creation: false
+       purchase-price: 20
+paging:
+   heading-color: 7
+   sub-color: 8

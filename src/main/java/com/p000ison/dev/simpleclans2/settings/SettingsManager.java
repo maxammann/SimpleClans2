@@ -6,22 +6,24 @@
  *     the Free Software Foundation, either version 3 of the License, or
  *     (at your option) any later version.
  *
- *     Foobar is distributed in the hope that it will be useful,
+ *     SimpleClans2 is distributed in the hope that it will be useful,
  *     but WITHOUT ANY WARRANTY; without even the implied warranty of
  *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *     GNU General Public License for more details.
  *
  *     You should have received a copy of the GNU General Public License
- *     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ *     along with SimpleClans2.  If not, see <http://www.gnu.org/licenses/>.
  *
- *     Created: 02.09.12 18:29
+ *     Created: 02.09.12 18:33
  */
 
 
 package com.p000ison.dev.simpleclans2.settings;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
+import com.p000ison.dev.simpleclans2.util.ExceptionHelper;
 import com.p000ison.dev.simpleclans2.util.Logging;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -48,6 +50,23 @@ public class SettingsManager {
     private boolean globalFFForced;
     private double killWeightRival, killWeightNeutral, killWeightCivilian;
 
+    private int elementsPerPage;
+    private String clanCommand;
+    private String serverName;
+
+    private int maxTagLenght, minTagLenght;
+    private Character[] disallowedColors;
+    private Set<String> disallowedTags;
+    private int maxBBLenght;
+    private ChatColor defaultBBColor;
+    private boolean requireVerification;
+    private boolean purchaseCreation, purchaseVerification;
+    private double purchasePrice;
+    private int purgeInactivePlayersDays, purgeInactiveClansDays, purgeUnverifiedClansDays;
+    private boolean showUnverifiedClansOnList;
+
+    private ChatColor headingPageColor, subPageColor;
+
     public SettingsManager(SimpleClans plugin)
     {
         this.plugin = plugin;
@@ -66,49 +85,92 @@ public class SettingsManager {
 
     private void load()
     {
+        try {
+            ConfigurationSection general = config.getConfigurationSection("general");
 
-        ConfigurationSection teleportation = config.getConfigurationSection("teleportation");
+            elementsPerPage = general.getInt("elements-per-page");
+            clanCommand = general.getString("clan-command");
+            setServerName(general.getString("server-name"));
 
-        drop = teleportation.getBoolean("drop-items-on-teleport");
-        dropAll = teleportation.getBoolean("drop-all-items-on-teleport");
-        teleportFuzzyness = teleportation.getDouble("teleport-fuzzyness");
-        timeUntilTeleport = teleportation.getInt("teleport-waiting-time");
+            ConfigurationSection teleportation = config.getConfigurationSection("teleportation");
 
-
-        ConfigurationSection pvp = config.getConfigurationSection("pvp");
-
-        onlyPvPinWar = pvp.getBoolean("only-pvp-in-war");
-        saveCivilians = pvp.getBoolean("save-civilians");
-        globalFFForced = pvp.getBoolean("global-ff-forced");
-
-        ConfigurationSection weights = pvp.getConfigurationSection("weights");
-
-        killWeightRival = weights.getDouble("rival");
-        killWeightNeutral = weights.getDouble("neutral");
-        killWeightCivilian = weights.getDouble("civilian");
+            drop = teleportation.getBoolean("drop-items-on-teleport");
+            dropAll = teleportation.getBoolean("drop-all-items-on-teleport");
+            teleportFuzzyness = teleportation.getDouble("teleport-fuzzyness");
+            timeUntilTeleport = teleportation.getInt("teleport-waiting-time");
 
 
-        //prepare variables
-        List<String> keepOnTeleportRaw = teleportation.getStringList("keep-items-on-teleport");
+            ConfigurationSection pvp = config.getConfigurationSection("pvp");
 
-        //do "magic" stuff to load this
+            onlyPvPinWar = pvp.getBoolean("only-pvp-in-war");
+            saveCivilians = pvp.getBoolean("save-civilians");
+            globalFFForced = pvp.getBoolean("global-ff-forced");
 
-        //checks and parses the materials
-        for (String materialRaw : keepOnTeleportRaw) {
+            ConfigurationSection weights = pvp.getConfigurationSection("weights");
 
-            Material material;
+            killWeightRival = weights.getDouble("rival");
+            killWeightNeutral = weights.getDouble("neutral");
+            killWeightCivilian = weights.getDouble("civilian");
 
-            if (materialRaw.matches("[0-9]+")) {
-                material = Material.getMaterial(Integer.parseInt(materialRaw));
-            } else {
-                material = Material.valueOf(materialRaw.toUpperCase());
+
+            ConfigurationSection clan = config.getConfigurationSection("clan");
+
+            maxTagLenght = clan.getInt("max-tag-lenght");
+            minTagLenght = clan.getInt("min-tag-lenght");
+            List<Character> disallowedColorsList = clan.getCharacterList("disallowed-colors");
+            disallowedColors = disallowedColorsList.toArray(new Character[disallowedColorsList.size()]);
+            disallowedTags = new HashSet<String>(config.getStringList("disallowed-tags"));
+            maxBBLenght = clan.getInt("max-bb-lenght");
+            defaultBBColor = ChatColor.getByChar(clan.getString("default-bb-color"));
+            requireVerification = clan.getBoolean("require-verification");
+            showUnverifiedClansOnList = clan.getBoolean("show-unverified-clans-on-list");
+
+            ConfigurationSection clanEconomy = clan.getConfigurationSection("economy");
+
+            purchaseCreation = clanEconomy.getBoolean("purchase-creation");
+            purchasePrice = clanEconomy.getDouble("purchase-price");
+
+            ConfigurationSection clanPurge = clan.getConfigurationSection("purge");
+
+            purgeInactivePlayersDays = clanPurge.getInt("inactive-player-data-days");
+            purgeInactiveClansDays = clanPurge.getInt("inactive-clan-days");
+            purgeUnverifiedClansDays = clanPurge.getInt("unverified-clan-days");
+
+
+            ConfigurationSection paging = config.getConfigurationSection("paging");
+
+            headingPageColor = ChatColor.getByChar(paging.getString("heading-color"));
+            subPageColor = ChatColor.getByChar(paging.getString("sub-color"));
+
+
+            //prepare variables
+            List<String> keepOnTeleportRaw = teleportation.getStringList("keep-items-on-teleport");
+
+            //do "magic" stuff to load this
+
+            if (getServerName() == null) {
+                setServerName(plugin.getServer().getServerName());
             }
 
-            if (material != null) {
-                keepOnTeleport.add(material.getId());
-            } else {
-                Logging.debug("The item or id: %s was not found!", Level.WARNING, material);
+            //checks and parses the materials
+            for (String materialRaw : keepOnTeleportRaw) {
+
+                Material material;
+
+                if (materialRaw.matches("[0-9]+")) {
+                    material = Material.getMaterial(Integer.parseInt(materialRaw));
+                } else {
+                    material = Material.valueOf(materialRaw.toUpperCase());
+                }
+
+                if (material != null) {
+                    keepOnTeleport.add(material.getId());
+                } else {
+                    Logging.debug("The item or id: %s was not found!", Level.WARNING, material);
+                }
             }
+        } catch (Exception e) {
+            ExceptionHelper.handleException(e, getClass());
         }
     }
 
@@ -170,5 +232,105 @@ public class SettingsManager {
     public double getKillWeightCivilian()
     {
         return killWeightCivilian;
+    }
+
+    public int getElementsPerPage()
+    {
+        return elementsPerPage;
+    }
+
+    public int getMaxTagLenght()
+    {
+        return maxTagLenght;
+    }
+
+    public int getMinTagLenght()
+    {
+        return minTagLenght;
+    }
+
+    public Character[] getDisallowedColors()
+    {
+        return disallowedColors;
+    }
+
+    public boolean isTagDisallowed(String tag)
+    {
+        return disallowedTags.contains(tag);
+    }
+
+    public int getMaxBBLenght()
+    {
+        return maxBBLenght;
+    }
+
+    public ChatColor getDefaultBBColor()
+    {
+        return defaultBBColor;
+    }
+
+    public boolean requireVerification()
+    {
+        return requireVerification;
+    }
+
+    public boolean isPurchaseVerification()
+    {
+        return purchaseVerification;
+    }
+
+    public boolean purchaseCreation()
+    {
+        return purchaseCreation;
+    }
+
+    public String getClanCommand()
+    {
+        return clanCommand;
+    }
+
+    public double getPurchasePrice()
+    {
+        return purchasePrice;
+    }
+
+    public int getPurgeInactivePlayersDays()
+    {
+        return purgeInactivePlayersDays;
+    }
+
+    public int getPurgeInactiveClansDays()
+    {
+        return purgeInactiveClansDays;
+    }
+
+    public int getPurgeUnverifiedClansDays()
+    {
+        return purgeUnverifiedClansDays;
+    }
+
+    public ChatColor getHeadingPageColor()
+    {
+        return headingPageColor;
+    }
+
+    public ChatColor getSubPageColor()
+    {
+        return subPageColor;
+    }
+
+    public String getServerName()
+    {
+        return serverName;
+    }
+
+    public void setServerName(String serverName)
+    {
+        this.serverName = serverName;
+    }
+
+    public boolean isShowUnverifiedClansOnList()
+    {
+        return showUnverifiedClansOnList;
     }
 }

@@ -6,15 +6,15 @@
  *     the Free Software Foundation, either version 3 of the License, or
  *     (at your option) any later version.
  *
- *     Foobar is distributed in the hope that it will be useful,
+ *     SimpleClans2 is distributed in the hope that it will be useful,
  *     but WITHOUT ANY WARRANTY; without even the implied warranty of
  *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *     GNU General Public License for more details.
  *
  *     You should have received a copy of the GNU General Public License
- *     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ *     along with SimpleClans2.  If not, see <http://www.gnu.org/licenses/>.
  *
- *     Created: 02.09.12 18:29
+ *     Created: 02.09.12 18:33
  */
 
 package com.p000ison.dev.simpleclans2.clanplayer;
@@ -25,7 +25,6 @@ import com.p000ison.dev.simpleclans2.requests.VoteResult;
 import com.p000ison.dev.simpleclans2.util.DateHelper;
 import org.bukkit.entity.Player;
 
-import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -43,7 +42,6 @@ public class ClanPlayer {
     private long lastSeen, joinDate;
     private int neutralKills, rivalKills, civilianKills, deaths;
     private PlayerFlags flags;
-    private Set<Long> pastClans = new HashSet<Long>();
     private VoteResult lastVoteResult = VoteResult.UNKNOWN;
 
     public ClanPlayer(SimpleClans plugin, String name)
@@ -51,6 +49,12 @@ public class ClanPlayer {
         flags = new PlayerFlags();
         this.plugin = plugin;
         this.name = name;
+    }
+
+    public ClanPlayer(SimpleClans plugin, long id, String name)
+    {
+        this(plugin, name);
+        this.id = id;
     }
 
     /**
@@ -155,7 +159,7 @@ public class ClanPlayer {
 
     public void addNeutralKills(int neutralKills)
     {
-        this.neutralKills++;
+        this.setNeutralKills(this.getNeutralKills() + 1);
     }
 
     public int getRivalKills()
@@ -165,7 +169,7 @@ public class ClanPlayer {
 
     public void addRivalKills()
     {
-        this.rivalKills++;
+        this.setRivalKills(this.getRivalKills() + 1);
     }
 
     public int getCivilianKills()
@@ -175,7 +179,7 @@ public class ClanPlayer {
 
     public void addCivilianKills()
     {
-        this.civilianKills++;
+        this.setCivilianKills(this.getCivilianKills() + 1);
     }
 
     public int getDeaths()
@@ -185,7 +189,7 @@ public class ClanPlayer {
 
     public void addDeath()
     {
-        this.deaths++;
+        this.setDeaths(this.getDeaths() + 1);
     }
 
     public long getId()
@@ -205,12 +209,12 @@ public class ClanPlayer {
 
     public void addPastClan(Clan clan)
     {
-        pastClans.add(clan.getId());
+        flags.addPastClan(clan.getId());
     }
 
     public Set<Long> getPastClans()
     {
-        return pastClans;
+        return flags.getPastClans();
     }
 
     public String getRank()
@@ -256,7 +260,7 @@ public class ClanPlayer {
      */
     public double getWeightedKills()
     {
-        return (rivalKills * plugin.getSettingsManager().getKillWeightRival()) + (neutralKills * plugin.getSettingsManager().getKillWeightNeutral()) + (civilianKills * plugin.getSettingsManager().getKillWeightCivilian());
+        return (getRivalKills() * plugin.getSettingsManager().getKillWeightRival()) + (getNeutralKills() * plugin.getSettingsManager().getKillWeightNeutral()) + (getCivilianKills() * plugin.getSettingsManager().getKillWeightCivilian());
     }
 
     /**
@@ -283,5 +287,37 @@ public class ClanPlayer {
     public Player toPlayer()
     {
         return plugin.getServer().getPlayerExact(name);
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        return obj instanceof Clan && ((Clan) obj).getId() == id;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return (int) id;
+    }
+
+    public void setNeutralKills(int neutralKills)
+    {
+        this.neutralKills = neutralKills;
+    }
+
+    public void setRivalKills(int rivalKills)
+    {
+        this.rivalKills = rivalKills;
+    }
+
+    public void setCivilianKills(int civilianKills)
+    {
+        this.civilianKills = civilianKills;
+    }
+
+    public void setDeaths(int deaths)
+    {
+        this.deaths = deaths;
     }
 }

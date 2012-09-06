@@ -6,22 +6,23 @@
  *     the Free Software Foundation, either version 3 of the License, or
  *     (at your option) any later version.
  *
- *     Foobar is distributed in the hope that it will be useful,
+ *     SimpleClans2 is distributed in the hope that it will be useful,
  *     but WITHOUT ANY WARRANTY; without even the implied warranty of
  *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *     GNU General Public License for more details.
  *
  *     You should have received a copy of the GNU General Public License
- *     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ *     along with SimpleClans2.  If not, see <http://www.gnu.org/licenses/>.
  *
- *     Created: 02.09.12 18:29
+ *     Created: 02.09.12 18:33
  */
 
 
 package com.p000ison.dev.simpleclans2.clan;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
-import com.p000ison.dev.simpleclans2.database.tables.ClanTable;
+import com.p000ison.dev.simpleclans2.database2.tables.ClanTable;
+import org.bukkit.ChatColor;
 
 import java.util.*;
 
@@ -68,10 +69,10 @@ public class ClanManager {
      */
     public Clan getClan(String tag)
     {
-        String lowerTag = tag.toLowerCase();
+        String lowerTag = ChatColor.stripColor(tag.toLowerCase());
 
         for (Clan clan : clans.values()) {
-            if (clan.getTag().toLowerCase().startsWith(lowerTag)) {
+            if (clan.getCleanTag().startsWith(lowerTag)) {
                 return clan;
             }
         }
@@ -102,15 +103,16 @@ public class ClanManager {
         clanTable.friendly_fire = clan.isFriendlyFireOn();
         clanTable.verified = clan.isVerified();
 
-        plugin.getDatabaseManager().getDatabase().save(clanTable);
+//        plugin.getDatabaseManager().getDatabase().save(clanTable);
 
         clan.setId(getClanId(clan.getTag()));
     }
 
-    public void createClan(String tag, String name)
+    public Clan createClan(String tag, String name)
     {
         Clan clan = new Clan(plugin, tag, name);
         createClan(clan);
+        return clan;
     }
 
     public Set<Clan> convertIdSetToClanSet(Set<Long> ids)
@@ -127,9 +129,10 @@ public class ClanManager {
 
     public long getClanId(String tag)
     {
-        ClanTable clanTable = plugin.getDatabaseManager().getDatabase().select(ClanTable.class).where().equal("tag", tag).execute().findOne();
-
-        return clanTable.id;
+//        ClanTable clanTable = plugin.getDatabaseManager().getDatabase().select(ClanTable.class).where().equal("tag", tag).execute().findOne();
+//
+//        return clanTable.id;
+        return 1;
     }
 
     public void importClans(Set<Clan> clans)
@@ -137,6 +140,17 @@ public class ClanManager {
         for (Clan clan : clans) {
             this.clans.put(clan.getId(), clan);
         }
+    }
+
+    public boolean existsClan(String tag)
+    {
+        for (Clan clan : getClans()) {
+            if (clan.getTag().equals(tag)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

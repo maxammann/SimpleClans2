@@ -6,22 +6,22 @@
  *     the Free Software Foundation, either version 3 of the License, or
  *     (at your option) any later version.
  *
- *     Foobar is distributed in the hope that it will be useful,
+ *     SimpleClans2 is distributed in the hope that it will be useful,
  *     but WITHOUT ANY WARRANTY; without even the implied warranty of
  *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *     GNU General Public License for more details.
  *
  *     You should have received a copy of the GNU General Public License
- *     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ *     along with SimpleClans2.  If not, see <http://www.gnu.org/licenses/>.
  *
- *     Created: 02.09.12 18:29
+ *     Created: 02.09.12 18:33
  */
 
 
 package com.p000ison.dev.simpleclans2.clanplayer;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
-import com.p000ison.dev.simpleclans2.database.tables.ClanPlayerTable;
+import com.p000ison.dev.simpleclans2.database2.tables.ClanPlayerTable;
 import org.bukkit.entity.Player;
 
 import java.util.Collections;
@@ -62,6 +62,8 @@ public class ClanPlayerManager {
 
         clanTable.name = name;
 
+//        plugin.getDatabaseManager().getDatabase().save(clanTable);
+
         clanPlayer.setId(getClanPlayerId(name));
 
         return clanPlayer;
@@ -91,9 +93,10 @@ public class ClanPlayerManager {
 
     public long getClanPlayerId(String name)
     {
-        ClanPlayerTable clanPlayerTable = plugin.getDatabaseManager().getDatabase().select(ClanPlayerTable.class).where().equal("name", name).execute().findOne();
+//        ClanPlayerTable clanPlayerTable = plugin.getDatabaseManager().getDatabase().select(ClanPlayerTable.class).where().equal("name", name).execute().findOne();
 
-        return clanPlayerTable.id;
+//        return clanPlayerTable.id;
+        return 1;
     }
 
     public ClanPlayer getClanPlayer(String name)

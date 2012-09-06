@@ -6,75 +6,68 @@
  *     the Free Software Foundation, either version 3 of the License, or
  *     (at your option) any later version.
  *
- *     Foobar is distributed in the hope that it will be useful,
+ *     SimpleClans2 is distributed in the hope that it will be useful,
  *     but WITHOUT ANY WARRANTY; without even the implied warranty of
  *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *     GNU General Public License for more details.
  *
  *     You should have received a copy of the GNU General Public License
- *     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ *     along with SimpleClans2.  If not, see <http://www.gnu.org/licenses/>.
  *
- *     Created: 02.09.12 18:29
+ *     Created: 03.09.12 16:26
  */
-
 
 package com.p000ison.dev.simpleclans2.database;
 
-import com.alta189.simplesave.Database;
-import com.alta189.simplesave.DatabaseFactory;
-import com.alta189.simplesave.exceptions.ConnectionException;
-import com.alta189.simplesave.exceptions.TableRegistrationException;
-import com.alta189.simplesave.mysql.MySQLConfiguration;
-import com.p000ison.dev.simpleclans2.data.KillEntry;
-import com.p000ison.dev.simpleclans2.database.tables.ClanPlayerTable;
-import com.p000ison.dev.simpleclans2.database.tables.ClanTable;
+import com.p000ison.dev.simpleclans2.SimpleClans;
+import com.p000ison.dev.simpleclans2.util.Logging;
+
+import java.util.logging.Level;
 
 /**
- * Represents a DatabaseManager. This handles all the database stuff.
+ * Represents a DatabaseManager
  */
 public class DatabaseManager {
 
-    private Database db = null;
+    private SimpleClans plugin;
 
-    public DatabaseManager() throws TableRegistrationException, ConnectionException
+    private Database database;
+
+    public DatabaseManager(SimpleClans plugin)
     {
+        this.plugin = plugin;
 
-        MySQLConfiguration config = new MySQLConfiguration();
-        config.setHost("localhost");
-        config.setUser("root");
-        config.setPassword("");
-        config.setDatabase("sc");
-        config.setPort(3306);
-        db = DatabaseFactory.createNewDatabase(config);
-
-        db.registerTable(ClanTable.class);
-        db.registerTable(ClanPlayerTable.class);
-        db.registerTable(KillEntry.class);
-
-        db.connect();
+        init();
     }
 
-    /**
-     * Checks if the database is connected.
-     *
-     * @return Weather the database is connected
-     */
-    public boolean isConnected()
+    private void init()
     {
-        if (db == null) {
-            return false;
+        database = new MySQLDatabase("localhost", "sc", "root", "");
+
+        if (!database.checkConnection()) {
+            Logging.debug(Level.SEVERE, "Failed to connect to database2!");
+            return;
         }
 
-        return db.isConnected();
+        if (!database.existsTable("sc2_clans")) {
+            Logging.debug("Creating table: sc2_clans");
+
+            String clanTable = "CREATE TABLE IF NOT EXISTS `sc2_clans` ( `id` INT NOT NULL AUTO_INCREMENT UNIQUE KEY PRIMARY KEY, `tag` VARCHAR(26) NOT NULL, `name` VARCHAR(100) NOT NULL, `verified` TINYINT(1) default 0, `friendly_fire` TINYINT(1) default 0, `allies` TEXT DEFAULT '', `rivals` TEXT DEFAULT '', `warring` TEXT DEFAULT '', `founded` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, `last_action` TIMESTAMP NOT NULL, `bb` MEDIUMTEXT NOT NULL, `flags` MEDIUMTEXT NOT NULL);";
+
+            database.execute(clanTable);
+        }
+
+        if (!database.existsTable("sc2_players")) {
+            Logging.debug("Creating table: sc2_players");
+
+            String clanTable = "CREATE TABLE IF NOT EXISTS `sc2_players` ( `id` INT NOT NULL AUTO_INCREMENT UNIQUE KEY PRIMARY KEY, `name` VARCHAR(16) NOT NULL UNIQUE KEY, `leader` TINYINT(1) default 0, `rank` VARCHAR(16), `trusted` TINYINT(1) default 0, `banned` TINYINT(1) default 0, `join_date` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, `last_seen` TIMESTAMP  NOT NULL, `clan` INT default -1, `friendly_fire` TINYINT(1) default 0, `neutral_kills` INT default 0, `rival_kills` INT default 0, `civilian_kills` INT default 0, `deaths` INT default 0, `flags` MEDIUMTEXT NOT NULL );";
+
+            database.execute(clanTable);
+        }
     }
 
-    /**
-     * Retrieve the database
-     *
-     * @return The Database link.
-     */
     public Database getDatabase()
     {
-        return db;
+        return database;
     }
 }

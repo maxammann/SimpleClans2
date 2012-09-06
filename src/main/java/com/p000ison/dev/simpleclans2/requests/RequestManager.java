@@ -6,15 +6,15 @@
  *     the Free Software Foundation, either version 3 of the License, or
  *     (at your option) any later version.
  *
- *     Foobar is distributed in the hope that it will be useful,
+ *     SimpleClans2 is distributed in the hope that it will be useful,
  *     but WITHOUT ANY WARRANTY; without even the implied warranty of
  *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *     GNU General Public License for more details.
  *
  *     You should have received a copy of the GNU General Public License
- *     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ *     along with SimpleClans2.  If not, see <http://www.gnu.org/licenses/>.
  *
- *     Created: 02.09.12 18:29
+ *     Created: 02.09.12 18:33
  */
 
 
@@ -32,53 +32,110 @@ import java.util.Set;
 public class RequestManager {
     public Set<Request> requests = new HashSet<Request>();
 
-    public boolean createRequest(Request create)
+    public boolean createRequest(Request created)
     {
 
         //hmm damn you DAUs ....
-        for (Request request : requests) {
 
-            if (request.getRequester().equals(create.getRequester())) {
-                return false;
+        if (created instanceof MultipleAcceptorsRequest) {
+            MultipleAcceptorsRequest multiCreated = (MultipleAcceptorsRequest) created;
+
+            //go through all requests
+            for (Request request : requests) {
+
+                //if there is already a request of this player cancel
+                if (request.getRequester().equals(created.getRequester())) {
+                    return false;
+                }
+
+                //if there are multiple acceptors
+                if (request instanceof MultipleAcceptorsRequest) {
+                    MultipleAcceptorsRequest multiRequest = (MultipleAcceptorsRequest) request;
+
+                    //Check if any player of the current acceptors has already a request to handle
+                    for (ClanPlayer clanPlayer : multiCreated.getAcceptors()) {
+                        for (ClanPlayer acceptor : multiRequest.getAcceptors()) {
+                            if (acceptor.equals(clanPlayer)) {
+                                return false;
+                            }
+                        }
+                    }
+                } else if (request instanceof SingleAcceptorRequest) {
+                    //check if the one acceptor has already a request to handle
+                    if (multiCreated.getAcceptors().contains(multiCreated.getRequester())) {
+                        return false;
+                    }
+                }
             }
+        } else if (created instanceof SingleAcceptorRequest) {
+            SingleAcceptorRequest singleCreated = (SingleAcceptorRequest) created;
 
-            for (ClanPlayer clanPlayer : request.getAcceptors()) {
-                for (ClanPlayer acceptor : create.getAcceptors()) {
-                    if (acceptor.equals(clanPlayer)) {
+            //go through all requests
+            for (Request request : requests) {
+
+                //if there is already a request of this player cancel
+                if (request.getRequester().equals(created.getRequester())) {
+                    return false;
+                }
+
+                //if there are multiple acceptors
+                if (request instanceof MultipleAcceptorsRequest) {
+                    MultipleAcceptorsRequest multiRequest = (MultipleAcceptorsRequest) request;
+
+                    //Check if the acceptor of the request has already a request to handle
+                    for (ClanPlayer acceptor : multiRequest.getAcceptors()) {
+                        if (acceptor.equals(singleCreated.getAcceptor())) {
+                            return false;
+                        }
+                    }
+
+                } else if (request instanceof SingleAcceptorRequest) {
+                    //check if the one acceptor has already a request to handle
+                    if (singleCreated.getRequester().equals(singleCreated.getAcceptor())) {
                         return false;
                     }
                 }
             }
         }
 
-        requests.add(create);
-        sendRequest(create);
+
+        requests.add(created);
+        created.sendRequest();
         return true;
     }
 
     public boolean vote(ClanPlayer acceptor, VoteResult result)
     {
+
         Iterator<Request> it = requests.iterator();
         while (it.hasNext()) {
             Request request = it.next();
-            if (request.getAcceptors().contains(acceptor)) {
-                if (acceptor.getLastVoteResult() == VoteResult.UNKNOWN) {
-                    if (result == VoteResult.DENY) {
-                        //cancel request
-                        cancelRequest(request);
-                        it.remove();
-                    } else {
-                        acceptor.setLastVoteResult(result);
-                    }
+            if (request.isAcceptor(acceptor)) {
 
-                    if (checkRequest(request)) {
-                        //if everyone has voted
-                        processRequest(request);
-                        it.remove();
-                    }
-
-                    return true;
+                if (result == VoteResult.ACCEPT) {
+                    request.accept(acceptor);
+                } else if (result == VoteResult.DENY) {
+                    request.deny(acceptor);
+                } else if (result == VoteResult.ABSTAINED) {
+                    request.deny(acceptor);
+                } else {
+                    return false;
                 }
+
+                //check if we were successfully
+                if (request.checkRequest()) {
+                    //if everyone has voted
+                    request.processRequest();
+                    it.remove();
+                } else {
+                    //check if everyone has voted if yes and no success -> remove
+                    if (request.hasEveryoneVoted()) {
+                        request.cancelRequest();
+                        it.remove();
+                    }
+                }
+
+                return true;
             }
         }
 
@@ -92,60 +149,21 @@ public class RequestManager {
         while (it.hasNext()) {
             Request request = it.next();
 
-            if (request.getRequester().equals(player)) {
+            if (request.getRequester().getName().equals(player)) {
                 it.remove();
             }
 
-            for (ClanPlayer clanPlayer : request.getAcceptors()) {
-                if (clanPlayer.getName().equals(player)) {
+            if (request instanceof MultipleAcceptorsRequest) {
+                for (ClanPlayer clanPlayer : ((MultipleAcceptorsRequest) request).getAcceptors()) {
+                    if (clanPlayer.getName().equals(player)) {
+                        it.remove();
+                    }
+                }
+            } else {
+                if (((SingleAcceptorRequest) request).getAcceptor().getName().equals(player)) {
                     it.remove();
                 }
             }
-        }
-    }
-
-    public void processRequest(Request request)
-    {
-        for (ClanPlayer acceptor : request.getAcceptors()) {
-            acceptor.toPlayer().sendMessage("accepted");
-            acceptor.setLastVoteResult(VoteResult.UNKNOWN);
-        }
-
-        request.runGoal();
-        request.getRequester().toPlayer().sendMessage("accept");
-    }
-
-    public void cancelRequest(Request request)
-    {
-
-        for (ClanPlayer acceptor : request.getAcceptors()) {
-            acceptor.toPlayer().sendMessage("Cancelled");
-            acceptor.setLastVoteResult(VoteResult.UNKNOWN);
-        }
-
-        request.getRequester().toPlayer().sendMessage("Cancelledbo");
-    }
-
-    public boolean checkRequest(Request request)
-    {
-        for (ClanPlayer acceptor : request.getAcceptors()) {
-            if (acceptor.getLastVoteResult() == VoteResult.UNKNOWN) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    public void sendRequest(Request request)
-    {
-        for (ClanPlayer clanPlayer : request.getAcceptors()) {
-
-            if (clanPlayer == null) {
-                continue;
-            }
-
-            clanPlayer.toPlayer().sendMessage(request.getMessage());
         }
     }
 }

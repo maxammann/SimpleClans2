@@ -6,21 +6,22 @@
  *     the Free Software Foundation, either version 3 of the License, or
  *     (at your option) any later version.
  *
- *     Foobar is distributed in the hope that it will be useful,
+ *     SimpleClans2 is distributed in the hope that it will be useful,
  *     but WITHOUT ANY WARRANTY; without even the implied warranty of
  *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *     GNU General Public License for more details.
  *
  *     You should have received a copy of the GNU General Public License
- *     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ *     along with SimpleClans2.  If not, see <http://www.gnu.org/licenses/>.
  *
- *     Created: 02.09.12 18:29
+ *     Created: 02.09.12 18:33
  */
 
 
 package com.p000ison.dev.simpleclans2.util;
 
 
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -31,36 +32,35 @@ public class DateHelper {
 
     public static double differenceInMonths(Date date1, Date date2)
     {
-        return differenceInYears(date1, date2) * 12;
+        return differenceInYears(date1, date2) * 12D;
     }
-
 
     public static double differenceInYears(Date date1, Date date2)
     {
         double days = differenceInDays(date1, date2);
-        return days / 365.2425;
+        return days / 365.2425D;
     }
 
     public static double differenceInDays(Date date1, Date date2)
     {
-        return differenceInHours(date1, date2) / 24.0;
+        return differenceInHours(date1, date2) / 24.0D;
     }
 
 
     public static double differenceInHours(Date date1, Date date2)
     {
-        return differenceInMinutes(date1, date2) / 60.0;
+        return differenceInMinutes(date1, date2) / 60.0D;
     }
 
 
     public static double differenceInMinutes(Date date1, Date date2)
     {
-        return differenceInSeconds(date1, date2) / 60.0;
+        return differenceInSeconds(date1, date2) / 60.0D;
     }
 
     public static double differenceInSeconds(Date date1, Date date2)
     {
-        return differenceInMilliseconds(date1, date2) / 1000.0;
+        return differenceInMilliseconds(date1, date2) / 1000.0D;
     }
 
     private static double differenceInMilliseconds(Date date1, Date date2)
@@ -70,38 +70,45 @@ public class DateHelper {
 
     public static double differenceInMonths(long date1, long date2)
     {
-        return differenceInMonths(date1, date2);
+        return differenceInYears(date1, date2) * 12D;
     }
 
 
     public static double differenceInYears(long date1, long date2)
     {
-        return differenceInYears(date1, date2);
+        double days = differenceInDays(date1, date2);
+        return days / 365.2425D;
     }
-
 
     public static double differenceInDays(long date1, long date2)
     {
-        return differenceInDays(date1, date2);
+        return differenceInHours(date1, date2) / 24.0D;
     }
 
     public static double differenceInHours(long date1, long date2)
     {
-        return differenceInHours(date1, date2);
+        return differenceInMinutes(date1, date2) / 60.0D;
     }
 
     public static double differenceInMinutes(long date1, long date2)
     {
-        return differenceInMinutes(date1, date2);
+        return differenceInSeconds(date1, date2) / 60.0D;
     }
 
     public static double differenceInSeconds(long date1, long date2)
     {
-        return differenceInSeconds(date1, date2);
+        return differenceInMilliseconds(date1, date2) / 1000.0D;
     }
 
     private static double differenceInMilliseconds(long date1, long date2)
     {
-        return Math.abs(date1 - date2);
+        return Math.abs(getTimeInMilliseconds(date1) - getTimeInMilliseconds(date2));
+    }
+
+    private static long getTimeInMilliseconds(long date)
+    {
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(date);
+        return cal.getTimeInMillis() + cal.getTimeZone().getOffset(cal.getTimeInMillis());
     }
 }
