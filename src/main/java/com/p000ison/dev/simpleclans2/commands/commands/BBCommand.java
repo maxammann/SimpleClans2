@@ -107,7 +107,7 @@ public class BBCommand extends GenericPlayerCommand {
         } else if (player.hasPermission("simpleclans.member.bb-add")) {
 
             if (cp.isTrusted()) {
-                String msg = GeneralHelper.arrayToString(1, args);
+                String msg = GeneralHelper.arrayToStringFromStart(1, args);
                 clan.addBBMessage(cp, msg);
 //                        plugin.getDataManager().updateClan(clan);
             } else {

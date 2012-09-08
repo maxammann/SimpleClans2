@@ -71,7 +71,7 @@ public class CreateCommand extends GenericPlayerCommand {
         String tag = args[0];
         String cleanTag = ChatColor.stripColor(args[0]);
 
-        String name = GeneralHelper.arrayToString(1, args);
+        String name = GeneralHelper.arrayToStringFromStart(1, args);
 
         if (player.hasPermission("simpleclans.mod.bypass")) {
             if (cleanTag.length() >= plugin.getSettingsManager().getMaxTagLenght()) {
@@ -135,7 +135,7 @@ public class CreateCommand extends GenericPlayerCommand {
         Clan clan = plugin.getClanManager().createClan(args[0], name);
         clan.setLeader(cp);
         cp.setClan(clan);
-        clan.addBBMessage(player.getName(), ChatColor.AQUA + MessageFormat.format(Language.getTranslation("clan.created"), name));
+        clan.addBBMessage(cp,  MessageFormat.format(Language.getTranslation("clan.created"), name));
 
         if (plugin.getSettingsManager().requireVerification()) {
             boolean verified = !plugin.getSettingsManager().requireVerification() || player.hasPermission("simpleclans.mod.verify");

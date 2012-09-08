@@ -20,40 +20,35 @@
 
 package com.p000ison.dev.simpleclans2.data;
 
-import com.alta189.simplesave.Field;
-import com.alta189.simplesave.Id;
-import com.alta189.simplesave.Table;
-
 import java.util.Date;
 
 /**
  * Represents a KillEntry
  */
-@Table("sc2_kills")
+
 public class KillEntry {
 
-    @Id
+
     private int id;
 
-    @Field
+
     private String attacker;
 
-    @Field
+
     private String attacker_tag;
 
-    @Field
+
     private String victim;
 
-    @Field
+
     private String victim_tag;
 
-    @Field
+
     private boolean war;
 
-    @Field
+
     private long date;
 
-    @Field
     private byte kill_type;
 
     public String getAttacker()
