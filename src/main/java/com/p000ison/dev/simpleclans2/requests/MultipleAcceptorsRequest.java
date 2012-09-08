@@ -21,6 +21,7 @@ package com.p000ison.dev.simpleclans2.requests;
 
 import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
+import org.bukkit.entity.Player;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -107,7 +108,6 @@ public abstract class MultipleAcceptorsRequest extends Request {
     @Override
     public boolean hasEveryoneVoted()
     {
-
         return accepts.size() + denies.size() + denies.size() >= acceptors.size();
     }
 
@@ -121,16 +121,29 @@ public abstract class MultipleAcceptorsRequest extends Request {
         return denies.size();
     }
 
-    public void sendRequest()
+    @Override
+    public void announceMessage(String message)
     {
-        for (ClanPlayer clanPlayer : getAcceptors()) {
+        for (ClanPlayer clanPlayer : acceptors) {
+            Player player = clanPlayer.toPlayer();
 
-            if (clanPlayer == null) {
+            if (player == null) {
                 continue;
             }
 
-            clanPlayer.toPlayer().sendMessage(getMessage());
+            player.sendMessage(message);
         }
+
+        Player player = requester.toPlayer();
+
+        if (player != null) {
+            player.sendMessage(message);
+        }
+    }
+
+    public void sendRequest()
+    {
+        announceMessage(getMessage());
     }
 
     @Override

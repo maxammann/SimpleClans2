@@ -24,11 +24,15 @@ import com.p000ison.dev.simpleclans2.clan.ClanManager;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayerManager;
 import com.p000ison.dev.simpleclans2.commands.CommandManager;
 import com.p000ison.dev.simpleclans2.commands.commands.AlliancesCommand;
+import com.p000ison.dev.simpleclans2.commands.commands.AllyCommand;
 import com.p000ison.dev.simpleclans2.commands.commands.CreateCommand;
 import com.p000ison.dev.simpleclans2.commands.commands.ListCommand;
+import com.p000ison.dev.simpleclans2.commands.commands.voting.AbstainCommand;
+import com.p000ison.dev.simpleclans2.commands.commands.voting.DenyCommand;
 import com.p000ison.dev.simpleclans2.data.DataManager;
 import com.p000ison.dev.simpleclans2.database.Database;
 import com.p000ison.dev.simpleclans2.database.DatabaseManager;
+import com.p000ison.dev.simpleclans2.requests.RequestManager;
 import com.p000ison.dev.simpleclans2.settings.SettingsManager;
 import com.p000ison.dev.simpleclans2.util.Logging;
 import net.milkbowl.vault.economy.Economy;
@@ -46,7 +50,7 @@ public class SimpleClans extends JavaPlugin {
     private DatabaseManager databaseManager;
     private ClanPlayerManager clanPlayerManager;
     private SettingsManager settingsManager;
-    private ClanRequestManager requestManager;
+    private RequestManager requestManager;
     private CommandManager commandManager;
     private DataManager dataManager;
     private static Economy economy;
@@ -55,6 +59,8 @@ public class SimpleClans extends JavaPlugin {
     @Override
     public void onEnable()
     {
+        long startup = System.currentTimeMillis();
+
         new Logging(getLogger());
         new Language("en_EN");
 
@@ -63,6 +69,10 @@ public class SimpleClans extends JavaPlugin {
         }
 
         loadManagers();
+
+        long finish = System.currentTimeMillis();
+
+        Logging.debug(String.format("Enabling took %s ms", finish - startup));
     }
 
 
@@ -96,15 +106,11 @@ public class SimpleClans extends JavaPlugin {
     private void loadManagers()
     {
         settingsManager = new SettingsManager(this);
-
-
         databaseManager = new DatabaseManager(this);
-
-
         clanManager = new ClanManager(this);
         clanPlayerManager = new ClanPlayerManager(this);
         dataManager = new DataManager(this);
-        requestManager = new ClanRequestManager();
+        requestManager = new RequestManager();
         setupCommands();
     }
 
@@ -115,6 +121,10 @@ public class SimpleClans extends JavaPlugin {
         commandManager.addCommand(new ListCommand(this));
         commandManager.addCommand(new CreateCommand(this));
         commandManager.addCommand(new AlliancesCommand(this));
+        commandManager.addCommand(new AllyCommand(this));
+        commandManager.addCommand(new CreateCommand(this));
+        commandManager.addCommand(new DenyCommand(this));
+        commandManager.addCommand(new AbstainCommand(this));
     }
 
     @Override
@@ -152,7 +162,7 @@ public class SimpleClans extends JavaPlugin {
         return settingsManager;
     }
 
-    public ClanRequestManager getRequestManager()
+    public RequestManager getRequestManager()
     {
         return requestManager;
     }

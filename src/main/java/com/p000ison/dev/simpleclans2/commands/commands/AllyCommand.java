@@ -24,13 +24,15 @@ import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
+import com.p000ison.dev.simpleclans2.requests.requests.AllyCreateRequest;
 import com.p000ison.dev.simpleclans2.util.ChatBlock;
+import com.p000ison.dev.simpleclans2.util.GeneralHelper;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.text.MessageFormat;
-import java.util.List;
+import java.util.Set;
 
 /**
  * Represents a AllyCommand
@@ -72,55 +74,62 @@ public class AllyCommand extends GenericPlayerCommand {
                 Clan clan = cp.getClan();
 
                 if (!clan.isVerified()) {
-                    ChatColor.RED + Language.getTranslation("clan.is.not.verified")
+                    player.sendMessage(ChatColor.RED + Language.getTranslation("clan.is.not.verified"));
                     return;
                 }
+
                 if (!clan.isLeader(cp)) {
-                    ChatColor.RED + Language.getTranslation("no.leader.permissions")
+                    player.sendMessage(ChatColor.RED + Language.getTranslation("no.leader.permissions"));
                     return;
                 }
-                if (clan.getSize() <= plugin.getSettingsManager().getClanMinSizeToAlly()) {
-                    ChatColor.RED + MessageFormat.format(Language.getTranslation("minimum.to.make.alliance"), plugin.getSettingsManager().getClanMinSizeToAlly())
+
+                if (clan.getSize() <= plugin.getSettingsManager().getMinimalSizeToAlly()) {
+                    player.sendMessage(ChatColor.RED + MessageFormat.format(Language.getTranslation("minimum.to.make.alliance"), plugin.getSettingsManager().getMinimalSizeToAlly()));
                     return;
                 }
+
                 String action = args[0];
                 Clan ally = plugin.getClanManager().getClan(args[1]);
 
                 if (ally == null) {
-                    ChatColor.RED + Language.getTranslation("no.clan.matched")
+                    player.sendMessage(ChatColor.RED + Language.getTranslation("no.clan.matched"));
                     return;
                 }
+
                 if (!ally.isVerified()) {
-                    ChatColor.RED + Language.getTranslation("cannot.ally.with.an.unverified.clan")
+                    player.sendMessage(ChatColor.RED + Language.getTranslation("cannot.ally.with.an.unverified.clan"));
                     return;
                 }
+
                 if (action.equals(Language.getTranslation("add"))) {
                     if (!clan.isAlly(ally)) {
-                        List<ClanPlayer> onlineLeaders = Helper.stripOffLinePlayers(clan.getLeaders());
 
-                        if (!onlineLeaders.isEmpty()) {
-                            plugin.getRequestManager().addAllyRequest(cp, ally, clan);
-                            ChatBlock.sendMessage(player, ChatColor.AQUA + MessageFormat.format(Language.getTranslation("leaders.have.been.asked.for.an.alliance"), Helper.capitalize(ally.getName())));
+                        Set<ClanPlayer> leaders = clan.getLeaders();
+                        GeneralHelper.stripOfflinePlayers(leaders);
+
+                        if (!leaders.isEmpty()) {
+                            plugin.getRequestManager().createRequest(new AllyCreateRequest(leaders, cp, clan, "", ally));
+                            player.sendMessage(ChatColor.AQUA + MessageFormat.format(Language.getTranslation("leaders.have.been.asked.for.an.alliance"), ally.getName()));
                         } else {
-                            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("at.least.one.leader.accept.the.alliance"));
+                            player.sendMessage(ChatColor.RED + Language.getTranslation("at.least.one.leader.accept.the.alliance"));
                         }
                     } else {
-                        ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("your.clans.are.already.allies"));
+                        player.sendMessage(ChatColor.RED + Language.getTranslation("your.clans.are.already.allies"));
                     }
                 } else if (action.equals(Language.getTranslation("remove"))) {
-                    if (clan.isAlly(ally.getTag())) {
+                    if (clan.isAlly(ally)) {
                         clan.removeAlly(ally);
-                        ally.addBBMessage(cp.getName(), ChatColor.AQUA + MessageFormat.format(Language.getTranslation("has.broken.the.alliance"), Helper.capitalize(clan.getName()), ally.getName()));
-                        clan.addBBMessage(cp.getName(), ChatColor.AQUA + MessageFormat.format(Language.getTranslation("has.broken.the.alliance"), Helper.capitalize(cp.getName()), Helper.capitalize(ally.getName())));
+                        ally.addBBMessage(cp.getName(), ChatColor.AQUA + MessageFormat.format(Language.getTranslation("has.broken.the.alliance"), clan.getName(), ally.getName()));
+                        clan.addBBMessage(cp.getName(), ChatColor.AQUA + MessageFormat.format(Language.getTranslation("has.broken.the.alliance"), cp.getName(), ally.getName()));
                     } else {
-                        ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("your.clans.are.not.allies"));
+                        player.sendMessage(ChatColor.RED + Language.getTranslation("your.clans.are.not.allies"));
                     }
                 } else {
-                    ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(Language.getTranslation("usage.ally"), plugin.getSettingsManager().getClanCommand()));
+                    player.sendMessage(ChatColor.RED + MessageFormat.format(Language.getTranslation("usage.ally"), plugin.getSettingsManager().getClanCommand()));
                 }
             }
         } else {
-            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("insufficient.permissions"));
+            player.sendMessage(ChatColor.RED + Language.getTranslation("insufficient.permissions"));
         }
     }
 }

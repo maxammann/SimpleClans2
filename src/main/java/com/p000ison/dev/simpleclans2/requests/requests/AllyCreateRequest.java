@@ -22,13 +22,10 @@ package com.p000ison.dev.simpleclans2.requests.requests;
 import com.p000ison.dev.simpleclans2.Language;
 import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
-import com.p000ison.dev.simpleclans2.requests.Executable;
 import com.p000ison.dev.simpleclans2.requests.MultipleAcceptorsRequest;
-import com.p000ison.dev.simpleclans2.requests.Request;
 import org.bukkit.ChatColor;
 
 import java.text.MessageFormat;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -48,7 +45,7 @@ public class AllyCreateRequest extends MultipleAcceptorsRequest {
     public boolean execute()
     {
         ClanPlayer cp = getRequester();
-        Clan clan = cp.getClan();
+        Clan clan = getClan();
 
 
         if (ally != null && clan != null) {
@@ -58,8 +55,8 @@ public class AllyCreateRequest extends MultipleAcceptorsRequest {
             // if (!accepts.isEmpty()) {
             clan.addAlly(ally);
 
-            ally.addBBMessage(cp.getName(), ChatColor.AQUA + MessageFormat.format(Language.getTranslation("accepted.an.alliance"), getAcceptors(), clan.getName()));
-            clan.addBBMessage(cp.getName(), ChatColor.AQUA + MessageFormat.format(Language.getTranslation("created.an.alliance"), cp.getName(), ally.getName()));
+            ally.addBBMessage(cp, MessageFormat.format(Language.getTranslation("accepted.an.alliance"), getAcceptors(), clan.getName()));
+            clan.addBBMessage(cp, MessageFormat.format(Language.getTranslation("created.an.alliance"), cp.getName(), ally.getName()));
             /*     } else {
              ally.addBBMessage(cp.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang("denied.an.alliance"), Helper.capitalize(denies.get(0)), clan.getName()));
              clan.addBBMessage(cp.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang("the.alliance.was.denied"), Helper.capitalize(ally.getName())));

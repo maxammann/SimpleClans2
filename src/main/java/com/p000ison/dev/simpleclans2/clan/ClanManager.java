@@ -21,17 +21,19 @@
 package com.p000ison.dev.simpleclans2.clan;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
-import com.p000ison.dev.simpleclans2.database2.tables.ClanTable;
+import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import org.bukkit.ChatColor;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * The ClanManager handels everything with clans.
  */
 public class ClanManager {
     private SimpleClans plugin;
-    private Map<Long, Clan> clans = new HashMap<Long, Clan>();
+    private Set<Clan> clans = new HashSet<Clan>();
 
 
     public ClanManager(SimpleClans plugin)
@@ -47,17 +49,22 @@ public class ClanManager {
      */
     public Set<Clan> getClans()
     {
-        return Collections.unmodifiableSet(new HashSet<Clan>(clans.values()));
+        return Collections.unmodifiableSet(clans);
     }
 
-    /**
-     * Returns a unmodifiable raw collection of all clans.
-     *
-     * @return A collection of all clans.
-     */
-    public Collection<Clan> getClansRaw()
+//    /**
+//     * Returns a unmodifiable raw collection of all clans.
+//     *
+//     * @return A collection of all clans.
+//     */
+//    public Collection<Clan> getClansRaw()
+//    {
+//        return Collections.unmodifiableSet(clans);
+//    }
+
+    public boolean removeClan(Clan clan)
     {
-        return Collections.unmodifiableCollection(clans.values());
+        return clans.remove(clan);
     }
 
     /**
@@ -71,7 +78,7 @@ public class ClanManager {
     {
         String lowerTag = ChatColor.stripColor(tag.toLowerCase());
 
-        for (Clan clan : clans.values()) {
+        for (Clan clan : clans) {
             if (clan.getCleanTag().startsWith(lowerTag)) {
                 return clan;
             }
@@ -87,21 +94,29 @@ public class ClanManager {
      */
     public Clan getClan(long id)
     {
-        return clans.get(id);
+        for (Clan clan : clans) {
+            if (clan.getId() == id) {
+                return clan;
+            }
+        }
+
+        return null;
     }
 
     public void createClan(Clan clan)
     {
-        clans.put(clan.getId(), clan);
+        clans.add(clan);
 
-        ClanTable clanTable = new ClanTable();
-
-        clanTable.tag = clan.getTag();
-        clanTable.name = clan.getName();
-        clanTable.last_action = System.currentTimeMillis();
-        clanTable.founded = System.currentTimeMillis();
-        clanTable.friendly_fire = clan.isFriendlyFireOn();
-        clanTable.verified = clan.isVerified();
+//        ClanTable clanTable = new ClanTable();
+//
+//        clanTable.tag = clan.getTag();
+//        clanTable.name = clan.getName();
+//        clanTable.last_action = System.currentTimeMillis();
+//        clanTable.founded = System.currentTimeMillis();
+//        clanTable.friendly_fire = clan.isFriendlyFireOn();
+//        clanTable.verified = clan.isVerified();
+//
+//        plugin.getDataManager().
 
 //        plugin.getDatabaseManager().getDatabase().save(clanTable);
 
@@ -137,9 +152,7 @@ public class ClanManager {
 
     public void importClans(Set<Clan> clans)
     {
-        for (Clan clan : clans) {
-            this.clans.put(clan.getId(), clan);
-        }
+        this.clans = clans;
     }
 
     public boolean existsClan(String tag)
@@ -161,11 +174,33 @@ public class ClanManager {
      */
     public Clan getClanExact(String tag)
     {
-        for (Clan clan : clans.values()) {
+        for (Clan clan : clans) {
             if (clan.getTag().equals(tag)) {
                 return clan;
             }
         }
         return null;
+    }
+
+    public void ban(ClanPlayer clanPlayer)
+    {
+        if (clanPlayer == null) {
+            return;
+        }
+
+        Clan clan = clanPlayer.getClan();
+
+        if (clan != null) {
+            if (clan.isLeader(clanPlayer) && clan.getLeaders().size() == 1) {
+                clan.disband();
+            } else {
+                clanPlayer.setJoinDate(0);
+                clan.removeMember(clanPlayer);
+                clanPlayer.setBanned(true);
+
+                plugin.getDataManager().updateClanPlayer(clanPlayer);
+//                plugin.getDataManager().updateClan(clan);
+            }
+        }
     }
 }

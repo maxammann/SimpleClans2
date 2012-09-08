@@ -21,7 +21,6 @@
 package com.p000ison.dev.simpleclans2.clanplayer;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
-import com.p000ison.dev.simpleclans2.database2.tables.ClanPlayerTable;
 import org.bukkit.entity.Player;
 
 import java.util.Collections;
@@ -58,11 +57,6 @@ public class ClanPlayerManager {
 
         players.add(clanPlayer);
 
-        ClanPlayerTable clanTable = new ClanPlayerTable();
-
-        clanTable.name = name;
-
-//        plugin.getDatabaseManager().getDatabase().save(clanTable);
 
         clanPlayer.setId(getClanPlayerId(name));
 

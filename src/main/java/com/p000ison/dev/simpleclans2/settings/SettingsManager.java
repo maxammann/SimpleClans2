@@ -57,13 +57,15 @@ public class SettingsManager {
     private int maxTagLenght, minTagLenght;
     private Character[] disallowedColors;
     private Set<String> disallowedTags;
-    private int maxBBLenght;
-    private ChatColor defaultBBColor;
     private boolean requireVerification;
     private boolean purchaseCreation, purchaseVerification;
     private double purchasePrice;
     private int purgeInactivePlayersDays, purgeInactiveClansDays, purgeUnverifiedClansDays;
     private boolean showUnverifiedClansOnList;
+    private int minimalSizeToAlly;
+
+    private String clanBB, clanPlayerBB, defaultBB;
+    private int maxBBDisplayLines, maxBBLenght;
 
     private ChatColor headingPageColor, subPageColor;
 
@@ -77,7 +79,7 @@ public class SettingsManager {
     {
         config = plugin.getConfig();
 
-        config.options().copyDefaults(true);
+
         save();
 
         load();
@@ -121,9 +123,9 @@ public class SettingsManager {
             disallowedColors = disallowedColorsList.toArray(new Character[disallowedColorsList.size()]);
             disallowedTags = new HashSet<String>(config.getStringList("disallowed-tags"));
             maxBBLenght = clan.getInt("max-bb-lenght");
-            defaultBBColor = ChatColor.getByChar(clan.getString("default-bb-color"));
             requireVerification = clan.getBoolean("require-verification");
             showUnverifiedClansOnList = clan.getBoolean("show-unverified-clans-on-list");
+            minimalSizeToAlly = clan.getInt("minimal-size-to-ally");
 
             ConfigurationSection clanEconomy = clan.getConfigurationSection("economy");
 
@@ -136,6 +138,14 @@ public class SettingsManager {
             purgeInactiveClansDays = clanPurge.getInt("inactive-clan-days");
             purgeUnverifiedClansDays = clanPurge.getInt("unverified-clan-days");
 
+
+            ConfigurationSection clanBBSection = clan.getConfigurationSection("bb");
+
+            clanBB = clanBBSection.getString("clan");
+            clanPlayerBB = clanBBSection.getString("clanplayer");
+            defaultBB = clanBBSection.getString("default");
+            maxBBDisplayLines = clanBBSection.getInt("max-display-lines");
+            maxBBLenght = clanBBSection.getInt("max-lines");
 
             ConfigurationSection paging = config.getConfigurationSection("paging");
 
@@ -264,11 +274,6 @@ public class SettingsManager {
         return maxBBLenght;
     }
 
-    public ChatColor getDefaultBBColor()
-    {
-        return defaultBBColor;
-    }
-
     public boolean requireVerification()
     {
         return requireVerification;
@@ -332,5 +337,30 @@ public class SettingsManager {
     public boolean isShowUnverifiedClansOnList()
     {
         return showUnverifiedClansOnList;
+    }
+
+    public int getMinimalSizeToAlly()
+    {
+        return minimalSizeToAlly;
+    }
+
+    public String getClanBB()
+    {
+        return clanBB;
+    }
+
+    public String getClanPlayerBB()
+    {
+        return clanPlayerBB;
+    }
+
+    public String getDefaultBB()
+    {
+        return defaultBB;
+    }
+
+    public int getMaxBBDisplayLines()
+    {
+        return maxBBDisplayLines;
     }
 }

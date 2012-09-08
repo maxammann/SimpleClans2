@@ -20,10 +20,10 @@
 package com.p000ison.dev.simpleclans2.util;
 
 import com.p000ison.dev.simpleclans2.clan.Clan;
+import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import org.bukkit.ChatColor;
 
-import java.util.Arrays;
-import java.util.Collection;
+import java.util.*;
 
 /**
  * Represents a GeneralHelper
@@ -56,6 +56,20 @@ public class GeneralHelper {
         }
 
         return string.substring(0, string.length() - 1);
+    }
+
+    public static Set<ClanPlayer> stripOfflinePlayers(Set<ClanPlayer> players)
+    {
+        Set<ClanPlayer> out = new HashSet<ClanPlayer>();
+        for (ClanPlayer clanPlayer : players) {
+
+            if (clanPlayer.toPlayer() != null) {
+                out.add(clanPlayer);
+            }
+
+        }
+
+        return out;
     }
 
     public static String clansToString(Collection<Clan> collection, String separator)

@@ -24,8 +24,6 @@ import com.p000ison.dev.simpleclans2.Flags;
 import com.p000ison.dev.simpleclans2.vectors.SerializablePlayerVector;
 import org.bukkit.Location;
 
-import java.util.Set;
-
 /**
  * Represents a the Flags of a clan
  */

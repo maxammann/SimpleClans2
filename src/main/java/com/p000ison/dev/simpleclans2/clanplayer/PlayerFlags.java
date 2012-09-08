@@ -34,26 +34,26 @@ public class PlayerFlags extends Flags {
      *
      * @param id The id of the clan to add.
      */
-    public void addPastClan(long id)
+    public void addPastClan(String clan)
     {
-        super.getSet("pastClans").add(id);
+        super.getSet("pastClans").add(clan);
     }
 
     /**
      * Removes a past clan to this clan.
      *
-     * @param id The id of the clan to remove.
+     * @param clan The id of the clan to remove.
      */
-    public void removePastClan(long id)
+    public void removePastClan(String clan)
     {
         Set warring = super.getSet("pastClans");
 
-        if (warring.contains(id)) {
-            warring.remove(id);
+        if (warring.contains(clan)) {
+            warring.remove(clan);
         }
     }
 
-    public Set<Long> getPastClans()
+    public Set<String> getPastClans()
     {
         return super.getSet("pastClans");
     }

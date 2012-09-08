@@ -23,14 +23,12 @@ package com.p000ison.dev.simpleclans2.requests;
 import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 
-import java.util.Set;
-
 /**
  * Represents a Request
  */
 public abstract class Request implements Executable {
 
-    private ClanPlayer requester;
+    protected ClanPlayer requester;
     private Clan clan;
     private String message;
     private long created;
@@ -76,6 +74,8 @@ public abstract class Request implements Executable {
     public abstract void sendRequest();
 
     public abstract boolean isAcceptor(ClanPlayer clanPlayer);
+
+    public abstract void announceMessage(String message);
 
     public long getCreatedDate()
     {

@@ -104,7 +104,7 @@ public class RequestManager {
         return true;
     }
 
-    public boolean vote(ClanPlayer acceptor, VoteResult result)
+    public Request vote(ClanPlayer acceptor, VoteResult result)
     {
 
         Iterator<Request> it = requests.iterator();
@@ -119,7 +119,7 @@ public class RequestManager {
                 } else if (result == VoteResult.ABSTAINED) {
                     request.deny(acceptor);
                 } else {
-                    return false;
+                    return null;
                 }
 
                 //check if we were successfully
@@ -135,11 +135,11 @@ public class RequestManager {
                     }
                 }
 
-                return true;
+                return request;
             }
         }
 
-        return false;
+        return null;
     }
 
     public void clearRequests(String player)

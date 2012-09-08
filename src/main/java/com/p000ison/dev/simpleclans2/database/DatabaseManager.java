@@ -52,7 +52,7 @@ public class DatabaseManager {
         if (!database.existsTable("sc2_clans")) {
             Logging.debug("Creating table: sc2_clans");
 
-            String clanTable = "CREATE TABLE IF NOT EXISTS `sc2_clans` ( `id` INT NOT NULL AUTO_INCREMENT UNIQUE KEY PRIMARY KEY, `tag` VARCHAR(26) NOT NULL, `name` VARCHAR(100) NOT NULL, `verified` TINYINT(1) default 0, `friendly_fire` TINYINT(1) default 0, `allies` TEXT DEFAULT '', `rivals` TEXT DEFAULT '', `warring` TEXT DEFAULT '', `founded` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, `last_action` TIMESTAMP NOT NULL, `bb` MEDIUMTEXT NOT NULL, `flags` MEDIUMTEXT NOT NULL);";
+            String clanTable = "CREATE TABLE IF NOT EXISTS `sc2_clans` ( `id` INT NOT NULL AUTO_INCREMENT UNIQUE KEY PRIMARY KEY, `tag` VARCHAR(26) NOT NULL, `name` VARCHAR(100) NOT NULL, `verified` TINYINT(1) default 0, `friendly_fire` TINYINT(1) default 0, `allies` TEXT, `rivals` TEXT, `warring` TEXT, `founded` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, `last_action` TIMESTAMP NOT NULL, `bb` MEDIUMTEXT NOT NULL, `flags` MEDIUMTEXT NOT NULL);";
 
             database.execute(clanTable);
         }

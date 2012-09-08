@@ -20,16 +20,16 @@
 
 package com.p000ison.dev.simpleclans2.clan;
 
+import com.p000ison.dev.simpleclans2.Language;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.util.DateHelper;
 import com.p000ison.dev.simpleclans2.util.GeneralHelper;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Set;
+import java.text.MessageFormat;
+import java.util.*;
 
 /**
  * Represents a Clan
@@ -48,6 +48,7 @@ public class Clan {
     private Set<Clan> allies = new HashSet<Clan>();
     private Set<Clan> rivals = new HashSet<Clan>();
     private Set<Clan> warring = new HashSet<Clan>();
+    private Set<ClanPlayer> allMembers = new HashSet<ClanPlayer>();
 
     /**
      * Creates a new clan
@@ -266,11 +267,11 @@ public class Clan {
      */
     public boolean isAlly(long id)
     {
-        for (Clan clan : allies) {
-            if (clan.getId() == id) {
-                return true;
-            }
-        }
+//        for (Clan clan : allies) {
+//            if (clan.getId() == id) {
+//                return true;
+//            }
+//        }
 
         return false;
     }
@@ -367,7 +368,7 @@ public class Clan {
 
     public boolean isMember()
     {
-        for (ClanPlayer cp : plugin.getClanPlayerManager().getClanPlayers()) {
+        for (ClanPlayer cp : allMembers) {
             if (cp.getClanId() == id && !cp.isLeader()) {
                 return true;
             }
@@ -383,7 +384,7 @@ public class Clan {
 
     public boolean isAnyMember()
     {
-        for (ClanPlayer cp : plugin.getClanPlayerManager().getClanPlayers()) {
+        for (ClanPlayer cp : allMembers) {
             if (cp.getClanId() == id) {
                 return true;
             }
@@ -397,7 +398,7 @@ public class Clan {
         Set<ClanPlayer> allMembers = new HashSet<ClanPlayer>();
 
 
-        for (ClanPlayer cp : plugin.getClanPlayerManager().getClanPlayers()) {
+        for (ClanPlayer cp : allMembers) {
             if (cp.getClanId() == id && !cp.isLeader()) {
                 allMembers.add(cp);
             }
@@ -408,15 +409,6 @@ public class Clan {
 
     public Set<ClanPlayer> getAllMembers()
     {
-        Set<ClanPlayer> allMembers = new HashSet<ClanPlayer>();
-
-
-        for (ClanPlayer cp : plugin.getClanPlayerManager().getClanPlayers()) {
-            if (cp.getClanId() == id) {
-                allMembers.add(cp);
-            }
-        }
-
         return allMembers;
     }
 
@@ -426,7 +418,7 @@ public class Clan {
         Set<ClanPlayer> leaders = new HashSet<ClanPlayer>();
 
 
-        for (ClanPlayer cp : plugin.getClanPlayerManager().getClanPlayers()) {
+        for (ClanPlayer cp : allMembers) {
             if (cp.getClanId() == id && cp.isLeader()) {
                 leaders.add(cp);
             }
@@ -440,9 +432,12 @@ public class Clan {
         Clan previous = clanPlayer.getClan();
 
         if (previous != null) {
-            clanPlayer.addPastClan(previous);
+            if (isVerified()) {
+                clanPlayer.addPastClan(getTag() + (clanPlayer.isLeader() ? "*" : ""));
+            }
         }
 
+        allMembers.add(clanPlayer);
         clanPlayer.setClan(this);
     }
 
@@ -469,10 +464,17 @@ public class Clan {
         return getAllMembers().size();
     }
 
-    public void addBBMessage(String announcer, String msg)
+    public void addBBMessage(ClanPlayer announcer, String msg)
     {
         if (isVerified()) {
-            addBBMessage(plugin.getSettingsManager().getDefaultBBColor().getChar() + announcer + GeneralHelper.parseColors(msg));
+            addBBRawMessage(GeneralHelper.parseColors(plugin.getSettingsManager().getClanPlayerBB().replace("+player", announcer.getName()).replace("+message", msg)));
+        }
+    }
+
+    public void addBBMessage(Clan announcer, String msg)
+    {
+        if (isVerified()) {
+            addBBRawMessage(GeneralHelper.parseColors(plugin.getSettingsManager().getClanBB().replace("+clan", announcer.getTag()).replace("+message", msg)));
         }
     }
 
@@ -481,7 +483,12 @@ public class Clan {
         return ChatColor.stripColor(tag.toLowerCase());
     }
 
-    public void addBBMessage(String message)
+    public void addBBMessage(String msg)
+    {
+        addBBRawMessage(GeneralHelper.parseColors(plugin.getSettingsManager().getDefaultBB().replace("+message", msg)));
+    }
+
+    private void addBBRawMessage(String message)
     {
         if (isVerified()) {
             if (bb.size() > plugin.getSettingsManager().getMaxBBLenght()) {
@@ -490,6 +497,11 @@ public class Clan {
 
             bb.add(message);
         }
+    }
+
+    public void clearBB()
+    {
+        bb.clear();
     }
 
     public void loadBB(LinkedList<String> bb)
@@ -522,5 +534,100 @@ public class Clan {
     public void addWarringClan(Clan warringClan)
     {
         warring.add(warringClan);
+    }
+
+    public void removeRival(Clan rival)
+    {
+        rivals.remove(rival);
+    }
+
+    public void removeAlly(Clan ally)
+    {
+        allies.remove(ally);
+    }
+
+    public void removeWarringClan(Clan warringClan)
+    {
+        warring.remove(warringClan);
+        addBBMessage(warringClan, MessageFormat.format(Language.getTranslation("you.are.no.longer.at.war"), warringClan.getName(), getTag()));
+    }
+
+    public void removeMember(ClanPlayer clanPlayer)
+    {
+        if (allMembers.contains(clanPlayer)) {
+
+            allMembers.remove(clanPlayer);
+
+            if (clanPlayer.isLeader()) {
+                clanPlayer.setLeader(false);
+                disband();
+            }
+        }
+    }
+
+    public void disband()
+    {
+        Iterator<ClanPlayer> clanPlayers = allMembers.iterator();
+
+        while (clanPlayers.hasNext()) {
+
+            ClanPlayer clanPlayer = clanPlayers.next();
+
+            removeMember(clanPlayer);
+
+            plugin.getDataManager().updateClanPlayer(clanPlayer);
+            clanPlayers.remove();
+        }
+
+
+        for (Clan warringClan : warring) {
+            warringClan.removeWarringClan(this);
+        }
+
+        for (Clan allyClan : allies) {
+            allyClan.removeAlly(this);
+        }
+
+        for (Clan rivalClan : rivals) {
+            rivalClan.removeRival(this);
+        }
+
+
+//        for (Clan c : clans) {
+//            String disbanded = plugin.getLang("clan.disbanded");
+//
+//            if (c.removeWarringClan(this)) {
+//                c.addBb(disbanded, ChatColor.AQUA + MessageFormat.format(plugin.getLang("you.are.no.longer.at.war"), Helper.capitalize(c.getName()), getColorTag()));
+//            }
+//
+//            if (c.removeRival(getTag())) {
+//                c.addBb(disbanded, ChatColor.AQUA + MessageFormat.format(plugin.getLang("has.been.disbanded.rivalry.ended"), Helper.capitalize(getName())));
+//            }
+//
+//            if (c.removeAlly(getTag())) {
+//                c.addBb(disbanded, ChatColor.AQUA + MessageFormat.format(plugin.getLang("has.been.disbanded.alliance.ended"), Helper.capitalize(getName())));
+//            }
+//        }
+
+        plugin.getClanManager().removeClan(this);
+        plugin.getDataManager().deleteClan(this);
+    }
+
+    public void displayBb(Player player, int maxLines)
+    {
+
+        int start = bb.size() - maxLines;
+        int end = bb.size();
+
+        for (; start < end; start++) {
+            player.sendMessage(bb.get(start));
+        }
+    }
+
+    public void displayBb(Player player)
+    {
+        for (String bbMessage : bb) {
+            player.sendMessage(bbMessage);
+        }
     }
 }

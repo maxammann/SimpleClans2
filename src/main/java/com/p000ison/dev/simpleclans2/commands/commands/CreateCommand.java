@@ -133,6 +133,8 @@ public class CreateCommand extends GenericPlayerCommand {
         }
 
         Clan clan = plugin.getClanManager().createClan(args[0], name);
+        clan.setLeader(cp);
+        cp.setClan(clan);
         clan.addBBMessage(player.getName(), ChatColor.AQUA + MessageFormat.format(Language.getTranslation("clan.created"), name));
 
         if (plugin.getSettingsManager().requireVerification()) {

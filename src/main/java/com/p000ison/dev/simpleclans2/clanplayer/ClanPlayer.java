@@ -207,12 +207,12 @@ public class ClanPlayer {
         return flags;
     }
 
-    public void addPastClan(Clan clan)
+    public void addPastClan(String string)
     {
-        flags.addPastClan(clan.getId());
+        flags.addPastClan(string);
     }
 
-    public Set<Long> getPastClans()
+    public Set<String> getPastClans()
     {
         return flags.getPastClans();
     }

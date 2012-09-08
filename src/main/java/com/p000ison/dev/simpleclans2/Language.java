@@ -33,7 +33,7 @@ import java.util.logging.Level;
 public class Language {
     private static final Locale defaultLocale = Locale.getDefault();
     private static Locale locale = defaultLocale;
-    private static ResourceBundle bundle = ResourceBundle.getBundle("languages.lang", defaultLocale);
+    private static ResourceBundle bundle;
     private static ResourceBundle defaultBundle = ResourceBundle.getBundle("languages.lang", Locale.ENGLISH);
 
     public Language(String loc)
@@ -48,7 +48,7 @@ public class Language {
             locale = new Locale(parts[0], parts[1], parts[2]);
         }
 
-        bundle = ResourceBundle.getBundle("languages.lang", locale, Language.class.getClassLoader());
+        bundle = ResourceBundle.getBundle("languages.lang", locale);
 
         for (String defaultKey : bundle.keySet()) {
             if (!bundle.containsKey(defaultKey)) {
@@ -75,6 +75,6 @@ public class Language {
 
     public static void clear()
     {
-        ResourceBundle.clearCache(Language.class.getClassLoader());
+        ResourceBundle.clearCache();
     }
 }
