@@ -17,12 +17,13 @@
  *     Created: 08.09.12 13:36
  */
 
-package com.p000ison.dev.simpleclans2.commands;
+package com.p000ison.dev.simpleclans2.commands.commands;
 
 import com.p000ison.dev.simpleclans2.Language;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
+import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
 import com.p000ison.dev.simpleclans2.util.ChatBlock;
 import com.p000ison.dev.simpleclans2.util.GeneralHelper;
 import org.bukkit.ChatColor;
@@ -38,12 +39,9 @@ import java.util.Set;
  */
 public class CoordsCommand extends GenericPlayerCommand {
 
-    private SimpleClans plugin;
-
     public CoordsCommand(SimpleClans plugin)
     {
         super("Coords", plugin);
-        this.plugin = plugin;
         setArgumentRange(0, 0);
         setUsages(MessageFormat.format(Language.getTranslation("usage.coords"), plugin.getSettingsManager().getClanCommand()));
         setIdentifiers(Language.getTranslation("coords.command"));
@@ -69,16 +67,12 @@ public class CoordsCommand extends GenericPlayerCommand {
         if (player.hasPermission("simpleclans.member.coords")) {
             ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
 
+
             if (cp != null) {
                 Clan clan = cp.getClan();
 
                 if (clan.isVerified()) {
                     if (cp.isTrusted()) {
-                        ChatBlock chatBlock = new ChatBlock();
-
-                        chatBlock.setAlignment("l", "c", "c", "c");
-
-                        chatBlock.addRow(headColor + Language.getTranslation("name"), Language.getTranslation("distance"), Language.getTranslation("coords.upper"), Language.getTranslation("world"));
 
                         Set<ClanPlayer> members = GeneralHelper.stripOfflinePlayers(clan.getMembers());
 
@@ -87,31 +81,53 @@ public class CoordsCommand extends GenericPlayerCommand {
                             return;
                         }
 
+                        int page = 0;
+                        int completeSize = members.size();
 
-//                        for (ClanPlayer clanPlayer : members) {
-//                            Player iPlayer = clanPlayer.toPlayer();
-//
-//                            if (iPlayer == null) {
-//                                continue;
-//                            }
-//
-//
-//                            String name = (clanPlayer.isLeader() ? plugin.getSettingsManager().getPageLeaderColor() : ((clanPlayer.isTrusted() ? plugin.getSettingsManager().getPageTrustedColor() : plugin.getSettingsManager().getPageUnTrustedColor()))) + clanPlayer.getName();
-//                            Location loc = iPlayer.getLocation();
-//                            int distance = (int) Math.ceil(loc.toVector().distance(player.getLocation().toVector()));
-//                            String coords = loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ();
-//                            String world = loc.getWorld().getName();
-//
-//                            chatBlock.addRow(name, ChatColor.AQUA.toString() + distance, ChatColor.WHITE.toString() + coords, world);
-//                        }
-//
-//
-//                        ChatBlock.sendBlank(player);
-//                        ChatBlock.saySingle(player, plugin.getSettingsManager().getPageClanNameColor() + Helper.capitalize(clan.getName()) + subColor + " " + Language.getTranslation("coords") + " " + headColor + Helper.generatePageSeparator(plugin.getSettingsManager().getPageSep()));
-//                        ChatBlock.sendBlank(player);
-//
-//                        chatBlock.sendBlock(player, plugin.getSettingsManager().getM());
-//
+                        if (args.length == 1) {
+                            try {
+                                page = Integer.parseInt(args[0]) - 1;
+                            } catch (NumberFormatException e) {
+                                player.sendMessage(Language.getTranslation("number.format"));
+                            }
+                        }
+
+                        ChatBlock chatBlock = new ChatBlock();
+
+                        chatBlock.setAlignment("l", "c", "c", "c");
+
+                        chatBlock.addRow(headColor + Language.getTranslation("name"), Language.getTranslation("distance"), Language.getTranslation("coords.upper"), Language.getTranslation("world"));
+
+
+
+
+                        for (ClanPlayer clanPlayer : members) {
+                            Player iPlayer = clanPlayer.toPlayer();
+
+                            if (iPlayer == null) {
+                                continue;
+                            }
+
+
+                            String name = (clanPlayer.isLeader() ? plugin.getSettingsManager().getLeaderColor() : ((clanPlayer.isTrusted() ? plugin.getSettingsManager().getTrustedColor() : plugin.getSettingsManager().getUntrustedColor()))) + clanPlayer.getName();
+                            Location loc = iPlayer.getLocation();
+                            int distance = (int) Math.ceil(loc.toVector().distance(player.getLocation().toVector()));
+                            String coords = loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ();
+                            String world = loc.getWorld().getName();
+
+                            chatBlock.addRow(name, ChatColor.AQUA.toString() + distance, ChatColor.WHITE.toString() + coords, world);
+                        }
+
+
+                        ChatBlock.sendBlank(player);
+                        ChatBlock.saySingle(player, plugin.getSettingsManager().getClanColor() + clan.getName() + subColor + " " + Language.getTranslation("coords") + " ");
+                        ChatBlock.sendBlank(player);
+
+                        int[] boundings = getBoundings(completeSize, page);
+
+                        chatBlock.sendBlock(player, boundings[0], boundings[1]);
+
+
 
                     } else {
                         ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("only.trusted.players.can.access.clan.coords"));

@@ -24,8 +24,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 /**
  * Represents a JSONUtil
@@ -44,7 +43,7 @@ public class JSONUtil {
     }
 
 
-    public static List JSONToList(String json, String key)
+    public static List<String> JSONToStringList(String json, String key)
     {
         if (json == null || json.isEmpty()) {
             return null;
@@ -62,6 +61,101 @@ public class JSONUtil {
             return null;
         }
 
-        return (JSONArray) array;
+        JSONArray listArray = ((JSONArray) array);
+
+        List<String> out = new ArrayList<String>(listArray.size());
+
+        for (Object obj : listArray) {
+            out.add(obj.toString());
+        }
+
+        return out;
+    }
+
+    public static Set<String> JSONToStringSet(String json, String key)
+    {
+        if (json == null || json.isEmpty()) {
+            return null;
+        }
+
+        JSONObject parser = (JSONObject) JSONValue.parse(json);
+
+        if (parser == null) {
+            return null;
+        }
+
+        Object array = parser.get(key);
+
+        if (!(array instanceof JSONArray)) {
+            return null;
+        }
+
+        JSONArray listArray = ((JSONArray) array);
+
+        Set<String> out = new HashSet<String>(listArray.size());
+
+        for (Object obj : listArray) {
+            out.add(obj.toString());
+        }
+
+        return out;
+    }
+
+    public static List<Long> JSONToLongList(String json, String key)
+    {
+        if (json == null || json.isEmpty()) {
+            return null;
+        }
+
+        JSONObject parser = (JSONObject) JSONValue.parse(json);
+
+        if (parser == null) {
+            return null;
+        }
+
+        Object array = parser.get(key);
+
+        if (!(array instanceof JSONArray)) {
+            return null;
+        }
+
+        JSONArray listArray = ((JSONArray) array);
+
+        List<Long> out = new ArrayList<Long>(listArray.size());
+
+        for (Object obj : listArray) {
+            out.add((Long) obj);
+        }
+
+        return out;
+    }
+
+    public static Set<Long> JSONToLongSet(String json, String key)
+    {
+        if (json == null || json.isEmpty()) {
+            return null;
+        }
+
+        JSONObject parser = (JSONObject) JSONValue.parse(json);
+
+        if (parser == null) {
+            return null;
+        }
+
+        Object array = parser.get(key);
+
+        if (!(array instanceof JSONArray)) {
+            return null;
+        }
+
+        JSONArray listArray = ((JSONArray) array);
+
+        Set<Long> out = new HashSet<Long>(listArray.size());
+
+        for (Object obj : listArray) {
+            out.add((Long) obj);
+        }
+
+        return out;
     }
 }

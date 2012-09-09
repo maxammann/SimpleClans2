@@ -51,14 +51,19 @@ public class ClanPlayerManager {
         return createClanPlayer(player.getName());
     }
 
-    public ClanPlayer createClanPlayer(String name)
+    public ClanPlayer createClanPlayer(String player)
     {
-        ClanPlayer clanPlayer = new ClanPlayer(plugin, name);
+        return createClanPlayer(new ClanPlayer(plugin, player));
+    }
+
+    public ClanPlayer createClanPlayer(ClanPlayer clanPlayer)
+    {
 
         players.add(clanPlayer);
 
+        plugin.getDataManager().insertClanPlayer(clanPlayer);
 
-        clanPlayer.setId(getClanPlayerId(name));
+        clanPlayer.setId(plugin.getDataManager().retrieveClanPlayerId(clanPlayer.getName()));
 
         return clanPlayer;
     }
@@ -83,14 +88,6 @@ public class ClanPlayerManager {
     public ClanPlayer getCreateClanPlayerExact(Player player)
     {
         return getCreateClanPlayerExact(player.getName());
-    }
-
-    public long getClanPlayerId(String name)
-    {
-//        ClanPlayerTable clanPlayerTable = plugin.getDatabaseManager().getDatabase().select(ClanPlayerTable.class).where().equal("name", name).execute().findOne();
-
-//        return clanPlayerTable.id;
-        return 1;
     }
 
     public ClanPlayer getClanPlayer(String name)

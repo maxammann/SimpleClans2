@@ -21,6 +21,7 @@ package com.p000ison.dev.simpleclans2.clanplayer;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
+import com.p000ison.dev.simpleclans2.ranks.Rank;
 import com.p000ison.dev.simpleclans2.requests.VoteResult;
 import com.p000ison.dev.simpleclans2.util.DateHelper;
 import org.bukkit.entity.Player;
@@ -37,12 +38,12 @@ public class ClanPlayer {
     private long id = -1;
     private String name;
     private Clan clan;
-    private String rank;
     private boolean banned, leader, trusted, friendlyFire;
     private long lastSeen, joinDate;
     private int neutralKills, rivalKills, civilianKills, deaths;
     private PlayerFlags flags;
     private VoteResult lastVoteResult = VoteResult.UNKNOWN;
+    private Rank rank;
 
     public ClanPlayer(SimpleClans plugin, String name)
     {
@@ -217,16 +218,6 @@ public class ClanPlayer {
         return flags.getPastClans();
     }
 
-    public String getRank()
-    {
-        return rank;
-    }
-
-    public void setRank(String rank)
-    {
-        this.rank = rank;
-    }
-
     public void setFlags(PlayerFlags flags)
     {
         this.flags = flags;
@@ -319,5 +310,20 @@ public class ClanPlayer {
     public void setDeaths(int deaths)
     {
         this.deaths = deaths;
+    }
+
+    public boolean hasPermission(String permission)
+    {
+        return rank != null && rank.hasPermission(permission);
+    }
+
+    public Rank getRank()
+    {
+        return rank;
+    }
+
+    public void setRank(Rank rank)
+    {
+        this.rank = rank;
     }
 }

@@ -52,16 +52,12 @@ public class ClanManager {
         return Collections.unmodifiableSet(clans);
     }
 
-//    /**
-//     * Returns a unmodifiable raw collection of all clans.
-//     *
-//     * @return A collection of all clans.
-//     */
-//    public Collection<Clan> getClansRaw()
-//    {
-//        return Collections.unmodifiableSet(clans);
-//    }
-
+    /**
+     * Removes a clan from memory
+     *
+     * @param clan The clan
+     * @return Weather it was successfully
+     */
     public boolean removeClan(Clan clan)
     {
         return clans.remove(clan);
@@ -107,20 +103,9 @@ public class ClanManager {
     {
         clans.add(clan);
 
-//        ClanTable clanTable = new ClanTable();
-//
-//        clanTable.tag = clan.getTag();
-//        clanTable.name = clan.getName();
-//        clanTable.last_action = System.currentTimeMillis();
-//        clanTable.founded = System.currentTimeMillis();
-//        clanTable.friendly_fire = clan.isFriendlyFireOn();
-//        clanTable.verified = clan.isVerified();
-//
-//        plugin.getDataManager().
+        plugin.getDataManager().insertClan(clan);
 
-//        plugin.getDatabaseManager().getDatabase().save(clanTable);
-
-        clan.setId(getClanId(clan.getTag()));
+        clan.setId(plugin.getDataManager().retrieveClanId(clan.getTag()));
     }
 
     public Clan createClan(String tag, String name)
@@ -140,14 +125,6 @@ public class ClanManager {
         }
 
         return allies;
-    }
-
-    public long getClanId(String tag)
-    {
-//        ClanTable clanTable = plugin.getDatabaseManager().getDatabase().select(ClanTable.class).where().equal("tag", tag).execute().findOne();
-//
-//        return clanTable.id;
-        return 1;
     }
 
     public void importClans(Set<Clan> clans)

@@ -60,7 +60,15 @@ public class DatabaseManager {
         if (!database.existsTable("sc2_players")) {
             Logging.debug("Creating table: sc2_players");
 
-            String clanTable = "CREATE TABLE IF NOT EXISTS `sc2_players` ( `id` INT NOT NULL AUTO_INCREMENT UNIQUE KEY PRIMARY KEY, `name` VARCHAR(16) NOT NULL UNIQUE KEY, `leader` TINYINT(1) default 0, `rank` VARCHAR(16), `trusted` TINYINT(1) default 0, `banned` TINYINT(1) default 0, `join_date` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, `last_seen` TIMESTAMP  NOT NULL, `clan` INT default -1, `friendly_fire` TINYINT(1) default 0, `neutral_kills` INT default 0, `rival_kills` INT default 0, `civilian_kills` INT default 0, `deaths` INT default 0, `flags` MEDIUMTEXT NOT NULL );";
+            String clanTable = "CREATE TABLE IF NOT EXISTS `sc2_players` ( `id` INT NOT NULL AUTO_INCREMENT UNIQUE KEY PRIMARY KEY, `name` VARCHAR(16) NOT NULL UNIQUE KEY, `leader` TINYINT(1) default 0, `rank` INT, `trusted` TINYINT(1) default 0, `banned` TINYINT(1) default 0, `join_date` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, `last_seen` TIMESTAMP  NOT NULL, `clan` INT default -1, `friendly_fire` TINYINT(1) default 0, `neutral_kills` INT default 0, `rival_kills` INT default 0, `civilian_kills` INT default 0, `deaths` INT default 0, `flags` MEDIUMTEXT NOT NULL );";
+
+            database.execute(clanTable);
+        }
+
+        if (!database.existsTable("sc2_ranks")) {
+            Logging.debug("Creating table: sc2_ranks");
+
+            String clanTable = "CREATE TABLE IF NOT EXISTS `sc2_ranks` ( `id` INT NOT NULL AUTO_INCREMENT UNIQUE KEY PRIMARY KEY, `clan` INT NOT NULL, `name` VARCHAR(16) NOT NULL UNIQUE KEY, `permissions` MEDIUMTEXT, `priority` INT(3) default -1 );";
 
             database.execute(clanTable);
         }

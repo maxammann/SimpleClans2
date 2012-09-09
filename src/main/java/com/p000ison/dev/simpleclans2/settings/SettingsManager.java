@@ -67,7 +67,7 @@ public class SettingsManager {
     private String clanBB, clanPlayerBB, defaultBB;
     private int maxBBDisplayLines, maxBBLenght;
 
-    private ChatColor headingPageColor, subPageColor;
+    private ChatColor headingPageColor, subPageColor, clanColor, leaderColor, trustedColor, untrustedColor;
 
     public SettingsManager(SimpleClans plugin)
     {
@@ -149,8 +149,14 @@ public class SettingsManager {
 
             ConfigurationSection paging = config.getConfigurationSection("paging");
 
-            headingPageColor = ChatColor.getByChar(paging.getString("heading-color"));
-            subPageColor = ChatColor.getByChar(paging.getString("sub-color"));
+            ConfigurationSection pageColors = paging.getConfigurationSection("colors");
+
+            headingPageColor = ChatColor.getByChar(pageColors.getString("heading-color"));
+            subPageColor = ChatColor.getByChar(pageColors.getString("sub-color"));
+            clanColor = ChatColor.getByChar(pageColors.getString("clan-color"));
+            leaderColor = ChatColor.getByChar(pageColors.getString("leader-color"));
+            trustedColor = ChatColor.getByChar(pageColors.getString("trusted-color"));
+            untrustedColor = ChatColor.getByChar(pageColors.getString("untrusted-color"));
 
 
             //prepare variables
@@ -362,5 +368,25 @@ public class SettingsManager {
     public int getMaxBBDisplayLines()
     {
         return maxBBDisplayLines;
+    }
+
+    public ChatColor getClanColor()
+    {
+        return clanColor;
+    }
+
+    public ChatColor getLeaderColor()
+    {
+        return leaderColor;
+    }
+
+    public ChatColor getTrustedColor()
+    {
+        return trustedColor;
+    }
+
+    public ChatColor getUntrustedColor()
+    {
+        return untrustedColor;
     }
 }

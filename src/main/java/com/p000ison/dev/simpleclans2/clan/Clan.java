@@ -44,7 +44,7 @@ public class Clan {
     private long foundedDate;
     private long lastActionDate;
     private boolean verified, friendlyFire;
-    private LinkedList<String> bb = new LinkedList<String>();
+    private LinkedList<String> bb;
     private Set<Clan> allies = new HashSet<Clan>();
     private Set<Clan> rivals = new HashSet<Clan>();
     private Set<Clan> warring = new HashSet<Clan>();
@@ -267,11 +267,11 @@ public class Clan {
      */
     public boolean isAlly(long id)
     {
-//        for (Clan clan : allies) {
-//            if (clan.getId() == id) {
-//                return true;
-//            }
-//        }
+        for (Clan clan : allies) {
+            if (clan.getId() == id) {
+                return true;
+            }
+        }
 
         return false;
     }
@@ -366,9 +366,20 @@ public class Clan {
         clanPlayer.setLeader(true);
     }
 
-    public boolean isMember()
+    /**
+     * Checks if the player is a member of this clan. This means no leader.
+     *
+     * @param cp The player
+     * @return Checks if the player is a member
+     */
+    public boolean isMember(ClanPlayer cp)
     {
-        for (ClanPlayer cp : allMembers) {
+        for (ClanPlayer comparePlayer : allMembers) {
+
+            if (!comparePlayer.getName().equals(cp.getName())) {
+                continue;
+            }
+
             if (cp.getClanId() == id && !cp.isLeader()) {
                 return true;
             }
@@ -377,20 +388,26 @@ public class Clan {
         return false;
     }
 
+    /**
+     * Checks if the player the leader of this clan.
+     *
+     * @param cp The player
+     * @return Checks if the player is the leader
+     */
     public boolean isLeader(ClanPlayer cp)
     {
         return cp.getClanId() == id && cp.isLeader();
     }
 
-    public boolean isAnyMember()
+    /**
+     * Checks if the player is any member of this clan. This means member/leader
+     *
+     * @param cp The player
+     * @return Checks if the player is any member
+     */
+    public boolean isAnyMember(ClanPlayer cp)
     {
-        for (ClanPlayer cp : allMembers) {
-            if (cp.getClanId() == id) {
-                return true;
-            }
-        }
-
-        return false;
+        return allMembers.contains(cp);
     }
 
     public Set<ClanPlayer> getMembers()
@@ -629,5 +646,30 @@ public class Clan {
         for (String bbMessage : bb) {
             player.sendMessage(bbMessage);
         }
+    }
+
+    public boolean hasAllies()
+    {
+        return allies != null && !allies.isEmpty();
+    }
+
+    public boolean hasRivals()
+    {
+        return rivals != null && !rivals.isEmpty();
+    }
+
+    public boolean hasWarringClans()
+    {
+        return warring != null && !warring.isEmpty();
+    }
+
+    public boolean hasBB()
+    {
+        return bb != null && !bb.isEmpty();
+    }
+
+    public LinkedList<String> getBB()
+    {
+        return bb;
     }
 }

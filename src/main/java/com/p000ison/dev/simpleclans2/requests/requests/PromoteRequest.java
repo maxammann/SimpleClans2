@@ -14,7 +14,7 @@
  *     You should have received a copy of the GNU General Public License
  *     along with SimpleClans2.  If not, see <http://www.gnu.org/licenses/>.
  *
- *     Created: 05.09.12 13:19
+ *     Created: 09.09.12 12:56
  */
 
 package com.p000ison.dev.simpleclans2.requests.requests;
@@ -23,22 +23,22 @@ import com.p000ison.dev.simpleclans2.Language;
 import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.requests.MultipleAcceptorsRequest;
-import org.bukkit.ChatColor;
+import org.bukkit.util.FileUtil;
 
 import java.text.MessageFormat;
 import java.util.Set;
 
 /**
- * Represents a AllyCreateRequest
+ * Represents a PromoteRequest
  */
-public class AllyCreateRequest extends MultipleAcceptorsRequest {
+public class PromoteRequest extends MultipleAcceptorsRequest {
 
-    private Clan ally;
+    private ClanPlayer targetPlayer;
 
-    public AllyCreateRequest(Set<ClanPlayer> acceptors, ClanPlayer requester, Clan clan, String message, Clan ally)
+    public PromoteRequest(Set<ClanPlayer> acceptors, ClanPlayer requester, Clan clan, String message, ClanPlayer targetPlayer)
     {
         super(acceptors, requester, clan, message);
-        this.ally = ally;
+        this.targetPlayer = targetPlayer;
     }
 
     @Override
@@ -48,20 +48,17 @@ public class AllyCreateRequest extends MultipleAcceptorsRequest {
         Clan clan = getClan();
 
 
-        if (ally != null && clan != null) {
-            /* List<String> accepts = req.getAccepts();
-  List<String> denies = req.getDenies();       */
+        if (clan != null && clan.equals(cp.getClan())) {
 
-            // if (!accepts.isEmpty()) {
-            clan.addAlly(ally);
-            ally.addAlly(clan);
 
-            ally.addBBMessage(cp, MessageFormat.format(Language.getTranslation("accepted.an.alliance"), getAcceptors(), clan.getName()));
-            clan.addBBMessage(cp, MessageFormat.format(Language.getTranslation("created.an.alliance"), cp.getName(), ally.getName()));
-            /*     } else {
-             ally.addBBMessage(cp.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang("denied.an.alliance"), Helper.capitalize(denies.get(0)), clan.getName()));
-             clan.addBBMessage(cp.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang("the.alliance.was.denied"), Helper.capitalize(ally.getName())));
-         }   */
+            clan.addBBMessage(MessageFormat.format(Language.getTranslation("promoted.to.leader"), targetPlayer.getName()));
+            clan.setLeader(targetPlayer);
+
+//            else
+//            {
+//                String deniers = Helper.capitalize(Helper.toMessage(Helper.toArray(denies), ", "));
+//                clan.leaderAnnounce(ChatColor.RED + MessageFormat.format(plugin.getLang("denied.the.promotion"), deniers, promoted));
+//            }
         }
         return true;
     }

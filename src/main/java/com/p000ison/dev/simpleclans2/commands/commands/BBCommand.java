@@ -93,7 +93,7 @@ public class BBCommand extends GenericPlayerCommand {
         } else if (args.length == 1 && args[0].equalsIgnoreCase("clear")) {
 
             if (player.hasPermission("simpleclans.leader.bb-clear")) {
-                if (cp.isTrusted() && cp.isLeader()) {
+                if (cp.isTrusted() && (cp.isLeader() || cp.hasPermission("manage.bb"))) {
                     cp.getClan().clearBB();
 //                            plugin.getDataManager().updateClan(clan);
                     player.sendMessage(ChatColor.RED + Language.getTranslation("cleared.bb"));

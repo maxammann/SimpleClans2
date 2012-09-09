@@ -48,7 +48,7 @@ public class ClanFFCommand extends GenericPlayerCommand {
     public String getMenu(ClanPlayer cp, CommandSender sender)
     {
         if (cp != null) {
-            if (cp.isLeader() && sender.hasPermission("simpleclans.leader.ff")) {
+            if ((cp.isLeader()|| cp.hasPermission("manage.clanff")) && sender.hasPermission("simpleclans.leader.ff")) {
                 return MessageFormat.format(Language.getTranslation("menu.clanff"), plugin.getSettingsManager().getClanCommand());
             }
         }
@@ -65,7 +65,7 @@ public class ClanFFCommand extends GenericPlayerCommand {
             if (cp != null) {
                 Clan clan = cp.getClan();
 
-                if (clan.isLeader(cp)) {
+                if (clan.isLeader(cp) || cp.hasPermission("manage.clanff")) {
                     if (args.length == 1) {
                         String action = args[0];
 

@@ -112,6 +112,11 @@ public class Flags {
         return json.toJSONString();
     }
 
+    public boolean hasFlags()
+    {
+        return data != null && !data.isEmpty();
+    }
+
     public boolean getBoolean(String key)
     {
         Object bool = data.get(key);

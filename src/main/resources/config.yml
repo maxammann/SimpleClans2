@@ -33,5 +33,10 @@ clan:
        purchase-price: 20
    minimal-size-to-ally: 1
 paging:
-   heading-color: 7
-   sub-color: 8
+   colors:
+       heading-color: '8'
+       sub-color: '7'
+       clan-color: 'b'
+       leader-color: '4'
+       trusted-color: 'f'
+       untrusted-color: '8'

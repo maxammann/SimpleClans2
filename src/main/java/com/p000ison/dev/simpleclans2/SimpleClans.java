@@ -23,15 +23,13 @@ package com.p000ison.dev.simpleclans2;
 import com.p000ison.dev.simpleclans2.clan.ClanManager;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayerManager;
 import com.p000ison.dev.simpleclans2.commands.CommandManager;
-import com.p000ison.dev.simpleclans2.commands.commands.AlliancesCommand;
-import com.p000ison.dev.simpleclans2.commands.commands.AllyCommand;
-import com.p000ison.dev.simpleclans2.commands.commands.CreateCommand;
-import com.p000ison.dev.simpleclans2.commands.commands.ListCommand;
+import com.p000ison.dev.simpleclans2.commands.commands.*;
 import com.p000ison.dev.simpleclans2.commands.commands.voting.AbstainCommand;
 import com.p000ison.dev.simpleclans2.commands.commands.voting.DenyCommand;
 import com.p000ison.dev.simpleclans2.data.DataManager;
 import com.p000ison.dev.simpleclans2.database.Database;
 import com.p000ison.dev.simpleclans2.database.DatabaseManager;
+import com.p000ison.dev.simpleclans2.ranks.RankManager;
 import com.p000ison.dev.simpleclans2.requests.RequestManager;
 import com.p000ison.dev.simpleclans2.settings.SettingsManager;
 import com.p000ison.dev.simpleclans2.util.Logging;
@@ -53,6 +51,7 @@ public class SimpleClans extends JavaPlugin {
     private RequestManager requestManager;
     private CommandManager commandManager;
     private DataManager dataManager;
+    private RankManager rankManager;
     private static Economy economy;
 
 
@@ -111,6 +110,7 @@ public class SimpleClans extends JavaPlugin {
         clanPlayerManager = new ClanPlayerManager(this);
         dataManager = new DataManager(this);
         requestManager = new RequestManager();
+        rankManager = new RankManager(this);
         setupCommands();
     }
 
@@ -125,6 +125,7 @@ public class SimpleClans extends JavaPlugin {
         commandManager.addCommand(new CreateCommand(this));
         commandManager.addCommand(new DenyCommand(this));
         commandManager.addCommand(new AbstainCommand(this));
+        commandManager.addCommand(new RankCreateCommand(this));
     }
 
     @Override
@@ -197,4 +198,8 @@ public class SimpleClans extends JavaPlugin {
         return economy;
     }
 
+    public RankManager getRankManager()
+    {
+        return rankManager;
+    }
 }
