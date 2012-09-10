@@ -24,11 +24,14 @@ import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
+import com.p000ison.dev.simpleclans2.requests.requests.DemoteRequest;
 import com.p000ison.dev.simpleclans2.util.ChatBlock;
+import com.p000ison.dev.simpleclans2.util.GeneralHelper;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.text.MessageFormat;
+import java.util.Set;
 
 /**
  * Represents a DemoteCommand
@@ -80,7 +83,10 @@ public class DemoteCommand extends GenericPlayerCommand {
                     clan.addBBMessage(cp, MessageFormat.format(Language.getTranslation("demoted.back.to.member"), demoted));
                     clan.demote(demoted);
                 } else {
-//                    plugin.getRequestManager().createRequest(cp, demoted, clan);
+                    Set<ClanPlayer> acceptors = GeneralHelper.stripOfflinePlayers(clan.getLeaders());
+                    acceptors.remove(demoted);
+
+                    plugin.getRequestManager().createRequest(new DemoteRequest(acceptors, cp, clan, demoted));
                     ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("demotion.vote.has.been.requested.from.all.leaders"));
                 }
 

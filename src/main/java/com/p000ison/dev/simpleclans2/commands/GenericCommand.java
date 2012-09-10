@@ -113,9 +113,6 @@ public abstract class GenericCommand implements Command {
             end = completeSize;
         }
 
-        System.out.println(start);
-        System.out.println(end);
-
         //If we are on page 0, we want to display the header
         if (page == 0) {
             end++;

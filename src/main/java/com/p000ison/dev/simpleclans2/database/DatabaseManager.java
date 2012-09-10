@@ -52,7 +52,7 @@ public class DatabaseManager {
         if (!database.existsTable("sc2_clans")) {
             Logging.debug("Creating table: sc2_clans");
 
-            String clanTable = "CREATE TABLE IF NOT EXISTS `sc2_clans` ( `id` INT NOT NULL AUTO_INCREMENT UNIQUE KEY PRIMARY KEY, `tag` VARCHAR(26) NOT NULL, `name` VARCHAR(100) NOT NULL, `verified` TINYINT(1) default 0, `friendly_fire` TINYINT(1) default 0, `allies` TEXT, `rivals` TEXT, `warring` TEXT, `founded` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, `last_action` TIMESTAMP NOT NULL, `bb` MEDIUMTEXT NOT NULL, `flags` MEDIUMTEXT NOT NULL);";
+            String clanTable = "CREATE TABLE IF NOT EXISTS `sc2_clans` ( `id` INT NOT NULL AUTO_INCREMENT UNIQUE KEY PRIMARY KEY, `tag` VARCHAR(26) NOT NULL, `name` VARCHAR(100) NOT NULL, `verified` TINYINT(1) default 0, `friendly_fire` TINYINT(1) default 0, `allies` TEXT, `rivals` TEXT, `warring` TEXT, `founded` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, `last_action` TIMESTAMP NOT NULL, `bb` MEDIUMTEXT, `flags` MEDIUMTEXT );";
 
             database.execute(clanTable);
         }
@@ -60,7 +60,7 @@ public class DatabaseManager {
         if (!database.existsTable("sc2_players")) {
             Logging.debug("Creating table: sc2_players");
 
-            String clanTable = "CREATE TABLE IF NOT EXISTS `sc2_players` ( `id` INT NOT NULL AUTO_INCREMENT UNIQUE KEY PRIMARY KEY, `name` VARCHAR(16) NOT NULL UNIQUE KEY, `leader` TINYINT(1) default 0, `rank` INT, `trusted` TINYINT(1) default 0, `banned` TINYINT(1) default 0, `join_date` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, `last_seen` TIMESTAMP  NOT NULL, `clan` INT default -1, `friendly_fire` TINYINT(1) default 0, `neutral_kills` INT default 0, `rival_kills` INT default 0, `civilian_kills` INT default 0, `deaths` INT default 0, `flags` MEDIUMTEXT NOT NULL );";
+            String clanTable = "CREATE TABLE IF NOT EXISTS `sc2_players` ( `id` INT NOT NULL AUTO_INCREMENT UNIQUE KEY PRIMARY KEY, `name` VARCHAR(16) NOT NULL UNIQUE KEY, `leader` TINYINT(1) default 0, `rank` INT, `trusted` TINYINT(1) default 0, `banned` TINYINT(1) default 0, `join_date` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, `last_seen` TIMESTAMP  NOT NULL, `clan` INT default -1, `friendly_fire` TINYINT(1) default 0, `neutral_kills` INT default 0, `rival_kills` INT default 0, `civilian_kills` INT default 0, `deaths` INT default 0, `flags` MEDIUMTEXT );";
 
             database.execute(clanTable);
         }

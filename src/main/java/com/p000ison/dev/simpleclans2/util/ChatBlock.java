@@ -122,8 +122,6 @@ public class ChatBlock {
             return false;
         }
 
-        System.out.println(rows.size());
-
 
         // if no column sizes provided them
         // make some up based on the data

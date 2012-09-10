@@ -45,7 +45,7 @@ public class DenyCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public String getMenu(ClanPlayer clanPlayer, CommandSender sender)
+    public String getMenu(ClanPlayer clanPlayer)
     {
         return null;
     }

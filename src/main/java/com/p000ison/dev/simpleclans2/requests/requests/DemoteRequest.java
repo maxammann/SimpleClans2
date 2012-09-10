@@ -14,7 +14,7 @@
  *     You should have received a copy of the GNU General Public License
  *     along with SimpleClans2.  If not, see <http://www.gnu.org/licenses/>.
  *
- *     Created: 09.09.12 12:56
+ *     Created: 10.09.12 17:07
  */
 
 package com.p000ison.dev.simpleclans2.requests.requests;
@@ -23,7 +23,7 @@ import com.p000ison.dev.simpleclans2.Language;
 import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.requests.MultipleAcceptorsRequest;
-import org.bukkit.util.FileUtil;
+import org.bukkit.ChatColor;
 
 import java.text.MessageFormat;
 import java.util.Set;
@@ -31,35 +31,24 @@ import java.util.Set;
 /**
  * Represents a PromoteRequest
  */
-public class PromoteRequest extends MultipleAcceptorsRequest {
+public class DemoteRequest extends MultipleAcceptorsRequest {
 
     private ClanPlayer targetPlayer;
 
-    public PromoteRequest(Set<ClanPlayer> acceptors, ClanPlayer requester, Clan clan,  ClanPlayer targetPlayer)
+    public DemoteRequest(Set<ClanPlayer> acceptors, ClanPlayer requester, Clan clan,  ClanPlayer targetPlayer)
     {
-        super(acceptors, requester, clan, MessageFormat.format(Language.getTranslation("asking.for.the.promotion"), requester.getName(), targetPlayer));
+        super(acceptors, requester, clan, MessageFormat.format(Language.getTranslation("asking.for.the.demotion"), requester.getName(), targetPlayer.getName()));
         this.targetPlayer = targetPlayer;
     }
 
     @Override
     public boolean execute()
     {
-        ClanPlayer cp = getRequester();
         Clan clan = getClan();
 
+        clan.addBBMessage(ChatColor.AQUA + MessageFormat.format(Language.getTranslation("demoted.back.to.member"), targetPlayer));
+        clan.demote(targetPlayer);
 
-        if (clan != null && clan.equals(cp.getClan())) {
-
-
-            clan.addBBMessage(MessageFormat.format(Language.getTranslation("promoted.to.leader"), targetPlayer.getName()));
-            clan.setLeader(targetPlayer);
-
-//            else
-//            {
-//                String deniers = Helper.capitalize(Helper.toMessage(Helper.toArray(denies), ", "));
-//                clan.leaderAnnounce(ChatColor.RED + MessageFormat.format(plugin.getLang("denied.the.promotion"), deniers, promoted));
-//            }
-        }
         return true;
     }
 }

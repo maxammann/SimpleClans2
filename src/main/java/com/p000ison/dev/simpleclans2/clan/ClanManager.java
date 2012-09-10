@@ -99,20 +99,21 @@ public class ClanManager {
         return null;
     }
 
-    public void createClan(Clan clan)
+    public Clan createClan(Clan clan)
     {
-        clans.add(clan);
+        if (plugin.getDataManager().insertClan(clan)) {
+            clan.setId(plugin.getDataManager().retrieveClanId(clan.getTag()));
+//            clans.add(clan);
+        }
 
-        plugin.getDataManager().insertClan(clan);
 
-        clan.setId(plugin.getDataManager().retrieveClanId(clan.getTag()));
+        return clan;
     }
 
     public Clan createClan(String tag, String name)
     {
         Clan clan = new Clan(plugin, tag, name);
-        createClan(clan);
-        return clan;
+        return createClan(clan);
     }
 
     public Set<Clan> convertIdSetToClanSet(Set<Long> ids)

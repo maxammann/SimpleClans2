@@ -22,6 +22,7 @@ package com.p000ison.dev.simpleclans2;
 
 import com.p000ison.dev.simpleclans2.clan.ClanManager;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayerManager;
+import com.p000ison.dev.simpleclans2.commands.Command;
 import com.p000ison.dev.simpleclans2.commands.CommandManager;
 import com.p000ison.dev.simpleclans2.commands.commands.*;
 import com.p000ison.dev.simpleclans2.commands.commands.voting.AbstainCommand;
@@ -29,14 +30,18 @@ import com.p000ison.dev.simpleclans2.commands.commands.voting.DenyCommand;
 import com.p000ison.dev.simpleclans2.data.DataManager;
 import com.p000ison.dev.simpleclans2.database.Database;
 import com.p000ison.dev.simpleclans2.database.DatabaseManager;
+import com.p000ison.dev.simpleclans2.listeners.SCPlayerListener;
 import com.p000ison.dev.simpleclans2.ranks.RankManager;
 import com.p000ison.dev.simpleclans2.requests.RequestManager;
 import com.p000ison.dev.simpleclans2.settings.SettingsManager;
+import com.p000ison.dev.simpleclans2.util.ClassesHelper;
 import com.p000ison.dev.simpleclans2.util.Logging;
 import net.milkbowl.vault.economy.Economy;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.lang.reflect.Constructor;
 import java.util.logging.Level;
 
 /**
@@ -68,6 +73,10 @@ public class SimpleClans extends JavaPlugin {
         }
 
         loadManagers();
+
+        PluginManager pm = getServer().getPluginManager();
+
+        pm.registerEvents(new SCPlayerListener(this), this);
 
         long finish = System.currentTimeMillis();
 
@@ -126,6 +135,12 @@ public class SimpleClans extends JavaPlugin {
         commandManager.addCommand(new DenyCommand(this));
         commandManager.addCommand(new AbstainCommand(this));
         commandManager.addCommand(new RankCreateCommand(this));
+        commandManager.addCommand(new BBAddCommand(this));
+        commandManager.addCommand(new BBClearCommand(this));
+        commandManager.addCommand(new BBCommand(this));
+        commandManager.addCommand(new CoordsCommand(this));
+        commandManager.addCommand(new DemoteCommand(this));
+        commandManager.addCommand(new BanCommand(this));
     }
 
     @Override

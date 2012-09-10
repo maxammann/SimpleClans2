@@ -35,9 +35,9 @@ public class AllyCreateRequest extends MultipleAcceptorsRequest {
 
     private Clan ally;
 
-    public AllyCreateRequest(Set<ClanPlayer> acceptors, ClanPlayer requester, Clan clan, String message, Clan ally)
+    public AllyCreateRequest(Set<ClanPlayer> acceptors, ClanPlayer requester, Clan clan, Clan ally)
     {
-        super(acceptors, requester, clan, message);
+        super(acceptors, requester, clan, MessageFormat.format(Language.getTranslation("proposing.an.alliance"), clan.getName(), ally.getTag()));
         this.ally = ally;
     }
 
@@ -49,19 +49,12 @@ public class AllyCreateRequest extends MultipleAcceptorsRequest {
 
 
         if (ally != null && clan != null) {
-            /* List<String> accepts = req.getAccepts();
-  List<String> denies = req.getDenies();       */
 
-            // if (!accepts.isEmpty()) {
             clan.addAlly(ally);
             ally.addAlly(clan);
 
             ally.addBBMessage(cp, MessageFormat.format(Language.getTranslation("accepted.an.alliance"), getAcceptors(), clan.getName()));
             clan.addBBMessage(cp, MessageFormat.format(Language.getTranslation("created.an.alliance"), cp.getName(), ally.getName()));
-            /*     } else {
-             ally.addBBMessage(cp.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang("denied.an.alliance"), Helper.capitalize(denies.get(0)), clan.getName()));
-             clan.addBBMessage(cp.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang("the.alliance.was.denied"), Helper.capitalize(ally.getName())));
-         }   */
         }
         return true;
     }

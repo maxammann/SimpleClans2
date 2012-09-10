@@ -77,6 +77,6 @@ public class BBCommand extends GenericPlayerCommand {
         }
 
 
-        clan.displayBb(player, plugin.getSettingsManager().getMaxBBDisplayLines());
+        clan.displayBb(player, /*plugin.getSettingsManager().getMaxBBDisplayLines()*/10);
     }
 }

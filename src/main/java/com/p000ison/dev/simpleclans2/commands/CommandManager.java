@@ -140,6 +140,7 @@ public class CommandManager {
                 }
             }
         }
+
         (sender == null ? player : sender).sendMessage(ChatColor.DARK_RED + "Command not found!");
 
         return true;

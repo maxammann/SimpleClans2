@@ -26,6 +26,7 @@ import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.util.DateHelper;
 import com.p000ison.dev.simpleclans2.util.GeneralHelper;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.text.MessageFormat;
@@ -44,7 +45,7 @@ public class Clan {
     private long foundedDate;
     private long lastActionDate;
     private boolean verified, friendlyFire;
-    private LinkedList<String> bb;
+    private LinkedList<String> bb = new LinkedList<String>();
     private Set<Clan> allies = new HashSet<Clan>();
     private Set<Clan> rivals = new HashSet<Clan>();
     private Set<Clan> warring = new HashSet<Clan>();
@@ -501,6 +502,7 @@ public class Clan {
     {
         if (isVerified()) {
             addBBRawMessage(GeneralHelper.parseColors(plugin.getSettingsManager().getClanPlayerBB().replace("+player", announcer.getName()).replace("+message", msg)));
+//            addBBRawMessage(GeneralHelper.parseColors("+player +message".replace("+player", announcer.getName()).replace("+message", msg)));
         }
     }
 
@@ -646,21 +648,37 @@ public class Clan {
         plugin.getDataManager().deleteClan(this);
     }
 
-    public void displayBb(Player player, int maxLines)
+    public void displayBb(CommandSender sender, int maxLines)
     {
+        if (bb == null || bb.isEmpty()) {
+            sender.sendMessage(Language.getTranslation("bb.is.empty"));
+            return;
+        }
 
-        int start = bb.size() - maxLines;
+        int start;
+
+        if (bb.size() - maxLines < 0) {
+            start = 0;
+        } else {
+            start = bb.size() - maxLines;
+        }
+
         int end = bb.size();
 
         for (; start < end; start++) {
-            player.sendMessage(bb.get(start));
+            sender.sendMessage(bb.get(start));
         }
     }
 
-    public void displayBb(Player player)
+    public void displayBb(CommandSender sender)
     {
+        if (bb == null || bb.isEmpty()) {
+            sender.sendMessage(Language.getTranslation("bb.is.empty"));
+            return;
+        }
+
         for (String bbMessage : bb) {
-            player.sendMessage(bbMessage);
+            sender.sendMessage(bbMessage);
         }
     }
 
@@ -707,5 +725,10 @@ public class Clan {
         }
 
         return true;
+    }
+
+    public void update()
+    {
+        plugin.getDataManager().updateClan(this);
     }
 }

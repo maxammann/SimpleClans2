@@ -93,7 +93,7 @@ public class GeneralHelper {
         return arrayToString(Arrays.copyOfRange(args, start, end));
     }
 
-    public static String arrayToStringFromStart(int start, Object... args)
+    public static String arrayToStringFromStart(int start, String... args)
     {
         return arrayToString(Arrays.copyOfRange(args, start, args.length));
     }

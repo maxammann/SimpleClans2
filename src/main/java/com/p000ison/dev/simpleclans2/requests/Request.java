@@ -57,6 +57,16 @@ public abstract class Request implements Executable {
         return requester;
     }
 
+    public long getCreatedDate()
+    {
+        return created;
+    }
+
+    public void setMessage(String message)
+    {
+        this.message = message;
+    }
+
     public abstract void accept(ClanPlayer clanPlayer);
 
     public abstract void deny(ClanPlayer clanPlayer);
@@ -79,8 +89,5 @@ public abstract class Request implements Executable {
 
     public abstract boolean hasRequestToHandle(ClanPlayer clanPlayer);
 
-    public long getCreatedDate()
-    {
-        return created;
-    }
+
 }

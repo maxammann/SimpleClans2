@@ -90,7 +90,7 @@ public class ClanPlayerManager {
         return getCreateClanPlayerExact(player.getName());
     }
 
-    public ClanPlayer getClanPlayer(String name)
+    public ClanPlayer getAnyClanPlayer(String name)
     {
 
         if (name == null) {
@@ -107,12 +107,38 @@ public class ClanPlayerManager {
         return null;
     }
 
+    public ClanPlayer getClanPlayer(String name)
+    {
+
+        if (name == null) {
+            return null;
+        }
+
+        String lowerName = name.toLowerCase();
+
+        for (ClanPlayer clanPlayer : players) {
+            if (clanPlayer.getName().toLowerCase().startsWith(lowerName)) {
+                if (clanPlayer.getClan() == null) {
+                    return null;
+                } else {
+                    return clanPlayer;
+                }
+            }
+        }
+        return null;
+    }
+
     public ClanPlayer getClanPlayer(Player player)
     {
         return getClanPlayerExact(player.getName());
     }
 
-    public ClanPlayer getClanPlayerExact(String name)
+    public ClanPlayer getAnyClanPlayer(Player player)
+    {
+        return getAnyClanPlayerExact(player.getName());
+    }
+
+    public ClanPlayer getAnyClanPlayerExact(String name)
     {
         if (name == null) {
             return null;
@@ -123,6 +149,26 @@ public class ClanPlayerManager {
                 return clanPlayer;
             }
         }
+
+        return null;
+    }
+
+    public ClanPlayer getClanPlayerExact(String name)
+    {
+        if (name == null) {
+            return null;
+        }
+
+        for (ClanPlayer clanPlayer : players) {
+            if (clanPlayer.getName().equals(name)) {
+                if (clanPlayer.getClan() == null) {
+                    return null;
+                } else {
+                    return clanPlayer;
+                }
+            }
+        }
+
         return null;
     }
 }

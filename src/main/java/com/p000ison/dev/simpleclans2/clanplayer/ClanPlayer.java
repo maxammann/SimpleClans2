@@ -65,7 +65,7 @@ public class ClanPlayer {
      */
     public long getClanId()
     {
-        return clan.getId();
+        return clan == null ? -1L : clan.getId();
     }
 
     /**
@@ -325,5 +325,10 @@ public class ClanPlayer {
     public void setRank(Rank rank)
     {
         this.rank = rank;
+    }
+
+    public void update()
+    {
+        plugin.getDataManager().updateClanPlayer(this);
     }
 }

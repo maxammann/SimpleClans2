@@ -102,10 +102,12 @@ public class CreateCommand extends GenericPlayerCommand {
 
         if (!cleanTag.matches("[0-9a-zA-Z]*")) {
             player.sendMessage(ChatColor.RED + Language.getTranslation("your.clan.tag.can.only.contain.letters.numbers.and.color.codes"));
+            return;
         }
 
         if (name.contains("&")) {
             player.sendMessage(ChatColor.RED + Language.getTranslation("your.clan.name.cannot.contain.color.codes"));
+            return;
         }
 
         ClanPlayer cp = plugin.getClanPlayerManager().getCreateClanPlayerExact(player);
@@ -128,8 +130,10 @@ public class CreateCommand extends GenericPlayerCommand {
         }
 
         Clan clan = plugin.getClanManager().createClan(args[0], name);
-        clan.setLeader(cp);
+        cp.setLeader(true);
+        cp.setTrusted(true);
         cp.setClan(clan);
+        cp.update();
         clan.addBBMessage(cp, MessageFormat.format(Language.getTranslation("clan.created"), name));
 
         if (plugin.getSettingsManager().requireVerification()) {
@@ -142,6 +146,8 @@ public class CreateCommand extends GenericPlayerCommand {
         } else {
             clan.setVerified(true);
         }
+
+        clan.update();
 
     }
 }
