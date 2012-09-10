@@ -49,15 +49,13 @@ public class ListCommand extends GenericConsoleCommand {
         setArgumentRange(0, 1);
         setUsages(MessageFormat.format(Language.getTranslation("usage.list"), "clan"));
         setIdentifiers(Language.getTranslation("list.command"));
+        setPermission("simpleclans.anyone.list");
     }
 
     @Override
-    public String getMenu(CommandSender sender)
+    public String getMenu()
     {
-        if (sender.hasPermission("simpleclans.anyone.list")) {
-            return MessageFormat.format(Language.getTranslation("menu.list"), "clan");
-        }
-        return null;
+        return MessageFormat.format(Language.getTranslation("menu.list"), "clan");
     }
 
     @Override
@@ -67,69 +65,62 @@ public class ListCommand extends GenericConsoleCommand {
         ChatColor subColor = plugin.getSettingsManager().getSubPageColor();
 
 
-        if (sender.hasPermission("simpleclans.anyone.list")) {
+        List<Clan> clans = new ArrayList<Clan>(plugin.getClanManager().getClans());
 
-            List<Clan> clans = new ArrayList<Clan>(plugin.getClanManager().getClans());
-
-            if (clans.isEmpty()) {
-                sender.sendMessage(ChatColor.RED + Language.getTranslation("no.clans.have.been.created"));
-                return;
-            }
-
-            int page = 0;
-            int completeSize = clans.size();
-
-            if (args.length == 1) {
-                try {
-                    page = Integer.parseInt(args[0]) - 1;
-                } catch (NumberFormatException e) {
-                    sender.sendMessage(Language.getTranslation("number.format"));
-                }
-            }
-
-            Collections.sort(clans, new KDRComparator());
-
-            ChatBlock chatBlock = new ChatBlock();
-
-            ChatBlock.sendBlank(sender);
-            ChatBlock.saySingle(sender, plugin.getSettingsManager().getServerName() + subColor + " " + Language.getTranslation("clans.lower"));
-            ChatBlock.sendBlank(sender);
-            ChatBlock.sendMessage(sender, headColor + Language.getTranslation("total.clans") + " " + subColor + clans.size());
-            ChatBlock.sendBlank(sender);
-
-            chatBlock.setAlignment("c", "l", "c", "c");
-
-            chatBlock.addRow(Language.getTranslation("rank"), Language.getTranslation("name"), Language.getTranslation("kdr"), Language.getTranslation("members"));
-
-            int rank = 1;
-
-            for (Clan clan : clans) {
-                if (!plugin.getSettingsManager().isShowUnverifiedClansOnList()) {
-                    if (!clan.isVerified()) {
-                        completeSize--;
-                        continue;
-                    }
-                }
-
-                String tag = clan.getTag();
-                String name = clan.getName();
-                String fullName = tag + " " + name;
-                String size = ChatColor.WHITE + "" + clan.getSize();
-                String kdr = clan.isVerified() ? ChatColor.YELLOW + "" + formatter.format(clan.getTotalKDR()) : "";
-
-                chatBlock.addRow("  " + rank, fullName, kdr, size);
-                rank++;
-            }
-
-            int[] boundings = getBoundings(completeSize, page);
-
-            chatBlock.sendBlock(sender, boundings[0], boundings[1]);
-
-            ChatBlock.sendBlank(sender);
-
-        } else {
-            ChatBlock.sendMessage(sender, ChatColor.DARK_RED + Language.getTranslation("insufficient.permissions"));
+        if (clans.isEmpty()) {
+            sender.sendMessage(ChatColor.RED + Language.getTranslation("no.clans.have.been.created"));
+            return;
         }
-    }
 
+        int page = 0;
+        int completeSize = clans.size();
+
+        if (args.length == 1) {
+            try {
+                page = Integer.parseInt(args[0]) - 1;
+            } catch (NumberFormatException e) {
+                sender.sendMessage(Language.getTranslation("number.format"));
+            }
+        }
+
+        Collections.sort(clans, new KDRComparator());
+
+        ChatBlock chatBlock = new ChatBlock();
+
+        ChatBlock.sendBlank(sender);
+        ChatBlock.saySingle(sender, plugin.getSettingsManager().getServerName() + subColor + " " + Language.getTranslation("clans.lower"));
+        ChatBlock.sendBlank(sender);
+        ChatBlock.sendMessage(sender, headColor + Language.getTranslation("total.clans") + " " + subColor + clans.size());
+        ChatBlock.sendBlank(sender);
+
+        chatBlock.setAlignment("c", "l", "c", "c");
+
+        chatBlock.addRow(Language.getTranslation("rank"), Language.getTranslation("name"), Language.getTranslation("kdr"), Language.getTranslation("members"));
+
+        int rank = 1;
+
+        for (Clan clan : clans) {
+            if (!plugin.getSettingsManager().isShowUnverifiedClansOnList()) {
+                if (!clan.isVerified()) {
+                    completeSize--;
+                    continue;
+                }
+            }
+
+            String tag = clan.getTag();
+            String name = clan.getName();
+            String fullName = tag + " " + name;
+            String size = ChatColor.WHITE + "" + clan.getSize();
+            String kdr = clan.isVerified() ? ChatColor.YELLOW + "" + formatter.format(clan.getTotalKDR()) : "";
+
+            chatBlock.addRow("  " + rank, fullName, kdr, size);
+            rank++;
+        }
+
+        int[] boundings = getBoundings(completeSize, page);
+
+        chatBlock.sendBlock(sender, boundings[0], boundings[1]);
+
+        ChatBlock.sendBlank(sender);
+    }
 }

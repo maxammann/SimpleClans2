@@ -20,6 +20,8 @@
 
 package com.p000ison.dev.simpleclans2.commands;
 
+import org.bukkit.permissions.Permissible;
+
 /**
  * Represents a Command
  */
@@ -38,6 +40,8 @@ public interface Command {
     public int getMaxArguments();
 
     public int getMinArguments();
+
+    public boolean hasPermission(Permissible sender);
 
     public void setArgumentRange(int min, int max);
 }

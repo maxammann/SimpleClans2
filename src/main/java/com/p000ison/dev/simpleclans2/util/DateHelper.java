@@ -29,7 +29,6 @@ import java.util.Date;
  */
 public class DateHelper {
 
-
     public static double differenceInMonths(Date date1, Date date2)
     {
         return differenceInYears(date1, date2) * 12D;
@@ -73,7 +72,6 @@ public class DateHelper {
         return differenceInYears(date1, date2) * 12D;
     }
 
-
     public static double differenceInYears(long date1, long date2)
     {
         double days = differenceInDays(date1, date2);
@@ -102,13 +100,6 @@ public class DateHelper {
 
     private static double differenceInMilliseconds(long date1, long date2)
     {
-        return Math.abs(getTimeInMilliseconds(date1) - getTimeInMilliseconds(date2));
-    }
-
-    private static long getTimeInMilliseconds(long date)
-    {
-        Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(date);
-        return cal.getTimeInMillis() + cal.getTimeZone().getOffset(cal.getTimeInMillis());
+        return Math.abs(date1 - date2);
     }
 }

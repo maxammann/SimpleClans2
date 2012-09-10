@@ -14,7 +14,7 @@
  *     You should have received a copy of the GNU General Public License
  *     along with SimpleClans2.  If not, see <http://www.gnu.org/licenses/>.
  *
- *     Created: 07.09.12 02:04
+ *     Created: 10.09.12 15:03
  */
 
 package com.p000ison.dev.simpleclans2.commands.commands;
@@ -24,7 +24,6 @@ import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
-import com.p000ison.dev.simpleclans2.util.ChatBlock;
 import com.p000ison.dev.simpleclans2.util.GeneralHelper;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -35,16 +34,16 @@ import java.text.MessageFormat;
 /**
  * Represents a BBCommand
  */
-public class BBCommand extends GenericPlayerCommand {
+public class BBClearCommand extends GenericPlayerCommand {
 
 
-    public BBCommand(SimpleClans plugin)
+    public BBClearCommand(SimpleClans plugin)
     {
-        super("BB", plugin);
+        super("BBClear", plugin);
         setArgumentRange(0, 0);
         setUsages(MessageFormat.format(Language.getTranslation("usage.bb"), plugin.getSettingsManager().getClanCommand()));
         setIdentifiers(Language.getTranslation("bb.command"));
-        setPermission("simpleclans.member.bb");
+        setPermission("simpleclans.member.bb-clear");
     }
 
     @Override
@@ -52,7 +51,7 @@ public class BBCommand extends GenericPlayerCommand {
     {
         if (cp != null) {
             if (cp.getClan().isVerified()) {
-                return MessageFormat.format(Language.getTranslation("menu.bb"), plugin.getSettingsManager().getClanCommand()) + "\n   §b";
+                return MessageFormat.format(Language.getTranslation("menu.bb.clear"), plugin.getSettingsManager().getClanCommand());
             }
         }
         return null;
@@ -76,7 +75,12 @@ public class BBCommand extends GenericPlayerCommand {
             return;
         }
 
-
-        clan.displayBb(player, plugin.getSettingsManager().getMaxBBDisplayLines());
+        if (cp.isTrusted() && (cp.isLeader() || cp.hasPermission("manage.bb"))) {
+            cp.getClan().clearBB();
+            plugin.getDataManager().updateClan(clan);
+            player.sendMessage(ChatColor.RED + Language.getTranslation("cleared.bb"));
+        } else {
+            player.sendMessage(ChatColor.RED + Language.getTranslation("no.leader.permissions"));
+        }
     }
 }

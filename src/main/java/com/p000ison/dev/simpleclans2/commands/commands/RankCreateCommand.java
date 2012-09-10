@@ -43,7 +43,7 @@ public class RankCreateCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public String getMenu(ClanPlayer clanPlayer, CommandSender sender)
+    public String getMenu(ClanPlayer clanPlayer)
     {
         return null;
     }
@@ -76,7 +76,5 @@ public class RankCreateCommand extends GenericPlayerCommand {
         }
 
         plugin.getRankManager().createRank(clan, GeneralHelper.arrayToStringFromStart(1, args), priority);
-
-
     }
 }

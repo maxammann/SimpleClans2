@@ -31,5 +31,5 @@ public abstract class GenericConsoleCommand extends GenericCommand {
 
     public abstract void execute(org.bukkit.command.CommandSender sender, String label, String[] args);
 
-    public abstract String getMenu(org.bukkit.command.CommandSender sender);
+    public abstract String getMenu();
 }

@@ -20,6 +20,7 @@
 
 package com.p000ison.dev.simpleclans2.commands;
 
+import com.p000ison.dev.simpleclans2.Language;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.util.Logging;
 import org.bukkit.ChatColor;
@@ -91,6 +92,7 @@ public class CommandManager {
                 if (cmd.isIdentifier(identifier)) {
                     String[] realArgs = Arrays.copyOfRange(arguments, argsIncluded, arguments.length);
 
+
                     if (realArgs.length < cmd.getMinArguments() || realArgs.length > cmd.getMaxArguments()) {
                         displayCommandHelp(cmd, sender, player);
                         return true;
@@ -102,14 +104,30 @@ public class CommandManager {
 
                     if (cmd instanceof GenericConsoleCommand) {
                         if (sender != null) {
+                            if (!cmd.hasPermission(sender)) {
+                                sender.sendMessage(ChatColor.DARK_RED + Language.getTranslation("insufficient.permissions"));
+                                return true;
+                            }
                             ((GenericConsoleCommand) cmd).execute(sender, label, realArgs);
                         } else {
+                            if (!cmd.hasPermission(player)) {
+                                player.sendMessage(ChatColor.DARK_RED + Language.getTranslation("insufficient.permissions"));
+                                return true;
+                            }
                             ((GenericConsoleCommand) cmd).execute((CommandSender) player, label, realArgs);
                         }
                     } else if (cmd instanceof GenericCommand) {
                         if (player != null) {
+                            if (!cmd.hasPermission(player)) {
+                                player.sendMessage(ChatColor.DARK_RED + Language.getTranslation("insufficient.permissions"));
+                                return true;
+                            }
                             ((GenericPlayerCommand) cmd).execute(player, label, realArgs);
                         } else if (sender instanceof Player) {
+                            if (!cmd.hasPermission(sender)) {
+                                sender.sendMessage(ChatColor.DARK_RED + Language.getTranslation("insufficient.permissions"));
+                                return true;
+                            }
                             ((GenericPlayerCommand) cmd).execute((Player) sender, label, realArgs);
                         } else {
                             Logging.debug(Level.WARNING, "Failed at parsing the command :(");

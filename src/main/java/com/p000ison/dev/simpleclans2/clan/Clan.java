@@ -361,9 +361,25 @@ public class Clan {
         this.lastActionDate = lastActionDate;
     }
 
-    public void setLeader(ClanPlayer clanPlayer)
+    public boolean setLeader(ClanPlayer clanPlayer)
     {
+        if (clanPlayer.getClanId() != id) {
+            return false;
+        }
+
         clanPlayer.setLeader(true);
+        return true;
+    }
+
+    public boolean demote(ClanPlayer clanPlayer)
+    {
+
+        if (clanPlayer.getClanId() != id) {
+            return false;
+        }
+
+        clanPlayer.setLeader(false);
+        return true;
     }
 
     /**
@@ -671,5 +687,25 @@ public class Clan {
     public LinkedList<String> getBB()
     {
         return bb;
+    }
+
+    public boolean allLeadersOnline()
+    {
+        return allLeadersOnline(null);
+    }
+
+    public boolean allLeadersOnline(ClanPlayer ignore)
+    {
+        for (ClanPlayer clanPlayer : getLeaders()) {
+            if (ignore == null && clanPlayer.equals(ignore)) {
+                continue;
+            }
+
+            if (clanPlayer.toPlayer() == null) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

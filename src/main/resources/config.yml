@@ -32,6 +32,8 @@ clan:
        purchase-creation: false
        purchase-price: 20
    minimal-size-to-ally: 1
+   voting:
+       demote: true
 paging:
    colors:
        heading-color: '8'

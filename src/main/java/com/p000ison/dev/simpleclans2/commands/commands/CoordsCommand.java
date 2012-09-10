@@ -45,13 +45,14 @@ public class CoordsCommand extends GenericPlayerCommand {
         setArgumentRange(0, 0);
         setUsages(MessageFormat.format(Language.getTranslation("usage.coords"), plugin.getSettingsManager().getClanCommand()));
         setIdentifiers(Language.getTranslation("coords.command"));
+        setPermission("simpleclans.member.coords");
     }
 
     @Override
-    public String getMenu(ClanPlayer cp, CommandSender sender)
+    public String getMenu(ClanPlayer cp)
     {
         if (cp != null) {
-            if (cp.getClan().isVerified() && cp.isTrusted() && sender.hasPermission("simpleclans.member.coords")) {
+            if (cp.getClan().isVerified() && cp.isTrusted()) {
                 return MessageFormat.format(Language.getTranslation("menu.coords"), plugin.getSettingsManager().getClanCommand());
             }
         }
@@ -64,83 +65,76 @@ public class CoordsCommand extends GenericPlayerCommand {
         ChatColor headColor = plugin.getSettingsManager().getHeadingPageColor();
         ChatColor subColor = plugin.getSettingsManager().getSubPageColor();
 
-        if (player.hasPermission("simpleclans.member.coords")) {
-            ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
+        ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
 
 
-            if (cp != null) {
-                Clan clan = cp.getClan();
+        if (cp != null) {
+            Clan clan = cp.getClan();
 
-                if (clan.isVerified()) {
-                    if (cp.isTrusted()) {
+            if (clan.isVerified()) {
+                if (cp.isTrusted()) {
 
-                        Set<ClanPlayer> members = GeneralHelper.stripOfflinePlayers(clan.getMembers());
+                    Set<ClanPlayer> members = GeneralHelper.stripOfflinePlayers(clan.getMembers());
 
-                        if (members.isEmpty()) {
-                            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("you.are.the.only.member.online"));
-                            return;
-                        }
-
-                        int page = 0;
-                        int completeSize = members.size();
-
-                        if (args.length == 1) {
-                            try {
-                                page = Integer.parseInt(args[0]) - 1;
-                            } catch (NumberFormatException e) {
-                                player.sendMessage(Language.getTranslation("number.format"));
-                            }
-                        }
-
-                        ChatBlock chatBlock = new ChatBlock();
-
-                        chatBlock.setAlignment("l", "c", "c", "c");
-
-                        chatBlock.addRow(headColor + Language.getTranslation("name"), Language.getTranslation("distance"), Language.getTranslation("coords.upper"), Language.getTranslation("world"));
-
-
-
-
-                        for (ClanPlayer clanPlayer : members) {
-                            Player iPlayer = clanPlayer.toPlayer();
-
-                            if (iPlayer == null) {
-                                continue;
-                            }
-
-
-                            String name = (clanPlayer.isLeader() ? plugin.getSettingsManager().getLeaderColor() : ((clanPlayer.isTrusted() ? plugin.getSettingsManager().getTrustedColor() : plugin.getSettingsManager().getUntrustedColor()))) + clanPlayer.getName();
-                            Location loc = iPlayer.getLocation();
-                            int distance = (int) Math.ceil(loc.toVector().distance(player.getLocation().toVector()));
-                            String coords = loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ();
-                            String world = loc.getWorld().getName();
-
-                            chatBlock.addRow(name, ChatColor.AQUA.toString() + distance, ChatColor.WHITE.toString() + coords, world);
-                        }
-
-
-                        ChatBlock.sendBlank(player);
-                        ChatBlock.saySingle(player, plugin.getSettingsManager().getClanColor() + clan.getName() + subColor + " " + Language.getTranslation("coords") + " ");
-                        ChatBlock.sendBlank(player);
-
-                        int[] boundings = getBoundings(completeSize, page);
-
-                        chatBlock.sendBlock(player, boundings[0], boundings[1]);
-
-
-
-                    } else {
-                        ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("only.trusted.players.can.access.clan.coords"));
+                    if (members.isEmpty()) {
+                        ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("you.are.the.only.member.online"));
+                        return;
                     }
-                } else {
-                    ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("clan.is.not.verified"));
-                }
 
+                    int page = 0;
+                    int completeSize = members.size();
+
+                    if (args.length == 1) {
+                        try {
+                            page = Integer.parseInt(args[0]) - 1;
+                        } catch (NumberFormatException e) {
+                            player.sendMessage(Language.getTranslation("number.format"));
+                        }
+                    }
+
+                    ChatBlock chatBlock = new ChatBlock();
+
+                    chatBlock.setAlignment("l", "c", "c", "c");
+
+                    chatBlock.addRow(headColor + Language.getTranslation("name"), Language.getTranslation("distance"), Language.getTranslation("coords.upper"), Language.getTranslation("world"));
+
+
+                    for (ClanPlayer clanPlayer : members) {
+                        Player iPlayer = clanPlayer.toPlayer();
+
+                        if (iPlayer == null) {
+                            continue;
+                        }
+
+
+                        String name = (clanPlayer.isLeader() ? plugin.getSettingsManager().getLeaderColor() : ((clanPlayer.isTrusted() ? plugin.getSettingsManager().getTrustedColor() : plugin.getSettingsManager().getUntrustedColor()))) + clanPlayer.getName();
+                        Location loc = iPlayer.getLocation();
+                        int distance = (int) Math.ceil(loc.toVector().distance(player.getLocation().toVector()));
+                        String coords = loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ();
+                        String world = loc.getWorld().getName();
+
+                        chatBlock.addRow(name, ChatColor.AQUA.toString() + distance, ChatColor.WHITE.toString() + coords, world);
+                    }
+
+
+                    ChatBlock.sendBlank(player);
+                    ChatBlock.saySingle(player, plugin.getSettingsManager().getClanColor() + clan.getName() + subColor + " " + Language.getTranslation("coords") + " ");
+                    ChatBlock.sendBlank(player);
+
+                    int[] boundings = getBoundings(completeSize, page);
+
+                    chatBlock.sendBlock(player, boundings[0], boundings[1]);
+
+
+                } else {
+                    ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("only.trusted.players.can.access.clan.coords"));
+                }
             } else {
-                ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
+                ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("clan.is.not.verified"));
             }
+
         } else {
-            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("insufficient.permissions"));
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
         }
     }
 }

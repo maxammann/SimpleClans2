@@ -67,6 +67,8 @@ public class SettingsManager {
     private String clanBB, clanPlayerBB, defaultBB;
     private int maxBBDisplayLines, maxBBLenght;
 
+    private boolean voteForDemote;
+
     private ChatColor headingPageColor, subPageColor, clanColor, leaderColor, trustedColor, untrustedColor;
 
     public SettingsManager(SimpleClans plugin)
@@ -87,6 +89,8 @@ public class SettingsManager {
 
     private void load()
     {
+        Logging.debug("Loading Settings!");
+        long start = System.currentTimeMillis();
         try {
             ConfigurationSection general = config.getConfigurationSection("general");
 
@@ -147,6 +151,9 @@ public class SettingsManager {
             maxBBDisplayLines = clanBBSection.getInt("max-display-lines");
             maxBBLenght = clanBBSection.getInt("max-lines");
 
+            ConfigurationSection voting = clan.getConfigurationSection("voting");
+            voteForDemote = voting.getBoolean("demote");
+
             ConfigurationSection paging = config.getConfigurationSection("paging");
 
             ConfigurationSection pageColors = paging.getConfigurationSection("colors");
@@ -188,6 +195,10 @@ public class SettingsManager {
         } catch (Exception e) {
             ExceptionHelper.handleException(e, getClass());
         }
+
+        long finish = System.currentTimeMillis();
+
+        Logging.debug("Loading settings finished! Took %s ms!", finish - start);
     }
 
     public void save()
@@ -388,5 +399,10 @@ public class SettingsManager {
     public ChatColor getUntrustedColor()
     {
         return untrustedColor;
+    }
+
+    public boolean isVoteForDemote()
+    {
+        return voteForDemote;
     }
 }

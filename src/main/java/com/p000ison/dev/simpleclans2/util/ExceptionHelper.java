@@ -33,7 +33,7 @@ public class ExceptionHelper {
         String msg = e.getMessage();
 
         if (msg != null) {
-            msg.replaceAll("\n", "");
+            msg = msg.replaceAll("\n", "");
         }
 
         Logging.debug("Failed because of: '%s'", Level.SEVERE, msg);

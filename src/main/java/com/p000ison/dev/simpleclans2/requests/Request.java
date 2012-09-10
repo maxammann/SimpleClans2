@@ -77,6 +77,8 @@ public abstract class Request implements Executable {
 
     public abstract void announceMessage(String message);
 
+    public abstract boolean hasRequestToHandle(ClanPlayer clanPlayer);
+
     public long getCreatedDate()
     {
         return created;

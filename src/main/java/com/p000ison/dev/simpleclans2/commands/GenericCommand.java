@@ -20,6 +20,8 @@
 package com.p000ison.dev.simpleclans2.commands;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
+import org.bukkit.command.CommandSender;
+import org.bukkit.permissions.Permissible;
 
 public abstract class GenericCommand implements Command {
     private String name;
@@ -28,6 +30,7 @@ public abstract class GenericCommand implements Command {
     private String[] identifiers;
     private String[] usage;
     protected SimpleClans plugin;
+    private String permission;
 
     public GenericCommand(String name, SimpleClans plugin)
     {
@@ -119,5 +122,16 @@ public abstract class GenericCommand implements Command {
         }
 
         return new int[]{start, end};
+    }
+
+    @Override
+    public boolean hasPermission(Permissible sender)
+    {
+        return permission == null || sender.hasPermission(permission);
+    }
+
+    public void setPermission(String permission)
+    {
+        this.permission = permission;
     }
 }

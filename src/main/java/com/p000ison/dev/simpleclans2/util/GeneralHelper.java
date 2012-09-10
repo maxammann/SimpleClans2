@@ -52,7 +52,6 @@ public class GeneralHelper {
 
         for (char color : args) {
             string.append(ChatColor.getByChar(color).name().toLowerCase()).append(' ');
-
         }
 
         return string.substring(0, string.length() - 1);

@@ -40,40 +40,31 @@ public class BanCommand extends GenericConsoleCommand {
         setArgumentRange(1, 1);
         setUsages(MessageFormat.format(Language.getTranslation("usage.ban"), plugin.getSettingsManager().getClanCommand()));
         setIdentifiers(Language.getTranslation("ban.command"));
+        setPermission("simpleclans.mod.ban");
     }
 
     @Override
-    public String getMenu(CommandSender sender)
+    public String getMenu()
     {
-        if (sender.hasPermission("simpleclans.mod.ban")) {
-            return ChatColor.DARK_RED + MessageFormat.format(Language.getTranslation("0.ban.unban.player.1.ban.unban.a.player"), plugin.getSettingsManager().getClanCommand());
-        }
-        return null;
+        return ChatColor.DARK_RED + MessageFormat.format(Language.getTranslation("0.ban.unban.player.1.ban.unban.a.player"), plugin.getSettingsManager().getClanCommand());
     }
 
     @Override
     public void execute(CommandSender sender, String label, String[] args)
     {
+        ClanPlayer clanPlayer = plugin.getClanPlayerManager().getClanPlayer(args[0]);
 
-        if (sender.hasPermission("simpleclans.mod.ban")) {
+        if (!clanPlayer.isBanned()) {
+            Player player = plugin.getServer().getPlayerExact(clanPlayer.getName());
 
-
-            ClanPlayer clanPlayer = plugin.getClanPlayerManager().getClanPlayer(args[0]);
-
-            if (!clanPlayer.isBanned()) {
-                Player player = plugin.getServer().getPlayerExact(clanPlayer.getName());
-
-                if (player != null) {
-                    player.sendMessage(ChatColor.AQUA + Language.getTranslation("you.banned"));
-                }
-
-                plugin.getClanManager().ban(clanPlayer);
-                sender.sendMessage(ChatColor.AQUA + Language.getTranslation("player.added.to.banned.list"));
-            } else {
-                sender.sendMessage(ChatColor.RED + Language.getTranslation("this.player.is.already.banned"));
+            if (player != null) {
+                player.sendMessage(ChatColor.AQUA + Language.getTranslation("you.banned"));
             }
+
+            plugin.getClanManager().ban(clanPlayer);
+            sender.sendMessage(ChatColor.AQUA + Language.getTranslation("player.added.to.banned.list"));
         } else {
-            sender.sendMessage(ChatColor.RED + Language.getTranslation("insufficient.permissions"));
+            sender.sendMessage(ChatColor.RED + Language.getTranslation("this.player.is.already.banned"));
         }
     }
 }

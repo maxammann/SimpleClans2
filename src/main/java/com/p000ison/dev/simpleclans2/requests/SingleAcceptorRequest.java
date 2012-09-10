@@ -49,6 +49,12 @@ public abstract class SingleAcceptorRequest extends Request {
         getRequester().toPlayer().sendMessage("accept");
     }
 
+    @Override
+    public boolean hasRequestToHandle(ClanPlayer clanPlayer)
+    {
+        return acceptor.equals(clanPlayer) || requester.equals(clanPlayer);
+    }
+
     public void cancelRequest()
     {
         acceptor.toPlayer().sendMessage("Cancelled");

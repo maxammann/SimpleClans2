@@ -37,5 +37,5 @@ public abstract class GenericPlayerCommand extends GenericCommand {
 
     public abstract void execute(org.bukkit.entity.Player player, String label, String[] args);
 
-    public abstract String getMenu(ClanPlayer clanPlayer, CommandSender sender);
+    public abstract String getMenu(ClanPlayer clanPlayer);
 }

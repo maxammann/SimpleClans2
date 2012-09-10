@@ -47,6 +47,12 @@ public abstract class MultipleAcceptorsRequest extends Request {
         return Collections.unmodifiableSet(acceptors);
     }
 
+    @Override
+    public boolean hasRequestToHandle(ClanPlayer clanPlayer)
+    {
+        return requester.equals(clanPlayer) || acceptors.contains(clanPlayer);
+    }
+
     public void processRequest()
     {
         for (ClanPlayer acceptor : getAcceptors()) {
@@ -108,7 +114,7 @@ public abstract class MultipleAcceptorsRequest extends Request {
     @Override
     public boolean hasEveryoneVoted()
     {
-        return accepts.size() + denies.size() + denies.size() >= acceptors.size();
+        return accepts.size() + denies.size() + abstains.size() >= acceptors.size();
     }
 
     public int getAccepts()

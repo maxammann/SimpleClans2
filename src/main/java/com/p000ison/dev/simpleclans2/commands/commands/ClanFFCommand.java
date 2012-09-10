@@ -39,16 +39,17 @@ public class ClanFFCommand extends GenericPlayerCommand {
     public ClanFFCommand(SimpleClans plugin)
     {
         super("Clanff", plugin);
-        setArgumentRange(0, 0);
+        setArgumentRange(1, 1);
         setUsages(MessageFormat.format(Language.getTranslation("usage.clanff"), plugin.getSettingsManager().getClanCommand()));
         setIdentifiers(Language.getTranslation("clanff.command"));
+        setPermission("simpleclans.leader.ff");
     }
 
     @Override
-    public String getMenu(ClanPlayer cp, CommandSender sender)
+    public String getMenu(ClanPlayer cp)
     {
         if (cp != null) {
-            if ((cp.isLeader()|| cp.hasPermission("manage.clanff")) && sender.hasPermission("simpleclans.leader.ff")) {
+            if ((cp.isLeader() || cp.hasPermission("manage.clanff"))) {
                 return MessageFormat.format(Language.getTranslation("menu.clanff"), plugin.getSettingsManager().getClanCommand());
             }
         }
@@ -72,11 +73,11 @@ public class ClanFFCommand extends GenericPlayerCommand {
                         if (action.equalsIgnoreCase(Language.getTranslation("allow"))) {
                             clan.addBBMessage(cp, Language.getTranslation("clan.wide.friendly.fire.is.allowed"));
                             clan.setFriendlyFire(true);
-//                            plugin.getDataManager().updateClan(clan);
+                            plugin.getDataManager().updateClan(clan);
                         } else if (action.equalsIgnoreCase(Language.getTranslation("block"))) {
                             clan.addBBMessage(cp, Language.getTranslation("clan.wide.friendly.fire.blocked"));
                             clan.setFriendlyFire(false);
-//                            plugin.getDataManager().updateClan(clan);
+                            plugin.getDataManager().updateClan(clan);
                         } else {
                             player.sendMessage(ChatColor.RED + MessageFormat.format(Language.getTranslation("usage.clanff"), plugin.getSettingsManager().getClanCommand()));
                         }

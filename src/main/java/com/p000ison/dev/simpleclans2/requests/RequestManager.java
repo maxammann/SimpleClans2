@@ -42,27 +42,8 @@ public class RequestManager {
 
             //go through all requests
             for (Request request : requests) {
-
-                //if there is already a request of this player cancel
-                if (request.getRequester().equals(created.getRequester())) {
-                    return false;
-                }
-
-                //if there are multiple acceptors
-                if (request instanceof MultipleAcceptorsRequest) {
-                    MultipleAcceptorsRequest multiRequest = (MultipleAcceptorsRequest) request;
-
-                    //Check if any player of the current acceptors has already a request to handle
-                    for (ClanPlayer clanPlayer : multiCreated.getAcceptors()) {
-                        for (ClanPlayer acceptor : multiRequest.getAcceptors()) {
-                            if (acceptor.equals(clanPlayer)) {
-                                return false;
-                            }
-                        }
-                    }
-                } else if (request instanceof SingleAcceptorRequest) {
-                    //check if the one acceptor has already a request to handle
-                    if (multiCreated.getAcceptors().contains(multiCreated.getRequester())) {
+                for (ClanPlayer clanPlayer : multiCreated.getAcceptors()) {
+                    if (request.hasRequestToHandle(clanPlayer)) {
                         return false;
                     }
                 }
@@ -73,27 +54,8 @@ public class RequestManager {
             //go through all requests
             for (Request request : requests) {
 
-                //if there is already a request of this player cancel
-                if (request.getRequester().equals(created.getRequester())) {
+                if (request.hasRequestToHandle(singleCreated.getAcceptor())) {
                     return false;
-                }
-
-                //if there are multiple acceptors
-                if (request instanceof MultipleAcceptorsRequest) {
-                    MultipleAcceptorsRequest multiRequest = (MultipleAcceptorsRequest) request;
-
-                    //Check if the acceptor of the request has already a request to handle
-                    for (ClanPlayer acceptor : multiRequest.getAcceptors()) {
-                        if (acceptor.equals(singleCreated.getAcceptor())) {
-                            return false;
-                        }
-                    }
-
-                } else if (request instanceof SingleAcceptorRequest) {
-                    //check if the one acceptor has already a request to handle
-                    if (singleCreated.getRequester().equals(singleCreated.getAcceptor())) {
-                        return false;
-                    }
                 }
             }
         }

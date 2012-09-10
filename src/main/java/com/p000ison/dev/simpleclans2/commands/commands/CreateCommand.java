@@ -43,18 +43,17 @@ public class CreateCommand extends GenericPlayerCommand {
         setArgumentRange(2, 20);
         setUsages(MessageFormat.format(Language.getTranslation("usage.create"), plugin.getSettingsManager().getClanCommand()), Language.getTranslation("example.clan.create"));
         setIdentifiers(Language.getTranslation("create.command"));
+        setPermission("simpleclans.leader.create");
     }
 
     @Override
-    public String getMenu(ClanPlayer cp, CommandSender sender)
+    public String getMenu(ClanPlayer cp)
     {
         if (cp.getClan() == null) {
-            if (sender.hasPermission("simpleclans.leader.create")) {
-                if (plugin.getSettingsManager().purchaseCreation()) {
-                    return MessageFormat.format(Language.getTranslation("menu.create.purchase"), plugin.getSettingsManager().getClanCommand());
-                } else {
-                    return MessageFormat.format(Language.getTranslation("menu.create.default"), plugin.getSettingsManager().getClanCommand());
-                }
+            if (plugin.getSettingsManager().purchaseCreation()) {
+                return MessageFormat.format(Language.getTranslation("menu.create.purchase"), plugin.getSettingsManager().getClanCommand());
+            } else {
+                return MessageFormat.format(Language.getTranslation("menu.create.default"), plugin.getSettingsManager().getClanCommand());
             }
         }
         return null;
@@ -63,11 +62,7 @@ public class CreateCommand extends GenericPlayerCommand {
     @Override
     public void execute(Player player, String label, String[] args)
     {
-        if (!player.hasPermission("simpleclans.leader.create")) {
-            player.sendMessage(ChatColor.RED + Language.getTranslation("insufficient.permissions"));
 
-            return;
-        }
         String tag = args[0];
         String cleanTag = ChatColor.stripColor(args[0]);
 
@@ -135,7 +130,7 @@ public class CreateCommand extends GenericPlayerCommand {
         Clan clan = plugin.getClanManager().createClan(args[0], name);
         clan.setLeader(cp);
         cp.setClan(clan);
-        clan.addBBMessage(cp,  MessageFormat.format(Language.getTranslation("clan.created"), name));
+        clan.addBBMessage(cp, MessageFormat.format(Language.getTranslation("clan.created"), name));
 
         if (plugin.getSettingsManager().requireVerification()) {
             boolean verified = !plugin.getSettingsManager().requireVerification() || player.hasPermission("simpleclans.mod.verify");
