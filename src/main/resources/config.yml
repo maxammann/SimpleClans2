@@ -1,7 +1,8 @@
 general:
     elements-per-page: 10
     clan-command: clan
-    server-name: TestServre
+    server-name: SimpleClans
+    global-ff: false
 teleportation:
     drop-items-on-teleport: false
     drop-all-items-on-teleport: false
@@ -19,6 +20,8 @@ pvp:
 clan:
    max-tag-lenght: 3
    min-tag-lenght: 4
+   set-home-only-once: false
+   minimal-size-to-ally: 1
    purge:
        inactive-player-data-days: 30
        inactive-clan-days: 7
@@ -27,11 +30,15 @@ clan:
      clan: '+clan: +message'
      clanplayer: '+player: +message'
      default: '+message'
-     max-lines: 10
+     max-lines: 1000
+     max-display-lines: 10
+   announce:
+     clan: '+clan: +message'
+     clanplayer: '+player: +message'
+     default: '+message'
    economy:
-       purchase-creation: false
-       purchase-price: 20
-   minimal-size-to-ally: 1
+       purchase-creation: 20
+       purchase-teleport: -1
    voting:
        demote: true
 paging:

@@ -38,22 +38,20 @@ public class GeneralHelper {
     {
     }
 
-    ;
-
-    public static String arrayToString(Object... args)
+    public static String arrayToString(String... args)
     {
         if (args == null || args.length == 0) {
             return null;
         }
 
-        StringBuilder string = new StringBuilder();
+        StringBuilder out = new StringBuilder();
 
-        for (Object obj : args) {
-            string.append(obj.toString()).append(' ');
+        for (Object string : args) {
+            out.append(string).append(' ');
 
         }
 
-        return string.substring(0, string.length() - 1);
+        return out.substring(0, out.length() - 1);
     }
 
     public static String arrayToString(char... args)
@@ -98,14 +96,14 @@ public class GeneralHelper {
     }
 
 
-    public static String arrayBoundsToString1(int start, int end, Object... args)
+    public static String arrayBoundsToString(int start, int end, String... args)
     {
         return arrayToString(Arrays.copyOfRange(args, start, end));
     }
 
     public static String arrayBoundsToString(int start, String... args)
     {
-        return arrayToString((Object[])Arrays.copyOfRange(args, start, args.length));
+        return arrayToString(Arrays.copyOfRange(args, start, args.length));
     }
 
     public static boolean containsColor(String test, char alternateChar, Character color)
