@@ -25,7 +25,6 @@ import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
 import com.p000ison.dev.simpleclans2.util.GeneralHelper;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.text.MessageFormat;
@@ -75,6 +74,6 @@ public class RankCreateCommand extends GenericPlayerCommand {
             return;
         }
 
-        plugin.getRankManager().createRank(clan, GeneralHelper.arrayToStringFromStart(1, args), priority);
+        plugin.getRankManager().createRank(clan, GeneralHelper.arrayBoundsToString(1, args), priority);
     }
 }

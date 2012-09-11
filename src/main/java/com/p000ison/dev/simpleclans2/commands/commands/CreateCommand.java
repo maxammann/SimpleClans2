@@ -65,7 +65,7 @@ public class CreateCommand extends GenericPlayerCommand {
         String tag = args[0];
         String cleanTag = ChatColor.stripColor(args[0]);
 
-        String name = GeneralHelper.arrayToStringFromStart(1, args);
+        String name = GeneralHelper.arrayBoundsToString(1, args);
 
         if (player.hasPermission("simpleclans.mod.bypass")) {
             if (cleanTag.length() >= plugin.getSettingsManager().getMaxTagLenght()) {

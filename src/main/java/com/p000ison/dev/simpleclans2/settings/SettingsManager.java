@@ -56,7 +56,7 @@ public class SettingsManager {
     private boolean globalFF;
 
     private int maxTagLenght, minTagLenght;
-    private Character[] disallowedColors;
+    private char[] disallowedColors;
     private Set<String> disallowedTags;
     private boolean requireVerification;
     private double purchaseCreationPrice, purchaseVerificationPrice, purchaseTeleportPrice;
@@ -128,7 +128,6 @@ public class SettingsManager {
             maxTagLenght = clan.getInt("max-tag-lenght");
             minTagLenght = clan.getInt("min-tag-lenght");
             List<Character> disallowedColorsList = clan.getCharacterList("disallowed-colors");
-            disallowedColors = disallowedColorsList.toArray(new Character[disallowedColorsList.size()]);
             disallowedTags = new HashSet<String>(config.getStringList("disallowed-tags"));
             maxBBLenght = clan.getInt("max-bb-lenght");
             requireVerification = clan.getBoolean("require-verification");
@@ -204,6 +203,14 @@ public class SettingsManager {
                     Logging.debug("The item or id: %s was not found!", Level.WARNING, material);
                 }
             }
+
+            //prepares the disallowed colors
+            disallowedColors = new char[disallowedColorsList.size()];
+
+            for (int i = 0; i < disallowedColorsList.size(); i++) {
+                disallowedColors[1] = disallowedColorsList.get(i);
+            }
+
         } catch (Exception e) {
             ExceptionHelper.handleException(e, getClass());
         }
@@ -288,7 +295,7 @@ public class SettingsManager {
         return minTagLenght;
     }
 
-    public Character[] getDisallowedColors()
+    public char[] getDisallowedColors()
     {
         return disallowedColors;
     }

@@ -98,14 +98,14 @@ public class GeneralHelper {
     }
 
 
-    public static String arrayToString(int start, int end, Object... args)
+    public static String arrayBoundsToString1(int start, int end, Object... args)
     {
         return arrayToString(Arrays.copyOfRange(args, start, end));
     }
 
-    public static String arrayToStringFromStart(int start, String... args)
+    public static String arrayBoundsToString(int start, String... args)
     {
-        return arrayToString(Arrays.copyOfRange(args, start, args.length));
+        return arrayToString((Object[])Arrays.copyOfRange(args, start, args.length));
     }
 
     public static boolean containsColor(String test, char alternateChar, Character color)
@@ -113,7 +113,7 @@ public class GeneralHelper {
         return test.contains(String.valueOf(alternateChar) + String.valueOf(color));
     }
 
-    public static boolean containsColor(String test, char alternateChar, Character... colors)
+    public static boolean containsColor(String test, char alternateChar, char... colors)
     {
         for (char color : colors) {
             if (containsColor(test, alternateChar, color)) {
