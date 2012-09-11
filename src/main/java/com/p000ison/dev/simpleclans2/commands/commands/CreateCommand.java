@@ -27,7 +27,6 @@ import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
 import com.p000ison.dev.simpleclans2.util.ChatBlock;
 import com.p000ison.dev.simpleclans2.util.GeneralHelper;
 import org.bukkit.ChatColor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.text.MessageFormat;
@@ -50,7 +49,7 @@ public class CreateCommand extends GenericPlayerCommand {
     public String getMenu(ClanPlayer cp)
     {
         if (cp.getClan() == null) {
-            if (plugin.getSettingsManager().purchaseCreation()) {
+            if (plugin.getSettingsManager().isPurchaseCreation()) {
                 return MessageFormat.format(Language.getTranslation("menu.create.purchase"), plugin.getSettingsManager().getClanCommand());
             } else {
                 return MessageFormat.format(Language.getTranslation("menu.create.default"), plugin.getSettingsManager().getClanCommand());
@@ -122,8 +121,8 @@ public class CreateCommand extends GenericPlayerCommand {
             return;
         }
 
-        if (SimpleClans.hasEconomy()) {
-            if (!SimpleClans.withdrawBalance(player.getName(), plugin.getSettingsManager().getPurchasePrice())) {
+        if (SimpleClans.hasEconomy() && plugin.getSettingsManager().isPurchaseCreation()) {
+            if (!SimpleClans.withdrawBalance(player.getName(), plugin.getSettingsManager().getPurchaseCreationPrice())) {
                 player.sendMessage(ChatColor.AQUA + Language.getTranslation("not.sufficient.money"));
                 return;
             }

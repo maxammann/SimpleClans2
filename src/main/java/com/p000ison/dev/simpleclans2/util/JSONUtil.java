@@ -31,6 +31,8 @@ import java.util.*;
  */
 public class JSONUtil {
 
+    private JSONUtil() {};
+
     public static String collectionToJSON(String key, Collection collection)
     {
         JSONObject json = new JSONObject();

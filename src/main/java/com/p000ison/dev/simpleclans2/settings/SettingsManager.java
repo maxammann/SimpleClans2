@@ -53,19 +53,22 @@ public class SettingsManager {
     private int elementsPerPage;
     private String clanCommand;
     private String serverName;
+    private boolean globalFF;
 
     private int maxTagLenght, minTagLenght;
     private Character[] disallowedColors;
     private Set<String> disallowedTags;
     private boolean requireVerification;
-    private boolean purchaseCreation, purchaseVerification;
-    private double purchasePrice;
+    private double purchaseCreationPrice, purchaseVerificationPrice, purchaseTeleportPrice;
     private int purgeInactivePlayersDays, purgeInactiveClansDays, purgeUnverifiedClansDays;
     private boolean showUnverifiedClansOnList;
     private int minimalSizeToAlly;
+    private boolean setHomeOnlyOnce;
 
     private String clanBB, clanPlayerBB, defaultBB;
     private int maxBBDisplayLines, maxBBLenght;
+
+    private String clanAnnounce, clanPlayerAnnounce, defaultAnnounce;
 
     private boolean voteForDemote;
 
@@ -96,7 +99,8 @@ public class SettingsManager {
 
             elementsPerPage = general.getInt("elements-per-page");
             clanCommand = general.getString("clan-command");
-            setServerName(general.getString("server-name"));
+            serverName = general.getString("server-name");
+            globalFF = general.getBoolean("global-ff");
 
             ConfigurationSection teleportation = config.getConfigurationSection("teleportation");
 
@@ -130,11 +134,13 @@ public class SettingsManager {
             requireVerification = clan.getBoolean("require-verification");
             showUnverifiedClansOnList = clan.getBoolean("show-unverified-clans-on-list");
             minimalSizeToAlly = clan.getInt("minimal-size-to-ally");
+            setHomeOnlyOnce = clan.getBoolean("set-home-only-once");
 
             ConfigurationSection clanEconomy = clan.getConfigurationSection("economy");
 
-            purchaseCreation = clanEconomy.getBoolean("purchase-creation");
-            purchasePrice = clanEconomy.getDouble("purchase-price");
+            purchaseCreationPrice = clanEconomy.getDouble("purchase-creation");
+            purchaseVerificationPrice = clanEconomy.getDouble("purchase-verification");
+            purchaseTeleportPrice = clanEconomy.getDouble("purchase-teleport");
 
             ConfigurationSection clanPurge = clan.getConfigurationSection("purge");
 
@@ -150,6 +156,12 @@ public class SettingsManager {
             defaultBB = clanBBSection.getString("default");
             maxBBDisplayLines = clanBBSection.getInt("max-display-lines");
             maxBBLenght = clanBBSection.getInt("max-lines");
+
+            ConfigurationSection clanAnnounceSection = clan.getConfigurationSection("announce");
+
+            clanAnnounce = clanAnnounceSection.getString("clan");
+            clanPlayerAnnounce = clanAnnounceSection.getString("clanplayer");
+            defaultAnnounce = clanBBSection.getString("default");
 
             ConfigurationSection voting = clan.getConfigurationSection("voting");
             voteForDemote = voting.getBoolean("demote");
@@ -296,24 +308,9 @@ public class SettingsManager {
         return requireVerification;
     }
 
-    public boolean isPurchaseVerification()
-    {
-        return purchaseVerification;
-    }
-
-    public boolean purchaseCreation()
-    {
-        return purchaseCreation;
-    }
-
     public String getClanCommand()
     {
         return clanCommand;
-    }
-
-    public double getPurchasePrice()
-    {
-        return purchasePrice;
     }
 
     public int getPurgeInactivePlayersDays()
@@ -404,5 +401,67 @@ public class SettingsManager {
     public boolean isVoteForDemote()
     {
         return voteForDemote;
+    }
+
+    public String getClanAnnounce()
+    {
+        return clanAnnounce;
+    }
+
+    public String getClanPlayerAnnounce()
+    {
+        return clanPlayerAnnounce;
+    }
+
+    public String getDefaultAnnounce()
+    {
+        return defaultAnnounce;
+    }
+
+    public boolean isSetHomeOnlyOnce()
+    {
+        return setHomeOnlyOnce;
+    }
+
+    public boolean isGlobalFF()
+    {
+        return globalFF;
+    }
+
+    public void setGlobalFF(boolean globalFF)
+    {
+        this.globalFF = globalFF;
+        config.getConfigurationSection("general").set("global-ff", globalFF);
+        plugin.saveConfig();
+    }
+
+    public double getPurchaseCreationPrice()
+    {
+        return purchaseCreationPrice;
+    }
+
+    public double getPurchaseVerificationPrice()
+    {
+        return purchaseVerificationPrice;
+    }
+
+    public double getPurchaseTeleportPrice()
+    {
+        return purchaseTeleportPrice;
+    }
+
+    public boolean isPurchaseCreation()
+    {
+        return purchaseCreationPrice > 0D;
+    }
+
+    public boolean isPurchaseVerification()
+    {
+        return purchaseVerificationPrice > 0D;
+    }
+
+    public boolean isPurchaseTeleport()
+    {
+        return purchaseTeleportPrice > 0D;
     }
 }

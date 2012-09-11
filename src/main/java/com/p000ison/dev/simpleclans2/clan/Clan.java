@@ -513,6 +513,37 @@ public class Clan {
         }
     }
 
+
+    public void announce(ClanPlayer clanPlayer, String message)
+    {
+        announceRaw(GeneralHelper.parseColors(plugin.getSettingsManager().getClanPlayerAnnounce().replace("+player", clanPlayer.getName()).replace("+message", message)));
+    }
+
+    public void announce(Clan clan, String message)
+    {
+        announceRaw(GeneralHelper.parseColors(plugin.getSettingsManager().getClanAnnounce().replace("+clan", clan.getTag()).replace("+message", message)));
+    }
+
+    public void announce(String message)
+    {
+        announceRaw(GeneralHelper.parseColors(plugin.getSettingsManager().getDefaultAnnounce().replace("+message", message)));
+    }
+
+    private void announceRaw(String message)
+    {
+        if (message == null) {
+            return;
+        }
+
+        for (ClanPlayer clanPlayer : getAllMembers()) {
+            Player player = clanPlayer.toPlayer();
+
+            if (player != null) {
+                player.sendMessage(message);
+            }
+        }
+    }
+
     public String getCleanTag()
     {
         return ChatColor.stripColor(tag.toLowerCase());

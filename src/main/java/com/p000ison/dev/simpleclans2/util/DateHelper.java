@@ -21,13 +21,14 @@
 package com.p000ison.dev.simpleclans2.util;
 
 
-import java.util.Calendar;
 import java.util.Date;
 
 /**
  * Represents a DateHelper
  */
 public class DateHelper {
+
+    private DateHelper() {}
 
     public static double differenceInMonths(Date date1, Date date2)
     {

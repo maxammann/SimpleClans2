@@ -50,7 +50,7 @@ public class SCPlayerListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onPlayeInteract(PlayerInteractEvent event)
+    public void onPlayerInteract(PlayerInteractEvent event)
     {
         System.out.println("1");
 

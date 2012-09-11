@@ -22,7 +22,6 @@ package com.p000ison.dev.simpleclans2;
 
 import com.p000ison.dev.simpleclans2.clan.ClanManager;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayerManager;
-import com.p000ison.dev.simpleclans2.commands.Command;
 import com.p000ison.dev.simpleclans2.commands.CommandManager;
 import com.p000ison.dev.simpleclans2.commands.commands.*;
 import com.p000ison.dev.simpleclans2.commands.commands.voting.AbstainCommand;
@@ -34,14 +33,15 @@ import com.p000ison.dev.simpleclans2.listeners.SCPlayerListener;
 import com.p000ison.dev.simpleclans2.ranks.RankManager;
 import com.p000ison.dev.simpleclans2.requests.RequestManager;
 import com.p000ison.dev.simpleclans2.settings.SettingsManager;
-import com.p000ison.dev.simpleclans2.util.ClassesHelper;
+import com.p000ison.dev.simpleclans2.support.PreciousStonesSupport;
+import com.p000ison.dev.simpleclans2.teleportation.TeleportManager;
+import com.p000ison.dev.simpleclans2.util.Announcer;
 import com.p000ison.dev.simpleclans2.util.Logging;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.lang.reflect.Constructor;
 import java.util.logging.Level;
 
 /**
@@ -57,6 +57,9 @@ public class SimpleClans extends JavaPlugin {
     private CommandManager commandManager;
     private DataManager dataManager;
     private RankManager rankManager;
+    private Announcer announcer;
+    private TeleportManager teleportManager;
+    private PreciousStonesSupport preciousStonesSupport;
     private static Economy economy;
 
 
@@ -119,7 +122,10 @@ public class SimpleClans extends JavaPlugin {
         clanPlayerManager = new ClanPlayerManager(this);
         dataManager = new DataManager(this);
         requestManager = new RequestManager();
+        announcer = new Announcer(this);
+        teleportManager = new TeleportManager(this);
         rankManager = new RankManager(this);
+        preciousStonesSupport = new PreciousStonesSupport(this);
         setupCommands();
     }
 
@@ -141,6 +147,13 @@ public class SimpleClans extends JavaPlugin {
         commandManager.addCommand(new CoordsCommand(this));
         commandManager.addCommand(new DemoteCommand(this));
         commandManager.addCommand(new BanCommand(this));
+        commandManager.addCommand(new HelpCommand(this));
+        commandManager.addCommand(new HomeCommand(this));
+        commandManager.addCommand(new HomeRegroupCommand(this));
+        commandManager.addCommand(new HomeSetCommand(this));
+        commandManager.addCommand(new GlobalFFCommand(this));
+        commandManager.addCommand(new ModDisbandCommand(this));
+        commandManager.addCommand(new DisbandCommand(this));
     }
 
     @Override
@@ -216,5 +229,20 @@ public class SimpleClans extends JavaPlugin {
     public RankManager getRankManager()
     {
         return rankManager;
+    }
+
+    public Announcer getAnnouncer()
+    {
+        return announcer;
+    }
+
+    public PreciousStonesSupport getPreciousStonesSupport()
+    {
+        return preciousStonesSupport;
+    }
+
+    public TeleportManager getTeleportManager()
+    {
+        return teleportManager;
     }
 }

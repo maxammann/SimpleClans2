@@ -22,13 +22,23 @@ package com.p000ison.dev.simpleclans2.util;
 import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Represents a GeneralHelper
  */
 public class GeneralHelper {
+
+    private GeneralHelper()
+    {
+    }
+
+    ;
 
     public static String arrayToString(Object... args)
     {
@@ -134,5 +144,10 @@ public class GeneralHelper {
     public static String parseColors(String msg)
     {
         return msg.replace("&", "\u00a7");
+    }
+
+    public static String locationToString(Location loc)
+    {
+        return loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ() + " " + loc.getWorld().getName();
     }
 }
