@@ -136,8 +136,8 @@ public class GeneralHelper {
     /**
      * Convert color hex values
      *
-     * @param msg
-     * @return
+     * @param msg The message to colorize
+     * @return The colored string
      */
     public static String parseColors(String msg)
     {

@@ -32,7 +32,7 @@ public class PlayerFlags extends Flags {
     /**
      * Adds a past clan to this clan.
      *
-     * @param id The id of the clan to add.
+     * @param clan The clan to add.
      */
     public void addPastClan(String clan)
     {

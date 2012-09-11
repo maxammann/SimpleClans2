@@ -57,7 +57,7 @@ public class MySQLDatabase implements Database {
     }
 
     /**
-     * @return connection
+     * @return The connection
      */
     @Override
     public Connection getConnection()
@@ -149,8 +149,8 @@ public class MySQLDatabase implements Database {
     /**
      * Execute a statement
      *
-     * @param query
-     * @return
+     * @param query The query string
+     * @return weather is was successfully
      */
     @Override
     public Boolean execute(String query)
@@ -168,8 +168,8 @@ public class MySQLDatabase implements Database {
     /**
      * Check whether a table exists
      *
-     * @param table
-     * @return
+     * @param table The table name
+     * @return Weather is exists
      */
     @Override
     public Boolean existsTable(String table)
@@ -188,9 +188,9 @@ public class MySQLDatabase implements Database {
     /**
      * Check whether a colum exists
      *
-     * @param table
-     * @param column
-     * @return
+     * @param table The table
+     * @param column The colmn
+     * @return Weather is exists
      */
     @Override
     public Boolean existsColumn(String table, String column)
