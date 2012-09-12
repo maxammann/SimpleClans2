@@ -23,7 +23,6 @@ import com.p000ison.dev.simpleclans2.Language;
 import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.requests.MultipleAcceptorsRequest;
-import org.bukkit.ChatColor;
 
 import java.text.MessageFormat;
 import java.util.Set;

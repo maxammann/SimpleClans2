@@ -14,6 +14,8 @@ permissions:
     description: Can verify simpleclans
   simpleclans.mod.ban:
     description: Can ban players from the entire plugin
+  simpleclans.mod.unban:
+    description: Can unban players from the entire plugin
   simpleclans.mod.disband:
     description: Can disband any clan
   simpleclans.mod.globalff:
@@ -133,6 +135,7 @@ permissions:
       simpleclans.mod.mostkilled: true
       simpleclans.mod.keep-items: true
       simpleclans.mod.nopvpinwar: true
+      simpleclans.mod.unban: true
   simpleclans.anyone.*:
     description: Permissions for anyone
     default: false

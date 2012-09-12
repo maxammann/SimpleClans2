@@ -36,7 +36,7 @@ import java.util.*;
 /**
  * Represents a Clan
  */
-public class Clan implements KDRAble{
+public class Clan implements KDRAble {
 
     private SimpleClans plugin;
 

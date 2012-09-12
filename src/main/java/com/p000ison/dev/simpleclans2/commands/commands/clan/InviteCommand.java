@@ -70,6 +70,7 @@ public class InviteCommand extends GenericPlayerCommand {
                     player.sendMessage(ChatColor.RED + Language.getTranslation("no.player.matched"));
                     return;
                 }
+
                 if (!invited.hasPermission("simpleclans.member.can-join")) {
                     player.sendMessage(ChatColor.RED + Language.getTranslation("the.player.doesn.t.not.have.the.permissions.to.join.clans"));
                     return;

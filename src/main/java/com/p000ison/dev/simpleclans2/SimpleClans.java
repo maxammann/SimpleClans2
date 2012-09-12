@@ -24,6 +24,7 @@ import com.p000ison.dev.simpleclans2.clan.ClanManager;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayerManager;
 import com.p000ison.dev.simpleclans2.commands.CommandManager;
 import com.p000ison.dev.simpleclans2.commands.commands.admin.BanCommand;
+import com.p000ison.dev.simpleclans2.commands.commands.admin.DisbandCommand;
 import com.p000ison.dev.simpleclans2.commands.commands.admin.GlobalFFCommand;
 import com.p000ison.dev.simpleclans2.commands.commands.admin.ModDisbandCommand;
 import com.p000ison.dev.simpleclans2.commands.commands.clan.*;

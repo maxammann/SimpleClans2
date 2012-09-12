@@ -59,8 +59,7 @@ public class DataManager {
         database = plugin.getDatabaseManager().getDatabase();
 
         prepareStatements();
-        importClans();
-        importClanPlayers();
+        importAll();
     }
 
     private void prepareStatements()
@@ -85,6 +84,11 @@ public class DataManager {
         retrieveRankByName = database.prepareStatement("SELECT id FROM `sc2_players` WHERE name = ?;");
     }
 
+    public final void importAll()
+    {
+        importClans();
+        importClanPlayers();
+    }
 
     public void updateClanPlayer(ClanPlayer clanPlayer)
     {

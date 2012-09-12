@@ -28,7 +28,6 @@ import com.p000ison.dev.simpleclans2.util.ChatBlock;
 import com.p000ison.dev.simpleclans2.util.GeneralHelper;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.text.MessageFormat;
@@ -77,7 +76,7 @@ public class CoordsCommand extends GenericPlayerCommand {
                     Set<ClanPlayer> members = GeneralHelper.stripOfflinePlayers(clan.getMembers());
 
                     if (members.isEmpty()) {
-                        ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("you.are.the.only.member.online"));
+                        player.sendMessage(ChatColor.RED + Language.getTranslation("you.are.the.only.member.online"));
                         return;
                     }
 
@@ -127,14 +126,14 @@ public class CoordsCommand extends GenericPlayerCommand {
 
 
                 } else {
-                    ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("only.trusted.players.can.access.clan.coords"));
+                    player.sendMessage(ChatColor.RED + Language.getTranslation("only.trusted.players.can.access.clan.coords"));
                 }
             } else {
-                ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("clan.is.not.verified"));
+                player.sendMessage(ChatColor.RED + Language.getTranslation("clan.is.not.verified"));
             }
 
         } else {
-            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
+            player.sendMessage(ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
         }
     }
 }

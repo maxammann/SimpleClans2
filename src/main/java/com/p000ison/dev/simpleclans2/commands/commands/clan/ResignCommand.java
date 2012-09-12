@@ -24,32 +24,29 @@ import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
+import com.p000ison.dev.simpleclans2.util.Announcer;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.text.MessageFormat;
 
-/**
- * @author phaed
- */
-public class DisbandCommand extends GenericPlayerCommand {
 
+public class ResignCommand extends GenericPlayerCommand {
 
-    public DisbandCommand(SimpleClans plugin)
+    public ResignCommand(SimpleClans plugin)
     {
-        super("Disband", plugin);
+        super("Resign", plugin);
         setArgumentRange(0, 0);
-        setUsages(MessageFormat.format(Language.getTranslation("usage.disband"), plugin.getSettingsManager().getClanCommand()));
-        setIdentifiers(Language.getTranslation("disband.command"));
+        setUsages(MessageFormat.format(Language.getTranslation("usage.resign"), plugin.getSettingsManager().getClanCommand()));
+        setIdentifiers(Language.getTranslation("resign.command"));
+        setPermission("simpleclans.member.resign");
     }
 
     @Override
     public String getMenu(ClanPlayer cp)
     {
         if (cp != null) {
-            if (cp.isLeader()) {
-                return ChatColor.DARK_RED + MessageFormat.format(Language.getTranslation("menu.disband"), plugin.getSettingsManager().getClanCommand());
-            }
+            return MessageFormat.format(Language.getTranslation("menu.resign"), plugin.getSettingsManager().getClanCommand());
         }
         return null;
     }
@@ -57,24 +54,19 @@ public class DisbandCommand extends GenericPlayerCommand {
     @Override
     public void execute(Player player, String label, String[] args)
     {
-
         ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
 
         if (cp != null) {
             Clan clan = cp.getClan();
 
-            if (!clan.isLeader(cp)) {
-                player.sendMessage(ChatColor.RED + Language.getTranslation("no.leader.permissions"));
-                return;
-            }
-
-            if (clan.getLeaders().size() == 1) {
-                clan.announce(cp, MessageFormat.format(Language.getTranslation("clan.has.been.disbanded"), clan.getName()));
+            if (!clan.isLeader(cp) || clan.getLeaders().size() > 1) {
+                clan.addBBMessage(cp, MessageFormat.format(Language.getTranslation("0.has.resigned"), player.getName()));
+                clan.removeMember(cp);
+            } else if (clan.isLeader(cp) && clan.getLeaders().size() == 1) {
+                Announcer.announce(ChatColor.AQUA + MessageFormat.format(Language.getTranslation("clan.has.been.disbanded"), clan.getName()));
                 clan.disband();
             } else {
-//              todo-requests
-//                plugin.getRequestManager().addDisbandRequest(cp, clan);
-                player.sendMessage(ChatColor.AQUA + Language.getTranslation("clan.disband.vote.has.been.requested.from.all.leaders"));
+                player.sendMessage(ChatColor.RED + Language.getTranslation("last.leader.cannot.resign.you.must.appoint.another.leader.or.disband.the.clan"));
             }
 
         } else {

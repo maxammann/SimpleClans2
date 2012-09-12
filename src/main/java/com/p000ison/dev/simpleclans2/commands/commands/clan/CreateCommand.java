@@ -24,7 +24,6 @@ import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
-import com.p000ison.dev.simpleclans2.util.ChatBlock;
 import com.p000ison.dev.simpleclans2.util.GeneralHelper;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -139,7 +138,7 @@ public class CreateCommand extends GenericPlayerCommand {
             boolean verified = !plugin.getSettingsManager().requireVerification() || player.hasPermission("simpleclans.mod.verify");
 
             if (!verified) {
-                ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("get.your.clan.verified.to.access.advanced.features"));
+                player.sendMessage(ChatColor.AQUA + Language.getTranslation("get.your.clan.verified.to.access.advanced.features"));
             }
 
         } else {

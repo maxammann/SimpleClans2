@@ -22,7 +22,6 @@ package com.p000ison.dev.simpleclans2.commands;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
-import org.bukkit.command.CommandSender;
 
 /**
  * Represents a GenericPlayerCommand
