@@ -20,6 +20,7 @@
 
 package com.p000ison.dev.simpleclans2.clan;
 
+import com.p000ison.dev.simpleclans2.KDRAble;
 import com.p000ison.dev.simpleclans2.Language;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
@@ -35,7 +36,7 @@ import java.util.*;
 /**
  * Represents a Clan
  */
-public class Clan {
+public class Clan implements KDRAble{
 
     private SimpleClans plugin;
 
@@ -476,7 +477,7 @@ public class Clan {
     }
 
 
-    public float getTotalKDR()
+    public float getKDR()
     {
         double totalWeightedKills = 0;
         int totalDeaths = 0;

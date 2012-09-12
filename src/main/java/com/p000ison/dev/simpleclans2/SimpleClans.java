@@ -23,7 +23,20 @@ package com.p000ison.dev.simpleclans2;
 import com.p000ison.dev.simpleclans2.clan.ClanManager;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayerManager;
 import com.p000ison.dev.simpleclans2.commands.CommandManager;
-import com.p000ison.dev.simpleclans2.commands.commands.*;
+import com.p000ison.dev.simpleclans2.commands.commands.admin.BanCommand;
+import com.p000ison.dev.simpleclans2.commands.commands.admin.GlobalFFCommand;
+import com.p000ison.dev.simpleclans2.commands.commands.admin.ModDisbandCommand;
+import com.p000ison.dev.simpleclans2.commands.commands.clan.*;
+import com.p000ison.dev.simpleclans2.commands.commands.clan.bb.BBAddCommand;
+import com.p000ison.dev.simpleclans2.commands.commands.clan.bb.BBClearCommand;
+import com.p000ison.dev.simpleclans2.commands.commands.clan.bb.BBCommand;
+import com.p000ison.dev.simpleclans2.commands.commands.clan.home.HomeCommand;
+import com.p000ison.dev.simpleclans2.commands.commands.clan.home.HomeRegroupCommand;
+import com.p000ison.dev.simpleclans2.commands.commands.clan.home.HomeSetCommand;
+import com.p000ison.dev.simpleclans2.commands.commands.general.AlliancesCommand;
+import com.p000ison.dev.simpleclans2.commands.commands.general.HelpCommand;
+import com.p000ison.dev.simpleclans2.commands.commands.general.LeaderboardCommand;
+import com.p000ison.dev.simpleclans2.commands.commands.general.ListCommand;
 import com.p000ison.dev.simpleclans2.commands.commands.voting.AbstainCommand;
 import com.p000ison.dev.simpleclans2.commands.commands.voting.DenyCommand;
 import com.p000ison.dev.simpleclans2.data.DataManager;
@@ -73,13 +86,17 @@ public class SimpleClans extends JavaPlugin {
 
         if (!setupEconomy()) {
             Logging.debug(Level.SEVERE, "Economy features disabled due to no Economy dependency found!");
+        } else {
+            Logging.debug("Hooked economy system: %s!", economy.getName());
         }
 
+        Logging.debug("Loading managers...");
         loadManagers();
+        Logging.debug("Loading the managers finished!");
 
-        PluginManager pm = getServer().getPluginManager();
+        registerEvents();
 
-        pm.registerEvents(new SCPlayerListener(this), this);
+        new Announcer(this);
 
         long finish = System.currentTimeMillis();
 
@@ -90,11 +107,19 @@ public class SimpleClans extends JavaPlugin {
     @Override
     public void onDisable()
     {
-        Language.clear();
-
         databaseManager.getDatabase().close();
 
+        economy = null;
+
+        Language.clear();
         Logging.close();
+    }
+
+    private void registerEvents()
+    {
+        PluginManager pm = getServer().getPluginManager();
+
+        pm.registerEvents(new SCPlayerListener(this), this);
     }
 
     private boolean setupEconomy()
@@ -154,6 +179,9 @@ public class SimpleClans extends JavaPlugin {
         commandManager.addCommand(new GlobalFFCommand(this));
         commandManager.addCommand(new ModDisbandCommand(this));
         commandManager.addCommand(new DisbandCommand(this));
+        commandManager.addCommand(new LeaderboardCommand(this));
+        commandManager.addCommand(new KickCommand(this));
+        commandManager.addCommand(new InviteCommand(this));
     }
 
     @Override

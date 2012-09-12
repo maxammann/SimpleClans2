@@ -14,46 +14,39 @@
  *     You should have received a copy of the GNU General Public License
  *     along with SimpleClans2.  If not, see <http://www.gnu.org/licenses/>.
  *
- *     Created: 07.09.12 02:04
+ *     Created: 11.09.12 19:46
  */
 
-package com.p000ison.dev.simpleclans2.commands.commands;
+package com.p000ison.dev.simpleclans2.commands.commands.members;
 
 import com.p000ison.dev.simpleclans2.Language;
 import com.p000ison.dev.simpleclans2.SimpleClans;
-import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
-import com.p000ison.dev.simpleclans2.util.ChatBlock;
-import com.p000ison.dev.simpleclans2.util.GeneralHelper;
 import org.bukkit.ChatColor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.text.MessageFormat;
 
 /**
- * Represents a BBCommand
+ * @author phaed
  */
-public class BBCommand extends GenericPlayerCommand {
+public class FFCommand extends GenericPlayerCommand {
 
-
-    public BBCommand(SimpleClans plugin)
+    public FFCommand(SimpleClans plugin)
     {
-        super("BB", plugin);
-        setArgumentRange(0, 0);
-        setUsages(MessageFormat.format(Language.getTranslation("usage.bb"), plugin.getSettingsManager().getClanCommand()));
-        setIdentifiers(Language.getTranslation("bb.command"));
-        setPermission("simpleclans.member.bb");
+        super("FFCommand", plugin);
+        setArgumentRange(1, 1);
+        setUsages(MessageFormat.format(Language.getTranslation("usage.ff"), plugin.getSettingsManager().getClanCommand()));
+        setIdentifiers(Language.getTranslation("ff.command"));
+        setPermission("simpleclans.member.ff");
     }
 
     @Override
     public String getMenu(ClanPlayer cp)
     {
         if (cp != null) {
-            if (cp.getClan().isVerified()) {
-                return MessageFormat.format(Language.getTranslation("menu.bb"), plugin.getSettingsManager().getClanCommand()) + "\n   §b";
-            }
+            return MessageFormat.format(Language.getTranslation("menu.ff"), plugin.getSettingsManager().getClanCommand());
         }
         return null;
     }
@@ -64,19 +57,22 @@ public class BBCommand extends GenericPlayerCommand {
 
         ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
 
-        if (cp == null) {
-            player.sendMessage(ChatColor.RED + Language.getTranslation("clan.is.not.verified"));
-            return;
-        }
+        if (cp != null) {
+            String action = args[0];
 
-        Clan clan = cp.getClan();
-
-        if (!clan.isVerified()) {
+            if (action.equalsIgnoreCase(Language.getTranslation("allow"))) {
+                cp.setFriendlyFire(true);
+                cp.update();
+                player.sendMessage(ChatColor.AQUA + Language.getTranslation("personal.friendly.fire.is.set.to.allowed"));
+            } else if (action.equalsIgnoreCase(Language.getTranslation("auto"))) {
+                cp.setFriendlyFire(false);
+                cp.update();
+                player.sendMessage(ChatColor.AQUA + Language.getTranslation("friendy.fire.is.now.managed.by.your.clan"));
+            } else {
+                player.sendMessage(ChatColor.RED + MessageFormat.format(Language.getTranslation("usage.0.ff.allow.auto"), plugin.getSettingsManager().getClanCommand()));
+            }
+        } else {
             player.sendMessage(ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
-            return;
         }
-
-
-        clan.displayBb(player, /*plugin.getSettingsManager().getMaxBBDisplayLines()*/10);
     }
 }

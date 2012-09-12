@@ -14,48 +14,46 @@
  *     You should have received a copy of the GNU General Public License
  *     along with SimpleClans2.  If not, see <http://www.gnu.org/licenses/>.
  *
- *     Created: 02.09.12 18:33
+ *     Created: 05.09.12 01:00
  */
 
-
-package com.p000ison.dev.simpleclans2.commands.commands;
+package com.p000ison.dev.simpleclans2.commands.commands.general;
 
 import com.p000ison.dev.simpleclans2.Language;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.commands.GenericConsoleCommand;
 import com.p000ison.dev.simpleclans2.util.ChatBlock;
+import com.p000ison.dev.simpleclans2.util.GeneralHelper;
 import com.p000ison.dev.simpleclans2.util.comparators.KDRComparator;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
-import java.text.DecimalFormat;
 import java.text.MessageFormat;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
- * Represents a ListCommand
+ * Represents a AlliancesCommand
  */
-public class ListCommand extends GenericConsoleCommand {
+public class AlliancesCommand extends GenericConsoleCommand {
 
-    NumberFormat formatter = new DecimalFormat("#.#");
 
-    public ListCommand(SimpleClans plugin)
+    public AlliancesCommand(SimpleClans plugin)
     {
-        super("List", plugin);
+        super("Alliances", plugin);
         setArgumentRange(0, 1);
-        setUsages(MessageFormat.format(Language.getTranslation("usage.list"), "clan"));
-        setIdentifiers(Language.getTranslation("list.command"));
-        setPermission("simpleclans.anyone.list");
+        setUsages(MessageFormat.format(Language.getTranslation("usage.alliances"), plugin.getSettingsManager().getClanCommand()));
+        setIdentifiers(Language.getTranslation("alliances.command"));
+        setPermission("simpleclans.anyone.alliances");
     }
 
     @Override
     public String getMenu()
     {
-        return MessageFormat.format(Language.getTranslation("menu.list"), "clan");
+        return MessageFormat.format(Language.getTranslation("menu.alliances"), plugin.getSettingsManager().getClanCommand(), ChatColor.WHITE);
     }
 
     @Override
@@ -83,41 +81,39 @@ public class ListCommand extends GenericConsoleCommand {
             }
         }
 
+
         Collections.sort(clans, new KDRComparator());
 
         ChatBlock chatBlock = new ChatBlock();
 
         ChatBlock.sendBlank(sender);
-        ChatBlock.saySingle(sender, plugin.getSettingsManager().getServerName() + subColor + " " + Language.getTranslation("clans.lower"));
-        ChatBlock.sendBlank(sender);
-        ChatBlock.sendMessage(sender, headColor + Language.getTranslation("total.clans") + " " + subColor + clans.size());
+        ChatBlock.saySingle(sender, plugin.getSettingsManager().getServerName() + subColor + " " + Language.getTranslation("alliances"));
         ChatBlock.sendBlank(sender);
 
-        chatBlock.setAlignment("c", "l", "c", "c");
-
-        chatBlock.addRow(Language.getTranslation("rank"), Language.getTranslation("name"), Language.getTranslation("kdr"), Language.getTranslation("members"));
-
-        int rank = 1;
+        chatBlock.setAlignment("l", "l");
+        chatBlock.addRow(headColor + Language.getTranslation("clan"), Language.getTranslation("allies"));
 
         for (Clan clan : clans) {
-            if (!plugin.getSettingsManager().isShowUnverifiedClansOnList()) {
-                if (!clan.isVerified()) {
-                    completeSize--;
-                    continue;
-                }
+            if (!clan.isVerified()) {
+                completeSize--;
+                continue;
             }
 
-            String tag = clan.getTag();
-            String name = clan.getName();
-            String fullName = tag + " " + name;
-            String size = ChatColor.WHITE + "" + clan.getSize();
-            String kdr = clan.isVerified() ? ChatColor.YELLOW + "" + formatter.format(clan.getTotalKDR()) : "";
+            Set<Clan> allies = clan.getAllies();
 
-            chatBlock.addRow("  " + rank, fullName, kdr, size);
-            rank++;
+            String alliesString;
+
+            if (allies == null || allies.isEmpty()) {
+                alliesString = subColor + "None";
+            } else {
+                alliesString = GeneralHelper.clansToString(clan.getAllies(), ChatColor.DARK_GRAY + " + ");
+            }
+
+            chatBlock.addRow(ChatColor.AQUA + clan.getTag(), alliesString);
         }
 
         int[] boundings = getBoundings(completeSize, page);
+
 
         chatBlock.sendBlock(sender, boundings[0], boundings[1]);
 

@@ -17,7 +17,7 @@
  *     Created: 07.09.12 01:18
  */
 
-package com.p000ison.dev.simpleclans2.commands.commands;
+package com.p000ison.dev.simpleclans2.commands.commands.admin;
 
 import com.p000ison.dev.simpleclans2.Language;
 import com.p000ison.dev.simpleclans2.SimpleClans;

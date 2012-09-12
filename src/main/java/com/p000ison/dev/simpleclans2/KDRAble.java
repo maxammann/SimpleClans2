@@ -14,27 +14,15 @@
  *     You should have received a copy of the GNU General Public License
  *     along with SimpleClans2.  If not, see <http://www.gnu.org/licenses/>.
  *
- *     Created: 02.09.12 18:33
+ *     Created: 12.09.12 12:07
  */
 
-
-package com.p000ison.dev.simpleclans2.util.comparators;
-
-import com.p000ison.dev.simpleclans2.KDRAble;
-
-import java.util.Comparator;
+package com.p000ison.dev.simpleclans2;
 
 /**
- * Represents a KDRComparator
+ *
  */
-public class KDRComparator implements Comparator<KDRAble> {
+public interface KDRAble {
 
-    @Override
-    public int compare(KDRAble kdr1, KDRAble kdr2)
-    {
-        Float o1 = kdr1.getKDR();
-        Float o2 = kdr2.getKDR();
-
-        return o2.compareTo(o1);
-    }
+    public float getKDR();
 }

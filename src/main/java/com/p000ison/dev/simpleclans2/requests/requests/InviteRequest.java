@@ -14,7 +14,7 @@
  *     You should have received a copy of the GNU General Public License
  *     along with SimpleClans2.  If not, see <http://www.gnu.org/licenses/>.
  *
- *     Created: 10.09.12 17:07
+ *     Created: 12.09.12 13:38
  */
 
 package com.p000ison.dev.simpleclans2.requests.requests;
@@ -22,33 +22,32 @@ package com.p000ison.dev.simpleclans2.requests.requests;
 import com.p000ison.dev.simpleclans2.Language;
 import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
-import com.p000ison.dev.simpleclans2.requests.MultipleAcceptorsRequest;
-import org.bukkit.ChatColor;
+import com.p000ison.dev.simpleclans2.requests.SingleAcceptorRequest;
+import com.p000ison.dev.simpleclans2.util.Announcer;
 
 import java.text.MessageFormat;
-import java.util.Set;
 
 /**
- * Represents a PromoteRequest
+ * Represents a InviteRequest
  */
-public class DemoteRequest extends MultipleAcceptorsRequest {
+public class InviteRequest extends SingleAcceptorRequest {
 
-    private ClanPlayer targetPlayer;
 
-    public DemoteRequest(Set<ClanPlayer> acceptors, ClanPlayer requester, Clan clan, ClanPlayer targetPlayer)
+    public InviteRequest(ClanPlayer invited, ClanPlayer requester, Clan clan)
     {
-        super(acceptors, requester, clan, MessageFormat.format(Language.getTranslation("asking.for.the.demotion"), requester.getName(), targetPlayer.getName()));
-        this.targetPlayer = targetPlayer;
+        super(invited, requester, clan, "");
     }
 
     @Override
     public boolean execute()
     {
-        Clan clan = getClan();
+        if (getClan() == null || getAcceptor() == null) {
+            return false;
+        }
 
-        clan.addBBMessage(ChatColor.AQUA + MessageFormat.format(Language.getTranslation("demoted.back.to.member"), targetPlayer));
-        clan.demote(targetPlayer);
-
+        getClan().addBBMessage(MessageFormat.format(Language.getTranslation("joined.the.clan"), getAcceptor().getName()));
+        Announcer.announce(MessageFormat.format(Language.getTranslation("has.joined"), getAcceptor().getName(), getClan().getName()));
+        getClan().addMember(getAcceptor());
         return true;
     }
 }

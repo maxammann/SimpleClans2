@@ -28,7 +28,11 @@ import java.util.logging.Level;
  */
 public class ExceptionHelper {
 
-    private ExceptionHelper() {};
+    private ExceptionHelper()
+    {
+    }
+
+    ;
 
     public static void handleException(Throwable e, Class<?> happened)
     {

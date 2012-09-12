@@ -102,4 +102,26 @@ public abstract class SingleAcceptorRequest extends Request {
 
         getAcceptor().toPlayer().sendMessage(getMessage());
     }
+
+    @Override
+    public boolean isAcceptor(ClanPlayer clanPlayer)
+    {
+        return clanPlayer.equals(acceptor);
+    }
+
+    @Override
+    public void announceMessage(String message)
+    {
+        Player acceptorPlayer = acceptor.toPlayer();
+
+        if (acceptorPlayer != null) {
+            acceptorPlayer.sendMessage(message);
+        }
+
+        Player requesterPlayer = acceptor.toPlayer();
+
+        if (requesterPlayer != null) {
+            requesterPlayer.sendMessage(message);
+        }
+    }
 }

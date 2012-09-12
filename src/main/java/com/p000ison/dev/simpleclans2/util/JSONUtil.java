@@ -31,7 +31,11 @@ import java.util.*;
  */
 public class JSONUtil {
 
-    private JSONUtil() {};
+    private JSONUtil()
+    {
+    }
+
+    ;
 
     public static String collectionToJSON(String key, Collection collection)
     {

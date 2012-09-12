@@ -14,10 +14,10 @@
  *     You should have received a copy of the GNU General Public License
  *     along with SimpleClans2.  If not, see <http://www.gnu.org/licenses/>.
  *
- *     Created: 10.09.12 15:03
+ *     Created: 10.09.12 15:02
  */
 
-package com.p000ison.dev.simpleclans2.commands.commands;
+package com.p000ison.dev.simpleclans2.commands.commands.clan.bb;
 
 import com.p000ison.dev.simpleclans2.Language;
 import com.p000ison.dev.simpleclans2.SimpleClans;
@@ -26,7 +26,6 @@ import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
 import com.p000ison.dev.simpleclans2.util.GeneralHelper;
 import org.bukkit.ChatColor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.text.MessageFormat;
@@ -34,16 +33,16 @@ import java.text.MessageFormat;
 /**
  * Represents a BBCommand
  */
-public class BBClearCommand extends GenericPlayerCommand {
+public class BBAddCommand extends GenericPlayerCommand {
 
 
-    public BBClearCommand(SimpleClans plugin)
+    public BBAddCommand(SimpleClans plugin)
     {
-        super("BBClear", plugin);
-        setArgumentRange(0, 0);
-        setUsages(MessageFormat.format(Language.getTranslation("usage.bb.clear"), plugin.getSettingsManager().getClanCommand()));
-        setIdentifiers(Language.getTranslation("bb.clear.command"));
-        setPermission("simpleclans.member.bb-clear");
+        super("BBAdd", plugin);
+        setArgumentRange(0, 500);
+        setUsages(MessageFormat.format(Language.getTranslation("usage.bb.add"), plugin.getSettingsManager().getClanCommand()));
+        setIdentifiers(Language.getTranslation("bb.add.command"));
+        setPermission("simpleclans.member.bb-add");
     }
 
     @Override
@@ -51,7 +50,7 @@ public class BBClearCommand extends GenericPlayerCommand {
     {
         if (cp != null) {
             if (cp.getClan().isVerified()) {
-                return MessageFormat.format(Language.getTranslation("menu.bb.clear"), plugin.getSettingsManager().getClanCommand());
+                return MessageFormat.format(Language.getTranslation("menu.bb.add"), plugin.getSettingsManager().getClanCommand());
             }
         }
         return null;
@@ -64,21 +63,22 @@ public class BBClearCommand extends GenericPlayerCommand {
         ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
 
         if (cp == null) {
-            player.sendMessage(ChatColor.RED + Language.getTranslation("clan.is.not.verified"));
+            player.sendMessage(ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
             return;
         }
 
         Clan clan = cp.getClan();
 
         if (!clan.isVerified()) {
-            player.sendMessage(ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
+            player.sendMessage(ChatColor.RED + Language.getTranslation("clan.is.not.verified"));
+
             return;
         }
 
-        if (cp.isTrusted() && (cp.isLeader() || cp.hasPermission("manage.bb"))) {
-            cp.getClan().clearBB();
+        if (cp.isTrusted()) {
+            String msg = GeneralHelper.arrayToString(args);
+            clan.addBBMessage(cp, msg);
             plugin.getDataManager().updateClan(clan);
-            player.sendMessage(ChatColor.RED + Language.getTranslation("cleared.bb"));
         } else {
             player.sendMessage(ChatColor.RED + Language.getTranslation("no.leader.permissions"));
         }

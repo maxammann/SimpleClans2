@@ -27,8 +27,14 @@ import java.util.Date;
  * Represents a DateHelper
  */
 public class DateHelper {
+    public static final long DAY = 86400000L;
+    public static final long HOUR = 3600000L;
+    public static final long MINUTE = 60000L;
+    public static final long SECOND = 1000L;
 
-    private DateHelper() {}
+    private DateHelper()
+    {
+    }
 
     public static double differenceInMonths(Date date1, Date date2)
     {
@@ -99,7 +105,7 @@ public class DateHelper {
         return differenceInMilliseconds(date1, date2) / 1000.0D;
     }
 
-    private static double differenceInMilliseconds(long date1, long date2)
+    public static long differenceInMilliseconds(long date1, long date2)
     {
         return Math.abs(date1 - date2);
     }

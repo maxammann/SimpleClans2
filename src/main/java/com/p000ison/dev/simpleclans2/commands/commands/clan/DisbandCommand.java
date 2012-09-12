@@ -14,43 +14,41 @@
  *     You should have received a copy of the GNU General Public License
  *     along with SimpleClans2.  If not, see <http://www.gnu.org/licenses/>.
  *
- *     Created: 10.09.12 15:02
+ *     Created: 11.09.12 19:46
  */
 
-package com.p000ison.dev.simpleclans2.commands.commands;
+package com.p000ison.dev.simpleclans2.commands.commands.clan;
 
 import com.p000ison.dev.simpleclans2.Language;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
-import com.p000ison.dev.simpleclans2.util.GeneralHelper;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.text.MessageFormat;
 
 /**
- * Represents a BBCommand
+ * @author phaed
  */
-public class BBAddCommand extends GenericPlayerCommand {
+public class DisbandCommand extends GenericPlayerCommand {
 
 
-    public BBAddCommand(SimpleClans plugin)
+    public DisbandCommand(SimpleClans plugin)
     {
-        super("BBAdd", plugin);
-        setArgumentRange(0, 500);
-        setUsages(MessageFormat.format(Language.getTranslation("usage.bb.add"), plugin.getSettingsManager().getClanCommand()));
-        setIdentifiers(Language.getTranslation("bb.add.command"));
-        setPermission("simpleclans.member.bb-add");
+        super("Disband", plugin);
+        setArgumentRange(0, 0);
+        setUsages(MessageFormat.format(Language.getTranslation("usage.disband"), plugin.getSettingsManager().getClanCommand()));
+        setIdentifiers(Language.getTranslation("disband.command"));
     }
 
     @Override
     public String getMenu(ClanPlayer cp)
     {
         if (cp != null) {
-            if (cp.getClan().isVerified()) {
-                return MessageFormat.format(Language.getTranslation("menu.bb.add"), plugin.getSettingsManager().getClanCommand());
+            if (cp.isLeader()) {
+                return ChatColor.DARK_RED + MessageFormat.format(Language.getTranslation("menu.disband"), plugin.getSettingsManager().getClanCommand());
             }
         }
         return null;
@@ -62,25 +60,25 @@ public class BBAddCommand extends GenericPlayerCommand {
 
         ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
 
-        if (cp == null) {
-            player.sendMessage(ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
-            return;
-        }
+        if (cp != null) {
+            Clan clan = cp.getClan();
 
-        Clan clan = cp.getClan();
+            if (!clan.isLeader(cp)) {
+                player.sendMessage(ChatColor.RED + Language.getTranslation("no.leader.permissions"));
+                return;
+            }
 
-        if (!clan.isVerified()) {
-            player.sendMessage(ChatColor.RED + Language.getTranslation("clan.is.not.verified"));
+            if (clan.getLeaders().size() == 1) {
+                clan.announce(cp, MessageFormat.format(Language.getTranslation("clan.has.been.disbanded"), clan.getName()));
+                clan.disband();
+            } else {
+//              todo-requests
+//                plugin.getRequestManager().addDisbandRequest(cp, clan);
+                player.sendMessage(ChatColor.AQUA + Language.getTranslation("clan.disband.vote.has.been.requested.from.all.leaders"));
+            }
 
-            return;
-        }
-
-        if (cp.isTrusted()) {
-            String msg = GeneralHelper.arrayToString(args);
-            clan.addBBMessage(cp, msg);
-            plugin.getDataManager().updateClan(clan);
         } else {
-            player.sendMessage(ChatColor.RED + Language.getTranslation("no.leader.permissions"));
+            player.sendMessage(ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
         }
     }
 }

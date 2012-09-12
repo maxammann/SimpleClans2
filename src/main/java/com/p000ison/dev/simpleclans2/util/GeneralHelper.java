@@ -21,8 +21,10 @@ package com.p000ison.dev.simpleclans2.util;
 
 import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -52,6 +54,21 @@ public class GeneralHelper {
         }
 
         return out.substring(0, out.length() - 1);
+    }
+
+    public static boolean isOnline(Player player)
+    {
+        if (player == null) {
+            return false;
+        }
+
+        for (Player players : Bukkit.getOnlinePlayers()) {
+            if (!players.canSee(player)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public static String arrayToString(char... args)

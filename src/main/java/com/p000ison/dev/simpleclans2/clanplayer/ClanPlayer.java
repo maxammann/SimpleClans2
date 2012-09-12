@@ -19,6 +19,8 @@
 
 package com.p000ison.dev.simpleclans2.clanplayer;
 
+import com.p000ison.dev.simpleclans2.KDRAble;
+import com.p000ison.dev.simpleclans2.Language;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.ranks.Rank;
@@ -31,7 +33,7 @@ import java.util.Set;
 /**
  * Represents a ClanPlayer
  */
-public class ClanPlayer {
+public class ClanPlayer implements KDRAble {
 
     private SimpleClans plugin;
 
@@ -330,5 +332,33 @@ public class ClanPlayer {
     public void update()
     {
         plugin.getDataManager().updateClanPlayer(this);
+    }
+
+    public String getLastSeen()
+    {
+        long current = System.currentTimeMillis();
+        long difference = DateHelper.differenceInMilliseconds(getLastSeenDate(), current);
+        //if the difference is more than a day
+        if (difference > DateHelper.DAY) {
+
+            long days = Math.round(DateHelper.differenceInDays(getLastSeenDate(), current));
+            return days == 1 ? "1 " + Language.getTranslation("day") : days + " " + Language.getTranslation("days");
+
+        } else if (difference > DateHelper.HOUR) {
+
+            long hours = Math.round(DateHelper.differenceInHours(getLastSeenDate(), current));
+            return hours == 1 ? "1 " + Language.getTranslation("hour") : hours + " " + Language.getTranslation("hours");
+
+        } else if (difference > DateHelper.MINUTE) {
+
+            long minutes = Math.round(DateHelper.differenceInMinutes(getLastSeenDate(), current));
+            return minutes == 1 ? "1 " + Language.getTranslation("minute") : minutes + " " + Language.getTranslation("minutes");
+
+        } else /*if (difference > DateHelper.SECOND)*/ {
+
+            long seconds = Math.round(DateHelper.differenceInSeconds(getLastSeenDate(), current));
+            return seconds == 1 ? "1 " + Language.getTranslation("second") : seconds + " " + Language.getTranslation("seconds");
+
+        }
     }
 }

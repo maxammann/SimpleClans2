@@ -14,10 +14,10 @@
  *     You should have received a copy of the GNU General Public License
  *     along with SimpleClans2.  If not, see <http://www.gnu.org/licenses/>.
  *
- *     Created: 11.09.12 21:02
+ *     Created: 11.09.12 21:05
  */
 
-package com.p000ison.dev.simpleclans2.commands.commands;
+package com.p000ison.dev.simpleclans2.commands.commands.clan.home;
 
 import com.p000ison.dev.simpleclans2.Language;
 import com.p000ison.dev.simpleclans2.SimpleClans;
@@ -30,20 +30,23 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.text.MessageFormat;
+import java.util.Random;
+import java.util.Set;
 
 /**
  * @author phaed
  */
-public class HomeSetCommand extends GenericPlayerCommand {
+public class HomeRegroupCommand extends GenericPlayerCommand {
 
+    private Random random = new Random();
 
-    public HomeSetCommand(SimpleClans plugin)
+    public HomeRegroupCommand(SimpleClans plugin)
     {
-        super("SetHome", plugin);
-        setArgumentRange(1, 1);
-        setUsages(MessageFormat.format(Language.getTranslation("usage.home.set"), plugin.getSettingsManager().getClanCommand()));
-        setIdentifiers(Language.getTranslation("home.set.command"));
-        setPermission("simpleclans.leader.home-set");
+        super("Home", plugin);
+        setArgumentRange(0, 2);
+        setUsages(MessageFormat.format(Language.getTranslation("usage.home.regroup"), plugin.getSettingsManager().getClanCommand()));
+        setIdentifiers(Language.getTranslation("home.regroup.command"));
+        setPermission("simpleclans.leader.home-regroup");
     }
 
     @Override
@@ -51,7 +54,7 @@ public class HomeSetCommand extends GenericPlayerCommand {
     {
         if (cp != null) {
             if (cp.getClan().isVerified()) {
-                return MessageFormat.format(Language.getTranslation("home.set.menu"), plugin.getSettingsManager().getClanCommand());
+                return MessageFormat.format(Language.getTranslation("home.regroup.menu"), plugin.getSettingsManager().getClanCommand());
             }
         }
         return null;
@@ -60,7 +63,6 @@ public class HomeSetCommand extends GenericPlayerCommand {
     @Override
     public void execute(Player player, String label, String[] args)
     {
-
         ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
 
         if (cp != null) {
@@ -72,16 +74,34 @@ public class HomeSetCommand extends GenericPlayerCommand {
                     Location loc = player.getLocation();
 
                     if (cp.isLeader()) {
-                        if (plugin.getPreciousStonesSupport().isTeleportAllowed(player, loc)) {
-                            if (plugin.getSettingsManager().isSetHomeOnlyOnce() && clan.getFlags().getHomeLocation() != null && !player.hasPermission("simpleclans.mod.home")) {
-                                player.sendMessage(ChatColor.RED + Language.getTranslation("home.base.only.once"));
-                                return;
-                            }
+                        if (player.hasPermission("simpleclans.leader.regroup")) {
+                            Set<ClanPlayer> members = clan.getAllMembers();
 
-                            clan.getFlags().setHomeLocation(loc);
-                            player.sendMessage(ChatColor.AQUA + MessageFormat.format(Language.getTranslation("hombase.set"), ChatColor.YELLOW + GeneralHelper.locationToString(loc)));
+                            for (ClanPlayer clanPlayer : members) {
+                                Player iPlayer = clanPlayer.toPlayer();
+
+                                if (iPlayer == null || iPlayer.equals(player)) {
+                                    continue;
+                                }
+
+                                int x = loc.getBlockX();
+                                int z = loc.getBlockZ();
+
+                                int xx = random.nextInt(2) - 1;
+                                int zz = random.nextInt(2) - 1;
+
+                                if (xx == 0 && zz == 0) {
+                                    xx = 1;
+                                }
+
+                                x = x + xx;
+                                z = z + zz;
+
+                                iPlayer.teleport(new Location(loc.getWorld(), x + .5, loc.getBlockY(), z + .5));
+                            }
+                            player.sendMessage(ChatColor.AQUA + Language.getTranslation("hombase.set") + ChatColor.YELLOW + GeneralHelper.locationToString(loc));
                         } else {
-                            player.sendMessage(ChatColor.RED + Language.getTranslation("no.teleport"));
+                            player.sendMessage(ChatColor.RED + Language.getTranslation("insufficient.permissions"));
                         }
                     } else {
                         player.sendMessage(ChatColor.RED + Language.getTranslation("no.leader.permissions"));

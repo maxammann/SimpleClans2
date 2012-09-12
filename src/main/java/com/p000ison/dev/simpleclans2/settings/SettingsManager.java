@@ -92,7 +92,7 @@ public class SettingsManager {
 
     private void load()
     {
-        Logging.debug("Loading Settings!");
+        Logging.debug("Loading Settings...");
         long start = System.currentTimeMillis();
         try {
             ConfigurationSection general = config.getConfigurationSection("general");
@@ -217,7 +217,7 @@ public class SettingsManager {
 
         long finish = System.currentTimeMillis();
 
-        Logging.debug("Loading settings finished! Took %s ms!", finish - start);
+        Logging.debug("Loading the settings finished! Took %s ms!", finish - start);
     }
 
     public void save()

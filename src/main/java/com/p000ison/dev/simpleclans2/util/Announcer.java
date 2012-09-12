@@ -29,34 +29,39 @@ import org.bukkit.Bukkit;
  */
 public class Announcer {
 
-    private SimpleClans plugin;
+    private static SimpleClans plugin;
 
     public Announcer(SimpleClans plugin)
     {
-        this.plugin = plugin;
+        Announcer.plugin = plugin;
     }
 
-    public void announce(ClanPlayer clanPlayer, String message)
+    public static void announce(ClanPlayer clanPlayer, String message)
     {
         announceRaw(GeneralHelper.parseColors(plugin.getSettingsManager().getClanPlayerAnnounce().replace("+player", clanPlayer.getName()).replace("+message", message)));
     }
 
-    public void announce(Clan clan, String message)
+    public static void announce(Clan clan, String message)
     {
         announceRaw(GeneralHelper.parseColors(plugin.getSettingsManager().getClanAnnounce().replace("+clan", clan.getTag()).replace("+message", message)));
     }
 
-    public void announce(String message)
+    public static void announce(String message)
     {
         announceRaw(GeneralHelper.parseColors(plugin.getSettingsManager().getDefaultAnnounce().replace("+message", message)));
     }
 
-    private void announceRaw(String message)
+    private static void announceRaw(String message)
     {
         if (message == null) {
             return;
         }
 
         Bukkit.broadcastMessage(message);
+    }
+
+    public static void clear()
+    {
+        plugin = null;
     }
 }

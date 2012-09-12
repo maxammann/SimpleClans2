@@ -14,16 +14,17 @@
  *     You should have received a copy of the GNU General Public License
  *     along with SimpleClans2.  If not, see <http://www.gnu.org/licenses/>.
  *
- *     Created: 11.09.12 19:46
+ *     Created: 11.09.12 21:02
  */
 
-package com.p000ison.dev.simpleclans2.commands.commands;
+package com.p000ison.dev.simpleclans2.commands.commands.clan.home;
 
 import com.p000ison.dev.simpleclans2.Language;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
+import com.p000ison.dev.simpleclans2.util.GeneralHelper;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -33,25 +34,24 @@ import java.text.MessageFormat;
 /**
  * @author phaed
  */
-public class HomeCommand extends GenericPlayerCommand {
+public class HomeSetCommand extends GenericPlayerCommand {
 
 
-    public HomeCommand(SimpleClans plugin)
+    public HomeSetCommand(SimpleClans plugin)
     {
-        super("Home", plugin);
-        setArgumentRange(0, 0);
-        setUsages(MessageFormat.format(Language.getTranslation("usage.home"), plugin.getSettingsManager().getClanCommand()));
-        setIdentifiers(Language.getTranslation("home.command"));
-        setPermission("simpleclans.member.home");
+        super("SetHome", plugin);
+        setArgumentRange(1, 1);
+        setUsages(MessageFormat.format(Language.getTranslation("usage.home.set"), plugin.getSettingsManager().getClanCommand()));
+        setIdentifiers(Language.getTranslation("home.set.command"));
+        setPermission("simpleclans.leader.home-set");
     }
 
     @Override
     public String getMenu(ClanPlayer cp)
     {
         if (cp != null) {
-
             if (cp.getClan().isVerified()) {
-                return MessageFormat.format(Language.getTranslation("menu.home"), plugin.getSettingsManager().getClanCommand());
+                return MessageFormat.format(Language.getTranslation("home.set.menu"), plugin.getSettingsManager().getClanCommand());
             }
         }
         return null;
@@ -61,7 +61,6 @@ public class HomeCommand extends GenericPlayerCommand {
     public void execute(Player player, String label, String[] args)
     {
 
-
         ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
 
         if (cp != null) {
@@ -69,26 +68,23 @@ public class HomeCommand extends GenericPlayerCommand {
 
             if (clan.isVerified()) {
                 if (cp.isTrusted()) {
-                    if (player.hasPermission("simpleclans.member.home")) {
 
-                        if (SimpleClans.hasEconomy() && plugin.getSettingsManager().isPurchaseTeleport()) {
-                            if (!SimpleClans.withdrawBalance(player.getName(), plugin.getSettingsManager().getPurchaseTeleportPrice())) {
-                                player.sendMessage(ChatColor.AQUA + Language.getTranslation("not.sufficient.money"));
+                    Location loc = player.getLocation();
+
+                    if (cp.isLeader()) {
+                        if (plugin.getPreciousStonesSupport().isTeleportAllowed(player, loc)) {
+                            if (plugin.getSettingsManager().isSetHomeOnlyOnce() && clan.getFlags().getHomeLocation() != null && !player.hasPermission("simpleclans.mod.home")) {
+                                player.sendMessage(ChatColor.RED + Language.getTranslation("home.base.only.once"));
                                 return;
                             }
+
+                            clan.getFlags().setHomeLocation(loc);
+                            player.sendMessage(ChatColor.AQUA + MessageFormat.format(Language.getTranslation("hombase.set"), ChatColor.YELLOW + GeneralHelper.locationToString(loc)));
+                        } else {
+                            player.sendMessage(ChatColor.RED + Language.getTranslation("no.teleport"));
                         }
-
-                        Location loc = clan.getFlags().getHomeLocation();
-
-                        if (loc == null) {
-                            player.sendMessage(ChatColor.RED + Language.getTranslation("hombase.not.set"));
-                            return;
-                        }
-
-                        plugin.getTeleportManager().addPlayer(player, loc, ChatColor.AQUA + MessageFormat.format(Language.getTranslation("now.at.homebase"), clan.getName()));
-
                     } else {
-                        player.sendMessage(ChatColor.RED + Language.getTranslation("insufficient.permissions"));
+                        player.sendMessage(ChatColor.RED + Language.getTranslation("no.leader.permissions"));
                     }
                 } else {
                     player.sendMessage(ChatColor.RED + Language.getTranslation("only.trusted.players.can.access.clan.vitals"));

@@ -188,7 +188,7 @@ public class MySQLDatabase implements Database {
     /**
      * Check whether a colum exists
      *
-     * @param table The table
+     * @param table  The table
      * @param column The colmn
      * @return Weather is exists
      */
