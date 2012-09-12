@@ -20,8 +20,13 @@
 package com.p000ison.dev.simpleclans2.support;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
+import com.p000ison.dev.simpleclans2.clan.Clan;
+import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
+import com.p000ison.dev.simpleclans2.listeners.SCPlayerListener;
+import com.p000ison.dev.simpleclans2.util.Logging;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginManager;
 import org.getspout.spoutapi.player.SpoutPlayer;
 
 import static org.getspout.spoutapi.SpoutManager.getOnlinePlayers;
@@ -39,13 +44,19 @@ public class SpoutSupport {
     {
         this.plugin = plugin;
 
-        Plugin spout = plugin.getServer().getPluginManager().getPlugin("SpoutPlugin");
+        PluginManager pm = plugin.getServer().getPluginManager();
+
+        Plugin spout = pm.getPlugin("SpoutPlugin");
 
         if (!(spout instanceof SpoutPlayer)) {
             return;
         }
 
+        Logging.debug("Hooked Spout!");
+
         SpoutSupport.spout = true;
+
+        pm.registerEvents(new SCPlayerListener(plugin), plugin);
     }
 
     public static boolean hasSpout()
@@ -58,6 +69,33 @@ public class SpoutSupport {
         if (!hasSpout()) {
             return;
         }
+
+        for (SpoutPlayer spoutPlayer : getOnlinePlayers()) {
+            ClanPlayer clanPlayer = plugin.getClanPlayerManager().getClanPlayerExact(spoutPlayer.getName());
+
+            if (clanPlayer == null) {
+                continue;
+            }
+
+            Clan clan = clanPlayer.getClan();
+
+            updateCape(spoutPlayer, clan);
+        }
+    }
+
+    public void updateCape(SpoutPlayer spoutPlayer, Clan clan)
+    {
+        if (clan == null || spoutPlayer == null) {
+            return;
+        }
+
+        String url = clan.getFlags().getClanCapeURL();
+
+        if (url == null) {
+            return;
+        }
+
+        spoutPlayer.setCape(url);
     }
 
     public static SpoutPlayer getSpoutPlayerExact(Player player)

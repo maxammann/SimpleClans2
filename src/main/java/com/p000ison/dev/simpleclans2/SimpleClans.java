@@ -48,6 +48,7 @@ import com.p000ison.dev.simpleclans2.ranks.RankManager;
 import com.p000ison.dev.simpleclans2.requests.RequestManager;
 import com.p000ison.dev.simpleclans2.settings.SettingsManager;
 import com.p000ison.dev.simpleclans2.support.PreciousStonesSupport;
+import com.p000ison.dev.simpleclans2.support.SpoutSupport;
 import com.p000ison.dev.simpleclans2.teleportation.TeleportManager;
 import com.p000ison.dev.simpleclans2.util.Announcer;
 import com.p000ison.dev.simpleclans2.util.Logging;
@@ -74,6 +75,7 @@ public class SimpleClans extends JavaPlugin {
     private Announcer announcer;
     private TeleportManager teleportManager;
     private PreciousStonesSupport preciousStonesSupport;
+    private SpoutSupport spoutSupport;
     private static Economy economy;
 
 
@@ -151,6 +153,7 @@ public class SimpleClans extends JavaPlugin {
         announcer = new Announcer(this);
         teleportManager = new TeleportManager(this);
         rankManager = new RankManager(this);
+        spoutSupport = new SpoutSupport(this);
         preciousStonesSupport = new PreciousStonesSupport(this);
         setupCommands();
     }
@@ -183,6 +186,7 @@ public class SimpleClans extends JavaPlugin {
         commandManager.addCommand(new LeaderboardCommand(this));
         commandManager.addCommand(new KickCommand(this));
         commandManager.addCommand(new InviteCommand(this));
+        commandManager.addCommand(new CapeCommand(this));
     }
 
     @Override
@@ -273,5 +277,10 @@ public class SimpleClans extends JavaPlugin {
     public TeleportManager getTeleportManager()
     {
         return teleportManager;
+    }
+
+    public SpoutSupport getSpoutSupport()
+    {
+        return spoutSupport;
     }
 }

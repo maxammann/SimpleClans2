@@ -57,90 +57,23 @@ public class ClanFlags extends Flags {
         return SerializablePlayerVector.deserialize(locationString).toLocation();
     }
 
-//    /**
-//     * Adds a warring clan to this clan.
-//     *
-//     * @param id The id of the clan to add.
-//     */
-//    public void addWarringClan(long id)
-//    {
-//        super.getSet("warring").add(id);
-//    }
-//
-//    /**
-//     * Removes a warring clan to this clan.
-//     *
-//     * @param id The id of the clan to remove.
-//     */
-//    public void removeWarringClan(long id)
-//    {
-//        Set warring = super.getSet("warring");
-//
-//        if (warring.contains(id)) {
-//            warring.remove(id);
-//        }
-//    }
-//
-//    /**
-//     * Adds a ally clan from this clan.
-//     *
-//     * @param id The id of the clan to add.
-//     */
-//    public void addAllyClan(long id)
-//    {
-//        super.getSet("allies").add(id);
-//    }
-//
-//    /**
-//     * Removes a ally clan from this clan.
-//     *
-//     * @param id The id of the clan to remove.
-//     */
-//    public void removeAllyClan(long id)
-//    {
-//        Set allies = super.getSet("allies");
-//
-//        if (allies.contains(id)) {
-//            allies.remove(id);
-//        }
-//    }
-//
-//    public Set<Long> getAllies()
-//    {
-//        return super.getSet("allies");
-//    }
-//
-//    /**
-//     * Adds a rival clan from this clan.
-//     *
-//     * @param id The id of the clan to add.
-//     */
-//    public void addRivalClan(long id)
-//    {
-//        super.getSet("rivals").add(id);
-//    }
-//
-//    /**
-//     * Removes a rival clan from this clan.
-//     *
-//     * @param id The id of the clan to remove.
-//     */
-//    public void removeRivalClan(long id)
-//    {
-//        Set rivals = super.getSet("rivals");
-//
-//        if (rivals.contains(id)) {
-//            rivals.remove(id);
-//        }
-//    }
-//
-//    public Set<Long> getRivals()
-//    {
-//        return super.getSet("rivals");
-//    }
-//
-//    public Set<Long> getWarringClans()
-//    {
-//        return super.getSet("warring");
-//    }
+    /**
+     * Sets the clan cape url
+     *
+     * @param url The URL
+     */
+    public void setClanCapeURL(String url)
+    {
+        super.setString("clan-cape-url", url);
+    }
+
+    /**
+     * Gets the clan cape url
+     *
+     * @return The cape url
+     */
+    public String getClanCapeURL()
+    {
+        return super.getString("clan-cape-url");
+    }
 }

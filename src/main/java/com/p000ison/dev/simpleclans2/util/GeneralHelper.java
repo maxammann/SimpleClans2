@@ -26,6 +26,9 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
@@ -165,4 +168,22 @@ public class GeneralHelper {
     {
         return loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ() + " " + loc.getWorld().getName();
     }
+
+    public static boolean checkConnection(String url)
+    {
+        try {
+            URL Url = new URL(url);
+            HttpURLConnection urlConn = (HttpURLConnection) Url.openConnection();
+            urlConn.connect();
+
+            if (urlConn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                return false;
+            }
+        } catch (IOException e) {
+            return false;
+        }
+
+        return true;
+    }
+
 }

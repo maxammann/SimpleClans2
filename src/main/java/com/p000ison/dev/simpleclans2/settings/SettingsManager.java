@@ -68,6 +68,9 @@ public class SettingsManager {
     private String clanBB, clanPlayerBB, defaultBB;
     private int maxBBDisplayLines, maxBBLenght;
 
+    private String defaultCape;
+    private boolean capesEnabled;
+
     private String clanAnnounce, clanPlayerAnnounce, defaultAnnounce;
 
     private boolean voteForDemote;
@@ -176,6 +179,11 @@ public class SettingsManager {
             trustedColor = ChatColor.getByChar(pageColors.getString("trusted-color"));
             untrustedColor = ChatColor.getByChar(pageColors.getString("untrusted-color"));
 
+
+            ConfigurationSection capes = clan.getConfigurationSection("capes");
+
+            defaultCape = capes.getString("default");
+            capesEnabled = capes.getBoolean("enabled");
 
             //prepare variables
             List<String> keepOnTeleportRaw = teleportation.getStringList("keep-items-on-teleport");
@@ -470,5 +478,15 @@ public class SettingsManager {
     public boolean isPurchaseTeleport()
     {
         return purchaseTeleportPrice > 0D;
+    }
+
+    public boolean isCapesEnabled()
+    {
+        return capesEnabled;
+    }
+
+    public String getDefaultCape()
+    {
+        return defaultCape;
     }
 }
