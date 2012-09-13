@@ -14,15 +14,15 @@
  *     You should have received a copy of the GNU General Public License
  *     along with SimpleClans2.  If not, see <http://www.gnu.org/licenses/>.
  *
- *     Created: 02.09.12 18:33
+ *     Created: 12.09.12 12:07
  */
 
+package com.p000ison.dev.simpleclans2;
 
-package com.p000ison.dev.simpleclans2.requests;
+/**
+ *
+ */
+public interface KDR {
 
-public enum VoteResult {
-    UNKNOWN,
-    ACCEPT,
-    ABSTAINED,
-    DENY
+    public float getKDR();
 }

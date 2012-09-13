@@ -31,11 +31,6 @@ public class Announcer {
 
     private static SimpleClans plugin;
 
-    public Announcer(SimpleClans plugin)
-    {
-        Announcer.plugin = plugin;
-    }
-
     public static void announce(ClanPlayer clanPlayer, String message)
     {
         announceRaw(GeneralHelper.parseColors(plugin.getSettingsManager().getClanPlayerAnnounce().replace("+player", clanPlayer.getName()).replace("+message", message)));
@@ -60,8 +55,18 @@ public class Announcer {
         Bukkit.broadcastMessage(message);
     }
 
+    public static void setPlugin(SimpleClans plugin)
+    {
+        Announcer.plugin = plugin;
+    }
+
+    public static SimpleClans getPlugin()
+    {
+        return plugin;
+    }
+
     public static void clear()
     {
-        plugin = null;
+        setPlugin(null);
     }
 }

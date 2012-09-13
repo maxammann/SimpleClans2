@@ -20,7 +20,7 @@
 
 package com.p000ison.dev.simpleclans2.clan;
 
-import com.p000ison.dev.simpleclans2.KDRAble;
+import com.p000ison.dev.simpleclans2.KDR;
 import com.p000ison.dev.simpleclans2.Language;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
@@ -36,7 +36,7 @@ import java.util.*;
 /**
  * Represents a Clan
  */
-public class Clan implements KDRAble {
+public class Clan implements KDR {
 
     private SimpleClans plugin;
 
@@ -307,7 +307,18 @@ public class Clan implements KDRAble {
             }
         }
 
-        return rivals.contains(id);
+        return false;
+    }
+
+    /**
+     * Checks weather the clan is a rival.
+     *
+     * @param clan The other clan.
+     * @return Weather they are rivals or not.
+     */
+    public boolean isRival(Clan clan)
+    {
+        return rivals.contains(clan);
     }
 
     /**

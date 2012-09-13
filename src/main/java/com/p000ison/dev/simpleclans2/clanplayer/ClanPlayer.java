@@ -19,7 +19,7 @@
 
 package com.p000ison.dev.simpleclans2.clanplayer;
 
-import com.p000ison.dev.simpleclans2.KDRAble;
+import com.p000ison.dev.simpleclans2.KDR;
 import com.p000ison.dev.simpleclans2.Language;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
@@ -33,7 +33,7 @@ import java.util.Set;
 /**
  * Represents a ClanPlayer
  */
-public class ClanPlayer implements KDRAble {
+public class ClanPlayer implements KDR {
 
     private SimpleClans plugin;
 
@@ -285,7 +285,14 @@ public class ClanPlayer implements KDRAble {
     @Override
     public boolean equals(Object obj)
     {
-        return obj instanceof Clan && ((Clan) obj).getId() == id;
+        if (obj instanceof Clan) {
+            Clan clan = ((Clan) obj);
+
+            if (clan.getId() == id || clan.getName().equals(name)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override

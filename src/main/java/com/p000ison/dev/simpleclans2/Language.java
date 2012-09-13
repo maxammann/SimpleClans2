@@ -20,6 +20,7 @@
 
 package com.p000ison.dev.simpleclans2;
 
+import com.p000ison.dev.simpleclans2.util.GeneralHelper;
 import com.p000ison.dev.simpleclans2.util.Logging;
 import org.bukkit.ChatColor;
 
@@ -36,7 +37,7 @@ public class Language {
     private static ResourceBundle bundle;
     private static ResourceBundle defaultBundle = ResourceBundle.getBundle("languages.lang", Locale.ENGLISH);
 
-    public Language(String loc)
+    public static void setInstance(String loc)
     {
         String[] parts = loc.split("[_\\.]");
 
@@ -64,13 +65,14 @@ public class Language {
 
             if (defaultBundle.containsKey(key)) {
                 Logging.debug(ChatColor.RED + "The language for the key %s was not found in the default bundle!", Level.WARNING, key);
-                return defaultBundle.getString(key);
+                return GeneralHelper.parseColors(defaultBundle.getString(key));
             }
 
-            return null;
+            //We return a error string because we do not want NPEs!
+            return "Error!";
         }
 
-        return bundle.getString(key);
+        return GeneralHelper.parseColors(bundle.getString(key));
     }
 
     public static void clear()

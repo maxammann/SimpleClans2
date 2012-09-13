@@ -58,6 +58,11 @@ public class ClanPlayerManager {
 
     public ClanPlayer createClanPlayer(ClanPlayer clanPlayer)
     {
+        for (ClanPlayer cp : players) {
+            if (cp.equals(clanPlayer)) {
+                return cp;
+            }
+        }
 
         players.add(clanPlayer);
 

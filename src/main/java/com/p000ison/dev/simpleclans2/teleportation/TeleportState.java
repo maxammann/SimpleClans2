@@ -38,10 +38,10 @@ public class TeleportState {
     private String msg;
     private boolean processing;
 
-    public TeleportState(SimpleClans plugin, Player player, Location dest, String msg, int waiting)
+    public TeleportState(SimpleClans plugin, Player player, Location destination, String msg, int waiting)
     {
         this.plugin = plugin;
-        this.destination = dest;
+        this.destination = destination;
         this.playerLocation = player.getLocation();
         this.playerName = player.getName();
         this.msg = msg;

@@ -20,17 +20,17 @@
 
 package com.p000ison.dev.simpleclans2.util.comparators;
 
-import com.p000ison.dev.simpleclans2.KDRAble;
+import com.p000ison.dev.simpleclans2.KDR;
 
 import java.util.Comparator;
 
 /**
  * Represents a KDRComparator
  */
-public class KDRComparator implements Comparator<KDRAble> {
+public class KDRComparator implements Comparator<KDR> {
 
     @Override
-    public int compare(KDRAble kdr1, KDRAble kdr2)
+    public int compare(KDR kdr1, KDR kdr2)
     {
         Float o1 = kdr1.getKDR();
         Float o2 = kdr2.getKDR();

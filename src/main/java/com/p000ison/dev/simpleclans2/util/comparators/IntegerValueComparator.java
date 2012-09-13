@@ -14,15 +14,29 @@
  *     You should have received a copy of the GNU General Public License
  *     along with SimpleClans2.  If not, see <http://www.gnu.org/licenses/>.
  *
- *     Created: 02.09.12 18:33
+ *     Created: 13.09.12 12:20
  */
 
+package com.p000ison.dev.simpleclans2.util.comparators;
 
-package com.p000ison.dev.simpleclans2.requests;
+import java.util.Comparator;
+import java.util.Map;
 
-public enum VoteResult {
-    UNKNOWN,
-    ACCEPT,
-    ABSTAINED,
-    DENY
+/**
+ * Represents a IntegerValueComparator
+ */
+public class IntegerValueComparator implements Comparator<String> {
+
+    private Map<?, Integer> base;
+
+    public IntegerValueComparator(Map<?, Integer> base)
+    {
+        this.base = base;
+    }
+
+    @Override
+    public int compare(String a, String b)
+    {
+        return base.get(a).compareTo(base.get(b));
+    }
 }

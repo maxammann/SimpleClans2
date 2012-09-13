@@ -25,19 +25,17 @@ import com.p000ison.dev.simpleclans2.SimpleClans;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 
 import java.text.MessageFormat;
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Handles teleporting with cooldown
  */
 public class TeleportManager {
     private SimpleClans plugin;
-    private HashMap<String, TeleportState> waitingPlayers = new HashMap<String, TeleportState>();
+    private Set<TeleportState> waitingPlayers = new HashSet<TeleportState>();
 
     /**
      *
@@ -45,7 +43,7 @@ public class TeleportManager {
     public TeleportManager(SimpleClans plugin)
     {
         this.plugin = plugin;
-        startCounter();
+        plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new TeleportTask(plugin, waitingPlayers), 0, 20L);
     }
 
     /**
@@ -59,31 +57,13 @@ public class TeleportManager {
     {
         int secs = plugin.getSettingsManager().getTimeUntilTeleport();
 
-        waitingPlayers.put(player.getName(), new TeleportState(plugin, player, destination, msg, secs));
+        waitingPlayers.add(new TeleportState(plugin, player, destination, msg, secs));
 
         if (secs > 0) {
             player.sendMessage(ChatColor.AQUA + MessageFormat.format(Language.getTranslation("waiting.for.teleport.stand.still.for.0.seconds"), secs));
         }
     }
 
-    private void dropItems(Player player)
-    {
-
-        Inventory inv = player.getInventory();
-        ItemStack[] contents = inv.getContents();
-
-        for (ItemStack item : contents) {
-
-            if (item == null) {
-                continue;
-            }
-
-            if (plugin.getSettingsManager().dropItemOnTeleport(item.getType())) {
-                player.getWorld().dropItemNaturally(player.getLocation(), item);
-                inv.remove(item);
-            }
-        }
-    }
 
     public static boolean isLocationEqual(Location location1, Location location2, double fuzzy)
     {
@@ -100,61 +80,5 @@ public class TeleportManager {
         }
 
         return true;
-    }
-
-    private void startCounter()
-    {
-        plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
-
-            @Override
-            public void run()
-            {
-                Iterator players = waitingPlayers.values().iterator();
-
-                while (players.hasNext()) {
-                    TeleportState state = (TeleportState) players.next();
-
-                    if (state.isProcessing()) {
-                        continue;
-                    }
-
-                    state.setProcessing(true);
-
-                    Player player = state.getPlayer();
-
-                    if (player == null) {
-                        players.remove();
-                        continue;
-                    }
-
-                    boolean isLocationEqual = isLocationEqual(player.getLocation(), state.getLocation(), plugin.getSettingsManager().getTeleportFuzzyness());
-
-                    if (state.isTeleportTime()) {
-                        if (isLocationEqual) {
-                            Location loc = state.getDestination();
-
-                            if (plugin.getSettingsManager().dropItems() && !player.hasPermission("simpleclans.mod.keep-items")) {
-                                dropItems(player);
-                            }
-
-                            player.teleport(new Location(loc.getWorld(), loc.getBlockX() + .5, loc.getBlockY(), loc.getBlockZ() + .5));
-
-                            player.sendMessage(state.getMessage());
-                        } else {
-                            player.sendMessage(ChatColor.RED + Language.getTranslation("you.moved.teleport.cancelled"));
-                        }
-
-                        players.remove();
-                    } else if (!isLocationEqual) {
-                        player.sendMessage(ChatColor.RED + Language.getTranslation("you.moved.teleport.cancelled"));
-                        players.remove();
-                    } else {
-                        player.sendMessage(ChatColor.AQUA.toString() + state.getCounter());
-                    }
-
-                    state.setProcessing(false);
-                }
-            }
-        }, 0, 20L);
     }
 }

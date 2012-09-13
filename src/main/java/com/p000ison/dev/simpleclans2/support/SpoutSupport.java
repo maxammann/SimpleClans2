@@ -24,6 +24,7 @@ import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.listeners.SCPlayerListener;
 import com.p000ison.dev.simpleclans2.util.Logging;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
@@ -38,7 +39,7 @@ import static org.getspout.spoutapi.SpoutManager.getPlayer;
 public class SpoutSupport {
 
     private SimpleClans plugin;
-    private static boolean spout;
+    private static boolean spout = false;
 
     public SpoutSupport(SimpleClans plugin)
     {
@@ -81,6 +82,24 @@ public class SpoutSupport {
 
             updateCape(spoutPlayer, clan);
         }
+    }
+
+    public static void showNotification(Player player, String title, String message, Material material)
+    {
+        if (!hasSpout()) {
+            getSpoutPlayerExact(player).sendNotification(title, message, material);
+        } else {
+            player.sendMessage(message);
+        }
+    }
+
+    public static void setTitle(Player player, String title)
+    {
+        if (!hasSpout()) {
+            return;
+        }
+
+        getSpoutPlayerExact(player).setTitle(title);
     }
 
     public void updateCape(SpoutPlayer spoutPlayer, Clan clan)

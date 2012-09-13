@@ -36,7 +36,7 @@ public class SerializablePlayerVector extends SerializableVector {
         super(world, x, y, z);
     }
 
-    public SerializablePlayerVector(World world, double x, double y, double z, float pitch, float yaw)
+    public SerializablePlayerVector(World world, double x, double y, double z, float yaw, float pitch)
     {
         super(world, x, y, z);
         this.yaw = yaw;
@@ -48,6 +48,7 @@ public class SerializablePlayerVector extends SerializableVector {
         this.x = location.getX();
         this.y = location.getY();
         this.z = location.getZ();
+        this.world = location.getWorld();
         this.pitch = location.getPitch();
         this.yaw = location.getYaw();
     }
@@ -60,10 +61,10 @@ public class SerializablePlayerVector extends SerializableVector {
         double y = Double.parseDouble(coords[1]);
         double z = Double.parseDouble(coords[2]);
         World world = Bukkit.getWorld(coords[3]);
-        float pitch = Float.parseFloat(coords[4]);
-        float yaw = Float.parseFloat(coords[5]);
+        float yaw = Float.parseFloat(coords[4]);
+        float pitch = Float.parseFloat(coords[5]);
 
-        return new SerializablePlayerVector(world, x, y, z, pitch, yaw);
+        return new SerializablePlayerVector(world, x, y, z, yaw, pitch );
     }
 
     public Location toLocation()
@@ -74,6 +75,12 @@ public class SerializablePlayerVector extends SerializableVector {
     @Override
     public String serialize()
     {
-        return super.getX() + ":" + super.getY() + ":" + super.getZ() + ":" + super.getWorld().getName();
+        return super.getX() + ":" + super.getY() + ":" + super.getZ() + ":" + super.getWorld().getName() + ":" + yaw + ":" + pitch;
+    }
+
+    @Override
+    public String toString()
+    {
+        return super.getX() + ":" + super.getY() + ":" + super.getZ() + ":" + super.getWorld().getName() + ":" + yaw + ":" + pitch;
     }
 }

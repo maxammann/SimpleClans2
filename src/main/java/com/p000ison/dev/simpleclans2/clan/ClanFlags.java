@@ -54,6 +54,8 @@ public class ClanFlags extends Flags {
             return null;
         }
 
+        System.out.println(SerializablePlayerVector.deserialize(locationString));
+
         return SerializablePlayerVector.deserialize(locationString).toLocation();
     }
 

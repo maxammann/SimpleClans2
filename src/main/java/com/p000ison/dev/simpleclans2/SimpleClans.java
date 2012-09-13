@@ -23,23 +23,23 @@ package com.p000ison.dev.simpleclans2;
 import com.p000ison.dev.simpleclans2.clan.ClanManager;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayerManager;
 import com.p000ison.dev.simpleclans2.commands.CommandManager;
-import com.p000ison.dev.simpleclans2.commands.commands.admin.BanCommand;
-import com.p000ison.dev.simpleclans2.commands.commands.admin.DisbandCommand;
-import com.p000ison.dev.simpleclans2.commands.commands.admin.GlobalFFCommand;
-import com.p000ison.dev.simpleclans2.commands.commands.admin.ModDisbandCommand;
-import com.p000ison.dev.simpleclans2.commands.commands.clan.*;
-import com.p000ison.dev.simpleclans2.commands.commands.clan.bb.BBAddCommand;
-import com.p000ison.dev.simpleclans2.commands.commands.clan.bb.BBClearCommand;
-import com.p000ison.dev.simpleclans2.commands.commands.clan.bb.BBCommand;
-import com.p000ison.dev.simpleclans2.commands.commands.clan.home.HomeCommand;
-import com.p000ison.dev.simpleclans2.commands.commands.clan.home.HomeRegroupCommand;
-import com.p000ison.dev.simpleclans2.commands.commands.clan.home.HomeSetCommand;
-import com.p000ison.dev.simpleclans2.commands.commands.general.AlliancesCommand;
-import com.p000ison.dev.simpleclans2.commands.commands.general.HelpCommand;
-import com.p000ison.dev.simpleclans2.commands.commands.general.LeaderboardCommand;
-import com.p000ison.dev.simpleclans2.commands.commands.general.ListCommand;
-import com.p000ison.dev.simpleclans2.commands.commands.voting.AbstainCommand;
-import com.p000ison.dev.simpleclans2.commands.commands.voting.DenyCommand;
+import com.p000ison.dev.simpleclans2.commands.admin.BanCommand;
+import com.p000ison.dev.simpleclans2.commands.admin.DisbandCommand;
+import com.p000ison.dev.simpleclans2.commands.admin.GlobalFFCommand;
+import com.p000ison.dev.simpleclans2.commands.clan.*;
+import com.p000ison.dev.simpleclans2.commands.clan.bb.BBAddCommand;
+import com.p000ison.dev.simpleclans2.commands.clan.bb.BBClearCommand;
+import com.p000ison.dev.simpleclans2.commands.clan.bb.BBCommand;
+import com.p000ison.dev.simpleclans2.commands.clan.home.HomeCommand;
+import com.p000ison.dev.simpleclans2.commands.clan.home.HomeRegroupCommand;
+import com.p000ison.dev.simpleclans2.commands.clan.home.HomeSetCommand;
+import com.p000ison.dev.simpleclans2.commands.general.AlliancesCommand;
+import com.p000ison.dev.simpleclans2.commands.general.HelpCommand;
+import com.p000ison.dev.simpleclans2.commands.general.LeaderboardCommand;
+import com.p000ison.dev.simpleclans2.commands.general.ListCommand;
+import com.p000ison.dev.simpleclans2.commands.voting.AbstainCommand;
+import com.p000ison.dev.simpleclans2.commands.voting.AcceptCommand;
+import com.p000ison.dev.simpleclans2.commands.voting.DenyCommand;
 import com.p000ison.dev.simpleclans2.data.DataManager;
 import com.p000ison.dev.simpleclans2.database.Database;
 import com.p000ison.dev.simpleclans2.database.DatabaseManager;
@@ -72,7 +72,6 @@ public class SimpleClans extends JavaPlugin {
     private CommandManager commandManager;
     private DataManager dataManager;
     private RankManager rankManager;
-    private Announcer announcer;
     private TeleportManager teleportManager;
     private PreciousStonesSupport preciousStonesSupport;
     private SpoutSupport spoutSupport;
@@ -84,8 +83,8 @@ public class SimpleClans extends JavaPlugin {
     {
         long startup = System.currentTimeMillis();
 
-        new Logging(getLogger());
-        new Language("en_EN");
+        Logging.setInstance(getLogger());
+        Language.setInstance("en_EN");
 
         if (!setupEconomy()) {
             Logging.debug(Level.SEVERE, "Economy features disabled due to no Economy dependency found!");
@@ -99,7 +98,7 @@ public class SimpleClans extends JavaPlugin {
 
         registerEvents();
 
-        new Announcer(this);
+        Announcer.setPlugin(this);
 
         long finish = System.currentTimeMillis();
 
@@ -150,7 +149,6 @@ public class SimpleClans extends JavaPlugin {
         clanPlayerManager = new ClanPlayerManager(this);
         dataManager = new DataManager(this);
         requestManager = new RequestManager();
-        announcer = new Announcer(this);
         teleportManager = new TeleportManager(this);
         rankManager = new RankManager(this);
         spoutSupport = new SpoutSupport(this);
@@ -167,6 +165,7 @@ public class SimpleClans extends JavaPlugin {
         commandManager.addCommand(new AlliancesCommand(this));
         commandManager.addCommand(new AllyCommand(this));
         commandManager.addCommand(new CreateCommand(this));
+        commandManager.addCommand(new AcceptCommand(this));
         commandManager.addCommand(new DenyCommand(this));
         commandManager.addCommand(new AbstainCommand(this));
         commandManager.addCommand(new RankCreateCommand(this));
@@ -181,7 +180,6 @@ public class SimpleClans extends JavaPlugin {
         commandManager.addCommand(new HomeRegroupCommand(this));
         commandManager.addCommand(new HomeSetCommand(this));
         commandManager.addCommand(new GlobalFFCommand(this));
-        commandManager.addCommand(new ModDisbandCommand(this));
         commandManager.addCommand(new DisbandCommand(this));
         commandManager.addCommand(new LeaderboardCommand(this));
         commandManager.addCommand(new KickCommand(this));
@@ -262,11 +260,6 @@ public class SimpleClans extends JavaPlugin {
     public RankManager getRankManager()
     {
         return rankManager;
-    }
-
-    public Announcer getAnnouncer()
-    {
-        return announcer;
     }
 
     public PreciousStonesSupport getPreciousStonesSupport()

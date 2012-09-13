@@ -29,14 +29,14 @@ import java.util.logging.Logger;
 public class Logging {
     private static Logger instance;
 
-    public Logging(Logger logger)
+    public static void setInstance(Logger instance)
     {
-        instance = logger;
+        Logging.instance = instance;
     }
 
     public static void close()
     {
-        instance = null;
+        setInstance(null);
     }
 
     public static void debug(String msg, Object... args)

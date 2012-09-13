@@ -41,6 +41,9 @@ clan:
        purchase-teleport: -1
    voting:
        demote: true
+   capes:
+       default: 'http://dl.dropbox.com/u/20831395/simpleclans/cape.png'
+       enabled: true
 paging:
    colors:
        heading-color: '8'
