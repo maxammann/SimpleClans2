@@ -108,9 +108,10 @@
                                     <exclude>org.bukkit:bukkit</exclude>
                                     <exclude>org.bukkit:minecraft-server</exclude>
                                     <exclude>net.milkbowl.vault:Vault</exclude>
-                                    <exclude>org.getspout:spoutpluginapi</exclude>
+                                    <exclude>org.getspout:spoutplugin</exclude>
                                     <exclude>org.hamcrest:hamcrest-core</exclude>
                                     <exclude>junit:junit</exclude>
+                                    <exclude>net.sacredlabyrinth.Phaed:PreciousStones</exclude>
                                 </excludes>
                             </artifactSet>
                         </configuration>
