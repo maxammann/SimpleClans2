@@ -18,7 +18,7 @@
  */
 
 
-package com.p000ison.dev.simpleclans2.data;
+package com.p000ison.dev.simpleclans2.database.data;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
@@ -41,16 +41,17 @@ import java.util.logging.Level;
 public class DataManager {
 
     private SimpleClans plugin;
-
-    private PreparedStatement deleteClan, updateClan, insertClan, retrieveClanByTag;
-
-    private PreparedStatement deleteClanPlayer, updateClanPlayer, insertClanPlayer, retrieveClanPlayerByName;
-
-    private PreparedStatement insertKill, retrieveTotalDeathsPerPlayer;
-
-    private PreparedStatement insertRank, updateRank, deleteRankByName, retrieveRank, retrieveRankByName;
-
     private Database database;
+    private DataQueue queue;
+
+    public PreparedStatement DELETE_CLAN, UPDATE_CLAN, INSERT_CLAN, RETRIEVE_CLAN_BY_TAG;
+
+    public PreparedStatement DELETE_CLANPLAYER, UPDATE_CLANPLAYER, INSERT_CLANPLAYER, RETRIEVE_CLANPLAYER_BY_NAME;
+
+    public PreparedStatement INSERT_KILL, RETRIEVE_TOTAL_DEATHS_PER_PLAYER;
+
+    public PreparedStatement INSERT_RANK, UPDATE_RANK, DELETE_RANK_BY_NAME, RETRIEVE_RANK, RETRIEVE_RANK_BY_NAME;
+
 
     public DataManager(SimpleClans plugin)
     {
@@ -58,30 +59,38 @@ public class DataManager {
 
         database = plugin.getDatabaseManager().getDatabase();
 
+        queue = new DataQueue(this);
+
+        long autoSave = plugin.getSettingsManager().getAutoSave() * 20L;
+
+        if (autoSave > 0) {
+            plugin.getServer().getScheduler().scheduleAsyncRepeatingTask(plugin, new AutoSaver(plugin), autoSave, autoSave);
+        }
+
         prepareStatements();
         importAll();
     }
 
     private void prepareStatements()
     {
-        deleteClan = database.prepareStatement("DELETE FROM `sc2_clans` WHERE id = ?;");
-        insertClan = database.prepareStatement("INSERT INTO `sc2_clans` ( `tag`, `name`, `verified`, `last_action` ) VALUES ( ?, ?, ?, ? );");
-        updateClan = database.prepareStatement("UPDATE `sc2_clans` SET tag = ?, name = ?, verified = ?, friendly_fire = ?, allies = ?, rivals = ?, warring = ?, last_action = CURRENT_TIMESTAMP, bb = ?, flags = ?;");
-        retrieveClanByTag = database.prepareStatement("SELECT id FROM `sc2_clans` WHERE tag = ?;");
+        DELETE_CLAN = database.prepareStatement("DELETE FROM `sc2_clans` WHERE id = ?;");
+        INSERT_CLAN = database.prepareStatement("INSERT INTO `sc2_clans` ( `tag`, `name`, `verified`, `last_action` ) VALUES ( ?, ?, ?, ? );");
+        UPDATE_CLAN = database.prepareStatement("UPDATE `sc2_clans` SET tag = ?, name = ?, verified = ?, friendly_fire = ?, allies = ?, rivals = ?, warring = ?, last_action = CURRENT_TIMESTAMP, bb = ?, flags = ?;");
+        RETRIEVE_CLAN_BY_TAG = database.prepareStatement("SELECT id FROM `sc2_clans` WHERE tag = ?;");
 
-        deleteClanPlayer = database.prepareStatement("DELETE FROM `sc2_players` WHERE id = ?;");
-        updateClanPlayer = database.prepareStatement("UPDATE `sc2_players` SET leader = ?, rank = ?, trusted = ?, banned = ?, last_seen = ?, clan = ?, friendly_fire = ?, neutral_kills = ?, rival_kills = ?, civilian_kills = ?, deaths = ?, flags = ?;");
-        insertClanPlayer = database.prepareStatement("INSERT INTO `sc2_players` ( `name`, `leader`, `rank`, `trusted`, `last_seen`, `clan`, `friendly_fire`, `flags` ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ? )");
-        retrieveClanPlayerByName = database.prepareStatement("SELECT id FROM `sc2_players` WHERE name = ?;");
+        DELETE_CLANPLAYER = database.prepareStatement("DELETE FROM `sc2_players` WHERE id = ?;");
+        UPDATE_CLANPLAYER = database.prepareStatement("UPDATE `sc2_players` SET leader = ?, rank = ?, trusted = ?, banned = ?, last_seen = ?, clan = ?, friendly_fire = ?, neutral_kills = ?, rival_kills = ?, civilian_kills = ?, deaths = ?, flags = ?;");
+        INSERT_CLANPLAYER = database.prepareStatement("INSERT INTO `sc2_players` ( `name`, `leader`, `rank`, `trusted`, `last_seen`, `clan`, `friendly_fire`, `flags` ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ? )");
+        RETRIEVE_CLANPLAYER_BY_NAME = database.prepareStatement("SELECT id FROM `sc2_players` WHERE name = ?;");
 
-        insertKill = database.prepareStatement("INSERT INTO `sc2_kills` ( `attacker`, `attacker_tag`, `victim`, `kill_type`, `victim_tag, `war` ) VALUES ( ?, ?, ?, ?, ?, ? );");
-        retrieveTotalDeathsPerPlayer = database.prepareStatement("SELECT victim, count(victim) AS kills FROM `sc_kills` GROUP BY victim ORDER BY 2 DESC;");
+        INSERT_KILL = database.prepareStatement("INSERT INTO `sc2_kills` ( `attacker`, `attacker_tag`, `victim`, `kill_type`, `victim_tag, `war` ) VALUES ( ?, ?, ?, ?, ?, ? );");
+        RETRIEVE_TOTAL_DEATHS_PER_PLAYER = database.prepareStatement("SELECT victim, count(victim) AS kills FROM `sc_kills` GROUP BY victim ORDER BY 2 DESC;");
 
-        insertRank = database.prepareStatement("INSERT INTO `sc2_ranks` ( `name`, `priority`, `clan` ) VALUES ( ?, ?, ? );");
-        updateRank = database.prepareStatement("UPDATE `sc2_ranks` SET name = ?, permissions = ?, priority = ?;");
-        deleteRankByName = database.prepareStatement("DELETE FROM `sc2_players` WHERE clan = ? AND name LIKE ?;");
-        retrieveRank = database.prepareStatement("SELECT * FROM `sc2_players` WHERE id = ? AND clan = ?;");
-        retrieveRankByName = database.prepareStatement("SELECT id FROM `sc2_players` WHERE name = ?;");
+        INSERT_RANK = database.prepareStatement("INSERT INTO `sc2_ranks` ( `name`, `priority`, `clan` ) VALUES ( ?, ?, ? );");
+        UPDATE_RANK = database.prepareStatement("UPDATE `sc2_ranks` SET name = ?, permissions = ?, priority = ?;");
+        DELETE_RANK_BY_NAME = database.prepareStatement("DELETE FROM `sc2_players` WHERE clan = ? AND name LIKE ?;");
+        RETRIEVE_RANK = database.prepareStatement("SELECT * FROM `sc2_players` WHERE id = ? AND clan = ?;");
+        RETRIEVE_RANK_BY_NAME = database.prepareStatement("SELECT id FROM `sc2_players` WHERE name = ?;");
     }
 
     public final void importAll()
@@ -90,30 +99,40 @@ public class DataManager {
         importClanPlayers();
     }
 
-    public void updateClanPlayer(ClanPlayer clanPlayer)
+    public synchronized void updateClanPlayer(ClanPlayer clanPlayer)
     {
         try {
-            updateClanPlayer.setBoolean(1, clanPlayer.isLeader());
-            updateClanPlayer.setLong(2, (clanPlayer.getRank() == null ? -1L : clanPlayer.getRank().getId()));
-            updateClanPlayer.setBoolean(3, clanPlayer.isTrusted());
-            updateClanPlayer.setBoolean(4, clanPlayer.isBanned());
-            updateClanPlayer.setTimestamp(5, new Timestamp(System.currentTimeMillis()));
+            UPDATE_CLANPLAYER.setBoolean(1, clanPlayer.isLeader());
+            UPDATE_CLANPLAYER.setLong(2, (clanPlayer.getRank() == null ? -1L : clanPlayer.getRank().getId()));
+            UPDATE_CLANPLAYER.setBoolean(3, clanPlayer.isTrusted());
+            UPDATE_CLANPLAYER.setBoolean(4, clanPlayer.isBanned());
+            UPDATE_CLANPLAYER.setTimestamp(5, new Timestamp(System.currentTimeMillis()));
 
             Clan clan = clanPlayer.getClan();
             System.out.println("update clanplayer : " + (clan == null ? -1L : clan.getId()));
 
-            updateClanPlayer.setLong(6, clan == null ? -1L : clan.getId());
-            updateClanPlayer.setBoolean(7, clanPlayer.isFriendlyFireOn());
-            updateClanPlayer.setInt(8, clanPlayer.getNeutralKills());
-            updateClanPlayer.setInt(9, clanPlayer.getRivalKills());
-            updateClanPlayer.setInt(10, clanPlayer.getCivilianKills());
-            updateClanPlayer.setInt(11, clanPlayer.getDeaths());
-            updateClanPlayer.setString(12, clanPlayer.getFlags().read());
+            UPDATE_CLANPLAYER.setLong(6, clan == null ? -1L : clan.getId());
+            UPDATE_CLANPLAYER.setBoolean(7, clanPlayer.isFriendlyFireOn());
+            UPDATE_CLANPLAYER.setInt(8, clanPlayer.getNeutralKills());
+            UPDATE_CLANPLAYER.setInt(9, clanPlayer.getRivalKills());
+            UPDATE_CLANPLAYER.setInt(10, clanPlayer.getCivilianKills());
+            UPDATE_CLANPLAYER.setInt(11, clanPlayer.getDeaths());
+            UPDATE_CLANPLAYER.setString(12, clanPlayer.getFlags().read());
 
-            updateClanPlayer.executeUpdate();
+            UPDATE_CLANPLAYER.executeUpdate();
         } catch (SQLException e) {
             Logging.debug(e, "Failed to update player %s.", clanPlayer.getName());
         }
+    }
+
+    public void addStatement(Executable statement)
+    {
+        queue.add(statement);
+    }
+
+    public DataQueue getQueue()
+    {
+        return queue;
     }
 
     public void deleteClanPlayer(ClanPlayer clanPlayer)
@@ -124,8 +143,8 @@ public class DataManager {
     public void deleteClanPlayer(long id)
     {
         try {
-            deleteClanPlayer.setLong(1, id);
-            deleteClanPlayer.executeUpdate();
+            DELETE_CLANPLAYER.setLong(1, id);
+            DELETE_CLANPLAYER.executeUpdate();
         } catch (SQLException e) {
             Logging.debug("Failed to delete clan player %s.", Level.SEVERE, id);
         }
@@ -134,21 +153,21 @@ public class DataManager {
     public void insertClanPlayer(ClanPlayer clanPlayer)
     {
         try {
-            insertClanPlayer.setString(1, clanPlayer.getName());
-            insertClanPlayer.setBoolean(2, clanPlayer.isLeader());
-            insertClanPlayer.setLong(3, clanPlayer.getRank() == null ? -1L : clanPlayer.getRank().getId());
-            insertClanPlayer.setBoolean(4, clanPlayer.isTrusted());
-            insertClanPlayer.setTimestamp(5, new Timestamp(System.currentTimeMillis()));
-            insertClanPlayer.setLong(6, clanPlayer.getClanId());
-            insertClanPlayer.setBoolean(7, clanPlayer.isFriendlyFireOn());
+            INSERT_CLANPLAYER.setString(1, clanPlayer.getName());
+            INSERT_CLANPLAYER.setBoolean(2, clanPlayer.isLeader());
+            INSERT_CLANPLAYER.setLong(3, clanPlayer.getRank() == null ? -1L : clanPlayer.getRank().getId());
+            INSERT_CLANPLAYER.setBoolean(4, clanPlayer.isTrusted());
+            INSERT_CLANPLAYER.setTimestamp(5, new Timestamp(System.currentTimeMillis()));
+            INSERT_CLANPLAYER.setLong(6, clanPlayer.getClanId());
+            INSERT_CLANPLAYER.setBoolean(7, clanPlayer.isFriendlyFireOn());
 
             if (clanPlayer.getFlags().hasFlags()) {
-                insertClanPlayer.setString(8, clanPlayer.getFlags().read());
+                INSERT_CLANPLAYER.setString(8, clanPlayer.getFlags().read());
             } else {
-                insertClanPlayer.setNull(8, Types.VARCHAR);
+                INSERT_CLANPLAYER.setNull(8, Types.VARCHAR);
             }
 
-            insertClanPlayer.executeUpdate();
+            INSERT_CLANPLAYER.executeUpdate();
         } catch (SQLException e) {
             Logging.debug(e, "Failed to insert clan player %s.", clanPlayer);
         }
@@ -158,8 +177,8 @@ public class DataManager {
     {
 
         try {
-            retrieveClanPlayerByName.setString(1, name);
-            ResultSet result = retrieveClanPlayerByName.executeQuery();
+            RETRIEVE_CLANPLAYER_BY_NAME.setString(1, name);
+            ResultSet result = RETRIEVE_CLANPLAYER_BY_NAME.executeQuery();
 
             if (!result.next()) {
                 return -1;
@@ -181,12 +200,12 @@ public class DataManager {
     public boolean insertClan(Clan clan)
     {
         try {
-            insertClan.setString(1, clan.getTag());
-            insertClan.setString(2, clan.getName());
-            insertClan.setBoolean(3, clan.isVerified());
-            insertClan.setTimestamp(4, new Timestamp(System.currentTimeMillis()));
+            INSERT_CLAN.setString(1, clan.getTag());
+            INSERT_CLAN.setString(2, clan.getName());
+            INSERT_CLAN.setBoolean(3, clan.isVerified());
+            INSERT_CLAN.setTimestamp(4, new Timestamp(System.currentTimeMillis()));
 
-            return insertClan.executeUpdate() != 0;
+            return INSERT_CLAN.executeUpdate() != 0;
         } catch (SQLException e) {
             Logging.debug(e, "Failed to insert clan %s.", clan);
         }
@@ -197,42 +216,42 @@ public class DataManager {
     public void updateClan(Clan clan)
     {
         try {
-            updateClan.setString(1, clan.getTag());
-            updateClan.setString(2, clan.getName());
-            updateClan.setBoolean(3, clan.isVerified());
-            updateClan.setBoolean(4, clan.isFriendlyFireOn());
+            UPDATE_CLAN.setString(1, clan.getTag());
+            UPDATE_CLAN.setString(2, clan.getName());
+            UPDATE_CLAN.setBoolean(3, clan.isVerified());
+            UPDATE_CLAN.setBoolean(4, clan.isFriendlyFireOn());
 
             if (clan.hasAllies()) {
-                updateClan.setString(5, JSONUtil.collectionToJSON("allies", clan.getAllies()));
+                UPDATE_CLAN.setString(5, JSONUtil.collectionToJSON("allies", clan.getAllies()));
             } else {
-                updateClan.setNull(5, Types.VARCHAR);
+                UPDATE_CLAN.setNull(5, Types.VARCHAR);
             }
 
             if (clan.hasRivals()) {
-                updateClan.setString(6, JSONUtil.collectionToJSON("rivals", clan.getRivals()));
+                UPDATE_CLAN.setString(6, JSONUtil.collectionToJSON("rivals", clan.getRivals()));
             } else {
-                updateClan.setNull(6, Types.VARCHAR);
+                UPDATE_CLAN.setNull(6, Types.VARCHAR);
             }
 
             if (clan.hasWarringClans()) {
-                updateClan.setString(7, JSONUtil.collectionToJSON("warring", clan.getWarringClans()));
+                UPDATE_CLAN.setString(7, JSONUtil.collectionToJSON("warring", clan.getWarringClans()));
             } else {
-                updateClan.setNull(7, Types.VARCHAR);
+                UPDATE_CLAN.setNull(7, Types.VARCHAR);
             }
 
             if (clan.hasBB()) {
-                updateClan.setString(8, JSONUtil.collectionToJSON("bb", clan.getBB()));
+                UPDATE_CLAN.setString(8, JSONUtil.collectionToJSON("bb", clan.getBB()));
             } else {
-                updateClan.setNull(8, Types.VARCHAR);
+                UPDATE_CLAN.setNull(8, Types.VARCHAR);
             }
 
             if (clan.getFlags().hasFlags()) {
-                updateClan.setString(9, clan.getFlags().read());
+                UPDATE_CLAN.setString(9, clan.getFlags().read());
             } else {
-                updateClan.setNull(9, Types.VARCHAR);
+                UPDATE_CLAN.setNull(9, Types.VARCHAR);
             }
 
-            updateClan.executeUpdate();
+            UPDATE_CLAN.executeUpdate();
         } catch (SQLException e) {
             Logging.debug(e, "Failed to update clan %s.", clan);
         }
@@ -243,8 +262,8 @@ public class DataManager {
     {
 
         try {
-            retrieveClanByTag.setString(1, tag);
-            ResultSet result = retrieveClanByTag.executeQuery();
+            RETRIEVE_CLAN_BY_TAG.setString(1, tag);
+            ResultSet result = RETRIEVE_CLAN_BY_TAG.executeQuery();
 
             if (!result.next()) {
                 return -1;
@@ -262,8 +281,8 @@ public class DataManager {
     public void deleteClan(long id)
     {
         try {
-            deleteClan.setLong(1, id);
-            deleteClan.executeUpdate();
+            DELETE_CLAN.setLong(1, id);
+            DELETE_CLAN.executeUpdate();
         } catch (SQLException e) {
             Logging.debug("Failed to delete clan %s.", Level.SEVERE, id);
         }
@@ -273,7 +292,7 @@ public class DataManager {
     {
         String query = "SELECT * FROM `sc2_clans`;";
 
-        ResultSet result = database.select(query);
+        ResultSet result = database.query(query);
         Set<Clan> clans = new HashSet<Clan>();
 
         Map<Clan, Set<Long>> rivalsToAdd = new HashMap<Clan, Set<Long>>();
@@ -401,7 +420,7 @@ public class DataManager {
     {
         String query = "SELECT * FROM `sc2_players`;";
 
-        ResultSet result = database.select(query);
+        ResultSet result = database.query(query);
         Set<ClanPlayer> clanPlayers = new HashSet<ClanPlayer>();
 
         long currentTime = System.currentTimeMillis();
@@ -469,12 +488,12 @@ public class DataManager {
     public boolean updateRank(Clan clan, Rank rank)
     {
         try {
-            updateRank.setString(1, rank.getName());
-            updateRank.setLong(2, clan.getId());
-            updateRank.setString(3, JSONUtil.collectionToJSON("perms", rank.getPermissions()));
-            updateRank.setInt(4, rank.getPriority());
+            UPDATE_RANK.setString(1, rank.getName());
+            UPDATE_RANK.setLong(2, clan.getId());
+            UPDATE_RANK.setString(3, JSONUtil.collectionToJSON("perms", rank.getPermissions()));
+            UPDATE_RANK.setInt(4, rank.getPriority());
 
-            return updateRank.executeUpdate() != 0;
+            return UPDATE_RANK.executeUpdate() != 0;
         } catch (SQLException e) {
             Logging.debug(e, "Failed at inserting rank!");
         }
@@ -485,11 +504,11 @@ public class DataManager {
     public boolean insertRank(Clan clan, Rank rank)
     {
         try {
-            insertRank.setString(1, rank.getName());
-            insertRank.setInt(2, rank.getPriority());
-            insertRank.setLong(3, clan.getId());
+            INSERT_RANK.setString(1, rank.getName());
+            INSERT_RANK.setInt(2, rank.getPriority());
+            INSERT_RANK.setLong(3, clan.getId());
 
-            return insertRank.executeUpdate() != 0;
+            return INSERT_RANK.executeUpdate() != 0;
         } catch (SQLException e) {
             Logging.debug(e, "Failed at inserting rank!");
         }
@@ -500,10 +519,10 @@ public class DataManager {
     public boolean deleteRank(Clan clan, String search)
     {
         try {
-            deleteRankByName.setLong(1, clan.getId());
-            deleteRankByName.setString(2, search);
+            DELETE_RANK_BY_NAME.setLong(1, clan.getId());
+            DELETE_RANK_BY_NAME.setString(2, search);
 
-            return deleteRankByName.executeUpdate() != 0;
+            return DELETE_RANK_BY_NAME.executeUpdate() != 0;
         } catch (SQLException e) {
             Logging.debug(e, "Failed at deleting rank!");
         }
@@ -516,8 +535,8 @@ public class DataManager {
     {
 
         try {
-            retrieveRankByName.setString(1, name);
-            ResultSet result = retrieveRankByName.executeQuery();
+            RETRIEVE_RANK_BY_NAME.setString(1, name);
+            ResultSet result = RETRIEVE_RANK_BY_NAME.executeQuery();
 
             if (!result.next()) {
                 return -1;
@@ -535,9 +554,9 @@ public class DataManager {
     {
 
         try {
-            retrieveRank.setLong(1, rankId);
-            retrieveRank.setLong(2, clanId);
-            ResultSet result = retrieveRank.executeQuery();
+            RETRIEVE_RANK.setLong(1, rankId);
+            RETRIEVE_RANK.setLong(2, clanId);
+            ResultSet result = RETRIEVE_RANK.executeQuery();
 
             if (!result.next()) {
                 return null;
@@ -558,7 +577,7 @@ public class DataManager {
         Map<String, Integer> out = new HashMap<String, Integer>();
 
         try {
-            ResultSet res = retrieveTotalDeathsPerPlayer.executeQuery();
+            ResultSet res = RETRIEVE_TOTAL_DEATHS_PER_PLAYER.executeQuery();
 
             if (res != null) {
 
@@ -573,19 +592,5 @@ public class DataManager {
         }
 
         return out;
-    }
-
-    public void addKill(String attacker, String attackerTag, String victim, String victimTag, KillType type, boolean inWar)
-    {
-        try {
-            insertKill.setString(1, attacker);
-            insertKill.setString(2, attackerTag);
-            insertKill.setString(3, victim);
-            insertKill.setString(4, victimTag);
-            insertKill.setByte(5, type.getType());
-            insertKill.setBoolean(6, inWar);
-        } catch (SQLException e) {
-            Logging.debug(e, "Failed to insert kill for victim attacker %s and victim %s.", attacker, victim);
-        }
     }
 }

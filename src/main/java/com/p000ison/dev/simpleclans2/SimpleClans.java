@@ -40,7 +40,7 @@ import com.p000ison.dev.simpleclans2.commands.general.ListCommand;
 import com.p000ison.dev.simpleclans2.commands.voting.AbstainCommand;
 import com.p000ison.dev.simpleclans2.commands.voting.AcceptCommand;
 import com.p000ison.dev.simpleclans2.commands.voting.DenyCommand;
-import com.p000ison.dev.simpleclans2.data.DataManager;
+import com.p000ison.dev.simpleclans2.database.data.DataManager;
 import com.p000ison.dev.simpleclans2.database.Database;
 import com.p000ison.dev.simpleclans2.database.DatabaseManager;
 import com.p000ison.dev.simpleclans2.listeners.SCPlayerListener;
@@ -152,7 +152,7 @@ public class SimpleClans extends JavaPlugin {
         teleportManager = new TeleportManager(this);
         rankManager = new RankManager(this);
         spoutSupport = new SpoutSupport(this);
-        preciousStonesSupport = new PreciousStonesSupport(this);
+        preciousStonesSupport = new PreciousStonesSupport();
         setupCommands();
     }
 

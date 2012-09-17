@@ -51,6 +51,7 @@ public class Clan implements KDR {
     private Set<Clan> rivals = new HashSet<Clan>();
     private Set<Clan> warring = new HashSet<Clan>();
     private Set<ClanPlayer> allMembers = new HashSet<ClanPlayer>();
+    private boolean update;
 
     /**
      * Creates a new clan
@@ -269,6 +270,10 @@ public class Clan implements KDR {
      */
     public boolean isAlly(long id)
     {
+        if (this.getId() == id) {
+            return true;
+        }
+
         for (Clan clan : allies) {
             if (clan.getId() == id) {
                 return true;
@@ -286,11 +291,7 @@ public class Clan implements KDR {
      */
     public boolean isAlly(Clan clan)
     {
-        if (clan == null) {
-            return false;
-        }
-
-        return allies.contains(clan);
+        return clan != null && (this.equals(clan) || allies.contains(clan));
     }
 
     /**
@@ -301,6 +302,10 @@ public class Clan implements KDR {
      */
     public boolean isRival(long id)
     {
+        if (this.getId() == id) {
+            return false;
+        }
+
         for (Clan clan : rivals) {
             if (clan.getId() == id) {
                 return true;
@@ -318,7 +323,7 @@ public class Clan implements KDR {
      */
     public boolean isRival(Clan clan)
     {
-        return rivals.contains(clan);
+        return clan != null && !this.equals(clan) && rivals.contains(clan);
     }
 
     /**
@@ -329,6 +334,10 @@ public class Clan implements KDR {
      */
     public boolean isWarring(long id)
     {
+        if (this.getId() == id) {
+            return false;
+        }
+
         for (Clan clan : warring) {
             if (clan.getId() == id) {
                 return true;
@@ -346,11 +355,7 @@ public class Clan implements KDR {
      */
     public boolean isWarring(Clan clan)
     {
-        if (clan == null) {
-            return false;
-        }
-
-        return warring.contains(clan);
+        return clan != null && !this.equals(clan) && warring.contains(clan);
     }
 
     /**
@@ -770,8 +775,18 @@ public class Clan implements KDR {
         return true;
     }
 
+//    public void update()
+//    {
+//        plugin.getDataManager().UPDATE_CLAN(this);
+//    }
+
+    public boolean needsUpdate()
+    {
+        return update;
+    }
+
     public void update()
     {
-        plugin.getDataManager().updateClan(this);
+        this.update = true;
     }
 }

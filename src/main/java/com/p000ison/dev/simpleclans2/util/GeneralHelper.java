@@ -24,8 +24,10 @@ import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -186,4 +188,29 @@ public class GeneralHelper {
         return true;
     }
 
+    public static boolean deleteWorld(World world)
+    {
+        return Bukkit.unloadWorld(world, false) && deleteDir(world.getWorldFolder());
+    }
+
+    public static boolean deleteDir(File path)
+    {
+
+        if (path == null || !path.isDirectory()) {
+            return false;
+        }
+
+        for (File file : path.listFiles()) {
+
+            if (file.isDirectory()) {
+                deleteDir(file);
+            }
+
+            if (!file.delete()) {
+                return false;
+            }
+        }
+
+        return path.delete();
+    }
 }

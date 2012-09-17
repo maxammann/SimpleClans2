@@ -54,6 +54,7 @@ public class SettingsManager {
     private String clanCommand;
     private String serverName;
     private boolean globalFF;
+    private int autoSave;
 
     private int maxTagLenght, minTagLenght;
     private char[] disallowedColors;
@@ -104,6 +105,7 @@ public class SettingsManager {
             clanCommand = general.getString("clan-command");
             serverName = general.getString("server-name");
             globalFF = general.getBoolean("global-ff");
+            autoSave = general.getInt("auto-save");
 
             ConfigurationSection teleportation = config.getConfigurationSection("teleportation");
 
@@ -488,5 +490,10 @@ public class SettingsManager {
     public String getDefaultCape()
     {
         return defaultCape;
+    }
+
+    public int getAutoSave()
+    {
+        return autoSave;
     }
 }

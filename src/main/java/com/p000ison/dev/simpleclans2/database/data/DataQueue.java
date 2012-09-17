@@ -14,31 +14,37 @@
  *     You should have received a copy of the GNU General Public License
  *     along with SimpleClans2.  If not, see <http://www.gnu.org/licenses/>.
  *
- *     Created: 02.09.12 18:33
+ *     Created: 15.09.12 18:59
  */
 
+package com.p000ison.dev.simpleclans2.database.data;
 
-package com.p000ison.dev.simpleclans2.data;
+import com.p000ison.dev.simpleclans2.util.Logging;
+
+import java.util.LinkedList;
+import java.util.Queue;
 
 /**
- * Represents a KillType
+ * Represents a DataQueue
  */
-public enum KillType {
+public class DataQueue extends LinkedList<Executable> implements Queue<Executable>, Runnable {
 
-    CIVILIAN((byte) 0),
-    NEUTRAL((byte) 1),
-    RIVAL((byte) 2);
+    private DataManager dataManager;
 
-    private byte type;
-
-
-    private KillType(byte type)
+    public DataQueue(DataManager dataManager)
     {
-        this.type = type;
+        this.dataManager = dataManager;
     }
 
-    public byte getType()
+    @Override
+    public synchronized void run()
     {
-        return type;
+        Executable statement;
+
+        while ((statement = this.poll()) != null) {
+            if (!statement.execute(dataManager)) {
+                Logging.debug("Failed to execute query!");
+            }
+        }
     }
 }

@@ -23,6 +23,8 @@ package com.p000ison.dev.simpleclans2.listeners;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
+import com.p000ison.dev.simpleclans2.database.data.KillType;
+import com.p000ison.dev.simpleclans2.database.data.statements.KillStatement;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -114,7 +116,7 @@ public class SCEntityListener implements Listener {
 
                     // same clan, deny damage
 
-                    if (victim.equals(attackerClan)) {
+                    if (victimClan.equals(attackerClan)) {
                         event.setCancelled(true);
                         return;
                     }
@@ -142,7 +144,7 @@ public class SCEntityListener implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public void onPlayerDeath(PlayerDeathEvent event)
     {
 
@@ -176,8 +178,24 @@ public class SCEntityListener implements Listener {
 
             if (attackerPlayer != null) {
                 ClanPlayer attacker = plugin.getClanPlayerManager().getCreateClanPlayerExact(attackerPlayer);
+                Clan attackerClan = attacker.getClan();
+                Clan victimClan = victim.getClan();
 
+                KillType type = KillType.NEUTRAL;
 
+                if (victimClan == null || attackerClan == null || !victim.getClan().isVerified() || !attacker.getClan().isVerified()) {
+                    attacker.addCivilianKill();
+                    type = KillType.CIVILIAN;
+                } else if (attackerClan.isRival(victimClan)) {
+                    attacker.addRivalKill();
+                    type = KillType.RIVAL;
+                } else /*if (attackerClan.isAlly(victimClan))*/ {
+                    attacker.addNeutralKill();
+                    type = KillType.ALLY;
+                }
+
+                plugin.getDataManager().addStatement(new KillStatement(attacker.getName(), attackerClan == null ? null : attackerClan.getTag(),
+                        victim.getName(), victimClan == null ? null : victimClan.getTag(), false, type));
             }
         }
     }

@@ -177,7 +177,7 @@ public class ClanManager {
                 clanPlayer.setBanned(true);
 
                 plugin.getDataManager().updateClanPlayer(clanPlayer);
-//                plugin.getDataManager().updateClan(clan);
+//                plugin.getDataManager().UPDATE_CLAN(clan);
             }
         }
     }

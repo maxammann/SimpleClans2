@@ -77,7 +77,7 @@ public class MySQLDatabase implements Database {
      * @return whether connection can be established
      */
     @Override
-    public Boolean checkConnection()
+    public boolean checkConnection()
     {
         return getConnection() != null;
     }
@@ -115,12 +115,12 @@ public class MySQLDatabase implements Database {
      * @return
      */
     @Override
-    public ResultSet select(String query)
+    public ResultSet query(String query)
     {
         try {
             return getConnection().createStatement().executeQuery(query);
         } catch (SQLException e) {
-            Logging.debug(e, "Error at SQL SELECT Query");
+            Logging.debug(e, "Error at SQL Query");
             Logging.debug("Query: " + query);
         }
 
@@ -134,14 +134,14 @@ public class MySQLDatabase implements Database {
      * @param query
      */
     @Override
-    public void update(String query)
+    public boolean update(String query)
     {
         try {
-            getConnection().createStatement().executeUpdate(query);
+            return getConnection().createStatement().executeUpdate(query) == 0;
         } catch (SQLException e) {
             Logging.debug(e, "Error at SQL UPDATE Query");
             Logging.debug("Query: " + query);
-
+            return false;
         }
     }
 
@@ -153,7 +153,7 @@ public class MySQLDatabase implements Database {
      * @return weather is was successfully
      */
     @Override
-    public Boolean execute(String query)
+    public boolean execute(String query)
     {
         try {
             getConnection().createStatement().execute(query);
@@ -172,7 +172,7 @@ public class MySQLDatabase implements Database {
      * @return Weather is exists
      */
     @Override
-    public Boolean existsTable(String table)
+    public boolean existsTable(String table)
     {
         try {
             ResultSet tables = getConnection().getMetaData().getTables(null, null, table, null);
@@ -193,7 +193,7 @@ public class MySQLDatabase implements Database {
      * @return Weather is exists
      */
     @Override
-    public Boolean existsColumn(String table, String column)
+    public boolean existsColumn(String table, String column)
     {
         try {
             ResultSet columns = getConnection().getMetaData().getColumns(null, null, table, column);

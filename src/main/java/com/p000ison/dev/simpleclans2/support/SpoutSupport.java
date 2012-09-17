@@ -23,11 +23,9 @@ import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.listeners.SCPlayerListener;
-import com.p000ison.dev.simpleclans2.util.Logging;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.PluginManager;
+import org.getspout.spout.Spout;
 import org.getspout.spoutapi.player.SpoutPlayer;
 
 import static org.getspout.spoutapi.SpoutManager.getOnlinePlayers;
@@ -36,33 +34,20 @@ import static org.getspout.spoutapi.SpoutManager.getPlayer;
 /**
  * Represents a SpoutSupport
  */
-public class SpoutSupport {
+public class SpoutSupport extends SimpleHook<Spout> {
 
     private SimpleClans plugin;
-    private static boolean spout = false;
 
     public SpoutSupport(SimpleClans plugin)
     {
+        super("SpoutPlugin", Spout.class);
         this.plugin = plugin;
-
-        PluginManager pm = plugin.getServer().getPluginManager();
-
-        Plugin spout = pm.getPlugin("SpoutPlugin");
-
-        if (!(spout instanceof SpoutPlayer)) {
-            return;
-        }
-
-        Logging.debug("Hooked Spout!");
-
-        SpoutSupport.spout = true;
-
-        pm.registerEvents(new SCPlayerListener(plugin), plugin);
+        plugin.getServer().getPluginManager().registerEvents(new SCPlayerListener(plugin), plugin);
     }
 
-    public static boolean hasSpout()
+    public boolean hasSpout()
     {
-        return spout;
+        return super.isEnabled();
     }
 
     public void updateAllCapes()
@@ -84,7 +69,7 @@ public class SpoutSupport {
         }
     }
 
-    public static void showNotification(Player player, String title, String message, Material material)
+    public void showNotification(Player player, String title, String message, Material material)
     {
         if (!hasSpout()) {
             getSpoutPlayerExact(player).sendNotification(title, message, material);
@@ -93,7 +78,7 @@ public class SpoutSupport {
         }
     }
 
-    public static void setTitle(Player player, String title)
+    public void setTitle(Player player, String title)
     {
         if (!hasSpout()) {
             return;

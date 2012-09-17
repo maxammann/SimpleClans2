@@ -47,6 +47,8 @@ public class ClanPlayer implements KDR {
     private VoteResult lastVoteResult = VoteResult.UNKNOWN;
     private Rank rank;
 
+    private boolean update;
+
     public ClanPlayer(SimpleClans plugin, String name)
     {
         flags = new PlayerFlags();
@@ -160,9 +162,9 @@ public class ClanPlayer implements KDR {
         return neutralKills;
     }
 
-    public void addNeutralKills(int neutralKills)
+    public void addNeutralKill()
     {
-        this.setNeutralKills(this.getNeutralKills() + 1);
+        neutralKills++;
     }
 
     public int getRivalKills()
@@ -170,9 +172,9 @@ public class ClanPlayer implements KDR {
         return rivalKills;
     }
 
-    public void addRivalKills()
+    public void addRivalKill()
     {
-        this.setRivalKills(this.getRivalKills() + 1);
+        rivalKills++;
     }
 
     public int getCivilianKills()
@@ -180,9 +182,9 @@ public class ClanPlayer implements KDR {
         return civilianKills;
     }
 
-    public void addCivilianKills()
+    public void addCivilianKill()
     {
-        this.setCivilianKills(this.getCivilianKills() + 1);
+        civilianKills++;
     }
 
     public int getDeaths()
@@ -338,7 +340,13 @@ public class ClanPlayer implements KDR {
 
     public void update()
     {
-        plugin.getDataManager().updateClanPlayer(this);
+        this.update = true;
+//        plugin.getDataManager().UPDATE_CLANPLAYER(this);
+    }
+
+    public boolean needsUpdate()
+    {
+       return this.update;
     }
 
     public String getLastSeen()

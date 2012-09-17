@@ -3,6 +3,7 @@ general:
     clan-command: clan
     server-name: SimpleClans
     global-ff: false
+    auto-save: 5
 teleportation:
     drop-items-on-teleport: false
     drop-all-items-on-teleport: false

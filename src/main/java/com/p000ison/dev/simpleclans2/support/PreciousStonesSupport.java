@@ -19,47 +19,51 @@
 
 package com.p000ison.dev.simpleclans2.support;
 
-import com.p000ison.dev.simpleclans2.util.Logging;
 import net.sacredlabyrinth.Phaed.PreciousStones.FieldFlag;
 import net.sacredlabyrinth.Phaed.PreciousStones.PreciousStones;
 import net.sacredlabyrinth.Phaed.PreciousStones.vectors.Field;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 
 import java.util.List;
 
 /**
  * Represents a PreciousStonesSupport
  */
-public class PreciousStonesSupport {
+public class PreciousStonesSupport extends Hook<PreciousStones> {
 
-    private PreciousStones preciousStones;
-
-    public PreciousStonesSupport(Plugin plugin)
+    public PreciousStonesSupport()
     {
-        Plugin preciousStonesRaw = plugin.getServer().getPluginManager().getPlugin("PreciousStones");
-
-        if (!(preciousStonesRaw instanceof PreciousStones)) {
-            Logging.debug("PreciousStones not found! Skipping!");
-            return;
-        }
-
-        preciousStones = (PreciousStones) preciousStonesRaw;
+        super("PreciousStones", PreciousStones.class);
     }
+
+//    private PreciousStones preciousStones;
+//
+//    public PreciousStonesSupport()
+//    {
+//        super("PreciousStones", PreciousStones.class);
+//        Plugin preciousStonesRaw = Bukkit.getServer().getPluginManager().getPlugin("PreciousStones");
+//
+//        if (!(preciousStonesRaw instanceof PreciousStones)) {
+//            Logging.debug("PreciousStones not found! Skipping!");
+//            return;
+//        }
+//
+//        preciousStones = (PreciousStones) preciousStonesRaw;
+//    }
 
 
     public boolean isTeleportAllowed(Player player, Location location)
     {
-        if (preciousStones == null) {
+        if (hooked == null) {
             return true;
         }
 
-        List<Field> fields = preciousStones.getForceFieldManager().getSourceFields(location, FieldFlag.PREVENT_TELEPORT);
+        List<Field> fields = hooked.getForceFieldManager().getSourceFields(location, FieldFlag.PREVENT_TELEPORT);
 
         if (fields != null && !fields.isEmpty()) {
             for (Field field : fields) {
-                boolean allowed = preciousStones.getForceFieldManager().isApplyToAllowed(field, player.getName());
+                boolean allowed = hooked.getForceFieldManager().isApplyToAllowed(field, player.getName());
 
                 if (!allowed || field.hasFlag(FieldFlag.APPLY_TO_ALL)) {
                     return false;

@@ -24,7 +24,6 @@ import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
-import com.p000ison.dev.simpleclans2.support.SpoutSupport;
 import com.p000ison.dev.simpleclans2.util.GeneralHelper;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -49,7 +48,7 @@ public class CapeCommand extends GenericPlayerCommand {
     public String getMenu(ClanPlayer cp)
     {
         if (cp != null) {
-            if (cp.getClan().isVerified() && cp.isLeader() && SpoutSupport.hasSpout() && plugin.getSettingsManager().isCapesEnabled()) {
+            if (cp.getClan().isVerified() && cp.isLeader() && plugin.getSpoutSupport().isEnabled() && plugin.getSettingsManager().isCapesEnabled()) {
                 return MessageFormat.format(Language.getTranslation("menu.cape"), plugin.getSettingsManager().getClanCommand());
             }
         }
