@@ -72,11 +72,11 @@ public class ClanFFCommand extends GenericPlayerCommand {
                         if (action.equalsIgnoreCase(Language.getTranslation("allow"))) {
                             clan.addBBMessage(cp, Language.getTranslation("clan.wide.friendly.fire.is.allowed"));
                             clan.setFriendlyFire(true);
-                            plugin.getDataManager().updateClan(clan);
+                            clan.update();
                         } else if (action.equalsIgnoreCase(Language.getTranslation("block"))) {
                             clan.addBBMessage(cp, Language.getTranslation("clan.wide.friendly.fire.blocked"));
                             clan.setFriendlyFire(false);
-                            plugin.getDataManager().updateClan(clan);
+                            clan.update();
                         } else {
                             player.sendMessage(ChatColor.RED + MessageFormat.format(Language.getTranslation("usage.clanff"), plugin.getSettingsManager().getClanCommand()));
                         }

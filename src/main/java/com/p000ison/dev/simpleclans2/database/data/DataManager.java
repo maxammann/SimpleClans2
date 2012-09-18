@@ -61,7 +61,8 @@ public class DataManager {
 
         queue = new DataQueue(this);
 
-        long autoSave = plugin.getSettingsManager().getAutoSave() * 20L;
+        //convert to minutes
+        long autoSave = plugin.getSettingsManager().getAutoSave() * 1200L;
 
         if (autoSave > 0) {
             plugin.getServer().getScheduler().scheduleAsyncRepeatingTask(plugin, new AutoSaver(plugin), autoSave, autoSave);

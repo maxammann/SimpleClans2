@@ -56,7 +56,7 @@ public class SettingsManager {
     private boolean globalFF;
     private int autoSave;
 
-    private int maxTagLenght, minTagLenght;
+    private int maxTagLenght, minTagLenght, maxNameLenght, minNameLenght;
     private char[] disallowedColors;
     private Set<String> disallowedTags;
     private boolean requireVerification;
@@ -87,10 +87,8 @@ public class SettingsManager {
     private void init()
     {
         config = plugin.getConfig();
-
-
+        config.options().copyDefaults(true);
         save();
-
         load();
     }
 
@@ -132,6 +130,8 @@ public class SettingsManager {
 
             maxTagLenght = clan.getInt("max-tag-lenght");
             minTagLenght = clan.getInt("min-tag-lenght");
+            maxNameLenght = clan.getInt("max-name-lenght");
+            minNameLenght = clan.getInt("min-name-lenght");
             List<Character> disallowedColorsList = clan.getCharacterList("disallowed-colors");
             disallowedTags = new HashSet<String>(config.getStringList("disallowed-tags"));
             maxBBLenght = clan.getInt("max-bb-lenght");
@@ -218,7 +218,7 @@ public class SettingsManager {
             disallowedColors = new char[disallowedColorsList.size()];
 
             for (int i = 0; i < disallowedColorsList.size(); i++) {
-                disallowedColors[1] = disallowedColorsList.get(i);
+                disallowedColors[i] = disallowedColorsList.get(i);
             }
 
         } catch (Exception e) {
@@ -238,6 +238,11 @@ public class SettingsManager {
     public void reload()
     {
         plugin.reloadConfig();
+        config = plugin.getConfig();
+        load();
+
+        System.out.println(config.getInt("clan.min-tag-lenght"));
+        System.out.println(minTagLenght);
     }
 
     public boolean dropItemOnTeleport(Material mat)
@@ -495,5 +500,15 @@ public class SettingsManager {
     public int getAutoSave()
     {
         return autoSave;
+    }
+
+    public int getMaxNameLenght()
+    {
+        return maxNameLenght;
+    }
+
+    public int getMinNameLenght()
+    {
+        return minNameLenght;
     }
 }

@@ -21,10 +21,12 @@ package com.p000ison.dev.simpleclans2.support;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
-import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.listeners.SCPlayerListener;
+import com.p000ison.dev.simpleclans2.util.Logging;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.getspout.spout.Spout;
 import org.getspout.spoutapi.player.SpoutPlayer;
 
@@ -34,44 +36,34 @@ import static org.getspout.spoutapi.SpoutManager.getPlayer;
 /**
  * Represents a SpoutSupport
  */
-public class SpoutSupport extends SimpleHook<Spout> {
+public class SpoutSupport  {
 
     private SimpleClans plugin;
+    private boolean enabled = false;
 
     public SpoutSupport(SimpleClans plugin)
     {
-        super("SpoutPlugin", Spout.class);
         this.plugin = plugin;
-        plugin.getServer().getPluginManager().registerEvents(new SCPlayerListener(plugin), plugin);
-    }
+        Plugin spout = Bukkit.getPluginManager().getPlugin("Spout");
 
-    public boolean hasSpout()
-    {
-        return super.isEnabled();
-    }
-
-    public void updateAllCapes()
-    {
-        if (!hasSpout()) {
+        if (!(spout instanceof Spout)) {
             return;
         }
 
-        for (SpoutPlayer spoutPlayer : getOnlinePlayers()) {
-            ClanPlayer clanPlayer = plugin.getClanPlayerManager().getClanPlayerExact(spoutPlayer.getName());
+        enabled = true;
+        Logging.debug("Hooked Spout version %s!", spout.getDescription().getVersion());
+        System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+        plugin.getServer().getPluginManager().registerEvents(new SCPlayerListener(plugin), plugin);
+    }
 
-            if (clanPlayer == null) {
-                continue;
-            }
-
-            Clan clan = clanPlayer.getClan();
-
-            updateCape(spoutPlayer, clan);
-        }
+    public boolean isEnabled()
+    {
+        return enabled;
     }
 
     public void showNotification(Player player, String title, String message, Material material)
     {
-        if (!hasSpout()) {
+        if (!isEnabled()) {
             getSpoutPlayerExact(player).sendNotification(title, message, material);
         } else {
             player.sendMessage(message);
@@ -80,7 +72,7 @@ public class SpoutSupport extends SimpleHook<Spout> {
 
     public void setTitle(Player player, String title)
     {
-        if (!hasSpout()) {
+        if (!isEnabled()) {
             return;
         }
 

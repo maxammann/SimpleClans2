@@ -20,7 +20,9 @@ pvp:
         civilian: 1
 clan:
    max-tag-lenght: 3
-   min-tag-lenght: 4
+   min-tag-lenght: 3
+   max-name-lenght: 15
+   min-name-lenght: 5
    set-home-only-once: false
    minimal-size-to-ally: 1
    purge:

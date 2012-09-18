@@ -43,12 +43,14 @@ public class AutoSaver implements Runnable {
         for (Clan clan : plugin.getClanManager().getClans()) {
             if (clan.needsUpdate()) {
                 dataManager.updateClan(clan);
+                clan.update(false);
             }
         }
 
         for (ClanPlayer clanPlayer : plugin.getClanPlayerManager().getClanPlayers()) {
             if (clanPlayer.needsUpdate()) {
                 dataManager.updateClanPlayer(clanPlayer);
+                clanPlayer.update(false);
             }
         }
 

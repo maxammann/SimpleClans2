@@ -20,12 +20,14 @@
 
 package com.p000ison.dev.simpleclans2;
 
+import com.p000ison.dev.simpleclans2.api.Core;
 import com.p000ison.dev.simpleclans2.clan.ClanManager;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayerManager;
 import com.p000ison.dev.simpleclans2.commands.CommandManager;
 import com.p000ison.dev.simpleclans2.commands.admin.BanCommand;
 import com.p000ison.dev.simpleclans2.commands.admin.DisbandCommand;
 import com.p000ison.dev.simpleclans2.commands.admin.GlobalFFCommand;
+import com.p000ison.dev.simpleclans2.commands.admin.ReloadCommand;
 import com.p000ison.dev.simpleclans2.commands.clan.*;
 import com.p000ison.dev.simpleclans2.commands.clan.bb.BBAddCommand;
 import com.p000ison.dev.simpleclans2.commands.clan.bb.BBClearCommand;
@@ -62,7 +64,7 @@ import java.util.logging.Level;
 /**
  * Represents a SimpleClans
  */
-public class SimpleClans extends JavaPlugin {
+public class SimpleClans extends JavaPlugin implements Core {
 
     private ClanManager clanManager;
     private DatabaseManager databaseManager;
@@ -184,6 +186,7 @@ public class SimpleClans extends JavaPlugin {
         commandManager.addCommand(new LeaderboardCommand(this));
         commandManager.addCommand(new KickCommand(this));
         commandManager.addCommand(new InviteCommand(this));
+        commandManager.addCommand(new ReloadCommand(this));
         commandManager.addCommand(new CapeCommand(this));
     }
 
@@ -192,6 +195,11 @@ public class SimpleClans extends JavaPlugin {
     {
         commandManager.executeAll(null, sender, command.getName(), label, args);
         return true;
+    }
+
+    public Core getCore()
+    {
+        return this;
     }
 
     public Database getSimpleClansDatabase()

@@ -42,7 +42,7 @@ public class ReloadCommand extends GenericConsoleCommand {
     @Override
     public String getMenu()
     {
-        return MessageFormat.format(Language.getTranslation("0.reload.1.reload.configuration"), plugin.getSettingsManager().getClanCommand());
+        return MessageFormat.format(Language.getTranslation("menu.reload"), plugin.getSettingsManager().getClanCommand());
     }
 
     @Override

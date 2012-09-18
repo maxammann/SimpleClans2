@@ -78,7 +78,7 @@ public class BBAddCommand extends GenericPlayerCommand {
         if (cp.isTrusted()) {
             String msg = GeneralHelper.arrayToString(args);
             clan.addBBMessage(cp, msg);
-            plugin.getDataManager().updateClan(clan);
+            clan.update();
         } else {
             player.sendMessage(ChatColor.RED + Language.getTranslation("no.leader.permissions"));
         }

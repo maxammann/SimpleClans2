@@ -75,7 +75,7 @@ public class BBClearCommand extends GenericPlayerCommand {
 
         if (cp.isTrusted() && (cp.isLeader() || cp.hasPermission("manage.bb"))) {
             cp.getClan().clearBB();
-            plugin.getDataManager().updateClan(clan);
+            clan.update();
             player.sendMessage(ChatColor.RED + Language.getTranslation("cleared.bb"));
         } else {
             player.sendMessage(ChatColor.RED + Language.getTranslation("no.leader.permissions"));

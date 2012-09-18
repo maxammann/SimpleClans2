@@ -349,6 +349,11 @@ public class ClanPlayer implements KDR {
        return this.update;
     }
 
+    public void update(boolean update)
+    {
+        this.update = update;
+    }
+
     public String getLastSeen()
     {
         long current = System.currentTimeMillis();

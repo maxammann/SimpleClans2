@@ -658,7 +658,7 @@ public class Clan implements KDR {
 
             removeMember(clanPlayer);
 
-            plugin.getDataManager().updateClanPlayer(clanPlayer);
+            clanPlayer.update();
             clanPlayers.remove();
         }
 
@@ -788,5 +788,10 @@ public class Clan implements KDR {
     public void update()
     {
         this.update = true;
+    }
+
+    public void update(boolean update)
+    {
+        this.update = update;
     }
 }

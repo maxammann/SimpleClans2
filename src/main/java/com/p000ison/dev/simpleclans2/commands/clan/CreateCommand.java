@@ -67,7 +67,7 @@ public class CreateCommand extends GenericPlayerCommand {
         String name = GeneralHelper.arrayBoundsToString(1, args);
 
         if (player.hasPermission("simpleclans.mod.bypass")) {
-            if (cleanTag.length() >= plugin.getSettingsManager().getMaxTagLenght()) {
+            if (cleanTag.length() > plugin.getSettingsManager().getMaxTagLenght()) {
                 player.sendMessage(ChatColor.RED + MessageFormat.format(Language.getTranslation("your.clan.tag.cannot.be.longer.than.characters"), plugin.getSettingsManager().getMaxTagLenght()));
                 return;
             }
@@ -82,12 +82,12 @@ public class CreateCommand extends GenericPlayerCommand {
                 return;
             }
 
-            if (ChatColor.stripColor(name).length() >= plugin.getSettingsManager().getMaxTagLenght()) {
+            if (ChatColor.stripColor(name).length() > plugin.getSettingsManager().getMaxNameLenght()) {
                 player.sendMessage(ChatColor.RED + MessageFormat.format(Language.getTranslation("your.clan.name.cannot.be.longer.than.characters"), plugin.getSettingsManager().getMaxTagLenght()));
                 return;
             }
 
-            if (ChatColor.stripColor(name).length() < plugin.getSettingsManager().getMinTagLenght()) {
+            if (ChatColor.stripColor(name).length() < plugin.getSettingsManager().getMinNameLenght()) {
                 player.sendMessage(ChatColor.RED + MessageFormat.format(Language.getTranslation("your.clan.name.must.be.longer.than.characters"), plugin.getSettingsManager().getMinTagLenght()));
                 return;
             }
