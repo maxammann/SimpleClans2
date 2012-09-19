@@ -22,7 +22,7 @@ package com.p000ison.dev.simpleclans2.commands;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import org.bukkit.permissions.Permissible;
 
-public abstract class GenericCommand implements Command {
+abstract class GenericCommand implements Command {
     private String name;
     private int minArgs;
     private int maxArgs;

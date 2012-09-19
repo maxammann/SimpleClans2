@@ -57,7 +57,7 @@ public class HelpCommand extends GenericConsoleCommand {
     }
 
     @Override
-    public void execute(CommandSender sender, String label, String[] args)
+    public void execute(CommandSender sender, String[] args)
     {
         int page = 0;
 

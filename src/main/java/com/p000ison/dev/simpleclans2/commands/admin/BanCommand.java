@@ -50,7 +50,7 @@ public class BanCommand extends GenericConsoleCommand {
     }
 
     @Override
-    public void execute(CommandSender sender, String label, String[] args)
+    public void execute(CommandSender sender, String[] args)
     {
         ClanPlayer clanPlayer = plugin.getClanPlayerManager().getClanPlayer(args[0]);
 

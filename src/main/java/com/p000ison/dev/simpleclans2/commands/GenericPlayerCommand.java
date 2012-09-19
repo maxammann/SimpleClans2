@@ -22,6 +22,7 @@ package com.p000ison.dev.simpleclans2.commands;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
+import org.bukkit.entity.Player;
 
 /**
  * Represents a GenericPlayerCommand
@@ -34,7 +35,7 @@ public abstract class GenericPlayerCommand extends GenericCommand {
         super(name, plugin);
     }
 
-    public abstract void execute(org.bukkit.entity.Player player, String label, String[] args);
+    public abstract void execute(Player player, String[] args);
 
     public abstract String getMenu(ClanPlayer clanPlayer);
 }

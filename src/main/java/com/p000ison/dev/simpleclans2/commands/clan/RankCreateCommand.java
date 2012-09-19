@@ -48,7 +48,7 @@ public class RankCreateCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public void execute(Player player, String label, String[] args)
+    public void execute(Player player, String[] args)
     {
         ClanPlayer clanPlayer = plugin.getClanPlayerManager().getClanPlayer(player);
 

@@ -67,7 +67,8 @@ public class CommandManager {
         return new HashSet<Command>(commands.values());
     }
 
-    public void executeAll(final Player player, final CommandSender sender, String command, String label, String[] args)
+
+    public void execute(CommandSender sender, String command, String[] args)
     {
         String[] arguments;
 
@@ -94,76 +95,44 @@ public class CommandManager {
 
 
                     if (realArgs.length < cmd.getMinArguments() || realArgs.length > cmd.getMaxArguments()) {
-                        displayCommandHelp(cmd, sender, player);
+                        displayCommandHelp(cmd, sender);
                         return;
                     } else if (realArgs.length > 0 && realArgs[0].equals("?")) {
-                        displayCommandHelp(cmd, sender, player);
+                        displayCommandHelp(cmd, sender);
                         return;
                     }
 
+                    if (!cmd.hasPermission(sender)) {
+                        sender.sendMessage(ChatColor.DARK_RED + Language.getTranslation("insufficient.permissions"));
+                        return;
+                    }
 
                     if (cmd instanceof GenericConsoleCommand) {
-                        if (sender != null) {
-                            if (!cmd.hasPermission(sender)) {
-                                sender.sendMessage(ChatColor.DARK_RED + Language.getTranslation("insufficient.permissions"));
-                                return;
-                            }
-                            ((GenericConsoleCommand) cmd).execute(sender, label, realArgs);
-                        } else {
-                            if (!cmd.hasPermission(player)) {
-                                player.sendMessage(ChatColor.DARK_RED + Language.getTranslation("insufficient.permissions"));
-                                return;
-                            }
-                            ((GenericConsoleCommand) cmd).execute((CommandSender) player, label, realArgs);
-                        }
-                    } else if (cmd instanceof GenericCommand) {
-                        if (player != null) {
-                            if (!cmd.hasPermission(player)) {
-                                player.sendMessage(ChatColor.DARK_RED + Language.getTranslation("insufficient.permissions"));
-                                return;
-                            }
-                            ((GenericPlayerCommand) cmd).execute(player, label, realArgs);
-                        } else if (sender instanceof Player) {
-                            if (!cmd.hasPermission(sender)) {
-                                sender.sendMessage(ChatColor.DARK_RED + Language.getTranslation("insufficient.permissions"));
-                                return;
-                            }
-                            ((GenericPlayerCommand) cmd).execute((Player) sender, label, realArgs);
-                        } else {
-                            Logging.debug(Level.WARNING, "Failed at parsing the command :(");
+                        ((GenericConsoleCommand) cmd).execute(sender, args);
+                    } else if (cmd instanceof GenericPlayerCommand) {
+                        if (sender instanceof Player) {
+                            ((GenericPlayerCommand) cmd).execute((Player) sender, args);
                         }
                     } else {
                         Logging.debug(Level.WARNING, "Failed at parsing the command :(");
                     }
-
-                    return;
                 }
             }
         }
 
-        (sender == null ? player : sender).sendMessage(ChatColor.DARK_RED + "Command not found!");
+        sender.sendMessage(ChatColor.DARK_RED + "Command not found!");
     }
 
-    private void displayCommandHelp(Command cmd, CommandSender sender, Player player)
+    private void displayCommandHelp(Command cmd, CommandSender sender)
     {
-        if (player == null) {
-            sender.sendMessage("§cCommand:§e " + cmd.getName());
-            String[] usages = cmd.getUsages();
-            StringBuilder sb = new StringBuilder("§cUsage:§e ").append(usages[0]).append("\n");
+        sender.sendMessage("§cCommand:§e " + cmd.getName());
+        String[] usages = cmd.getUsages();
+        StringBuilder sb = new StringBuilder("§cUsage:§e ").append(usages[0]).append("\n");
 
-            for (int i = 1; i < usages.length; i++) {
-                sb.append("           ").append(usages[i]).append("\n");
-            }
-            sender.sendMessage(sb.toString());
-        } else if (sender == null) {
-            player.sendMessage("§cCommand:§e " + cmd.getName());
-            String[] usages = cmd.getUsages();
-            StringBuilder sb = new StringBuilder("§cUsage:§e ").append(usages[0]).append("\n");
-
-            for (int i = 1; i < usages.length; i++) {
-                sb.append("           ").append(usages[i]).append("\n");
-            }
-            player.sendMessage(sb.toString());
+        for (int i = 1; i < usages.length; i++) {
+            sb.append("           ").append(usages[i]).append("\n");
         }
+
+        sender.sendMessage(sb.toString());
     }
 }

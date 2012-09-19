@@ -193,7 +193,7 @@ public class SimpleClans extends JavaPlugin implements Core {
     @Override
     public boolean onCommand(org.bukkit.command.CommandSender sender, org.bukkit.command.Command command, java.lang.String label, java.lang.String[] args)
     {
-        commandManager.executeAll(null, sender, command.getName(), label, args);
+        commandManager.execute(sender, command.getName(), args);
         return true;
     }
 

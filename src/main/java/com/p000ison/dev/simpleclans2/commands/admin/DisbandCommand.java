@@ -52,7 +52,7 @@ public class DisbandCommand extends GenericConsoleCommand {
     }
 
     @Override
-    public void execute(CommandSender sender, String label, String[] args)
+    public void execute(CommandSender sender, String[] args)
     {
         if (args.length == 0) {
             if (!(sender instanceof Player)) {

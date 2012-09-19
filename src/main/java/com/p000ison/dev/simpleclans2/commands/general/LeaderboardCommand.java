@@ -59,7 +59,7 @@ public class LeaderboardCommand extends GenericConsoleCommand {
     }
 
     @Override
-    public void execute(CommandSender sender, String label, String[] args)
+    public void execute(CommandSender sender, String[] args)
     {
 
         ChatColor headColor = plugin.getSettingsManager().getHeadingPageColor();

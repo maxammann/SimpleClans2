@@ -21,6 +21,7 @@
 package com.p000ison.dev.simpleclans2.commands;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
+import org.bukkit.command.CommandSender;
 
 public abstract class GenericConsoleCommand extends GenericCommand {
 
@@ -29,7 +30,7 @@ public abstract class GenericConsoleCommand extends GenericCommand {
         super(name, plugin);
     }
 
-    public abstract void execute(org.bukkit.command.CommandSender sender, String label, String[] args);
+    public abstract void execute(CommandSender sender, String[] args);
 
     public abstract String getMenu();
 }
