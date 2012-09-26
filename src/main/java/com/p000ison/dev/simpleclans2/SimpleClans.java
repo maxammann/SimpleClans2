@@ -111,6 +111,7 @@ public class SimpleClans extends JavaPlugin implements Core {
     @Override
     public void onDisable()
     {
+        dataManager.getQueue().run();
         databaseManager.getDatabase().close();
 
         economy = null;
@@ -188,6 +189,7 @@ public class SimpleClans extends JavaPlugin implements Core {
         commandManager.addCommand(new InviteCommand(this));
         commandManager.addCommand(new ReloadCommand(this));
         commandManager.addCommand(new CapeCommand(this));
+        commandManager.addCommand(new ResignCommand(this));
     }
 
     @Override

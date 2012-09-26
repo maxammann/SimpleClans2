@@ -36,7 +36,7 @@ import static org.getspout.spoutapi.SpoutManager.getPlayer;
 /**
  * Represents a SpoutSupport
  */
-public class SpoutSupport  {
+public class SpoutSupport {
 
     private SimpleClans plugin;
     private boolean enabled = false;

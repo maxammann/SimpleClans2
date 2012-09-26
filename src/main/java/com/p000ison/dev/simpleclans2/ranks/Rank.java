@@ -19,6 +19,8 @@
 
 package com.p000ison.dev.simpleclans2.ranks;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -102,5 +104,76 @@ public class Rank {
     public void setId(long id)
     {
         this.id = id;
+    }
+
+    public static void main(String[] args)
+    {
+//        String text = "";
+//
+//        for (int i = 0; i < 500; i++) {
+//            for (int y = 0; y < 9; y++) {
+//                text += y;
+//                if (y % 9 == 0) {
+//                    text += "|";
+//                }
+//            }
+//        }
+//
+//        List<String> pages = split(text);
+//        pages.toArray(new String[pages.size()]);
+//
+//        for (String s : split(text)) {
+//            System.out.println(s);
+//            System.out.println();
+//        }
+    }
+
+    public static List<String> split(String text)
+    {
+        int MAX_CHARS = 256;
+        int MAX_LINES = 13;
+        int MAX_CHARS_PER_LINE = 18;
+
+        List<String> finalPages = new ArrayList<String>();
+        StringBuilder currentPage = new StringBuilder(text);
+
+        int breaks = 0;
+        int current = 0;
+        int currentLineNumber = 0;
+
+        while (true) {
+            current++;
+            if (current % MAX_CHARS_PER_LINE == 0) {
+                currentLineNumber++;
+                if (currentPage.length() > current) {
+                    currentPage.insert(current, "\n");
+                }
+                breaks++;
+            }
+
+            if (currentLineNumber >= MAX_LINES || currentLineNumber > MAX_CHARS) {
+                String newPage;
+                if (currentPage.length() > current + breaks) {
+                    newPage = currentPage.substring(0, current + breaks);
+                    currentPage = new StringBuilder(currentPage.substring(current + breaks));
+                } else {
+                    newPage = currentPage.substring(0);
+                    currentPage = null;
+                }
+
+                finalPages.add(newPage);
+                //reset
+                current = 0;
+                breaks = 0;
+                currentLineNumber = 0;
+            }
+
+            if (currentPage == null) {
+                break;
+            }
+        }
+
+        return finalPages;
+
     }
 }

@@ -21,7 +21,6 @@ package com.p000ison.dev.simpleclans2.commands.voting;
 
 import com.p000ison.dev.simpleclans2.Language;
 import com.p000ison.dev.simpleclans2.SimpleClans;
-import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
 import com.p000ison.dev.simpleclans2.requests.Request;
@@ -52,19 +51,7 @@ public class AbstainCommand extends GenericPlayerCommand {
     @Override
     public void execute(Player player, String[] args)
     {
-        ClanPlayer clanPlayer = plugin.getClanPlayerManager().getClanPlayer(player);
-
-        if (clanPlayer == null) {
-            player.sendMessage(Language.getTranslation("not.a.member.of.any.clan"));
-            return;
-        }
-
-        Clan clan = clanPlayer.getClan();
-
-        if (clan == null) {
-            player.sendMessage(Language.getTranslation("not.a.member.of.any.clan"));
-            return;
-        }
+        ClanPlayer clanPlayer = plugin.getClanPlayerManager().getCreateClanPlayerExact(player);
 
         Request request = plugin.getRequestManager().vote(clanPlayer, VoteResult.ABSTAINED);
 

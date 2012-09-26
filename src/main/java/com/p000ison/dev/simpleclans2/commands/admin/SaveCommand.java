@@ -14,7 +14,7 @@
  *     You should have received a copy of the GNU General Public License
  *     along with SimpleClans2.  If not, see <http://www.gnu.org/licenses/>.
  *
- *     Created: 11.09.12 19:46
+ *     Created: 26.09.12 20:43
  */
 
 package com.p000ison.dev.simpleclans2.commands.admin;
@@ -28,21 +28,21 @@ import org.bukkit.command.CommandSender;
 import java.text.MessageFormat;
 
 
-public class ReloadCommand extends GenericConsoleCommand {
+public class SaveCommand extends GenericConsoleCommand {
 
-    public ReloadCommand(SimpleClans plugin)
+    public SaveCommand(SimpleClans plugin)
     {
-        super("Reload", plugin);
+        super("Save", plugin);
         setArgumentRange(0, 0);
-        setUsages(MessageFormat.format(Language.getTranslation("usage.reload"), plugin.getSettingsManager().getClanCommand()));
-        setIdentifiers(Language.getTranslation("reload.command"));
-        setPermission("simpleclans.admin.reload");
+        setUsages(MessageFormat.format(Language.getTranslation("usage.save"), plugin.getSettingsManager().getClanCommand()));
+        setIdentifiers(Language.getTranslation("save.command"));
+        setPermission("simpleclans.admin.save");
     }
 
     @Override
     public String getMenu()
     {
-        return MessageFormat.format(Language.getTranslation("menu.reload"), plugin.getSettingsManager().getClanCommand());
+        return MessageFormat.format(Language.getTranslation("menu.save"), plugin.getSettingsManager().getClanCommand());
     }
 
     @Override
@@ -50,11 +50,9 @@ public class ReloadCommand extends GenericConsoleCommand {
     {
         long start = System.currentTimeMillis();
 
-        plugin.getSettingsManager().reload();
         plugin.getDataManager().getQueue().run();
-        plugin.getDataManager().importAll();
 
         long end = System.currentTimeMillis();
-        sender.sendMessage(ChatColor.AQUA + MessageFormat.format(Language.getTranslation("configuration.reloaded"), end - start));
+        sender.sendMessage(ChatColor.AQUA + MessageFormat.format(Language.getTranslation("data.saved"), end - start));
     }
 }

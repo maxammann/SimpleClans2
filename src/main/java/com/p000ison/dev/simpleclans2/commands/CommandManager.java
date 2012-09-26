@@ -29,7 +29,6 @@ import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.Set;
 import java.util.logging.Level;
 
@@ -38,33 +37,37 @@ import java.util.logging.Level;
  */
 public class CommandManager {
 
-    private SimpleClans plugin;
-    private LinkedHashMap<String, Command> commands;
+    private Set<Command> commands;
 
     public CommandManager(SimpleClans plugin)
     {
-        this.plugin = plugin;
-        commands = new LinkedHashMap<String, Command>();
+        commands = new HashSet<Command>();
     }
 
     public void addCommand(Command command)
     {
-        commands.put(command.getName().toLowerCase(), command);
+        commands.add(command);
     }
 
-    public void removeCommand(String command)
+    public void removeCommand(Command command)
     {
         commands.remove(command);
     }
 
     public Command getCommand(String name)
     {
-        return commands.get(name.toLowerCase());
+        for (Command cmd : commands) {
+            if (cmd.getName().equalsIgnoreCase(name)) {
+                return cmd;
+            }
+        }
+
+        return null;
     }
 
     public Set<Command> getCommands()
     {
-        return new HashSet<Command>(commands.values());
+        return commands;
     }
 
 
@@ -89,7 +92,7 @@ public class CommandManager {
 
             //trim the last ' '
             identifier = identifier.trim();
-            for (Command cmd : commands.values()) {
+            for (Command cmd : commands) {
                 if (cmd.isIdentifier(identifier)) {
                     String[] realArgs = Arrays.copyOfRange(arguments, argsIncluded, arguments.length);
 
@@ -108,10 +111,12 @@ public class CommandManager {
                     }
 
                     if (cmd instanceof GenericConsoleCommand) {
-                        ((GenericConsoleCommand) cmd).execute(sender, args);
+                        ((GenericConsoleCommand) cmd).execute(sender, realArgs);
+                        return;
                     } else if (cmd instanceof GenericPlayerCommand) {
                         if (sender instanceof Player) {
-                            ((GenericPlayerCommand) cmd).execute((Player) sender, args);
+                            ((GenericPlayerCommand) cmd).execute((Player) sender, realArgs);
+                            return;
                         }
                     } else {
                         Logging.debug(Level.WARNING, "Failed at parsing the command :(");

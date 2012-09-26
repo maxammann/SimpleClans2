@@ -72,6 +72,8 @@ public class RequestManager {
         Iterator<Request> it = requests.iterator();
         while (it.hasNext()) {
             Request request = it.next();
+            System.out.println(request.getRequester().getName());
+            System.out.println(((SingleAcceptorRequest)request).getAcceptor().getName()); ;
             if (request.isAcceptor(acceptor)) {
 
                 if (result == VoteResult.ACCEPT) {
@@ -81,6 +83,7 @@ public class RequestManager {
                 } else if (result == VoteResult.ABSTAINED) {
                     request.deny(acceptor);
                 } else {
+                    System.out.println(1);
                     return null;
                 }
 
@@ -97,10 +100,12 @@ public class RequestManager {
                     }
                 }
 
+                System.out.println(2);
                 return request;
             }
         }
 
+        System.out.println(3);
         return null;
     }
 

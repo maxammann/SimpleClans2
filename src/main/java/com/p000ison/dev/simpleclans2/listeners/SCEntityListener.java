@@ -181,21 +181,28 @@ public class SCEntityListener implements Listener {
                 Clan attackerClan = attacker.getClan();
                 Clan victimClan = victim.getClan();
 
-                KillType type = KillType.NEUTRAL;
+                KillType type;
+
+                boolean war = false;
 
                 if (victimClan == null || attackerClan == null || !victim.getClan().isVerified() || !attacker.getClan().isVerified()) {
                     attacker.addCivilianKill();
                     type = KillType.CIVILIAN;
                 } else if (attackerClan.isRival(victimClan)) {
+
+                    if (attackerClan.isWarring(victimClan)) {
+                        war = true;
+                    }
+
                     attacker.addRivalKill();
                     type = KillType.RIVAL;
                 } else /*if (attackerClan.isAlly(victimClan))*/ {
                     attacker.addNeutralKill();
-                    type = KillType.ALLY;
+                    type = KillType.NEUTRAL;
                 }
 
                 plugin.getDataManager().addStatement(new KillStatement(attacker.getName(), attackerClan == null ? null : attackerClan.getTag(),
-                        victim.getName(), victimClan == null ? null : victimClan.getTag(), false, type));
+                        victim.getName(), victimClan == null ? null : victimClan.getTag(), war, type));
             }
         }
     }

@@ -106,6 +106,9 @@ public abstract class SingleAcceptorRequest extends Request {
     @Override
     public boolean isAcceptor(ClanPlayer clanPlayer)
     {
+        System.out.println(clanPlayer.getName());
+        System.out.println(acceptor.getName());
+        System.out.println(clanPlayer.equals(acceptor));
         return clanPlayer.equals(acceptor);
     }
 
@@ -118,7 +121,7 @@ public abstract class SingleAcceptorRequest extends Request {
             acceptorPlayer.sendMessage(message);
         }
 
-        Player requesterPlayer = acceptor.toPlayer();
+        Player requesterPlayer = requester.toPlayer();
 
         if (requesterPlayer != null) {
             requesterPlayer.sendMessage(message);

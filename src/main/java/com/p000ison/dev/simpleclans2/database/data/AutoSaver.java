@@ -22,24 +22,28 @@ package com.p000ison.dev.simpleclans2.database.data;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
+import com.p000ison.dev.simpleclans2.util.Logging;
+
+import java.util.LinkedList;
+import java.util.Queue;
 
 /**
  * Represents a AutoSaver
  */
-public class AutoSaver implements Runnable {
+public class AutoSaver extends LinkedList<Executable> implements Queue<Executable>, Runnable {
 
+    private DataManager dataManager;
     private SimpleClans plugin;
 
     public AutoSaver(SimpleClans simpleClans)
     {
         this.plugin = simpleClans;
+        this.dataManager = plugin.getDataManager();
     }
 
     @Override
     public void run()
     {
-        DataManager dataManager = plugin.getDataManager();
-
         for (Clan clan : plugin.getClanManager().getClans()) {
             if (clan.needsUpdate()) {
                 dataManager.updateClan(clan);
@@ -54,6 +58,12 @@ public class AutoSaver implements Runnable {
             }
         }
 
-        dataManager.getQueue().run();
+        Executable statement;
+
+        while ((statement = this.poll()) != null) {
+            if (!statement.execute(dataManager)) {
+                Logging.debug("Failed to execute query!");
+            }
+        }
     }
 }

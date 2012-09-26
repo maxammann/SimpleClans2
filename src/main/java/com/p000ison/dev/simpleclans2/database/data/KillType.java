@@ -27,8 +27,7 @@ public enum KillType {
 
     CIVILIAN((byte) 0),
     NEUTRAL((byte) 1),
-    RIVAL((byte) 2),
-    ALLY((byte) 3);
+    RIVAL((byte) 2);
 
     private byte type;
 

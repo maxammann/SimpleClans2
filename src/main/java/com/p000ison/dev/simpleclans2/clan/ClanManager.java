@@ -103,7 +103,7 @@ public class ClanManager {
     {
         if (plugin.getDataManager().insertClan(clan)) {
             clan.setId(plugin.getDataManager().retrieveClanId(clan.getTag()));
-//            clans.add(clan);
+            clans.add(clan);
         }
 
 

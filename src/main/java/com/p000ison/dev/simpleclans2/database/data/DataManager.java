@@ -42,7 +42,7 @@ public class DataManager {
 
     private SimpleClans plugin;
     private Database database;
-    private DataQueue queue;
+    private AutoSaver autoSaver;
 
     public PreparedStatement DELETE_CLAN, UPDATE_CLAN, INSERT_CLAN, RETRIEVE_CLAN_BY_TAG;
 
@@ -59,13 +59,13 @@ public class DataManager {
 
         database = plugin.getDatabaseManager().getDatabase();
 
-        queue = new DataQueue(this);
+        autoSaver = new AutoSaver(plugin);
 
         //convert to minutes
         long autoSave = plugin.getSettingsManager().getAutoSave() * 1200L;
 
         if (autoSave > 0) {
-            plugin.getServer().getScheduler().scheduleAsyncRepeatingTask(plugin, new AutoSaver(plugin), autoSave, autoSave);
+            plugin.getServer().getScheduler().scheduleAsyncRepeatingTask(plugin, autoSaver, autoSave, autoSave);
         }
 
         prepareStatements();
@@ -128,12 +128,12 @@ public class DataManager {
 
     public void addStatement(Executable statement)
     {
-        queue.add(statement);
+        getQueue().add(statement);
     }
 
-    public DataQueue getQueue()
+    public AutoSaver getQueue()
     {
-        return queue;
+        return autoSaver;
     }
 
     public void deleteClanPlayer(ClanPlayer clanPlayer)

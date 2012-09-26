@@ -35,7 +35,7 @@ public class InviteRequest extends SingleAcceptorRequest {
 
     public InviteRequest(ClanPlayer invited, ClanPlayer requester, Clan clan)
     {
-        super(invited, requester, clan, "");
+        super(invited, requester, clan, MessageFormat.format(Language.getTranslation("you.have.been.invited"), clan.getTag()));
     }
 
     @Override

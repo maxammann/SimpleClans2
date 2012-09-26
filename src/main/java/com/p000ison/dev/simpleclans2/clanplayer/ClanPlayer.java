@@ -287,10 +287,10 @@ public class ClanPlayer implements KDR {
     @Override
     public boolean equals(Object obj)
     {
-        if (obj instanceof Clan) {
-            Clan clan = ((Clan) obj);
+        if (obj instanceof ClanPlayer) {
+            ClanPlayer clanPlayer = ((ClanPlayer) obj);
 
-            if (clan.getId() == id || clan.getName().equals(name)) {
+            if (clanPlayer.getId() == id || clanPlayer.getName().equals(name)) {
                 return true;
             }
         }
