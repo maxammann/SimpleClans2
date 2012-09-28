@@ -77,6 +77,10 @@ public class Clan implements KDR {
         this.id = id;
     }
 
+    public String getFounded()
+    {
+        return new java.text.SimpleDateFormat("MMM dd, ''yy h:mm a").format(new Date(this.foundedDate));
+    }
 
     /**
      * Gets the tag of a clan. This is unique and can contain colors.
@@ -793,5 +797,32 @@ public class Clan implements KDR {
     public void update(boolean update)
     {
         this.update = update;
+    }
+
+    /**
+     * This return a array of kills this clan made. This needs only one iteration.
+     * <p/>
+     * <p><strong>Total Deaths: </strong><i>Index 0</i></p>
+     * <p><strong>Total Rival Kills: </strong><i>Index 1</i></p>
+     * <p><strong>Total Civilian Kills: </strong><i>Index 2</i></p>
+     * <p><strong>Total Neutral Kills: </strong><i>Index 3</i></p>
+     *
+     * @return A array of the kills of this clan from index 0 - 3
+     */
+    public int[] getTotalKills()
+    {
+        int totalDeaths = 0;
+        int totalRivalKills = 0;
+        int totalCivilianKills = 0;
+        int totalNeutralKills = 0;
+
+        for (ClanPlayer clanPlayer : getAllMembers()) {
+            totalDeaths += clanPlayer.getDeaths();
+            totalRivalKills += clanPlayer.getRivalKills();
+            totalCivilianKills += clanPlayer.getCivilianKills();
+            totalNeutralKills += clanPlayer.getNeutralKills();
+        }
+
+        return new int[]{totalDeaths, totalRivalKills, totalCivilianKills, totalCivilianKills, totalNeutralKills};
     }
 }

@@ -62,7 +62,7 @@ public class RankCreateCommand extends GenericPlayerCommand {
             return;
         }
 
-        if (!clan.isLeader(clanPlayer) && !clanPlayer.hasPermission("manage.ranks")) {
+        if (!clan.isLeader(clanPlayer) && !clanPlayer.hasRankPermission("manage.ranks")) {
             return;
         }
 

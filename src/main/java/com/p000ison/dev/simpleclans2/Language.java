@@ -24,6 +24,7 @@ import com.p000ison.dev.simpleclans2.util.GeneralHelper;
 import com.p000ison.dev.simpleclans2.util.Logging;
 import org.bukkit.ChatColor;
 
+import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -73,6 +74,12 @@ public class Language {
         }
 
         return GeneralHelper.parseColors(bundle.getString(key));
+    }
+
+    public static String getTranslationMessage(String key, Object... args)
+    {
+        String translation = getTranslation(key);
+        return translation == null ? "Error!" : MessageFormat.format(key, args);
     }
 
     public static void clear()

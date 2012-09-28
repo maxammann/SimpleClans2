@@ -73,7 +73,7 @@ public class BBClearCommand extends GenericPlayerCommand {
             return;
         }
 
-        if (cp.isTrusted() && (cp.isLeader() || cp.hasPermission("manage.bb"))) {
+        if (cp.isTrusted() && (cp.isLeader() || cp.hasRankPermission("manage.bb"))) {
             cp.getClan().clearBB();
             clan.update();
             player.sendMessage(ChatColor.RED + Language.getTranslation("cleared.bb"));

@@ -20,6 +20,7 @@
 package com.p000ison.dev.simpleclans2.ranks;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -33,6 +34,21 @@ public class Rank {
     private long clanId;
     private Set<String> permissions;
     private int priority;
+
+    private static final Set<String> availablePermissions = new HashSet<String>();
+
+    static {
+        availablePermissions.add("leader.demote");
+        availablePermissions.add("manage.bb");
+        availablePermissions.add("manage.ally");
+        availablePermissions.add("manage.clanff");
+        availablePermissions.add("manage.ranks");
+    }
+
+    public static void addAvailablePermission(String permission)
+    {
+        availablePermissions.add(permission);
+    }
 
     public Rank(long id, String name)
     {
@@ -51,9 +67,17 @@ public class Rank {
         return name;
     }
 
-    public void addPermission(String permission)
+    public String addPermission(String permission)
     {
-        permissions.add(permission);
+        String lowerPerm = permission.toLowerCase();
+        for (String perm : availablePermissions) {
+            String loweriPerm = perm.toLowerCase();
+            if (loweriPerm.equals(lowerPerm) || loweriPerm.startsWith(lowerPerm)) {
+                permissions.add(perm);
+                return perm;
+            }
+        }
+        return null;
     }
 
     public boolean hasPermission(String permission)

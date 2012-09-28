@@ -130,4 +130,16 @@ abstract class GenericCommand implements Command {
     {
         this.permission = permission;
     }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        return obj instanceof GenericCommand && name.equals(((GenericCommand) obj).getName());
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return name.hashCode();
+    }
 }

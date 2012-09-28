@@ -52,14 +52,12 @@ public class AcceptCommand extends GenericPlayerCommand {
     public void execute(Player player, String[] args)
     {
         ClanPlayer clanPlayer = plugin.getClanPlayerManager().getCreateClanPlayerExact(player);
-
         Request request = plugin.getRequestManager().vote(clanPlayer, VoteResult.ACCEPT);
 
         if (request != null) {
-            request.announceMessage(MessageFormat.format(Language.getTranslation("voted.to.accept"), player.getDisplayName()));
+            request.announceMessage(Language.getTranslationMessage("voted.to.accept", player.getDisplayName()));
         } else {
-            player.sendMessage("nothing.to.accept");
+            player.sendMessage(Language.getTranslation("nothing.to.accept"));
         }
     }
-
 }

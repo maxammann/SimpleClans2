@@ -92,14 +92,17 @@ public class CommandManager {
 
             //trim the last ' '
             identifier = identifier.trim();
+
+            Command helpCommand = null;
+
             for (Command cmd : commands) {
                 if (cmd.isIdentifier(identifier)) {
                     String[] realArgs = Arrays.copyOfRange(arguments, argsIncluded, arguments.length);
 
 
                     if (realArgs.length < cmd.getMinArguments() || realArgs.length > cmd.getMaxArguments()) {
-                        displayCommandHelp(cmd, sender);
-                        return;
+                        helpCommand = cmd;
+                        continue;
                     } else if (realArgs.length > 0 && realArgs[0].equals("?")) {
                         displayCommandHelp(cmd, sender);
                         return;
@@ -122,6 +125,10 @@ public class CommandManager {
                         Logging.debug(Level.WARNING, "Failed at parsing the command :(");
                     }
                 }
+            }
+
+            if (helpCommand != null) {
+                displayCommandHelp(helpCommand, sender);
             }
         }
 

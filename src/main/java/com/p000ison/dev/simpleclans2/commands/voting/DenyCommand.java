@@ -52,15 +52,12 @@ public class DenyCommand extends GenericPlayerCommand {
     public void execute(Player player, String[] args)
     {
         ClanPlayer clanPlayer = plugin.getClanPlayerManager().getCreateClanPlayerExact(player);
-
-
         Request request = plugin.getRequestManager().vote(clanPlayer, VoteResult.DENY);
 
         if (request != null) {
-            request.announceMessage(Language.getTranslation("voted.to.deny"));
+            request.announceMessage(Language.getTranslationMessage("voted.to.deny", player.getDisplayName()));
         } else {
-            player.sendMessage("nothing.to.accept");
+            player.sendMessage(Language.getTranslation("nothing.to.deny"));
         }
     }
-
 }

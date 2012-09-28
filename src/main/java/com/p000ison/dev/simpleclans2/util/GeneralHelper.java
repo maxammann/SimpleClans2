@@ -117,6 +117,22 @@ public class GeneralHelper {
         return string.substring(0, string.length() - separator.length());
     }
 
+    public static String clansPlayersToString(Collection<ClanPlayer> collection, String separator)
+    {
+        if (collection == null || collection.isEmpty()) {
+            return null;
+        }
+
+        StringBuilder string = new StringBuilder();
+
+        for (ClanPlayer cp : collection) {
+            string.append(cp.getName()).append(separator);
+
+        }
+
+        return string.substring(0, string.length() - separator.length());
+    }
+
 
     public static String arrayBoundsToString(int start, int end, String... args)
     {

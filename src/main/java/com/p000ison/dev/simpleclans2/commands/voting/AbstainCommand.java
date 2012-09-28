@@ -52,14 +52,12 @@ public class AbstainCommand extends GenericPlayerCommand {
     public void execute(Player player, String[] args)
     {
         ClanPlayer clanPlayer = plugin.getClanPlayerManager().getCreateClanPlayerExact(player);
-
         Request request = plugin.getRequestManager().vote(clanPlayer, VoteResult.ABSTAINED);
 
         if (request != null) {
-            request.announceMessage(Language.getTranslation("voted.to.abstain"));
+            request.announceMessage(Language.getTranslationMessage("voted.to.abstain", player.getDisplayName()));
         } else {
-            player.sendMessage("nothing.to.accept");
+            player.sendMessage(Language.getTranslation("nothing.to.abstain"));
         }
     }
-
 }

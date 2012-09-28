@@ -65,7 +65,7 @@ public class DemoteCommand extends GenericPlayerCommand {
         if (cp != null) {
             Clan clan = cp.getClan();
 
-            if (clan.isLeader(cp)) {
+            if (clan.isLeader(cp) || cp.hasRankPermission("leader.demote")) {
                 ClanPlayer demoted = plugin.getClanPlayerManager().getClanPlayer(args[0]);
 
                 if (!clan.allLeadersOnline(demoted)) {

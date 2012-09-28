@@ -323,14 +323,14 @@ public class ClanPlayer implements KDR {
         this.deaths = deaths;
     }
 
-    public boolean hasPermission(String permission)
-    {
-        return rank != null && rank.hasPermission(permission);
-    }
-
     public Rank getRank()
     {
         return rank;
+    }
+
+    public boolean hasRankPermission(String permission)
+    {
+        return rank != null && getRank().hasPermission(permission);
     }
 
     public void setRank(Rank rank)
@@ -346,7 +346,7 @@ public class ClanPlayer implements KDR {
 
     public boolean needsUpdate()
     {
-       return this.update;
+        return this.update;
     }
 
     public void update(boolean update)
@@ -358,6 +358,7 @@ public class ClanPlayer implements KDR {
     {
         long current = System.currentTimeMillis();
         long difference = DateHelper.differenceInMilliseconds(getLastSeenDate(), current);
+
         //if the difference is more than a day
         if (difference > DateHelper.DAY) {
 
