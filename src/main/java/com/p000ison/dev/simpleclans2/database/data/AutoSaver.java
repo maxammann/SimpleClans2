@@ -35,10 +35,11 @@ public class AutoSaver extends LinkedList<Executable> implements Queue<Executabl
     private DataManager dataManager;
     private SimpleClans plugin;
 
-    public AutoSaver(SimpleClans simpleClans)
+    public AutoSaver(SimpleClans simpleClans, DataManager dataManager)
     {
         this.plugin = simpleClans;
-        this.dataManager = plugin.getDataManager();
+        this.dataManager = dataManager;
+        System.out.println(dataManager);
     }
 
     @Override
@@ -46,6 +47,7 @@ public class AutoSaver extends LinkedList<Executable> implements Queue<Executabl
     {
         for (Clan clan : plugin.getClanManager().getClans()) {
             if (clan.needsUpdate()) {
+                System.out.println(dataManager);
                 dataManager.updateClan(clan);
                 clan.update(false);
             }

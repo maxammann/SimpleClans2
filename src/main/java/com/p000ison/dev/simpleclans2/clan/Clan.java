@@ -24,6 +24,7 @@ import com.p000ison.dev.simpleclans2.KDR;
 import com.p000ison.dev.simpleclans2.Language;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
+import com.p000ison.dev.simpleclans2.ranks.Rank;
 import com.p000ison.dev.simpleclans2.util.DateHelper;
 import com.p000ison.dev.simpleclans2.util.GeneralHelper;
 import org.bukkit.ChatColor;
@@ -51,6 +52,7 @@ public class Clan implements KDR {
     private Set<Clan> rivals = new HashSet<Clan>();
     private Set<Clan> warring = new HashSet<Clan>();
     private Set<ClanPlayer> allMembers = new HashSet<ClanPlayer>();
+    private Set<Rank> ranks = new HashSet<Rank>();
     private boolean update;
 
     /**
@@ -77,6 +79,11 @@ public class Clan implements KDR {
         this.id = id;
     }
 
+    /**
+     * Returns a formated string of the date this clan was founded
+     *
+     * @return Returns a formatted date
+     */
     public String getFounded()
     {
         return new java.text.SimpleDateFormat("MMM dd, ''yy h:mm a").format(new Date(this.foundedDate));
@@ -92,6 +99,11 @@ public class Clan implements KDR {
         return tag;
     }
 
+    /**
+     * Sets the tag of this clan
+     *
+     * @param tag The tag
+     */
     public void setTag(String tag)
     {
         this.tag = tag;
@@ -209,7 +221,7 @@ public class Clan implements KDR {
     /**
      * Sets this clan verified.
      *
-     * @param verified
+     * @param verified Weather this clan should be verified
      */
     public void setVerified(boolean verified)
     {
@@ -383,6 +395,12 @@ public class Clan implements KDR {
         this.lastActionDate = lastActionDate;
     }
 
+    /**
+     * Sets the leader of this clan
+     *
+     * @param clanPlayer The player to set
+     * @return Weather it was successfully
+     */
     public boolean setLeader(ClanPlayer clanPlayer)
     {
         if (clanPlayer.getClanId() != id) {
@@ -393,6 +411,12 @@ public class Clan implements KDR {
         return true;
     }
 
+    /**
+     * Demotes a leader to a normal player
+     *
+     * @param clanPlayer The player to demote
+     * @return Weather it was successfully
+     */
     public boolean demote(ClanPlayer clanPlayer)
     {
 
@@ -448,6 +472,11 @@ public class Clan implements KDR {
         return allMembers.contains(cp);
     }
 
+    /**
+     * Gets all the members excluded the leader
+     *
+     * @return A Set of the members
+     */
     public Set<ClanPlayer> getMembers()
     {
         Set<ClanPlayer> allMembers = new HashSet<ClanPlayer>();
@@ -459,15 +488,24 @@ public class Clan implements KDR {
             }
         }
 
-        return allMembers;
+        return Collections.unmodifiableSet(allMembers);
     }
 
+    /**
+     * Returns all members including the leader
+     *
+     * @return A set of all members of this clan
+     */
     public Set<ClanPlayer> getAllMembers()
     {
         return allMembers;
     }
 
-
+    /**
+     * Returns a set of all leaders
+     *
+     * @return A Set of all leaders
+     */
     public Set<ClanPlayer> getLeaders()
     {
         Set<ClanPlayer> leaders = new HashSet<ClanPlayer>();
@@ -479,9 +517,14 @@ public class Clan implements KDR {
             }
         }
 
-        return leaders;
+        return Collections.unmodifiableSet(leaders);
     }
 
+    /**
+     * Adds a player as member to this clan
+     *
+     * @param clanPlayer The player
+     */
     public void addMember(ClanPlayer clanPlayer)
     {
         Clan previous = clanPlayer.getClan();
@@ -497,6 +540,11 @@ public class Clan implements KDR {
     }
 
 
+    /**
+     * Gets the total kdr of all members
+     *
+     * @return The total KDR
+     */
     public float getKDR()
     {
         double totalWeightedKills = 0;
@@ -514,11 +562,22 @@ public class Clan implements KDR {
         return ((float) totalWeightedKills) / ((float) totalDeaths);
     }
 
+    /**
+     * The size of this clan
+     *
+     * @return The total size of this clan
+     */
     public int getSize()
     {
         return getAllMembers().size();
     }
 
+    /**
+     * Adds a message to the bb
+     *
+     * @param announcer The announcer of this message
+     * @param msg       The message which should be posted
+     */
     public void addBBMessage(ClanPlayer announcer, String msg)
     {
         if (isVerified()) {
@@ -527,6 +586,13 @@ public class Clan implements KDR {
         }
     }
 
+
+    /**
+     * Adds a message to the bb
+     *
+     * @param announcer The announcer clan of this message
+     * @param msg       The message which should be posted
+     */
     public void addBBMessage(Clan announcer, String msg)
     {
         if (isVerified()) {
@@ -535,21 +601,45 @@ public class Clan implements KDR {
     }
 
 
-    public void announce(ClanPlayer clanPlayer, String message)
+    /**
+     * Announces a message to all clan members
+     *
+     * @param announcer The announcer of this message
+     * @param msg       The message which should be announced
+     */
+    public void announce(ClanPlayer announcer, String msg)
     {
-        announceRaw(GeneralHelper.parseColors(plugin.getSettingsManager().getClanPlayerAnnounce().replace("+player", clanPlayer.getName()).replace("+message", message)));
+        announceRaw(GeneralHelper.parseColors(plugin.getSettingsManager().getClanPlayerAnnounce().replace("+player", announcer.getName()).replace("+message", msg)));
     }
 
-    public void announce(Clan clan, String message)
+    /**
+     * Announces a message to all clan members
+     *
+     * @param announcer The announcer clan of this message
+     * @param msg       The message which should be announced
+     */
+    public void announce(Clan announcer, String msg)
     {
-        announceRaw(GeneralHelper.parseColors(plugin.getSettingsManager().getClanAnnounce().replace("+clan", clan.getTag()).replace("+message", message)));
+        announceRaw(GeneralHelper.parseColors(plugin.getSettingsManager().getClanAnnounce().replace("+clan", announcer.getTag()).replace("+message", msg)));
     }
 
-    public void announce(String message)
+    /**
+     * Announces a message to all clan members
+     *
+     * @param msg The message which should be announced
+     */
+    public void announce(String msg)
     {
-        announceRaw(GeneralHelper.parseColors(plugin.getSettingsManager().getDefaultAnnounce().replace("+message", message)));
+        announceRaw(GeneralHelper.parseColors(plugin.getSettingsManager().getDefaultAnnounce().replace("+message", msg)));
     }
 
+    /**
+     * announces a message to all clan players raw
+     *
+     * <p><strong>Internally used!</strong></p>
+     *
+     * @param message The message
+     */
     private void announceRaw(String message)
     {
         if (message == null) {
@@ -565,6 +655,11 @@ public class Clan implements KDR {
         }
     }
 
+    /**
+     * Gets a clean comparable tag of this clan
+     *
+     * @return The clean tag
+     */
     public String getCleanTag()
     {
         return ChatColor.stripColor(tag.toLowerCase());
@@ -597,15 +692,22 @@ public class Clan implements KDR {
     }
 
     @Override
-    public boolean equals(Object obj)
+    public boolean equals(Object o)
     {
-        return obj instanceof Clan && ((Clan) obj).getId() == id;
+        if (this == o) return true;
+        if (o == null || !(o instanceof Clan)) return false;
+
+        Clan clan = (Clan) o;
+
+        if (id != clan.id) return false;
+
+        return true;
     }
 
     @Override
     public int hashCode()
     {
-        return (int) id;
+        return (int) (id ^ (id >>> 32));
     }
 
     public void addRival(Clan rival)
@@ -824,5 +926,91 @@ public class Clan implements KDR {
         }
 
         return new int[]{totalDeaths, totalRivalKills, totalCivilianKills, totalCivilianKills, totalNeutralKills};
+    }
+
+    public void addRank(Rank rank)
+    {
+        if (rank == null) {
+            return;
+        }
+
+        ranks.add(rank);
+    }
+
+    public Set<Rank> getRanks()
+    {
+        return Collections.unmodifiableSet(ranks);
+    }
+
+    public boolean removeRank(String query)
+    {
+        for (ClanPlayer clanPlayer : allMembers) {
+            Rank rank = clanPlayer.getRank();
+
+            if (rank == null) {
+                continue;
+            }
+
+            if (rank.getName().equals(query)) {
+                clanPlayer.setRank(null);
+            }
+        }
+
+        Iterator<Rank> rankIterator = ranks.iterator();
+
+        while (rankIterator.hasNext()) {
+            Rank currentRank = rankIterator.next();
+            if (currentRank.getName().equals(query)) {
+                plugin.getDataManager().deleteRank(currentRank.getId());
+                rankIterator.remove();
+            }
+        }
+
+        return true;
+    }
+
+    public boolean removeRank(Rank query)
+    {
+        for (ClanPlayer clanPlayer : allMembers) {
+            Rank rank = clanPlayer.getRank();
+
+            if (rank == null) {
+                continue;
+            }
+
+            if (rank.equals(query)) {
+                clanPlayer.setRank(null);
+            }
+        }
+
+        return ranks.remove(query);
+    }
+
+    public void setRanks(Set<Rank> ranks)
+    {
+        this.ranks = ranks;
+    }
+
+    public Rank getRank(long id)
+    {
+        for (Rank rank : ranks) {
+            if (rank.getId() == id) {
+                return rank;
+            }
+        }
+
+        return null;
+    }
+
+    public Rank getRank(String query)
+    {
+        String cleanQuery = query.toLowerCase();
+        for (Rank rank : ranks) {
+            if (rank.getName().toLowerCase().startsWith(cleanQuery)) {
+                return rank;
+            }
+        }
+
+        return null;
     }
 }

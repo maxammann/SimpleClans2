@@ -55,7 +55,7 @@ public class AbstainCommand extends GenericPlayerCommand {
         Request request = plugin.getRequestManager().vote(clanPlayer, VoteResult.ABSTAINED);
 
         if (request != null) {
-            request.announceMessage(Language.getTranslationMessage("voted.to.abstain", player.getDisplayName()));
+            request.announceMessage(Language.getTranslation("voted.to.abstain", player.getDisplayName()));
         } else {
             player.sendMessage(Language.getTranslation("nothing.to.abstain"));
         }

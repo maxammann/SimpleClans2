@@ -55,7 +55,7 @@ public class AcceptCommand extends GenericPlayerCommand {
         Request request = plugin.getRequestManager().vote(clanPlayer, VoteResult.ACCEPT);
 
         if (request != null) {
-            request.announceMessage(Language.getTranslationMessage("voted.to.accept", player.getDisplayName()));
+            request.announceMessage(Language.getTranslation("voted.to.accept", player.getDisplayName()));
         } else {
             player.sendMessage(Language.getTranslation("nothing.to.accept"));
         }

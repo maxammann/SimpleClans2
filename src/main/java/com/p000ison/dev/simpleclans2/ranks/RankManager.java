@@ -22,9 +22,6 @@ package com.p000ison.dev.simpleclans2.ranks;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
 
-import java.util.HashSet;
-import java.util.Set;
-
 /**
  * Represents a RankManager
  */
@@ -42,15 +39,13 @@ public class RankManager {
         Rank rank = new Rank(name, priority);
         plugin.getDataManager().insertRank(clan, rank);
 
-        rank.setId(getRankId(name));
+        rank.setId(getRankId(name, clan));
 
         return rank;
     }
 
-    private long getRankId(String name)
+    private long getRankId(String name, Clan clan)
     {
-        return plugin.getDataManager().retrieveRankId(name);
+        return plugin.getDataManager().retrieveRankId(name, clan);
     }
-
-
 }

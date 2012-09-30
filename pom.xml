@@ -189,7 +189,7 @@
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
-            <version>1.3.2-R0.2-SNAPSHOT</version>
+            <version>1.3.1-R2.0</version>
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
@@ -197,7 +197,7 @@
             <groupId>net.milkbowl.vault</groupId>
             <artifactId>Vault</artifactId>
             <type>jar</type>
-            <version>1.2.16-SNAPSHOT</version>
+            <version>1.2.18-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.getspout</groupId>

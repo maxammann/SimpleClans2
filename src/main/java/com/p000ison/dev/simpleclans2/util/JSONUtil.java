@@ -21,7 +21,6 @@
 package com.p000ison.dev.simpleclans2.util;
 
 import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
 import java.util.*;
@@ -35,105 +34,77 @@ public class JSONUtil {
     {
     }
 
-    ;
-
-    public static String collectionToJSON(String key, Collection collection)
+    @SuppressWarnings("unchecked")
+    public static String collectionToJSON(Collection collection)
     {
-        JSONObject json = new JSONObject();
         JSONArray array = new JSONArray();
 
         array.addAll(collection);
-        json.put(key, array);
 
-        return json.toJSONString();
+        return array.toJSONString();
     }
 
-
-    public static List<String> JSONToStringList(String json, String key)
+    public static List<String> JSONToStringList(String json)
     {
         if (json == null || json.isEmpty()) {
             return null;
         }
 
-        JSONObject parser = (JSONObject) JSONValue.parse(json);
+        JSONArray parser = (JSONArray) JSONValue.parse(json);
 
         if (parser == null) {
             return null;
         }
 
-        Object array = parser.get(key);
+        List<String> list = new ArrayList<String>();
 
-        if (!(array instanceof JSONArray)) {
-            return null;
+        for (Object obj : parser) {
+            list.add(obj.toString());
         }
 
-        JSONArray listArray = ((JSONArray) array);
-
-        List<String> out = new ArrayList<String>(listArray.size());
-
-        for (Object obj : listArray) {
-            out.add(obj.toString());
-        }
-
-        return out;
+        return list;
     }
 
-    public static Set<String> JSONToStringSet(String json, String key)
+    public static Set<String> JSONToStringSet(String json)
     {
         if (json == null || json.isEmpty()) {
             return null;
         }
 
-        JSONObject parser = (JSONObject) JSONValue.parse(json);
+        JSONArray parser = (JSONArray) JSONValue.parse(json);
 
         if (parser == null) {
             return null;
         }
 
-        Object array = parser.get(key);
+        Set<String> set = new HashSet<String>();
 
-        if (!(array instanceof JSONArray)) {
-            return null;
+        for (Object obj : parser) {
+            set.add(obj.toString());
         }
 
-        JSONArray listArray = ((JSONArray) array);
-
-        Set<String> out = new HashSet<String>(listArray.size());
-
-        for (Object obj : listArray) {
-            out.add(obj.toString());
-        }
-
-        return out;
+        return set;
     }
 
-    public static List<Long> JSONToLongList(String json, String key)
+    public static List<Long> JSONToLongList(String json)
     {
         if (json == null || json.isEmpty()) {
             return null;
         }
 
-        JSONObject parser = (JSONObject) JSONValue.parse(json);
+        JSONArray parser = (JSONArray) JSONValue.parse(json);
 
         if (parser == null) {
             return null;
         }
 
-        Object array = parser.get(key);
+        List<Long> list = new ArrayList<Long>();
 
-        if (!(array instanceof JSONArray)) {
-            return null;
+        for (Object obj : parser) {
+            list.add((Long) obj);
         }
 
-        JSONArray listArray = ((JSONArray) array);
-
-        List<Long> out = new ArrayList<Long>(listArray.size());
-
-        for (Object obj : listArray) {
-            out.add((Long) obj);
-        }
-
-        return out;
+        return list;
     }
 
     public static Set<Long> JSONToLongSet(String json, String key)
@@ -142,26 +113,18 @@ public class JSONUtil {
             return null;
         }
 
-        JSONObject parser = (JSONObject) JSONValue.parse(json);
+        JSONArray parser = (JSONArray) JSONValue.parse(json);
 
         if (parser == null) {
             return null;
         }
 
-        Object array = parser.get(key);
+        Set<Long> set = new HashSet<Long>();
 
-        if (!(array instanceof JSONArray)) {
-            return null;
+        for (Object obj : parser) {
+            set.add((Long) obj);
         }
 
-        JSONArray listArray = ((JSONArray) array);
-
-        Set<Long> out = new HashSet<Long>(listArray.size());
-
-        for (Object obj : listArray) {
-            out.add((Long) obj);
-        }
-
-        return out;
+        return set;
     }
 }

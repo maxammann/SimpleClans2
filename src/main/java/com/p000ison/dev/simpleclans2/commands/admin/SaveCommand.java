@@ -35,7 +35,7 @@ public class SaveCommand extends GenericConsoleCommand {
         super("Save", plugin);
         setArgumentRange(0, 0);
         setUsages(MessageFormat.format(Language.getTranslation("usage.save"), plugin.getSettingsManager().getClanCommand()));
-        setIdentifiers(Language.getTranslation("save.command"));
+        setIdentifiers(Language.getTranslation("command.save"));
         setPermission("simpleclans.admin.save");
     }
 

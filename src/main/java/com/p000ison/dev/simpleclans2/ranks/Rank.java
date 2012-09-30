@@ -62,6 +62,14 @@ public class Rank {
         this.priority = priority;
     }
 
+    public Rank(long id, String name, int priority, long clanId, Set<String> permissions)
+    {
+        this(name, priority);
+        this.clanId = clanId;
+        this.permissions = permissions;
+        this.id = id;
+    }
+
     public String getName()
     {
         return name;
@@ -199,5 +207,24 @@ public class Rank {
 
         return finalPages;
 
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Rank rank = (Rank) o;
+
+        if (id != rank.id) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return (int) (id ^ (id >>> 32));
     }
 }

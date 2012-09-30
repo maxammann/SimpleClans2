@@ -55,7 +55,7 @@ public class DenyCommand extends GenericPlayerCommand {
         Request request = plugin.getRequestManager().vote(clanPlayer, VoteResult.DENY);
 
         if (request != null) {
-            request.announceMessage(Language.getTranslationMessage("voted.to.deny", player.getDisplayName()));
+            request.announceMessage(Language.getTranslation("voted.to.deny", player.getDisplayName()));
         } else {
             player.sendMessage(Language.getTranslation("nothing.to.deny"));
         }

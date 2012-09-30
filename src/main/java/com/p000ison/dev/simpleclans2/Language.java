@@ -26,6 +26,7 @@ import org.bukkit.ChatColor;
 
 import java.text.MessageFormat;
 import java.util.Locale;
+import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 
@@ -59,27 +60,23 @@ public class Language {
         }
     }
 
-    public static String getTranslation(String key)
+    public static String getTranslation(String key, Object... args)
     {
-        if (!bundle.containsKey(key)) {
+        try {
+            String lang = bundle.getString(key);
+            return GeneralHelper.parseColors(args.length > 0 ? MessageFormat.format(lang, args) : lang);
+        } catch (MissingResourceException e) {
             Logging.debug(ChatColor.RED + "The language for the key %s was not found!", Level.WARNING, key);
 
-            if (defaultBundle.containsKey(key)) {
+            try {
+                String lang = defaultBundle.getString(key);
+                return GeneralHelper.parseColors(args.length > 0 ? MessageFormat.format(lang, args) : lang);
+            } catch (MissingResourceException ex) {
                 Logging.debug(ChatColor.RED + "The language for the key %s was not found in the default bundle!", Level.WARNING, key);
-                return GeneralHelper.parseColors(defaultBundle.getString(key));
+                //We return a error string because we do not want NPEs!
+                return "Error!";
             }
-
-            //We return a error string because we do not want NPEs!
-            return "Error!";
         }
-
-        return GeneralHelper.parseColors(bundle.getString(key));
-    }
-
-    public static String getTranslationMessage(String key, Object... args)
-    {
-        String translation = getTranslation(key);
-        return translation == null ? "Error!" : MessageFormat.format(key, args);
     }
 
     public static void clear()
