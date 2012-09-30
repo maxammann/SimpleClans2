@@ -218,6 +218,7 @@ public class DataManager {
 
     public void updateClan(Clan clan)
     {
+
         try {
             UPDATE_CLAN.setString(1, clan.getTag());
             UPDATE_CLAN.setString(2, clan.getName());
