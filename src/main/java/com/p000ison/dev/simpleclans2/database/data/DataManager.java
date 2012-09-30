@@ -123,6 +123,7 @@ public class DataManager {
             UPDATE_CLANPLAYER.setLong(13, clanPlayer.getId());
 
             UPDATE_CLANPLAYER.executeUpdate();
+            UPDATE_CLANPLAYER.close();
         } catch (SQLException e) {
             Logging.debug(e, "Failed to update player %s.", clanPlayer.getName());
         }
@@ -148,6 +149,7 @@ public class DataManager {
         try {
             DELETE_CLANPLAYER.setLong(1, id);
             DELETE_CLANPLAYER.executeUpdate();
+            DELETE_CLANPLAYER.close();
         } catch (SQLException e) {
             Logging.debug("Failed to delete clan player %s.", Level.SEVERE, id);
         }
@@ -171,6 +173,7 @@ public class DataManager {
             }
 
             INSERT_CLANPLAYER.executeUpdate();
+            INSERT_CLANPLAYER.close();
         } catch (SQLException e) {
             Logging.debug(e, "Failed to insert clan player %s.", clanPlayer);
         }
@@ -187,7 +190,10 @@ public class DataManager {
                 return -1;
             }
 
-            return result.getLong("id");
+            long id = result.getLong("id");
+            RETRIEVE_CLANPLAYER_BY_NAME.close();
+
+            return id;
 
         } catch (SQLException e) {
             Logging.debug(e, "Failed at retrieving clan player id!");
@@ -208,7 +214,10 @@ public class DataManager {
             INSERT_CLAN.setBoolean(3, clan.isVerified());
             INSERT_CLAN.setTimestamp(4, new Timestamp(System.currentTimeMillis()));
 
-            return INSERT_CLAN.executeUpdate() != 0;
+            int state = INSERT_CLAN.executeUpdate();
+            INSERT_CLAN.close();
+
+            return state != 0;
         } catch (SQLException e) {
             Logging.debug(e, "Failed to insert clan %s.", clan);
         }
@@ -218,7 +227,6 @@ public class DataManager {
 
     public void updateClan(Clan clan)
     {
-
         try {
             UPDATE_CLAN.setString(1, clan.getTag());
             UPDATE_CLAN.setString(2, clan.getName());
@@ -258,6 +266,7 @@ public class DataManager {
             UPDATE_CLAN.setLong(10, clan.getId());
 
             UPDATE_CLAN.executeUpdate();
+            UPDATE_CLAN.close();
         } catch (SQLException e) {
             Logging.debug(e, "Failed to update clan %s.", clan);
         }
@@ -271,12 +280,16 @@ public class DataManager {
             RETRIEVE_CLAN_BY_TAG.setString(1, tag);
             ResultSet result = RETRIEVE_CLAN_BY_TAG.executeQuery();
 
+
             if (!result.next()) {
                 return -1;
             }
 
-            return result.getLong("id");
+            long id = result.getLong("id");
 
+            RETRIEVE_CLAN_BY_TAG.close();
+
+            return id;
         } catch (SQLException e) {
             Logging.debug(e, "Failed at retrieving clan id!");
         }
@@ -289,6 +302,7 @@ public class DataManager {
         try {
             DELETE_CLAN.setLong(1, id);
             DELETE_CLAN.executeUpdate();
+            DELETE_CLAN.close();
         } catch (SQLException e) {
             Logging.debug("Failed to delete clan %s.", Level.SEVERE, id);
         }
@@ -524,7 +538,10 @@ public class DataManager {
             UPDATE_RANK.setString(3, JSONUtil.collectionToJSON(rank.getPermissions()));
             UPDATE_RANK.setInt(4, rank.getPriority());
 
-            return UPDATE_RANK.executeUpdate() != 0;
+            int state = UPDATE_RANK.executeUpdate();
+            UPDATE_RANK.close();
+
+            return state != 0;
         } catch (SQLException e) {
             Logging.debug(e, "Failed at inserting rank!");
         }
@@ -539,7 +556,10 @@ public class DataManager {
             INSERT_RANK.setInt(2, rank.getPriority());
             INSERT_RANK.setLong(3, clan.getId());
 
-            return INSERT_RANK.executeUpdate() != 0;
+            int state = INSERT_RANK.executeUpdate();
+            INSERT_RANK.close();
+
+            return state != 0;
         } catch (SQLException e) {
             Logging.debug(e, "Failed at inserting rank!");
         }
@@ -560,11 +580,16 @@ public class DataManager {
             RETRIEVE_RANK_BY_NAME.setLong(2, clan.getId());
             ResultSet result = RETRIEVE_RANK_BY_NAME.executeQuery();
 
+
             if (!result.next()) {
                 return -1;
             }
 
-            return result.getLong("id");
+            long id = result.getLong("id");
+
+            RETRIEVE_RANK_BY_NAME.close();
+
+            return id;
 
         } catch (SQLException e) {
             Logging.debug(e, "Failed at retrieving rank!");
@@ -586,6 +611,9 @@ public class DataManager {
 
             Rank rank = new Rank(rankId, result.getString("name"));
             rank.setPermissions(JSONUtil.JSONToStringSet(result.getString("permissions")));
+
+            RETRIEVE_RANK.close();
+
             return rank;
 
         } catch (SQLException e) {
@@ -609,6 +637,8 @@ public class DataManager {
                     out.put(victim, res.getInt("kills"));
                 }
             }
+
+            RETRIEVE_TOTAL_DEATHS_PER_PLAYER.close();
         } catch (SQLException e) {
             Logging.debug(e, "Failed at retrieving deaths!");
         }
