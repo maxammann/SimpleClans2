@@ -150,18 +150,28 @@ public class Rank {
     public boolean equals(Object o)
     {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == null || !(o instanceof Rank)) return false;
 
         Rank rank = (Rank) o;
 
-        if (id != rank.id) return false;
-
-        return true;
+        return id == rank.id;
     }
 
     @Override
     public int hashCode()
     {
         return (int) (id ^ (id >>> 32));
+    }
+
+    @Override
+    public String toString()
+    {
+        return "Rank{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", clanId=" + clanId +
+                ", permissions=" + permissions +
+                ", priority=" + priority +
+                '}';
     }
 }

@@ -41,4 +41,12 @@ public enum KillType {
     {
         return type;
     }
+
+    @Override
+    public String toString()
+    {
+        return "KillType{" +
+                "type=" + this.name().toLowerCase() +
+                '}';
+    }
 }

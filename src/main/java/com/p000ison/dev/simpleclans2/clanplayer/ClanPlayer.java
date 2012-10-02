@@ -386,4 +386,24 @@ public class ClanPlayer implements KDR {
 
         }
     }
+
+    @Override
+    public String toString()
+    {
+        return "ClanPlayer{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", clan=" + clan.getTag() +
+                ", leader=" + leader +
+                ", update=" + update +
+                ", rank=" + rank +
+                ", deaths=" + deaths +
+                ", civilianKills=" + civilianKills +
+                ", rivalKills=" + rivalKills +
+                ", neutralKills=" + neutralKills +
+                ", lastSeen=" + lastSeen +
+                ", trusted=" + trusted +
+                ", banned=" + banned +
+                '}';
+    }
 }

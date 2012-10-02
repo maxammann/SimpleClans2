@@ -1016,4 +1016,18 @@ public class Clan implements KDR {
 
         return null;
     }
+
+
+    @Override
+    public String toString()
+    {
+        return "Clan{" +
+                "id=" + id +
+                ", tag='" + tag + '\'' +
+                ", name='" + name + '\'' +
+                ", lastActionDate=" + lastActionDate +
+                ", verified=" + verified +
+                ", update=" + update +
+                '}';
+    }
 }

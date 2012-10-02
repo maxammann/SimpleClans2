@@ -22,6 +22,8 @@ package com.p000ison.dev.simpleclans2.commands;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import org.bukkit.permissions.Permissible;
 
+import java.util.Arrays;
+
 abstract class GenericCommand implements Command {
     private String name;
     private int minArgs;
@@ -145,5 +147,17 @@ abstract class GenericCommand implements Command {
     public int hashCode()
     {
         return name.hashCode();
+    }
+
+    @Override
+    public String toString()
+    {
+        return "GenericCommand{" +
+                "name='" + name + '\'' +
+                ", minArgs=" + minArgs +
+                ", permission='" + permission + '\'' +
+                ", identifiers=" + (identifiers == null ? null : Arrays.asList(identifiers)) +
+                ", maxArgs=" + maxArgs +
+                '}';
     }
 }
