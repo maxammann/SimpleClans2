@@ -21,7 +21,6 @@
 package com.p000ison.dev.simpleclans2.settings;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
-import com.p000ison.dev.simpleclans2.database.DatabaseConfiguration;
 import com.p000ison.dev.simpleclans2.util.ExceptionHelper;
 import com.p000ison.dev.simpleclans2.util.Logging;
 import org.bukkit.ChatColor;

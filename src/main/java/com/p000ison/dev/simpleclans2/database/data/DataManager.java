@@ -542,7 +542,7 @@ public class DataManager {
                 clanPlayers.add(clanPlayer);
             }
         } catch (SQLException e) {
-            Logging.debug(e, "Failed at retrieving clans!");
+            Logging.debug(e, "Failed at retrieving clan players!");
         }
 
         try {

@@ -17,7 +17,9 @@
  *     Created: 10/2/12 5:10 PM
  */
 
-package com.p000ison.dev.simpleclans2.database;
+package com.p000ison.dev.simpleclans2.settings;
+
+import com.p000ison.dev.simpleclans2.database.DatabaseMode;
 
 /**
  * Represents a DatabaseConfiguration

@@ -8,7 +8,7 @@ database:
     mode: 'mysql'
     host: 'localhost'
     port: 3306
-    username: ''
+    username: 'root'
     password: ''
     database: 'sc'
 teleportation:

@@ -19,6 +19,7 @@
 
 package com.p000ison.dev.simpleclans2.database;
 
+import com.p000ison.dev.simpleclans2.settings.DatabaseConfiguration;
 import com.p000ison.dev.simpleclans2.util.Logging;
 
 import java.sql.*;
@@ -116,9 +117,7 @@ public class MySQLDatabase implements Database {
     {
         try {
             Statement statement = getConnection().createStatement();
-            ResultSet result = statement.executeQuery(query);
-            statement.close();
-            return result;
+            return statement.executeQuery(query);
         } catch (SQLException e) {
             Logging.debug(e, "Error at SQL Query");
             Logging.debug("Query: " + query);
