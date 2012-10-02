@@ -38,7 +38,7 @@ public class LanguageMap extends HashMap<String, String> {
     private void load(File folder, String file, String language)
     {
         if (!language.equalsIgnoreCase("default")) {
-            String[] fullName = file.split(".");
+            String[] fullName = file.split("\\.");
 
             if (fullName.length != 2) {
                 Logging.debug(Level.SEVERE, "Invalid file name of the language file!");
@@ -48,7 +48,7 @@ public class LanguageMap extends HashMap<String, String> {
             String name = fullName[0];
             String extension = fullName[1];
 
-            file = name + language + extension;
+            file = name + '_' + language + '.' + extension;
         }
 
         File realFile = new File(folder, file);

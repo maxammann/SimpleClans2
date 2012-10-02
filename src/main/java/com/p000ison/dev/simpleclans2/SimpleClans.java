@@ -91,7 +91,7 @@ public class SimpleClans extends JavaPlugin implements Core {
             Logging.setInstance(getLogger());
 
             saveResource("languages/lang.properties", true);
-            Language.setInstance(new File(getDataFolder(), "languages"), "default");
+            Language.setInstance(new File(getDataFolder(), "languages"), "test");
 
             if (!setupEconomy()) {
                 Logging.debug(Level.SEVERE, "Economy features disabled due to no Economy dependency found!");
