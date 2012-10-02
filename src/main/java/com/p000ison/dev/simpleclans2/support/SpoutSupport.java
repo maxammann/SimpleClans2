@@ -52,7 +52,6 @@ public class SpoutSupport {
 
         enabled = true;
         Logging.debug("Hooked Spout version %s!", spout.getDescription().getVersion());
-        System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
         plugin.getServer().getPluginManager().registerEvents(new SCPlayerListener(plugin), plugin);
     }
 

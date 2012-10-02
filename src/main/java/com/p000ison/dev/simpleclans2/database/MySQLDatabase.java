@@ -28,19 +28,11 @@ import java.sql.*;
  */
 public class MySQLDatabase implements Database {
     private Connection connection;
-    private String host;
-    private String username;
-    private String password;
-    private String database;
+    private DatabaseConfiguration databaseConfiguration;
 
-
-    public MySQLDatabase(String host, String database, String username, String password)
+    public MySQLDatabase(DatabaseConfiguration databaseConfiguration)
     {
-        this.database = database;
-        this.host = host;
-        this.username = username;
-        this.password = password;
-
+        this.databaseConfiguration = databaseConfiguration;
         initialize();
     }
 
@@ -48,12 +40,17 @@ public class MySQLDatabase implements Database {
     {
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:mysql://" + host + "/" + database, username, password);
+            connection = DriverManager.getConnection("jdbc:mysql://" + databaseConfiguration.getHost() + ":" + databaseConfiguration.getPort() + "/" + databaseConfiguration.getDatabase(), databaseConfiguration.getUsername(), databaseConfiguration.getPassword());
         } catch (ClassNotFoundException e) {
             Logging.debug("ClassNotFoundException! " + e.getMessage());
         } catch (SQLException e) {
             Logging.debug("SQLException! " + e.getMessage());
         }
+    }
+
+    public void reconnect()
+    {
+        initialize();
     }
 
     /**
@@ -118,7 +115,10 @@ public class MySQLDatabase implements Database {
     public ResultSet query(String query)
     {
         try {
-            return getConnection().createStatement().executeQuery(query);
+            Statement statement = getConnection().createStatement();
+            ResultSet result = statement.executeQuery(query);
+            statement.close();
+            return result;
         } catch (SQLException e) {
             Logging.debug(e, "Error at SQL Query");
             Logging.debug("Query: " + query);
@@ -137,7 +137,10 @@ public class MySQLDatabase implements Database {
     public boolean update(String query)
     {
         try {
-            return getConnection().createStatement().executeUpdate(query) == 0;
+            Statement statement = getConnection().createStatement();
+            boolean result = statement.executeUpdate(query) == 0;
+            statement.close();
+            return result;
         } catch (SQLException e) {
             Logging.debug(e, "Error at SQL UPDATE Query");
             Logging.debug("Query: " + query);
@@ -156,8 +159,10 @@ public class MySQLDatabase implements Database {
     public boolean execute(String query)
     {
         try {
-            getConnection().createStatement().execute(query);
-            return true;
+            Statement statement = getConnection().createStatement();
+            boolean result = statement.execute(query);
+            statement.close();
+            return result;
         } catch (SQLException e) {
             Logging.debug(e, "Error at SQL EXECUTE Query");
             Logging.debug("Query: " + query);

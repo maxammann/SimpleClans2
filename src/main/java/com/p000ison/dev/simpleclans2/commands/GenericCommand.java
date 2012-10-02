@@ -58,6 +58,10 @@ abstract class GenericCommand implements Command {
     @Override
     public boolean isIdentifier(String cmd)
     {
+        if (cmd == null) {
+            return false;
+        }
+
         for (String identifier : identifiers) {
             if (cmd.equalsIgnoreCase(identifier)) {
                 return true;

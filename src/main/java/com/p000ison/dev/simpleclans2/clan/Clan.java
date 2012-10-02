@@ -58,7 +58,7 @@ public class Clan implements KDR {
     /**
      * Creates a new clan
      *
-     * @param plugin
+     * @param plugin The plugin
      */
     public Clan(SimpleClans plugin)
     {
@@ -143,9 +143,9 @@ public class Clan implements KDR {
     /**
      * Sets the flags of this clan to a new object.
      *
-     * @param flag The flag to set
+     * @param flags The flag to set
      */
-    public void setFlags(ClanFlags flag)
+    public void setFlags(ClanFlags flags)
     {
         this.flags = flags;
     }
@@ -479,16 +479,15 @@ public class Clan implements KDR {
      */
     public Set<ClanPlayer> getMembers()
     {
-        Set<ClanPlayer> allMembers = new HashSet<ClanPlayer>();
-
+        Set<ClanPlayer> members = new HashSet<ClanPlayer>();
 
         for (ClanPlayer cp : allMembers) {
             if (cp.getClanId() == id && !cp.isLeader()) {
-                allMembers.add(cp);
+                members.add(cp);
             }
         }
 
-        return Collections.unmodifiableSet(allMembers);
+        return Collections.unmodifiableSet(members);
     }
 
     /**
@@ -694,14 +693,18 @@ public class Clan implements KDR {
     @Override
     public boolean equals(Object o)
     {
-        if (this == o) return true;
-        if (o == null || !(o instanceof Clan)) return false;
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || !(o instanceof Clan)) {
+            return false;
+        }
 
         Clan clan = (Clan) o;
 
-        if (id != clan.id) return false;
+        return id == clan.id;
 
-        return true;
     }
 
     @Override
@@ -869,7 +872,7 @@ public class Clan implements KDR {
     public boolean allLeadersOnline(ClanPlayer ignore)
     {
         for (ClanPlayer clanPlayer : getLeaders()) {
-            if (ignore == null && clanPlayer.equals(ignore)) {
+            if (ignore != null && clanPlayer.equals(ignore)) {
                 continue;
             }
 

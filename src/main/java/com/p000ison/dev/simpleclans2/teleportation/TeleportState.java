@@ -30,7 +30,6 @@ import org.bukkit.entity.Player;
  */
 public class TeleportState {
 
-    private SimpleClans plugin;
     private String playerName;
     private Location playerLocation;
     private Location destination;
@@ -40,7 +39,6 @@ public class TeleportState {
 
     public TeleportState(SimpleClans plugin, Player player, Location destination, String msg, int waiting)
     {
-        this.plugin = plugin;
         this.destination = destination;
         this.playerLocation = player.getLocation();
         this.playerName = player.getName();

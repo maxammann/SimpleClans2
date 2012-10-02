@@ -21,7 +21,6 @@
 package com.p000ison.dev.simpleclans2.commands;
 
 import com.p000ison.dev.simpleclans2.Language;
-import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.util.Logging;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -39,7 +38,7 @@ public class CommandManager {
 
     private Set<Command> commands;
 
-    public CommandManager(SimpleClans plugin)
+    public CommandManager()
     {
         commands = new HashSet<Command>();
     }
@@ -84,14 +83,16 @@ public class CommandManager {
 
         //Iterate through all arguments from the last to the first argument
         for (int argsIncluded = arguments.length; argsIncluded >= 0; argsIncluded--) {
-            String identifier = "";
+            StringBuilder identifierBuilder = new StringBuilder();
+            String identifier;
             //Build the identifier string
             for (int i = 0; i < argsIncluded; i++) {
-                identifier += " " + arguments[i];
+                identifierBuilder.append(" ").append(arguments[i]);
             }
 
             //trim the last ' '
-            identifier = identifier.trim();
+
+            identifier = identifierBuilder.toString().trim();
 
             Command helpCommand = null;
 

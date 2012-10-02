@@ -80,8 +80,6 @@ public class HomeCommand extends GenericPlayerCommand {
 
                         Location loc = clan.getFlags().getHomeLocation();
 
-                        System.out.println(loc.getYaw());
-
                         if (loc == null) {
                             player.sendMessage(ChatColor.RED + Language.getTranslation("hombase.not.set"));
                             return;

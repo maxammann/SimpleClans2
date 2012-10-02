@@ -42,7 +42,7 @@ public class DatabaseManager {
 
     private void init()
     {
-        database = new MySQLDatabase("localhost", "sc", "root", "");
+        database = new MySQLDatabase(plugin.getSettingsManager().getDatabaseConfiguration());
 
         if (!database.checkConnection()) {
             Logging.debug(Level.SEVERE, "Failed to connect to database2!");

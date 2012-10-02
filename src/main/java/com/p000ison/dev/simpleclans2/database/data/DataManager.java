@@ -293,6 +293,7 @@ public class DataManager {
         } catch (SQLException e) {
             Logging.debug(e, "Failed at retrieving clan id!");
         }
+
         return -1;
     }
 
@@ -302,9 +303,14 @@ public class DataManager {
         try {
             DELETE_CLAN.setLong(1, id);
             DELETE_CLAN.executeUpdate();
-            DELETE_CLAN.close();
         } catch (SQLException e) {
             Logging.debug("Failed to delete clan %s.", Level.SEVERE, id);
+        }
+
+        try {
+            DELETE_CLAN.close();
+        } catch (SQLException e) {
+            Logging.debug(e, "Failed at closing the prepared statement!");
         }
     }
 
@@ -389,6 +395,12 @@ public class DataManager {
             Logging.debug(e, "Failed at retrieving clans!");
         }
 
+        try {
+            result.close();
+        } catch (SQLException e) {
+            Logging.debug(e, "Failed at closing result!");
+        }
+
         plugin.getClanManager().importClans(clans);
         importAssociated(rivalsToAdd, alliesToAdd, warringToAdd);
     }
@@ -412,6 +424,12 @@ public class DataManager {
             }
         } catch (SQLException e) {
             Logging.debug(e, "Failed at retrieving ranks!");
+        }
+
+        try {
+            result.close();
+        } catch (SQLException e) {
+            Logging.debug(e, "Failed at closing result!");
         }
 
         return ranks;
@@ -527,6 +545,12 @@ public class DataManager {
             Logging.debug(e, "Failed at retrieving clans!");
         }
 
+        try {
+            result.close();
+        } catch (SQLException e) {
+            Logging.debug(e, "Failed at closing result!");
+        }
+
         plugin.getClanPlayerManager().importClanPlayers(clanPlayers);
     }
 
@@ -539,7 +563,12 @@ public class DataManager {
             UPDATE_RANK.setInt(4, rank.getPriority());
 
             int state = UPDATE_RANK.executeUpdate();
-            UPDATE_RANK.close();
+
+            try {
+                UPDATE_RANK.close();
+            } catch (SQLException e) {
+                Logging.debug(e, "Failed at closing the prepared statement!");
+            }
 
             return state != 0;
         } catch (SQLException e) {
@@ -557,7 +586,12 @@ public class DataManager {
             INSERT_RANK.setLong(3, clan.getId());
 
             int state = INSERT_RANK.executeUpdate();
-            INSERT_RANK.close();
+
+            try {
+                INSERT_RANK.close();
+            } catch (SQLException e) {
+                Logging.debug(e, "Failed at closing the prepared statement!");
+            }
 
             return state != 0;
         } catch (SQLException e) {
@@ -587,7 +621,11 @@ public class DataManager {
 
             long id = result.getLong("id");
 
-            RETRIEVE_RANK_BY_NAME.close();
+            try {
+                result.close();
+            } catch (SQLException e) {
+                Logging.debug(e, "Failed at closing result!");
+            }
 
             return id;
 
@@ -597,37 +635,39 @@ public class DataManager {
         return -1;
     }
 
-    private Rank retrieveRank(long rankId, long clanId)
-    {
-
-        try {
-            RETRIEVE_RANK.setLong(1, rankId);
-            RETRIEVE_RANK.setLong(2, clanId);
-            ResultSet result = RETRIEVE_RANK.executeQuery();
-
-            if (!result.next()) {
-                return null;
-            }
-
-            Rank rank = new Rank(rankId, result.getString("name"));
-            rank.setPermissions(JSONUtil.JSONToSet(result.getString("permissions"), new HashSet<Integer>()));
-
-            RETRIEVE_RANK.close();
-
-            return rank;
-
-        } catch (SQLException e) {
-            Logging.debug(e, "Failed at retrieving rank!");
-        }
-        return null;
-    }
+//    private Rank retrieveRank(long rankId, long clanId)
+//    {
+//
+//        try {
+//            RETRIEVE_RANK.setLong(1, rankId);
+//            RETRIEVE_RANK.setLong(2, clanId);
+//            ResultSet result = RETRIEVE_RANK.executeQuery();
+//
+//            if (!result.next()) {
+//                return null;
+//            }
+//
+//            Rank rank = new Rank(rankId, result.getString("name"));
+//            rank.setPermissions(JSONUtil.JSONToSet(result.getString("permissions"), new HashSet<Integer>()));
+//
+//            RETRIEVE_RANK.close();
+//
+//            return rank;
+//
+//        } catch (SQLException e) {
+//            Logging.debug(e, "Failed at retrieving rank!");
+//        }
+//        return null;
+//    }
 
     public Map<String, Integer> getTotalDeathsPerPlayer()
     {
         Map<String, Integer> out = new HashMap<String, Integer>();
 
+        ResultSet res = null;
+
         try {
-            ResultSet res = RETRIEVE_TOTAL_DEATHS_PER_PLAYER.executeQuery();
+            res = RETRIEVE_TOTAL_DEATHS_PER_PLAYER.executeQuery();
 
             if (res != null) {
 
@@ -637,10 +677,16 @@ public class DataManager {
                     out.put(victim, res.getInt("kills"));
                 }
             }
-
-            RETRIEVE_TOTAL_DEATHS_PER_PLAYER.close();
         } catch (SQLException e) {
             Logging.debug(e, "Failed at retrieving deaths!");
+        }
+
+        try {
+            if (res != null) {
+                res.close();
+            }
+        } catch (SQLException e) {
+            Logging.debug(e, "Failed at closing result!");
         }
 
         return out;

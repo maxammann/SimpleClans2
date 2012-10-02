@@ -1,9 +1,16 @@
 general:
     elements-per-page: 10
-    clan-command: clan
-    server-name: SimpleClans
+    clan-command: 'clan'
+    server-name: 'SimpleClans'
     global-ff: false
     auto-save: 5
+database:
+    mode: 'mysql'
+    host: 'localhost'
+    port: 3306
+    username: ''
+    password: ''
+    database: 'sc'
 teleportation:
     drop-items-on-teleport: false
     drop-all-items-on-teleport: false

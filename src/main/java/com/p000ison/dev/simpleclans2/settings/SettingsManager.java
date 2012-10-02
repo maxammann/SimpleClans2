@@ -21,6 +21,7 @@
 package com.p000ison.dev.simpleclans2.settings;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
+import com.p000ison.dev.simpleclans2.database.DatabaseConfiguration;
 import com.p000ison.dev.simpleclans2.util.ExceptionHelper;
 import com.p000ison.dev.simpleclans2.util.Logging;
 import org.bukkit.ChatColor;
@@ -39,6 +40,8 @@ import java.util.logging.Level;
 public class SettingsManager {
     private SimpleClans plugin;
     private FileConfiguration config;
+
+    private DatabaseConfiguration databaseConfiguration;
 
     private boolean dropAll, drop;
     private Set<Integer> keepOnTeleport = new HashSet<Integer>();
@@ -109,6 +112,15 @@ public class SettingsManager {
             serverName = general.getString("server-name");
             globalFF = general.getBoolean("global-ff");
             autoSave = general.getInt("auto-save");
+
+            ConfigurationSection databaseSection = config.getConfigurationSection("database");
+            databaseConfiguration = new DatabaseConfiguration();
+            databaseConfiguration.setHost(databaseSection.getString("host"));
+            databaseConfiguration.setUsername(databaseSection.getString("username"));
+            databaseConfiguration.setPassword(databaseSection.getString("password"));
+            databaseConfiguration.setDatabase(databaseSection.getString("database"));
+            databaseConfiguration.setMode(databaseSection.getString("mode"));
+            databaseConfiguration.setPort(databaseSection.getInt("port"));
 
             ConfigurationSection teleportation = config.getConfigurationSection("teleportation");
 
@@ -221,7 +233,7 @@ public class SettingsManager {
                 if (material != null) {
                     keepOnTeleport.add(material.getId());
                 } else {
-                    Logging.debug("The item or id: %s was not found!", Level.WARNING, material);
+                    Logging.debug("The item or id: %s was not found!", Level.WARNING, materialRaw);
                 }
             }
 
@@ -251,6 +263,11 @@ public class SettingsManager {
         plugin.reloadConfig();
         config = plugin.getConfig();
         load();
+    }
+
+    public DatabaseConfiguration getDatabaseConfiguration()
+    {
+        return databaseConfiguration;
     }
 
     public boolean dropItemOnTeleport(Material mat)

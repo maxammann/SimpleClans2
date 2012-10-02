@@ -85,22 +85,28 @@ public class SimpleClans extends JavaPlugin implements Core {
     {
         long startup = System.currentTimeMillis();
 
-        Logging.setInstance(getLogger());
-        Language.setInstance("en_EN");
+        try {
+            Logging.setInstance(getLogger());
+            Language.setInstance("en_EN");
 
-        if (!setupEconomy()) {
-            Logging.debug(Level.SEVERE, "Economy features disabled due to no Economy dependency found!");
-        } else {
-            Logging.debug("Hooked economy system: %s!", economy.getName());
+            if (!setupEconomy()) {
+                Logging.debug(Level.SEVERE, "Economy features disabled due to no Economy dependency found!");
+            } else {
+                Logging.debug("Hooked economy system: %s!", economy.getName());
+            }
+
+            Logging.debug("Loading managers...");
+            loadManagers();
+            Logging.debug("Loading the managers finished!");
+
+            registerEvents();
+
+            Announcer.setPlugin(this);
+        } catch (Exception e) {
+            Logging.debug(e, "Failed at loading SimpleClans! Disabling...");
+            getServer().getPluginManager().disablePlugin(this);
+            return;
         }
-
-        Logging.debug("Loading managers...");
-        loadManagers();
-        Logging.debug("Loading the managers finished!");
-
-        registerEvents();
-
-        Announcer.setPlugin(this);
 
         long finish = System.currentTimeMillis();
 
@@ -159,7 +165,7 @@ public class SimpleClans extends JavaPlugin implements Core {
         rankManager = new RankManager(this);
         spoutSupport = new SpoutSupport(this);
         preciousStonesSupport = new PreciousStonesSupport();
-        commandManager = new CommandManager(this);
+        commandManager = new CommandManager();
         setupCommands();
     }
 
