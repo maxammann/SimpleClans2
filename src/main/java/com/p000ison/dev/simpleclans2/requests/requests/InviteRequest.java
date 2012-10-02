@@ -19,7 +19,7 @@
 
 package com.p000ison.dev.simpleclans2.requests.requests;
 
-import com.p000ison.dev.simpleclans2.Language;
+import com.p000ison.dev.simpleclans2.language.Language;
 import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.requests.SingleAcceptorRequest;

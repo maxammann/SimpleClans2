@@ -21,7 +21,7 @@
 package com.p000ison.dev.simpleclans2.clan;
 
 import com.p000ison.dev.simpleclans2.KDR;
-import com.p000ison.dev.simpleclans2.Language;
+import com.p000ison.dev.simpleclans2.language.Language;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.ranks.Rank;

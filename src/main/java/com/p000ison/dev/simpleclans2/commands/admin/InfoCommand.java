@@ -19,7 +19,7 @@
 
 package com.p000ison.dev.simpleclans2.commands.admin;
 
-import com.p000ison.dev.simpleclans2.Language;
+import com.p000ison.dev.simpleclans2.language.Language;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.commands.GenericConsoleCommand;
 import org.bukkit.command.CommandSender;
@@ -67,5 +67,7 @@ public class InfoCommand extends GenericConsoleCommand {
             sender.sendMessage("ID: " + task.getTaskId());
             sender.sendMessage("Sync: " + task.isSync());
         }
+
+        System.out.println(Language.getTranslation("usage.list"));
     }
 }

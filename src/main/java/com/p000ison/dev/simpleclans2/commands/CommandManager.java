@@ -20,7 +20,7 @@
 
 package com.p000ison.dev.simpleclans2.commands;
 
-import com.p000ison.dev.simpleclans2.Language;
+import com.p000ison.dev.simpleclans2.language.Language;
 import com.p000ison.dev.simpleclans2.util.Logging;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;

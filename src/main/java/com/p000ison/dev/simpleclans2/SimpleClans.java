@@ -44,6 +44,7 @@ import com.p000ison.dev.simpleclans2.commands.voting.DenyCommand;
 import com.p000ison.dev.simpleclans2.database.Database;
 import com.p000ison.dev.simpleclans2.database.DatabaseManager;
 import com.p000ison.dev.simpleclans2.database.data.DataManager;
+import com.p000ison.dev.simpleclans2.language.Language;
 import com.p000ison.dev.simpleclans2.listeners.SCEntityListener;
 import com.p000ison.dev.simpleclans2.listeners.SCPlayerListener;
 import com.p000ison.dev.simpleclans2.ranks.RankManager;
@@ -59,6 +60,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
 import java.util.logging.Level;
 
 /**
@@ -87,7 +89,9 @@ public class SimpleClans extends JavaPlugin implements Core {
 
         try {
             Logging.setInstance(getLogger());
-            Language.setInstance("en_EN");
+
+            saveResource("languages/lang.properties", true);
+            Language.setInstance(new File(getDataFolder(), "languages"), "default");
 
             if (!setupEconomy()) {
                 Logging.debug(Level.SEVERE, "Economy features disabled due to no Economy dependency found!");

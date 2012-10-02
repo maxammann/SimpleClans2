@@ -87,11 +87,13 @@ public class SCPlayerListener implements Listener {
         Player player = event.getPlayer();
         String message = event.getMessage();
 
-        String[] args = message.split(" ");
+        String[] args = message.substring(1).split(" ");
         int lenght = args.length;
 
         String clanCommand = plugin.getSettingsManager().getClanCommand();
 
+
+        System.out.println(args[0]);
         if (args[0].equalsIgnoreCase(clanCommand)) {
             plugin.getCommandManager().execute(player, clanCommand, Arrays.copyOfRange(args, 1, lenght));
             event.setCancelled(true);

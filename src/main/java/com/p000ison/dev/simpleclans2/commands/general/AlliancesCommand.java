@@ -19,7 +19,7 @@
 
 package com.p000ison.dev.simpleclans2.commands.general;
 
-import com.p000ison.dev.simpleclans2.Language;
+import com.p000ison.dev.simpleclans2.language.Language;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.commands.GenericConsoleCommand;

@@ -20,7 +20,7 @@
 
 package com.p000ison.dev.simpleclans2.teleportation;
 
-import com.p000ison.dev.simpleclans2.Language;
+import com.p000ison.dev.simpleclans2.language.Language;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
