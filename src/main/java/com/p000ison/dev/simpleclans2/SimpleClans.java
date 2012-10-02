@@ -32,18 +32,19 @@ import com.p000ison.dev.simpleclans2.commands.clan.bb.BBCommand;
 import com.p000ison.dev.simpleclans2.commands.clan.home.HomeCommand;
 import com.p000ison.dev.simpleclans2.commands.clan.home.HomeRegroupCommand;
 import com.p000ison.dev.simpleclans2.commands.clan.home.HomeSetCommand;
+import com.p000ison.dev.simpleclans2.commands.clan.rank.RankCreateCommand;
 import com.p000ison.dev.simpleclans2.commands.clan.rank.RankSetCommand;
 import com.p000ison.dev.simpleclans2.commands.general.AlliancesCommand;
 import com.p000ison.dev.simpleclans2.commands.general.HelpCommand;
 import com.p000ison.dev.simpleclans2.commands.general.LeaderboardCommand;
 import com.p000ison.dev.simpleclans2.commands.general.ListCommand;
-import com.p000ison.dev.simpleclans2.commands.clan.rank.RankCreateCommand;
 import com.p000ison.dev.simpleclans2.commands.voting.AbstainCommand;
 import com.p000ison.dev.simpleclans2.commands.voting.AcceptCommand;
 import com.p000ison.dev.simpleclans2.commands.voting.DenyCommand;
-import com.p000ison.dev.simpleclans2.database.data.DataManager;
 import com.p000ison.dev.simpleclans2.database.Database;
 import com.p000ison.dev.simpleclans2.database.DatabaseManager;
+import com.p000ison.dev.simpleclans2.database.data.DataManager;
+import com.p000ison.dev.simpleclans2.listeners.SCEntityListener;
 import com.p000ison.dev.simpleclans2.listeners.SCPlayerListener;
 import com.p000ison.dev.simpleclans2.ranks.RankManager;
 import com.p000ison.dev.simpleclans2.requests.RequestManager;
@@ -110,7 +111,9 @@ public class SimpleClans extends JavaPlugin implements Core {
     @Override
     public void onDisable()
     {
+        //save data
         dataManager.getQueue().run();
+        //close the connection to the database
         databaseManager.getDatabase().close();
 
         economy = null;
@@ -124,6 +127,7 @@ public class SimpleClans extends JavaPlugin implements Core {
         PluginManager pm = getServer().getPluginManager();
 
         pm.registerEvents(new SCPlayerListener(this), this);
+        pm.registerEvents(new SCEntityListener(this), this);
     }
 
     private boolean setupEconomy()
@@ -155,13 +159,12 @@ public class SimpleClans extends JavaPlugin implements Core {
         rankManager = new RankManager(this);
         spoutSupport = new SpoutSupport(this);
         preciousStonesSupport = new PreciousStonesSupport();
+        commandManager = new CommandManager(this);
         setupCommands();
     }
 
     private void setupCommands()
     {
-        commandManager = new CommandManager(this);
-
         commandManager.addCommand(new ListCommand(this));
         commandManager.addCommand(new CreateCommand(this));
         commandManager.addCommand(new AlliancesCommand(this));
@@ -194,6 +197,7 @@ public class SimpleClans extends JavaPlugin implements Core {
         commandManager.addCommand(new VerifyCommand(this));
         commandManager.addCommand(new RankSetCommand(this));
         commandManager.addCommand(new SaveCommand(this));
+        commandManager.addCommand(new InfoCommand(this));
 
 //        commandManager.addCommand(new VerifyCommand(this));
 //        commandManager.addCommand(new LookupCommand(this));

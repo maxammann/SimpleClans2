@@ -76,6 +76,11 @@ public class SettingsManager {
 
     private boolean voteForDemote;
 
+    private boolean motdBBEnabled;
+    private int motdBBLines;
+    private String motdBBFormat;
+
+
     private ChatColor headingPageColor, subPageColor, clanColor, leaderColor, trustedColor, untrustedColor;
 
     public SettingsManager(SimpleClans plugin)
@@ -167,6 +172,12 @@ public class SettingsManager {
             clanPlayerAnnounce = clanAnnounceSection.getString("clanplayer");
             defaultAnnounce = clanBBSection.getString("default");
 
+
+            ConfigurationSection motd = clan.getConfigurationSection("motd");
+            motdBBEnabled = motd.getBoolean("bb");
+            motdBBLines = motd.getInt("lines");
+            motdBBFormat = motd.getString("format");
+
             ConfigurationSection voting = clan.getConfigurationSection("voting");
             voteForDemote = voting.getBoolean("demote");
 
@@ -240,9 +251,6 @@ public class SettingsManager {
         plugin.reloadConfig();
         config = plugin.getConfig();
         load();
-
-        System.out.println(config.getInt("clan.min-tag-lenght"));
-        System.out.println(minTagLenght);
     }
 
     public boolean dropItemOnTeleport(Material mat)
@@ -510,5 +518,20 @@ public class SettingsManager {
     public int getMinNameLenght()
     {
         return minNameLenght;
+    }
+
+    public boolean isMotdBBEnabled()
+    {
+        return motdBBEnabled;
+    }
+
+    public int getMotdBBLines()
+    {
+        return motdBBLines;
+    }
+
+    public String getMotdBBFormat()
+    {
+        return motdBBFormat;
     }
 }

@@ -64,7 +64,7 @@ public class SerializablePlayerVector extends SerializableVector {
         float yaw = Float.parseFloat(coords[4]);
         float pitch = Float.parseFloat(coords[5]);
 
-        return new SerializablePlayerVector(world, x, y, z, yaw, pitch );
+        return new SerializablePlayerVector(world, x, y, z, yaw, pitch);
     }
 
     public Location toLocation()

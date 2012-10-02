@@ -333,6 +333,11 @@ public class ClanPlayer implements KDR {
         return rank != null && getRank().hasPermission(permission);
     }
 
+    public boolean hasRankPermission(int id)
+    {
+        return rank != null && getRank().hasPermission(id);
+    }
+
     public void setRank(Rank rank)
     {
         this.rank = rank;
@@ -341,7 +346,6 @@ public class ClanPlayer implements KDR {
     public void update()
     {
         this.update = true;
-//        plugin.getDataManager().UPDATE_CLANPLAYER(this);
     }
 
     public boolean needsUpdate()

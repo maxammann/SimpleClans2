@@ -72,8 +72,7 @@ public class RequestManager {
         Iterator<Request> it = requests.iterator();
         while (it.hasNext()) {
             Request request = it.next();
-            System.out.println(request.getRequester().getName());
-            System.out.println(((SingleAcceptorRequest)request).getAcceptor().getName()); ;
+
             if (request.isAcceptor(acceptor)) {
 
                 if (result == VoteResult.ACCEPT) {
@@ -100,12 +99,10 @@ public class RequestManager {
                     }
                 }
 
-                System.out.println(2);
                 return request;
             }
         }
 
-        System.out.println(3);
         return null;
     }
 
@@ -118,17 +115,23 @@ public class RequestManager {
 
             if (request.getRequester().getName().equals(player)) {
                 it.remove();
+                //we cancel here because a player can be only once a requester of a acceptor
+                return;
             }
 
             if (request instanceof MultipleAcceptorsRequest) {
                 for (ClanPlayer clanPlayer : ((MultipleAcceptorsRequest) request).getAcceptors()) {
                     if (clanPlayer.getName().equals(player)) {
                         it.remove();
+                        //we cancel here because a player can be only once a requester of a acceptor
+                        return;
                     }
                 }
             } else {
                 if (((SingleAcceptorRequest) request).getAcceptor().getName().equals(player)) {
                     it.remove();
+                    //we cancel here because a player can be only once a requester of a acceptor
+                    return;
                 }
             }
         }

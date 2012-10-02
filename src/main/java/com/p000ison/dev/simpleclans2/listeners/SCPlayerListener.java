@@ -21,12 +21,19 @@
 package com.p000ison.dev.simpleclans2.listeners;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
+import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
+import com.p000ison.dev.simpleclans2.util.GeneralHelper;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Internally used
@@ -47,6 +54,49 @@ public class SCPlayerListener implements Listener {
         Player player = event.getPlayer();
 
         plugin.getRequestManager().clearRequests(player.getName());
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onPlayerLogin(PlayerLoginEvent event)
+    {
+        Player player = event.getPlayer();
+
+        ClanPlayer clanPlayer = plugin.getClanPlayerManager().getClanPlayer(player);
+
+        if (clanPlayer != null) {
+
+            if (plugin.getSettingsManager().isMotdBBEnabled()) {
+
+                System.out.println(clanPlayer.getClan());
+                List<String> bb = clanPlayer.getClan().getBB();
+
+                if (bb.size() > 0) {
+
+                    for (int i = 0; i < plugin.getSettingsManager().getMotdBBLines() && i < bb.size(); i++) {
+                        player.sendMessage(GeneralHelper.parseColors(plugin.getSettingsManager().getMotdBBFormat().replace("-bb", bb.get(i))));
+                    }
+                }
+            }
+        }
+    }
+
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onCommandPreprocess(PlayerCommandPreprocessEvent event)
+    {
+        Player player = event.getPlayer();
+        String message = event.getMessage();
+
+        String[] args = message.split(" ");
+        int lenght = args.length;
+
+        String clanCommand = plugin.getSettingsManager().getClanCommand();
+
+        if (args[0].equalsIgnoreCase(clanCommand)) {
+            plugin.getCommandManager().execute(player, clanCommand, Arrays.copyOfRange(args, 1, lenght));
+            event.setCancelled(true);
+//            return;
+        }
     }
 
     @EventHandler(priority = EventPriority.MONITOR)

@@ -19,9 +19,9 @@
 
 package com.p000ison.dev.simpleclans2.ranks;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -32,22 +32,22 @@ public class Rank {
 
     private String name;
     private long clanId;
-    private Set<String> permissions;
+    private Set<Integer> permissions = new HashSet<Integer>();
     private int priority;
 
-    private static final Set<String> availablePermissions = new HashSet<String>();
+    private static final Map<String, Integer> availablePermissions = new HashMap<String, Integer>();
 
     static {
-        availablePermissions.add("leader.demote");
-        availablePermissions.add("manage.bb");
-        availablePermissions.add("manage.ally");
-        availablePermissions.add("manage.clanff");
-        availablePermissions.add("manage.ranks");
+        availablePermissions.put("leader.demote", 0);
+        availablePermissions.put("manage.bb", 1);
+        availablePermissions.put("manage.ally", 2);
+        availablePermissions.put("manage.clanff", 3);
+        availablePermissions.put("manage.ranks", 4);
     }
 
-    public static void addAvailablePermission(String permission)
+    public static void addAvailablePermission(String permission, int id)
     {
-        availablePermissions.add(permission);
+        availablePermissions.put(permission, id);
     }
 
     public Rank(long id, String name)
@@ -62,7 +62,7 @@ public class Rank {
         this.priority = priority;
     }
 
-    public Rank(long id, String name, int priority, long clanId, Set<String> permissions)
+    public Rank(long id, String name, int priority, long clanId, Set<Integer> permissions)
     {
         this(name, priority);
         this.clanId = clanId;
@@ -70,27 +70,40 @@ public class Rank {
         this.id = id;
     }
 
+
+    public boolean hasPermission(int id)
+    {
+        return permissions.contains(id);
+    }
+
+    public boolean hasPermission(String permission)
+    {
+        return permissions.contains(availablePermissions.get(permission));
+    }
+
     public String getName()
     {
         return name;
     }
 
+    public void setPermissions(Set<Integer> permissions)
+    {
+        this.permissions = permissions;
+    }
+
     public String addPermission(String permission)
     {
         String lowerPerm = permission.toLowerCase();
-        for (String perm : availablePermissions) {
-            String loweriPerm = perm.toLowerCase();
-            if (loweriPerm.equals(lowerPerm) || loweriPerm.startsWith(lowerPerm)) {
-                permissions.add(perm);
-                return perm;
+        for (Map.Entry<String, Integer> perm : availablePermissions.entrySet()) {
+            String key = perm.getKey();
+            String cleanKey = key.toLowerCase();
+
+            if (cleanKey.startsWith(lowerPerm)) {
+                permissions.add(perm.getValue());
+                return key;
             }
         }
         return null;
-    }
-
-    public boolean hasPermission(String permission)
-    {
-        return permission.contains(permission);
     }
 
     public boolean isMorePowerful(Rank rank)
@@ -98,7 +111,7 @@ public class Rank {
         return priority > rank.getPriority();
     }
 
-    public Set<String> getPermissions()
+    public Set<Integer> getPermissions()
     {
         return permissions;
     }
@@ -118,11 +131,6 @@ public class Rank {
         this.clanId = clanId;
     }
 
-    public void setPermissions(Set<String> permissions)
-    {
-        this.permissions = permissions;
-    }
-
     public void setPriority(int priority)
     {
         this.priority = priority;
@@ -136,77 +144,6 @@ public class Rank {
     public void setId(long id)
     {
         this.id = id;
-    }
-
-    public static void main(String[] args)
-    {
-//        String text = "";
-//
-//        for (int i = 0; i < 500; i++) {
-//            for (int y = 0; y < 9; y++) {
-//                text += y;
-//                if (y % 9 == 0) {
-//                    text += "|";
-//                }
-//            }
-//        }
-//
-//        List<String> pages = split(text);
-//        pages.toArray(new String[pages.size()]);
-//
-//        for (String s : split(text)) {
-//            System.out.println(s);
-//            System.out.println();
-//        }
-    }
-
-    public static List<String> split(String text)
-    {
-        int MAX_CHARS = 256;
-        int MAX_LINES = 13;
-        int MAX_CHARS_PER_LINE = 18;
-
-        List<String> finalPages = new ArrayList<String>();
-        StringBuilder currentPage = new StringBuilder(text);
-
-        int breaks = 0;
-        int current = 0;
-        int currentLineNumber = 0;
-
-        while (true) {
-            current++;
-            if (current % MAX_CHARS_PER_LINE == 0) {
-                currentLineNumber++;
-                if (currentPage.length() > current) {
-                    currentPage.insert(current, "\n");
-                }
-                breaks++;
-            }
-
-            if (currentLineNumber >= MAX_LINES || currentLineNumber > MAX_CHARS) {
-                String newPage;
-                if (currentPage.length() > current + breaks) {
-                    newPage = currentPage.substring(0, current + breaks);
-                    currentPage = new StringBuilder(currentPage.substring(current + breaks));
-                } else {
-                    newPage = currentPage.substring(0);
-                    currentPage = null;
-                }
-
-                finalPages.add(newPage);
-                //reset
-                current = 0;
-                breaks = 0;
-                currentLineNumber = 0;
-            }
-
-            if (currentPage == null) {
-                break;
-            }
-        }
-
-        return finalPages;
-
     }
 
     @Override

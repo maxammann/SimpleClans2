@@ -39,7 +39,6 @@ public class AutoSaver extends LinkedList<Executable> implements Queue<Executabl
     {
         this.plugin = simpleClans;
         this.dataManager = dataManager;
-        System.out.println(dataManager);
     }
 
     @Override

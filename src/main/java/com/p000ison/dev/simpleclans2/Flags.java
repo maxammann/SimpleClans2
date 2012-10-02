@@ -33,6 +33,7 @@ import java.util.Set;
 /**
  * Represents a ClanFlags
  */
+@SuppressWarnings("unchecked")
 public class Flags {
 
     private Map<String, Object> data = new HashMap<String, Object>();

@@ -46,6 +46,11 @@ public class TeleportManager {
         plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new TeleportTask(plugin, waitingPlayers), 0, 20L);
     }
 
+    public int getWaitingPlayers()
+    {
+        return waitingPlayers.size();
+    }
+
     /**
      * Add player to teleport waiting queue
      *

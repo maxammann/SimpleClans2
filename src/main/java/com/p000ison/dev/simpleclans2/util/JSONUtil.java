@@ -107,7 +107,7 @@ public class JSONUtil {
         return list;
     }
 
-    public static Set<Long> JSONToLongSet(String json, String key)
+    public static Set<Long> JSONToLongSet(String json)
     {
         if (json == null || json.isEmpty()) {
             return null;
@@ -123,6 +123,25 @@ public class JSONUtil {
 
         for (Object obj : parser) {
             set.add((Long) obj);
+        }
+
+        return set;
+    }
+
+    public static <T> Set<T> JSONToSet(String json, Set<T> set)
+    {
+        if (json == null || json.isEmpty()) {
+            return null;
+        }
+
+        JSONArray parser = (JSONArray) JSONValue.parse(json);
+
+        if (parser == null) {
+            return null;
+        }
+
+        for (Object obj : parser) {
+            set.add((T) obj);
         }
 
         return set;

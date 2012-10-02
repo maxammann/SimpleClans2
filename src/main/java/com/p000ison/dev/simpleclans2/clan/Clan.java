@@ -635,7 +635,7 @@ public class Clan implements KDR {
 
     /**
      * announces a message to all clan players raw
-     *
+     * <p/>
      * <p><strong>Internally used!</strong></p>
      *
      * @param message The message

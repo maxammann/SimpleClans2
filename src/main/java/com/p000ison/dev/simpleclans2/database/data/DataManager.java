@@ -361,21 +361,21 @@ public class DataManager {
                 }
 
                 //allies
-                Set<Long> rawAllies = JSONUtil.JSONToLongSet(result.getString("allies"), "allies");
+                Set<Long> rawAllies = JSONUtil.JSONToLongSet(result.getString("allies"));
 
                 if (rawAllies != null) {
                     alliesToAdd.put(clan, rawAllies);
                 }
 
                 //rivals
-                Set<Long> rawRivals = JSONUtil.JSONToLongSet(result.getString("rivals"), "rivals");
+                Set<Long> rawRivals = JSONUtil.JSONToLongSet(result.getString("rivals"));
 
                 if (rawRivals != null) {
                     rivalsToAdd.put(clan, rawRivals);
                 }
 
                 //warring
-                Set<Long> rawWarring = JSONUtil.JSONToLongSet(result.getString("warring"), "warring");
+                Set<Long> rawWarring = JSONUtil.JSONToLongSet(result.getString("warring"));
 
                 if (rawWarring != null) {
                     warringToAdd.put(clan, rawWarring);
@@ -406,7 +406,7 @@ public class DataManager {
                 long id = result.getLong("id");
                 String name = result.getString("name");
                 int priority = result.getInt("priority");
-                Set<String> permissions = JSONUtil.JSONToStringSet("permissions");
+                Set<Integer> permissions = JSONUtil.JSONToSet("permissions", new HashSet<Integer>());
 
                 ranks.add(new Rank(id, name, priority, clanId, permissions));
             }
@@ -610,7 +610,7 @@ public class DataManager {
             }
 
             Rank rank = new Rank(rankId, result.getString("name"));
-            rank.setPermissions(JSONUtil.JSONToStringSet(result.getString("permissions")));
+            rank.setPermissions(JSONUtil.JSONToSet(result.getString("permissions"), new HashSet<Integer>()));
 
             RETRIEVE_RANK.close();
 

@@ -37,7 +37,7 @@ public class AnyProfileCommand extends GenericConsoleCommand {
     public AnyProfileCommand(SimpleClans plugin)
     {
         super("ProfileAny", plugin);
-        setArgumentRange(0, 1);
+        setArgumentRange(1, 1);
         setUsages(MessageFormat.format(Language.getTranslation("usage.profile"), plugin.getSettingsManager().getClanCommand()));
         setIdentifiers(Language.getTranslation("profile.command"));
         setPermission("simpleclans.anyone.profile");

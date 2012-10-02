@@ -90,7 +90,7 @@ public class HelpCommand extends GenericConsoleCommand {
                     commands.add(command);
                 }
             } else {
-                if (((GenericPlayerCommand) command).getMenu(cp) != null) {
+                if (cp != null && ((GenericPlayerCommand) command).getMenu(cp) != null) {
                     commands.add(command);
                 }
             }
@@ -124,14 +124,6 @@ public class HelpCommand extends GenericConsoleCommand {
             }
 
             menu.append("   ").append(commandMenu).append("\n").append(ChatColor.RESET);
-
-
-//            String[] commandMenu = cmd.getMenu();
-//            if (commandMenu != null) {
-//                for (String usage : commandMenu) {
-//                    menu.append("   §b").append(usage).append("\n");
-//                }
-//            }
         }
         sender.sendMessage(menu.toString());
     }
