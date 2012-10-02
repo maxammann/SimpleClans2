@@ -89,9 +89,12 @@ public class InviteCommand extends GenericPlayerCommand {
                 ClanPlayer invitedClanPlayer = plugin.getClanPlayerManager().createClanPlayer(invited);
 
                 if (invitedClanPlayer.getClan() == null) {
-//                  todo-economy
-                    if (SimpleClans.hasEconomy()) {
 
+                    if (SimpleClans.hasEconomy() && plugin.getSettingsManager().isPurchaseInvite()) {
+                        if (!SimpleClans.withdrawBalance(player.getName(), plugin.getSettingsManager().getInvitationPrice())) {
+                            player.sendMessage(ChatColor.AQUA + Language.getTranslation("not.sufficient.money"));
+                            return;
+                        }
                     }
 
                     plugin.getRequestManager().createRequest(new InviteRequest(invitedClanPlayer, cp, cp.getClan()));

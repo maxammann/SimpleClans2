@@ -63,7 +63,7 @@ public class SettingsManager {
     private char[] disallowedColors;
     private Set<String> disallowedTags;
     private boolean requireVerification;
-    private double purchaseCreationPrice, purchaseVerificationPrice, purchaseTeleportPrice;
+    private double purchaseCreationPrice, purchaseVerificationPrice, purchaseTeleportPrice, purchaseInvite;
     private int purgeInactivePlayersDays, purgeInactiveClansDays, purgeUnverifiedClansDays;
     private boolean showUnverifiedClansOnList;
     private int minimalSizeToAlly;
@@ -162,6 +162,7 @@ public class SettingsManager {
             purchaseCreationPrice = clanEconomy.getDouble("purchase-creation");
             purchaseVerificationPrice = clanEconomy.getDouble("purchase-verification");
             purchaseTeleportPrice = clanEconomy.getDouble("purchase-teleport");
+            purchaseInvite = clanEconomy.getDouble("purchase-invite");
 
             ConfigurationSection clanPurge = clan.getConfigurationSection("purge");
 
@@ -502,6 +503,11 @@ public class SettingsManager {
         return purchaseCreationPrice > 0D;
     }
 
+    public boolean isPurchaseInvite()
+    {
+        return purchaseInvite > 0D;
+    }
+
     public boolean isPurchaseVerification()
     {
         return purchaseVerificationPrice > 0D;
@@ -550,5 +556,10 @@ public class SettingsManager {
     public String getMotdBBFormat()
     {
         return motdBBFormat;
+    }
+
+    public double getInvitationPrice()
+    {
+        return purchaseInvite;
     }
 }
