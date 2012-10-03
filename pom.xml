@@ -112,6 +112,7 @@
                                     <exclude>org.hamcrest:hamcrest-core</exclude>
                                     <exclude>junit:junit</exclude>
                                     <exclude>net.sacredlabyrinth.Phaed:PreciousStones</exclude>
+                                    <exclude>commons-lang:commons-lang</exclude>
                                 </excludes>
                             </artifactSet>
                         </configuration>
