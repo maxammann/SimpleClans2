@@ -23,6 +23,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 
 import java.text.DecimalFormat;
 import java.util.HashMap;
@@ -33,10 +34,11 @@ import java.util.Map;
  */
 public class PlayerState {
     private Player player;
-    private static Map<Material, Integer> FOOD = new HashMap<Material, Integer>();
-    private static final DecimalFormat FOOD_FORMAT = new DecimalFormat("#.#");
+    private static final Map<Material, Integer> FOOD = new HashMap<Material, Integer>();
+    private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.#");
 
-    private static Map<Material, Integer> WEAPONS = new HashMap<Material, Integer>();
+//    private static Map<Material, Integer> WEAPONS = new HashMap<Material, Integer>();
+    private static final ChatColor[] ARMOR_ORDER = new ChatColor[]{ChatColor.BLACK, ChatColor.GOLD, ChatColor.YELLOW, ChatColor.WHITE, ChatColor.GRAY, ChatColor.AQUA, ChatColor.RED};
 //    private static Map<Material, Integer> GOLD_TOOLS = new HashMap<Material, Integer>();
 //    private static Map<Material, Integer> STONE_TOOLS = new HashMap<Material, Integer>();
 //    private static Map<Material, Integer> IRON_TOOLS = new HashMap<Material, Integer>();
@@ -65,42 +67,152 @@ public class PlayerState {
         //1.4
         //potato;carrot;baked potato; golden carrot; carrot; pumpkin pie
 
-        WEAPONS.put(Material.WOOD_SWORD, 4);
-        WEAPONS.put(Material.GOLD_SWORD, 4);
-        WEAPONS.put(Material.STONE_SWORD, 6);
-        WEAPONS.put(Material.IRON_SWORD, 8);
-        WEAPONS.put(Material.DIAMOND_SWORD, 10);
-
-        ARMOR.put(Material.LEATHER_HELMET, 1);
-        ARMOR.put(Material.LEATHER_CHESTPLATE, 3);
-        ARMOR.put(Material.LEATHER_LEGGINGS, 2);
-        ARMOR.put(Material.LEATHER_BOOTS, 1);
-
-        ARMOR.put(Material.GOLD_HELMET, 2);
-        ARMOR.put(Material.GOLD_CHESTPLATE, 5);
-        ARMOR.put(Material.GOLD_LEGGINGS, 3);
-        ARMOR.put(Material.GOLD_BOOTS, 1);
-
-        ARMOR.put(Material.CHAINMAIL_HELMET, 2);
-        ARMOR.put(Material.CHAINMAIL_CHESTPLATE, 5);
-        ARMOR.put(Material.CHAINMAIL_LEGGINGS, 4);
-        ARMOR.put(Material.CHAINMAIL_BOOTS, 1);
-
-        ARMOR.put(Material.IRON_HELMET, 2);
-        ARMOR.put(Material.IRON_CHESTPLATE, 6);
-        ARMOR.put(Material.IRON_LEGGINGS, 5);
-        ARMOR.put(Material.IRON_BOOTS, 2);
-
-        ARMOR.put(Material.DIAMOND_HELMET, 3);
-        ARMOR.put(Material.DIAMOND_CHESTPLATE, 8);
-        ARMOR.put(Material.DIAMOND_LEGGINGS, 6);
-        ARMOR.put(Material.DIAMOND_BOOTS, 3);
+//        WEAPONS.put(Material.WOOD_SWORD, 4);
+//        WEAPONS.put(Material.GOLD_SWORD, 4);
+//        WEAPONS.put(Material.STONE_SWORD, 6);
+//        WEAPONS.put(Material.IRON_SWORD, 8);
+//        WEAPONS.put(Material.DIAMOND_SWORD, 10);
+//
+//        ARMOR.put(Material.LEATHER_HELMET, 1);
+//        ARMOR.put(Material.LEATHER_CHESTPLATE, 3);
+//        ARMOR.put(Material.LEATHER_LEGGINGS, 2);
+//        ARMOR.put(Material.LEATHER_BOOTS, 1);
+//
+//        ARMOR.put(Material.GOLD_HELMET, 2);
+//        ARMOR.put(Material.GOLD_CHESTPLATE, 5);
+//        ARMOR.put(Material.GOLD_LEGGINGS, 3);
+//        ARMOR.put(Material.GOLD_BOOTS, 1);
+//
+//        ARMOR.put(Material.CHAINMAIL_HELMET, 2);
+//        ARMOR.put(Material.CHAINMAIL_CHESTPLATE, 5);
+//        ARMOR.put(Material.CHAINMAIL_LEGGINGS, 4);
+//        ARMOR.put(Material.CHAINMAIL_BOOTS, 1);
+//
+//        ARMOR.put(Material.IRON_HELMET, 2);
+//        ARMOR.put(Material.IRON_CHESTPLATE, 6);
+//        ARMOR.put(Material.IRON_LEGGINGS, 5);
+//        ARMOR.put(Material.IRON_BOOTS, 2);
+//
+//        ARMOR.put(Material.DIAMOND_HELMET, 3);
+//        ARMOR.put(Material.DIAMOND_CHESTPLATE, 8);
+//        ARMOR.put(Material.DIAMOND_LEGGINGS, 6);
+//        ARMOR.put(Material.DIAMOND_BOOTS, 3);
     }
 
 
     public PlayerState(Player player)
     {
         this.player = player;
+    }
+
+    public String getArmor(String helmetSign, String chestplateSign, String leggingsSign, String bootsSign)
+    {
+        StringBuilder armorString = new StringBuilder();
+        ChatColor color = ChatColor.BLACK;
+        PlayerInventory inventory = player.getInventory();
+
+        ItemStack helmet = inventory.getHelmet();
+        ItemStack chestplate = inventory.getChestplate();
+        ItemStack leggings = inventory.getLeggings();
+        ItemStack boots = inventory.getBoots();
+
+        if (helmet != null) {
+            switch (helmet.getType()) {
+                case LEATHER_HELMET:
+                    color = ARMOR_ORDER[1];
+                    break;
+                case GOLD_HELMET:
+                    color = ARMOR_ORDER[2];
+                    break;
+                case CHAINMAIL_HELMET:
+                    color = ARMOR_ORDER[3];
+                    break;
+                case IRON_HELMET:
+                    color = ARMOR_ORDER[4];
+                    break;
+                case DIAMOND_HELMET:
+                    color = ARMOR_ORDER[5];
+                    break;
+                default:
+                    color = ARMOR_ORDER[6];
+            }
+        }
+
+        armorString.append(color).append(helmetSign);
+
+        if (chestplate != null) {
+            switch (chestplate.getType()) {
+                case LEATHER_CHESTPLATE:
+                    color = ARMOR_ORDER[1];
+                    break;
+                case GOLD_CHESTPLATE:
+                    color = ARMOR_ORDER[2];
+                    break;
+                case CHAINMAIL_CHESTPLATE:
+                    color = ARMOR_ORDER[3];
+                    break;
+                case IRON_CHESTPLATE:
+                    color = ARMOR_ORDER[4];
+                    break;
+                case DIAMOND_CHESTPLATE:
+                    color = ARMOR_ORDER[5];
+                    break;
+                default:
+                    color = ARMOR_ORDER[6];
+            }
+        }
+
+        armorString.append(color).append(chestplateSign);
+
+        if (leggings != null) {
+            switch (leggings.getType()) {
+                case LEATHER_LEGGINGS:
+                    color = ARMOR_ORDER[1];
+                    break;
+                case GOLD_LEGGINGS:
+                    color = ARMOR_ORDER[2];
+                    break;
+                case CHAINMAIL_LEGGINGS:
+                    color = ARMOR_ORDER[3];
+                    break;
+                case IRON_LEGGINGS:
+                    color = ARMOR_ORDER[4];
+                    break;
+                case DIAMOND_LEGGINGS:
+                    color = ARMOR_ORDER[5];
+                    break;
+                default:
+                    color = ARMOR_ORDER[6];
+            }
+        }
+
+        armorString.append(color).append(leggingsSign);
+
+        if (boots != null) {
+            switch (boots.getType()) {
+                case LEATHER_BOOTS:
+                    color = ARMOR_ORDER[1];
+                    break;
+                case GOLD_BOOTS:
+                    color = ARMOR_ORDER[2];
+                    break;
+                case CHAINMAIL_BOOTS:
+                    color = ARMOR_ORDER[3];
+                    break;
+                case IRON_BOOTS:
+                    color = ARMOR_ORDER[4];
+                    break;
+                case DIAMOND_BOOTS:
+                    color = ARMOR_ORDER[5];
+                    break;
+                default:
+                    color = ARMOR_ORDER[6];
+            }
+        }
+
+        armorString.append(color).append(bootsSign);
+
+        return armorString.toString();
     }
 
     public String getFood(String format)
@@ -128,7 +240,7 @@ public class PlayerState {
         if (food == 0) {
             return null;
         } else {
-            return String.format(format, FOOD_FORMAT.format(food));
+            return String.format(format, DECIMAL_FORMAT.format(food));
         }
     }
 

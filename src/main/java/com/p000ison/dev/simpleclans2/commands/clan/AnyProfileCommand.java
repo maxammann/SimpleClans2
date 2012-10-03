@@ -55,7 +55,7 @@ public class AnyProfileCommand extends GenericConsoleCommand {
         Clan clan = plugin.getClanManager().getClan(args[0]);
 
         if (clan == null) {
-            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("no.clan.matched"));
+            player.sendMessage( ChatColor.RED + Language.getTranslation("no.clan.matched"));
             return;
         }
 

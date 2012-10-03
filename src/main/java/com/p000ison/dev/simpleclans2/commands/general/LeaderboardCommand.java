@@ -96,24 +96,26 @@ public class LeaderboardCommand extends GenericConsoleCommand {
 
         int rank = 1;
 
+        int[] boundings = getBoundings(completeSize, page);
 
-        for (ClanPlayer cp : clanPlayers) {
+        for (int i = boundings[0]; i < boundings[1]; i++) {
+            ClanPlayer clanPlayer = clanPlayers.get(i);
 
-            String name = (cp.isLeader() ? plugin.getSettingsManager().getLeaderColor() : ((cp.isTrusted() ? plugin.getSettingsManager().getTrustedColor() : plugin.getSettingsManager().getUntrustedColor()))) + cp.getName();
-            String lastSeen = (GeneralHelper.isOnline(cp.toPlayer()) ? ChatColor.GREEN + Language.getTranslation("online") : ChatColor.WHITE + cp.getLastSeen());
+            String name = (clanPlayer.isLeader() ? plugin.getSettingsManager().getLeaderColor() : ((clanPlayer.isTrusted() ? plugin.getSettingsManager().getTrustedColor() : plugin.getSettingsManager().getUntrustedColor()))) + clanPlayer.getName();
+            String lastSeen = (GeneralHelper.isOnline(clanPlayer.toPlayer()) ? ChatColor.GREEN + Language.getTranslation("online") : ChatColor.WHITE + clanPlayer.getLastSeen());
 
             String clanTag = ChatColor.WHITE + Language.getTranslation("free.agent");
 
-            if (cp.getClan() != null) {
-                clanTag = cp.getClan().getTag();
+            if (clanPlayer.getClan() != null) {
+                clanTag = clanPlayer.getClan().getTag();
             }
 
-            chatBlock.addRow("  " + rank, name, ChatColor.YELLOW.toString() + formatter.format(cp.getKDR()), clanTag, lastSeen);
+            chatBlock.addRow("  " + rank, name, ChatColor.YELLOW.toString() + formatter.format(clanPlayer.getKDR()), clanTag, lastSeen);
             rank++;
         }
-        int[] boundings = getBoundings(completeSize, page);
 
-        chatBlock.sendBlock(sender, boundings[0], boundings[1]);
+
+        chatBlock.sendBlock(sender);
 
         ChatBlock.sendBlank(sender);
     }

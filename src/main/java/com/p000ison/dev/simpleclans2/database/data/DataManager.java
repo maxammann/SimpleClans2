@@ -529,6 +529,7 @@ public class DataManager {
                         Logging.debug("Failed to find clan for %s.", Level.WARNING, clanPlayer.getName());
                     } else {
                         clanPlayer.setClan(clan);
+                        clan.addMember(clanPlayer);
 
                         long rank = result.getLong("rank");
 

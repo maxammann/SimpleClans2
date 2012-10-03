@@ -44,7 +44,7 @@ public class RankCreateCommand extends GenericPlayerCommand {
     public String getMenu(ClanPlayer clanPlayer)
     {
         if (clanPlayer != null) {
-            return Language.getTranslation("menu.rank.create");
+            return Language.getTranslation("menu.rank.create", plugin.getSettingsManager().getClanCommand());
         }
         return null;
     }

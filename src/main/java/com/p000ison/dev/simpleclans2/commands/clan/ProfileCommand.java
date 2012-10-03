@@ -68,17 +68,18 @@ public class ProfileCommand extends GenericPlayerCommand {
         ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
 
         if (cp == null) {
-            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
+            player.sendMessage(ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
         } else {
             if (cp.getClan().isVerified()) {
                 Clan clan = cp.getClan();
+                System.out.println(clan.getAllMembers());
                 if (clan.isVerified()) {
                     showClanProfile(player, clan, plugin);
                 } else {
-                    ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("clan.is.not.verified"));
+                    player.sendMessage(ChatColor.RED + Language.getTranslation("clan.is.not.verified"));
                 }
             } else {
-                ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("clan.is.not.verified"));
+                player.sendMessage(ChatColor.RED + Language.getTranslation("clan.is.not.verified"));
             }
         }
     }
@@ -98,9 +99,12 @@ public class ProfileCommand extends GenericPlayerCommand {
         String membersOnline = onlineCount + subColor + "/" + ChatColor.WHITE + clan.getSize();
         String inactive = ChatColor.WHITE.toString() + clan.getInactiveDays() + subColor + "/" + ChatColor.WHITE.toString() + (clan.isVerified() ? plugin.getSettingsManager().getPurgeInactiveClansDays() : plugin.getSettingsManager().getPurgeUnverifiedClansDays()) + " " + Language.getTranslation("days");
         String founded = ChatColor.WHITE + clan.getFounded();
-        String allies = ChatColor.WHITE + GeneralHelper.clansToString(clan.getAllies(), ",");
 
-        String rivals = ChatColor.WHITE + GeneralHelper.clansToString(clan.getRivals(), ",");
+        String rawAllies =  GeneralHelper.clansToString(clan.getAllies(), ",");
+        String allies = ChatColor.WHITE + (rawAllies == null ? Language.getTranslation("none") : rawAllies);
+
+        String rawRivals =  GeneralHelper.clansToString(clan.getRivals(), ",");
+        String rivals = ChatColor.WHITE + (rawRivals == null ? Language.getTranslation("none") : rawRivals);
         String kdr = ChatColor.YELLOW + formatter.format(clan.getKDR());
 
         int[] kills = clan.getTotalKills();
@@ -112,17 +116,17 @@ public class ProfileCommand extends GenericPlayerCommand {
 
         String status = ChatColor.WHITE + (clan.isVerified() ? plugin.getSettingsManager().getTrustedColor() + Language.getTranslation("verified") : plugin.getSettingsManager().getUntrustedColor() + Language.getTranslation("unverified"));
 
-        ChatBlock.sendMessage(sender, "  " + subColor + MessageFormat.format(Language.getTranslation("name.0"), name));
-        ChatBlock.sendMessage(sender, "  " + subColor + MessageFormat.format(Language.getTranslation("status.0"), status));
-        ChatBlock.sendMessage(sender, "  " + subColor + MessageFormat.format(Language.getTranslation("leaders.0"), leaders));
-        ChatBlock.sendMessage(sender, "  " + subColor + MessageFormat.format(Language.getTranslation("members.online.0"), membersOnline));
-        ChatBlock.sendMessage(sender, "  " + subColor + MessageFormat.format(Language.getTranslation("kdr.0"), kdr));
-        ChatBlock.sendMessage(sender, "  " + subColor + Language.getTranslation("kill.totals") + " " + headColor + "[" + Language.getTranslation("rival") + ":" + rival + " " + headColor + Language.getTranslation("neutral") + ":" + neutral + " " + headColor + Language.getTranslation("civilian") + ":" + civ + headColor + "]");
-        ChatBlock.sendMessage(sender, "  " + subColor + MessageFormat.format(Language.getTranslation("deaths.0"), deaths));
-        ChatBlock.sendMessage(sender, "  " + subColor + MessageFormat.format(Language.getTranslation("allies.0"), allies));
-        ChatBlock.sendMessage(sender, "  " + subColor + MessageFormat.format(Language.getTranslation("rivals.0"), rivals));
-        ChatBlock.sendMessage(sender, "  " + subColor + MessageFormat.format(Language.getTranslation("founded.0"), founded));
-        ChatBlock.sendMessage(sender, "  " + subColor + MessageFormat.format(Language.getTranslation("inactive.0"), inactive));
+        sender.sendMessage("  " + subColor + MessageFormat.format(Language.getTranslation("name.0"), name));
+        sender.sendMessage("  " + subColor + MessageFormat.format(Language.getTranslation("status.0"), status));
+        sender.sendMessage("  " + subColor + MessageFormat.format(Language.getTranslation("leaders.0"), leaders));
+        sender.sendMessage("  " + subColor + MessageFormat.format(Language.getTranslation("members.online.0"), membersOnline));
+        sender.sendMessage("  " + subColor + MessageFormat.format(Language.getTranslation("kdr.0"), kdr));
+        sender.sendMessage("  " + subColor + Language.getTranslation("kill.totals") + " " + headColor + "[" + Language.getTranslation("rival") + ":" + rival + " " + headColor + Language.getTranslation("neutral") + ":" + neutral + " " + headColor + Language.getTranslation("civilian") + ":" + civ + headColor + "]");
+        sender.sendMessage("  " + subColor + MessageFormat.format(Language.getTranslation("deaths.0"), deaths));
+        sender.sendMessage("  " + subColor + MessageFormat.format(Language.getTranslation("allies.0"), allies));
+        sender.sendMessage("  " + subColor + MessageFormat.format(Language.getTranslation("rivals.0"), rivals));
+        sender.sendMessage("  " + subColor + MessageFormat.format(Language.getTranslation("founded.0"), founded));
+        sender.sendMessage("  " + subColor + MessageFormat.format(Language.getTranslation("inactive.0"), inactive));
 
         ChatBlock.sendBlank(sender);
     }

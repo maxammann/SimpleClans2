@@ -32,6 +32,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.text.MessageFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -79,6 +80,8 @@ public class Clan implements KDR {
         this.id = id;
     }
 
+    public static final SimpleDateFormat DATE_FORMAT = new java.text.SimpleDateFormat("MMM dd, yyyy h:mm a");
+
     /**
      * Returns a formated string of the date this clan was founded
      *
@@ -86,7 +89,7 @@ public class Clan implements KDR {
      */
     public String getFounded()
     {
-        return new java.text.SimpleDateFormat("MMM dd, ''yy h:mm a").format(new Date(this.foundedDate));
+        return DATE_FORMAT.format(new Date(this.foundedDate));
     }
 
     /**
@@ -379,9 +382,9 @@ public class Clan implements KDR {
      *
      * @return The days this clan is inactive
      */
-    public double getInactiveDays()
+    public int getInactiveDays()
     {
-        return DateHelper.differenceInDays(lastActionDate, System.currentTimeMillis());
+        return (int) Math.round(DateHelper.differenceInDays(lastActionDate, System.currentTimeMillis()));
     }
 
 
@@ -509,9 +512,8 @@ public class Clan implements KDR {
     {
         Set<ClanPlayer> leaders = new HashSet<ClanPlayer>();
 
-
         for (ClanPlayer cp : allMembers) {
-            if (cp.getClanId() == id && cp.isLeader()) {
+            if (cp.isLeader()) {
                 leaders.add(cp);
             }
         }

@@ -1,42 +1,25 @@
-/*
- * This file is part of SimpleClans2 (2012).
- *
- *     SimpleClans2 is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
- *
- *     SimpleClans2 is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
- *
- *     You should have received a copy of the GNU General Public License
- *     along with SimpleClans2.  If not, see <http://www.gnu.org/licenses/>.
- *
- *     Created: 02.09.12 18:33
- */
-
-
 package com.p000ison.dev.simpleclans2.util;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
- * Represents a ChatBlock
+ * @author phaed
  */
 public class ChatBlock {
     private final int colspacing = 12;
     private static final int lineLength = 320;
-    private ArrayList<Double> columnSizes = new ArrayList<Double>();
-    private ArrayList<Integer> columnSpaces = new ArrayList<Integer>();
-    private ArrayList<String> columnAlignments = new ArrayList<String>();
+    private List<Double> columnSizes = new ArrayList<Double>();
+    private List<Integer> columnSpaces = new ArrayList<Integer>();
+    private List<String> columnAlignments = new ArrayList<String>();
     private LinkedList<String[]> rows = new LinkedList<String[]>();
     private boolean prefix_used = false;
     private String color = "";
@@ -89,7 +72,13 @@ public class ChatBlock {
      */
     public void addRow(String... contents)
     {
-        rows.add(contents);
+        List<String> out = new ArrayList<String>();
+
+        for (String content : contents) {
+            out.add(format(content));
+        }
+
+        rows.add(out.toArray(new String[out.size()]));
     }
 
     /**
@@ -110,9 +99,10 @@ public class ChatBlock {
 
     /**
      * @param sender
+     * @param amount
      * @return
      */
-    public boolean sendBlock(CommandSender sender, int from, int to)
+    public boolean sendBlock(CommandSender sender, int amount)
     {
         if (sender == null) {
             return false;
@@ -122,6 +112,9 @@ public class ChatBlock {
             return false;
         }
 
+        if (!(sender instanceof Player)) {
+            amount = 999;
+        }
 
         // if no column sizes provided them
         // make some up based on the data
@@ -143,15 +136,16 @@ public class ChatBlock {
                 columnSizes.add(getMaxWidth(i) + spacing);
             }
         }
+
         // size up all sections
 
-        for (int i = from; i < to; i++) {
+        for (int i = 0; i < amount; i++) {
             if (rows.size() == 0) {
                 continue;
             }
 
             String rowstring = "";
-            String[] row = rows.get(i);
+            String row[] = rows.pollFirst();
 
             for (int sid = 0; sid < row.length; sid++) {
                 String section = row[sid];
@@ -211,7 +205,7 @@ public class ChatBlock {
             return;
         }
 
-        prefix_used = prefix == null ? true : false;
+        prefix_used = prefix == null;
 
         String empty_prefix = ChatBlock.makeEmpty(prefix);
 
@@ -451,7 +445,7 @@ public class ChatBlock {
     public static double msgLength(String str)
     {
         double length = 0;
-        str = ChatColor.stripColor(str);
+        str = cleanColors(str);
 
         // Loop through all the characters, skipping any color characters and their following color codes
 
@@ -464,6 +458,22 @@ public class ChatBlock {
             }
         }
         return length;
+    }
+
+    /**
+     * @param str
+     * @return
+     */
+    public static String cleanColors(String str)
+    {
+        String patternStr = "ï¿½.";
+        String replacementStr = "";
+
+        Pattern pattern = Pattern.compile(patternStr);
+        Matcher matcher = pattern.matcher(str);
+        String out = matcher.replaceAll(replacementStr);
+
+        return out;
     }
 
     /**
@@ -527,7 +537,7 @@ public class ChatBlock {
 
             // Create an array list to hold individual words
 
-            List<String> words = new ArrayList<String>();
+            ArrayList<String> words = new ArrayList<String>();
 
             // Loop through the words finding their length and increasing
             // j, the end point for the sub string
@@ -616,51 +626,46 @@ public class ChatBlock {
     }
 
     /**
+     * Outputs a message to a user
+     *
+     * @param receiver
+     * @param msg
+     */
+    public static void send(CommandSender receiver, String msg, Object... args)
+    {
+        if (receiver == null) {
+            return;
+        }
+
+        msg = format(msg, args);
+
+        String[] message = colorize(wordWrap(msg, 0));
+
+        for (String out : message) {
+            receiver.sendMessage(out);
+        }
+    }
+
+    /**
      * Outputs a single line out, crops overflow
      *
      * @param receiver
      * @param msg
      */
-    public static void saySingle(CommandSender receiver, String msg)
+    public static void saySingle(CommandSender receiver, String msg, Object... args)
     {
         if (receiver == null) {
             return;
         }
+
+        msg = format(msg, args);
 
         receiver.sendMessage(cropRightToFit(colorize(new String[]{msg})[0], lineLength));
     }
 
-    /**
-     * Outputs a message to a user
-     *
-     * @param receiver
-     * @param msg
-     */
-    public static void sendMessage(CommandSender receiver, String msg)
+    private static String format(String msg, Object... args)
     {
-        sendPrefixedMessage(receiver, null, msg);
-    }
-
-    /**
-     * Outputs a message to a user
-     *
-     * @param receiver
-     * @param prefix
-     * @param msg
-     */
-    public static void sendPrefixedMessage(CommandSender receiver, String prefix, String msg)
-    {
-        if (receiver == null) {
-            return;
-        }
-
-        int prefix_width = prefix == null ? 0 : (int) msgLength(prefix);
-
-        String[] message = colorize(wordWrap(msg, prefix_width));
-
-        for (String out : message) {
-            receiver.sendMessage((prefix == null ? "" : prefix + " ") + out);
-        }
+        return String.format(msg, args);
     }
 
     /**
@@ -751,19 +756,5 @@ public class ChatBlock {
         }
 
         return message;
-    }
-
-    /**
-     * @param prefix
-     * @return
-     */
-    public String firstPrefix(String prefix)
-    {
-        if (prefix_used) {
-            return ChatBlock.makeEmpty(prefix);
-        } else {
-            prefix_used = true;
-            return prefix;
-        }
     }
 }

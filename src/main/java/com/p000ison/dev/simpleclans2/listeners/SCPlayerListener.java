@@ -21,6 +21,7 @@
 package com.p000ison.dev.simpleclans2.listeners;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
+import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.util.GeneralHelper;
 import org.bukkit.entity.Player;
@@ -65,9 +66,12 @@ public class SCPlayerListener implements Listener {
 
         if (clanPlayer != null) {
 
+            Clan clan = clanPlayer.getClan();
+
+            System.out.println(clan);
+
             if (plugin.getSettingsManager().isMotdBBEnabled()) {
 
-                System.out.println(clanPlayer.getClan());
                 List<String> bb = clanPlayer.getClan().getBB();
 
                 if (bb.size() > 0) {
@@ -77,6 +81,9 @@ public class SCPlayerListener implements Listener {
                     }
                 }
             }
+
+            clan.updateLastAction();
+            clan.update();
         }
     }
 

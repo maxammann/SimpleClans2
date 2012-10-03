@@ -94,7 +94,10 @@ public class AlliancesCommand extends GenericConsoleCommand {
         chatBlock.setAlignment("l", "l");
         chatBlock.addRow(headColor + Language.getTranslation("clan"), Language.getTranslation("allies"));
 
-        for (Clan clan : clans) {
+        int[] boundings = getBoundings(completeSize, page);
+
+        for (int i = boundings[0]; i < boundings[1]; i++) {
+            Clan clan = clans.get(i);
             if (!clan.isVerified()) {
                 completeSize--;
                 continue;
@@ -113,10 +116,7 @@ public class AlliancesCommand extends GenericConsoleCommand {
             chatBlock.addRow("  " + ChatColor.AQUA + clan.getTag(), alliesString);
         }
 
-        int[] boundings = getBoundings(completeSize, page);
-
-
-        chatBlock.sendBlock(sender, boundings[0], boundings[1]);
+        chatBlock.sendBlock(sender);
 
         ChatBlock.sendBlank(sender);
     }

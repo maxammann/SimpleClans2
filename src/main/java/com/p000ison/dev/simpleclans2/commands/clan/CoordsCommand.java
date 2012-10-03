@@ -19,11 +19,11 @@
 
 package com.p000ison.dev.simpleclans2.commands.clan;
 
-import com.p000ison.dev.simpleclans2.language.Language;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
+import com.p000ison.dev.simpleclans2.language.Language;
 import com.p000ison.dev.simpleclans2.util.ChatBlock;
 import com.p000ison.dev.simpleclans2.util.GeneralHelper;
 import org.bukkit.ChatColor;
@@ -31,7 +31,8 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.text.MessageFormat;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Represents a CoordsCommand
@@ -73,7 +74,7 @@ public class CoordsCommand extends GenericPlayerCommand {
             if (clan.isVerified()) {
                 if (cp.isTrusted()) {
 
-                    Set<ClanPlayer> members = GeneralHelper.stripOfflinePlayers(clan.getMembers());
+                    List<ClanPlayer> members = new ArrayList<ClanPlayer>(GeneralHelper.stripOfflinePlayers(clan.getMembers()));
 
                     if (members.isEmpty()) {
                         player.sendMessage(ChatColor.RED + Language.getTranslation("you.are.the.only.member.online"));
@@ -98,8 +99,10 @@ public class CoordsCommand extends GenericPlayerCommand {
 
                     chatBlock.addRow(headColor + Language.getTranslation("name"), Language.getTranslation("distance"), Language.getTranslation("coords.upper"), Language.getTranslation("world"));
 
+                    int[] boundings = getBoundings(completeSize, page);
 
-                    for (ClanPlayer clanPlayer : members) {
+                    for (int i = boundings[0]; i < boundings[1]; i++) {
+                        ClanPlayer clanPlayer = members.get(i);
                         Player iPlayer = clanPlayer.toPlayer();
 
                         if (iPlayer == null) {
@@ -121,9 +124,8 @@ public class CoordsCommand extends GenericPlayerCommand {
                     ChatBlock.saySingle(player, plugin.getSettingsManager().getClanColor() + clan.getName() + subColor + " " + Language.getTranslation("coords") + " ");
                     ChatBlock.sendBlank(player);
 
-                    int[] boundings = getBoundings(completeSize, page);
 
-                    chatBlock.sendBlock(player, boundings[0], boundings[1]);
+                    chatBlock.sendBlock(player);
 
 
                 } else {

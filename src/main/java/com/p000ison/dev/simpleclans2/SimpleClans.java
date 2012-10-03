@@ -209,7 +209,6 @@ public class SimpleClans extends JavaPlugin implements Core {
         commandManager.addCommand(new SaveCommand(this));
         commandManager.addCommand(new InfoCommand(this));
 
-//        commandManager.addCommand(new VerifyCommand(this));
 //        commandManager.addCommand(new LookupCommand(this));
 //        commandManager.addCommand(new RivalriesCommand(this));
 //        commandManager.addCommand(new RosterCommand(this));

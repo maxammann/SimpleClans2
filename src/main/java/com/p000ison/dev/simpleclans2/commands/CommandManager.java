@@ -72,6 +72,7 @@ public class CommandManager {
 
     public void execute(CommandSender sender, String command, String[] args)
     {
+        try {
         String[] arguments;
 
         //Build the args; if the args length is 0 then build if from the base command
@@ -99,7 +100,6 @@ public class CommandManager {
             for (Command cmd : commands) {
                 if (cmd.isIdentifier(identifier)) {
                     String[] realArgs = Arrays.copyOfRange(arguments, argsIncluded, arguments.length);
-
 
                     if (realArgs.length < cmd.getMinArguments() || realArgs.length > cmd.getMaxArguments()) {
                         helpCommand = cmd;
@@ -130,7 +130,11 @@ public class CommandManager {
 
             if (helpCommand != null) {
                 displayCommandHelp(helpCommand, sender);
+                return;
             }
+        }
+        }catch (Exception e) {
+            e.printStackTrace();
         }
 
         sender.sendMessage(ChatColor.DARK_RED + "Command not found!");

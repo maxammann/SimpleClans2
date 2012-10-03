@@ -61,7 +61,7 @@ public class VerifyCommand extends GenericPlayerCommand {
         ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
 
         if (cp == null) {
-            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
+            player.sendMessage( ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
             return;
         }
 
@@ -80,7 +80,7 @@ public class VerifyCommand extends GenericPlayerCommand {
                 clan.setVerified(true);
                 clan.addBBMessage(cp, MessageFormat.format(Language.getTranslation("clan.0.has.been.verified"), clan.getName()));
                 clan.update();
-                ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("the.clan.has.been.verified"));
+                player.sendMessage( ChatColor.AQUA + Language.getTranslation("the.clan.has.been.verified"));
             } else {
                 player.sendMessage(ChatColor.GRAY + Language.getTranslation("your.clan.is.already.verified"));
             }

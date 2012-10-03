@@ -91,7 +91,7 @@ public class ListCommand extends GenericConsoleCommand {
         ChatBlock.sendBlank(sender);
         ChatBlock.saySingle(sender, plugin.getSettingsManager().getServerName() + subColor + " " + Language.getTranslation("clans.lower"));
         ChatBlock.sendBlank(sender);
-        ChatBlock.sendMessage(sender, headColor + Language.getTranslation("total.clans") + " " + subColor + clans.size());
+        sender.sendMessage(headColor + Language.getTranslation("total.clans") + " " + subColor + clans.size());
         ChatBlock.sendBlank(sender);
 
         chatBlock.setAlignment("c", "l", "c", "c");
@@ -100,7 +100,10 @@ public class ListCommand extends GenericConsoleCommand {
 
         int rank = 1;
 
-        for (Clan clan : clans) {
+        int[] boundings = getBoundings(completeSize, page);
+
+        for (int i = boundings[0]; i < boundings[1]; i++) {
+            Clan clan = clans.get(i);
             if (!plugin.getSettingsManager().isShowUnverifiedClansOnList()) {
                 if (!clan.isVerified()) {
                     completeSize--;
@@ -118,9 +121,7 @@ public class ListCommand extends GenericConsoleCommand {
             rank++;
         }
 
-        int[] boundings = getBoundings(completeSize, page);
-
-        chatBlock.sendBlock(sender, boundings[0], boundings[1]);
+        chatBlock.sendBlock(sender);
 
         ChatBlock.sendBlank(sender);
     }
