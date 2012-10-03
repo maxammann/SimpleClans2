@@ -69,6 +69,7 @@ public class SCPlayerListener implements Listener {
             Clan clan = clanPlayer.getClan();
 
             System.out.println(clan);
+            System.out.println(clanPlayer);
 
             if (plugin.getSettingsManager().isMotdBBEnabled()) {
 
@@ -99,8 +100,6 @@ public class SCPlayerListener implements Listener {
 
         String clanCommand = plugin.getSettingsManager().getClanCommand();
 
-
-        System.out.println(args[0]);
         if (args[0].equalsIgnoreCase(clanCommand)) {
             plugin.getCommandManager().execute(player, clanCommand, Arrays.copyOfRange(args, 1, lenght));
             event.setCancelled(true);
@@ -111,10 +110,10 @@ public class SCPlayerListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerInteract(PlayerInteractEvent event)
     {
-        System.out.println("1");
-
-        System.out.println("3");
-
-        System.out.println("2");
+//        System.out.println("1");
+//
+//        System.out.println("3");
+//
+//        System.out.println("2");
     }
 }

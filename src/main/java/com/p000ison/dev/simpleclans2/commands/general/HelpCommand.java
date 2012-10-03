@@ -19,27 +19,25 @@
 
 package com.p000ison.dev.simpleclans2.commands.general;
 
-import com.p000ison.dev.simpleclans2.language.Language;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.commands.Command;
 import com.p000ison.dev.simpleclans2.commands.GenericConsoleCommand;
 import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
+import com.p000ison.dev.simpleclans2.language.Language;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author Max
  */
 public class HelpCommand extends GenericConsoleCommand {
-
-    private static final int CMDS_PER_PAGE = 12;
 
 
     public HelpCommand(SimpleClans plugin)
@@ -70,8 +68,8 @@ public class HelpCommand extends GenericConsoleCommand {
             }
         }
 
-        Set<Command> sortCommands = plugin.getCommandManager().getCommands();
-        List<Command> commands = new ArrayList<Command>();
+        List<Command> commands = new ArrayList<Command>(plugin.getCommandManager().getCommands());
+        Iterator<Command> it = commands.iterator();
 
         ClanPlayer cp = null;
 
@@ -80,39 +78,31 @@ public class HelpCommand extends GenericConsoleCommand {
         }
 
         // Build list of permitted commands
-        for (Command command : sortCommands) {
-            if (!command.hasPermission(sender)) {
+        while (it.hasNext()) {
+            Command command = it.next();
+            if (command.hasPermission(sender)) {
                 continue;
             }
 
             if (command instanceof GenericConsoleCommand) {
-                if (((GenericConsoleCommand) command).getMenu() != null) {
-                    commands.add(command);
+                if (((GenericConsoleCommand) command).getMenu() == null) {
+                    it.remove();
                 }
             } else {
-                if (cp != null && ((GenericPlayerCommand) command).getMenu(cp) != null) {
-                    commands.add(command);
+                if (cp == null || ((GenericPlayerCommand) command).getMenu(cp) == null) {
+                    it.remove();
                 }
             }
         }
 
-        int numPages = commands.size() / CMDS_PER_PAGE;
-        if (commands.size() % CMDS_PER_PAGE != 0) {
-            numPages++;
-        }
+        int size = commands.size();
 
-        if (page >= numPages || page < 0) {
-            page = 0;
-        }
-        sender.sendMessage(plugin.getSettingsManager().getServerName() + " <" + (page + 1) + "/" + numPages + "> §7" + Language.getTranslation("clan.commands"));
+        int[] boundings = getBoundings(size, page);
 
-        int start = page * CMDS_PER_PAGE;
-        int end = start + CMDS_PER_PAGE;
-        if (end > commands.size()) {
-            end = commands.size();
-        }
+        sender.sendMessage(plugin.getSettingsManager().getServerName() + " <" + (page + 1) + "/" + boundings[2] + "> §7" + Language.getTranslation("clan.commands"));
+
         StringBuilder menu = new StringBuilder();
-        for (int c = start; c < end; c++) {
+        for (int c = boundings[0]; c < boundings[1]; c++) {
             Command cmd = commands.get(c);
 
             String commandMenu;
@@ -123,8 +113,13 @@ public class HelpCommand extends GenericConsoleCommand {
                 commandMenu = ((GenericPlayerCommand) cmd).getMenu(cp);
             }
 
-            menu.append("   ").append(commandMenu).append("\n").append(ChatColor.RESET);
+            menu.append(MessageFormat.format(plugin.getSettingsManager().getHelpFormat(), commandMenu)).append(ChatColor.RESET);
+
+            if (c != boundings[1]) {
+                menu.append('\n');
+            }
         }
+
         sender.sendMessage(menu.toString());
     }
 }

@@ -111,7 +111,6 @@ public class DataManager {
             UPDATE_CLANPLAYER.setTimestamp(5, new Timestamp(System.currentTimeMillis()));
 
             Clan clan = clanPlayer.getClan();
-            System.out.println("update clanplayer : " + (clan == null ? -1L : clan.getId()));
 
             UPDATE_CLANPLAYER.setLong(6, clan == null ? -1L : clan.getId());
             UPDATE_CLANPLAYER.setBoolean(7, clanPlayer.isFriendlyFireOn());

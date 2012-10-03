@@ -32,6 +32,7 @@ import com.p000ison.dev.simpleclans2.commands.clan.bb.BBCommand;
 import com.p000ison.dev.simpleclans2.commands.clan.home.HomeCommand;
 import com.p000ison.dev.simpleclans2.commands.clan.home.HomeRegroupCommand;
 import com.p000ison.dev.simpleclans2.commands.clan.home.HomeSetCommand;
+import com.p000ison.dev.simpleclans2.commands.clan.rank.RankAddPermissionCommand;
 import com.p000ison.dev.simpleclans2.commands.clan.rank.RankCreateCommand;
 import com.p000ison.dev.simpleclans2.commands.clan.rank.RankSetCommand;
 import com.p000ison.dev.simpleclans2.commands.general.AlliancesCommand;
@@ -207,6 +208,7 @@ public class SimpleClans extends JavaPlugin implements Core {
         commandManager.addCommand(new VerifyCommand(this));
         commandManager.addCommand(new RankSetCommand(this));
         commandManager.addCommand(new SaveCommand(this));
+        commandManager.addCommand(new RankAddPermissionCommand(this));
         commandManager.addCommand(new InfoCommand(this));
 
 //        commandManager.addCommand(new LookupCommand(this));

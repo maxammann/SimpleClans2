@@ -82,7 +82,6 @@ public class RequestManager {
                 } else if (result == VoteResult.ABSTAINED) {
                     request.deny(acceptor);
                 } else {
-                    System.out.println(1);
                     return null;
                 }
 

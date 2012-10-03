@@ -22,6 +22,7 @@ package com.p000ison.dev.simpleclans2.settings;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.util.ExceptionHelper;
+import com.p000ison.dev.simpleclans2.util.GeneralHelper;
 import com.p000ison.dev.simpleclans2.util.Logging;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -57,6 +58,7 @@ public class SettingsManager {
     private String serverName;
     private boolean globalFF;
     private int autoSave;
+    private String helpFormat;
 
     private int maxTagLenght, minTagLenght, maxNameLenght, minNameLenght;
     private char[] disallowedColors;
@@ -111,6 +113,7 @@ public class SettingsManager {
             serverName = general.getString("server-name");
             globalFF = general.getBoolean("global-ff");
             autoSave = general.getInt("auto-save");
+            helpFormat = GeneralHelper.parseColors(general.getString("help-format"));
 
             ConfigurationSection databaseSection = config.getConfigurationSection("database");
             databaseConfiguration = new DatabaseConfiguration();
@@ -560,5 +563,10 @@ public class SettingsManager {
     public double getInvitationPrice()
     {
         return purchaseInvite;
+    }
+
+    public String getHelpFormat()
+    {
+        return helpFormat;
     }
 }

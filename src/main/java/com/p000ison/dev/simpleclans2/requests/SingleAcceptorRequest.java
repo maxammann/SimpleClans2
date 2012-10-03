@@ -106,9 +106,6 @@ public abstract class SingleAcceptorRequest extends Request {
     @Override
     public boolean isAcceptor(ClanPlayer clanPlayer)
     {
-        System.out.println(clanPlayer.getName());
-        System.out.println(acceptor.getName());
-        System.out.println(clanPlayer.equals(acceptor));
         return clanPlayer.equals(acceptor);
     }
 

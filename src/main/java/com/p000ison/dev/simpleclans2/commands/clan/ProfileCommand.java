@@ -72,7 +72,6 @@ public class ProfileCommand extends GenericPlayerCommand {
         } else {
             if (cp.getClan().isVerified()) {
                 Clan clan = cp.getClan();
-                System.out.println(clan.getAllMembers());
                 if (clan.isVerified()) {
                     showClanProfile(player, clan, plugin);
                 } else {

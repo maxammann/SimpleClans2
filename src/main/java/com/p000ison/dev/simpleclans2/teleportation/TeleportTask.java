@@ -73,7 +73,6 @@ public class TeleportTask implements Runnable {
                     }
 
                     player.teleport(state.getDestination());
-                    System.out.println(state.getDestination().getYaw());
 
                     player.sendMessage(state.getMessage());
                 } else {

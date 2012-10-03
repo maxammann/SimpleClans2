@@ -19,6 +19,7 @@
 
 package com.p000ison.dev.simpleclans2.language;
 
+import com.p000ison.dev.simpleclans2.util.GeneralHelper;
 import com.p000ison.dev.simpleclans2.util.Logging;
 
 import java.io.*;
@@ -79,7 +80,7 @@ public class LanguageMap extends HashMap<String, String> {
                     continue;
                 }
 
-                put(entry[0], entry[1]);
+                put(entry[0], GeneralHelper.parseColors(entry[1]));
             }
         } catch (IOException e) {
             Logging.debug(e, "Failed at loading the language file %s!", file);

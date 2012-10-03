@@ -20,8 +20,6 @@
 
 package com.p000ison.dev.simpleclans2.language;
 
-import com.p000ison.dev.simpleclans2.language.LanguageMap;
-import com.p000ison.dev.simpleclans2.util.GeneralHelper;
 import com.p000ison.dev.simpleclans2.util.Logging;
 import org.bukkit.ChatColor;
 
@@ -67,14 +65,22 @@ public class Language {
                     return "Error!";
                 }
 
-                return GeneralHelper.parseColors(MessageFormat.format(defaultBundleOutput, args));
+                if (args.length > 0) {
+                    return MessageFormat.format(defaultBundleOutput, args);
+                } else {
+                    return defaultBundleOutput;
+                }
             }
 
             //We return a error string because we do not want NPEs!
             return "Error!";
         }
 
-        return GeneralHelper.parseColors(MessageFormat.format(bundleOutput, args));
+        if (args.length > 0) {
+            return MessageFormat.format(bundleOutput, args);
+        } else {
+            return bundleOutput;
+        }
     }
 
     public static void clear()

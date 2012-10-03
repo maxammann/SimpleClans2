@@ -34,6 +34,7 @@ public class Rank {
     private long clanId;
     private Set<Integer> permissions = new HashSet<Integer>();
     private int priority;
+    private boolean update;
 
     private static final Map<String, Integer> availablePermissions = new HashMap<String, Integer>();
 
@@ -66,7 +67,11 @@ public class Rank {
     {
         this(name, priority);
         this.clanId = clanId;
-        this.permissions = permissions;
+        if (permissions == null) {
+            this.permissions = new HashSet<Integer>();
+        } else {
+            this.permissions = permissions;
+        }
         this.id = id;
     }
 
@@ -84,11 +89,6 @@ public class Rank {
     public String getName()
     {
         return name;
-    }
-
-    public void setPermissions(Set<Integer> permissions)
-    {
-        this.permissions = permissions;
     }
 
     public String addPermission(String permission)
@@ -173,5 +173,15 @@ public class Rank {
                 ", permissions=" + permissions +
                 ", priority=" + priority +
                 '}';
+    }
+
+    public boolean needsUpdate()
+    {
+        return update;
+    }
+
+    public void update(boolean update)
+    {
+        this.update = update;
     }
 }

@@ -67,7 +67,5 @@ public class InfoCommand extends GenericConsoleCommand {
             sender.sendMessage("ID: " + task.getTaskId());
             sender.sendMessage("Sync: " + task.isSync());
         }
-
-        System.out.println(Language.getTranslation("usage.list"));
     }
 }

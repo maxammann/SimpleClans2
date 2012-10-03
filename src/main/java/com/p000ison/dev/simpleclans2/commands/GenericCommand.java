@@ -118,12 +118,7 @@ abstract class GenericCommand implements Command {
             end = completeSize;
         }
 
-        //If we are on page 0, we want to display the header
-//        if (page == 0) {
-//            end++;
-//        }
-
-        return new int[]{start, end};
+        return new int[]{start, end, numPages};
     }
 
     @Override

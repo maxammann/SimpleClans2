@@ -80,7 +80,6 @@ public class HomeSetCommand extends GenericPlayerCommand {
 
                             clan.getFlags().setHomeLocation(loc);
                             clan.update();
-                            System.out.println(loc.getYaw());
                             player.sendMessage(ChatColor.AQUA + MessageFormat.format(Language.getTranslation("hombase.set"), ChatColor.YELLOW + GeneralHelper.locationToString(loc)));
                         } else {
                             player.sendMessage(ChatColor.RED + Language.getTranslation("no.teleport"));
