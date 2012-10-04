@@ -26,7 +26,7 @@ import java.util.logging.Logger;
 /**
  * A logger utility.
  */
-public class Logging {
+public final class Logging {
     private static Logger instance;
 
     public static void setInstance(Logger instance)

@@ -476,12 +476,7 @@ public class ChatBlock {
         return out;
     }
 
-    /**
-     * Finds the visual length of the character on the screen.
-     *
-     * @param x
-     * @return
-     */
+
     public static int charLength(char x)
     {
         if ("i.:,;|!".indexOf(x) != -1) {

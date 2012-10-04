@@ -39,7 +39,7 @@ import java.util.Set;
 /**
  * Represents a GeneralHelper
  */
-public class GeneralHelper {
+public final class GeneralHelper {
 
     private GeneralHelper()
     {

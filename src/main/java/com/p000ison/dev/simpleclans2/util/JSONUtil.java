@@ -28,7 +28,7 @@ import java.util.*;
 /**
  * Represents a JSONUtil
  */
-public class JSONUtil {
+public final class JSONUtil {
 
     private JSONUtil()
     {

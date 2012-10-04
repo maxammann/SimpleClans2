@@ -26,13 +26,11 @@ import java.util.logging.Level;
 /**
  * Represents a ExceptionHelper
  */
-public class ExceptionHelper {
+public final class ExceptionHelper {
 
     private ExceptionHelper()
     {
     }
-
-    ;
 
     public static void handleException(Throwable e, Class<?> happened)
     {

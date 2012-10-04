@@ -27,7 +27,7 @@ import org.bukkit.Bukkit;
 /**
  * Represents a Announcer
  */
-public class Announcer {
+public final class Announcer {
 
     private static SimpleClans plugin;
 

@@ -26,7 +26,7 @@ import java.util.Date;
 /**
  * Represents a DateHelper
  */
-public class DateHelper {
+public final class DateHelper {
     public static final long DAY = 86400000L;
     public static final long HOUR = 3600000L;
     public static final long MINUTE = 60000L;
