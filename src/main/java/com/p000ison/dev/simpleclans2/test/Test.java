@@ -19,8 +19,8 @@
 
 package com.p000ison.dev.simpleclans2.test;
 
-import com.p000ison.dev.simpleclans2.util.ChatBlock;
 import com.p000ison.dev.simpleclans2.util.chat.Align;
+import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 
 /**
  * Represents a Test
@@ -52,7 +52,7 @@ public class Test {
 
         long start = System.currentTimeMillis();
 
-        com.p000ison.dev.simpleclans2.util.ChatBlock.ChatBlock impl = new ChatBlock.ChatBlock();
+        ChatBlock impl = new ChatBlock();
         impl.setAlignment(Align.LEFT);
         for (int y = 0; y < 10; y++) {
             impl.addRow("1");
