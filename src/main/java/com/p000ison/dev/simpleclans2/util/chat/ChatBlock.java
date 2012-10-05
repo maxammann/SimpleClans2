@@ -27,6 +27,9 @@ import java.util.List;
 
 /**
  * A ChatBlock is used to send tables with rows and columns to a  {@link org.bukkit.command.CommandSender}.
+ *
+ * @author p000ison
+ * @author phaed420
  */
 public class ChatBlock {
 

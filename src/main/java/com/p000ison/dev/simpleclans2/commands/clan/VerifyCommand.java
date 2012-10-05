@@ -19,11 +19,11 @@
 
 package com.p000ison.dev.simpleclans2.commands.clan;
 
-import com.p000ison.dev.simpleclans2.language.Language;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
+import com.p000ison.dev.simpleclans2.language.Language;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -60,7 +60,7 @@ public class VerifyCommand extends GenericPlayerCommand {
         ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
 
         if (cp == null) {
-            player.sendMessage( ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
+            player.sendMessage(ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
             return;
         }
 
@@ -79,7 +79,7 @@ public class VerifyCommand extends GenericPlayerCommand {
                 clan.setVerified(true);
                 clan.addBBMessage(cp, MessageFormat.format(Language.getTranslation("clan.0.has.been.verified"), clan.getName()));
                 clan.update();
-                player.sendMessage( ChatColor.AQUA + Language.getTranslation("the.clan.has.been.verified"));
+                player.sendMessage(ChatColor.AQUA + Language.getTranslation("the.clan.has.been.verified"));
             } else {
                 player.sendMessage(ChatColor.GRAY + Language.getTranslation("your.clan.is.already.verified"));
             }

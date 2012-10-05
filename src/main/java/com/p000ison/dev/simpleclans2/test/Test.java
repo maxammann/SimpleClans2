@@ -64,7 +64,8 @@ public class Test {
 
     }
 
-    public void speedTestChatblocks() {
+    public void speedTestChatblocks()
+    {
 //        long[] orginalTimings = new long[5000];
 //
 //        for (int i = 0; i < 5000; i++) {

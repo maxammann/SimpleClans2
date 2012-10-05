@@ -73,67 +73,67 @@ public class CommandManager {
     public void execute(CommandSender sender, String command, String[] args)
     {
         try {
-        String[] arguments;
+            String[] arguments;
 
-        //Build the args; if the args length is 0 then build if from the base command
-        if (args.length == 0) {
-            arguments = new String[]{command};
-        } else {
-            arguments = args;
-        }
-
-        //Iterate through all arguments from the last to the first argument
-        for (int argsIncluded = arguments.length; argsIncluded >= 0; argsIncluded--) {
-            StringBuilder identifierBuilder = new StringBuilder();
-            String identifier;
-            //Build the identifier string
-            for (int i = 0; i < argsIncluded; i++) {
-                identifierBuilder.append(" ").append(arguments[i]);
+            //Build the args; if the args length is 0 then build if from the base command
+            if (args.length == 0) {
+                arguments = new String[]{command};
+            } else {
+                arguments = args;
             }
 
-            //trim the last ' '
+            //Iterate through all arguments from the last to the first argument
+            for (int argsIncluded = arguments.length; argsIncluded >= 0; argsIncluded--) {
+                StringBuilder identifierBuilder = new StringBuilder();
+                String identifier;
+                //Build the identifier string
+                for (int i = 0; i < argsIncluded; i++) {
+                    identifierBuilder.append(" ").append(arguments[i]);
+                }
 
-            identifier = identifierBuilder.toString().trim();
+                //trim the last ' '
 
-            Command helpCommand = null;
+                identifier = identifierBuilder.toString().trim();
 
-            for (Command cmd : commands) {
-                if (cmd.isIdentifier(identifier)) {
-                    String[] realArgs = Arrays.copyOfRange(arguments, argsIncluded, arguments.length);
+                Command helpCommand = null;
 
-                    if (realArgs.length < cmd.getMinArguments() || realArgs.length > cmd.getMaxArguments()) {
-                        helpCommand = cmd;
-                        continue;
-                    } else if (realArgs.length > 0 && realArgs[0].equals("?")) {
-                        displayCommandHelp(cmd, sender);
-                        return;
-                    }
+                for (Command cmd : commands) {
+                    if (cmd.isIdentifier(identifier)) {
+                        String[] realArgs = Arrays.copyOfRange(arguments, argsIncluded, arguments.length);
 
-                    if (!cmd.hasPermission(sender)) {
-                        sender.sendMessage(ChatColor.DARK_RED + Language.getTranslation("insufficient.permissions"));
-                        return;
-                    }
-
-                    if (cmd instanceof GenericConsoleCommand) {
-                        ((GenericConsoleCommand) cmd).execute(sender, realArgs);
-                        return;
-                    } else if (cmd instanceof GenericPlayerCommand) {
-                        if (sender instanceof Player) {
-                            ((GenericPlayerCommand) cmd).execute((Player) sender, realArgs);
+                        if (realArgs.length < cmd.getMinArguments() || realArgs.length > cmd.getMaxArguments()) {
+                            helpCommand = cmd;
+                            continue;
+                        } else if (realArgs.length > 0 && realArgs[0].equals("?")) {
+                            displayCommandHelp(cmd, sender);
                             return;
                         }
-                    } else {
-                        Logging.debug(Level.WARNING, "Failed at parsing the command :(");
+
+                        if (!cmd.hasPermission(sender)) {
+                            sender.sendMessage(ChatColor.DARK_RED + Language.getTranslation("insufficient.permissions"));
+                            return;
+                        }
+
+                        if (cmd instanceof GenericConsoleCommand) {
+                            ((GenericConsoleCommand) cmd).execute(sender, realArgs);
+                            return;
+                        } else if (cmd instanceof GenericPlayerCommand) {
+                            if (sender instanceof Player) {
+                                ((GenericPlayerCommand) cmd).execute((Player) sender, realArgs);
+                                return;
+                            }
+                        } else {
+                            Logging.debug(Level.WARNING, "Failed at parsing the command :(");
+                        }
                     }
                 }
-            }
 
-            if (helpCommand != null) {
-                displayCommandHelp(helpCommand, sender);
-                return;
+                if (helpCommand != null) {
+                    displayCommandHelp(helpCommand, sender);
+                    return;
+                }
             }
-        }
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

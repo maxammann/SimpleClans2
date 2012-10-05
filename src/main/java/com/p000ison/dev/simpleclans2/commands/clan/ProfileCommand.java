@@ -19,13 +19,13 @@
 
 package com.p000ison.dev.simpleclans2.commands.clan;
 
-import com.p000ison.dev.simpleclans2.language.Language;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
-import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
+import com.p000ison.dev.simpleclans2.language.Language;
 import com.p000ison.dev.simpleclans2.util.GeneralHelper;
+import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -99,10 +99,10 @@ public class ProfileCommand extends GenericPlayerCommand {
         String inactive = ChatColor.WHITE.toString() + clan.getInactiveDays() + subColor + "/" + ChatColor.WHITE.toString() + (clan.isVerified() ? plugin.getSettingsManager().getPurgeInactiveClansDays() : plugin.getSettingsManager().getPurgeUnverifiedClansDays()) + " " + Language.getTranslation("days");
         String founded = ChatColor.WHITE + clan.getFounded();
 
-        String rawAllies =  GeneralHelper.clansToString(clan.getAllies(), ",");
+        String rawAllies = GeneralHelper.clansToString(clan.getAllies(), ",");
         String allies = ChatColor.WHITE + (rawAllies == null ? Language.getTranslation("none") : rawAllies);
 
-        String rawRivals =  GeneralHelper.clansToString(clan.getRivals(), ",");
+        String rawRivals = GeneralHelper.clansToString(clan.getRivals(), ",");
         String rivals = ChatColor.WHITE + (rawRivals == null ? Language.getTranslation("none") : rawRivals);
         String kdr = ChatColor.YELLOW + formatter.format(clan.getKDR());
 

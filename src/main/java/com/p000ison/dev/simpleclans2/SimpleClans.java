@@ -22,6 +22,7 @@ package com.p000ison.dev.simpleclans2;
 
 import com.p000ison.dev.simpleclans2.api.Core;
 import com.p000ison.dev.simpleclans2.clan.ClanManager;
+import com.p000ison.dev.simpleclans2.clan.ranks.RankManager;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayerManager;
 import com.p000ison.dev.simpleclans2.commands.CommandManager;
 import com.p000ison.dev.simpleclans2.commands.admin.*;
@@ -48,7 +49,6 @@ import com.p000ison.dev.simpleclans2.database.data.DataManager;
 import com.p000ison.dev.simpleclans2.language.Language;
 import com.p000ison.dev.simpleclans2.listeners.SCEntityListener;
 import com.p000ison.dev.simpleclans2.listeners.SCPlayerListener;
-import com.p000ison.dev.simpleclans2.clan.ranks.RankManager;
 import com.p000ison.dev.simpleclans2.requests.RequestManager;
 import com.p000ison.dev.simpleclans2.settings.SettingsManager;
 import com.p000ison.dev.simpleclans2.support.PreciousStonesSupport;

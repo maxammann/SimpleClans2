@@ -37,7 +37,7 @@ public class PlayerState {
     private static final Map<Material, Integer> FOOD = new HashMap<Material, Integer>();
     private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.#");
 
-//    private static Map<Material, Integer> WEAPONS = new HashMap<Material, Integer>();
+    //    private static Map<Material, Integer> WEAPONS = new HashMap<Material, Integer>();
     private static final ChatColor[] ARMOR_ORDER = new ChatColor[]{ChatColor.BLACK, ChatColor.GOLD, ChatColor.YELLOW, ChatColor.WHITE, ChatColor.GRAY, ChatColor.AQUA, ChatColor.RED};
 //    private static Map<Material, Integer> GOLD_TOOLS = new HashMap<Material, Integer>();
 //    private static Map<Material, Integer> STONE_TOOLS = new HashMap<Material, Integer>();

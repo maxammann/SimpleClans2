@@ -19,10 +19,10 @@
 
 package com.p000ison.dev.simpleclans2.commands.clan;
 
-import com.p000ison.dev.simpleclans2.language.Language;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.commands.GenericConsoleCommand;
+import com.p000ison.dev.simpleclans2.language.Language;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
@@ -54,7 +54,7 @@ public class AnyProfileCommand extends GenericConsoleCommand {
         Clan clan = plugin.getClanManager().getClan(args[0]);
 
         if (clan == null) {
-            player.sendMessage( ChatColor.RED + Language.getTranslation("no.clan.matched"));
+            player.sendMessage(ChatColor.RED + Language.getTranslation("no.clan.matched"));
             return;
         }
 
