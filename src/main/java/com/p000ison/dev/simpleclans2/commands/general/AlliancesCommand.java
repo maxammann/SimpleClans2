@@ -23,7 +23,8 @@ import com.p000ison.dev.simpleclans2.language.Language;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.commands.GenericConsoleCommand;
-import com.p000ison.dev.simpleclans2.util.ChatBlock;
+import com.p000ison.dev.simpleclans2.util.chat.Align;
+import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.util.GeneralHelper;
 import com.p000ison.dev.simpleclans2.util.comparators.KDRComparator;
 import org.bukkit.ChatColor;
@@ -88,10 +89,10 @@ public class AlliancesCommand extends GenericConsoleCommand {
         ChatBlock chatBlock = new ChatBlock();
 
         ChatBlock.sendBlank(sender);
-        ChatBlock.saySingle(sender, plugin.getSettingsManager().getServerName() + subColor + " " + Language.getTranslation("alliances"));
+        ChatBlock.sendSingle(sender, plugin.getSettingsManager().getServerName() + subColor + " " + Language.getTranslation("alliances"));
         ChatBlock.sendBlank(sender);
 
-        chatBlock.setAlignment("l", "l");
+        chatBlock.setAlignment(Align.LEFT, Align.LEFT);
         chatBlock.addRow(headColor + Language.getTranslation("clan"), Language.getTranslation("allies"));
 
         int[] boundings = getBoundings(completeSize, page);

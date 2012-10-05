@@ -24,7 +24,8 @@ import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
 import com.p000ison.dev.simpleclans2.language.Language;
-import com.p000ison.dev.simpleclans2.util.ChatBlock;
+import com.p000ison.dev.simpleclans2.util.chat.Align;
+import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.util.GeneralHelper;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -95,7 +96,7 @@ public class CoordsCommand extends GenericPlayerCommand {
 
                     ChatBlock chatBlock = new ChatBlock();
 
-                    chatBlock.setAlignment("l", "c", "c", "c");
+                    chatBlock.setAlignment(Align.LEFT, Align.CENTER, Align.CENTER, Align.CENTER);
 
                     chatBlock.addRow(headColor + Language.getTranslation("name"), Language.getTranslation("distance"), Language.getTranslation("coords.upper"), Language.getTranslation("world"));
 
@@ -121,7 +122,7 @@ public class CoordsCommand extends GenericPlayerCommand {
 
 
                     ChatBlock.sendBlank(player);
-                    ChatBlock.saySingle(player, plugin.getSettingsManager().getClanColor() + clan.getName() + subColor + " " + Language.getTranslation("coords") + " ");
+                    ChatBlock.sendSingle(player, plugin.getSettingsManager().getClanColor() + clan.getName() + subColor + " " + Language.getTranslation("coords"));
                     ChatBlock.sendBlank(player);
 
 

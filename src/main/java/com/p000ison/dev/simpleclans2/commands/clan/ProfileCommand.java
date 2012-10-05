@@ -24,7 +24,7 @@ import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
-import com.p000ison.dev.simpleclans2.util.ChatBlock;
+import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.util.GeneralHelper;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -89,7 +89,7 @@ public class ProfileCommand extends GenericPlayerCommand {
         ChatColor headColor = plugin.getSettingsManager().getHeadingPageColor();
 
         ChatBlock.sendBlank(sender);
-        ChatBlock.saySingle(sender, plugin.getSettingsManager().getClanColor() + clan.getName() + subColor + " " + Language.getTranslation("profile"));
+        ChatBlock.sendSingle(sender, plugin.getSettingsManager().getClanColor() + clan.getName() + subColor + " " + Language.getTranslation("profile"));
         ChatBlock.sendBlank(sender);
 
         String name = clan.getName();

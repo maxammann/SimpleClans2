@@ -63,4 +63,58 @@ public class Test {
 
 
     }
+
+    public void speedTestChatblocks() {
+//        long[] orginalTimings = new long[5000];
+//
+//        for (int i = 0; i < 5000; i++) {
+//            long start = System.currentTimeMillis();
+//
+//            com.p000ison.dev.simpleclans2.util.chat.ChatBlock block1 = new com.p000ison.dev.simpleclans2.util.chat.ChatBlock();
+//            block1.setAlignment("c", "c", "r", "l");
+//            for (int j = 0; j < 100; j++) {
+//                block1.addRow("123456789", "123456789", "123456789", "123456789");
+//            }
+//
+//            block1.sendBlock(sender);
+//
+//            long finish = System.currentTimeMillis();
+//            orginalTimings[i] = finish - start;
+//        }
+//
+//        long[] myTimings = new long[5000];
+//
+//
+//        for (int i = 0; i < 500; i++) {
+//            long start = System.currentTimeMillis();
+//
+//            ChatBlock block = new ChatBlock();
+//            block.setAlignment(Align.CENTER, Align.CENTER, Align.RIGHT, Align.LEFT);
+//            for (int j = 0; j < 100; j++) {
+//                block.addRow("123456789", "123456789", "123456789", "123456789");
+//            }
+//
+//            block.sendBlock(sender);
+//
+//            long finish = System.currentTimeMillis();
+//            myTimings[i] = finish - start;
+//        }
+//
+//        int my = 0;
+//
+//        for (long a : myTimings) {
+//            my += a;
+//        }
+//
+//        int orginal = 0;
+//
+//        for (long a : orginalTimings) {
+//            orginal += a;
+//        }
+//
+//        System.out.println(my);
+//        System.out.println(orginal);
+//        System.out.println("My: " + (my / 5000.0));
+//        System.out.println("Orginal: " + (orginal / 5000.0));
+    }
 }

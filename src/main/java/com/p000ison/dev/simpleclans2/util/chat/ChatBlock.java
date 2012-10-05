@@ -104,7 +104,7 @@ public class ChatBlock {
 
         for (int i = 0; i < sections.length; i++) {
             builderSections[i] = new StringBuilder(sections[i]);
-        }   
+        }
 
         rows.add(builderSections);
     }
@@ -152,7 +152,7 @@ public class ChatBlock {
                 switch (align) {
                     case RIGHT:
                         if (sectionLength > columnSize) {
-                            cropRight(section, columnSize);
+                            cropLeft(section, columnSize);
                         } else if (sectionLength < columnSize) {
                             padLeft(section, columnSize);
                         }
@@ -177,7 +177,7 @@ public class ChatBlock {
 
             cropRight(finalRow, MAX_LINE_LENGTH);
 
-            sender.sendMessage(finalRow.toString());
+//            sender.sendMessage(finalRow.toString());
         }
         return true;
     }
@@ -185,7 +185,7 @@ public class ChatBlock {
     /**
      * Sets the alignment of each row.
      * <p/>
-     * <p>Example:</p><br>
+     * <p>Example:</p>
      * <p/>
      * block.setAlignment(Align.LEFT, Align.RIGHT);
      * <p/>
@@ -379,6 +379,60 @@ public class ChatBlock {
     }
 
     /**
+     * Sends a message to a player.
+     *
+     * @param sender  The retriever
+     * @param message The message
+     */
+    public static void sendMessage(CommandSender sender, String message)
+    {
+        if (prefix != null) {
+            message = prefix + message;
+        }
+
+        sender.sendMessage(message);
+    }
+
+    /**
+     * Sends messages to a player
+     *
+     * @param sender   The retriever
+     * @param messages The message
+     */
+    public static void sendMessage(CommandSender sender, String... messages)
+    {
+        for (int i = 0; i < messages.length; i++) {
+            String message = messages[i];
+            if (prefix != null) {
+                messages[i] = prefix + message;
+            }
+
+            sender.sendMessage(message);
+        }
+    }
+
+    /**
+     * Sends a blank line.
+     *
+     * @param receiver The retriever.
+     */
+    public static void sendBlank(CommandSender receiver)
+    {
+        receiver.sendMessage("");
+    }
+
+    /**
+     * Sends a single line line to the player. This will crop the overflow right.
+     *
+     * @param receiver The retriever
+     * @param message  The message.
+     */
+    public static void sendSingle(CommandSender receiver, String message)
+    {
+        receiver.sendMessage("");
+    }
+
+    /**
      * Sets the prefix for messages
      *
      * @param prefix The prefix to set or <strong>null</strong> if you do not like one
@@ -398,6 +452,5 @@ public class ChatBlock {
     {
         return msg.replace("&", "\u00a7");
     }
-
 }
 

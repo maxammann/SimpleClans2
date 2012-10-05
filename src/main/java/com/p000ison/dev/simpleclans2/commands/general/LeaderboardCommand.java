@@ -23,7 +23,8 @@ import com.p000ison.dev.simpleclans2.language.Language;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.commands.GenericConsoleCommand;
-import com.p000ison.dev.simpleclans2.util.ChatBlock;
+import com.p000ison.dev.simpleclans2.util.chat.Align;
+import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.util.GeneralHelper;
 import com.p000ison.dev.simpleclans2.util.comparators.KDRComparator;
 import org.bukkit.ChatColor;
@@ -86,12 +87,12 @@ public class LeaderboardCommand extends GenericConsoleCommand {
         ChatBlock chatBlock = new ChatBlock();
 
         ChatBlock.sendBlank(sender);
-        ChatBlock.saySingle(sender, plugin.getSettingsManager().getServerName() + subColor + " " + Language.getTranslation("leaderboard.command"));
+        ChatBlock.sendSingle(sender, plugin.getSettingsManager().getServerName() + subColor + " " + Language.getTranslation("leaderboard.command"));
         ChatBlock.sendBlank(sender);
         sender.sendMessage(headColor + MessageFormat.format(Language.getTranslation("total.clan.players.0"), subColor.toString() + clanPlayers.size()));
         ChatBlock.sendBlank(sender);
 
-        chatBlock.setAlignment("c", "l", "c", "c", "c", "c");
+        chatBlock.setAlignment(Align.CENTER, Align.LEFT, Align.CENTER, Align.CENTER, Align.CENTER, Align.CENTER);
         chatBlock.addRow("  " + headColor + Language.getTranslation("rank"), Language.getTranslation("player"), Language.getTranslation("kdr"), Language.getTranslation("clan"), Language.getTranslation("seen"));
 
         int rank = 1;

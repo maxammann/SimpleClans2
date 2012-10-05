@@ -20,9 +20,16 @@
 package com.p000ison.dev.simpleclans2;
 
 /**
- *
+ * If a class implements this, it has a KDR.
  */
 public interface KDR {
 
+    /**
+     * Returns the KDR of the object.
+     * <p/>
+     * <p><strong>KDR: </strong> "Kill to Death Ratio"</p>
+     *
+     * @return The KDR of this object.
+     */
     public float getKDR();
 }

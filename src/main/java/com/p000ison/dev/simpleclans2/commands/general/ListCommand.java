@@ -24,7 +24,8 @@ import com.p000ison.dev.simpleclans2.language.Language;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.commands.GenericConsoleCommand;
-import com.p000ison.dev.simpleclans2.util.ChatBlock;
+import com.p000ison.dev.simpleclans2.util.chat.Align;
+import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.util.comparators.KDRComparator;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -89,12 +90,12 @@ public class ListCommand extends GenericConsoleCommand {
         ChatBlock chatBlock = new ChatBlock();
 
         ChatBlock.sendBlank(sender);
-        ChatBlock.saySingle(sender, plugin.getSettingsManager().getServerName() + subColor + " " + Language.getTranslation("clans.lower"));
+        ChatBlock.sendSingle(sender, plugin.getSettingsManager().getServerName() + subColor + " " + Language.getTranslation("clans.lower"));
         ChatBlock.sendBlank(sender);
         sender.sendMessage(headColor + Language.getTranslation("total.clans") + " " + subColor + clans.size());
         ChatBlock.sendBlank(sender);
 
-        chatBlock.setAlignment("c", "l", "c", "c");
+        chatBlock.setAlignment(Align.CENTER, Align.LEFT, Align.CENTER, Align.CENTER);
 
         chatBlock.addRow(Language.getTranslation("rank"), Language.getTranslation("name"), Language.getTranslation("kdr"), Language.getTranslation("members"));
 

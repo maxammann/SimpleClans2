@@ -34,7 +34,7 @@ public final class Announcer {
 
     public static void announce(ClanPlayer clanPlayer, String message)
     {
-        announceRaw(com.p000ison.dev.simpleclans2.util.chat.ChatBlock.parseColors(plugin.getSettingsManager().getClanPlayerAnnounce().replace("+player", clanPlayer.getName()).replace("+message", message)));
+        announceRaw(ChatBlock.parseColors(plugin.getSettingsManager().getClanPlayerAnnounce().replace("+player", clanPlayer.getName()).replace("+message", message)));
     }
 
     public static void announce(Clan clan, String message)
