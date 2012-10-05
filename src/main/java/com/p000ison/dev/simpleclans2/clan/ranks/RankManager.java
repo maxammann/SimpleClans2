@@ -17,7 +17,7 @@
  *     Created: 09.09.12 15:06
  */
 
-package com.p000ison.dev.simpleclans2.ranks;
+package com.p000ison.dev.simpleclans2.clan.ranks;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;

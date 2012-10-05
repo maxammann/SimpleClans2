@@ -24,9 +24,9 @@ import com.p000ison.dev.simpleclans2.KDR;
 import com.p000ison.dev.simpleclans2.language.Language;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
-import com.p000ison.dev.simpleclans2.ranks.Rank;
+import com.p000ison.dev.simpleclans2.clan.ranks.Rank;
 import com.p000ison.dev.simpleclans2.util.DateHelper;
-import com.p000ison.dev.simpleclans2.util.GeneralHelper;
+import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -582,7 +582,7 @@ public class Clan implements KDR {
     public void addBBMessage(ClanPlayer announcer, String msg)
     {
         if (isVerified()) {
-            addBBRawMessage(GeneralHelper.parseColors(plugin.getSettingsManager().getClanPlayerBB().replace("+player", announcer.getName()).replace("+message", msg)));
+            addBBRawMessage(ChatBlock.parseColors(plugin.getSettingsManager().getClanPlayerBB().replace("+player", announcer.getName()).replace("+message", msg)));
 //            addBBRawMessage(GeneralHelper.parseColors("+player +message".replace("+player", announcer.getName()).replace("+message", msg)));
         }
     }
@@ -597,7 +597,7 @@ public class Clan implements KDR {
     public void addBBMessage(Clan announcer, String msg)
     {
         if (isVerified()) {
-            addBBRawMessage(GeneralHelper.parseColors(plugin.getSettingsManager().getClanBB().replace("+clan", announcer.getTag()).replace("+message", msg)));
+            addBBRawMessage(ChatBlock.parseColors(plugin.getSettingsManager().getClanBB().replace("+clan", announcer.getTag()).replace("+message", msg)));
         }
     }
 
@@ -610,7 +610,7 @@ public class Clan implements KDR {
      */
     public void announce(ClanPlayer announcer, String msg)
     {
-        announceRaw(GeneralHelper.parseColors(plugin.getSettingsManager().getClanPlayerAnnounce().replace("+player", announcer.getName()).replace("+message", msg)));
+        announceRaw(ChatBlock.parseColors(plugin.getSettingsManager().getClanPlayerAnnounce().replace("+player", announcer.getName()).replace("+message", msg)));
     }
 
     /**
@@ -621,7 +621,7 @@ public class Clan implements KDR {
      */
     public void announce(Clan announcer, String msg)
     {
-        announceRaw(GeneralHelper.parseColors(plugin.getSettingsManager().getClanAnnounce().replace("+clan", announcer.getTag()).replace("+message", msg)));
+        announceRaw(ChatBlock.parseColors(plugin.getSettingsManager().getClanAnnounce().replace("+clan", announcer.getTag()).replace("+message", msg)));
     }
 
     /**
@@ -631,7 +631,7 @@ public class Clan implements KDR {
      */
     public void announce(String msg)
     {
-        announceRaw(GeneralHelper.parseColors(plugin.getSettingsManager().getDefaultAnnounce().replace("+message", msg)));
+        announceRaw(ChatBlock.parseColors(plugin.getSettingsManager().getDefaultAnnounce().replace("+message", msg)));
     }
 
     /**
@@ -668,7 +668,7 @@ public class Clan implements KDR {
 
     public void addBBMessage(String msg)
     {
-        addBBRawMessage(GeneralHelper.parseColors(plugin.getSettingsManager().getDefaultBB().replace("+message", msg)));
+        addBBRawMessage(ChatBlock.parseColors(plugin.getSettingsManager().getDefaultBB().replace("+message", msg)));
     }
 
     private void addBBRawMessage(String message)

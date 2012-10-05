@@ -171,17 +171,6 @@ public final class GeneralHelper {
         return true;
     }
 
-    /**
-     * Convert color hex values
-     *
-     * @param msg The message to colorize
-     * @return The colored string
-     */
-    public static String parseColors(String msg)
-    {
-        return msg.replace("&", "\u00a7");
-    }
-
     public static String locationToString(Location loc)
     {
         return loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ() + " " + loc.getWorld().getName();

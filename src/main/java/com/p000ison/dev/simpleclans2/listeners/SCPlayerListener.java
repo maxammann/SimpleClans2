@@ -23,7 +23,7 @@ package com.p000ison.dev.simpleclans2.listeners;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
-import com.p000ison.dev.simpleclans2.util.GeneralHelper;
+import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -78,7 +78,7 @@ public class SCPlayerListener implements Listener {
                 if (bb.size() > 0) {
 
                     for (int i = 0; i < plugin.getSettingsManager().getMotdBBLines() && i < bb.size(); i++) {
-                        player.sendMessage(GeneralHelper.parseColors(plugin.getSettingsManager().getMotdBBFormat().replace("-bb", bb.get(i))));
+                        player.sendMessage(ChatBlock.parseColors(plugin.getSettingsManager().getMotdBBFormat().replace("-bb", bb.get(i))));
                     }
                 }
             }

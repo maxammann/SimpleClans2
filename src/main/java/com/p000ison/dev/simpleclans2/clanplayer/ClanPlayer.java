@@ -23,7 +23,7 @@ import com.p000ison.dev.simpleclans2.KDR;
 import com.p000ison.dev.simpleclans2.language.Language;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
-import com.p000ison.dev.simpleclans2.ranks.Rank;
+import com.p000ison.dev.simpleclans2.clan.ranks.Rank;
 import com.p000ison.dev.simpleclans2.requests.VoteResult;
 import com.p000ison.dev.simpleclans2.util.DateHelper;
 import org.bukkit.entity.Player;

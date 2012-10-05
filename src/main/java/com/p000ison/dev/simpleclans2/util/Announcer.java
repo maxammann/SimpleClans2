@@ -22,6 +22,7 @@ package com.p000ison.dev.simpleclans2.util;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
+import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import org.bukkit.Bukkit;
 
 /**
@@ -33,17 +34,17 @@ public final class Announcer {
 
     public static void announce(ClanPlayer clanPlayer, String message)
     {
-        announceRaw(GeneralHelper.parseColors(plugin.getSettingsManager().getClanPlayerAnnounce().replace("+player", clanPlayer.getName()).replace("+message", message)));
+        announceRaw(com.p000ison.dev.simpleclans2.util.chat.ChatBlock.parseColors(plugin.getSettingsManager().getClanPlayerAnnounce().replace("+player", clanPlayer.getName()).replace("+message", message)));
     }
 
     public static void announce(Clan clan, String message)
     {
-        announceRaw(GeneralHelper.parseColors(plugin.getSettingsManager().getClanAnnounce().replace("+clan", clan.getTag()).replace("+message", message)));
+        announceRaw(ChatBlock.parseColors(plugin.getSettingsManager().getClanAnnounce().replace("+clan", clan.getTag()).replace("+message", message)));
     }
 
     public static void announce(String message)
     {
-        announceRaw(GeneralHelper.parseColors(plugin.getSettingsManager().getDefaultAnnounce().replace("+message", message)));
+        announceRaw(ChatBlock.parseColors(plugin.getSettingsManager().getDefaultAnnounce().replace("+message", message)));
     }
 
     private static void announceRaw(String message)

@@ -22,8 +22,8 @@ package com.p000ison.dev.simpleclans2.settings;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.util.ExceptionHelper;
-import com.p000ison.dev.simpleclans2.util.GeneralHelper;
 import com.p000ison.dev.simpleclans2.util.Logging;
+import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -113,7 +113,7 @@ public class SettingsManager {
             serverName = general.getString("server-name");
             globalFF = general.getBoolean("global-ff");
             autoSave = general.getInt("auto-save");
-            helpFormat = GeneralHelper.parseColors(general.getString("help-format"));
+            helpFormat = ChatBlock.parseColors(general.getString("help-format"));
 
             ConfigurationSection databaseSection = config.getConfigurationSection("database");
             databaseConfiguration = new DatabaseConfiguration();

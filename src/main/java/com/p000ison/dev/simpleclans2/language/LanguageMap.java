@@ -14,13 +14,13 @@
  *     You should have received a copy of the GNU General Public License
  *     along with SimpleClans2.  If not, see <http://www.gnu.org/licenses/>.
  *
- *     Created: 10/2/12 6:14 PM
+ *     Created: 05.10.12 13:46
  */
 
 package com.p000ison.dev.simpleclans2.language;
 
-import com.p000ison.dev.simpleclans2.util.GeneralHelper;
 import com.p000ison.dev.simpleclans2.util.Logging;
+import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 
 import java.io.*;
 import java.util.HashMap;
@@ -70,7 +70,7 @@ public class LanguageMap extends HashMap<String, String> {
 
                 String trimmed = line.trim();
 
-                if (trimmed.isEmpty()) {
+                if (trimmed.isEmpty() || trimmed.contains("#")) {
                     continue;
                 }
 
@@ -80,7 +80,7 @@ public class LanguageMap extends HashMap<String, String> {
                     continue;
                 }
 
-                put(entry[0], GeneralHelper.parseColors(entry[1]));
+                put(entry[0], ChatBlock.parseColors(entry[1]));
             }
         } catch (IOException e) {
             Logging.debug(e, "Failed at loading the language file %s!", file);

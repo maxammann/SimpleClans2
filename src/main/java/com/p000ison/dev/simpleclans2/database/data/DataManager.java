@@ -27,7 +27,7 @@ import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.clanplayer.PlayerFlags;
 import com.p000ison.dev.simpleclans2.database.Database;
 import com.p000ison.dev.simpleclans2.database.data.statements.RemoveRankStatement;
-import com.p000ison.dev.simpleclans2.ranks.Rank;
+import com.p000ison.dev.simpleclans2.clan.ranks.Rank;
 import com.p000ison.dev.simpleclans2.util.DateHelper;
 import com.p000ison.dev.simpleclans2.util.JSONUtil;
 import com.p000ison.dev.simpleclans2.util.Logging;
