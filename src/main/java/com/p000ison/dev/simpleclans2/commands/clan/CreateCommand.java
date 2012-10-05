@@ -29,6 +29,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.text.MessageFormat;
+import java.util.Locale;
 
 /**
  * Represents a CreateCommand
@@ -92,7 +93,7 @@ public class CreateCommand extends GenericPlayerCommand {
                 return;
             }
 
-            if (plugin.getSettingsManager().isTagDisallowed(cleanTag.toLowerCase())) {
+            if (plugin.getSettingsManager().isTagDisallowed(cleanTag.toLowerCase(Locale.US))) {
                 player.sendMessage(ChatColor.RED + Language.getTranslation("that.tag.name.is.disallowed"));
                 return;
             }

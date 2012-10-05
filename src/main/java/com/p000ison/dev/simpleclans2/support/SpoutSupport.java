@@ -30,6 +30,8 @@ import org.bukkit.plugin.Plugin;
 import org.getspout.spout.Spout;
 import org.getspout.spoutapi.player.SpoutPlayer;
 
+import java.util.Locale;
+
 import static org.getspout.spoutapi.SpoutManager.getOnlinePlayers;
 import static org.getspout.spoutapi.SpoutManager.getPlayer;
 
@@ -111,9 +113,9 @@ public class SpoutSupport {
 
     public static SpoutPlayer getSpoutPlayer(String player)
     {
-        String clean = player.toLowerCase();
+        String clean = player.toLowerCase(Locale.US);
         for (SpoutPlayer spoutPlayer : getOnlinePlayers()) {
-            String iClean = spoutPlayer.getName().toLowerCase();
+            String iClean = spoutPlayer.getName().toLowerCase(Locale.US);
             if (iClean.equals(clean) || iClean.startsWith(clean)) {
                 return spoutPlayer;
             }

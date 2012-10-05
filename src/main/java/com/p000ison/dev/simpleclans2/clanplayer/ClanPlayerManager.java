@@ -25,6 +25,7 @@ import org.bukkit.entity.Player;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 /**
@@ -102,10 +103,10 @@ public class ClanPlayerManager {
             return null;
         }
 
-        String lowerName = name.toLowerCase();
+        String lowerName = name.toLowerCase(Locale.US);
 
         for (ClanPlayer clanPlayer : players) {
-            if (clanPlayer.getName().toLowerCase().startsWith(lowerName)) {
+            if (clanPlayer.getName().toLowerCase(Locale.US).startsWith(lowerName)) {
                 return clanPlayer;
             }
         }
@@ -119,10 +120,10 @@ public class ClanPlayerManager {
             return null;
         }
 
-        String lowerName = name.toLowerCase();
+        String lowerName = name.toLowerCase(Locale.US);
 
         for (ClanPlayer clanPlayer : players) {
-            if (clanPlayer.getName().toLowerCase().startsWith(lowerName)) {
+            if (clanPlayer.getName().toLowerCase(Locale.US).startsWith(lowerName)) {
                 if (clanPlayer.getClan() == null) {
                     return null;
                 } else {

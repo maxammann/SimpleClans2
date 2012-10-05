@@ -26,6 +26,7 @@ import org.bukkit.ChatColor;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 /**
@@ -72,7 +73,7 @@ public class ClanManager {
      */
     public Clan getClan(String tag)
     {
-        String lowerTag = ChatColor.stripColor(tag.toLowerCase());
+        String lowerTag = ChatColor.stripColor(tag.toLowerCase(Locale.US));
 
         for (Clan clan : clans) {
             if (clan.getCleanTag().startsWith(lowerTag)) {

@@ -19,10 +19,7 @@
 
 package com.p000ison.dev.simpleclans2.clan.ranks;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Represents a Rank
@@ -93,10 +90,10 @@ public class Rank {
 
     public String addPermission(String permission)
     {
-        String lowerPerm = permission.toLowerCase();
+        String lowerPerm = permission.toLowerCase(Locale.US);
         for (Map.Entry<String, Integer> perm : availablePermissions.entrySet()) {
             String key = perm.getKey();
-            String cleanKey = key.toLowerCase();
+            String cleanKey = key.toLowerCase(Locale.US);
 
             if (cleanKey.startsWith(lowerPerm)) {
                 permissions.add(perm.getValue());

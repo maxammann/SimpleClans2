@@ -25,12 +25,11 @@ import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.util.Logging;
 
 import java.util.LinkedList;
-import java.util.Queue;
 
 /**
  * Represents a AutoSaver
  */
-public class AutoSaver extends LinkedList<Executable> implements Queue<Executable>, Runnable {
+public class AutoSaver extends LinkedList<Executable> implements Runnable {
 
     private DataManager dataManager;
     private SimpleClans plugin;

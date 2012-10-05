@@ -663,7 +663,7 @@ public class Clan implements KDR {
      */
     public String getCleanTag()
     {
-        return ChatColor.stripColor(tag.toLowerCase());
+        return ChatColor.stripColor(tag.toLowerCase(Locale.US));
     }
 
     public void addBBMessage(String msg)
@@ -1009,9 +1009,9 @@ public class Clan implements KDR {
 
     public Rank getRank(String query)
     {
-        String cleanQuery = query.toLowerCase();
+        String cleanQuery = query.toLowerCase(Locale.US);
         for (Rank rank : ranks) {
-            if (rank.getName().toLowerCase().startsWith(cleanQuery)) {
+            if (rank.getName().toLowerCase(Locale.US).startsWith(cleanQuery)) {
                 return rank;
             }
         }

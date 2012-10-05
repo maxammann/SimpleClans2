@@ -31,10 +31,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Represents a GeneralHelper
@@ -81,7 +78,7 @@ public final class GeneralHelper {
         StringBuilder string = new StringBuilder();
 
         for (char color : args) {
-            string.append(ChatColor.getByChar(color).name().toLowerCase()).append(' ');
+            string.append(ChatColor.getByChar(color).name().toLowerCase(Locale.US)).append(' ');
         }
 
         return string.substring(0, string.length() - 1);

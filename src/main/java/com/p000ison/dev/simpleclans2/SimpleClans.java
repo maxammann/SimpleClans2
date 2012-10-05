@@ -127,8 +127,6 @@ public class SimpleClans extends JavaPlugin implements Core {
         //close the connection to the database
         databaseManager.getDatabase().close();
 
-        economy = null;
-
         Language.clear();
         Logging.close();
     }
@@ -257,21 +255,25 @@ public class SimpleClans extends JavaPlugin implements Core {
         return databaseManager;
     }
 
+    @Override
     public ClanManager getClanManager()
     {
         return clanManager;
     }
 
+    @Override
     public ClanPlayerManager getClanPlayerManager()
     {
         return clanPlayerManager;
     }
 
+    @Override
     public SettingsManager getSettingsManager()
     {
         return settingsManager;
     }
 
+    @Override
     public RequestManager getRequestManager()
     {
         return requestManager;
@@ -307,6 +309,7 @@ public class SimpleClans extends JavaPlugin implements Core {
         return economy;
     }
 
+    @Override
     public RankManager getRankManager()
     {
         return rankManager;
@@ -317,6 +320,7 @@ public class SimpleClans extends JavaPlugin implements Core {
         return preciousStonesSupport;
     }
 
+    @Override
     public TeleportManager getTeleportManager()
     {
         return teleportManager;

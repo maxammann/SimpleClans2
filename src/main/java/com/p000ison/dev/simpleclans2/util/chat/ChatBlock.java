@@ -147,7 +147,7 @@ public class ChatBlock {
                 Align align = getAlign(column);
 
                 if (align == null) {
-                    return false;
+                    align = Align.LEFT;
                 }
 
                 double sectionLength = msgLength(section);
@@ -166,6 +166,7 @@ public class ChatBlock {
                         } else if (sectionLength < columnSize) {
                             padRight(section, columnSize);
                         }
+                        break;
                     case CENTER:
                         if (sectionLength > columnSize) {
                             cropRight(section, columnSize);
@@ -173,6 +174,8 @@ public class ChatBlock {
                             center(section, columnSize);
                         }
                         break;
+                    default:
+                        throw new IllegalArgumentException("Align not found!");
                 }
 
                 finalRow.append(section);

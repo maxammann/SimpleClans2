@@ -20,6 +20,8 @@
 
 package com.p000ison.dev.simpleclans2.database.data;
 
+import java.util.Locale;
+
 /**
  * Represents a KillType
  */
@@ -46,7 +48,7 @@ public enum KillType {
     public String toString()
     {
         return "KillType{" +
-                "type=" + this.name().toLowerCase() +
+                "type=" + this.name().toLowerCase(Locale.US) +
                 '}';
     }
 }

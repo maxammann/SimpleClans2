@@ -31,6 +31,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.logging.Level;
 
@@ -230,7 +231,7 @@ public class SettingsManager {
                 if (materialRaw.matches("[0-9]+")) {
                     material = Material.getMaterial(Integer.parseInt(materialRaw));
                 } else {
-                    material = Material.valueOf(materialRaw.toUpperCase());
+                    material = Material.valueOf(materialRaw.toUpperCase(Locale.US));
                 }
 
                 if (material != null) {
@@ -247,7 +248,7 @@ public class SettingsManager {
                 disallowedColors[i] = disallowedColorsList.get(i);
             }
 
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             ExceptionHelper.handleException(e, getClass());
         }
 
