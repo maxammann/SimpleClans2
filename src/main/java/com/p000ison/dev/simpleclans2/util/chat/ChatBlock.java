@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A ChatBlock is used to send tables with rows and columns to a  @see{org.bukkit.command.CommandSender}.
+ * A ChatBlock is used to send tables with rows and columns to a  {@link org.bukkit.command.CommandSender}.
  */
 public class ChatBlock {
 
@@ -104,13 +104,13 @@ public class ChatBlock {
 
         for (int i = 0; i < sections.length; i++) {
             builderSections[i] = new StringBuilder(sections[i]);
-        }
+        }   
 
         rows.add(builderSections);
     }
 
     /**
-     * Sends the complete block to a @see{org.bukkit.command.CommandSender}.
+     * Sends the complete block to a {@link org.bukkit.command.CommandSender}.
      *
      * @param sender The retriever.
      * @return Weather is was successfully.
@@ -202,7 +202,7 @@ public class ChatBlock {
     }
 
     /**
-     * Crops the string right in the @see{java.lang.StringBuilder}
+     * Crops the string right in the {@link java.lang.StringBuilder}.
      *
      * @param text   The message to crop right.
      * @param length The lenght it of the section it should be crop right.
@@ -220,7 +220,7 @@ public class ChatBlock {
 
 
     /**
-     * Crops the string left in the @see{java.lang.StringBuilder}
+     * Crops the string left in the {@link java.lang.StringBuilder}.
      *
      * @param text   The message to crop left.
      * @param length The lenght it of the section it should be crop left.
@@ -237,7 +237,7 @@ public class ChatBlock {
     }
 
     /**
-     * Pads the string right in the @see{java.lang.StringBuilder}
+     * Pads the string right in the {@link java.lang.StringBuilder}.
      *
      * @param text   The message to pad right.
      * @param length The lenght it of the section it should be pad right.
@@ -261,7 +261,7 @@ public class ChatBlock {
     }
 
     /**
-     * Pads the string left in the @see{java.lang.StringBuilder}
+     * Pads the string left in the {@link java.lang.StringBuilder}.
      *
      * @param text   The message to pad left.
      * @param length The lenght it of the section it should be pad left.
@@ -289,7 +289,7 @@ public class ChatBlock {
     }
 
     /**
-     * Centers the string in the @see{java.lang.StringBuilder}
+     * Centers the string in the {@link java.lang.StringBuilder}.
      *
      * @param text       The message to center.
      * @param lineLength The lenght it of the section it should be centered in.
