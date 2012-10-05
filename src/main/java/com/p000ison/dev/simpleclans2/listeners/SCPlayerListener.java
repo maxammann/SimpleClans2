@@ -29,7 +29,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
@@ -105,15 +104,5 @@ public class SCPlayerListener implements Listener {
             event.setCancelled(true);
 //            return;
         }
-    }
-
-    @EventHandler(priority = EventPriority.MONITOR)
-    public void onPlayerInteract(PlayerInteractEvent event)
-    {
-//        System.out.println("1");
-//
-//        System.out.println("3");
-//
-//        System.out.println("2");
     }
 }

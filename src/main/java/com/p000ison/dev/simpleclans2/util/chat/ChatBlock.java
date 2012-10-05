@@ -130,11 +130,11 @@ public class ChatBlock {
         int firstRowLength = rows.get(0).length;
 
         if (alignment.length != firstRowLength) {
-            throw new IllegalArgumentException("The number of alignments must equal the number of sections!");
+            throw new IllegalArgumentException(String.format("The number of alignments must equal the number of sections! %s != %s" , alignment.length, firstRowLength));
         }
 
         if (columnSizes.length != firstRowLength) {
-            throw new IllegalArgumentException("The number of alignments must equal the number of sections!");
+            throw new IllegalArgumentException(String.format("The number of alignments must equal the number of sections! %s != %s", columnSizes.length, firstRowLength));
         }
 
         for (StringBuilder[] row : rows) {
@@ -183,7 +183,7 @@ public class ChatBlock {
 
             cropRight(finalRow, MAX_LINE_LENGTH);
 
-//            sender.sendMessage(finalRow.toString());
+            sender.sendMessage(finalRow.toString());
         }
         return true;
     }
@@ -451,12 +451,16 @@ public class ChatBlock {
     /**
      * Convert color hex values
      *
-     * @param msg The message to colorize
+     * @param text The message to colorize
      * @return The colored string
      */
-    public static String parseColors(String msg)
+    public static String parseColors(String text)
     {
-        return msg.replace("&", "\u00a7");
+        if (text == null) {
+            return null;
+        }
+
+        return text.replace("&", "\u00a7");
     }
 }
 

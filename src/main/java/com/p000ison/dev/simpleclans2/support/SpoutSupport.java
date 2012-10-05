@@ -40,12 +40,10 @@ import static org.getspout.spoutapi.SpoutManager.getPlayer;
  */
 public class SpoutSupport {
 
-    private SimpleClans plugin;
     private boolean enabled = false;
 
     public SpoutSupport(SimpleClans plugin)
     {
-        this.plugin = plugin;
         Plugin spout = Bukkit.getPluginManager().getPlugin("Spout");
 
         if (!(spout instanceof Spout)) {

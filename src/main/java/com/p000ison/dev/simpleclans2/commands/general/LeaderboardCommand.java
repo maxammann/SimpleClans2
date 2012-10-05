@@ -92,15 +92,22 @@ public class LeaderboardCommand extends GenericConsoleCommand {
         sender.sendMessage(headColor + MessageFormat.format(Language.getTranslation("total.clan.players.0"), subColor.toString() + clanPlayers.size()));
         ChatBlock.sendBlank(sender);
 
-        chatBlock.setAlignment(Align.CENTER, Align.LEFT, Align.CENTER, Align.CENTER, Align.CENTER, Align.CENTER);
+        chatBlock.setAlignment(Align.CENTER, Align.LEFT, Align.CENTER, Align.CENTER, Align.CENTER);
         chatBlock.addRow("  " + headColor + Language.getTranslation("rank"), Language.getTranslation("player"), Language.getTranslation("kdr"), Language.getTranslation("clan"), Language.getTranslation("seen"));
 
         int rank = 1;
 
         int[] boundings = getBoundings(completeSize, page);
 
-        for (int i = boundings[0]; i < boundings[1]; i++) {
+        int end = boundings[1];
+
+        for (int i = boundings[0]; i < end; i++) {
             ClanPlayer clanPlayer = clanPlayers.get(i);
+
+            if (clanPlayer.isBanned()) {
+                end++;
+                continue;
+            }
 
             String name = (clanPlayer.isLeader() ? plugin.getSettingsManager().getLeaderColor() : ((clanPlayer.isTrusted() ? plugin.getSettingsManager().getTrustedColor() : plugin.getSettingsManager().getUntrustedColor()))) + clanPlayer.getName();
             String lastSeen = (GeneralHelper.isOnline(clanPlayer.toPlayer()) ? ChatColor.GREEN + Language.getTranslation("online") : ChatColor.WHITE + clanPlayer.getLastSeen());

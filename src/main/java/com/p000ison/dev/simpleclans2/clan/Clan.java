@@ -532,7 +532,13 @@ public class Clan implements KDR {
 
         if (previous != null) {
             if (isVerified()) {
-                clanPlayer.addPastClan(getTag() + (clanPlayer.isLeader() ? "*" : ""));
+                String pastClan = previous.getTag();
+
+                if (clanPlayer.isLeader()) {
+                    pastClan += '*';
+                }
+
+                clanPlayer.addPastClan(pastClan);
             }
         }
 
@@ -583,7 +589,6 @@ public class Clan implements KDR {
     {
         if (isVerified()) {
             addBBRawMessage(ChatBlock.parseColors(plugin.getSettingsManager().getClanPlayerBB().replace("+player", announcer.getName()).replace("+message", msg)));
-//            addBBRawMessage(GeneralHelper.parseColors("+player +message".replace("+player", announcer.getName()).replace("+message", msg)));
         }
     }
 
@@ -885,11 +890,6 @@ public class Clan implements KDR {
 
         return true;
     }
-
-//    public void update()
-//    {
-//        plugin.getDataManager().UPDATE_CLAN(this);
-//    }
 
     public boolean needsUpdate()
     {

@@ -36,16 +36,7 @@ public class PlayerState {
     private Player player;
     private static final Map<Material, Integer> FOOD = new HashMap<Material, Integer>();
     private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.#");
-
-    //    private static Map<Material, Integer> WEAPONS = new HashMap<Material, Integer>();
     private static final ChatColor[] ARMOR_ORDER = new ChatColor[]{ChatColor.BLACK, ChatColor.GOLD, ChatColor.YELLOW, ChatColor.WHITE, ChatColor.GRAY, ChatColor.AQUA, ChatColor.RED};
-//    private static Map<Material, Integer> GOLD_TOOLS = new HashMap<Material, Integer>();
-//    private static Map<Material, Integer> STONE_TOOLS = new HashMap<Material, Integer>();
-//    private static Map<Material, Integer> IRON_TOOLS = new HashMap<Material, Integer>();
-//    private static Map<Material, Integer> DIAMOND_TOOLS = new HashMap<Material, Integer>();
-//    private static Map<Material, Integer> OTHER_TOOLS = new HashMap<Material, Integer>();
-
-
     private static Map<Material, Integer> ARMOR = new HashMap<Material, Integer>();
 
     static {
@@ -66,37 +57,6 @@ public class PlayerState {
         FOOD.put(Material.MELON_STEM, 2);
         //1.4
         //potato;carrot;baked potato; golden carrot; carrot; pumpkin pie
-
-//        WEAPONS.put(Material.WOOD_SWORD, 4);
-//        WEAPONS.put(Material.GOLD_SWORD, 4);
-//        WEAPONS.put(Material.STONE_SWORD, 6);
-//        WEAPONS.put(Material.IRON_SWORD, 8);
-//        WEAPONS.put(Material.DIAMOND_SWORD, 10);
-//
-//        ARMOR.put(Material.LEATHER_HELMET, 1);
-//        ARMOR.put(Material.LEATHER_CHESTPLATE, 3);
-//        ARMOR.put(Material.LEATHER_LEGGINGS, 2);
-//        ARMOR.put(Material.LEATHER_BOOTS, 1);
-//
-//        ARMOR.put(Material.GOLD_HELMET, 2);
-//        ARMOR.put(Material.GOLD_CHESTPLATE, 5);
-//        ARMOR.put(Material.GOLD_LEGGINGS, 3);
-//        ARMOR.put(Material.GOLD_BOOTS, 1);
-//
-//        ARMOR.put(Material.CHAINMAIL_HELMET, 2);
-//        ARMOR.put(Material.CHAINMAIL_CHESTPLATE, 5);
-//        ARMOR.put(Material.CHAINMAIL_LEGGINGS, 4);
-//        ARMOR.put(Material.CHAINMAIL_BOOTS, 1);
-//
-//        ARMOR.put(Material.IRON_HELMET, 2);
-//        ARMOR.put(Material.IRON_CHESTPLATE, 6);
-//        ARMOR.put(Material.IRON_LEGGINGS, 5);
-//        ARMOR.put(Material.IRON_BOOTS, 2);
-//
-//        ARMOR.put(Material.DIAMOND_HELMET, 3);
-//        ARMOR.put(Material.DIAMOND_CHESTPLATE, 8);
-//        ARMOR.put(Material.DIAMOND_LEGGINGS, 6);
-//        ARMOR.put(Material.DIAMOND_BOOTS, 3);
     }
 
 

@@ -341,7 +341,7 @@ public class SettingsManager {
 
     public char[] getDisallowedColors()
     {
-        return disallowedColors;
+        return disallowedColors.clone();
     }
 
     public boolean isTagDisallowed(String tag)

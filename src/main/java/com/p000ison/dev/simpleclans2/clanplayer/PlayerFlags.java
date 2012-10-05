@@ -57,5 +57,4 @@ public class PlayerFlags extends Flags {
     {
         return super.getSet("pastClans");
     }
-
 }

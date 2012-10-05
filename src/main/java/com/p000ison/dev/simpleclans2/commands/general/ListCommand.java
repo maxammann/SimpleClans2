@@ -118,7 +118,8 @@ public class ListCommand extends GenericConsoleCommand {
             String size = ChatColor.WHITE.toString() + clan.getSize();
             String kdr = clan.isVerified() ? ChatColor.YELLOW + "" + formatter.format(clan.getKDR()) : "";
 
-            chatBlock.addRow("  " + rank, fullName, kdr, size);
+            chatBlock.addRow(String.valueOf(rank), fullName, kdr, size);
+
             rank++;
         }
 

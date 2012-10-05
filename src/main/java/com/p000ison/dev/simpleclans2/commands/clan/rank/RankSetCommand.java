@@ -46,8 +46,10 @@ public class RankSetCommand extends GenericPlayerCommand {
     @Override
     public String getMenu(ClanPlayer clanPlayer)
     {
-        if (clanPlayer.isLeader() || clanPlayer.hasRankPermission("manage.ranks")) {
-            return Language.getTranslation("menu.rank.set", plugin.getSettingsManager().getClanCommand());
+        if (clanPlayer != null) {
+            if (clanPlayer.isLeader() || clanPlayer.hasRankPermission("manage.ranks")) {
+                return Language.getTranslation("menu.rank.set", plugin.getSettingsManager().getClanCommand());
+            }
         }
         return null;
     }

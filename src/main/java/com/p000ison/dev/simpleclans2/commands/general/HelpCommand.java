@@ -31,14 +31,13 @@ import org.bukkit.entity.Player;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Max
  */
 public class HelpCommand extends GenericConsoleCommand {
-
 
     public HelpCommand(SimpleClans plugin)
     {
@@ -68,8 +67,8 @@ public class HelpCommand extends GenericConsoleCommand {
             }
         }
 
-        List<Command> commands = new ArrayList<Command>(plugin.getCommandManager().getCommands());
-        Iterator<Command> it = commands.iterator();
+        Set<Command> sortCommands = plugin.getCommandManager().getCommands();
+        List<Command> commands = new ArrayList<Command>();
 
         ClanPlayer cp = null;
 
@@ -78,19 +77,18 @@ public class HelpCommand extends GenericConsoleCommand {
         }
 
         // Build list of permitted commands
-        while (it.hasNext()) {
-            Command command = it.next();
-            if (command.hasPermission(sender)) {
+        for (Command command : sortCommands) {
+            if (!command.hasPermission(sender)) {
                 continue;
             }
 
             if (command instanceof GenericConsoleCommand) {
-                if (((GenericConsoleCommand) command).getMenu() == null) {
-                    it.remove();
+                if (((GenericConsoleCommand) command).getMenu() != null) {
+                    commands.add(command);
                 }
             } else {
-                if (cp == null || ((GenericPlayerCommand) command).getMenu(cp) == null) {
-                    it.remove();
+                if (cp != null && ((GenericPlayerCommand) command).getMenu(cp) != null) {
+                    commands.add(command);
                 }
             }
         }
@@ -101,7 +99,8 @@ public class HelpCommand extends GenericConsoleCommand {
 
         sender.sendMessage(plugin.getSettingsManager().getServerName() + " <" + (page + 1) + "/" + boundings[2] + "> §7" + Language.getTranslation("clan.commands"));
 
-        StringBuilder menu = new StringBuilder();
+        StringBuilder menu = new StringBuilder("\n");
+
         for (int c = boundings[0]; c < boundings[1]; c++) {
             Command cmd = commands.get(c);
 
