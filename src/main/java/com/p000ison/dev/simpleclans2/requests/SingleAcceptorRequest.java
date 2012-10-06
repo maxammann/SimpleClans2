@@ -65,7 +65,7 @@ public abstract class SingleAcceptorRequest extends Request {
 
     public boolean checkRequest()
     {
-        return !getAcceptor().getLastVoteResult().equals(VoteResult.ACCEPT);
+        return getAcceptor().getLastVoteResult().equals(VoteResult.ACCEPT);
     }
 
     @Override

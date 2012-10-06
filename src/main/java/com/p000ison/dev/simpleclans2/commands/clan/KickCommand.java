@@ -73,7 +73,7 @@ public class KickCommand extends GenericPlayerCommand {
                     return;
                 }
 
-                if (clan.isMember(kicked)) {
+                if (!clan.isMember(kicked)) {
                     player.sendMessage(ChatColor.RED + Language.getTranslation("the.player.is.not.a.member.of.your.clan"));
                     return;
                 }

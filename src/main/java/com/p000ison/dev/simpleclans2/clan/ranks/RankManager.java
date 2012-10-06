@@ -34,9 +34,18 @@ public class RankManager {
         this.plugin = plugin;
     }
 
-    public Rank createRank(Clan clan, String name, int priority)
+    /**
+     * Creates a new rank
+     *
+     * @param clan     The clan
+     * @param name     The name
+     * @param tag      The tag
+     * @param priority The priority
+     * @return The created rank
+     */
+    public Rank createRank(Clan clan, String name, String tag, int priority)
     {
-        Rank rank = new Rank(name, priority);
+        Rank rank = new Rank(name, tag, priority);
         plugin.getDataManager().insertRank(clan, rank);
 
         rank.setId(getRankId(name, clan));

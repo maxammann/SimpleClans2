@@ -40,6 +40,7 @@ import com.p000ison.dev.simpleclans2.commands.general.AlliancesCommand;
 import com.p000ison.dev.simpleclans2.commands.general.HelpCommand;
 import com.p000ison.dev.simpleclans2.commands.general.LeaderboardCommand;
 import com.p000ison.dev.simpleclans2.commands.general.ListCommand;
+import com.p000ison.dev.simpleclans2.commands.members.FFCommand;
 import com.p000ison.dev.simpleclans2.commands.voting.AbstainCommand;
 import com.p000ison.dev.simpleclans2.commands.voting.AcceptCommand;
 import com.p000ison.dev.simpleclans2.commands.voting.DenyCommand;
@@ -208,6 +209,7 @@ public class SimpleClans extends JavaPlugin implements Core {
         commandManager.addCommand(new SaveCommand(this));
         commandManager.addCommand(new RankAddPermissionCommand(this));
         commandManager.addCommand(new InfoCommand(this));
+        commandManager.addCommand(new FFCommand(this));
 
 //        commandManager.addCommand(new LookupCommand(this));
 //        commandManager.addCommand(new RivalriesCommand(this));

@@ -77,12 +77,12 @@ public class DataManager {
     {
         DELETE_CLAN = database.prepareStatement("DELETE FROM `sc2_clans` WHERE id = ?;");
         INSERT_CLAN = database.prepareStatement("INSERT INTO `sc2_clans` ( `tag`, `name`, `verified`, `last_action` ) VALUES ( ?, ?, ?, ? );");
-        UPDATE_CLAN = database.prepareStatement("UPDATE `sc2_clans` SET tag = ?, name = ?, verified = ?, friendly_fire = ?, allies = ?, rivals = ?, warring = ?, last_action = CURRENT_TIMESTAMP, bb = ?, flags = ? WHERE id = ?;");
+        UPDATE_CLAN = database.prepareStatement("UPDATE `sc2_clans` SET tag = ?, name = ?, verified = ?, allies = ?, rivals = ?, warring = ?, last_action = CURRENT_TIMESTAMP, bb = ?, flags = ? WHERE id = ?;");
         RETRIEVE_CLAN_BY_TAG = database.prepareStatement("SELECT id FROM `sc2_clans` WHERE tag = ?;");
 
         DELETE_CLANPLAYER = database.prepareStatement("DELETE FROM `sc2_players` WHERE id = ?;");
-        UPDATE_CLANPLAYER = database.prepareStatement("UPDATE `sc2_players` SET leader = ?, rank = ?, trusted = ?, banned = ?, last_seen = ?, clan = ?, friendly_fire = ?, neutral_kills = ?, rival_kills = ?, civilian_kills = ?, deaths = ?, flags = ? WHERE id = ?;");
-        INSERT_CLANPLAYER = database.prepareStatement("INSERT INTO `sc2_players` ( `name`, `leader`, `rank`, `trusted`, `last_seen`, `clan`, `friendly_fire`, `flags` ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ? )");
+        UPDATE_CLANPLAYER = database.prepareStatement("UPDATE `sc2_players` SET leader = ?, rank = ?, trusted = ?, banned = ?, last_seen = ?, clan = ?, neutral_kills = ?, rival_kills = ?, civilian_kills = ?, deaths = ?, flags = ? WHERE id = ?;");
+        INSERT_CLANPLAYER = database.prepareStatement("INSERT INTO `sc2_players` ( `name`, `leader`, `rank`, `trusted`, `last_seen`, `clan`, `flags` ) VALUES ( ?, ?, ?, ?, ?, ?, ? )");
         RETRIEVE_CLANPLAYER_BY_NAME = database.prepareStatement("SELECT id FROM `sc2_players` WHERE name = ?;");
 
         INSERT_KILL = database.prepareStatement("INSERT INTO `sc2_kills` ( `attacker`, `attacker_tag`, `victim`, `kill_type`, `victim_tag, `war` ) VALUES ( ?, ?, ?, ?, ?, ? );");
@@ -113,13 +113,12 @@ public class DataManager {
             Clan clan = clanPlayer.getClan();
 
             UPDATE_CLANPLAYER.setLong(6, clan == null ? -1L : clan.getId());
-            UPDATE_CLANPLAYER.setBoolean(7, clanPlayer.isFriendlyFireOn());
-            UPDATE_CLANPLAYER.setInt(8, clanPlayer.getNeutralKills());
-            UPDATE_CLANPLAYER.setInt(9, clanPlayer.getRivalKills());
-            UPDATE_CLANPLAYER.setInt(10, clanPlayer.getCivilianKills());
-            UPDATE_CLANPLAYER.setInt(11, clanPlayer.getDeaths());
-            UPDATE_CLANPLAYER.setString(12, clanPlayer.getFlags().read());
-            UPDATE_CLANPLAYER.setLong(13, clanPlayer.getId());
+            UPDATE_CLANPLAYER.setInt(7, clanPlayer.getNeutralKills());
+            UPDATE_CLANPLAYER.setInt(8, clanPlayer.getRivalKills());
+            UPDATE_CLANPLAYER.setInt(9, clanPlayer.getCivilianKills());
+            UPDATE_CLANPLAYER.setInt(10, clanPlayer.getDeaths());
+            UPDATE_CLANPLAYER.setString(11, clanPlayer.getFlags().read());
+            UPDATE_CLANPLAYER.setLong(12, clanPlayer.getId());
 
             UPDATE_CLANPLAYER.executeUpdate();
         } catch (SQLException e) {
@@ -161,12 +160,11 @@ public class DataManager {
             INSERT_CLANPLAYER.setBoolean(4, clanPlayer.isTrusted());
             INSERT_CLANPLAYER.setTimestamp(5, new Timestamp(System.currentTimeMillis()));
             INSERT_CLANPLAYER.setLong(6, clanPlayer.getClanId());
-            INSERT_CLANPLAYER.setBoolean(7, clanPlayer.isFriendlyFireOn());
 
             if (clanPlayer.getFlags().hasFlags()) {
-                INSERT_CLANPLAYER.setString(8, clanPlayer.getFlags().read());
+                INSERT_CLANPLAYER.setString(7, clanPlayer.getFlags().read());
             } else {
-                INSERT_CLANPLAYER.setNull(8, Types.VARCHAR);
+                INSERT_CLANPLAYER.setNull(7, Types.VARCHAR);
             }
 
             INSERT_CLANPLAYER.executeUpdate();
@@ -223,39 +221,38 @@ public class DataManager {
             UPDATE_CLAN.setString(1, clan.getTag());
             UPDATE_CLAN.setString(2, clan.getName());
             UPDATE_CLAN.setBoolean(3, clan.isVerified());
-            UPDATE_CLAN.setBoolean(4, clan.isFriendlyFireOn());
 
             if (clan.hasAllies()) {
-                UPDATE_CLAN.setString(5, JSONUtil.collectionToJSON(clan.getAllies()));
+                UPDATE_CLAN.setString(4, JSONUtil.collectionToJSON(clan.getAllies()));
+            } else {
+                UPDATE_CLAN.setNull(4, Types.VARCHAR);
+            }
+
+            if (clan.hasRivals()) {
+                UPDATE_CLAN.setString(5, JSONUtil.collectionToJSON(clan.getRivals()));
             } else {
                 UPDATE_CLAN.setNull(5, Types.VARCHAR);
             }
 
-            if (clan.hasRivals()) {
-                UPDATE_CLAN.setString(6, JSONUtil.collectionToJSON(clan.getRivals()));
+            if (clan.hasWarringClans()) {
+                UPDATE_CLAN.setString(6, JSONUtil.collectionToJSON(clan.getWarringClans()));
             } else {
                 UPDATE_CLAN.setNull(6, Types.VARCHAR);
             }
 
-            if (clan.hasWarringClans()) {
-                UPDATE_CLAN.setString(7, JSONUtil.collectionToJSON(clan.getWarringClans()));
+            if (clan.hasBB()) {
+                UPDATE_CLAN.setString(7, JSONUtil.collectionToJSON(clan.getBB()));
             } else {
                 UPDATE_CLAN.setNull(7, Types.VARCHAR);
             }
 
-            if (clan.hasBB()) {
-                UPDATE_CLAN.setString(8, JSONUtil.collectionToJSON(clan.getBB()));
+            if (clan.getFlags().hasFlags()) {
+                UPDATE_CLAN.setString(8, clan.getFlags().read());
             } else {
                 UPDATE_CLAN.setNull(8, Types.VARCHAR);
             }
 
-            if (clan.getFlags().hasFlags()) {
-                UPDATE_CLAN.setString(9, clan.getFlags().read());
-            } else {
-                UPDATE_CLAN.setNull(9, Types.VARCHAR);
-            }
-
-            UPDATE_CLAN.setLong(10, clan.getId());
+            UPDATE_CLAN.setLong(9, clan.getId());
 
             UPDATE_CLAN.executeUpdate();
         } catch (SQLException e) {
@@ -331,7 +328,6 @@ public class DataManager {
 
                 clan.setVerified(verified);
                 clan.setFoundedDate(result.getLong("founded"));
-                clan.setFriendlyFire(result.getBoolean("friendly_fire"));
                 clan.setLastActionDate(lastAction);
 
                 //flags
@@ -392,10 +388,11 @@ public class DataManager {
 
                 long id = result.getLong("id");
                 String name = result.getString("name");
+                String tag = result.getString("tag");
                 int priority = result.getInt("priority");
                 Set<Integer> permissions = JSONUtil.JSONToSet("permissions", new HashSet<Integer>());
 
-                ranks.add(new Rank(id, name, priority, clanId, permissions));
+                ranks.add(new Rank(id, name, tag, priority, permissions));
             }
         } catch (SQLException e) {
             Logging.debug(e, "Failed at retrieving ranks!");
@@ -476,7 +473,6 @@ public class DataManager {
                 clanPlayer.setTrusted(result.getBoolean("trusted"));
                 clanPlayer.setLastSeenDate(lastSeen);
                 clanPlayer.setJoinDate(result.getLong("join_date"));
-                clanPlayer.setFriendlyFire(result.getBoolean("friendly_fire"));
                 clanPlayer.setNeutralKills(result.getInt("neutral_kills"));
                 clanPlayer.setRivalKills(result.getInt("rival_kills"));
                 clanPlayer.setCivilianKills(result.getInt("civilian_kills"));
@@ -499,6 +495,9 @@ public class DataManager {
                     } else {
                         clanPlayer.setClan(clan);
                         clan.addMember(clanPlayer);
+
+                        System.out.println(clanPlayer);
+                        System.out.println(clan);
 
                         long rank = result.getLong("rank");
 

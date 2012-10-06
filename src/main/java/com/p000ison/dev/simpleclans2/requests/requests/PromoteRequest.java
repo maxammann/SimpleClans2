@@ -52,6 +52,7 @@ public class PromoteRequest extends MultipleAcceptorsRequest {
 
             clan.addBBMessage(MessageFormat.format(Language.getTranslation("promoted.to.leader"), targetPlayer.getName()));
             clan.setLeader(targetPlayer);
+            targetPlayer.update(true);
 
 //            else
 //            {

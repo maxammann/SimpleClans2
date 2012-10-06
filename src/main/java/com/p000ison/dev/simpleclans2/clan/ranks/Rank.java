@@ -28,7 +28,7 @@ public class Rank {
     private long id;
 
     private String name;
-    private long clanId;
+    private String tag;
     private Set<Integer> permissions = new HashSet<Integer>();
     private int priority;
     private boolean update;
@@ -43,27 +43,57 @@ public class Rank {
         availablePermissions.put("manage.ranks", 4);
     }
 
+    /**
+     * Adds a available permission.
+     *
+     * @param permission The permission.
+     * @param id         The assigned id.
+     */
     public static void addAvailablePermission(String permission, int id)
     {
         availablePermissions.put(permission, id);
     }
 
-    public Rank(long id, String name)
+    /**
+     * Creates a new rank
+     *
+     * @param id   The id of the rank.
+     * @param name The name of the rank.
+     * @param tag  The tag
+     */
+    public Rank(long id, String name, String tag)
     {
+        this.tag = tag;
         this.setId(id);
         this.name = name;
     }
 
-    public Rank(String name, int priority)
+    /**
+     * Creates a new rank
+     *
+     * @param name     The name of the rank.
+     * @param tag      The tag
+     * @param priority The priority
+     */
+    public Rank(String name, String tag, int priority)
     {
         this.name = name;
         this.priority = priority;
+        this.tag = tag;
     }
 
-    public Rank(long id, String name, int priority, long clanId, Set<Integer> permissions)
+    /**
+     * Creates a new rank
+     *
+     * @param id          The id of the rank.
+     * @param name        The name of the rank.
+     * @param tag         The tag
+     * @param priority    The priority
+     * @param permissions The permissions of this rank
+     */
+    public Rank(long id, String name, String tag, int priority, Set<Integer> permissions)
     {
-        this(name, priority);
-        this.clanId = clanId;
+        this(name, tag, priority);
         if (permissions == null) {
             this.permissions = new HashSet<Integer>();
         } else {
@@ -73,21 +103,45 @@ public class Rank {
     }
 
 
+    /**
+     * Checks if this permission has the permission.
+     *
+     * @param id The id of the permission.
+     * @return Weather it has this permission.
+     */
     public boolean hasPermission(int id)
     {
         return permissions.contains(id);
     }
 
+    /**
+     * Checks if this permission has the permission.
+     *
+     * @param permission The permission.
+     * @return Weather it has this permission.
+     */
     public boolean hasPermission(String permission)
     {
         return permissions.contains(availablePermissions.get(permission));
     }
 
+    /**
+     * Gets the name of this rank.
+     *
+     * @return The rank.
+     */
     public String getName()
     {
         return name;
     }
 
+
+    /**
+     * Adds a permission to this rank. This implements a low searching method.
+     *
+     * @param permission The permission
+     * @return The added permission.
+     */
     public String addPermission(String permission)
     {
         String lowerPerm = permission.toLowerCase(Locale.US);
@@ -103,46 +157,73 @@ public class Rank {
         return null;
     }
 
+    /**
+     * Checks if a rank is more powerful than another one.
+     *
+     * @param rank The other rank.
+     * @return Weather this is more powerful.
+     */
     public boolean isMorePowerful(Rank rank)
     {
         return priority > rank.getPriority();
     }
 
+    /**
+     * Gets a set of permissions.
+     *
+     * @return A set of permissions.
+     */
     public Set<Integer> getPermissions()
     {
         return permissions;
     }
 
+    /**
+     * Gets the priority of this rank.
+     *
+     * @return The priority
+     */
     public int getPriority()
     {
         return priority;
     }
 
-    public long getClanId()
-    {
-        return clanId;
-    }
-
-    public void setClanId(long clanId)
-    {
-        this.clanId = clanId;
-    }
-
+    /**
+     * Sets the priority of this clan
+     *
+     * @param priority The priority to set
+     */
     public void setPriority(int priority)
     {
         this.priority = priority;
     }
 
+    /**
+     * Gets the id of this clan
+     *
+     * @return The ID
+     */
     public long getId()
     {
         return id;
     }
 
+    /**
+     * Sets the id of this clan
+     *
+     * @param id The id to set
+     */
     public void setId(long id)
     {
         this.id = id;
     }
 
+    /**
+     * Checks if 2 ranks equal.
+     *
+     * @param o The other rank
+     * @return Weather they match
+     */
     @Override
     public boolean equals(Object o)
     {
@@ -154,29 +235,48 @@ public class Rank {
         return id == rank.id;
     }
 
+    /**
+     * Gets a hashCode of this rank.
+     *
+     * @return The hash code of this rank
+     */
     @Override
     public int hashCode()
     {
         return (int) (id ^ (id >>> 32));
     }
 
+    /**
+     * Returns info about this rank.
+     *
+     * @return The rank in a rank.
+     */
     @Override
     public String toString()
     {
         return "Rank{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", clanId=" + clanId +
                 ", permissions=" + permissions +
                 ", priority=" + priority +
                 '}';
     }
 
+    /**
+     * Checks if this rank should be pushed  to the database.
+     *
+     * @return Weather this  needs a update.
+     */
     public boolean needsUpdate()
     {
         return update;
     }
 
+    /**
+     * Sets weather this needs a update
+     *
+     * @param update True of false
+     */
     public void update(boolean update)
     {
         this.update = update;

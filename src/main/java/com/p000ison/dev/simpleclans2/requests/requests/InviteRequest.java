@@ -32,7 +32,6 @@ import java.text.MessageFormat;
  */
 public class InviteRequest extends SingleAcceptorRequest {
 
-
     public InviteRequest(ClanPlayer invited, ClanPlayer requester, Clan clan)
     {
         super(invited, requester, clan, MessageFormat.format(Language.getTranslation("you.have.been.invited"), clan.getTag()));
@@ -45,9 +44,15 @@ public class InviteRequest extends SingleAcceptorRequest {
             return false;
         }
 
-        getClan().addBBMessage(MessageFormat.format(Language.getTranslation("joined.the.clan"), getAcceptor().getName()));
-        Announcer.announce(MessageFormat.format(Language.getTranslation("has.joined"), getAcceptor().getName(), getClan().getName()));
-        getClan().addMember(getAcceptor());
+        ClanPlayer acceptor = getAcceptor();
+
+        getClan().addMember(acceptor);
+        acceptor.setClan(getClan());
+
+        getClan().addBBMessage(MessageFormat.format(Language.getTranslation("joined.the.clan"), acceptor.getName()));
+        Announcer.announce(MessageFormat.format(Language.getTranslation("has.joined"), acceptor.getName(), getClan().getName()));
+
+        acceptor.update(true);
         return true;
     }
 }

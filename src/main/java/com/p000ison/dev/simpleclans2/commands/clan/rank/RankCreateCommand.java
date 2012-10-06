@@ -75,6 +75,6 @@ public class RankCreateCommand extends GenericPlayerCommand {
         }
 
 
-        clan.addRank(plugin.getRankManager().createRank(clan, GeneralHelper.arrayBoundsToString(1, args), priority));
+        clan.addRank(plugin.getRankManager().createRank(clan, GeneralHelper.arrayBoundsToString(1, args), "afg", priority));
     }
 }

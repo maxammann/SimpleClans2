@@ -1,6 +1,6 @@
 general:
     elements-per-page: 10
-    help-format: '&    {0}'
+    help-format: '&b    {0}'
     clan-command: 'clan'
     server-name: 'SimpleClans'
     global-ff: false

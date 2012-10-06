@@ -149,6 +149,12 @@ public class Flags {
         data.put(key, set);
     }
 
+
+    public void setBoolean(String key, boolean bool)
+    {
+        data.put(key, bool);
+    }
+
     public String getString(String key)
     {
         Object string = data.get(key);

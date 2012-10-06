@@ -40,7 +40,7 @@ public class ClanPlayer implements KDR {
     private long id = -1;
     private String name;
     private Clan clan;
-    private boolean banned, leader, trusted, friendlyFire;
+    private boolean banned, leader, trusted;
     private long lastSeen, joinDate;
     private int neutralKills, rivalKills, civilianKills, deaths;
     private PlayerFlags flags;
@@ -129,12 +129,12 @@ public class ClanPlayer implements KDR {
 
     public boolean isFriendlyFireOn()
     {
-        return friendlyFire;
+        return getFlags().isFriendlyFireEnabled();
     }
 
     public void setFriendlyFire(boolean friendlyFire)
     {
-        this.friendlyFire = friendlyFire;
+        getFlags().setFriendlyFire(friendlyFire);
     }
 
     public long getLastSeenDate()
@@ -393,7 +393,7 @@ public class ClanPlayer implements KDR {
         return "ClanPlayer{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", clan=" + clan.getTag() +
+                ", clan=" + clan +
                 ", leader=" + leader +
                 ", update=" + update +
                 ", rank=" + rank +

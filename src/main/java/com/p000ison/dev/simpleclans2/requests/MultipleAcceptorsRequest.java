@@ -75,19 +75,6 @@ public abstract class MultipleAcceptorsRequest extends Request {
         getRequester().toPlayer().sendMessage("Cancelledbo");
     }
 
-//    private int getPositiveVotes()
-//    {
-//        int positive = 0;
-//
-//        for (ClanPlayer acceptor : getAcceptors()) {
-//            if (acceptor.getLastVoteResult() == VoteResult.ACCEPT) {
-//                positive++;
-//            }
-//        }
-//
-//        return positive;
-//    }
-
     @Override
     public void accept(ClanPlayer clanPlayer)
     {

@@ -105,6 +105,10 @@ public class RequestManager {
         return null;
     }
 
+    public int getRequests() {
+        return requests.size();
+    }
+
     public void clearRequests(String player)
     {
         Iterator<Request> it = requests.iterator();

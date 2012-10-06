@@ -22,7 +22,6 @@ package com.p000ison.dev.simpleclans2.api;
 import com.p000ison.dev.simpleclans2.clan.ClanManager;
 import com.p000ison.dev.simpleclans2.clan.ranks.RankManager;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayerManager;
-import com.p000ison.dev.simpleclans2.commands.CommandManager;
 import com.p000ison.dev.simpleclans2.database.Database;
 import com.p000ison.dev.simpleclans2.requests.RequestManager;
 import com.p000ison.dev.simpleclans2.settings.SettingsManager;
@@ -33,19 +32,53 @@ import com.p000ison.dev.simpleclans2.teleportation.TeleportManager;
  */
 public interface Core {
 
+    /**
+     * Gets the manager, which handles everything about clans.
+     *
+     * @return The clan manager of SimpleClans.
+     */
     public ClanManager getClanManager();
 
+    /**
+     * Gets the manager, which handles everything about clan players.
+     *
+     * @return The clan player manager of SimpleClans.
+     */
     public ClanPlayerManager getClanPlayerManager();
 
+    /**
+     * Gets the manager, which stores all the settings.
+     *
+     * @return The settings manager of SimpleClans.
+     */
     public SettingsManager getSettingsManager();
 
+    /**
+     * Gets the manager, which handles all the requests.
+     *
+     * @return The request manager or SimpleClans.
+     */
     public RequestManager getRequestManager();
 
-    public CommandManager getCommandManager();
 
+    /**
+     * Gets the manager, which handles everything about ranks.
+     *
+     * @return The rank manager or SimpleClans.
+     */
     public RankManager getRankManager();
 
+    /**
+     * Gets the manager, which handles everything about teleports.
+     *
+     * @return The teleport manager or SimpleClans.
+     */
     public TeleportManager getTeleportManager();
 
+    /**
+     * Gets the database of SimpleClans.
+     *
+     * @return The database of SimpleClans.
+     */
     public Database getSimpleClansDatabase();
 }

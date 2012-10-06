@@ -57,4 +57,14 @@ public class PlayerFlags extends Flags {
     {
         return super.getSet("pastClans");
     }
+
+    public void setFriendlyFire(boolean bool)
+    {
+        super.setBoolean("friendlyFire", bool);
+    }
+
+    public boolean isFriendlyFireEnabled()
+    {
+        return super.getBoolean("friendlyFire");
+    }
 }

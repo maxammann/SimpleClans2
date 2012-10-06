@@ -48,6 +48,7 @@ public class DemoteRequest extends MultipleAcceptorsRequest {
 
         clan.addBBMessage(ChatColor.AQUA + MessageFormat.format(Language.getTranslation("demoted.back.to.member"), targetPlayer));
         clan.demote(targetPlayer);
+        targetPlayer.update(true);
 
         return true;
     }

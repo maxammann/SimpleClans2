@@ -57,6 +57,7 @@ public class InfoCommand extends GenericConsoleCommand {
         sender.sendMessage("Loaded clan players: " + loadedClanPlayers);
         sender.sendMessage("Data in queue: " + dataQueue);
         sender.sendMessage("Teleporting: " + teleporting);
+        sender.sendMessage("Requests: " + plugin.getRequestManager().getRequests());
 
         for (BukkitTask task : plugin.getServer().getScheduler().getPendingTasks()) {
             if (!task.getOwner().equals(plugin)) {

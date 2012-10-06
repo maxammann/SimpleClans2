@@ -88,6 +88,8 @@ public class InviteCommand extends GenericPlayerCommand {
 
                 ClanPlayer invitedClanPlayer = plugin.getClanPlayerManager().createClanPlayer(invited);
 
+                System.out.println(invitedClanPlayer.getClan());
+
                 if (invitedClanPlayer.getClan() == null) {
 
                     if (SimpleClans.hasEconomy() && plugin.getSettingsManager().isPurchaseInvite()) {

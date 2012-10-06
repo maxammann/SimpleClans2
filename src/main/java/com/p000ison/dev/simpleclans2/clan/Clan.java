@@ -47,7 +47,7 @@ public class Clan implements KDR {
     private ClanFlags flags;
     private long foundedDate;
     private long lastActionDate;
-    private boolean verified, friendlyFire;
+    private boolean verified;
     private LinkedList<String> bb = new LinkedList<String>();
     private Set<Clan> allies = new HashSet<Clan>();
     private Set<Clan> rivals = new HashSet<Clan>();
@@ -67,6 +67,13 @@ public class Clan implements KDR {
         this.plugin = plugin;
     }
 
+    /**
+     * Creates a new clan
+     *
+     * @param plugin The plugin
+     * @param tag    The tag of this clan
+     * @param name   The full name of this clan
+     */
     public Clan(SimpleClans plugin, String tag, String name)
     {
         this(plugin);
@@ -74,6 +81,14 @@ public class Clan implements KDR {
         this.name = name;
     }
 
+    /**
+     * Creates a new clan
+     *
+     * @param plugin The plugin
+     * @param id     The id
+     * @param tag    The tag of this clan
+     * @param name   The full name of this clan
+     */
     public Clan(SimpleClans plugin, long id, String tag, String name)
     {
         this(plugin, tag, name);
@@ -238,7 +253,7 @@ public class Clan implements KDR {
      */
     public boolean isFriendlyFireOn()
     {
-        return friendlyFire;
+        return getFlags().isFriendlyFireEnabled();
     }
 
     /**
@@ -248,7 +263,7 @@ public class Clan implements KDR {
      */
     public void setFriendlyFire(boolean friendlyFire)
     {
-        this.friendlyFire = friendlyFire;
+        getFlags().setFriendlyFire(friendlyFire);
     }
 
     /**
@@ -588,7 +603,9 @@ public class Clan implements KDR {
     public void addBBMessage(ClanPlayer announcer, String msg)
     {
         if (isVerified()) {
-            addBBRawMessage(ChatBlock.parseColors(plugin.getSettingsManager().getClanPlayerBB().replace("+player", announcer.getName()).replace("+message", msg)));
+            msg = ChatBlock.parseColors(plugin.getSettingsManager().getClanPlayerBB().replace("+player", announcer.getName()).replace("+message", msg));
+            announce(announcer, msg);
+            addBBRawMessage(msg);
         }
     }
 
@@ -602,7 +619,9 @@ public class Clan implements KDR {
     public void addBBMessage(Clan announcer, String msg)
     {
         if (isVerified()) {
-            addBBRawMessage(ChatBlock.parseColors(plugin.getSettingsManager().getClanBB().replace("+clan", announcer.getTag()).replace("+message", msg)));
+            msg = ChatBlock.parseColors(plugin.getSettingsManager().getClanBB().replace("+clan", announcer.getTag()).replace("+message", msg));
+            announce(msg);
+            addBBRawMessage(msg);
         }
     }
 
@@ -1007,6 +1026,12 @@ public class Clan implements KDR {
         return null;
     }
 
+    /**
+     * Searches for a rank saved in this clan
+     *
+     * @param query The search query
+     * @return The rank
+     */
     public Rank getRank(String query)
     {
         String cleanQuery = query.toLowerCase(Locale.US);

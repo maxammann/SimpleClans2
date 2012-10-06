@@ -76,4 +76,14 @@ public class ClanFlags extends Flags {
     {
         return super.getString("clan-cape-url");
     }
+
+    public void setFriendlyFire(boolean bool)
+    {
+        super.setBoolean("friendlyFire", bool);
+    }
+
+    public boolean isFriendlyFireEnabled()
+    {
+        return super.getBoolean("friendlyFire");
+    }
 }

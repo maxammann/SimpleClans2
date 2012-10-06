@@ -54,6 +54,9 @@ public class AllyCreateRequest extends MultipleAcceptorsRequest {
 
             ally.addBBMessage(cp, MessageFormat.format(Language.getTranslation("accepted.an.alliance"), getAcceptors(), clan.getName()));
             clan.addBBMessage(cp, MessageFormat.format(Language.getTranslation("created.an.alliance"), cp.getName(), ally.getName()));
+
+            clan.update(true);
+            ally.update(true);
         }
         return true;
     }
