@@ -26,7 +26,7 @@ import java.util.*;
 /**
  * Represents a Rank
  */
-public class Rank {
+public class Rank implements Comparable<Rank> {
     private long id;
 
     private String name;
@@ -35,7 +35,7 @@ public class Rank {
     private int priority;
     private boolean update;
 
-    private static final Map< java.lang.Integer, String> availablePermissions = new TreeMap<java.lang.Integer, String >();
+    private static final Map<java.lang.Integer, String> availablePermissions = new TreeMap<java.lang.Integer, String>();
 
     static {
         availablePermissions.put(0, "leader.demote");
@@ -160,7 +160,7 @@ public class Rank {
         int id = -1;
         int smallest = Integer.MAX_VALUE;
 
-        for (Map.Entry<Integer, String > perm : availablePermissions.entrySet()) {
+        for (Map.Entry<Integer, String> perm : availablePermissions.entrySet()) {
             String key = perm.getValue();
 
             int distance = StringUtils.getLevenshteinDistance(key, permission);
@@ -312,5 +312,11 @@ public class Rank {
     public void setTag(String tag)
     {
         this.tag = tag;
+    }
+
+    @Override
+    public int compareTo(Rank o)
+    {
+        return new Integer(o.getPriority()).compareTo(getPriority());
     }
 }

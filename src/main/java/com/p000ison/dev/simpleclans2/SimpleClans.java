@@ -33,10 +33,7 @@ import com.p000ison.dev.simpleclans2.commands.clan.bb.BBCommand;
 import com.p000ison.dev.simpleclans2.commands.clan.home.HomeCommand;
 import com.p000ison.dev.simpleclans2.commands.clan.home.HomeRegroupCommand;
 import com.p000ison.dev.simpleclans2.commands.clan.home.HomeSetCommand;
-import com.p000ison.dev.simpleclans2.commands.clan.rank.RankAddPermissionCommand;
-import com.p000ison.dev.simpleclans2.commands.clan.rank.RankCreateCommand;
-import com.p000ison.dev.simpleclans2.commands.clan.rank.RankSetCommand;
-import com.p000ison.dev.simpleclans2.commands.clan.rank.ViewPermissionsCommand;
+import com.p000ison.dev.simpleclans2.commands.clan.rank.*;
 import com.p000ison.dev.simpleclans2.commands.general.AlliancesCommand;
 import com.p000ison.dev.simpleclans2.commands.general.HelpCommand;
 import com.p000ison.dev.simpleclans2.commands.general.LeaderboardCommand;
@@ -212,6 +209,7 @@ public class SimpleClans extends JavaPlugin implements Core {
         commandManager.addCommand(new InfoCommand(this));
         commandManager.addCommand(new FFCommand(this));
         commandManager.addCommand(new ViewPermissionsCommand(this));
+        commandManager.addCommand(new ViewRanksCommand(this));
 
 //        commandManager.addCommand(new LookupCommand(this));
 //        commandManager.addCommand(new RivalriesCommand(this));

@@ -38,7 +38,7 @@ import java.util.*;
 /**
  * Represents a Clan
  */
-public class Clan implements KDR {
+public class Clan implements KDR, Comparable<Clan> {
 
     private SimpleClans plugin;
 
@@ -1056,5 +1056,11 @@ public class Clan implements KDR {
                 ", verified=" + verified +
                 ", update=" + update +
                 '}';
+    }
+
+    @Override
+    public int compareTo(Clan o)
+    {
+        return new Integer(o.getInactiveDays()).compareTo(getInactiveDays());
     }
 }

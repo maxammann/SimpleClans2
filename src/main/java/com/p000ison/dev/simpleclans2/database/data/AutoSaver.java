@@ -21,6 +21,7 @@ package com.p000ison.dev.simpleclans2.database.data;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
+import com.p000ison.dev.simpleclans2.clan.ranks.Rank;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.util.Logging;
 
@@ -47,6 +48,13 @@ public class AutoSaver extends LinkedList<Executable> implements Runnable {
             if (clan.needsUpdate()) {
                 dataManager.updateClan(clan);
                 clan.update(false);
+            }
+
+            for (Rank rank : clan.getRanks()) {
+                if (rank.needsUpdate()) {
+                    rank.update(false);
+                    dataManager.updateRank(clan, rank);
+                }
             }
         }
 

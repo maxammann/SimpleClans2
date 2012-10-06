@@ -88,11 +88,9 @@ public class DataManager {
         INSERT_KILL = database.prepareStatement("INSERT INTO `sc2_kills` ( `attacker`, `attacker_tag`, `victim`, `kill_type`, `victim_tag, `war` ) VALUES ( ?, ?, ?, ?, ?, ? );");
         RETRIEVE_TOTAL_DEATHS_PER_PLAYER = database.prepareStatement("SELECT victim, count(victim) AS kills FROM `sc_kills` GROUP BY victim ORDER BY 2 DESC;");
 
-        INSERT_RANK = database.prepareStatement("INSERT INTO `sc2_ranks` ( `name`, `priority`, `clan` ) VALUES ( ?, ?, ? );");
-        UPDATE_RANK = database.prepareStatement("UPDATE `sc2_ranks` SET name = ?, permissions = ?, priority = ?;");
-        DELETE_RANK_BY_ID = database.prepareStatement("DELETE FROM `sc2_ranks` WHERE id = ?;");
-        RETRIEVE_RANK = database.prepareStatement("SELECT * FROM `sc2_players` WHERE id = ? AND clan = ?;");
-        RETRIEVE_RANK_BY_NAME = database.prepareStatement("SELECT id FROM `sc2_players` WHERE name = ? AND clan = ?;");
+        INSERT_RANK = database.prepareStatement("INSERT INTO `sc2_ranks` ( `name`, `tag`, `priority`, `clan` ) VALUES ( ?, ?, ?, ? );");
+        UPDATE_RANK = database.prepareStatement("UPDATE `sc2_ranks` SET name = ?, tag = ?, permissions = ?, priority = ?;");
+        RETRIEVE_RANK_BY_NAME = database.prepareStatement("SELECT id FROM `sc2_ranks` WHERE name = ? AND clan = ?;");
     }
 
     public final void importAll()
@@ -496,9 +494,6 @@ public class DataManager {
                         clanPlayer.setClan(clan);
                         clan.addMember(clanPlayer);
 
-                        System.out.println(clanPlayer);
-                        System.out.println(clan);
-
                         long rank = result.getLong("rank");
 
                         if (rank != -1) {
@@ -521,7 +516,7 @@ public class DataManager {
     {
         try {
             UPDATE_RANK.setString(1, rank.getName());
-            UPDATE_RANK.setLong(2, clan.getId());
+            UPDATE_RANK.setString(2, rank.getTag());
             UPDATE_RANK.setString(3, JSONUtil.collectionToJSON(rank.getPermissions()));
             UPDATE_RANK.setInt(4, rank.getPriority());
 
@@ -529,7 +524,7 @@ public class DataManager {
 
             return state != 0;
         } catch (SQLException e) {
-            Logging.debug(e, "Failed at inserting rank!");
+            Logging.debug(e, "Failed at updating rank!");
         }
 
         return false;
@@ -539,8 +534,9 @@ public class DataManager {
     {
         try {
             INSERT_RANK.setString(1, rank.getName());
-            INSERT_RANK.setInt(2, rank.getPriority());
-            INSERT_RANK.setLong(3, clan.getId());
+            INSERT_RANK.setString(2, rank.getTag());
+            INSERT_RANK.setInt(3, rank.getPriority());
+            INSERT_RANK.setLong(4, clan.getId());
 
             int state = INSERT_RANK.executeUpdate();
 

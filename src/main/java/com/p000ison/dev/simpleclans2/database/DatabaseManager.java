@@ -70,7 +70,7 @@ public class DatabaseManager {
         if (!database.existsTable("sc2_ranks")) {
             Logging.debug("Creating table: sc2_ranks");
 
-            String clanTable = "CREATE TABLE IF NOT EXISTS `sc2_ranks` ( `id` INT NOT NULL AUTO_INCREMENT UNIQUE KEY PRIMARY KEY, `clan` INT NOT NULL, `name` VARCHAR(16) NOT NULL UNIQUE KEY, `permissions` MEDIUMTEXT, `priority` INT(3) default -1 );";
+            String clanTable = "CREATE TABLE IF NOT EXISTS `sc2_ranks` ( `id` INT NOT NULL AUTO_INCREMENT UNIQUE KEY PRIMARY KEY, `clan` INT NOT NULL, `name` VARCHAR(16) NOT NULL UNIQUE KEY, `tag` VARCHAR(16) NOT NULL UNIQUE KEY,`permissions` MEDIUMTEXT, `priority` INT(3) default -1 );";
 
             database.execute(clanTable);
         }
