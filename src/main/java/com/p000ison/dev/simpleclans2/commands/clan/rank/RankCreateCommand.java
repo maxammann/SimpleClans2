@@ -35,7 +35,7 @@ public class RankCreateCommand extends GenericPlayerCommand {
     public RankCreateCommand(SimpleClans plugin)
     {
         super("RankCreate", plugin);
-        setArgumentRange(2, 50);
+        setArgumentRange(3, 50);
         setUsages(Language.getTranslation("usage.rank.create", plugin.getSettingsManager().getClanCommand()));
         setIdentifiers(Language.getTranslation("rank.create.command"));
     }
@@ -74,7 +74,9 @@ public class RankCreateCommand extends GenericPlayerCommand {
             return;
         }
 
+        String name = GeneralHelper.arrayBoundsToString(2, args);
 
-        clan.addRank(plugin.getRankManager().createRank(clan, GeneralHelper.arrayBoundsToString(1, args), "afg", priority));
+        clan.addRank(plugin.getRankManager().createRank(clan, name, args[1], priority));
+        player.sendMessage(ChatColor.AQUA + Language.getTranslation("rank.created", name));
     }
 }

@@ -1036,7 +1036,7 @@ public class Clan implements KDR {
     {
         String cleanQuery = query.toLowerCase(Locale.US);
         for (Rank rank : ranks) {
-            if (rank.getName().toLowerCase(Locale.US).startsWith(cleanQuery)) {
+            if (rank.getTag().toLowerCase(Locale.US).startsWith(cleanQuery)) {
                 return rank;
             }
         }

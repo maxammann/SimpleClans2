@@ -19,6 +19,8 @@
 
 package com.p000ison.dev.simpleclans2.clan.ranks;
 
+import org.apache.commons.lang.StringUtils;
+
 import java.util.*;
 
 /**
@@ -33,14 +35,14 @@ public class Rank {
     private int priority;
     private boolean update;
 
-    private static final Map<String, Integer> availablePermissions = new HashMap<String, Integer>();
+    private static final Map< java.lang.Integer, String> availablePermissions = new TreeMap<java.lang.Integer, String >();
 
     static {
-        availablePermissions.put("leader.demote", 0);
-        availablePermissions.put("manage.bb", 1);
-        availablePermissions.put("manage.ally", 2);
-        availablePermissions.put("manage.clanff", 3);
-        availablePermissions.put("manage.ranks", 4);
+        availablePermissions.put(0, "leader.demote");
+        availablePermissions.put(1, "manage.bb");
+        availablePermissions.put(2, "manage.ally");
+        availablePermissions.put(3, "manage.clanff");
+        availablePermissions.put(4, "manage.ranks");
     }
 
     /**
@@ -51,7 +53,17 @@ public class Rank {
      */
     public static void addAvailablePermission(String permission, int id)
     {
-        availablePermissions.put(permission, id);
+        availablePermissions.put(id, permission);
+    }
+
+    /**
+     * Gets all available permission
+     *
+     * @return The available permissions.
+     */
+    public static Map<Integer, String> getAvailablePermissions()
+    {
+        return availablePermissions;
     }
 
     /**
@@ -122,7 +134,7 @@ public class Rank {
      */
     public boolean hasPermission(String permission)
     {
-        return permissions.contains(availablePermissions.get(permission));
+        return availablePermissions.values().contains(permission);
     }
 
     /**
@@ -144,16 +156,26 @@ public class Rank {
      */
     public String addPermission(String permission)
     {
-        String lowerPerm = permission.toLowerCase(Locale.US);
-        for (Map.Entry<String, Integer> perm : availablePermissions.entrySet()) {
-            String key = perm.getKey();
-            String cleanKey = key.toLowerCase(Locale.US);
+        String nearest = null;
+        int id = -1;
+        int smallest = Integer.MAX_VALUE;
 
-            if (cleanKey.startsWith(lowerPerm)) {
-                permissions.add(perm.getValue());
-                return key;
+        for (Map.Entry<Integer, String > perm : availablePermissions.entrySet()) {
+            String key = perm.getValue();
+
+            int distance = StringUtils.getLevenshteinDistance(key, permission);
+            if (distance < smallest) {
+                smallest = distance;
+                id = perm.getKey();
+                nearest = key;
             }
         }
+
+        if (nearest != null && id != -1) {
+            permissions.add(id);
+            return nearest;
+        }
+
         return null;
     }
 
@@ -280,5 +302,15 @@ public class Rank {
     public void update(boolean update)
     {
         this.update = update;
+    }
+
+    public String getTag()
+    {
+        return tag;
+    }
+
+    public void setTag(String tag)
+    {
+        this.tag = tag;
     }
 }

@@ -25,7 +25,6 @@ import com.p000ison.dev.simpleclans2.clan.ranks.Rank;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
 import com.p000ison.dev.simpleclans2.language.Language;
-import com.p000ison.dev.simpleclans2.util.GeneralHelper;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -38,7 +37,7 @@ public class RankSetCommand extends GenericPlayerCommand {
     public RankSetCommand(SimpleClans plugin)
     {
         super("RankSet", plugin);
-        setArgumentRange(2, 50);
+        setArgumentRange(2, 2);
         setUsages(Language.getTranslation("usage.rank.set", plugin.getSettingsManager().getClanCommand()));
         setIdentifiers(Language.getTranslation("rank.set.command"));
     }
@@ -78,7 +77,7 @@ public class RankSetCommand extends GenericPlayerCommand {
             return;
         }
 
-        Rank rank = clan.getRank(GeneralHelper.arrayBoundsToString(1, args));
+        Rank rank = clan.getRank(args[1]);
 
         if (rank == null) {
             player.sendMessage(Language.getTranslation("rank.not.found"));
@@ -87,5 +86,6 @@ public class RankSetCommand extends GenericPlayerCommand {
 
         query.setRank(rank);
         query.update();
+        player.sendMessage(Language.getTranslation("rank.set", query.getName(), rank.getName()));
     }
 }

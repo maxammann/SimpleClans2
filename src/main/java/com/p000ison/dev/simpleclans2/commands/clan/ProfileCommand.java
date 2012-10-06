@@ -94,7 +94,7 @@ public class ProfileCommand extends GenericPlayerCommand {
 
         String name = clan.getName();
         String leaders = plugin.getSettingsManager().getLeaderColor() + GeneralHelper.clansPlayersToString(clan.getLeaders(), ",");
-        String onlineCount = ChatColor.WHITE.toString() + GeneralHelper.stripOfflinePlayers(clan.getMembers()).size();
+        String onlineCount = ChatColor.WHITE.toString() + GeneralHelper.stripOfflinePlayers(clan.getAllMembers()).size();
         String membersOnline = onlineCount + subColor + "/" + ChatColor.WHITE + clan.getSize();
         String inactive = ChatColor.WHITE.toString() + clan.getInactiveDays() + subColor + "/" + ChatColor.WHITE.toString() + (clan.isVerified() ? plugin.getSettingsManager().getPurgeInactiveClansDays() : plugin.getSettingsManager().getPurgeUnverifiedClansDays()) + " " + Language.getTranslation("days");
         String founded = ChatColor.WHITE + clan.getFounded();

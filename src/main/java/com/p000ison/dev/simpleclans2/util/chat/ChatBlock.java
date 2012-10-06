@@ -101,12 +101,12 @@ public class ChatBlock {
      *
      * @param sections An array of the sections of this row.
      */
-    public void addRow(String... sections)
+    public void addRow(Object... sections)
     {
         StringBuilder[] builderSections = new StringBuilder[sections.length];
 
         for (int i = 0; i < sections.length; i++) {
-            builderSections[i] = new StringBuilder(sections[i]);
+            builderSections[i] = new StringBuilder(sections[i].toString());
         }
 
         rows.add(builderSections);

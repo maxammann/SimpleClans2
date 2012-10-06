@@ -130,10 +130,11 @@ public class CreateCommand extends GenericPlayerCommand {
 
         Clan clan = plugin.getClanManager().createClan(args[0], name);
         cp.setLeader(true);
-        cp.setTrusted(true);
+
         cp.setClan(clan);
-        cp.update();
+
         clan.addBBMessage(cp, MessageFormat.format(Language.getTranslation("clan.created"), name));
+        cp.update();
 
         if (plugin.getSettingsManager().requireVerification()) {
             boolean verified = !plugin.getSettingsManager().requireVerification() || player.hasPermission("simpleclans.mod.verify");
@@ -141,6 +142,8 @@ public class CreateCommand extends GenericPlayerCommand {
             if (!verified) {
                 player.sendMessage(ChatColor.AQUA + Language.getTranslation("get.your.clan.verified.to.access.advanced.features"));
             }
+
+            clan.setVerified(verified);
 
         } else {
             clan.setVerified(true);

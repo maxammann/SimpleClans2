@@ -78,7 +78,15 @@ public class RankAddPermissionCommand extends GenericPlayerCommand {
             return;
         }
 
-        rank.addPermission(args[0]);
+        String added = rank.addPermission(args[0]);
+
+        if (added == null) {
+            player.sendMessage(ChatColor.DARK_RED + Language.getTranslation("permission.not.found"));
+            return;
+        }
+
         rank.update(true);
+
+        player.sendMessage(ChatColor.AQUA + Language.getTranslation("rank.permission.added", added, rank.getName()));
     }
 }
