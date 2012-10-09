@@ -37,7 +37,7 @@ public class PlayerState {
     private static final Map<Material, Integer> FOOD = new HashMap<Material, Integer>();
     private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.#");
     private static final ChatColor[] ARMOR_ORDER = new ChatColor[]{ChatColor.BLACK, ChatColor.GOLD, ChatColor.YELLOW, ChatColor.WHITE, ChatColor.GRAY, ChatColor.AQUA, ChatColor.RED};
-    private static Map<Material, Integer> ARMOR = new HashMap<Material, Integer>();
+    private static Map<Material, Integer> WEAPONS = new HashMap<Material, Integer>();
 
     static {
         FOOD.put(Material.GRILLED_PORK, 8);
@@ -57,6 +57,7 @@ public class PlayerState {
         FOOD.put(Material.MELON_STEM, 2);
         //1.4
         //potato;carrot;baked potato; golden carrot; carrot; pumpkin pie
+
     }
 
 
@@ -99,6 +100,7 @@ public class PlayerState {
         }
 
         armorString.append(color).append(helmetSign);
+        color = ChatColor.BLACK;
 
         if (chestplate != null) {
             switch (chestplate.getType()) {
@@ -123,6 +125,7 @@ public class PlayerState {
         }
 
         armorString.append(color).append(chestplateSign);
+        color = ChatColor.BLACK;
 
         if (leggings != null) {
             switch (leggings.getType()) {
@@ -147,6 +150,7 @@ public class PlayerState {
         }
 
         armorString.append(color).append(leggingsSign);
+        color = ChatColor.BLACK;
 
         if (boots != null) {
             switch (boots.getType()) {
@@ -172,7 +176,59 @@ public class PlayerState {
 
         armorString.append(color).append(bootsSign);
 
-        return armorString.toString();
+        return armorString.length() == 0 ? ChatColor.BLACK + "Empty" : armorString.toString();
+    }
+
+    public String getWeapons(String sword, String bow, String arrow)
+    {
+        ItemStack[] contents = player.getInventory().getContents();
+        StringBuilder weapons = new StringBuilder();
+
+        for (ItemStack itemStack : contents) {
+            if (itemStack == null) {
+                continue;
+            }
+
+            String type = null;
+            ChatColor color = null;
+
+            switch (itemStack.getType()) {
+                case WOOD_SWORD:
+                    type = sword;
+                    color = ChatColor.GOLD;
+                    break;
+                case GOLD_SWORD:
+                    type = sword;
+                    color = ChatColor.YELLOW;
+                    break;
+                case IRON_SWORD:
+                    type = sword;
+                    color = ChatColor.WHITE;
+                    break;
+                case DIAMOND_SWORD:
+                    type = sword;
+                    color = ChatColor.WHITE;
+                    break;
+                case BOW:
+                    type = bow;
+                    color = ChatColor.GOLD;
+                    break;
+                case ARROW:
+                    type = arrow;
+                    color = ChatColor.GOLD;
+                    break;
+            }
+
+            if (type != null && color != null) {
+                weapons.append(color).append(type);
+                int amount = itemStack.getAmount();
+                if (amount > 1) {
+                    weapons.append(amount);
+                }
+            }
+        }
+
+        return weapons.length() == 0 ? ChatColor.BLACK + "Empty" : weapons.toString();
     }
 
     public String getFood(String format)
@@ -197,11 +253,7 @@ public class PlayerState {
 
         food /= 2;
 
-        if (food == 0) {
-            return null;
-        } else {
-            return String.format(format, DECIMAL_FORMAT.format(food));
-        }
+        return String.format(format, DECIMAL_FORMAT.format(food));
     }
 
     public String getHealth()

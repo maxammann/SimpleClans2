@@ -130,7 +130,7 @@ public class ChatBlock {
         int firstRowLength = rows.get(0).length;
 
         if (alignment.length != firstRowLength) {
-            throw new IllegalArgumentException(String.format("The number of alignments must equal the number of sections! %s != %s" , alignment.length, firstRowLength));
+            throw new IllegalArgumentException(String.format("The number of alignments must equal the number of sections! %s != %s", alignment.length, firstRowLength));
         }
 
         if (columnSizes.length != firstRowLength) {
@@ -461,6 +461,14 @@ public class ChatBlock {
         }
 
         return text.replace("&", "\u00a7");
+    }
+
+    public static void sendHead(CommandSender sender, String text, ChatColor headColor)
+    {
+        StringBuilder head = new StringBuilder(text).append(' ').append(headColor);
+        while (msgLength(head) < MAX_LINE_LENGTH) {
+            head.append('-');
+        }
     }
 }
 

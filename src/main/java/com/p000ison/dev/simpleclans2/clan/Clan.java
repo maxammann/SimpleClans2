@@ -1063,4 +1063,15 @@ public class Clan implements KDR, Comparable<Clan> {
     {
         return new Integer(o.getInactiveDays()).compareTo(getInactiveDays());
     }
+
+    public Set<ClanPlayer> getAllAllyMembers()
+    {
+        Set<ClanPlayer> allyMembers = new HashSet<ClanPlayer>();
+
+        for (Clan ally : getAllies()) {
+            allyMembers.addAll(ally.getAllMembers());
+        }
+
+        return Collections.unmodifiableSet(allyMembers);
+    }
 }

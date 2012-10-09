@@ -214,7 +214,7 @@ public class SimpleClans extends JavaPlugin implements Core {
 //        commandManager.addCommand(new LookupCommand(this));
 //        commandManager.addCommand(new RivalriesCommand(this));
 //        commandManager.addCommand(new RosterCommand(this));
-//        commandManager.addCommand(new VitalsCommand(this));
+        commandManager.addCommand(new VitalsCommand(this));
 //        commandManager.addCommand(new StatsCommand(this));
 //        commandManager.addCommand(new StrifesCommand(this));
 //        commandManager.addCommand(new KillsCommand(this));
@@ -223,7 +223,6 @@ public class SimpleClans extends JavaPlugin implements Core {
 //        commandManager.addCommand(new WarCommand(this));
 //        commandManager.addCommand(new ModtagCommand(this));
 //        commandManager.addCommand(new ToggleCommand(this));
-//        commandManager.addCommand(new SetRankCommand(this));
 //        commandManager.addCommand(new TrustCommand(this));
 //        commandManager.addCommand(new UntrustCommand(this));
 //        commandManager.addCommand(new PromoteCommand(this));

@@ -27,6 +27,8 @@ import com.p000ison.dev.simpleclans2.clan.ranks.Rank;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.clanplayer.PlayerFlags;
 import com.p000ison.dev.simpleclans2.database.Database;
+import com.p000ison.dev.simpleclans2.database.data.response.ResponseRequest;
+import com.p000ison.dev.simpleclans2.database.data.response.ResponseTask;
 import com.p000ison.dev.simpleclans2.database.data.statements.RemoveRankStatement;
 import com.p000ison.dev.simpleclans2.util.DateHelper;
 import com.p000ison.dev.simpleclans2.util.JSONUtil;
@@ -44,6 +46,7 @@ public class DataManager {
     private SimpleClans plugin;
     private Database database;
     private AutoSaver autoSaver;
+    private ResponseTask responseTask;
 
     public PreparedStatement DELETE_CLAN, UPDATE_CLAN, INSERT_CLAN, RETRIEVE_CLAN_BY_TAG;
 
@@ -61,6 +64,10 @@ public class DataManager {
         database = plugin.getDatabaseManager().getDatabase();
 
         autoSaver = new AutoSaver(plugin, this);
+        responseTask = new ResponseTask(plugin);
+
+        plugin.getServer().getScheduler().scheduleAsyncRepeatingTask(plugin, responseTask, 0L, 10L);
+
 
         //convert to minutes
         long autoSave = plugin.getSettingsManager().getAutoSave() * 1200L;
@@ -91,6 +98,11 @@ public class DataManager {
         INSERT_RANK = database.prepareStatement("INSERT INTO `sc2_ranks` ( `name`, `tag`, `priority`, `clan` ) VALUES ( ?, ?, ?, ? );");
         UPDATE_RANK = database.prepareStatement("UPDATE `sc2_ranks` SET name = ?, tag = ?, permissions = ?, priority = ?;");
         RETRIEVE_RANK_BY_NAME = database.prepareStatement("SELECT id FROM `sc2_ranks` WHERE name = ? AND clan = ?;");
+    }
+
+    public void addResponse(ResponseRequest response)
+    {
+        responseTask.add(response);
     }
 
     public final void importAll()
