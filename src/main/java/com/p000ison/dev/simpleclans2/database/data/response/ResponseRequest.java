@@ -25,14 +25,14 @@ import org.bukkit.command.CommandSender;
  * Represents a ResponseRequest
  */
 public abstract class ResponseRequest implements ResponseAble {
-    protected CommandSender sender;
+    private final CommandSender sender;
 
     protected ResponseRequest(CommandSender sender)
     {
         this.sender = sender;
     }
 
-    public CommandSender getRetriever()
+    protected CommandSender getRetriever()
     {
         return sender;
     }
