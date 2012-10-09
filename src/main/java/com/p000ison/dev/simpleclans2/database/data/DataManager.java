@@ -27,7 +27,7 @@ import com.p000ison.dev.simpleclans2.clan.ranks.Rank;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.clanplayer.PlayerFlags;
 import com.p000ison.dev.simpleclans2.database.Database;
-import com.p000ison.dev.simpleclans2.database.data.response.ResponseRequest;
+import com.p000ison.dev.simpleclans2.database.data.response.Response;
 import com.p000ison.dev.simpleclans2.database.data.response.ResponseTask;
 import com.p000ison.dev.simpleclans2.database.data.statements.RemoveRankStatement;
 import com.p000ison.dev.simpleclans2.util.DateHelper;
@@ -49,12 +49,10 @@ public class DataManager {
     private ResponseTask responseTask;
 
     public PreparedStatement DELETE_CLAN, UPDATE_CLAN, INSERT_CLAN, RETRIEVE_CLAN_BY_TAG;
-
     public PreparedStatement DELETE_CLANPLAYER, UPDATE_CLANPLAYER, INSERT_CLANPLAYER, RETRIEVE_CLANPLAYER_BY_NAME;
-
     public PreparedStatement INSERT_KILL, RETRIEVE_TOTAL_DEATHS_PER_PLAYER;
-
-    public PreparedStatement INSERT_RANK, UPDATE_RANK, DELETE_RANK_BY_ID, RETRIEVE_RANK, RETRIEVE_RANK_BY_NAME;
+    public PreparedStatement INSERT_RANK, UPDATE_RANK, DELETE_RANK_BY_ID, RETRIEVE_RANK_BY_NAME;
+    public PreparedStatement RETRIEVE_BB, INSERT_BB, DELETE_BB, PURGE_BB;
 
 
     public DataManager(SimpleClans plugin)
@@ -66,7 +64,7 @@ public class DataManager {
         autoSaver = new AutoSaver(plugin, this);
         responseTask = new ResponseTask(plugin);
 
-        plugin.getServer().getScheduler().scheduleAsyncRepeatingTask(plugin, responseTask, 0L, 10L);
+        plugin.getServer().getScheduler().scheduleAsyncRepeatingTask(plugin, responseTask, 0L, 5L);
 
 
         //convert to minutes
@@ -96,13 +94,27 @@ public class DataManager {
         RETRIEVE_TOTAL_DEATHS_PER_PLAYER = database.prepareStatement("SELECT victim, count(victim) AS kills FROM `sc_kills` GROUP BY victim ORDER BY 2 DESC;");
 
         INSERT_RANK = database.prepareStatement("INSERT INTO `sc2_ranks` ( `name`, `tag`, `priority`, `clan` ) VALUES ( ?, ?, ?, ? );");
-        UPDATE_RANK = database.prepareStatement("UPDATE `sc2_ranks` SET name = ?, tag = ?, permissions = ?, priority = ?;");
+        UPDATE_RANK = database.prepareStatement("UPDATE `sc2_ranks` SET name = ?, tag = ?, permissions = ?, priority = ? WHERE clan = ?;");
         RETRIEVE_RANK_BY_NAME = database.prepareStatement("SELECT id FROM `sc2_ranks` WHERE name = ? AND clan = ?;");
+
+        RETRIEVE_BB = database.prepareStatement("SELECT `text` FROM `sc2_bb` WHERE clan = ? ORDER BY `date` LIMIT ?, ?;");
+        INSERT_BB = database.prepareStatement("INSERT INTO `sc2_bb` ( `text`, `clan` ) VALUES ( ?, ? );");
+        PURGE_BB = database.prepareStatement("DELETE FROM `sc2_bb` WHERE clan = ?;");
     }
 
-    public void addResponse(ResponseRequest response)
+    public void addResponse(Response response)
     {
         responseTask.add(response);
+    }
+
+    public void addStatement(Executable statement)
+    {
+        getAutoSaver().add(statement);
+    }
+
+    public AutoSaver getAutoSaver()
+    {
+        return autoSaver;
     }
 
     public final void importAll()
@@ -134,16 +146,6 @@ public class DataManager {
         } catch (SQLException e) {
             Logging.debug(e, "Failed to update player %s.", clanPlayer.getName());
         }
-    }
-
-    public void addStatement(Executable statement)
-    {
-        getQueue().add(statement);
-    }
-
-    public AutoSaver getQueue()
-    {
-        return autoSaver;
     }
 
     public void deleteClanPlayer(ClanPlayer clanPlayer)
@@ -531,6 +533,7 @@ public class DataManager {
             UPDATE_RANK.setString(2, rank.getTag());
             UPDATE_RANK.setString(3, JSONUtil.collectionToJSON(rank.getPermissions()));
             UPDATE_RANK.setInt(4, rank.getPriority());
+            UPDATE_RANK.setLong(5, clan.getId());
 
             int state = UPDATE_RANK.executeUpdate();
 
@@ -616,5 +619,54 @@ public class DataManager {
         }
 
         return out;
+    }
+
+    public List<String> retrieveBB(Clan clan, int start, int end)
+    {
+
+        List<String> bb = new ArrayList<String>();
+
+        ResultSet res = null;
+
+        try {
+            RETRIEVE_BB.setLong(1, clan.getId());
+            RETRIEVE_BB.setInt(2, start);
+            RETRIEVE_BB.setInt(3, end);
+            res = RETRIEVE_BB.executeQuery();
+
+
+
+            if (res != null) {
+
+                while (res.next()) {
+                    bb.add(res.getString("text"));
+                }
+            }
+        } catch (SQLException e) {
+            Logging.debug(e, "Failed at retrieving bb for %s!", clan.getTag());
+        }
+
+        try {
+            if (res != null) {
+                res.close();
+            }
+        } catch (SQLException e) {
+            Logging.debug(e, "Failed at closing result!");
+        }
+
+        System.out.println(bb.size());;
+
+        return bb;
+    }
+
+    public void purgeBB(Clan clan)
+    {
+
+        try {
+            PURGE_BB.setLong(1, clan.getId());
+            PURGE_BB.executeUpdate();
+        } catch (SQLException e) {
+            Logging.debug(e, "Failed at purging bb for %s!", clan.getTag());
+        }
     }
 }

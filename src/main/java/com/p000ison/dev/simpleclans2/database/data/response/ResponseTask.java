@@ -27,7 +27,7 @@ import java.util.LinkedList;
 /**
  * Represents a ResponseTask
  */
-public class ResponseTask extends LinkedList<ResponseRequest> implements Runnable {
+public class ResponseTask extends LinkedList<Response> implements Runnable {
 
     private SimpleClans plugin;
 
@@ -39,10 +39,10 @@ public class ResponseTask extends LinkedList<ResponseRequest> implements Runnabl
     @Override
     public void run()
     {
-        ResponseRequest response;
+        Response response;
 
         while ((response = this.poll()) != null) {
-            if (response.getRetriever() != null && !response.execute(plugin)) {
+            if (response.getRetriever() != null && !response.execute()) {
                 Logging.debug("Failed to execute query!");
             }
         }

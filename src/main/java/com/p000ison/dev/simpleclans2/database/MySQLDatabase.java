@@ -49,11 +49,6 @@ public class MySQLDatabase implements Database {
         }
     }
 
-    public void reconnect()
-    {
-        initialize();
-    }
-
     /**
      * @return The connection
      */
@@ -109,8 +104,8 @@ public class MySQLDatabase implements Database {
     /**
      * Execute a select statement
      *
-     * @param query
-     * @return
+     * @param query The query
+     * @return The ResultSet
      */
     @Override
     public ResultSet query(String query)
@@ -130,7 +125,7 @@ public class MySQLDatabase implements Database {
     /**
      * Execute an update statement
      *
-     * @param query
+     * @param query Weather it was successfully
      */
     @Override
     public boolean update(String query)

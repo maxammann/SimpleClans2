@@ -19,21 +19,34 @@
 
 package com.p000ison.dev.simpleclans2.database.data.response;
 
+import com.p000ison.dev.simpleclans2.SimpleClans;
 import org.bukkit.command.CommandSender;
 
 /**
- * Represents a ResponseRequest
+ * Represents a Response
  */
-public abstract class ResponseRequest implements ResponseAble {
-    private final CommandSender sender;
+public abstract class Response implements ResponseAble {
+    protected final SimpleClans plugin;
+    protected final CommandSender sender;
 
-    protected ResponseRequest(CommandSender sender)
+    protected Response(SimpleClans plugin, CommandSender sender)
     {
+        this.plugin = plugin;
         this.sender = sender;
     }
 
     protected CommandSender getRetriever()
     {
         return sender;
+    }
+
+
+    public int[] getBoundings(int page)
+    {
+
+        int start = page * plugin.getSettingsManager().getElementsPerPage();
+        int end = start + plugin.getSettingsManager().getElementsPerPage();
+
+        return new int[]{start, end};
     }
 }

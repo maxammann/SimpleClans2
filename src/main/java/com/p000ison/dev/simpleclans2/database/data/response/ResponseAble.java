@@ -19,12 +19,10 @@
 
 package com.p000ison.dev.simpleclans2.database.data.response;
 
-import com.p000ison.dev.simpleclans2.SimpleClans;
-
 /**
  * Represents a ResponseAble
  */
 public interface ResponseAble {
 
-    public boolean execute(SimpleClans plugin);
+    public boolean execute();
 }

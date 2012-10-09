@@ -23,6 +23,7 @@ package com.p000ison.dev.simpleclans2.listeners;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
+import com.p000ison.dev.simpleclans2.database.data.response.responses.BBResponse;
 import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -67,8 +68,7 @@ public class SCPlayerListener implements Listener {
 
             Clan clan = clanPlayer.getClan();
 
-            System.out.println(clan);
-            System.out.println(clanPlayer);
+            plugin.getDataManager().addResponse(new BBResponse(plugin, player, clan, 0));
 
             if (plugin.getSettingsManager().isMotdBBEnabled()) {
 

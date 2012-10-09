@@ -50,7 +50,7 @@ public class SaveCommand extends GenericConsoleCommand {
     {
         long start = System.currentTimeMillis();
 
-        plugin.getDataManager().getQueue().run();
+        plugin.getDataManager().getAutoSaver().run();
 
         long end = System.currentTimeMillis();
         sender.sendMessage(ChatColor.AQUA + MessageFormat.format(Language.getTranslation("data.saved"), end - start));

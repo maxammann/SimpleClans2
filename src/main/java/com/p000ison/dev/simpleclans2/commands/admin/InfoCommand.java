@@ -50,7 +50,7 @@ public class InfoCommand extends GenericConsoleCommand {
     {
         int loadedClans = plugin.getClanManager().getClans().size();
         int loadedClanPlayers = plugin.getClanPlayerManager().getClanPlayers().size();
-        int dataQueue = plugin.getDataManager().getQueue().size();
+        int dataQueue = plugin.getDataManager().getAutoSaver().size();
         int teleporting = plugin.getTeleportManager().getWaitingPlayers();
 
         sender.sendMessage("Loaded clans: " + loadedClans);

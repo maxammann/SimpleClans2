@@ -122,7 +122,7 @@ public class SimpleClans extends JavaPlugin implements Core {
     public void onDisable()
     {
         //save data
-        dataManager.getQueue().run();
+        dataManager.getAutoSaver().run();
         //close the connection to the database
         databaseManager.getDatabase().close();
 

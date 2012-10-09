@@ -51,7 +51,7 @@ public class ReloadCommand extends GenericConsoleCommand {
         long start = System.currentTimeMillis();
 
         plugin.getSettingsManager().reload();
-        plugin.getDataManager().getQueue().run();
+        plugin.getDataManager().getAutoSaver().run();
         plugin.getDataManager().importAll();
 
         long end = System.currentTimeMillis();
