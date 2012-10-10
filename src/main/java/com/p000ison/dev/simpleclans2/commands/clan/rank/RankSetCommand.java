@@ -40,6 +40,7 @@ public class RankSetCommand extends GenericPlayerCommand {
         setArgumentRange(2, 2);
         setUsages(Language.getTranslation("usage.rank.set", plugin.getSettingsManager().getClanCommand()));
         setIdentifiers(Language.getTranslation("rank.set.command"));
+        setType(Type.RANK);
     }
 
     @Override

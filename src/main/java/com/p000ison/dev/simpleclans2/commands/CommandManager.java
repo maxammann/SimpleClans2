@@ -72,80 +72,66 @@ public class CommandManager {
 
     public void execute(CommandSender sender, String command, String[] args)
     {
-        long start = System.currentTimeMillis();
-
         try {
-            String[] arguments;
+            String identifier;
+            String[] realArgs;
 
             //Build the args; if the args length is 0 then build if from the base command
             if (args.length == 0) {
-                arguments = new String[]{command};
+                identifier = command;
+                realArgs = new String[0];
             } else {
-                arguments = args;
+                identifier = args[0];
+                realArgs = Arrays.copyOfRange(args, 1, args.length);
             }
 
-            //Iterate through all arguments from the last to the first argument
-            for (int argsIncluded = arguments.length; argsIncluded >= 0; argsIncluded--) {
-                StringBuilder identifierBuilder = new StringBuilder();
-                String identifier;
-                //Build the identifier string
-                for (int i = 0; i < argsIncluded; i++) {
-                    identifierBuilder.append(" ").append(arguments[i]);
-                }
+            Command helpCommand = null;
 
-                //trim the last ' '
+            for (Command cmd : commands) {
+                if (cmd.isIdentifier(identifier)) {
 
-                identifier = identifierBuilder.toString().trim();
+                    Command.Type type = cmd.getType();
 
-                Command helpCommand = null;
+                    if (type != null && !type.getCommand().equals(command)) {
+                        displayCommandHelp(cmd, sender);
+                        return;
+                    }
 
-                for (Command cmd : commands) {
-                    if (cmd.isIdentifier(identifier)) {
-                        String[] realArgs = Arrays.copyOfRange(arguments, argsIncluded, arguments.length);
+                    if (realArgs.length < cmd.getMinArguments() || realArgs.length > cmd.getMaxArguments()) {
+                        helpCommand = cmd;
+                        continue;
+                    } else if (realArgs.length > 0 && realArgs[0].equals("?")) {
+                        displayCommandHelp(cmd, sender);
+                        return;
+                    }
 
-                        if (realArgs.length < cmd.getMinArguments() || realArgs.length > cmd.getMaxArguments()) {
-                            helpCommand = cmd;
-                            continue;
-                        } else if (realArgs.length > 0 && realArgs[0].equals("?")) {
-                            displayCommandHelp(cmd, sender);
+                    if (!cmd.hasPermission(sender)) {
+                        sender.sendMessage(ChatColor.DARK_RED + Language.getTranslation("insufficient.permissions"));
+                        return;
+                    }
+
+                    if (cmd instanceof GenericConsoleCommand) {
+                        ((GenericConsoleCommand) cmd).execute(sender, realArgs);
+                        return;
+                    } else if (cmd instanceof GenericPlayerCommand) {
+                        if (sender instanceof Player) {
+                            ((GenericPlayerCommand) cmd).execute((Player) sender, realArgs);
                             return;
                         }
-
-                        if (!cmd.hasPermission(sender)) {
-                            sender.sendMessage(ChatColor.DARK_RED + Language.getTranslation("insufficient.permissions"));
-                            return;
-                        }
-
-                        if (cmd instanceof GenericConsoleCommand) {
-                            ((GenericConsoleCommand) cmd).execute(sender, realArgs);
-                            long finish = System.currentTimeMillis();
-                            System.out.printf("Command took %s!", finish - start);
-                            return;
-                        } else if (cmd instanceof GenericPlayerCommand) {
-                            if (sender instanceof Player) {
-                                ((GenericPlayerCommand) cmd).execute((Player) sender, realArgs);
-                                long finish = System.currentTimeMillis();
-                                System.out.printf("Command took %s!", finish - start);
-                                return;
-                            }
-                        } else {
-                            Logging.debug(Level.WARNING, "Failed at parsing the command :(");
-                        }
+                    } else {
+                        Logging.debug(Level.WARNING, "Failed at parsing the command :(");
                     }
                 }
-
-                if (helpCommand != null) {
-                    displayCommandHelp(helpCommand, sender);
-                    return;
-                }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+
+            if (helpCommand != null) {
+                displayCommandHelp(helpCommand, sender);
+                return;
+            }
+
+        } catch (RuntimeException e) {
+            Logging.debug(e, "Failed at running a SimpleClans command!");
         }
-
-
-        long finish = System.currentTimeMillis();
-        System.out.printf("Command took %s!", finish - start);
 
         sender.sendMessage(ChatColor.DARK_RED + "Command not found!");
     }

@@ -41,6 +41,7 @@ public class ViewPermissionsCommand extends GenericConsoleCommand {
         setUsages(Language.getTranslation("usage.view.permissions", plugin.getSettingsManager().getClanCommand()));
         setIdentifiers(Language.getTranslation("view.permissions.command"));
         setPermission("simpleclans.rank.view.permissions");
+        setType(Type.RANK);
     }
 
     @Override

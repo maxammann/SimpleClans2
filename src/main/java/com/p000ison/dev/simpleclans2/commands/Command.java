@@ -44,4 +44,25 @@ public interface Command {
     public boolean hasPermission(Permissible sender);
 
     public void setArgumentRange(int min, int max);
+
+    public static enum Type {
+        CLAN("clan"),
+        RANK("rank"),
+        BB("bb");
+
+        private String command;
+
+        private Type(String command)
+        {
+
+            this.command = command;
+        }
+
+        public String getCommand()
+        {
+            return command;
+        }
+    }
+
+    public Type getType();
 }

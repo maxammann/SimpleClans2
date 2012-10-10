@@ -32,6 +32,7 @@ abstract class GenericCommand implements Command {
     private String[] usage;
     protected SimpleClans plugin;
     private String permission;
+    private Type type;
 
     public GenericCommand(String name, SimpleClans plugin)
     {
@@ -154,5 +155,15 @@ abstract class GenericCommand implements Command {
                 ", identifiers=" + (identifiers == null ? null : Arrays.asList(identifiers)) +
                 ", maxArgs=" + maxArgs +
                 '}';
+    }
+
+    public Type getType()
+    {
+        return type;
+    }
+
+    public void setType(Type type)
+    {
+        this.type = type;
     }
 }
