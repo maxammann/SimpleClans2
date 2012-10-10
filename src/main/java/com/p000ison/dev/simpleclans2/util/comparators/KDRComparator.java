@@ -22,12 +22,13 @@ package com.p000ison.dev.simpleclans2.util.comparators;
 
 import com.p000ison.dev.simpleclans2.KDR;
 
+import java.io.Serializable;
 import java.util.Comparator;
 
 /**
  * Represents a KDRComparator
  */
-public class KDRComparator implements Comparator<KDR> {
+public class KDRComparator implements Comparator<KDR>, Serializable {
 
     @Override
     public int compare(KDR kdr1, KDR kdr2)

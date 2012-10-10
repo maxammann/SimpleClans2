@@ -19,7 +19,6 @@
 
 package com.p000ison.dev.simpleclans2.database.data.response;
 
-import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.util.Logging;
 
 import java.util.LinkedList;
@@ -29,12 +28,7 @@ import java.util.LinkedList;
  */
 public class ResponseTask extends LinkedList<Response> implements Runnable {
 
-    private SimpleClans plugin;
-
-    public ResponseTask(SimpleClans plugin)
-    {
-        this.plugin = plugin;
-    }
+    private static final long serialVersionUID = 1L;
 
     @Override
     public void run()
@@ -43,7 +37,7 @@ public class ResponseTask extends LinkedList<Response> implements Runnable {
 
         while ((response = this.poll()) != null) {
             if (response.getRetriever() != null && !response.execute()) {
-                Logging.debug("Failed to execute query!");
+                Logging.debug("Failed to execute response-able!");
             }
         }
     }

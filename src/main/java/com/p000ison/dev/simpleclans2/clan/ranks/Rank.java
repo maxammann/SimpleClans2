@@ -315,8 +315,10 @@ public class Rank implements Comparable<Rank> {
     }
 
     @Override
-    public int compareTo(Rank o)
+    public int compareTo(Rank anotherRank)
     {
-        return new Integer(o.getPriority()).compareTo(getPriority());
+        int thisPriority = this.getPriority();
+        int anotherPriority = anotherRank.getPriority();
+        return (thisPriority < anotherPriority ? -1 : (thisPriority == anotherPriority ? 0 : 1));
     }
 }

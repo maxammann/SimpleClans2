@@ -19,13 +19,14 @@
 
 package com.p000ison.dev.simpleclans2.util.comparators;
 
+import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Map;
 
 /**
  * Represents a IntegerValueComparator
  */
-public class IntegerValueComparator implements Comparator<String> {
+public class IntegerValueComparator implements Comparator<String>, Serializable {
 
     private Map<?, Integer> base;
 

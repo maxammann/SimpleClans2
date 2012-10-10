@@ -28,7 +28,6 @@ import com.p000ison.dev.simpleclans2.language.Language;
 import com.p000ison.dev.simpleclans2.util.DateHelper;
 import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import org.bukkit.ChatColor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.text.MessageFormat;
@@ -48,7 +47,7 @@ public class Clan implements KDR, Comparable<Clan> {
     private long foundedDate;
     private long lastActionDate;
     private boolean verified;
-    private LinkedList<String> bb = new LinkedList<String>();
+    //    private LinkedList<String> bb = new LinkedList<String>();
     private Set<Clan> allies = new HashSet<Clan>();
     private Set<Clan> rivals = new HashSet<Clan>();
     private Set<Clan> warring = new HashSet<Clan>();
@@ -698,23 +697,24 @@ public class Clan implements KDR, Comparable<Clan> {
     private void addBBRawMessage(String message)
     {
         if (isVerified()) {
-            if (bb.size() > plugin.getSettingsManager().getMaxBBLenght()) {
-                bb.pollFirst();
-            }
+//            if (bb.size() > plugin.getSettingsManager().getMaxBBLenght()) {
+//                bb.pollFirst();
+//            }
 
-            bb.add(message);
+            plugin.getDataManager().insertBBMessage(this, message);
+//            bb.add(message);
         }
     }
 
     public void clearBB()
     {
-        bb.clear();
+        plugin.getDataManager().purgeBB(this);
     }
 
-    public void loadBB(LinkedList<String> bb)
-    {
-        this.bb = bb;
-    }
+//    public void loadBB(LinkedList<String> bb)
+//    {
+//        this.bb = bb;
+//    }
 
     @Override
     public boolean equals(Object o)
@@ -831,39 +831,39 @@ public class Clan implements KDR, Comparable<Clan> {
         plugin.getDataManager().deleteClan(this);
     }
 
-    public void displayBb(CommandSender sender, int maxLines)
-    {
-        if (bb == null || bb.isEmpty()) {
-            sender.sendMessage(Language.getTranslation("bb.is.empty"));
-            return;
-        }
-
-        int start;
-
-        if (bb.size() - maxLines < 0) {
-            start = 0;
-        } else {
-            start = bb.size() - maxLines;
-        }
-
-        int end = bb.size();
-
-        for (; start < end; start++) {
-            sender.sendMessage(bb.get(start));
-        }
-    }
-
-    public void displayBb(CommandSender sender)
-    {
-        if (bb == null || bb.isEmpty()) {
-            sender.sendMessage(Language.getTranslation("bb.is.empty"));
-            return;
-        }
-
-        for (String bbMessage : bb) {
-            sender.sendMessage(bbMessage);
-        }
-    }
+//    public void displayBb(CommandSender sender, int maxLines)
+//    {
+//        if (bb == null || bb.isEmpty()) {
+//            sender.sendMessage(Language.getTranslation("bb.is.empty"));
+//            return;
+//        }
+//
+//        int start;
+//
+//        if (bb.size() - maxLines < 0) {
+//            start = 0;
+//        } else {
+//            start = bb.size() - maxLines;
+//        }
+//
+//        int end = bb.size();
+//
+//        for (; start < end; start++) {
+//            sender.sendMessage(bb.get(start));
+//        }
+//    }
+//
+//    public void displayBb(CommandSender sender)
+//    {
+//        if (bb == null || bb.isEmpty()) {
+//            sender.sendMessage(Language.getTranslation("bb.is.empty"));
+//            return;
+//        }
+//
+//        for (String bbMessage : bb) {
+//            sender.sendMessage(bbMessage);
+//        }
+//    }
 
     public boolean hasAllies()
     {
@@ -880,15 +880,15 @@ public class Clan implements KDR, Comparable<Clan> {
         return warring != null && !warring.isEmpty();
     }
 
-    public boolean hasBB()
-    {
-        return bb != null && !bb.isEmpty();
-    }
-
-    public LinkedList<String> getBB()
-    {
-        return bb;
-    }
+//    public boolean hasBB()
+//    {
+//        return bb != null && !bb.isEmpty();
+//    }
+//
+//    public LinkedList<String> getBB()
+//    {
+//        return bb;
+//    }
 
     public boolean allLeadersOnline()
     {
@@ -1059,9 +1059,11 @@ public class Clan implements KDR, Comparable<Clan> {
     }
 
     @Override
-    public int compareTo(Clan o)
+    public int compareTo(Clan anotherClan)
     {
-        return new Integer(o.getInactiveDays()).compareTo(getInactiveDays());
+        int thisInactiveDate = this.getInactiveDays();
+        int anotherInactiveDate = anotherClan.getInactiveDays();
+        return (thisInactiveDate < anotherInactiveDate ? -1 : (thisInactiveDate == anotherInactiveDate ? 0 : 1));
     }
 
     public Set<ClanPlayer> getAllAllyMembers()

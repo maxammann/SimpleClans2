@@ -32,8 +32,10 @@ import java.util.LinkedList;
  */
 public class AutoSaver extends LinkedList<Executable> implements Runnable {
 
-    private DataManager dataManager;
-    private SimpleClans plugin;
+    private static final long serialVersionUID = 1L;
+
+    private transient DataManager dataManager;
+    private transient SimpleClans plugin;
 
     public AutoSaver(SimpleClans simpleClans, DataManager dataManager)
     {

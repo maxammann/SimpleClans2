@@ -192,7 +192,7 @@ public class SettingsManager {
             ConfigurationSection motd = clan.getConfigurationSection("motd");
             motdBBEnabled = motd.getBoolean("bb");
             motdBBLines = motd.getInt("lines");
-            motdBBFormat = motd.getString("format");
+            motdBBFormat = ChatBlock.parseColors(motd.getString("format"));
 
             ConfigurationSection voting = clan.getConfigurationSection("voting");
             voteForDemote = voting.getBoolean("demote");

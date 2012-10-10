@@ -23,6 +23,7 @@ import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
+import com.p000ison.dev.simpleclans2.database.data.response.responses.BBClearResponse;
 import com.p000ison.dev.simpleclans2.language.Language;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -74,9 +75,7 @@ public class BBClearCommand extends GenericPlayerCommand {
         }
 
         if (cp.isTrusted() && (cp.isLeader() || cp.hasRankPermission("manage.bb"))) {
-            cp.getClan().clearBB();
-            clan.update();
-            player.sendMessage(ChatColor.RED + Language.getTranslation("cleared.bb"));
+            plugin.getDataManager().addResponse(new BBClearResponse(plugin, player, clan));
         } else {
             player.sendMessage(ChatColor.RED + Language.getTranslation("no.leader.permissions"));
         }

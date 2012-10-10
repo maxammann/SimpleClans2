@@ -72,6 +72,8 @@ public class CommandManager {
 
     public void execute(CommandSender sender, String command, String[] args)
     {
+        long start = System.currentTimeMillis();
+
         try {
             String[] arguments;
 
@@ -116,10 +118,14 @@ public class CommandManager {
 
                         if (cmd instanceof GenericConsoleCommand) {
                             ((GenericConsoleCommand) cmd).execute(sender, realArgs);
+                            long finish = System.currentTimeMillis();
+                            System.out.printf("Command took %s!", finish - start);
                             return;
                         } else if (cmd instanceof GenericPlayerCommand) {
                             if (sender instanceof Player) {
                                 ((GenericPlayerCommand) cmd).execute((Player) sender, realArgs);
+                                long finish = System.currentTimeMillis();
+                                System.out.printf("Command took %s!", finish - start);
                                 return;
                             }
                         } else {
@@ -136,6 +142,10 @@ public class CommandManager {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+
+        long finish = System.currentTimeMillis();
+        System.out.printf("Command took %s!", finish - start);
 
         sender.sendMessage(ChatColor.DARK_RED + "Command not found!");
     }

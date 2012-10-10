@@ -52,7 +52,7 @@ public class DataManager {
     public PreparedStatement DELETE_CLANPLAYER, UPDATE_CLANPLAYER, INSERT_CLANPLAYER, RETRIEVE_CLANPLAYER_BY_NAME;
     public PreparedStatement INSERT_KILL, RETRIEVE_TOTAL_DEATHS_PER_PLAYER;
     public PreparedStatement INSERT_RANK, UPDATE_RANK, DELETE_RANK_BY_ID, RETRIEVE_RANK_BY_NAME;
-    public PreparedStatement RETRIEVE_BB, INSERT_BB, DELETE_BB, PURGE_BB;
+    public PreparedStatement RETRIEVE_BB_LIMIT, INSERT_BB, PURGE_BB, RETRIEVE_BB;
 
 
     public DataManager(SimpleClans plugin)
@@ -62,7 +62,7 @@ public class DataManager {
         database = plugin.getDatabaseManager().getDatabase();
 
         autoSaver = new AutoSaver(plugin, this);
-        responseTask = new ResponseTask(plugin);
+        responseTask = new ResponseTask();
 
         plugin.getServer().getScheduler().scheduleAsyncRepeatingTask(plugin, responseTask, 0L, 5L);
 
@@ -82,7 +82,7 @@ public class DataManager {
     {
         DELETE_CLAN = database.prepareStatement("DELETE FROM `sc2_clans` WHERE id = ?;");
         INSERT_CLAN = database.prepareStatement("INSERT INTO `sc2_clans` ( `tag`, `name`, `verified`, `last_action` ) VALUES ( ?, ?, ?, ? );");
-        UPDATE_CLAN = database.prepareStatement("UPDATE `sc2_clans` SET tag = ?, name = ?, verified = ?, allies = ?, rivals = ?, warring = ?, last_action = CURRENT_TIMESTAMP, bb = ?, flags = ? WHERE id = ?;");
+        UPDATE_CLAN = database.prepareStatement("UPDATE `sc2_clans` SET tag = ?, name = ?, verified = ?, allies = ?, rivals = ?, warring = ?, last_action = CURRENT_TIMESTAMP, flags = ? WHERE id = ?;");
         RETRIEVE_CLAN_BY_TAG = database.prepareStatement("SELECT id FROM `sc2_clans` WHERE tag = ?;");
 
         DELETE_CLANPLAYER = database.prepareStatement("DELETE FROM `sc2_players` WHERE id = ?;");
@@ -97,9 +97,10 @@ public class DataManager {
         UPDATE_RANK = database.prepareStatement("UPDATE `sc2_ranks` SET name = ?, tag = ?, permissions = ?, priority = ? WHERE clan = ?;");
         RETRIEVE_RANK_BY_NAME = database.prepareStatement("SELECT id FROM `sc2_ranks` WHERE name = ? AND clan = ?;");
 
-        RETRIEVE_BB = database.prepareStatement("SELECT `text` FROM `sc2_bb` WHERE clan = ? ORDER BY `date` LIMIT ?, ?;");
-        INSERT_BB = database.prepareStatement("INSERT INTO `sc2_bb` ( `text`, `clan` ) VALUES ( ?, ? );");
+        RETRIEVE_BB_LIMIT = database.prepareStatement("SELECT `text` FROM `sc2_bb` WHERE clan = ? ORDER BY `date` LIMIT ?, ?;");
+        INSERT_BB = database.prepareStatement("INSERT INTO `sc2_bb` ( `clan`, `text` ) VALUES ( ?, ? );");
         PURGE_BB = database.prepareStatement("DELETE FROM `sc2_bb` WHERE clan = ?;");
+        RETRIEVE_BB   = database.prepareStatement("SELECT `text` FROM `sc2_bb` WHERE clan = ? ORDER BY `date`;");
     }
 
     public void addResponse(Response response)
@@ -252,19 +253,19 @@ public class DataManager {
                 UPDATE_CLAN.setNull(6, Types.VARCHAR);
             }
 
-            if (clan.hasBB()) {
-                UPDATE_CLAN.setString(7, JSONUtil.collectionToJSON(clan.getBB()));
+//            if (clan.hasBB()) {
+//                UPDATE_CLAN.setString(7, JSONUtil.collectionToJSON(clan.getBB()));
+//            } else {
+//                UPDATE_CLAN.setNull(7, Types.VARCHAR);
+//            }
+
+            if (clan.getFlags().hasFlags()) {
+                UPDATE_CLAN.setString(7, clan.getFlags().read());
             } else {
                 UPDATE_CLAN.setNull(7, Types.VARCHAR);
             }
 
-            if (clan.getFlags().hasFlags()) {
-                UPDATE_CLAN.setString(8, clan.getFlags().read());
-            } else {
-                UPDATE_CLAN.setNull(8, Types.VARCHAR);
-            }
-
-            UPDATE_CLAN.setLong(9, clan.getId());
+            UPDATE_CLAN.setLong(8, clan.getId());
 
             UPDATE_CLAN.executeUpdate();
         } catch (SQLException e) {
@@ -349,11 +350,11 @@ public class DataManager {
                 clan.setFlags(flags);
 
                 //bb
-                List<String> rawBB = JSONUtil.JSONToStringList(result.getString("bb"));
-
-                if (rawBB != null) {
-                    clan.loadBB(new LinkedList<String>(rawBB));
-                }
+//                List<String> rawBB = JSONUtil.JSONToStringList(result.getString("bb"));
+//
+//                if (rawBB != null) {
+//                    clan.loadBB(new LinkedList<String>(rawBB));
+//                }
 
                 //allies
                 Set<Long> rawAllies = JSONUtil.JSONToLongSet(result.getString("allies"));
@@ -629,11 +630,10 @@ public class DataManager {
         ResultSet res = null;
 
         try {
-            RETRIEVE_BB.setLong(1, clan.getId());
-            RETRIEVE_BB.setInt(2, start);
-            RETRIEVE_BB.setInt(3, end);
-            res = RETRIEVE_BB.executeQuery();
-
+            RETRIEVE_BB_LIMIT.setLong(1, clan.getId());
+            RETRIEVE_BB_LIMIT.setInt(2, start);
+            RETRIEVE_BB_LIMIT.setInt(3, end);
+            res = RETRIEVE_BB_LIMIT.executeQuery();
 
 
             if (res != null) {
@@ -654,8 +654,6 @@ public class DataManager {
             Logging.debug(e, "Failed at closing result!");
         }
 
-        System.out.println(bb.size());;
-
         return bb;
     }
 
@@ -667,6 +665,17 @@ public class DataManager {
             PURGE_BB.executeUpdate();
         } catch (SQLException e) {
             Logging.debug(e, "Failed at purging bb for %s!", clan.getTag());
+        }
+    }
+
+    public void insertBBMessage(Clan clan, String message)
+    {
+        try {
+            INSERT_BB.setLong(1, clan.getId());
+            INSERT_BB.setString(2, message);
+            INSERT_BB.executeUpdate();
+        } catch (SQLException e) {
+            Logging.debug(e, "Failed at inserting bb message!");
         }
     }
 }

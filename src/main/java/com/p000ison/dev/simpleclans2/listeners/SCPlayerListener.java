@@ -24,7 +24,6 @@ import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.database.data.response.responses.BBResponse;
-import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -34,7 +33,6 @@ import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * Internally used
@@ -68,18 +66,17 @@ public class SCPlayerListener implements Listener {
 
             Clan clan = clanPlayer.getClan();
 
-            plugin.getDataManager().addResponse(new BBResponse(plugin, player, clan, 0));
-
             if (plugin.getSettingsManager().isMotdBBEnabled()) {
 
-                List<String> bb = clanPlayer.getClan().getBB();
-
-                if (bb.size() > 0) {
-
-                    for (int i = 0; i < plugin.getSettingsManager().getMotdBBLines() && i < bb.size(); i++) {
-                        player.sendMessage(ChatBlock.parseColors(plugin.getSettingsManager().getMotdBBFormat().replace("-bb", bb.get(i))));
-                    }
-                }
+                plugin.getDataManager().addResponse(new BBResponse(plugin, player, clan, -1, plugin.getSettingsManager().getMotdBBLines(), plugin.getSettingsManager().getMotdBBFormat()));
+//                List<String> bb = clanPlayer.getClan().getBB();
+//
+//                if (bb.size() > 0) {
+//
+//                    for (int i = 0; i < plugin.getSettingsManager().getMotdBBLines() && i < bb.size(); i++) {
+//                        player.sendMessage(ChatBlock.parseColors(plugin.getSettingsManager().getMotdBBFormat().replace("-bb", bb.get(i))));
+//                    }
+//                }
             }
 
             clan.updateLastAction();
