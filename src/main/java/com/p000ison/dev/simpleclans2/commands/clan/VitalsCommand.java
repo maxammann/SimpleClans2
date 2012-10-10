@@ -77,7 +77,7 @@ public class VitalsCommand extends GenericPlayerCommand {
 
                         ChatBlock chatBlock = new ChatBlock();
                         ChatBlock.sendBlank(player);
-                        ChatBlock.sendHead(player, plugin.getSettingsManager().getClanColor() + StringHelper.capitalize(clan.getName()) + subColor + " " + Language.getTranslation("vitals"), headColor);
+                        ChatBlock.sendHead(player, plugin.getSettingsManager().getClanColor() + StringHelper.capitalize(clan.getName()), Language.getTranslation("vitals"));
 
                         ChatBlock.sendBlank(player);
                         ChatBlock.sendMessage(player, headColor + Language.getTranslation("weapons") + ": " + MessageFormat.format(Language.getTranslation("0.s.sword.1.2.b.bow.3.4.a.arrow"), ChatColor.WHITE, ChatColor.DARK_GRAY, ChatColor.WHITE, ChatColor.DARK_GRAY, ChatColor.WHITE));
@@ -87,7 +87,7 @@ public class VitalsCommand extends GenericPlayerCommand {
 
                         chatBlock.setAlignment(Align.LEFT, Align.LEFT, Align.LEFT, Align.CENTER, Align.CENTER, Align.CENTER);
 
-                        chatBlock.addRow("  " + headColor + Language.getTranslation("name"), Language.getTranslation("health"), Language.getTranslation("hunger"), Language.getTranslation("food"), Language.getTranslation("armor"), Language.getTranslation("weapons"));
+                        chatBlock.addRow(headColor + Language.getTranslation("name"), Language.getTranslation("health"), Language.getTranslation("hunger"), Language.getTranslation("food"), Language.getTranslation("armor"), Language.getTranslation("weapons"));
 
                         Set<ClanPlayer> members = GeneralHelper.stripOfflinePlayers(clan.getAllMembers());
 
@@ -103,7 +103,7 @@ public class VitalsCommand extends GenericPlayerCommand {
                                 String weapons = state.getWeapons(Language.getTranslation("weapon.S"), Language.getTranslation("weapon.B"), Language.getTranslation("weapon.A"));
                                 String food = state.getFood("%s§ch");
 
-                                chatBlock.addRow("  " + name, ChatColor.RED + health, hunger, ChatColor.WHITE + food, armor, weapons);
+                                chatBlock.addRow(name, ChatColor.RED + health, hunger, ChatColor.WHITE + food, armor, weapons);
                             }
                         }
 

@@ -34,9 +34,10 @@ import java.util.List;
 public class ChatBlock {
 
     private static final int COLUMN_SPACING = 12;
-    private static final int MAX_LINE_LENGTH = 320;
+    private static final int MAX_LINE_LENGTH = 318;
 
     private static String prefix = null;
+    private static ChatColor headColor, subColor;
 
     private List<StringBuilder[]> rows = new ArrayList<StringBuilder[]>();
     private Align[] alignment = null;
@@ -463,12 +464,78 @@ public class ChatBlock {
         return text.replace("&", "\u00a7");
     }
 
-    public static void sendHead(CommandSender sender, String text, ChatColor headColor)
+    /**
+     * Sends a header to a {@link org.bukkit.command.CommandSender}.
+     *
+     * @param sender   The retriever
+     * @param head     The head
+     * @param subtitle The sub-title
+     */
+    public static void sendHead(CommandSender sender, String head, String subtitle)
     {
-        StringBuilder head = new StringBuilder(text).append(' ').append(headColor);
-        while (msgLength(head) < MAX_LINE_LENGTH) {
-            head.append('-');
+        StringBuilder header = new StringBuilder(head).append(' ');
+
+        if (subColor != null) {
+            header.append(subColor);
         }
+
+        header.append(subtitle).append(' ');
+
+        if (headColor != null) {
+            header.append(headColor);
+        }
+
+        while (msgLength(header) < MAX_LINE_LENGTH) {
+            header.append('-');
+        }
+
+        StringBuilder sb = new StringBuilder();
+
+        while (msgLength(sb) < MAX_LINE_LENGTH) {
+            sb.append('a');
+        }
+
+        sender.sendMessage(header.toString());
+    }
+
+    /**
+     * Sets the color of the header
+     *
+     * @param headColor The color to set
+     */
+    public static void setHeadColor(ChatColor headColor)
+    {
+        ChatBlock.headColor = headColor;
+    }
+
+    /**
+     * Sets the sub-color of a header
+     *
+     * @param subColor The color to set
+     */
+    public static void setSubColor(ChatColor subColor)
+    {
+        ChatBlock.subColor = subColor;
+    }
+
+    /**
+     * Gets the heading color
+     *
+     * @return The heading color
+     */
+    public static ChatColor getHeadingColor()
+    {
+        return headColor;
+    }
+
+    /**
+     * Gets the sub color in a header
+     *
+     * @return The sub color
+     */
+    public static ChatColor getSubPageColor()
+    {
+        return subColor;
     }
 }
 

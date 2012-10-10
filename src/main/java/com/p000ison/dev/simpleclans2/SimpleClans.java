@@ -91,7 +91,7 @@ public class SimpleClans extends JavaPlugin implements Core {
             Logging.setInstance(getLogger());
 
             saveResource("languages/lang.properties", true);
-            Language.setInstance(new File(getDataFolder(), "languages"), "test");
+            Language.setInstance(new File(getDataFolder(), "languages"), "default");
 
             if (!setupEconomy()) {
                 Logging.debug(Level.SEVERE, "Economy features disabled due to no Economy dependency found!");
@@ -102,6 +102,9 @@ public class SimpleClans extends JavaPlugin implements Core {
             Logging.debug("Loading managers...");
             loadManagers();
             Logging.debug("Loading the managers finished!");
+
+            com.p000ison.dev.simpleclans2.util.chat.ChatBlock.setHeadColor(getSettingsManager().getHeadingPageColor());
+            com.p000ison.dev.simpleclans2.util.chat.ChatBlock.setSubColor(getSettingsManager().getSubPageColor());
 
             registerEvents();
 

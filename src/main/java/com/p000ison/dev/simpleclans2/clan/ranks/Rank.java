@@ -21,7 +21,10 @@ package com.p000ison.dev.simpleclans2.clan.ranks;
 
 import org.apache.commons.lang.StringUtils;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 
 /**
  * Represents a Rank

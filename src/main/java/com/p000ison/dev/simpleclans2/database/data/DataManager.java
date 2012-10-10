@@ -100,7 +100,7 @@ public class DataManager {
         RETRIEVE_BB_LIMIT = database.prepareStatement("SELECT `text` FROM `sc2_bb` WHERE clan = ? ORDER BY `date` LIMIT ?, ?;");
         INSERT_BB = database.prepareStatement("INSERT INTO `sc2_bb` ( `clan`, `text` ) VALUES ( ?, ? );");
         PURGE_BB = database.prepareStatement("DELETE FROM `sc2_bb` WHERE clan = ?;");
-        RETRIEVE_BB   = database.prepareStatement("SELECT `text` FROM `sc2_bb` WHERE clan = ? ORDER BY `date`;");
+        RETRIEVE_BB = database.prepareStatement("SELECT `text` FROM `sc2_bb` WHERE clan = ? ORDER BY `date`;");
     }
 
     public void addResponse(Response response)

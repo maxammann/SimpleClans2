@@ -27,6 +27,7 @@ import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
 import com.p000ison.dev.simpleclans2.language.Language;
 import com.p000ison.dev.simpleclans2.util.chat.Align;
 import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -46,6 +47,7 @@ public class ViewRanksCommand extends GenericPlayerCommand {
         setUsages(Language.getTranslation("usage.view.ranks", plugin.getSettingsManager().getClanCommand()));
         setIdentifiers(Language.getTranslation("view.ranks.command"));
         setPermission("simpleclans.rank.view.ranks");
+        setType(Type.RANK);
     }
 
     @Override
@@ -87,21 +89,22 @@ public class ViewRanksCommand extends GenericPlayerCommand {
             }
         }
 
+
         ChatBlock chatBlock = new ChatBlock();
 
-        ChatBlock.sendMessage(player, "Ranks:");
+        ChatBlock.sendHead(player, plugin.getSettingsManager().getClanColor() + clan.getTag(), Language.getTranslation("ranks"));
 
         ChatBlock.sendBlank(player);
 
-        chatBlock.setAlignment(Align.CENTER, Align.LEFT, Align.LEFT, Align.CENTER);
-        chatBlock.addRow("ID", "Tag", "Name", "Priority");
+        chatBlock.setAlignment(Align.CENTER, Align.LEFT, Align.CENTER);
+        chatBlock.addRow(Language.getTranslation("id"), Language.getTranslation("tag"), Language.getTranslation("priority"));
 
         int[] boundings = getBoundings(completeSize, page);
 
         for (int i = boundings[0]; i < boundings[1]; i++) {
             Rank rank = sorted.get(i);
 
-            chatBlock.addRow(rank.getId(), rank.getTag(), rank.getName(), rank.getPriority());
+            chatBlock.addRow(ChatColor.GRAY.toString() + rank.getId(), ChatColor.GRAY + rank.getTag(), ChatColor.GRAY.toString() + rank.getPriority());
         }
 
 

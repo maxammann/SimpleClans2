@@ -55,12 +55,12 @@ public class ViewPermissionsCommand extends GenericConsoleCommand {
     {
         ChatBlock chatBlock = new ChatBlock();
 
-        ChatBlock.sendMessage(sender, "Permissions:");
+        ChatBlock.sendHead(sender, Language.getTranslation("global"), Language.getTranslation("permissions"));
 
         ChatBlock.sendBlank(sender);
 
         chatBlock.setAlignment(Align.CENTER, Align.LEFT);
-        chatBlock.addRow("ID", "Permission");
+        chatBlock.addRow(ChatBlock.getHeadingColor() + "ID", ChatBlock.getHeadingColor() + Language.getTranslation("permission"));
 
         for (Map.Entry<Integer, String> entry : Rank.getAvailablePermissions().entrySet()) {
             chatBlock.addRow(entry.getKey(), entry.getValue());

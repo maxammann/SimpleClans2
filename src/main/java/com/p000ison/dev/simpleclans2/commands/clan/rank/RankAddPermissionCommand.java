@@ -41,6 +41,7 @@ public class RankAddPermissionCommand extends GenericPlayerCommand {
         setArgumentRange(2, 2);
         setUsages(Language.getTranslation("usage.rank.add.permission", plugin.getSettingsManager().getClanCommand()));
         setIdentifiers(Language.getTranslation("rank.add.permission.command"));
+        setType(Type.RANK);
     }
 
     @Override

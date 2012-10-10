@@ -105,7 +105,8 @@ public class RequestManager {
         return null;
     }
 
-    public int getRequests() {
+    public int getRequests()
+    {
         return requests.size();
     }
 
