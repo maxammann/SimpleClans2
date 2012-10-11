@@ -14,7 +14,6 @@ SimpleClans was borne out of the need for a self-sustaining drop-and-go system t
 Phaed
 
 
-
 Yep, and I took this over and delveloping now the second version of SimpleClans.
 
 Max
