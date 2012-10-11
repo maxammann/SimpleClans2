@@ -49,16 +49,9 @@ public class PromoteRequest extends MultipleAcceptorsRequest {
 
         if (clan != null && clan.equals(cp.getClan())) {
 
-
             clan.addBBMessage(MessageFormat.format(Language.getTranslation("promoted.to.leader"), targetPlayer.getName()));
             clan.setLeader(targetPlayer);
             targetPlayer.update(true);
-
-//            else
-//            {
-//                String deniers = Helper.capitalize(Helper.toMessage(Helper.toArray(denies), ", "));
-//                clan.leaderAnnounce(ChatColor.RED + MessageFormat.format(plugin.getLang("denied.the.promotion"), deniers, promoted));
-//            }
         }
         return true;
     }

@@ -79,7 +79,7 @@ public class SettingsManager {
 
     private String clanAnnounce, clanPlayerAnnounce, defaultAnnounce;
 
-    private boolean voteForDemote;
+    private boolean voteForDemote, voteForPromote;
 
     private boolean motdBBEnabled;
     private int motdBBLines;
@@ -196,6 +196,7 @@ public class SettingsManager {
 
             ConfigurationSection voting = clan.getConfigurationSection("voting");
             voteForDemote = voting.getBoolean("demote");
+            voteForPromote = voting.getBoolean("promote");
 
             ConfigurationSection paging = config.getConfigurationSection("paging");
 
@@ -569,5 +570,10 @@ public class SettingsManager {
     public String getHelpFormat()
     {
         return helpFormat;
+    }
+
+    public boolean isVoteForPromote()
+    {
+        return voteForPromote;
     }
 }
