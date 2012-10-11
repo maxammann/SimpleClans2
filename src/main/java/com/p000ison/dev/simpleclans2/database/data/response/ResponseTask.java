@@ -36,8 +36,8 @@ public class ResponseTask extends LinkedList<Response> implements Runnable {
         Response response;
 
         while ((response = this.poll()) != null) {
-            if (response.getRetriever() != null && !response.execute()) {
-                Logging.debug("Failed to execute response-able!");
+            if (response.getRetriever() != null && !response.response()) {
+                Logging.debug("Failed to response response-able!");
             }
         }
     }

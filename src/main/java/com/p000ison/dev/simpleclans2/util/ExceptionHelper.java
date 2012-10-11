@@ -50,7 +50,7 @@ public final class ExceptionHelper {
                     continue;
                 }
 
-                Logging.debug("Failed to execute line %d!", Level.SEVERE, line);
+                Logging.debug("Failed to response line %d!", Level.SEVERE, line);
                 return;
             }
         }
@@ -70,7 +70,7 @@ public final class ExceptionHelper {
                 continue;
             }
 
-            Logging.debug(ChatColor.RED + "Failed to execute line %d!", Level.SEVERE, line);
+            Logging.debug(ChatColor.RED + "Failed to response line %d!", Level.SEVERE, line);
             return;
         }
     }

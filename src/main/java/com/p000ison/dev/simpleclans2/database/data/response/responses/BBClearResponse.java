@@ -41,7 +41,7 @@ public class BBClearResponse extends Response {
     }
 
     @Override
-    public boolean execute()
+    public boolean response()
     {
         DataManager dataManager = plugin.getDataManager();
 

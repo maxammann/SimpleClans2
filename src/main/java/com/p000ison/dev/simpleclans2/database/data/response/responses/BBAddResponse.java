@@ -43,7 +43,7 @@ public class BBAddResponse extends Response {
     }
 
     @Override
-    public boolean execute()
+    public boolean response()
     {
         DataManager dataManager = plugin.getDataManager();
 
