@@ -19,4 +19,5 @@ Yep, and I took this over and delveloping now the second version of SimpleClans.
 
 Max
 
+
  
