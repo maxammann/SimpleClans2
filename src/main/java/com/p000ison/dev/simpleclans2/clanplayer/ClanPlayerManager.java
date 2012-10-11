@@ -21,6 +21,8 @@
 package com.p000ison.dev.simpleclans2.clanplayer;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
+import com.p000ison.dev.simpleclans2.api.events.ClanPlayerCreateEvent;
+import com.p000ison.dev.simpleclans2.exceptions.ClanPlayerCreateException;
 import org.bukkit.entity.Player;
 
 import java.util.Collections;
@@ -40,7 +42,6 @@ public class ClanPlayerManager {
     {
         this.plugin = plugin;
     }
-
 
     public void importClanPlayers(Set<ClanPlayer> clanPlayers)
     {
@@ -65,11 +66,19 @@ public class ClanPlayerManager {
             }
         }
 
+        long id = plugin.getDataManager().retrieveClanPlayerId(clanPlayer.getName());
+
+        if (id < 0) {
+            throw new ClanPlayerCreateException(clanPlayer, id);
+        }
+
+        clanPlayer.setId(id);
+
         players.add(clanPlayer);
 
         plugin.getDataManager().insertClanPlayer(clanPlayer);
 
-        clanPlayer.setId(plugin.getDataManager().retrieveClanPlayerId(clanPlayer.getName()));
+        plugin.getServer().getPluginManager().callEvent(new ClanPlayerCreateEvent(clanPlayer));
 
         return clanPlayer;
     }
