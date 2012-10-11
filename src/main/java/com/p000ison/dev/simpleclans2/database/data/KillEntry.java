@@ -14,7 +14,7 @@
  *     You should have received a copy of the GNU General Public License
  *     along with SimpleClans2.  If not, see <http://www.gnu.org/licenses/>.
  *
- *     Created: 02.09.12 18:33
+ *     Last modified: 10.10.12 21:57
  */
 
 
