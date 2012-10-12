@@ -21,7 +21,7 @@ package com.p000ison.dev.simpleclans2.database.data.response.responses;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
-import com.p000ison.dev.simpleclans2.database.data.DataManager;
+import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.database.data.response.Response;
 import com.p000ison.dev.simpleclans2.language.Language;
 import org.bukkit.ChatColor;
@@ -32,22 +32,26 @@ import org.bukkit.command.CommandSender;
  */
 public class BBAddResponse extends Response {
 
-    private Clan clan;
+    private ClanPlayer clanPlayer;
     private String message;
 
-    public BBAddResponse(SimpleClans plugin, CommandSender sender, Clan clan, String message)
+    public BBAddResponse(SimpleClans plugin, ClanPlayer clanPlayer, CommandSender sender, String message)
     {
         super(plugin, sender);
-        this.clan = clan;
+        this.clanPlayer = clanPlayer;
         this.message = message;
     }
 
     @Override
     public boolean response()
     {
-        DataManager dataManager = plugin.getDataManager();
+        Clan clan = clanPlayer.getClan();
 
-        dataManager.insertBBMessage(clan, message);
+        if (clan == null) {
+            return false;
+        }
+
+        clan.addBBMessage(clanPlayer, message);
         sender.sendMessage(ChatColor.AQUA + Language.getTranslation("bb.added"));
         return true;
     }

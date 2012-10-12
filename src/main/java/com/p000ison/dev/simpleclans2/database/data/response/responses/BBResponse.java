@@ -64,7 +64,7 @@ public class BBResponse extends Response {
         if (bb == null) {
             return false;
         } else if (bb.isEmpty()) {
-            sender.sendMessage(Language.getTranslation("bb.is.empty"));
+            sender.sendMessage(Language.getTranslation("bb.is.empty.or.not.found"));
             return true;
         }
 

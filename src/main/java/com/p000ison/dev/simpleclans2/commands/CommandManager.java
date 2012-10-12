@@ -20,15 +20,17 @@
 
 package com.p000ison.dev.simpleclans2.commands;
 
+import com.p000ison.dev.simpleclans2.SimpleClans;
+import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.language.Language;
 import com.p000ison.dev.simpleclans2.util.Logging;
+import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.text.MessageFormat;
+import java.util.*;
 import java.util.logging.Level;
 
 /**
@@ -37,9 +39,11 @@ import java.util.logging.Level;
 public class CommandManager {
 
     private Set<Command> commands;
+    private final SimpleClans plugin;
 
-    public CommandManager()
+    public CommandManager(SimpleClans plugin)
     {
+        this.plugin = plugin;
         commands = new HashSet<Command>();
     }
 
@@ -73,6 +77,7 @@ public class CommandManager {
     public void execute(CommandSender sender, String command, String[] args)
     {
         try {
+
             String identifier;
             String[] realArgs;
 
@@ -83,6 +88,20 @@ public class CommandManager {
             } else {
                 identifier = args[0];
                 realArgs = Arrays.copyOfRange(args, 1, args.length);
+            }
+
+            //Display default help
+            if (args.length == 0) {
+                displayHelp(sender, Command.Type.getByCommand(command), 0);
+                return;
+            } else if (args.length > 0 && args[0].equals("help")) {
+                if (args.length == 2) {
+                    displayHelp(sender, Command.Type.getByCommand(command), getPage(args[1]));
+                    return;
+                } else {
+                    displayHelp(sender, Command.Type.getByCommand(command), 0);
+                    return;
+                }
             }
 
             Command helpCommand = null;
@@ -103,19 +122,17 @@ public class CommandManager {
                     } else if (realArgs.length > 0 && realArgs[0].equals("?")) {
                         displayCommandHelp(cmd, sender);
                         return;
-                    }
-
-                    if (!cmd.hasPermission(sender)) {
+                    } else if (!cmd.hasPermission(sender)) {
                         sender.sendMessage(ChatColor.DARK_RED + Language.getTranslation("insufficient.permissions"));
                         return;
                     }
 
                     if (cmd instanceof GenericConsoleCommand) {
-                        ((GenericConsoleCommand) cmd).execute(sender, realArgs);
+                        ((GenericConsoleCommand) cmd).execute(sender, command, realArgs);
                         return;
                     } else if (cmd instanceof GenericPlayerCommand) {
                         if (sender instanceof Player) {
-                            ((GenericPlayerCommand) cmd).execute((Player) sender, realArgs);
+                            ((GenericPlayerCommand) cmd).execute((Player) sender, command, realArgs);
                             return;
                         }
                     } else {
@@ -147,5 +164,117 @@ public class CommandManager {
         }
 
         sender.sendMessage(sb.toString());
+    }
+
+    private void displayHelp(CommandSender sender, Command.Type commandType, int page)
+    {
+        Set<Command> sortCommands = plugin.getCommandManager().getCommands();
+        List<Command> commands = new ArrayList<Command>();
+
+        ClanPlayer cp = null;
+
+        if (sender instanceof Player) {
+            cp = plugin.getClanPlayerManager().getClanPlayer(sender.getName());
+        }
+
+        // Build list of permitted commands
+        for (Command cmd : sortCommands) {
+            if (!cmd.hasPermission(sender)) {
+                continue;
+            }
+
+            if (cmd.getType() != commandType) {
+                continue;
+            }
+
+            if (cmd instanceof GenericConsoleCommand) {
+                if (((GenericConsoleCommand) cmd).getMenu() != null) {
+                    commands.add(cmd);
+                }
+            } else {
+                if (cp != null && ((GenericPlayerCommand) cmd).getMenu(cp) != null) {
+                    commands.add(cmd);
+                }
+            }
+        }
+
+
+        int size = commands.size();
+
+        int[] boundings = getBoundings(size, page);
+
+        sender.sendMessage(plugin.getSettingsManager().getServerName() + " <" + (boundings[3] + 1) + "/" + boundings[2] + "> §7" + Language.getTranslation("clan.commands"));
+
+        StringBuilder menu = new StringBuilder("\n");
+
+
+        for (int c = boundings[0]; c < boundings[1]; c++) {
+            Command cmd = commands.get(c);
+
+            String commandMenu;
+
+            if (cmd instanceof GenericConsoleCommand) {
+                commandMenu = ((GenericConsoleCommand) cmd).getMenu();
+            } else if (cp != null) {
+                commandMenu = ((GenericPlayerCommand) cmd).getMenu(cp);
+            } else {
+                continue;
+            }
+
+            menu.append(MessageFormat.format(plugin.getSettingsManager().getHelpFormat(), commandMenu)).append(ChatColor.RESET);
+
+            if (c != boundings[1]) {
+                menu.append('\n');
+            }
+        }
+
+
+        sender.sendMessage(menu.toString());
+        ChatBlock.sendBlank(sender, 2);
+    }
+
+    public int[] getBoundings(int completeSize, int page)
+    {
+        int numPages = completeSize / plugin.getSettingsManager().getElementsPerPage();
+
+        if (completeSize % plugin.getSettingsManager().getElementsPerPage() != 0) {
+            numPages++;
+        }
+
+        if (page >= numPages || page < 0) {
+            page = 0;
+        }
+
+
+        int start = page * plugin.getSettingsManager().getElementsPerPage();
+        int end = start + plugin.getSettingsManager().getElementsPerPage();
+
+
+        if (end > completeSize) {
+            end = completeSize;
+        }
+
+        return new int[]{start, end, numPages, page};
+    }
+
+    public static int getPage(String[] args)
+    {
+        if (args.length == 1) {
+           return getPage(args[0]);
+        }
+        return 0;
+    }
+
+    public static int getPage(String pageString)
+    {
+        try {
+            int page = Integer.parseInt(pageString) - 1;
+            if (page < 0) {
+                page = 0;
+            }
+            return page;
+        } catch (NumberFormatException e) {
+            return -1;
+        }
     }
 }

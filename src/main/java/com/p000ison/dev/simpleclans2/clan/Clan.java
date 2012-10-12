@@ -602,9 +602,8 @@ public class Clan implements KDR, Comparable<Clan> {
     public void addBBMessage(ClanPlayer announcer, String msg)
     {
         if (isVerified()) {
-            msg = ChatBlock.parseColors(plugin.getSettingsManager().getClanPlayerBB().replace("+player", announcer.getName()).replace("+message", msg));
             announce(announcer, msg);
-            addBBRawMessage(msg);
+            addBBRawMessage(ChatBlock.parseColors(plugin.getSettingsManager().getClanPlayerBB().replace("+player", announcer.getName()).replace("+message", msg)));
         }
     }
 

@@ -167,7 +167,7 @@ public class SimpleClans extends JavaPlugin implements Core {
         rankManager = new RankManager(this);
         spoutSupport = new SpoutSupport(this);
         preciousStonesSupport = new PreciousStonesSupport();
-        commandManager = new CommandManager();
+        commandManager = new CommandManager(this);
         setupCommands();
     }
 
@@ -188,7 +188,7 @@ public class SimpleClans extends JavaPlugin implements Core {
         commandManager.addCommand(new CoordsCommand(this));
         commandManager.addCommand(new DemoteCommand(this));
         commandManager.addCommand(new BanCommand(this));
-        commandManager.addCommand(new HelpCommand(this));
+//        commandManager.addCommand(new HelpCommand(this));
         commandManager.addCommand(new HomeCommand(this));
         commandManager.addCommand(new HomeRegroupCommand(this));
         commandManager.addCommand(new HomeSetCommand(this));

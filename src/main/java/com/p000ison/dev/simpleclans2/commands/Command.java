@@ -62,6 +62,21 @@ public interface Command {
         {
             return command;
         }
+
+        public static Type getByCommand(String command) {
+
+            if (command == null) {
+                return null;
+            }
+
+            for (Type type : values()) {
+                if (type.getCommand().equalsIgnoreCase(command)) {
+                    return type;
+                }
+            }
+
+            return null;
+        }
     }
 
     public Type getType();

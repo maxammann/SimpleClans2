@@ -22,6 +22,7 @@ package com.p000ison.dev.simpleclans2.commands.clan.bb;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
+import com.p000ison.dev.simpleclans2.commands.CommandManager;
 import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
 import com.p000ison.dev.simpleclans2.database.data.response.responses.BBResponse;
 import com.p000ison.dev.simpleclans2.language.Language;
@@ -39,7 +40,7 @@ public class BBCommand extends GenericPlayerCommand {
     public BBCommand(SimpleClans plugin)
     {
         super("BB", plugin);
-        setArgumentRange(0, 0);
+        setArgumentRange(0, 1);
         setUsages(MessageFormat.format(Language.getTranslation("usage.bb"), plugin.getSettingsManager().getClanCommand()));
         setIdentifiers(Language.getTranslation("bb.command"));
         setPermission("simpleclans.member.bb");
@@ -57,7 +58,7 @@ public class BBCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public void execute(Player player, String[] args)
+    public void execute(Player player, String command, String[] args)
     {
 
         ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
@@ -74,8 +75,14 @@ public class BBCommand extends GenericPlayerCommand {
             return;
         }
 
+        int page = CommandManager.getPage(args);
 
-        plugin.getDataManager().addResponse(new BBResponse(plugin, player, clan, 0, -1, null));
+        if (page == -1) {
+            player.sendMessage(Language.getTranslation("number.format"));
+            return;
+        }
+
+        plugin.getDataManager().addResponse(new BBResponse(plugin, player, clan, page, -1, null));
 //        clan.displayBb(player, /*plugin.getSettingsManager().getMaxBBDisplayLines()*/10);
     }
 }

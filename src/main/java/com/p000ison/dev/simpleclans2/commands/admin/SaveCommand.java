@@ -46,7 +46,7 @@ public class SaveCommand extends GenericConsoleCommand {
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args)
+    public void execute(CommandSender sender, String command, String[] args)
     {
         long start = System.currentTimeMillis();
 

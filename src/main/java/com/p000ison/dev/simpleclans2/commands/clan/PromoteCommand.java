@@ -53,14 +53,14 @@ public class PromoteCommand extends GenericPlayerCommand {
     {
         if (cp != null) {
             if (cp.isLeader()) {
-                return MessageFormat.format(Language.getTranslation("0.promote.member.1.promote.a.member.to.leader"), plugin.getSettingsManager().getClanCommand());
+                return MessageFormat.format(Language.getTranslation("menu.promote"), plugin.getSettingsManager().getClanCommand());
             }
         }
         return null;
     }
 
     @Override
-    public void execute(Player player, String[] args)
+    public void execute(Player player, String command, String[] args)
     {
         ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
 

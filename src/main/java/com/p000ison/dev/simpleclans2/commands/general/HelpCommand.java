@@ -44,7 +44,7 @@ public class HelpCommand extends GenericConsoleCommand {
         super("Help", plugin);
         setUsages(String.format("/%s help §8[page#]", plugin.getSettingsManager().getClanCommand()));
         setArgumentRange(0, 1);
-        setIdentifiers("sc", "simpleclans", plugin.getSettingsManager().getClanCommand(), "help");
+        setIdentifiers("sc", "simpleclans", plugin.getSettingsManager().getClanCommand(), "help", "rank");
     }
 
     @Override
@@ -54,7 +54,7 @@ public class HelpCommand extends GenericConsoleCommand {
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args)
+    public void execute(CommandSender sender, String command, String[] args)
     {
         int page = 0;
 
@@ -76,19 +76,25 @@ public class HelpCommand extends GenericConsoleCommand {
             cp = plugin.getClanPlayerManager().getClanPlayer(sender.getName());
         }
 
+        Command.Type commandType = Command.Type.getByCommand(command);
+
         // Build list of permitted commands
-        for (Command command : sortCommands) {
-            if (!command.hasPermission(sender)) {
+        for (Command cmd : sortCommands) {
+            if (!cmd.hasPermission(sender)) {
                 continue;
             }
 
-            if (command instanceof GenericConsoleCommand) {
-                if (((GenericConsoleCommand) command).getMenu() != null) {
-                    commands.add(command);
+            if (cmd.getType() != commandType) {
+                continue;
+            }
+
+            if (cmd instanceof GenericConsoleCommand) {
+                if (((GenericConsoleCommand) cmd).getMenu() != null) {
+                    commands.add(cmd);
                 }
             } else {
-                if (cp != null && ((GenericPlayerCommand) command).getMenu(cp) != null) {
-                    commands.add(command);
+                if (cp != null && ((GenericPlayerCommand) cmd).getMenu(cp) != null) {
+                    commands.add(cmd);
                 }
             }
         }

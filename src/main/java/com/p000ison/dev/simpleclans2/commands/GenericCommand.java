@@ -32,7 +32,7 @@ abstract class GenericCommand implements Command {
     private String[] usage;
     protected SimpleClans plugin;
     private String permission;
-    private Type type = Type.CLAN;
+    private Type type;
 
     public GenericCommand(String name, SimpleClans plugin)
     {
@@ -100,26 +100,7 @@ abstract class GenericCommand implements Command {
 
     public int[] getBoundings(int completeSize, int page)
     {
-        int numPages = completeSize / plugin.getSettingsManager().getElementsPerPage();
-
-        if (completeSize % plugin.getSettingsManager().getElementsPerPage() != 0) {
-            numPages++;
-        }
-
-        if (page >= numPages || page < 0) {
-            page = 0;
-        }
-
-
-        int start = page * plugin.getSettingsManager().getElementsPerPage();
-        int end = start + plugin.getSettingsManager().getElementsPerPage();
-
-
-        if (end > completeSize) {
-            end = completeSize;
-        }
-
-        return new int[]{start, end, numPages};
+        return plugin.getCommandManager().getBoundings(completeSize, page);
     }
 
     @Override

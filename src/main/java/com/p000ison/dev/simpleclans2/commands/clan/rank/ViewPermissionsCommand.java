@@ -51,7 +51,7 @@ public class ViewPermissionsCommand extends GenericConsoleCommand {
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args)
+    public void execute(CommandSender sender, String command, String[] args)
     {
         ChatBlock chatBlock = new ChatBlock();
 

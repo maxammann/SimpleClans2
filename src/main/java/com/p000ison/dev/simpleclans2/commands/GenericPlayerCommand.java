@@ -35,7 +35,7 @@ public abstract class GenericPlayerCommand extends GenericCommand {
         super(name, plugin);
     }
 
-    public abstract void execute(Player player, String[] args);
+    public abstract void execute(Player player, String command, String[] args);
 
     public abstract String getMenu(ClanPlayer clanPlayer);
 }

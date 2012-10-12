@@ -57,7 +57,7 @@ public class ViewRanksCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public void execute(Player player, String[] args)
+    public void execute(Player player, String command, String[] args)
     {
         ClanPlayer clanPlayer = plugin.getClanPlayerManager().getClanPlayer(player);
 

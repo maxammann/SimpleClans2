@@ -49,7 +49,7 @@ public class AnyProfileCommand extends GenericConsoleCommand {
     }
 
     @Override
-    public void execute(CommandSender player, String[] args)
+    public void execute(CommandSender player, String command, String[] args)
     {
         Clan clan = plugin.getClanManager().getClan(args[0]);
 

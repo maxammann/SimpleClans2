@@ -53,11 +53,11 @@ public class RivalriesCommand extends GenericConsoleCommand {
     @Override
     public String getMenu()
     {
-        return MessageFormat.format(Language.getTranslation("0.rivalries.1.view.all.clan.rivalries"), plugin.getSettingsManager().getClanColor());
+        return MessageFormat.format(Language.getTranslation("menu.rivalries"), plugin.getSettingsManager().getClanCommand());
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args)
+    public void execute(CommandSender sender, String command, String[] args)
     {
         ChatColor headColor = plugin.getSettingsManager().getHeadingPageColor();
 

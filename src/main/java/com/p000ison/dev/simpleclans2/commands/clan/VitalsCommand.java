@@ -54,17 +54,16 @@ public class VitalsCommand extends GenericPlayerCommand {
     {
         if (cp != null) {
             if (cp.isTrusted() && cp.getClan().isVerified()) {
-                return MessageFormat.format(Language.getTranslation("0.vitals.1.view.your.clan.member.s.vitals"), plugin.getSettingsManager().getClanCommand());
+                return MessageFormat.format(Language.getTranslation("menu.vitals"), plugin.getSettingsManager().getClanCommand());
             }
         }
         return null;
     }
 
     @Override
-    public void execute(Player player, String[] args)
+    public void execute(Player player, String command, String[] args)
     {
         ChatColor headColor = plugin.getSettingsManager().getHeadingPageColor();
-        ChatColor subColor = plugin.getSettingsManager().getSubPageColor();
 
         if (player.hasPermission("simpleclans.member.vitals")) {
             ClanPlayer clanPlayer = plugin.getClanPlayerManager().getClanPlayer(player);

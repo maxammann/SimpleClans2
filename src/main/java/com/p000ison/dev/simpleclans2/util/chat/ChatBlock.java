@@ -429,6 +429,19 @@ public class ChatBlock {
     }
 
     /**
+     * Sends a blank line.
+     *
+     * @param receiver The retriever.
+     * @param amount   How oftern this should be sent
+     */
+    public static void sendBlank(CommandSender receiver, int amount)
+    {
+        for (int i = 0; i < amount; i++) {
+            sendBlank(receiver);
+        }
+    }
+
+    /**
      * Sends a single line line to the player. This will crop the overflow right.
      *
      * @param receiver The retriever

@@ -58,7 +58,7 @@ public class BBAddCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public void execute(Player player, String[] args)
+    public void execute(Player player, String command, String[] args)
     {
 
         ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
@@ -78,7 +78,7 @@ public class BBAddCommand extends GenericPlayerCommand {
 
         if (cp.isTrusted()) {
             String msg = GeneralHelper.arrayToString(args);
-            plugin.getDataManager().addResponse(new BBAddResponse(plugin, player, clan, msg));
+            plugin.getDataManager().addResponse(new BBAddResponse(plugin, cp, player, msg));
         } else {
             player.sendMessage(ChatColor.RED + Language.getTranslation("no.leader.permissions"));
         }

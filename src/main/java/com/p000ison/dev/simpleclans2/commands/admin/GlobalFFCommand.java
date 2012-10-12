@@ -48,7 +48,7 @@ public class GlobalFFCommand extends GenericConsoleCommand {
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args)
+    public void execute(CommandSender sender, String command, String[] args)
     {
         String action = args[0];
 

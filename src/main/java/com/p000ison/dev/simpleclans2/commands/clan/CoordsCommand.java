@@ -61,7 +61,7 @@ public class CoordsCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public void execute(Player player, String[] args)
+    public void execute(Player player, String command, String[] args)
     {
         ChatColor headColor = plugin.getSettingsManager().getHeadingPageColor();
         ChatColor subColor = plugin.getSettingsManager().getSubPageColor();
