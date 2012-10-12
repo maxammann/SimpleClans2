@@ -12,11 +12,11 @@ public class Language {
     private static LanguageMap bundle;
     private static final String DEFAULT_FILE_NAME = "lang.properties";
 
-    public static void setInstance(File folder, String language)
+    public static void setInstance(File folder)
     {
-        defaultBundle = new LanguageMap("/languages/lang.properties", true);
+        defaultBundle = new LanguageMap("/languages/" + DEFAULT_FILE_NAME, true);
         defaultBundle.load();
-        bundle = new LanguageMap(new File(folder, "lang.properties").getAbsolutePath(), false);
+        bundle = new LanguageMap(new File(folder, DEFAULT_FILE_NAME).getAbsolutePath(), false);
         bundle.setDefault(defaultBundle);
         bundle.load();
     }
@@ -53,10 +53,9 @@ public class Language {
     public static void clear()
     {
         bundle.clear();
-        if (defaultBundle != null) {
-            defaultBundle.clear();
-        }
-        bundle = null;
+        defaultBundle.clear();
+
         defaultBundle = null;
+        bundle = null;
     }
 }

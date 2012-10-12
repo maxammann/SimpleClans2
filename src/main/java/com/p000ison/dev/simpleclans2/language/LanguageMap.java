@@ -94,7 +94,7 @@ public class LanguageMap extends HashMap<String, String> {
             return false;
         }
 
-        byte[] buffer = new byte[256];
+        byte[] buffer = new byte[1024];
 
         OutputStream output = new FileOutputStream(target);
 
@@ -129,7 +129,7 @@ public class LanguageMap extends HashMap<String, String> {
                     continue;
                 }
 
-                put(entry[0], ChatBlock.parseColors(entry[1]));
+                put(entry[0], entry[1]);
             }
 
             if (!inJar && defaultMap != null) {
@@ -173,5 +173,11 @@ public class LanguageMap extends HashMap<String, String> {
     public void setDefault(LanguageMap defaultMap)
     {
         this.defaultMap = defaultMap;
+    }
+
+    @Override
+    public String put(String key, String value)
+    {
+        return super.put(key, ChatBlock.parseColors(value));
     }
 }

@@ -47,7 +47,6 @@ public class Clan implements KDR, Comparable<Clan> {
     private long foundedDate;
     private long lastActionDate;
     private boolean verified;
-    //    private LinkedList<String> bb = new LinkedList<String>();
     private Set<Clan> allies = new HashSet<Clan>();
     private Set<Clan> rivals = new HashSet<Clan>();
     private Set<Clan> warring = new HashSet<Clan>();
