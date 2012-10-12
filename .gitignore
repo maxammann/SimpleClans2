@@ -1,0 +1,12 @@
+#IntelliJ
+.idea/
+SimpleClans2.iml
+out/
+
+#Maven
+target/
+
+#Atlassian
+atlassian-ide-plugin.xml
+
+
