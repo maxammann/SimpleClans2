@@ -30,7 +30,7 @@ public class ClanEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
     private final Clan clan;
 
-    public ClanEvent(Clan clan)
+    protected ClanEvent(Clan clan)
     {
         this.clan = clan;
     }

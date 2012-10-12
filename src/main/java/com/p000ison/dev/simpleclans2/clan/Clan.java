@@ -771,10 +771,7 @@ public class Clan implements KDR, Comparable<Clan> {
 
     public void removeMember(ClanPlayer clanPlayer)
     {
-        if (allMembers.contains(clanPlayer)) {
-
-            allMembers.remove(clanPlayer);
-
+        if (allMembers.remove(clanPlayer)) {
             if (clanPlayer.isLeader()) {
                 clanPlayer.setLeader(false);
                 disband();
@@ -790,9 +787,10 @@ public class Clan implements KDR, Comparable<Clan> {
 
             ClanPlayer clanPlayer = clanPlayers.next();
 
-            removeMember(clanPlayer);
-
+            clanPlayer.setClan(null);
+            clanPlayer.setLeader(false);
             clanPlayer.update();
+
             clanPlayers.remove();
         }
 

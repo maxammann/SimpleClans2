@@ -46,32 +46,35 @@ public interface Command {
     public void setArgumentRange(int min, int max);
 
     public static enum Type {
-        CLAN("clan"),
+        CLAN("clan", "sc"),
         RANK("rank"),
         BB("bb");
 
-        private String command;
+        private String[] command;
 
-        private Type(String command)
+        private Type(String... command)
         {
 
             this.command = command;
         }
 
-        public String getCommand()
+        public String[] getCommands()
         {
             return command;
         }
 
-        public static Type getByCommand(String command) {
+        public static Type getByCommand(String command)
+        {
 
             if (command == null) {
                 return null;
             }
 
             for (Type type : values()) {
-                if (type.getCommand().equalsIgnoreCase(command)) {
-                    return type;
+                for (String cmd : type.getCommands()) {
+                    if (cmd.equalsIgnoreCase(command)) {
+                        return type;
+                    }
                 }
             }
 

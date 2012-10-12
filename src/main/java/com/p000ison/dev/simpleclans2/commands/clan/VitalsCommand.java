@@ -65,32 +65,55 @@ public class VitalsCommand extends GenericPlayerCommand {
     {
         ChatColor headColor = plugin.getSettingsManager().getHeadingPageColor();
 
-        if (player.hasPermission("simpleclans.member.vitals")) {
-            ClanPlayer clanPlayer = plugin.getClanPlayerManager().getClanPlayer(player);
 
-            if (clanPlayer != null) {
-                Clan clan = clanPlayer.getClan();
+        ClanPlayer clanPlayer = plugin.getClanPlayerManager().getClanPlayer(player);
 
-                if (clan.isVerified()) {
-                    if (clanPlayer.isTrusted()) {
+        if (clanPlayer != null) {
+            Clan clan = clanPlayer.getClan();
 
-                        ChatBlock chatBlock = new ChatBlock();
-                        ChatBlock.sendBlank(player);
-                        ChatBlock.sendHead(player, plugin.getSettingsManager().getClanColor() + StringHelper.capitalize(clan.getName()), Language.getTranslation("vitals"));
+            if (clan.isVerified()) {
+                if (clanPlayer.isTrusted()) {
 
-                        ChatBlock.sendBlank(player);
-                        ChatBlock.sendMessage(player, headColor + Language.getTranslation("weapons") + ": " + MessageFormat.format(Language.getTranslation("0.s.sword.1.2.b.bow.3.4.a.arrow"), ChatColor.WHITE, ChatColor.DARK_GRAY, ChatColor.WHITE, ChatColor.DARK_GRAY, ChatColor.WHITE));
-                        ChatBlock.sendMessage(player, headColor + Language.getTranslation("materials") + ": " + ChatColor.AQUA + Language.getTranslation("diamond") + ChatColor.DARK_GRAY + ", " + ChatColor.YELLOW + Language.getTranslation("gold") + ChatColor.DARK_GRAY + ", " + ChatColor.GRAY + Language.getTranslation("stone") + ChatColor.DARK_GRAY + ", " + ChatColor.WHITE + Language.getTranslation("iron") + ChatColor.DARK_GRAY + ", " + ChatColor.GOLD + Language.getTranslation("wood"));
+                    ChatBlock chatBlock = new ChatBlock();
+                    ChatBlock.sendBlank(player);
+                    ChatBlock.sendHead(player, plugin.getSettingsManager().getClanColor() + StringHelper.capitalize(clan.getName()), Language.getTranslation("vitals"));
 
-                        ChatBlock.sendBlank(player);
+                    ChatBlock.sendBlank(player);
+                    ChatBlock.sendMessage(player, headColor + Language.getTranslation("weapons") + ": " + Language.getTranslation("weapon.legend", ChatColor.WHITE, ChatColor.DARK_GRAY, ChatColor.WHITE, ChatColor.DARK_GRAY, ChatColor.WHITE));
+                    ChatBlock.sendMessage(player, headColor + Language.getTranslation("materials") + ": " + ChatColor.AQUA + Language.getTranslation("diamond") + ChatColor.DARK_GRAY + ", " + ChatColor.YELLOW + Language.getTranslation("gold") + ChatColor.DARK_GRAY + ", " + ChatColor.GRAY + Language.getTranslation("stone") + ChatColor.DARK_GRAY + ", " + ChatColor.WHITE + Language.getTranslation("iron") + ChatColor.DARK_GRAY + ", " + ChatColor.GOLD + Language.getTranslation("wood"));
 
-                        chatBlock.setAlignment(Align.LEFT, Align.LEFT, Align.LEFT, Align.CENTER, Align.CENTER, Align.CENTER);
+                    ChatBlock.sendBlank(player);
 
-                        chatBlock.addRow(headColor + Language.getTranslation("name"), Language.getTranslation("health"), Language.getTranslation("hunger"), Language.getTranslation("food"), Language.getTranslation("armor"), Language.getTranslation("weapons"));
+                    chatBlock.setAlignment(Align.LEFT, Align.LEFT, Align.LEFT, Align.CENTER, Align.CENTER, Align.CENTER);
 
-                        Set<ClanPlayer> members = GeneralHelper.stripOfflinePlayers(clan.getAllMembers());
+                    chatBlock.addRow(headColor + Language.getTranslation("name"), Language.getTranslation("health"), Language.getTranslation("hunger"), Language.getTranslation("food"), Language.getTranslation("armor"), Language.getTranslation("weapons"));
 
-                        for (ClanPlayer cp : members) {
+                    Set<ClanPlayer> members = GeneralHelper.stripOfflinePlayers(clan.getAllMembers());
+
+                    for (ClanPlayer cp : members) {
+                        Player iPlayer = cp.toPlayer();
+                        PlayerState state = new PlayerState(iPlayer);
+
+                        if (iPlayer != null) {
+                            String name = (cp.isLeader() ? plugin.getSettingsManager().getLeaderColor() : ((cp.isTrusted() ? plugin.getSettingsManager().getTrustedColor() : plugin.getSettingsManager().getUntrustedColor()))) + cp.getName();
+                            String health = state.getHealth();
+                            String hunger = state.getHunger();
+                            String armor = state.getArmor(Language.getTranslation("armor.h"), Language.getTranslation("armor.c"), Language.getTranslation("armor.l"), Language.getTranslation("armor.b"));
+                            String weapons = state.getWeapons(Language.getTranslation("weapon.S"), Language.getTranslation("weapon.B"), Language.getTranslation("weapon.A"));
+                            String food = state.getFood("%s§ch");
+
+                            chatBlock.addRow(name, ChatColor.RED + health, hunger, ChatColor.WHITE + food, armor, weapons);
+                        }
+                    }
+
+                    Set<ClanPlayer> allAllyMembers = clan.getAllAllyMembers();
+
+                    if (!allAllyMembers.isEmpty()) {
+
+                        chatBlock.addRow(ChatColor.GRAY + " -- Allies -- ", "", "", "", "", "");
+
+
+                        for (ClanPlayer cp : allAllyMembers) {
                             Player iPlayer = cp.toPlayer();
                             PlayerState state = new PlayerState(iPlayer);
 
@@ -100,51 +123,25 @@ public class VitalsCommand extends GenericPlayerCommand {
                                 String hunger = state.getHunger();
                                 String armor = state.getArmor(Language.getTranslation("armor.h"), Language.getTranslation("armor.c"), Language.getTranslation("armor.l"), Language.getTranslation("armor.b"));
                                 String weapons = state.getWeapons(Language.getTranslation("weapon.S"), Language.getTranslation("weapon.B"), Language.getTranslation("weapon.A"));
-                                String food = state.getFood("%s§ch");
+                                String food = state.getFood("%sh");
 
-                                chatBlock.addRow(name, ChatColor.RED + health, hunger, ChatColor.WHITE + food, armor, weapons);
+                                chatBlock.addRow("  " + name, ChatColor.RED + health, hunger, ChatColor.WHITE + food, armor, weapons);
                             }
                         }
-
-                        Set<ClanPlayer> allAllyMembers = clan.getAllAllyMembers();
-
-                        if (!allAllyMembers.isEmpty()) {
-
-                            chatBlock.addRow(ChatColor.GRAY + " -- Allies -- ", "", "", "", "", "");
-
-
-                            for (ClanPlayer cp : allAllyMembers) {
-                                Player iPlayer = cp.toPlayer();
-                                PlayerState state = new PlayerState(iPlayer);
-
-                                if (iPlayer != null) {
-                                    String name = (cp.isLeader() ? plugin.getSettingsManager().getLeaderColor() : ((cp.isTrusted() ? plugin.getSettingsManager().getTrustedColor() : plugin.getSettingsManager().getUntrustedColor()))) + cp.getName();
-                                    String health = state.getHealth();
-                                    String hunger = state.getHunger();
-                                    String armor = state.getArmor(Language.getTranslation("armor.h"), Language.getTranslation("armor.c"), Language.getTranslation("armor.l"), Language.getTranslation("armor.b"));
-                                    String weapons = state.getWeapons(Language.getTranslation("weapon.S"), Language.getTranslation("weapon.B"), Language.getTranslation("weapon.A"));
-                                    String food = state.getFood("%sh");
-
-                                    chatBlock.addRow("  " + name, ChatColor.RED + health, hunger, ChatColor.WHITE + food, armor, weapons);
-                                }
-                            }
-                        }
-
-                        chatBlock.sendBlock(player);
-
-                        ChatBlock.sendBlank(player);
-
-                    } else {
-                        ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("only.trusted.players.can.access.clan.vitals"));
                     }
+
+                    chatBlock.sendBlock(player);
+
+                    ChatBlock.sendBlank(player);
+
                 } else {
-                    ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("clan.is.not.verified"));
+                    ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("only.trusted.players.can.access.clan.vitals"));
                 }
             } else {
-                ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
+                ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("clan.is.not.verified"));
             }
         } else {
-            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("insufficient.permissions"));
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
         }
     }
 }

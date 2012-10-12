@@ -111,7 +111,7 @@ public class CommandManager {
 
                     Command.Type type = cmd.getType();
 
-                    if (type != null && !type.getCommand().equals(command)) {
+                    if (type != null && !type.equals(cmd.getType())) {
                         displayCommandHelp(cmd, sender);
                         return;
                     }
@@ -148,6 +148,7 @@ public class CommandManager {
 
         } catch (RuntimeException e) {
             Logging.debug(e, "Failed at running a SimpleClans command!");
+            return;
         }
 
         sender.sendMessage(ChatColor.DARK_RED + "Command not found!");
@@ -183,7 +184,7 @@ public class CommandManager {
                 continue;
             }
 
-            if (cmd.getType() != commandType) {
+            if (cmd.getType() != null && cmd.getType() != commandType) {
                 continue;
             }
 

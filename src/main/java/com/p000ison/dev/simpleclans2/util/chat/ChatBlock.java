@@ -107,7 +107,13 @@ public class ChatBlock {
         StringBuilder[] builderSections = new StringBuilder[sections.length];
 
         for (int i = 0; i < sections.length; i++) {
-            builderSections[i] = new StringBuilder(sections[i].toString());
+            Object toAdd = sections[i];
+
+            if (toAdd == null) {
+                throw new IllegalArgumentException(String.format("No argument of a row can be null! (Index: %s)", i));
+            }
+
+            builderSections[i] = new StringBuilder(toAdd.toString());
         }
 
         rows.add(builderSections);
