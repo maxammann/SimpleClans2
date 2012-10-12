@@ -23,54 +23,103 @@ import com.p000ison.dev.simpleclans2.util.Logging;
 import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 
 import java.io.*;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.HashMap;
-import java.util.logging.Level;
+import java.util.Map;
 
 /**
  * Represents a LanguageMap
  */
 public class LanguageMap extends HashMap<String, String> {
 
-    public LanguageMap(File folder, String file, String language)
+    private LanguageMap defaultMap;
+    private final String location;
+    private final boolean inJar;
+
+    public LanguageMap(String location, boolean inJar)
     {
-        load(folder, file, language);
+        this.location = location;
+        this.inJar = inJar;
+
     }
 
-    private void load(File folder, String file, String language)
+    private Reader getReader() throws IOException
     {
-        if (!language.equalsIgnoreCase("default")) {
-            String[] fullName = file.split("\\.");
+        File file = new File(location);
+        if (!file.exists()) {
+            String DEFAULT_LOCATION = "/languages/lang.properties";
+            copy(LanguageMap.class.getResourceAsStream(DEFAULT_LOCATION), file);
+        }
+        return inJar ? new InputStreamReader(getResource(location)) : new FileReader(file);
+    }
 
-            if (fullName.length != 2) {
-                Logging.debug(Level.SEVERE, "Invalid file name of the language file!");
-                return;
+    public static InputStream getResource(String filename)
+    {
+        if (filename == null) {
+            throw new IllegalArgumentException("Filename cannot be null");
+        }
+
+        try {
+            URL url = LanguageMap.class.getResource(filename);
+
+            if (url == null) {
+                return null;
             }
 
-            String name = fullName[0];
-            String extension = fullName[1];
+            URLConnection connection = url.openConnection();
+            connection.setUseCaches(false);
+            return connection.getInputStream();
+        } catch (IOException ex) {
+            return null;
+        }
+    }
 
-            file = name + '_' + language + '.' + extension;
+    private Writer getWriter() throws IOException
+    {
+        return new FileWriter(new File(location), true);
+    }
+
+    public static boolean copy(InputStream input, File target) throws IOException
+    {
+        if (target.exists()) {
+            return false;
         }
 
-        File realFile = new File(folder, file);
-
-        BufferedReader reader;
-
-        try {
-            reader = new BufferedReader(new InputStreamReader(new FileInputStream(realFile)));
-        } catch (FileNotFoundException e) {
-            Logging.debug("The language file %s was not found!", Level.SEVERE, file);
-            return;
+        if (!target.getParentFile().mkdir()) {
+            return false;
         }
 
-        String line;
+        if (!target.createNewFile()) {
+            return false;
+        }
+
+        byte[] buffer = new byte[256];
+
+        OutputStream output = new FileOutputStream(target);
+
+        while (input.read(buffer) != -1) {
+            output.write(buffer);
+        }
+
+        output.flush();
+        output.close();
+        return true;
+    }
+
+    public void load()
+    {
+        BufferedReader reader = null;
+        Writer writer = null;
 
         try {
+            reader = new BufferedReader(getReader());
+            String line;
+
             while ((line = reader.readLine()) != null) {
-
                 String trimmed = line.trim();
 
-                if (trimmed.isEmpty() || trimmed.contains("#")) {
+                if (trimmed.isEmpty() || trimmed.startsWith("#")) {
                     continue;
                 }
 
@@ -82,14 +131,47 @@ public class LanguageMap extends HashMap<String, String> {
 
                 put(entry[0], ChatBlock.parseColors(entry[1]));
             }
+
+            if (!inJar && defaultMap != null) {
+                writer = new BufferedWriter(getWriter());
+
+                for (Map.Entry<String, String> entry : defaultMap.entrySet()) {
+                    if (this.containsKey(entry.getKey())) {
+                        continue;
+                    }
+
+                    this.put(entry.getKey(), entry.getValue());
+
+                    writer.write(entry.getKey());
+                    writer.write('=');
+                    writer.write(entry.getValue());
+                    writer.write('\n');
+                }
+            }
         } catch (IOException e) {
-            Logging.debug(e, "Failed at loading the language file %s!", file);
+            Logging.debug(e, "Failed at loading the language file!");
         } finally {
             try {
-                reader.close();
+                if (reader != null) {
+                    reader.close();
+                }
+                if (writer != null) {
+                    writer.flush();
+                    writer.close();
+                }
             } catch (IOException e) {
-                Logging.debug(e, "Failed at closing the stream for the language file %s!", file);
+                Logging.debug(e, "Failed at closing the stream for the language file!");
             }
         }
+    }
+
+    public LanguageMap getDefaultMap()
+    {
+        return defaultMap;
+    }
+
+    public void setDefault(LanguageMap defaultMap)
+    {
+        this.defaultMap = defaultMap;
     }
 }

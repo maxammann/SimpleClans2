@@ -78,7 +78,6 @@ public class SimpleClans extends JavaPlugin implements Core {
     private SpoutSupport spoutSupport;
     private static Economy economy;
 
-
     @Override
     public void onEnable()
     {
@@ -87,7 +86,7 @@ public class SimpleClans extends JavaPlugin implements Core {
         try {
             Logging.setInstance(getLogger());
 
-            saveResource("languages/lang.properties", true);
+//            saveResource("languages/lang.properties", true);
             Language.setInstance(new File(getDataFolder(), "languages"), "default");
 
             if (!setupEconomy()) {
@@ -122,9 +121,13 @@ public class SimpleClans extends JavaPlugin implements Core {
     public void onDisable()
     {
         //save data
-        dataManager.getAutoSaver().run();
+        if (dataManager != null) {
+            dataManager.getAutoSaver().run();
+        }
         //close the connection to the database
-        databaseManager.getDatabase().close();
+        if (databaseManager != null) {
+            databaseManager.getDatabase().close();
+        }
 
         Language.clear();
         Logging.close();
