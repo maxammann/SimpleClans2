@@ -387,6 +387,12 @@ public class ClanPlayer implements KDR {
         }
     }
 
+    public void unset()
+    {
+        this.setLeader(false);
+        this.setTrusted(false);
+    }
+
     @Override
     public String toString()
     {

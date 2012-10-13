@@ -24,6 +24,7 @@ import com.p000ison.dev.simpleclans2.KDR;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.ranks.Rank;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
+import com.p000ison.dev.simpleclans2.database.data.response.responses.BBAddResponse;
 import com.p000ison.dev.simpleclans2.language.Language;
 import com.p000ison.dev.simpleclans2.util.DateHelper;
 import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
@@ -699,7 +700,8 @@ public class Clan implements KDR, Comparable<Clan> {
 //                bb.pollFirst();
 //            }
 
-            plugin.getDataManager().insertBBMessage(this, message);
+            plugin.getDataManager().addResponse(new BBAddResponse(plugin, message, this));
+
 //            bb.add(message);
         }
     }
@@ -772,7 +774,8 @@ public class Clan implements KDR, Comparable<Clan> {
     {
         if (allMembers.remove(clanPlayer)) {
             if (clanPlayer.isLeader()) {
-                clanPlayer.setLeader(false);
+                clanPlayer.unset();
+                clanPlayer.update();
                 disband();
             }
         }
@@ -786,8 +789,7 @@ public class Clan implements KDR, Comparable<Clan> {
 
             ClanPlayer clanPlayer = clanPlayers.next();
 
-            clanPlayer.setClan(null);
-            clanPlayer.setLeader(false);
+            clanPlayer.unset();
             clanPlayer.update();
 
             clanPlayers.remove();

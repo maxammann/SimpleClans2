@@ -29,15 +29,15 @@ import org.bukkit.command.CommandSender;
 import java.util.List;
 
 /**
- * Represents a BBResponse
+ * Represents a BBRetrieveResponse
  */
-public class BBResponse extends Response {
+public class BBRetrieveResponse extends Response {
 
     private Clan clan;
     private int page, maxLines;
     private String format;
 
-    public BBResponse(SimpleClans plugin, CommandSender sender, Clan clan, int page, int maxLines, String format)
+    public BBRetrieveResponse(SimpleClans plugin, CommandSender sender, Clan clan, int page, int maxLines, String format)
     {
         super(plugin, sender);
         this.clan = clan;

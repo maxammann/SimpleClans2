@@ -14,34 +14,31 @@
  *     You should have received a copy of the GNU General Public License
  *     along with SimpleClans2.  If not, see <http://www.gnu.org/licenses/>.
  *
- *     Last modified: 10.10.12 21:57
+ *     Last modified: 13.10.12 15:05
  */
 
-package com.p000ison.dev.simpleclans2.database.data.response.responses;
+package com.p000ison.dev.simpleclans2.language;
 
-import com.p000ison.dev.simpleclans2.SimpleClans;
-import com.p000ison.dev.simpleclans2.clan.Clan;
-import com.p000ison.dev.simpleclans2.database.data.response.Response;
+import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * Represents a BBRetrieveResponse
+ * Represents a ColorizedMap
  */
-public class BBAddResponse extends Response {
+public class ColorizedMap extends HashMap<String, String> {
 
-    private String message;
-    private Clan clan;
-
-    public BBAddResponse(SimpleClans plugin, String message, Clan clan)
+    public void importMap(Map<Object, Object> otherMap)
     {
-        super(plugin, null);
-        this.message = message;
-        this.clan = clan;
+        for (Map.Entry<Object, Object> current : otherMap.entrySet()) {
+            this.put(current.getKey().toString(), current.getValue().toString());
+        }
     }
 
     @Override
-    public boolean response()
+    public String put(String key, String value)
     {
-        plugin.getDataManager().insertBBMessage(clan, message);
-        return true;
+        return super.put(key, ChatBlock.parseColors(value));
     }
 }

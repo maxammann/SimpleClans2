@@ -28,7 +28,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 /**
- * Represents a BBResponse
+ * Represents a BBRetrieveResponse
  */
 public class BBClearResponse extends Response {
 

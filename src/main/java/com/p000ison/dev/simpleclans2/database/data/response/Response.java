@@ -40,7 +40,6 @@ public abstract class Response implements ResponseAble {
         return sender;
     }
 
-
     public int[] getBoundings(int page)
     {
 

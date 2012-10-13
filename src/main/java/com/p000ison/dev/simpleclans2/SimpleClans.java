@@ -34,7 +34,10 @@ import com.p000ison.dev.simpleclans2.commands.clan.home.HomeCommand;
 import com.p000ison.dev.simpleclans2.commands.clan.home.HomeRegroupCommand;
 import com.p000ison.dev.simpleclans2.commands.clan.home.HomeSetCommand;
 import com.p000ison.dev.simpleclans2.commands.clan.rank.*;
-import com.p000ison.dev.simpleclans2.commands.general.*;
+import com.p000ison.dev.simpleclans2.commands.general.AlliancesCommand;
+import com.p000ison.dev.simpleclans2.commands.general.LeaderboardCommand;
+import com.p000ison.dev.simpleclans2.commands.general.ListCommand;
+import com.p000ison.dev.simpleclans2.commands.general.RivalriesCommand;
 import com.p000ison.dev.simpleclans2.commands.members.FFCommand;
 import com.p000ison.dev.simpleclans2.commands.voting.AbstainCommand;
 import com.p000ison.dev.simpleclans2.commands.voting.AcceptCommand;
@@ -86,7 +89,10 @@ public class SimpleClans extends JavaPlugin implements Core {
         try {
             Logging.setInstance(getLogger());
 
+            Logging.debug("Loading the language file..");
+            long startLanguage = System.currentTimeMillis();
             Language.setInstance(new File(getDataFolder(), "languages"));
+            Logging.debug("Loading the language file finished! Took %s ms!", System.currentTimeMillis() - startLanguage);
 
             if (!setupEconomy()) {
                 Logging.debug(Level.SEVERE, "Economy features disabled due to no Economy dependency found!");
@@ -215,13 +221,13 @@ public class SimpleClans extends JavaPlugin implements Core {
         commandManager.addCommand(new VitalsCommand(this));
         commandManager.addCommand(new RivalriesCommand(this));
         commandManager.addCommand(new PromoteCommand(this));
+        commandManager.addCommand(new TrustCommand(this));
+        commandManager.addCommand(new UnTrustCommand(this));
+        commandManager.addCommand(new RivalCommand(this));
 
 //        commandManager.addCommand(new LookupCommand(this));
 //        commandManager.addCommand(new RosterCommand(this));
 //        commandManager.addCommand(new StatsCommand(this));
-//        commandManager.addCommand(new RivalCommand(this));
-//        commandManager.addCommand(new TrustCommand(this));
-//        commandManager.addCommand(new UntrustCommand(this));
 
 //        commandManager.addCommand(new StrifesCommand(this));
 //        commandManager.addCommand(new KillsCommand(this));

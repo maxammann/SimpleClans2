@@ -23,7 +23,6 @@ import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
-import com.p000ison.dev.simpleclans2.database.data.response.responses.BBAddResponse;
 import com.p000ison.dev.simpleclans2.language.Language;
 import com.p000ison.dev.simpleclans2.util.GeneralHelper;
 import org.bukkit.ChatColor;
@@ -78,7 +77,8 @@ public class BBAddCommand extends GenericPlayerCommand {
 
         if (cp.isTrusted()) {
             String msg = GeneralHelper.arrayToString(args);
-            plugin.getDataManager().addResponse(new BBAddResponse(plugin, cp, player, msg));
+            clan.addBBMessage(cp, msg);
+            player.sendMessage(ChatColor.AQUA + Language.getTranslation("bb.added"));
         } else {
             player.sendMessage(ChatColor.RED + Language.getTranslation("no.leader.permissions"));
         }

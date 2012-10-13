@@ -24,7 +24,7 @@ import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.commands.CommandManager;
 import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
-import com.p000ison.dev.simpleclans2.database.data.response.responses.BBResponse;
+import com.p000ison.dev.simpleclans2.database.data.response.responses.BBRetrieveResponse;
 import com.p000ison.dev.simpleclans2.language.Language;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -82,7 +82,7 @@ public class BBCommand extends GenericPlayerCommand {
             return;
         }
 
-        plugin.getDataManager().addResponse(new BBResponse(plugin, player, clan, page, -1, null));
+        plugin.getDataManager().addResponse(new BBRetrieveResponse(plugin, player, clan, page, -1, null));
 //        clan.displayBb(player, /*plugin.getSettingsManager().getMaxBBDisplayLines()*/10);
     }
 }

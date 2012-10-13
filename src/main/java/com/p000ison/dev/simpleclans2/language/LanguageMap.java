@@ -25,23 +25,24 @@ import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
 
 /**
  * Represents a LanguageMap
  */
-public class LanguageMap extends HashMap<String, String> {
+public class LanguageMap {
 
     private LanguageMap defaultMap;
     private final String location;
     private final boolean inJar;
+    private ColorizedMap map;
 
     public LanguageMap(String location, boolean inJar)
     {
         this.location = location;
         this.inJar = inJar;
-
     }
 
     private Reader getReader() throws IOException
@@ -54,25 +55,21 @@ public class LanguageMap extends HashMap<String, String> {
         return inJar ? new InputStreamReader(getResource(location)) : new FileReader(file);
     }
 
-    public static InputStream getResource(String filename)
+    public static InputStream getResource(String filename) throws IOException
     {
         if (filename == null) {
-            throw new IllegalArgumentException("Filename cannot be null");
+            throw new IllegalArgumentException("The path can not be null");
         }
 
-        try {
-            URL url = LanguageMap.class.getResource(filename);
+        URL url = LanguageMap.class.getResource(filename);
 
-            if (url == null) {
-                return null;
-            }
-
-            URLConnection connection = url.openConnection();
-            connection.setUseCaches(false);
-            return connection.getInputStream();
-        } catch (IOException ex) {
+        if (url == null) {
             return null;
         }
+
+        URLConnection connection = url.openConnection();
+        connection.setUseCaches(false);
+        return connection.getInputStream();
     }
 
     private Writer getWriter() throws IOException
@@ -82,7 +79,7 @@ public class LanguageMap extends HashMap<String, String> {
 
     public static boolean copy(InputStream input, File target) throws IOException
     {
-        if (target.exists()) {
+        if (target.exists() || target.isDirectory()) {
             return false;
         }
 
@@ -109,45 +106,15 @@ public class LanguageMap extends HashMap<String, String> {
 
     public void load()
     {
-        BufferedReader reader = null;
-        Writer writer = null;
+        Reader reader = null;
 
         try {
-            reader = new BufferedReader(getReader());
-            String line;
+            reader = getReader();
 
-            while ((line = reader.readLine()) != null) {
-                String trimmed = line.trim();
-
-                if (trimmed.isEmpty() || trimmed.startsWith("#")) {
-                    continue;
-                }
-
-                String[] entry = line.split("=|' '(.*?)");
-
-                if (entry.length != 2) {
-                    continue;
-                }
-
-                put(entry[0], entry[1]);
-            }
-
-            if (!inJar && defaultMap != null) {
-                writer = new BufferedWriter(getWriter());
-
-                for (Map.Entry<String, String> entry : defaultMap.entrySet()) {
-                    if (this.containsKey(entry.getKey())) {
-                        continue;
-                    }
-
-                    this.put(entry.getKey(), entry.getValue());
-
-                    writer.write(entry.getKey());
-                    writer.write('=');
-                    writer.write(entry.getValue());
-                    writer.write('\n');
-                }
-            }
+            Properties properties = new Properties();
+            properties.load(getReader());
+            map = new ColorizedMap();
+            map.importMap(properties);
         } catch (IOException e) {
             Logging.debug(e, "Failed at loading the language file!");
         } finally {
@@ -155,6 +122,35 @@ public class LanguageMap extends HashMap<String, String> {
                 if (reader != null) {
                     reader.close();
                 }
+            } catch (IOException e) {
+                Logging.debug(e, "Failed at closing the stream for the language file!");
+            }
+        }
+    }
+
+    public void save()
+    {
+        Writer writer = null;
+        try {
+            writer = getWriter();
+
+            if (!inJar && defaultMap != null) {
+                writer = new BufferedWriter(getWriter());
+
+                for (Map.Entry<String, String> entry : defaultMap.getEntries()) {
+                    if (this.contains(entry.getKey())) {
+                        continue;
+                    }
+
+                    this.put(entry.getKey(), entry.getValue());
+
+                    writer.write(entry.getKey() + '=' + entry.getValue() + '\n');
+                }
+            }
+        } catch (IOException e) {
+            Logging.debug(e, "Failed at saving the language file!");
+        } finally {
+            try {
                 if (writer != null) {
                     writer.flush();
                     writer.close();
@@ -175,9 +171,28 @@ public class LanguageMap extends HashMap<String, String> {
         this.defaultMap = defaultMap;
     }
 
-    @Override
     public String put(String key, String value)
     {
-        return super.put(key, ChatBlock.parseColors(value));
+        return map.put(key, ChatBlock.parseColors(value));
+    }
+
+    public Set<Map.Entry<String, String>> getEntries()
+    {
+        return map.entrySet();
+    }
+
+    public boolean contains(String key)
+    {
+        return map.containsKey(key);
+    }
+
+    public void clear()
+    {
+        map.clear();
+    }
+
+    public String getValue(String key)
+    {
+        return map.get(key);
     }
 }
