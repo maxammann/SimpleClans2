@@ -82,21 +82,21 @@ public class LanguageMap {
     public static boolean copy(InputStream input, File target) throws IOException
     {
         if (target.exists()) {
-            throw new IllegalArgumentException("[Copy] File exists already!");
+            throw new IllegalArgumentException("File exists already!");
         }
 
         File parentDir = target.getParentFile();
 
         if (!parentDir.isDirectory()) {
-            throw new IllegalArgumentException("[Copy] The directory exists already!");
+            throw new IllegalArgumentException("The parent of this file is no directory!?");
         }
 
-        if (!parentDir.exists() && parentDir.mkdir()) {
-            throw new IllegalArgumentException("[Copy] Failed at creating directories!");
+        if (!parentDir.exists() && parentDir.mkdirs()) {
+            throw new IllegalArgumentException("Failed at creating directories!");
         }
 
         if (!target.createNewFile()) {
-            throw new IllegalArgumentException("[Copy] Failed at creating new empty file!");
+            throw new IllegalArgumentException("Failed at creating new empty file!");
         }
 
         byte[] buffer = new byte[1024];
