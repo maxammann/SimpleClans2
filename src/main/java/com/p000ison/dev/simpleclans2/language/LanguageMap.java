@@ -50,7 +50,9 @@ public class LanguageMap {
         File file = new File(location);
         if (!file.exists()) {
             String DEFAULT_LOCATION = "/languages/lang.properties";
-            copy(LanguageMap.class.getResourceAsStream(DEFAULT_LOCATION), file);
+            InputStream fromJar = getResource(DEFAULT_LOCATION);
+            copy(fromJar, file);
+            fromJar.close();
         }
         return inJar ? new InputStreamReader(getResource(location)) : new FileReader(file);
     }
@@ -79,24 +81,32 @@ public class LanguageMap {
 
     public static boolean copy(InputStream input, File target) throws IOException
     {
-        if (target.exists() || target.isDirectory()) {
-            return false;
+        if (target.exists()) {
+            throw new IllegalArgumentException("[Copy] File exists already!");
         }
 
-        if (!target.getParentFile().mkdir()) {
-            return false;
+        File parentDir = target.getParentFile();
+
+        if (!parentDir.isDirectory()) {
+            throw new IllegalArgumentException("[Copy] The directory exists already!");
+        }
+
+        if (!parentDir.exists() && parentDir.mkdir()) {
+            throw new IllegalArgumentException("[Copy] Failed at creating directories!");
         }
 
         if (!target.createNewFile()) {
-            return false;
+            throw new IllegalArgumentException("[Copy] Failed at creating new empty file!");
         }
 
         byte[] buffer = new byte[1024];
 
         OutputStream output = new FileOutputStream(target);
 
-        while (input.read(buffer) != -1) {
-            output.write(buffer);
+        int realLength;
+
+        while ((realLength = input.read(buffer)) > 0) {
+            output.write(buffer, 0, realLength);
         }
 
         output.flush();
@@ -112,7 +122,7 @@ public class LanguageMap {
             reader = getReader();
 
             Properties properties = new Properties();
-            properties.load(getReader());
+            properties.load(reader);
             map = new ColorizedMap();
             map.importMap(properties);
         } catch (IOException e) {
@@ -121,6 +131,7 @@ public class LanguageMap {
             try {
                 if (reader != null) {
                     reader.close();
+                    System.out.println("Close default reader");
                 }
             } catch (IOException e) {
                 Logging.debug(e, "Failed at closing the stream for the language file!");
@@ -135,7 +146,7 @@ public class LanguageMap {
             writer = getWriter();
 
             if (!inJar && defaultMap != null) {
-                writer = new BufferedWriter(getWriter());
+                System.out.println("wrrrrrrrrrrrrrrrrite");
 
                 for (Map.Entry<String, String> entry : defaultMap.getEntries()) {
                     if (this.contains(entry.getKey())) {
@@ -154,6 +165,7 @@ public class LanguageMap {
                 if (writer != null) {
                     writer.flush();
                     writer.close();
+                    System.out.println("close default writer");
                 }
             } catch (IOException e) {
                 Logging.debug(e, "Failed at closing the stream for the language file!");
