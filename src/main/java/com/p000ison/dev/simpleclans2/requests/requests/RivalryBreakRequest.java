@@ -14,7 +14,7 @@
  *     You should have received a copy of the GNU General Public License
  *     along with SimpleClans2.  If not, see <http://www.gnu.org/licenses/>.
  *
- *     Last modified: 10.10.12 21:57
+ *     Last modified: 13.10.12 18:41
  */
 
 package com.p000ison.dev.simpleclans2.requests.requests;
@@ -30,14 +30,14 @@ import java.util.Set;
 /**
  * Represents a AllyCreateRequest
  */
-public class AllyCreateRequest extends MultipleAcceptorsRequest {
+public class RivalryBreakRequest extends MultipleAcceptorsRequest {
 
-    private Clan ally;
+    private Clan rival;
 
-    public AllyCreateRequest(Set<ClanPlayer> acceptors, ClanPlayer requester, Clan clan, Clan ally)
+    public RivalryBreakRequest(Set<ClanPlayer> acceptors, ClanPlayer requester, Clan clan, Clan rival)
     {
-        super(acceptors, requester, clan, MessageFormat.format(Language.getTranslation("proposing.an.alliance"), clan.getName(), ally.getTag()));
-        this.ally = ally;
+        super(acceptors, requester, clan, MessageFormat.format(Language.getTranslation("proposing.to.end.the.rivalry"), clan.getTag(), rival.getTag()));
+        this.rival = rival;
     }
 
     @Override
@@ -47,16 +47,16 @@ public class AllyCreateRequest extends MultipleAcceptorsRequest {
         Clan clan = getClan();
 
 
-        if (ally != null && clan != null) {
+        if (rival != null && clan != null) {
 
-            clan.addAlly(ally);
-            ally.addAlly(clan);
+            clan.removeRival(rival);
+            rival.removeRival(clan);
 
-            ally.addBBMessage(cp, MessageFormat.format(Language.getTranslation("accepted.an.alliance"), getAcceptors().size(), clan.getName()));
-            clan.addBBMessage(cp, MessageFormat.format(Language.getTranslation("created.an.alliance"), cp.getName(), ally.getName()));
+            rival.addBBMessage(cp, Language.getTranslation("broken.the.rivalry", getAcceptors().size(), clan.getName()));
+            clan.addBBMessage(cp, Language.getTranslation("broken.the.rivalry.with", cp.getName(), rival.getName()));
 
             clan.update(true);
-            ally.update(true);
+            rival.update(true);
         }
         return true;
     }

@@ -21,6 +21,7 @@
 package com.p000ison.dev.simpleclans2.settings;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
+import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.util.ExceptionHelper;
 import com.p000ison.dev.simpleclans2.util.Logging;
 import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
@@ -68,8 +69,10 @@ public class SettingsManager {
     private double purchaseCreationPrice, purchaseVerificationPrice, purchaseTeleportPrice, purchaseInvite;
     private int purgeInactivePlayersDays, purgeInactiveClansDays, purgeUnverifiedClansDays;
     private boolean showUnverifiedClansOnList;
-    private int minimalSizeToAlly;
+    private int minimalSizeToAlly, minimalSizeToRival;
     private boolean setHomeOnlyOnce;
+    private Set<Long> unRivalAbleClans;
+    private double rivalLimitPercent;
 
     private String clanBB, clanPlayerBB, defaultBB;
     private int maxBBDisplayLines, maxBBLenght;
@@ -158,7 +161,10 @@ public class SettingsManager {
             requireVerification = clan.getBoolean("require-verification");
             showUnverifiedClansOnList = clan.getBoolean("show-unverified-clans-on-list");
             minimalSizeToAlly = clan.getInt("minimal-size-to-ally");
+            minimalSizeToRival = clan.getInt("minimal-size-to-rival");
             setHomeOnlyOnce = clan.getBoolean("set-home-only-once");
+            unRivalAbleClans = new HashSet<Long>(clan.getLongList("unrivalable-clans"));
+            rivalLimitPercent = clan.getDouble("rival-limit-percent");
 
             ConfigurationSection clanEconomy = clan.getConfigurationSection("economy");
 
@@ -575,5 +581,20 @@ public class SettingsManager {
     public boolean isVoteForPromote()
     {
         return voteForPromote;
+    }
+
+    public boolean isUnRivalAble(Clan clan)
+    {
+        return unRivalAbleClans.contains(clan.getId());
+    }
+
+    public int getMinimalSizeToRival()
+    {
+        return minimalSizeToRival;
+    }
+
+    public double getRivalLimitPercent()
+    {
+        return rivalLimitPercent;
     }
 }

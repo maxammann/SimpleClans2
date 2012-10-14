@@ -1074,4 +1074,23 @@ public class Clan implements KDR, Comparable<Clan> {
 
         return Collections.unmodifiableSet(allyMembers);
     }
+
+    /**
+     * Check whether the clan has crossed the rival limit
+     * <p/>
+     * <strong>limit = AllRivalAbleClans * rivalPercentLimit</strong>
+     *
+     * @return Weather the clan has reached the maximum rivalries
+     */
+    public boolean reachedRivalLimit()
+    {
+        int rivalCount = rivals.size();
+        //minus 1 because this clan is rivable
+        int clanCount = plugin.getClanManager().getRivalAbleClanCount() - 1;
+        double rivalPercent = plugin.getSettingsManager().getRivalLimitPercent();
+
+        double limit = (double) clanCount * rivalPercent / 100.0D;
+
+        return rivalCount > limit;
+    }
 }

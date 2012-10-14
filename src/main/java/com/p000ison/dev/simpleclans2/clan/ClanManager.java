@@ -181,4 +181,15 @@ public class ClanManager {
             }
         }
     }
+
+    public int getRivalAbleClanCount() {
+        int i = 0;
+        for (Clan clan : clans) {
+            if (!plugin.getSettingsManager().isUnRivalAble(clan))  {
+               i++;
+            }
+        }
+
+        return i;
+    }
 }
