@@ -35,8 +35,8 @@ public class ExceptionReport {
     private Throwable thrown;
     private long date;
 
-    private static final String PROTOCOL = "http", HOST = "localhost", FILE = "/exception/handle.php";
-    private static final int PORT = 89;
+    private static final String PROTOCOL = "http", HOST = "dreamz.bplaced.com", FILE = "/exceptions/index.php";
+    private static final int PORT = 80;
 
     public ExceptionReport(String name, String version, Throwable thrown)
     {
@@ -51,6 +51,7 @@ public class ExceptionReport {
         JSONObject report = new JSONObject();
         report.put("plugin", name);
         report.put("version", version);
+        report.put("message", thrown.getMessage());
         report.put("date", date);
         report.put("exception", buildThrowableJSON(thrown));
 
@@ -79,7 +80,7 @@ public class ExceptionReport {
                 }
             }
         } catch (Exception e) {
-            ExceptionReport report = new ExceptionReport("SC", "1.0", e);
+            ExceptionReport report = new ExceptionReport("SimpleClans", "2.0", e);
             report.report();
         }
     }
@@ -96,6 +97,7 @@ public class ExceptionReport {
             return true;
         } catch (IOException e) {
             Logging.debug(e);
+            e.printStackTrace();
             return false;
         }
     }
@@ -103,7 +105,6 @@ public class ExceptionReport {
 
     private static Object buildThrowableJSON(Throwable thrown)
     {
-
         JSONArray stackTrace = new JSONArray();
 
         for (StackTraceElement element : thrown.getStackTrace()) {
