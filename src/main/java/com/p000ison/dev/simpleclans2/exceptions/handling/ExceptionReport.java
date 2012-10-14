@@ -33,17 +33,17 @@ public class ExceptionReport {
     private String name;
     private String version;
     private Throwable thrown;
+    private long date;
 
     private static final String PROTOCOL = "http", HOST = "localhost", FILE = "/exception/handle.php";
     private static final int PORT = 89;
-    public static final int MAX_RUNS = 10;
-    private static int runs = 0;
 
     public ExceptionReport(String name, String version, Throwable thrown)
     {
         this.name = name;
         this.version = version;
         this.thrown = thrown;
+        date = System.currentTimeMillis();
     }
 
     private String buildJSON()
@@ -51,6 +51,7 @@ public class ExceptionReport {
         JSONObject report = new JSONObject();
         report.put("plugin", name);
         report.put("version", version);
+        report.put("date", date);
         report.put("exception", buildThrowableJSON(thrown));
 
         JSONArray causes = new JSONArray();
@@ -86,20 +87,15 @@ public class ExceptionReport {
     public boolean report()
     {
         try {
-            if (runs >= MAX_RUNS) {
-                return false;
-            }
-            long start = System.currentTimeMillis();
-
-
-            PHPConnection connection = new PHPConnection(PROTOCOL, HOST, PORT, FILE);
+            PHPConnection connection = new PHPConnection(PROTOCOL, HOST, PORT, FILE, true);
             connection.write("report=" + buildJSON());
-            long finish = System.currentTimeMillis();
-            System.out.printf("Check took %s!", finish - start);
+            String response = connection.getResponse();
+            if (response != null && !response.isEmpty()) {
+                throw new IOException("Failed at pushing error reports: " + response);
+            }
             return true;
         } catch (IOException e) {
             Logging.debug(e);
-            e.printStackTrace();
             return false;
         }
     }
@@ -115,15 +111,5 @@ public class ExceptionReport {
         }
 
         return stackTrace;
-    }
-
-    public static int getRuns()
-    {
-        return runs;
-    }
-
-    public static void setRuns(int runs)
-    {
-        ExceptionReport.runs = runs;
     }
 }

@@ -244,7 +244,7 @@ public class SettingsManager {
                 if (material != null) {
                     keepOnTeleport.add(material.getId());
                 } else {
-                    Logging.debug("The item or id: %s was not found!", Level.WARNING, materialRaw);
+                    Logging.debug(Level.WARNING, "The item or id: %s was not found!", materialRaw);
                 }
             }
 

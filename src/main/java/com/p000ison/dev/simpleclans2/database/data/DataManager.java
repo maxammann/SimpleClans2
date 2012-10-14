@@ -145,7 +145,7 @@ public class DataManager {
 
             UPDATE_CLANPLAYER.executeUpdate();
         } catch (SQLException e) {
-            Logging.debug(e, "Failed to update player %s.", clanPlayer.getName());
+            Logging.debug("Failed to update player %s.", clanPlayer.getName());
         }
     }
 
@@ -301,7 +301,7 @@ public class DataManager {
             DELETE_CLAN.setLong(1, id);
             DELETE_CLAN.executeUpdate();
         } catch (SQLException e) {
-            Logging.debug("Failed to delete clan %s.", Level.SEVERE, id);
+            Logging.debug(Level.SEVERE, "Failed to delete clan %s.", id);
         }
     }
 
@@ -504,7 +504,7 @@ public class DataManager {
                     Clan clan = plugin.getClanManager().getClan(clanId);
 
                     if (clan == null) {
-                        Logging.debug("Failed to find clan for %s.", Level.WARNING, clanPlayer.getName());
+                        Logging.debug(Level.WARNING, "Failed to find clan for %s.", clanPlayer.getName());
                     } else {
                         clanPlayer.setClan(clan);
                         clan.addMember(clanPlayer);

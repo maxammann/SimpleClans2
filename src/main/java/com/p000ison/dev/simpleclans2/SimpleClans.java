@@ -45,6 +45,7 @@ import com.p000ison.dev.simpleclans2.commands.voting.DenyCommand;
 import com.p000ison.dev.simpleclans2.database.Database;
 import com.p000ison.dev.simpleclans2.database.DatabaseManager;
 import com.p000ison.dev.simpleclans2.database.data.DataManager;
+import com.p000ison.dev.simpleclans2.exceptions.handling.ExceptionReporterTask;
 import com.p000ison.dev.simpleclans2.language.Language;
 import com.p000ison.dev.simpleclans2.listeners.SCEntityListener;
 import com.p000ison.dev.simpleclans2.listeners.SCPlayerListener;
@@ -89,6 +90,8 @@ public class SimpleClans extends JavaPlugin implements Core {
         try {
             Logging.setInstance(getLogger());
 
+            getServer().getScheduler().scheduleAsyncRepeatingTask(this, new ExceptionReporterTask(), 0L, 1200L);
+
             Logging.debug("Loading the language file..");
             long startLanguage = System.currentTimeMillis();
             Language.setInstance(new File(getDataFolder(), "languages"));
@@ -110,7 +113,7 @@ public class SimpleClans extends JavaPlugin implements Core {
             registerEvents();
 
             Announcer.setPlugin(this);
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             Logging.debug(e, "Failed at loading SimpleClans! Disabling...");
             getServer().getPluginManager().disablePlugin(this);
             return;

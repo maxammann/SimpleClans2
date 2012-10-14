@@ -19,8 +19,7 @@
 
 package com.p000ison.dev.simpleclans2.exceptions.handling;
 
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -32,13 +31,21 @@ public class PHPConnection {
     /**
      * The Connection to the URL
      */
-    private URLConnection con;
+    private URLConnection connection;
+    private boolean read = false;
+
+    public PHPConnection(String protocol, String host, int port, String file, boolean read) throws IOException
+    {
+        this(protocol, host, port, file);
+        this.read = read;
+    }
 
     public PHPConnection(String protocol, String host, int port, String file) throws IOException
     {
-        con = new URL(protocol, host, port, file).openConnection();
-        con.setDoOutput(true);
-        con.setUseCaches(false);
+
+        connection = new URL(protocol, host, port, file).openConnection();
+        connection.setDoOutput(true);
+        connection.setUseCaches(false);
     }
 
     /**
@@ -49,29 +56,39 @@ public class PHPConnection {
      */
     public void write(String data) throws IOException
     {
-        OutputStream out = con.getOutputStream();
+        final OutputStream out = connection.getOutputStream();
         out.write(data.getBytes());
         out.flush();
         out.close();
-        con.getInputStream().close();
+        if (!read) {
+            connection.getInputStream().close();
+        }
     }
 
-//    /**
-//     * Reading incoming data from the target-URL
-//     *
-//     * @return The incoming data
-//     * @throws IOException
-//     */
-//    public String read() throws IOException
-//    {
-//        InputStream in = con.getInputStream();
-//        int current;
-//        StringBuilder incoming = new StringBuilder();
-//
-//        while ((current = in.read()) > 0) {
-//            incoming.append((char) current);
-//        }
-//        in.close();
-//        return incoming.toString();
-//    }
+    public String getResponse() throws IOException
+    {
+        final BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        String response = reader.readLine();
+        reader.close();
+        return response;
+    }
+
+    /**
+     * Reading incoming data from the target-URL
+     *
+     * @return The incoming data
+     * @throws IOException
+     */
+    public String read() throws IOException
+    {
+        final BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        final StringBuilder incoming = new StringBuilder();
+
+        String response;
+        while ((response = reader.readLine()) != null) {
+            incoming.append(response);
+        }
+
+        return incoming.toString();
+    }
 }

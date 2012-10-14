@@ -40,7 +40,7 @@ public final class ExceptionHelper {
             msg = msg.replaceAll("\n", "");
         }
 
-        Logging.debug("Failed because of: '%s'", Level.SEVERE, msg);
+        Logging.debug(Level.SEVERE, "Failed because of: '%s'", msg);
 
         for (StackTraceElement element : e.getStackTrace()) {
             if (element.getClassName().equals(happened.getName())) {
@@ -50,7 +50,7 @@ public final class ExceptionHelper {
                     continue;
                 }
 
-                Logging.debug("Failed to response line %d!", Level.SEVERE, line);
+                Logging.debug(Level.SEVERE, "Failed to response line %d!", line);
                 return;
             }
         }
@@ -60,7 +60,7 @@ public final class ExceptionHelper {
 
     public static void handleException(Throwable e)
     {
-        Logging.debug("Failed because of: '%s'", Level.SEVERE, e.getLocalizedMessage().replaceAll("\n", ""));
+        Logging.debug(Level.SEVERE, "Failed because of: '%s'", e.getLocalizedMessage().replaceAll("\n", ""));
 
         for (StackTraceElement element : e.getStackTrace()) {
 
@@ -70,7 +70,7 @@ public final class ExceptionHelper {
                 continue;
             }
 
-            Logging.debug(ChatColor.RED + "Failed to response line %d!", Level.SEVERE, line);
+            Logging.debug(Level.SEVERE, ChatColor.RED + "Failed to response line %d!", line);
             return;
         }
     }

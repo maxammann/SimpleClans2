@@ -27,12 +27,12 @@ public class Language {
         String bundleOutput = bundle.getValue(key);
 
         if (bundleOutput == null) {
-            Logging.debug(ChatColor.RED + "The language for the key %s was not found!", Level.WARNING, key);
+            Logging.debug(Level.WARNING, ChatColor.RED + "The language for the key %s was not found!", key);
 
             if (defaultBundle != null) {
                 String defaultBundleOutput = defaultBundle.getValue(key);
                 if (defaultBundleOutput == null) {
-                    Logging.debug(ChatColor.RED + "The language for the key %s was not found in the default bundle!", Level.WARNING, key);
+                    Logging.debug(Level.WARNING, ChatColor.RED + "The language for the key %s was not found in the default bundle!", key);
                     return "Error!";
                 }
 

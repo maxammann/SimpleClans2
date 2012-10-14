@@ -20,6 +20,9 @@
 
 package com.p000ison.dev.simpleclans2.util;
 
+import com.p000ison.dev.simpleclans2.exceptions.handling.ExceptionReport;
+import com.p000ison.dev.simpleclans2.exceptions.handling.ExceptionReporterTask;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -41,40 +44,40 @@ public final class Logging {
 
     public static void debug(String msg, Object... args)
     {
-        debug(Level.INFO, String.format(msg, args), null);
+        debugRaw(Level.INFO, String.format(msg, args), null);
     }
 
-    public static void debug(String msg, Level level, Object... args)
+    public static void debug(Level level, String msg, Object... args)
     {
-        debug(Level.SEVERE, String.format(msg, args), null);
+        debugRaw(level, String.format(msg, args), null);
     }
 
     public static void debug(String msg)
     {
-        debug(Level.INFO, msg, null);
+        debugRaw(Level.INFO, msg, null);
     }
 
     public static void debug(Level level, String msg)
     {
-        debug(Level.SEVERE, msg, null);
+        debugRaw(level, msg, null);
     }
 
     public static void debug(Throwable ex)
     {
-        debug(Level.SEVERE, null, ex);
+        debugRaw(Level.SEVERE, null, ex);
     }
 
     public static void debug(Throwable ex, String msg)
     {
-        debug(Level.SEVERE, msg, ex);
+        debugRaw(Level.SEVERE, msg, ex);
     }
 
     public static void debug(Throwable ex, String msg, Object... args)
     {
-        debug(Level.SEVERE, String.format(msg, args), ex);
+        debugRaw(Level.SEVERE, String.format(msg, args), ex);
     }
 
-    public static void debug(Level level, String msg, Throwable ex)
+    private static void debugRaw(Level level, String msg, Throwable ex)
     {
 
         if (instance == null) {
@@ -85,7 +88,11 @@ public final class Logging {
             level = Level.INFO;
         }
 
-        instance.log(level, msg, ex);
+        if (ex == null) {
+            instance.log(level, msg);
+        } else {
+            instance.log(level, msg, ex);
+            ExceptionReporterTask.addReport(new ExceptionReport("SimpleClans", "1.0", ex));
+        }
     }
-
 }
