@@ -62,6 +62,11 @@ public class DataManager {
 
         database = plugin.getDatabaseManager().getDatabase();
 
+        if (database == null) {
+            Logging.debug("No database found! Skipping...");
+            return;
+        }
+
         autoSaver = new AutoSaver(plugin, this);
         responseTask = new ResponseTask();
 
@@ -161,7 +166,7 @@ public class DataManager {
             DELETE_CLANPLAYER.setLong(1, id);
             DELETE_CLANPLAYER.executeUpdate();
         } catch (SQLException e) {
-            Logging.debug(e, "Failed to delete clan player %s.", id);
+            Logging.debug(e, true, "Failed to delete clan player %s.", id);
         }
     }
 
@@ -183,7 +188,7 @@ public class DataManager {
 
             INSERT_CLANPLAYER.executeUpdate();
         } catch (SQLException e) {
-            Logging.debug(e, "Failed to insert clan player %s.", clanPlayer);
+            Logging.debug(e, true, "Failed to insert clan player %s.", clanPlayer);
         }
     }
 
@@ -201,7 +206,7 @@ public class DataManager {
             return result.getLong("id");
 
         } catch (SQLException e) {
-            Logging.debug(e, "Failed at retrieving clan player id!");
+            Logging.debug(e, true, "Failed at retrieving clan player id!");
         }
         return -1;
     }
@@ -223,7 +228,7 @@ public class DataManager {
 
             return state != 0;
         } catch (SQLException e) {
-            Logging.debug(e, "Failed to insert clan %s.", clan);
+            Logging.debug(e, true, "Failed to insert clan %s.", clan);
         }
 
         return false;
@@ -270,7 +275,7 @@ public class DataManager {
 
             UPDATE_CLAN.executeUpdate();
         } catch (SQLException e) {
-            Logging.debug(e, "Failed to update clan %s.", clan);
+            Logging.debug(e, true, "Failed to update clan %s.", clan);
         }
     }
 
@@ -289,7 +294,7 @@ public class DataManager {
 
             return result.getLong("id");
         } catch (SQLException e) {
-            Logging.debug(e, "Failed at retrieving clan id!");
+            Logging.debug(e, true, "Failed at retrieving clan id!");
         }
 
         return -1;
@@ -383,7 +388,7 @@ public class DataManager {
                 clans.add(clan);
             }
         } catch (SQLException e) {
-            Logging.debug(e, "Failed at retrieving clans!");
+            Logging.debug(e, true, "Failed at retrieving clans!");
         }
 
         plugin.getClanManager().importClans(clans);
@@ -409,7 +414,7 @@ public class DataManager {
                 ranks.add(new Rank(id, name, tag, priority, permissions));
             }
         } catch (SQLException e) {
-            Logging.debug(e, "Failed at retrieving ranks!");
+            Logging.debug(e, true, "Failed at retrieving ranks!");
         }
 
         return ranks;
@@ -522,7 +527,7 @@ public class DataManager {
                 clanPlayers.add(clanPlayer);
             }
         } catch (SQLException e) {
-            Logging.debug(e, "Failed at retrieving clan players!");
+            Logging.debug(e, true, "Failed at retrieving clan players!");
         }
 
         plugin.getClanPlayerManager().importClanPlayers(clanPlayers);
@@ -541,7 +546,7 @@ public class DataManager {
 
             return state != 0;
         } catch (SQLException e) {
-            Logging.debug(e, "Failed at updating rank!");
+            Logging.debug(e, true, "Failed at updating rank!");
         }
 
         return false;
@@ -559,7 +564,7 @@ public class DataManager {
 
             return state != 0;
         } catch (SQLException e) {
-            Logging.debug(e, "Failed at inserting rank!");
+            Logging.debug(e, true, "Failed at inserting rank!");
         }
 
         return false;
@@ -586,7 +591,7 @@ public class DataManager {
             return result.getLong("id");
 
         } catch (SQLException e) {
-            Logging.debug(e, "Failed at retrieving rank!");
+            Logging.debug(e, true, "Failed at retrieving rank!");
         }
         return -1;
     }
@@ -609,7 +614,7 @@ public class DataManager {
                 }
             }
         } catch (SQLException e) {
-            Logging.debug(e, "Failed at retrieving deaths!");
+            Logging.debug(e, true, "Failed at retrieving deaths!");
         }
 
         try {
@@ -617,7 +622,7 @@ public class DataManager {
                 res.close();
             }
         } catch (SQLException e) {
-            Logging.debug(e, "Failed at closing result!");
+            Logging.debug(e, true, "Failed at closing result!");
         }
 
         return out;
@@ -644,7 +649,7 @@ public class DataManager {
                 }
             }
         } catch (SQLException e) {
-            Logging.debug(e, "Failed at retrieving bb for %s!", clan.getTag());
+            Logging.debug(e, true, "Failed at retrieving bb for %s!", clan.getTag());
         }
 
         try {
@@ -652,7 +657,7 @@ public class DataManager {
                 res.close();
             }
         } catch (SQLException e) {
-            Logging.debug(e, "Failed at closing result!");
+            Logging.debug(e, true, "Failed at closing result!");
         }
 
         return bb;
@@ -665,7 +670,7 @@ public class DataManager {
             PURGE_BB.setLong(1, clan.getId());
             PURGE_BB.executeUpdate();
         } catch (SQLException e) {
-            Logging.debug(e, "Failed at purging bb for %s!", clan.getTag());
+            Logging.debug(e, true, "Failed at purging bb for %s!", clan.getTag());
         }
     }
 
@@ -676,7 +681,7 @@ public class DataManager {
             INSERT_BB.setString(2, message);
             INSERT_BB.executeUpdate();
         } catch (SQLException e) {
-            Logging.debug(e, "Failed at inserting bb message!");
+            Logging.debug(e, true, "Failed at inserting bb message!");
         }
     }
 }

@@ -90,7 +90,7 @@ public class ListCommand extends GenericConsoleCommand {
         ChatBlock chatBlock = new ChatBlock();
 
         ChatBlock.sendBlank(sender);
-        ChatBlock.sendSingle(sender, plugin.getSettingsManager().getServerName() + subColor + " " + Language.getTranslation("clans.lower"));
+        ChatBlock.sendHead(sender, plugin.getSettingsManager().getServerName(), Language.getTranslation("clans.lower"));
         ChatBlock.sendBlank(sender);
         sender.sendMessage(headColor + Language.getTranslation("total.clans") + " " + subColor + clans.size());
         ChatBlock.sendBlank(sender);

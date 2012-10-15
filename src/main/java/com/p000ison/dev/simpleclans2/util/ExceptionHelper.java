@@ -55,7 +55,7 @@ public final class ExceptionHelper {
             }
         }
 
-        Logging.debug(e, "Failed to print the cause of this exception!");
+        Logging.debug(e, true, "Failed to print the cause of this exception!");
     }
 
     public static void handleException(Throwable e)

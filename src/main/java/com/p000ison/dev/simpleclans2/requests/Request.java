@@ -33,8 +33,7 @@ public abstract class Request implements Executable {
     private String message;
     private long created;
 
-
-    public Request(ClanPlayer requester, Clan clan, String message)
+    protected Request(ClanPlayer requester, Clan clan, String message)
     {
         this.requester = requester;
         this.clan = clan;

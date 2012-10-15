@@ -147,7 +147,7 @@ public class CommandManager {
             }
 
         } catch (RuntimeException e) {
-            Logging.debug(e, "Failed at running a SimpleClans command!");
+            Logging.debug(e, "Failed at running a SimpleClans command!", true);
             return;
         }
 
@@ -204,7 +204,7 @@ public class CommandManager {
 
         int[] boundings = getBoundings(size, page);
 
-        sender.sendMessage(plugin.getSettingsManager().getServerName() + " <" + (boundings[3] + 1) + "/" + boundings[2] + "> §7" + Language.getTranslation("clan.commands"));
+        ChatBlock.sendHead(sender, plugin.getSettingsManager().getServerName() + " <" + (boundings[3] + 1) + "/" + boundings[2] + ">", Language.getTranslation("clan.commands"));
 
         StringBuilder menu = new StringBuilder("\n");
 

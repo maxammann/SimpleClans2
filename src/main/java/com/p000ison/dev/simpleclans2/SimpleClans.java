@@ -62,6 +62,7 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.sql.SQLException;
 import java.util.logging.Level;
 
 /**
@@ -121,7 +122,9 @@ public class SimpleClans extends JavaPlugin implements Core {
 
             Announcer.setPlugin(this);
         } catch (RuntimeException e) {
-            Logging.debug(e, "Failed at loading SimpleClans! Disabling...");
+            Logging.debug("------------------------------------------------------------");
+            Logging.debug(e, "Failed at loading SimpleClans! Disabling...", true);
+            Logging.debug("------------------------------------------------------------");
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
@@ -176,7 +179,15 @@ public class SimpleClans extends JavaPlugin implements Core {
     private void loadManagers()
     {
         settingsManager = new SettingsManager(this);
-        databaseManager = new DatabaseManager(this);
+        try {
+            databaseManager = new DatabaseManager(this);
+        } catch (SQLException e) {
+            Logging.debug("------------------------------------------------------------");
+            Logging.debug("The connection to the database failed: %s!", e.getMessage());
+            Logging.debug("------------------------------------------------------------");
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
         clanManager = new ClanManager(this);
         clanPlayerManager = new ClanPlayerManager(this);
         dataManager = new DataManager(this);
@@ -206,7 +217,6 @@ public class SimpleClans extends JavaPlugin implements Core {
         commandManager.addCommand(new CoordsCommand(this));
         commandManager.addCommand(new DemoteCommand(this));
         commandManager.addCommand(new BanCommand(this));
-//        commandManager.addCommand(new HelpCommand(this));
         commandManager.addCommand(new HomeCommand(this));
         commandManager.addCommand(new HomeRegroupCommand(this));
         commandManager.addCommand(new HomeSetCommand(this));

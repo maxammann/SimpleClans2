@@ -67,7 +67,7 @@ public class KillStatement implements Executable {
             kill.setBoolean(7, war);
             kill.execute();
         } catch (SQLException e) {
-            Logging.debug(e, "Failed to insert kill for victim attacker %s and victim %s.", attacker, victim);
+            Logging.debug(e, true, "Failed to insert kill for victim attacker %s and victim %s.", attacker, victim);
         }
         return false;
     }

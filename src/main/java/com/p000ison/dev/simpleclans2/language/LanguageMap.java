@@ -126,15 +126,14 @@ public class LanguageMap {
             map = new ColorizedMap();
             map.importMap(properties);
         } catch (IOException e) {
-            Logging.debug(e, "Failed at loading the language file!");
+            Logging.debug(e, false, "Failed at loading the language file!");
         } finally {
             try {
                 if (reader != null) {
                     reader.close();
-                    System.out.println("Close default reader");
                 }
             } catch (IOException e) {
-                Logging.debug(e, "Failed at closing the stream for the language file!");
+                Logging.debug(e, false, "Failed at closing the stream for the language file!");
             }
         }
     }
@@ -146,8 +145,6 @@ public class LanguageMap {
             writer = getWriter();
 
             if (!inJar && defaultMap != null) {
-                System.out.println("wrrrrrrrrrrrrrrrrite");
-
                 for (Map.Entry<String, String> entry : defaultMap.getEntries()) {
                     if (this.contains(entry.getKey())) {
                         continue;
@@ -159,16 +156,15 @@ public class LanguageMap {
                 }
             }
         } catch (IOException e) {
-            Logging.debug(e, "Failed at saving the language file!");
+            Logging.debug(e, false, "Failed at saving the language file!");
         } finally {
             try {
                 if (writer != null) {
                     writer.flush();
                     writer.close();
-                    System.out.println("close default writer");
                 }
             } catch (IOException e) {
-                Logging.debug(e, "Failed at closing the stream for the language file!");
+                Logging.debug(e, false, "Failed at closing the stream for the language file!");
             }
         }
     }

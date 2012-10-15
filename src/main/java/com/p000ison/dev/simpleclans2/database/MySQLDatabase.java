@@ -31,21 +31,19 @@ public class MySQLDatabase implements Database {
     private Connection connection;
     private DatabaseConfiguration databaseConfiguration;
 
-    public MySQLDatabase(DatabaseConfiguration databaseConfiguration)
+    public MySQLDatabase(DatabaseConfiguration databaseConfiguration) throws SQLException
     {
         this.databaseConfiguration = databaseConfiguration;
         initialize();
     }
 
-    private void initialize()
+    private void initialize() throws SQLException
     {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             connection = DriverManager.getConnection("jdbc:mysql://" + databaseConfiguration.getHost() + ":" + databaseConfiguration.getPort() + "/" + databaseConfiguration.getDatabase(), databaseConfiguration.getUsername(), databaseConfiguration.getPassword());
         } catch (ClassNotFoundException e) {
             Logging.debug("ClassNotFoundException! " + e.getMessage());
-        } catch (SQLException e) {
-            Logging.debug("SQLException! " + e.getMessage());
         }
     }
 
@@ -60,7 +58,7 @@ public class MySQLDatabase implements Database {
                 initialize();
             }
         } catch (SQLException e) {
-            initialize();
+            return null;
         }
 
         return connection;
@@ -114,7 +112,7 @@ public class MySQLDatabase implements Database {
             Statement statement = getConnection().createStatement();
             return statement.executeQuery(query);
         } catch (SQLException e) {
-            Logging.debug(e, "Error at SQL Query");
+            Logging.debug(e, "Error at SQL Query", true);
             Logging.debug("Query: " + query);
         }
 
@@ -136,7 +134,7 @@ public class MySQLDatabase implements Database {
             statement.close();
             return result;
         } catch (SQLException e) {
-            Logging.debug(e, "Error at SQL UPDATE Query");
+            Logging.debug(e, "Error at SQL UPDATE Query", true);
             Logging.debug("Query: " + query);
             return false;
         }
@@ -158,7 +156,7 @@ public class MySQLDatabase implements Database {
             statement.close();
             return result;
         } catch (SQLException e) {
-            Logging.debug(e, "Error at SQL EXECUTE Query");
+            Logging.debug(e, "Error at SQL EXECUTE Query", true);
             Logging.debug("Query: " + query);
             return false;
         }

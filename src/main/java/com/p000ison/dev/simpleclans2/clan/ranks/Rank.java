@@ -252,8 +252,12 @@ public class Rank implements Comparable<Rank> {
     @Override
     public boolean equals(Object o)
     {
-        if (this == o) return true;
-        if (o == null || !(o instanceof Rank)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || !(o instanceof Rank)) {
+            return false;
+        }
 
         Rank rank = (Rank) o;
 

@@ -34,7 +34,7 @@ abstract class GenericCommand implements Command {
     private String permission;
     private Type type;
 
-    public GenericCommand(String name, SimpleClans plugin)
+    protected GenericCommand(String name, SimpleClans plugin)
     {
         this.name = name;
         this.plugin = plugin;

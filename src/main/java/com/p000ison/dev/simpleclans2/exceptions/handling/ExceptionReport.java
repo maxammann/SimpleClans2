@@ -96,8 +96,7 @@ public class ExceptionReport {
             }
             return true;
         } catch (IOException e) {
-            Logging.debug(e);
-            e.printStackTrace();
+            Logging.debug(e, true);
             return false;
         }
     }

@@ -20,7 +20,6 @@
 
 package com.p000ison.dev.simpleclans2.util;
 
-import com.p000ison.dev.simpleclans2.exceptions.handling.ExceptionReport;
 import com.p000ison.dev.simpleclans2.exceptions.handling.ExceptionReporterTask;
 
 import java.util.logging.Level;
@@ -44,40 +43,40 @@ public final class Logging {
 
     public static void debug(String msg, Object... args)
     {
-        debugRaw(Level.INFO, String.format(msg, args), null);
+        debugRaw(Level.INFO, String.format(msg, args), null, false);
     }
 
     public static void debug(Level level, String msg, Object... args)
     {
-        debugRaw(level, String.format(msg, args), null);
+        debugRaw(level, String.format(msg, args), null, false);
     }
 
     public static void debug(String msg)
     {
-        debugRaw(Level.INFO, msg, null);
+        debugRaw(Level.INFO, msg, null, false);
     }
 
     public static void debug(Level level, String msg)
     {
-        debugRaw(level, msg, null);
+        debugRaw(level, msg, null, false);
     }
 
-    public static void debug(Throwable ex)
+    public static void debug(Throwable ex, boolean reportException)
     {
-        debugRaw(Level.SEVERE, null, ex);
+        debugRaw(Level.SEVERE, null, ex, reportException);
     }
 
-    public static void debug(Throwable ex, String msg)
+    public static void debug(Throwable ex, String msg, boolean reportException)
     {
-        debugRaw(Level.SEVERE, msg, ex);
+        debugRaw(Level.SEVERE, msg, ex, reportException);
     }
 
-    public static void debug(Throwable ex, String msg, Object... args)
+    public static void debug(Throwable ex, boolean reportException, String msg, Object... args)
     {
-        debugRaw(Level.SEVERE, String.format(msg, args), ex);
+        debugRaw(Level.SEVERE, String.format(msg, args), ex, reportException);
     }
 
-    private static void debugRaw(Level level, String msg, Throwable ex)
+    private static void debugRaw(Level level, String msg, Throwable ex, boolean reportException)
     {
 
         if (instance == null) {
@@ -90,9 +89,9 @@ public final class Logging {
 
         if (ex == null) {
             instance.log(level, msg);
-        } else {
+        } else if (reportException) {
             instance.log(level, msg, ex);
-            ExceptionReporterTask.addReport(new ExceptionReport("SimpleClans", "1.0", ex));
+            ExceptionReporterTask.addReport(ex);
         }
     }
 }

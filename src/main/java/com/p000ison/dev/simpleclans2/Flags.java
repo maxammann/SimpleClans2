@@ -82,7 +82,7 @@ public class Flags {
                 }
 
             } catch (Exception ex) {
-                Logging.debug(ex, "Failed at loading the flags");
+                Logging.debug(ex, true, "Failed at loading the flags");
             }
         }
     }

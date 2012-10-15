@@ -22,6 +22,7 @@ package com.p000ison.dev.simpleclans2.database;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.util.Logging;
 
+import java.sql.SQLException;
 import java.util.logging.Level;
 
 /**
@@ -33,14 +34,14 @@ public class DatabaseManager {
 
     private Database database;
 
-    public DatabaseManager(SimpleClans plugin)
+    public DatabaseManager(SimpleClans plugin) throws SQLException
     {
         this.plugin = plugin;
 
         init();
     }
 
-    private void init()
+    private void init() throws SQLException
     {
         database = new MySQLDatabase(plugin.getSettingsManager().getDatabaseConfiguration());
 
