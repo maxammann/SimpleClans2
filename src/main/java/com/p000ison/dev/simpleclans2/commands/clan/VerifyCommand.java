@@ -45,10 +45,8 @@ public class VerifyCommand extends GenericPlayerCommand {
     @Override
     public String getMenu(ClanPlayer cp)
     {
-        if (cp != null) {
-            if (!cp.getClan().isVerified() && plugin.getSettingsManager().requireVerification() && plugin.getSettingsManager().isPurchaseVerification()) {
-                return MessageFormat.format(Language.getTranslation("menu.verify"), plugin.getSettingsManager().getClanCommand());
-            }
+        if (cp != null && !cp.getClan().isVerified() && plugin.getSettingsManager().requireVerification() && plugin.getSettingsManager().isPurchaseVerification()) {
+            return MessageFormat.format(Language.getTranslation("menu.verify"), plugin.getSettingsManager().getClanCommand());
         }
         return null;
     }
@@ -69,11 +67,9 @@ public class VerifyCommand extends GenericPlayerCommand {
         if (plugin.getSettingsManager().requireVerification()) {
             if (!clan.isVerified()) {
 
-                if (SimpleClans.hasEconomy() && plugin.getSettingsManager().isPurchaseVerification()) {
-                    if (!SimpleClans.withdrawBalance(player.getName(), plugin.getSettingsManager().getPurchaseVerificationPrice())) {
-                        player.sendMessage(ChatColor.AQUA + Language.getTranslation("not.sufficient.money"));
-                        return;
-                    }
+                if (SimpleClans.hasEconomy() && plugin.getSettingsManager().isPurchaseVerification() && !SimpleClans.withdrawBalance(player.getName(), plugin.getSettingsManager().getPurchaseVerificationPrice())) {
+                    player.sendMessage(ChatColor.AQUA + Language.getTranslation("not.sufficient.money"));
+                    return;
                 }
 
                 clan.setVerified(true);

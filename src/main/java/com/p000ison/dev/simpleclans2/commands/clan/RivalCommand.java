@@ -49,10 +49,8 @@ public class RivalCommand extends GenericPlayerCommand {
     @Override
     public String getMenu(ClanPlayer cp)
     {
-        if (cp != null) {
-            if (cp.isLeader() && cp.getClan().isVerified()) {
-                return Language.getTranslation("menu.rival", plugin.getSettingsManager().getClanCommand());
-            }
+        if (cp != null && cp.isLeader() && cp.getClan().isVerified()) {
+            return Language.getTranslation("menu.rival", plugin.getSettingsManager().getClanCommand());
         }
         return null;
     }

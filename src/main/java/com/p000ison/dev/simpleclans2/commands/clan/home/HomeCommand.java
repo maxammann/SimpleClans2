@@ -48,11 +48,8 @@ public class HomeCommand extends GenericPlayerCommand {
     @Override
     public String getMenu(ClanPlayer cp)
     {
-        if (cp != null) {
-
-            if (cp.getClan().isVerified()) {
-                return MessageFormat.format(Language.getTranslation("menu.home"), plugin.getSettingsManager().getClanCommand());
-            }
+        if (cp != null && cp.getClan().isVerified()) {
+            return MessageFormat.format(Language.getTranslation("menu.home"), plugin.getSettingsManager().getClanCommand());
         }
         return null;
     }
@@ -60,8 +57,6 @@ public class HomeCommand extends GenericPlayerCommand {
     @Override
     public void execute(Player player, String command, String[] args)
     {
-
-
         ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
 
         if (cp != null) {
@@ -71,11 +66,9 @@ public class HomeCommand extends GenericPlayerCommand {
                 if (cp.isTrusted()) {
                     if (player.hasPermission("simpleclans.member.home")) {
 
-                        if (SimpleClans.hasEconomy() && plugin.getSettingsManager().isPurchaseTeleport()) {
-                            if (!SimpleClans.withdrawBalance(player.getName(), plugin.getSettingsManager().getPurchaseTeleportPrice())) {
-                                player.sendMessage(ChatColor.AQUA + Language.getTranslation("not.sufficient.money"));
-                                return;
-                            }
+                        if (SimpleClans.hasEconomy() && plugin.getSettingsManager().isPurchaseTeleport() && !SimpleClans.withdrawBalance(player.getName(), plugin.getSettingsManager().getPurchaseTeleportPrice())) {
+                            player.sendMessage(ChatColor.AQUA + Language.getTranslation("not.sufficient.money"));
+                            return;
                         }
 
                         Location loc = clan.getFlags().getHomeLocation();

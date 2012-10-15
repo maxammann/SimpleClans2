@@ -27,23 +27,23 @@ import org.bukkit.permissions.Permissible;
  */
 public interface Command {
 
-    public String getName();
+    String getName();
 
-    public String[] getUsages();
+    String[] getUsages();
 
-    public void setIdentifiers(String... identifiers);
+    void setIdentifiers(String... identifiers);
 
-    public boolean isIdentifier(String cmd);
+    boolean isIdentifier(String cmd);
 
-    public void setUsages(String... text);
+    void setUsages(String... text);
 
-    public int getMaxArguments();
+    int getMaxArguments();
 
-    public int getMinArguments();
+    int getMinArguments();
 
-    public boolean hasPermission(Permissible sender);
+    boolean hasPermission(Permissible sender);
 
-    public void setArgumentRange(int min, int max);
+    void setArgumentRange(int min, int max);
 
     public static enum Type {
         CLAN("clan", "sc"),

@@ -47,10 +47,8 @@ public class CapeCommand extends GenericPlayerCommand {
     @Override
     public String getMenu(ClanPlayer cp)
     {
-        if (cp != null) {
-            if (cp.getClan().isVerified() && cp.isLeader() && plugin.getSpoutSupport().isEnabled() && plugin.getSettingsManager().isCapesEnabled()) {
-                return MessageFormat.format(Language.getTranslation("menu.cape"), plugin.getSettingsManager().getClanCommand());
-            }
+        if (cp != null && cp.getClan().isVerified() && cp.isLeader() && plugin.getSpoutSupport().isEnabled() && plugin.getSettingsManager().isCapesEnabled()) {
+            return MessageFormat.format(Language.getTranslation("menu.cape"), plugin.getSettingsManager().getClanCommand());
         }
         return null;
     }

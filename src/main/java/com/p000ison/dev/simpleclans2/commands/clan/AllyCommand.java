@@ -52,10 +52,8 @@ public class AllyCommand extends GenericPlayerCommand {
 
         if (clanPlayer != null) {
             Clan clan = clanPlayer.getClan();
-            if (clan != null) {
-                if ((clanPlayer.isLeader() || clanPlayer.hasRankPermission("manage.ally")) && clan.isVerified()) {
-                    return MessageFormat.format(Language.getTranslation("menu.ally"), plugin.getSettingsManager().getClanCommand());
-                }
+            if (clan != null && (clanPlayer.isLeader() || clanPlayer.hasRankPermission("manage.ally")) && clan.isVerified()) {
+                return MessageFormat.format(Language.getTranslation("menu.ally"), plugin.getSettingsManager().getClanCommand());
             }
         }
         return null;

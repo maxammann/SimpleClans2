@@ -24,5 +24,5 @@ package com.p000ison.dev.simpleclans2.database.data;
  */
 public interface Executable {
 
-    public boolean execute(DataManager dataManager);
+    boolean execute(DataManager dataManager);
 }

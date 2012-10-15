@@ -121,11 +121,9 @@ public class CreateCommand extends GenericPlayerCommand {
             return;
         }
 
-        if (SimpleClans.hasEconomy() && plugin.getSettingsManager().isPurchaseCreation()) {
-            if (!SimpleClans.withdrawBalance(player.getName(), plugin.getSettingsManager().getPurchaseCreationPrice())) {
-                player.sendMessage(ChatColor.AQUA + Language.getTranslation("not.sufficient.money"));
-                return;
-            }
+        if (SimpleClans.hasEconomy() && plugin.getSettingsManager().isPurchaseCreation() && !SimpleClans.withdrawBalance(player.getName(), plugin.getSettingsManager().getPurchaseCreationPrice())) {
+            player.sendMessage(ChatColor.AQUA + Language.getTranslation("not.sufficient.money"));
+            return;
         }
 
         Clan clan = plugin.getClanManager().createClan(args[0], name);

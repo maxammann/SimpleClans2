@@ -48,12 +48,13 @@ public class DataManager {
     private AutoSaver autoSaver;
     private ResponseTask responseTask;
 
-    public PreparedStatement DELETE_CLAN, UPDATE_CLAN, INSERT_CLAN, RETRIEVE_CLAN_BY_TAG;
-    public PreparedStatement DELETE_CLANPLAYER, UPDATE_CLANPLAYER, INSERT_CLANPLAYER, RETRIEVE_CLANPLAYER_BY_NAME;
-    public PreparedStatement INSERT_KILL, RETRIEVE_TOTAL_DEATHS_PER_PLAYER;
-    public PreparedStatement INSERT_RANK, UPDATE_RANK, DELETE_RANK_BY_ID, RETRIEVE_RANK_BY_NAME;
-    public PreparedStatement RETRIEVE_BB_LIMIT, INSERT_BB, PURGE_BB, RETRIEVE_BB;
-
+    private PreparedStatement DELETE_CLAN, UPDATE_CLAN, INSERT_CLAN, RETRIEVE_CLAN_BY_TAG;
+    private PreparedStatement DELETE_CLANPLAYER, UPDATE_CLANPLAYER, INSERT_CLANPLAYER, RETRIEVE_CLANPLAYER_BY_NAME;
+    private PreparedStatement RETRIEVE_TOTAL_DEATHS_PER_PLAYER;
+    public PreparedStatement INSERT_KILL;
+    private PreparedStatement INSERT_RANK, UPDATE_RANK, RETRIEVE_RANK_BY_NAME;
+    public PreparedStatement DELETE_RANK_BY_ID;
+    private PreparedStatement RETRIEVE_BB_LIMIT, INSERT_BB, PURGE_BB, RETRIEVE_BB;
 
     public DataManager(SimpleClans plugin)
     {

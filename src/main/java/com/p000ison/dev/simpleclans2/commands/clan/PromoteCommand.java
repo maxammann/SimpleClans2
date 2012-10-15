@@ -51,10 +51,8 @@ public class PromoteCommand extends GenericPlayerCommand {
     @Override
     public String getMenu(ClanPlayer cp)
     {
-        if (cp != null) {
-            if (cp.isLeader()) {
-                return MessageFormat.format(Language.getTranslation("menu.promote"), plugin.getSettingsManager().getClanCommand());
-            }
+        if (cp != null && cp.isLeader()) {
+            return MessageFormat.format(Language.getTranslation("menu.promote"), plugin.getSettingsManager().getClanCommand());
         }
         return null;
     }

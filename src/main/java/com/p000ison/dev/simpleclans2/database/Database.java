@@ -33,19 +33,19 @@ public interface Database {
      *
      * @return connection
      */
-    public Connection getConnection();
+    Connection getConnection();
 
     /**
      * Checks the connection
      *
      * @return whether connection can be established
      */
-    public boolean checkConnection();
+    boolean checkConnection();
 
     /**
      * Close connection
      */
-    public void close();
+    void close();
 
     /**
      * Execute a query
@@ -53,7 +53,7 @@ public interface Database {
      * @param query The query
      * @return The {@link ResultSet}
      */
-    public ResultSet query(String query);
+    ResultSet query(String query);
 
 
     /**
@@ -61,7 +61,7 @@ public interface Database {
      *
      * @param query The query
      */
-    public boolean update(String query);
+    boolean update(String query);
 
 
     /**
@@ -70,7 +70,7 @@ public interface Database {
      * @param query The query
      * @return Weather is was successfully
      */
-    public boolean execute(String query);
+    boolean execute(String query);
 
 
     /**
@@ -79,7 +79,7 @@ public interface Database {
      * @param statement The statement
      * @return The {@link PreparedStatement}
      */
-    public PreparedStatement prepareStatement(String statement);
+    PreparedStatement prepareStatement(String statement);
 
     /**
      * Check whether a table exists
@@ -87,7 +87,7 @@ public interface Database {
      * @param table The table
      * @return Weather the table exists.
      */
-    public boolean existsTable(String table);
+    boolean existsTable(String table);
 
 
     /**
@@ -97,6 +97,6 @@ public interface Database {
      * @param colmn The colmn
      * @return Weather the colmn exists
      */
-    public boolean existsColumn(String table, String colmn);
+    boolean existsColumn(String table, String colmn);
 }
 

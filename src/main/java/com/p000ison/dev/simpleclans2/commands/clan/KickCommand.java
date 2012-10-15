@@ -44,10 +44,8 @@ public class KickCommand extends GenericPlayerCommand {
     @Override
     public String getMenu(ClanPlayer cp)
     {
-        if (cp != null) {
-            if (cp.isLeader()) {
-                return MessageFormat.format(Language.getTranslation("menu.kick"), plugin.getSettingsManager().getClanCommand());
-            }
+        if (cp != null && cp.isLeader()) {
+            return MessageFormat.format(Language.getTranslation("menu.kick"), plugin.getSettingsManager().getClanCommand());
         }
         return null;
     }

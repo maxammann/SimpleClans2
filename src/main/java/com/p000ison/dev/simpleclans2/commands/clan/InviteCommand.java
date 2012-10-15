@@ -47,11 +47,10 @@ public class InviteCommand extends GenericPlayerCommand {
     @Override
     public String getMenu(ClanPlayer cp)
     {
-        if (cp != null) {
-            if (cp.isLeader()) {
-                return MessageFormat.format(Language.getTranslation("menu.invite"), plugin.getSettingsManager().getClanCommand());
-            }
+        if (cp != null && cp.isLeader()) {
+            return MessageFormat.format(Language.getTranslation("menu.invite"), plugin.getSettingsManager().getClanCommand());
         }
+
         return null;
     }
 
@@ -92,11 +91,9 @@ public class InviteCommand extends GenericPlayerCommand {
 
                 if (invitedClanPlayer.getClan() == null) {
 
-                    if (SimpleClans.hasEconomy() && plugin.getSettingsManager().isPurchaseInvite()) {
-                        if (!SimpleClans.withdrawBalance(player.getName(), plugin.getSettingsManager().getInvitationPrice())) {
-                            player.sendMessage(ChatColor.AQUA + Language.getTranslation("not.sufficient.money"));
-                            return;
-                        }
+                    if (SimpleClans.hasEconomy() && plugin.getSettingsManager().isPurchaseInvite() && !SimpleClans.withdrawBalance(player.getName(), plugin.getSettingsManager().getInvitationPrice())) {
+                        player.sendMessage(ChatColor.AQUA + Language.getTranslation("not.sufficient.money"));
+                        return;
                     }
 
                     plugin.getRequestManager().createRequest(new InviteRequest(invitedClanPlayer, cp, cp.getClan()));

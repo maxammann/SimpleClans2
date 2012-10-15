@@ -45,11 +45,10 @@ public class ModifyTagCommand extends GenericPlayerCommand {
     @Override
     public String getMenu(ClanPlayer cp)
     {
-        if (cp != null) {
-            if (cp.isLeader() && cp.getClan().isVerified()) {
-                return MessageFormat.format(Language.getTranslation("0.modtag.tag.1.modify.the.clan.s.tag"), plugin.getSettingsManager().getClanCommand());
-            }
+        if (cp != null && cp.isLeader() && cp.getClan().isVerified()) {
+            return MessageFormat.format(Language.getTranslation("0.modtag.tag.1.modify.the.clan.s.tag"), plugin.getSettingsManager().getClanCommand());
         }
+
         return null;
     }
 

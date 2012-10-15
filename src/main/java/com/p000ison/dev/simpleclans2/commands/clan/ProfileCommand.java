@@ -39,7 +39,7 @@ import java.text.NumberFormat;
  */
 public class ProfileCommand extends GenericPlayerCommand {
 
-    private final static NumberFormat formatter = new DecimalFormat("#.#");
+    private static final NumberFormat formatter = new DecimalFormat("#.#");
 
     public ProfileCommand(SimpleClans plugin)
     {
@@ -53,10 +53,8 @@ public class ProfileCommand extends GenericPlayerCommand {
     @Override
     public String getMenu(ClanPlayer cp)
     {
-        if (cp != null) {
-            if (cp.getClan().isVerified()) {
-                return MessageFormat.format(Language.getTranslation("menu.profile.own"), plugin.getSettingsManager().getClanCommand());
-            }
+        if (cp != null && cp.getClan().isVerified()) {
+            return MessageFormat.format(Language.getTranslation("menu.profile.own"), plugin.getSettingsManager().getClanCommand());
         }
         return null;
     }

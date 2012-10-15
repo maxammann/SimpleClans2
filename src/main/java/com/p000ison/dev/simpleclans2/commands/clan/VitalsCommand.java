@@ -52,10 +52,8 @@ public class VitalsCommand extends GenericPlayerCommand {
     @Override
     public String getMenu(ClanPlayer cp)
     {
-        if (cp != null) {
-            if (cp.isTrusted() && cp.getClan().isVerified()) {
-                return MessageFormat.format(Language.getTranslation("menu.vitals"), plugin.getSettingsManager().getClanCommand());
-            }
+        if (cp != null && cp.isTrusted() && cp.getClan().isVerified()) {
+            return MessageFormat.format(Language.getTranslation("menu.vitals"), plugin.getSettingsManager().getClanCommand());
         }
         return null;
     }

@@ -48,10 +48,8 @@ public class BBAddCommand extends GenericPlayerCommand {
     @Override
     public String getMenu(ClanPlayer cp)
     {
-        if (cp != null) {
-            if (cp.getClan().isVerified()) {
-                return MessageFormat.format(Language.getTranslation("menu.bb.add"), plugin.getSettingsManager().getClanCommand());
-            }
+        if (cp != null && cp.getClan().isVerified()) {
+            return MessageFormat.format(Language.getTranslation("menu.bb.add"), plugin.getSettingsManager().getClanCommand());
         }
         return null;
     }

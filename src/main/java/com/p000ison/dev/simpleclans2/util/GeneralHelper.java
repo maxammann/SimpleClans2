@@ -143,7 +143,7 @@ public final class GeneralHelper {
 
     public static boolean containsColor(String test, char alternateChar, Character color)
     {
-        return test.contains(String.valueOf(alternateChar) + String.valueOf(color));
+        return test.contains(alternateChar + String.valueOf(color));
     }
 
     public static boolean containsColor(String test, char alternateChar, char... colors)

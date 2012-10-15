@@ -24,5 +24,5 @@ package com.p000ison.dev.simpleclans2.database.data.response;
  */
 public interface ResponseAble {
 
-    public boolean response();
+    boolean response();
 }

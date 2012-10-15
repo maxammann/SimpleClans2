@@ -105,11 +105,9 @@ public class ListCommand extends GenericConsoleCommand {
 
         for (int i = boundings[0]; i < boundings[1]; i++) {
             Clan clan = clans.get(i);
-            if (!plugin.getSettingsManager().isShowUnverifiedClansOnList()) {
-                if (!clan.isVerified()) {
-                    completeSize--;
-                    continue;
-                }
+            if (!plugin.getSettingsManager().isShowUnverifiedClansOnList() && !clan.isVerified()) {
+                completeSize--;
+                continue;
             }
 
             String tag = clan.getTag();

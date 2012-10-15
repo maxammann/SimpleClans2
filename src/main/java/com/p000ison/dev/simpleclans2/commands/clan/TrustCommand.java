@@ -45,10 +45,8 @@ public class TrustCommand extends GenericPlayerCommand {
     @Override
     public String getMenu(ClanPlayer cp)
     {
-        if (cp != null) {
-            if (cp.isLeader() && cp.getClan().isVerified()) {
-                return Language.getTranslation("menu.trust", plugin.getSettingsManager().getClanCommand());
-            }
+        if (cp != null && cp.isLeader() && cp.getClan().isVerified()) {
+            return Language.getTranslation("menu.trust", plugin.getSettingsManager().getClanCommand());
         }
         return null;
     }

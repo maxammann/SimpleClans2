@@ -31,5 +31,5 @@ public interface KDR {
      *
      * @return The KDR of this object.
      */
-    public float getKDR();
+    float getKDR();
 }

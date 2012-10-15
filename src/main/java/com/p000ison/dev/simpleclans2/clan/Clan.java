@@ -544,16 +544,14 @@ public class Clan implements KDR, Comparable<Clan> {
     {
         Clan previous = clanPlayer.getClan();
 
-        if (previous != null) {
-            if (isVerified()) {
-                String pastClan = previous.getTag();
+        if (previous != null && isVerified()) {
+            String pastClan = previous.getTag();
 
-                if (clanPlayer.isLeader()) {
-                    pastClan += '*';
-                }
-
-                clanPlayer.addPastClan(pastClan);
+            if (clanPlayer.isLeader()) {
+                pastClan += '*';
             }
+
+            clanPlayer.addPastClan(pastClan);
         }
 
         allMembers.add(clanPlayer);

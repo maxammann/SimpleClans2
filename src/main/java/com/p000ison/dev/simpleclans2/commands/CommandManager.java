@@ -261,7 +261,7 @@ public class CommandManager {
     public static int getPage(String[] args)
     {
         if (args.length == 1) {
-           return getPage(args[0]);
+            return getPage(args[0]);
         }
         return 0;
     }

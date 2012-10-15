@@ -47,10 +47,8 @@ public class RankAddPermissionCommand extends GenericPlayerCommand {
     @Override
     public String getMenu(ClanPlayer clanPlayer)
     {
-        if (clanPlayer != null) {
-            if (clanPlayer.isLeader() || clanPlayer.hasRankPermission("manage.ranks")) {
-                return Language.getTranslation("menu.rank.add.permission", plugin.getSettingsManager().getClanCommand());
-            }
+        if (clanPlayer != null && (clanPlayer.isLeader() || clanPlayer.hasRankPermission("manage.ranks"))) {
+            return Language.getTranslation("menu.rank.add.permission", plugin.getSettingsManager().getClanCommand());
         }
         return null;
     }

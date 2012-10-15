@@ -22,5 +22,5 @@ package com.p000ison.dev.simpleclans2.requests;
 
 public interface Executable {
 
-    public boolean execute();
+    boolean execute();
 }

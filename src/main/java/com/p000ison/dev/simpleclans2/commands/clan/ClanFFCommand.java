@@ -34,7 +34,6 @@ import java.text.MessageFormat;
  */
 public class ClanFFCommand extends GenericPlayerCommand {
 
-
     public ClanFFCommand(SimpleClans plugin)
     {
         super("Clanff", plugin);
@@ -47,10 +46,8 @@ public class ClanFFCommand extends GenericPlayerCommand {
     @Override
     public String getMenu(ClanPlayer cp)
     {
-        if (cp != null) {
-            if ((cp.isLeader() || cp.hasRankPermission("manage.clanff"))) {
-                return MessageFormat.format(Language.getTranslation("menu.clanff"), plugin.getSettingsManager().getClanCommand());
-            }
+        if (cp != null && (cp.isLeader() || cp.hasRankPermission("manage.clanff"))) {
+            return MessageFormat.format(Language.getTranslation("menu.clanff"), plugin.getSettingsManager().getClanCommand());
         }
         return null;
     }
