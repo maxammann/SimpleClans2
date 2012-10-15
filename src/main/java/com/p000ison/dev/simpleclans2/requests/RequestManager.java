@@ -75,14 +75,21 @@ public class RequestManager {
 
             if (request.isAcceptor(acceptor)) {
 
-                if (result == VoteResult.ACCEPT) {
-                    request.accept(acceptor);
-                } else if (result == VoteResult.DENY) {
-                    request.deny(acceptor);
-                } else if (result == VoteResult.ABSTAINED) {
-                    request.deny(acceptor);
-                } else {
-                    return null;
+                switch (result) {
+                    case ACCEPT:
+                        request.accept(acceptor);
+                        break;
+                    case DENY:
+                        request.deny(acceptor);
+                        break;
+                    case ABSTAINED:
+                        if (request instanceof SingleAcceptorRequest) {
+                            return request;
+                        }
+                        request.abstain(acceptor);
+                        break;
+                    default:
+                        return null;
                 }
 
                 //check if we were successfully

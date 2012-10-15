@@ -79,7 +79,7 @@ public class KickCommand extends GenericPlayerCommand {
                 }
 
                 if (!clan.isLeader(kicked)) {
-                    clan.addBBMessage(cp, ChatColor.AQUA + MessageFormat.format(Language.getTranslation("has.been.kicked.by"), kicked, player.getName()));
+                    clan.addBBMessage(cp, ChatColor.AQUA + MessageFormat.format(Language.getTranslation("has.been.kicked.by"), kicked.getName(), player.getName()));
                     clan.removeMember(kicked);
                 } else {
                     player.sendMessage(ChatColor.RED + Language.getTranslation("you.cannot.kick.another.leader"));

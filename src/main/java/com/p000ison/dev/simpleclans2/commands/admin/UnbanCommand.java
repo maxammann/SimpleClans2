@@ -36,8 +36,8 @@ public class UnbanCommand extends GenericConsoleCommand {
     {
         super("Unban", plugin);
         setArgumentRange(1, 1);
-        setUsages(MessageFormat.format(Language.getTranslation("usage.Command"), plugin.getSettingsManager().getClanCommand()));
-        setIdentifiers(Language.getTranslation("Command.command"));
+        setUsages(MessageFormat.format(Language.getTranslation("usage.unban"), plugin.getSettingsManager().getClanCommand()));
+        setIdentifiers(Language.getTranslation("unban.command"));
         setPermission("simpleclans.mod.unban");
     }
 

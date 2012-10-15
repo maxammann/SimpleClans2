@@ -19,6 +19,8 @@
 
 package com.p000ison.dev.simpleclans2.exceptions.handling;
 
+import com.p000ison.dev.simpleclans2.SimpleClans;
+
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -27,13 +29,34 @@ import java.util.Queue;
  */
 public class ExceptionReporterTask extends LinkedList<String> implements Runnable {
 
-    private static Queue<ExceptionReport> queue = new LinkedList<ExceptionReport>();
+    private static Queue<ExceptionReport> queue;
     private static final int MAX_REPORTS = 15;
+
+    public ExceptionReporterTask()
+    {
+        ExceptionReporterTask.queue = new LinkedList<ExceptionReport>();
+    }
 
     public static boolean addReport(ExceptionReport exceptionReport)
     {
+        if (queue == null) {
+            return false;
+        }
         if (queue.size() < MAX_REPORTS) {
             queue.add(exceptionReport);
+            return true;
+        }
+
+        return false;
+    }
+
+    public static boolean addReport(Throwable thrown)
+    {
+        if (queue == null) {
+            return false;
+        }
+        if (queue.size() < MAX_REPORTS) {
+            queue.add(new ExceptionReport(SimpleClans.getPluginName(), SimpleClans.getPluginVersion(), thrown));
             return true;
         }
 

@@ -5,6 +5,7 @@ general:
     server-name: 'SimpleClans'
     global-ff: false
     auto-save: 5
+    report-errors: true
 database:
     mode: 'mysql'
     host: 'localhost'

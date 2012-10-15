@@ -42,11 +42,9 @@ public abstract class SingleAcceptorRequest extends Request {
 
     public void processRequest()
     {
-        acceptor.toPlayer().sendMessage("accepted");
         acceptor.setLastVoteResult(VoteResult.UNKNOWN);
 
         execute();
-        getRequester().toPlayer().sendMessage("accept");
     }
 
     @Override
@@ -57,10 +55,7 @@ public abstract class SingleAcceptorRequest extends Request {
 
     public void cancelRequest()
     {
-        acceptor.toPlayer().sendMessage("Cancelled");
         acceptor.setLastVoteResult(VoteResult.UNKNOWN);
-
-        getRequester().toPlayer().sendMessage("Cancelledbo");
     }
 
     public boolean checkRequest()

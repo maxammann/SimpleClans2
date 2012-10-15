@@ -56,23 +56,18 @@ public abstract class MultipleAcceptorsRequest extends Request {
     public void processRequest()
     {
         for (ClanPlayer acceptor : getAcceptors()) {
-            acceptor.toPlayer().sendMessage("accepted");
             acceptor.setLastVoteResult(VoteResult.UNKNOWN);
         }
 
         execute();
-        getRequester().toPlayer().sendMessage("accept");
     }
 
     public void cancelRequest()
     {
 
         for (ClanPlayer acceptor : getAcceptors()) {
-            acceptor.toPlayer().sendMessage("Cancelled");
             acceptor.setLastVoteResult(VoteResult.UNKNOWN);
         }
-
-        getRequester().toPlayer().sendMessage("Cancelledbo");
     }
 
     @Override

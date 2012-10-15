@@ -61,6 +61,7 @@ public class SettingsManager {
     private boolean globalFF;
     private int autoSave;
     private String helpFormat;
+    private boolean reportErrors;
 
     private int maxTagLenght, minTagLenght, maxNameLenght, minNameLenght;
     private char[] disallowedColors;
@@ -118,6 +119,7 @@ public class SettingsManager {
             globalFF = general.getBoolean("global-ff");
             autoSave = general.getInt("auto-save");
             helpFormat = ChatBlock.parseColors(general.getString("help-format"));
+            reportErrors = general.getBoolean("report-errors");
 
             ConfigurationSection databaseSection = config.getConfigurationSection("database");
             databaseConfiguration = new DatabaseConfiguration();
@@ -596,5 +598,10 @@ public class SettingsManager {
     public double getRivalLimitPercent()
     {
         return rivalLimitPercent;
+    }
+
+    public boolean isReportErrors()
+    {
+        return reportErrors;
     }
 }

@@ -66,6 +66,10 @@ public class ClanPlayerManager {
             }
         }
 
+        players.add(clanPlayer);
+
+        plugin.getDataManager().insertClanPlayer(clanPlayer);
+
         long id = plugin.getDataManager().retrieveClanPlayerId(clanPlayer.getName());
 
         if (id < 0) {
@@ -73,10 +77,6 @@ public class ClanPlayerManager {
         }
 
         clanPlayer.setId(id);
-
-        players.add(clanPlayer);
-
-        plugin.getDataManager().insertClanPlayer(clanPlayer);
 
         plugin.getServer().getPluginManager().callEvent(new ClanPlayerCreateEvent(clanPlayer));
 

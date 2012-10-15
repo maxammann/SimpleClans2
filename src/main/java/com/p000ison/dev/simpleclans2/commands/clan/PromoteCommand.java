@@ -83,30 +83,30 @@ public class PromoteCommand extends GenericPlayerCommand {
             return;
         }
 
-        ClanPlayer promoted = plugin.getClanPlayerManager().getClanPlayer(player);
+        ClanPlayer promoted = plugin.getClanPlayerManager().getClanPlayer(promotedPlayer);
 
 
-        if (!promotedPlayer.equals(player)) {
+        if (promotedPlayer.equals(player)) {
             player.sendMessage(ChatColor.RED + Language.getTranslation("you.cannot.promote.yourself"));
             return;
         }
 
-        if (clan.isMember(promoted)) {
+        if (!clan.isMember(promoted)) {
             player.sendMessage(ChatColor.RED + Language.getTranslation("the.player.is.not.a.member.of.your.clan"));
             return;
         }
 
-        if (!promoted.isLeader()) {
+        if (promoted.isLeader()) {
             player.sendMessage(ChatColor.RED + Language.getTranslation("the.player.is.already.a.leader"));
             return;
         }
 
-        if (promotedPlayer.hasPermission("simpleclans.leader.promotable")) {
+        if (!promotedPlayer.hasPermission("simpleclans.leader.promotable")) {
             player.sendMessage(ChatColor.RED + Language.getTranslation("the.member.to.be.promoted.must.be.online"));
             return;
         }
 
-        if (clan.allLeadersOnline()) {
+        if (!clan.allLeadersOnline()) {
             player.sendMessage(ChatColor.RED + Language.getTranslation("all.leaders.must.be.online.to.vote.on.this.promotion"));
             return;
         }

@@ -389,6 +389,7 @@ public class ClanPlayer implements KDR {
 
     public void unset()
     {
+        setClan(null);
         this.setLeader(false);
         this.setTrusted(false);
     }

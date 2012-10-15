@@ -73,15 +73,18 @@ public class SCEntityListener implements Listener {
                 return;
             }
 
+            System.out.println("Default test: " + attackerPlayer.getName());
+
             ClanPlayer attacker = plugin.getClanPlayerManager().getClanPlayer(attackerPlayer);
             ClanPlayer victim = plugin.getClanPlayerManager().getClanPlayer(victimPlayer);
 
-            Clan attackerClan = attacker.getClan();
-            Clan victimClan = victim.getClan();
+            Clan attackerClan = attacker == null ? null : attacker.getClan();
+            Clan victimClan = victim == null ? null : victim.getClan();
 
             if (plugin.getSettingsManager().isOnlyPvPinWar()) {
-                // if one doesn't have clan then they cant be at war
+                System.out.println("only pvp in war");
 
+                // if one doesn't have clan then they cant be at war
                 if (attackerClan == null || victimClan == null) {
                     event.setCancelled(true);
                     return;
@@ -100,38 +103,31 @@ public class SCEntityListener implements Listener {
                 return;
             }
 
-            if (victimClan != null) {
-                if (attackerClan != null) {
-                    // personal ff enabled, allow damage
-                    //skip if globalff is on
-                    if (plugin.getSettingsManager().isGlobalFFForced() || victim.isFriendlyFireOn()) {
-                        return;
-                    }
+            if (victimClan != null && attackerClan != null) {
+                System.out.println("both are in clans");
+                // personal ff enabled, allow damage
+                //skip if globalff is on
+                if (plugin.getSettingsManager().isGlobalFFForced() || victim.isFriendlyFireOn()) {
+                    return;
+                }
 
-                    // clan ff enabled, allow damage
+                // clan ff enabled, allow damage
 
-                    if (plugin.getSettingsManager().isGlobalFFForced() || victimClan.isFriendlyFireOn()) {
-                        return;
-                    }
+                if (plugin.getSettingsManager().isGlobalFFForced() || victimClan.isFriendlyFireOn()) {
+                    return;
+                }
 
-                    // same clan, deny damage
+                // same clan, deny damage
 
-                    if (victimClan.equals(attackerClan)) {
-                        event.setCancelled(true);
-                        return;
-                    }
+                if (victimClan.equals(attackerClan)) {
+                    event.setCancelled(true);
+                    return;
+                }
 
-                    // ally clan, deny damage
+                // ally clan, deny damage
 
-                    if (victimClan.isAlly(attackerClan)) {
-                        event.setCancelled(true);
-                    }
-                } else {
-                    // not part of a clan - check if safeCivilians is set
-                    // ignore setting if he has a specific permissions
-                    if (plugin.getSettingsManager().isSaveCivilians() && !victimPlayer.hasPermission("simpleclans.ignore-safe-civilians")) {
-                        event.setCancelled(true);
-                    }
+                if (victimClan.isAlly(attackerClan)) {
+                    event.setCancelled(true);
                 }
             } else {
                 // not part of a clan - check if safeCivilians is set
@@ -140,7 +136,6 @@ public class SCEntityListener implements Listener {
                     event.setCancelled(true);
                 }
             }
-
         }
     }
 

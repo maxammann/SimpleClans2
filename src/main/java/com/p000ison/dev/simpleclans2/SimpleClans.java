@@ -82,6 +82,8 @@ public class SimpleClans extends JavaPlugin implements Core {
     private SpoutSupport spoutSupport;
     private static Economy economy;
 
+    private static String name, version;
+
     @Override
     public void onEnable()
     {
@@ -90,7 +92,8 @@ public class SimpleClans extends JavaPlugin implements Core {
         try {
             Logging.setInstance(getLogger());
 
-            getServer().getScheduler().scheduleAsyncRepeatingTask(this, new ExceptionReporterTask(), 0L, 1200L);
+            name = getName();
+            version = getDescription().getVersion();
 
             Logging.debug("Loading the language file..");
             long startLanguage = System.currentTimeMillis();
@@ -106,6 +109,10 @@ public class SimpleClans extends JavaPlugin implements Core {
             Logging.debug("Loading managers...");
             loadManagers();
             Logging.debug("Loading the managers finished!");
+
+            if (getSettingsManager().isReportErrors()) {
+                getServer().getScheduler().scheduleAsyncRepeatingTask(this, new ExceptionReporterTask(), 0L, 1200L);
+            }
 
             com.p000ison.dev.simpleclans2.util.chat.ChatBlock.setHeadColor(getSettingsManager().getHeadingPageColor());
             com.p000ison.dev.simpleclans2.util.chat.ChatBlock.setSubColor(getSettingsManager().getSubPageColor());
@@ -227,6 +234,8 @@ public class SimpleClans extends JavaPlugin implements Core {
         commandManager.addCommand(new TrustCommand(this));
         commandManager.addCommand(new UnTrustCommand(this));
         commandManager.addCommand(new RivalCommand(this));
+        commandManager.addCommand(new ClanFFCommand(this));
+        commandManager.addCommand(new UnbanCommand(this));
 
 //        commandManager.addCommand(new LookupCommand(this));
 //        commandManager.addCommand(new RosterCommand(this));
@@ -342,5 +351,15 @@ public class SimpleClans extends JavaPlugin implements Core {
     public SpoutSupport getSpoutSupport()
     {
         return spoutSupport;
+    }
+
+    public static String getPluginName()
+    {
+        return name;
+    }
+
+    public static String getPluginVersion()
+    {
+        return version;
     }
 }

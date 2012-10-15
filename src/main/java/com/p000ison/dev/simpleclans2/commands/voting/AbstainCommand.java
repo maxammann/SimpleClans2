@@ -23,6 +23,7 @@ import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
 import com.p000ison.dev.simpleclans2.language.Language;
+import com.p000ison.dev.simpleclans2.requests.MultipleAcceptorsRequest;
 import com.p000ison.dev.simpleclans2.requests.Request;
 import com.p000ison.dev.simpleclans2.requests.VoteResult;
 import org.bukkit.entity.Player;
@@ -55,7 +56,11 @@ public class AbstainCommand extends GenericPlayerCommand {
         Request request = plugin.getRequestManager().vote(clanPlayer, VoteResult.ABSTAINED);
 
         if (request != null) {
-            request.announceMessage(Language.getTranslation("voted.to.abstain", player.getDisplayName()));
+            if (request instanceof MultipleAcceptorsRequest) {
+                request.announceMessage(Language.getTranslation("voted.to.abstain", player.getDisplayName()));
+            } else {
+                player.sendMessage("You can only abstein if multi");
+            }
         } else {
             player.sendMessage(Language.getTranslation("nothing.to.abstain"));
         }
