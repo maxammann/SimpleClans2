@@ -89,8 +89,8 @@ public class AlliancesCommand extends GenericConsoleCommand {
         ChatBlock chatBlock = new ChatBlock();
 
         ChatBlock.sendBlank(sender);
-        ChatBlock.sendSingle(sender, plugin.getSettingsManager().getServerName() + subColor + " " + Language.getTranslation("alliances"));
-        ChatBlock.sendBlank(sender);
+        ChatBlock.sendHead(sender, plugin.getSettingsManager().getServerName(), Language.getTranslation("alliances"));
+        ChatBlock.sendBlank(sender, 2);
 
         chatBlock.setAlignment(Align.LEFT, Align.LEFT);
         chatBlock.addRow(headColor + Language.getTranslation("clan"), Language.getTranslation("allies"));

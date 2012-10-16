@@ -139,12 +139,17 @@ public class ClanPlayer implements KDR {
 
     public long getLastSeenDate()
     {
-        return lastSeen;
+        return toPlayer() == null ? lastSeen : System.currentTimeMillis();
     }
 
     public void setLastSeenDate(long lastSeen)
     {
         this.lastSeen = lastSeen;
+    }
+
+    public void updateLastSeen()
+    {
+        this.lastSeen = System.currentTimeMillis();
     }
 
     public long getJoinDate()

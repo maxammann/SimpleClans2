@@ -34,7 +34,7 @@ import java.util.List;
 public class ChatBlock {
 
     private static final int COLUMN_SPACING = 12;
-    private static final int MAX_LINE_LENGTH = 318;
+    private static final int MAX_LINE_LENGTH = 315;
 
     private static String prefix = null;
     private static ChatColor headColor, subColor;

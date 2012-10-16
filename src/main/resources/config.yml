@@ -64,6 +64,7 @@ clan:
        lines: 5
        format: '&4- -bb'
    unrivalable-clans: [ ]
+   modify-tag-completely: false
 paging:
    colors:
        heading-color: '8'

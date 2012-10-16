@@ -22,8 +22,12 @@ package com.p000ison.dev.simpleclans2.clan;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
+import com.p000ison.dev.simpleclans2.language.Language;
+import com.p000ison.dev.simpleclans2.util.GeneralHelper;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 
+import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Locale;
@@ -192,5 +196,82 @@ public class ClanManager {
         }
 
         return i;
+    }
+
+    /**
+     * Verifies the change or the set of a clan
+     *
+     * @param reportTo  The sender to report the errors
+     * @param tag       The tag to change
+     * @param tagBefore If there was a tag before, else null
+     * @return Weather this tag is valid
+     */
+    public boolean verifyClanTag(CommandSender reportTo, String tag, String tagBefore, boolean mod)
+    {
+        String cleanTag = ChatColor.stripColor(tag).toLowerCase(Locale.US);
+
+        if (!mod) {
+            if (cleanTag.length() > plugin.getSettingsManager().getMaxTagLenght()) {
+                reportTo.sendMessage(ChatColor.RED + MessageFormat.format(Language.getTranslation("your.clan.tag.cannot.be.longer.than.characters"), plugin.getSettingsManager().getMaxTagLenght()));
+                return false;
+            }
+
+            if (cleanTag.length() < plugin.getSettingsManager().getMinTagLenght()) {
+                reportTo.sendMessage(ChatColor.RED + MessageFormat.format(Language.getTranslation("your.clan.tag.must.be.longer.than.characters"), plugin.getSettingsManager().getMinTagLenght()));
+                return false;
+            }
+
+            if (GeneralHelper.containsColor(tag, '&', plugin.getSettingsManager().getDisallowedColors())) {
+                reportTo.sendMessage(ChatColor.RED + MessageFormat.format(Language.getTranslation("your.tag.cannot.contain.the.following.colors"), GeneralHelper.arrayToString(plugin.getSettingsManager().getDisallowedColors())));
+                return false;
+            }
+            if (plugin.getSettingsManager().isTagDisallowed(cleanTag)) {
+                reportTo.sendMessage(ChatColor.RED + Language.getTranslation("that.tag.name.is.disallowed"));
+                return false;
+            }
+        }
+
+        if (tagBefore != null) {
+            if (!plugin.getSettingsManager().isModifyTagCompletely()) {
+                if (!tag.equalsIgnoreCase(tagBefore)) {
+                    reportTo.sendMessage(ChatColor.RED + Language.getTranslation("you.can.only.modify.the.color.and.case.of.the.tag"));
+                    return false;
+                }
+            }
+        }
+
+        if (existsClan(tag)) {
+            reportTo.sendMessage(ChatColor.RED + Language.getTranslation("clan.with.this.tag.already.exists"));
+            return false;
+        }
+
+        if (!cleanTag.matches("[0-9a-zA-Z]*")) {
+            reportTo.sendMessage(ChatColor.RED + Language.getTranslation("your.clan.tag.can.only.contain.letters.numbers.and.color.codes"));
+            return false;
+        }
+
+        return true;
+    }
+
+    public boolean verifyClanName(CommandSender reportTo, String name, boolean mod)
+    {
+        if (!mod) {
+            if (ChatColor.stripColor(name).length() > plugin.getSettingsManager().getMaxNameLenght()) {
+                reportTo.sendMessage(ChatColor.RED + MessageFormat.format(Language.getTranslation("your.clan.name.cannot.be.longer.than.characters"), plugin.getSettingsManager().getMaxTagLenght()));
+                return false;
+            }
+
+            if (ChatColor.stripColor(name).length() < plugin.getSettingsManager().getMinNameLenght()) {
+                reportTo.sendMessage(ChatColor.RED + MessageFormat.format(Language.getTranslation("your.clan.name.must.be.longer.than.characters"), plugin.getSettingsManager().getMinTagLenght()));
+                return false;
+            }
+        }
+
+        if (name.contains("&")) {
+            reportTo.sendMessage(ChatColor.RED + Language.getTranslation("your.clan.name.cannot.contain.color.codes"));
+            return false;
+        }
+
+        return true;
     }
 }

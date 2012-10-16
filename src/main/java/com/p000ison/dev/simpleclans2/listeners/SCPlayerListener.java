@@ -52,6 +52,12 @@ public class SCPlayerListener implements Listener {
     {
         Player player = event.getPlayer();
 
+        ClanPlayer clanPlayer = plugin.getClanPlayerManager().getClanPlayer(player);
+
+        if (clanPlayer != null) {
+            clanPlayer.updateLastSeen();
+        }
+
         plugin.getRequestManager().clearRequests(player.getName());
     }
 
@@ -63,20 +69,10 @@ public class SCPlayerListener implements Listener {
         ClanPlayer clanPlayer = plugin.getClanPlayerManager().getClanPlayer(player);
 
         if (clanPlayer != null) {
-
             Clan clan = clanPlayer.getClan();
 
             if (plugin.getSettingsManager().isMotdBBEnabled()) {
-
                 plugin.getDataManager().addResponse(new BBRetrieveResponse(plugin, player, clan, -1, plugin.getSettingsManager().getMotdBBLines(), plugin.getSettingsManager().getMotdBBFormat()));
-//                List<String> bb = clanPlayer.getClan().getBB();
-//
-//                if (bb.size() > 0) {
-//
-//                    for (int i = 0; i < plugin.getSettingsManager().getMotdBBLines() && i < bb.size(); i++) {
-//                        player.sendMessage(ChatBlock.parseColors(plugin.getSettingsManager().getMotdBBFormat().replace("-bb", bb.get(i))));
-//                    }
-//                }
             }
 
             clan.updateLastAction();

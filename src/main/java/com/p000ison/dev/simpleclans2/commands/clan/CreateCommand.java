@@ -29,7 +29,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.text.MessageFormat;
-import java.util.Locale;
 
 /**
  * Represents a CreateCommand
@@ -61,54 +60,6 @@ public class CreateCommand extends GenericPlayerCommand {
     @Override
     public void execute(Player player, String command, String[] args)
     {
-
-        String tag = args[0];
-        String cleanTag = ChatColor.stripColor(args[0]);
-
-        String name = GeneralHelper.arrayBoundsToString(1, args);
-
-        if (player.hasPermission("simpleclans.mod.bypass")) {
-            if (cleanTag.length() > plugin.getSettingsManager().getMaxTagLenght()) {
-                player.sendMessage(ChatColor.RED + MessageFormat.format(Language.getTranslation("your.clan.tag.cannot.be.longer.than.characters"), plugin.getSettingsManager().getMaxTagLenght()));
-                return;
-            }
-
-            if (cleanTag.length() < plugin.getSettingsManager().getMinTagLenght()) {
-                player.sendMessage(ChatColor.RED + MessageFormat.format(Language.getTranslation("your.clan.tag.must.be.longer.than.characters"), plugin.getSettingsManager().getMinTagLenght()));
-                return;
-            }
-
-            if (GeneralHelper.containsColor(tag, '&', plugin.getSettingsManager().getDisallowedColors())) {
-                player.sendMessage(ChatColor.RED + MessageFormat.format(Language.getTranslation("your.tag.cannot.contain.the.following.colors"), GeneralHelper.arrayToString(plugin.getSettingsManager().getDisallowedColors())));
-                return;
-            }
-
-            if (ChatColor.stripColor(name).length() > plugin.getSettingsManager().getMaxNameLenght()) {
-                player.sendMessage(ChatColor.RED + MessageFormat.format(Language.getTranslation("your.clan.name.cannot.be.longer.than.characters"), plugin.getSettingsManager().getMaxTagLenght()));
-                return;
-            }
-
-            if (ChatColor.stripColor(name).length() < plugin.getSettingsManager().getMinNameLenght()) {
-                player.sendMessage(ChatColor.RED + MessageFormat.format(Language.getTranslation("your.clan.name.must.be.longer.than.characters"), plugin.getSettingsManager().getMinTagLenght()));
-                return;
-            }
-
-            if (plugin.getSettingsManager().isTagDisallowed(cleanTag.toLowerCase(Locale.US))) {
-                player.sendMessage(ChatColor.RED + Language.getTranslation("that.tag.name.is.disallowed"));
-                return;
-            }
-        }
-
-        if (!cleanTag.matches("[0-9a-zA-Z]*")) {
-            player.sendMessage(ChatColor.RED + Language.getTranslation("your.clan.tag.can.only.contain.letters.numbers.and.color.codes"));
-            return;
-        }
-
-        if (name.contains("&")) {
-            player.sendMessage(ChatColor.RED + Language.getTranslation("your.clan.name.cannot.contain.color.codes"));
-            return;
-        }
-
         ClanPlayer cp = plugin.getClanPlayerManager().getCreateClanPlayerExact(player);
 
         if (cp.getClan() != null) {
@@ -116,8 +67,15 @@ public class CreateCommand extends GenericPlayerCommand {
             return;
         }
 
-        if (plugin.getClanManager().existsClan(cleanTag)) {
-            player.sendMessage(ChatColor.RED + Language.getTranslation("clan.with.this.tag.already.exists"));
+        String tag = args[0];
+        String name = GeneralHelper.arrayBoundsToString(1, args);
+        boolean bypass = player.hasPermission("simpleclans.mod.bypass");
+
+        if (!plugin.getClanManager().verifyClanTag(player, tag, null, bypass)) {
+            return;
+        }
+
+        if (!plugin.getClanManager().verifyClanName(player, name, bypass)) {
             return;
         }
 

@@ -20,9 +20,11 @@
 package com.p000ison.dev.simpleclans2.commands.clan;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
+import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
 import com.p000ison.dev.simpleclans2.language.Language;
+import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -46,7 +48,7 @@ public class ModifyTagCommand extends GenericPlayerCommand {
     public String getMenu(ClanPlayer cp)
     {
         if (cp != null && cp.isLeader() && cp.getClan().isVerified()) {
-            return MessageFormat.format(Language.getTranslation("0.modtag.tag.1.modify.the.clan.s.tag"), plugin.getSettingsManager().getClanCommand());
+            return MessageFormat.format(Language.getTranslation("menu.modtag"), plugin.getSettingsManager().getClanCommand());
         }
 
         return null;
@@ -55,46 +57,33 @@ public class ModifyTagCommand extends GenericPlayerCommand {
     @Override
     public void execute(Player player, String label, String[] args)
     {
-//        ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
-//
-//        if (cp != null) {
-//            Clan clan = cp.getClan();
-//
-//            if (clan.isVerified()) {
-//                if (clan.isLeader(cp)) {
-//
-//                    String newTag = args[0];
-//                    String cleanTag = Helper.cleanTag(newtag);
-//
-//                    if (Helper.stripColors(newtag).length() <= plugin.getSettingsManager().getTagMaxLength()) {
-//                        if (!plugin.getSettingsManager().hasDisallowedColor(newtag)) {
-//                            if (Helper.stripColors(newtag).matches("[0-9a-zA-Z]*")) {
-//                                if (cleantag.equals(clan.getTag())) {
-//                                    clan.addBb(player.getName(), ChatColor.AQUA + MessageFormat.format(Language.getTranslation("tag.changed.to.0"), Helper.parseColors(newtag)));
-//                                    clan.changeClanTag(newtag);
-//                                    plugin.getClanManager().updateDisplayName(player.getPlayer());
-//                                } else {
-//                                    ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("you.can.only.modify.the.color.and.case.of.the.tag"));
-//                                }
-//                            } else {
-//                                ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("your.clan.tag.can.only.contain.letters.numbers.and.color.codes"));
-//                            }
-//                        } else {
-//                            ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(Language.getTranslation("your.tag.cannot.contain.the.following.colors"), plugin.getSettingsManager().getDisallowedColorString()));
-//                        }
-//
-//                    } else {
-//                        ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(Language.getTranslation("your.clan.tag.cannot.be.longer.than.characters"), plugin.getSettingsManager().getTagMaxLength()));
-//                    }
-//
-//                } else {
-//                    ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("no.leader.permissions"));
-//                }
-//            } else {
-//                ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("clan.is.not.verified"));
-//            }
-//        } else {
-//            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
-//        }
+        ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
+
+        if (cp != null) {
+            Clan clan = cp.getClan();
+
+            if (clan.isVerified()) {
+                if (clan.isLeader(cp)) {
+
+                    String newTag = args[0];
+                    String tagBefore = clan.getTag();
+                    boolean bypass = player.hasPermission("simpleclans.mod.bypass");
+
+                    if (!plugin.getClanManager().verifyClanTag(player, newTag, tagBefore, bypass)) {
+                        return;
+                    }
+
+                    clan.addBBMessage(cp, MessageFormat.format(Language.getTranslation("tag.changed.to.0"), newTag));
+                    clan.setTag(newTag);
+                    clan.update();
+                } else {
+                    ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("no.leader.permissions"));
+                }
+            } else {
+                ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("clan.is.not.verified"));
+            }
+        } else {
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
+        }
     }
 }

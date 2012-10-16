@@ -74,6 +74,7 @@ public class SettingsManager {
     private boolean setHomeOnlyOnce;
     private Set<Long> unRivalAbleClans;
     private double rivalLimitPercent;
+    private boolean modifyTagCompletely;
 
     private String clanBB, clanPlayerBB, defaultBB;
     private int maxBBDisplayLines, maxBBLenght;
@@ -137,7 +138,6 @@ public class SettingsManager {
             teleportFuzzyness = teleportation.getDouble("teleport-fuzzyness");
             timeUntilTeleport = teleportation.getInt("teleport-waiting-time");
 
-
             ConfigurationSection pvp = config.getConfigurationSection("pvp");
 
             onlyPvPinWar = pvp.getBoolean("only-pvp-in-war");
@@ -167,6 +167,7 @@ public class SettingsManager {
             setHomeOnlyOnce = clan.getBoolean("set-home-only-once");
             unRivalAbleClans = new HashSet<Long>(clan.getLongList("unrivalable-clans"));
             rivalLimitPercent = clan.getDouble("rival-limit-percent");
+            modifyTagCompletely = clan.getBoolean("modify-tag-completely");
 
             ConfigurationSection clanEconomy = clan.getConfigurationSection("economy");
 
@@ -603,5 +604,10 @@ public class SettingsManager {
     public boolean isReportErrors()
     {
         return reportErrors;
+    }
+
+    public boolean isModifyTagCompletely()
+    {
+        return modifyTagCompletely;
     }
 }

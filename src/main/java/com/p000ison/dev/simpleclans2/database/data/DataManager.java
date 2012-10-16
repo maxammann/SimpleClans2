@@ -137,7 +137,7 @@ public class DataManager {
             UPDATE_CLANPLAYER.setLong(2, (clanPlayer.getRank() == null ? -1L : clanPlayer.getRank().getId()));
             UPDATE_CLANPLAYER.setBoolean(3, clanPlayer.isTrusted());
             UPDATE_CLANPLAYER.setBoolean(4, clanPlayer.isBanned());
-            UPDATE_CLANPLAYER.setTimestamp(5, new Timestamp(System.currentTimeMillis()));
+            UPDATE_CLANPLAYER.setTimestamp(5, new Timestamp(clanPlayer.getLastSeenDate()));
 
             Clan clan = clanPlayer.getClan();
 
@@ -510,6 +510,10 @@ public class DataManager {
                     Clan clan = plugin.getClanManager().getClan(clanId);
 
                     if (clan == null) {
+                        if (clanPlayer.isTrusted()) {
+                            Logging.debug("%s was trusted although the player had no clan!");
+                            clanPlayer.setTrusted(false);
+                        }
                         Logging.debug(Level.WARNING, "Failed to find clan for %s.", clanPlayer.getName());
                     } else {
                         clanPlayer.setClan(clan);
