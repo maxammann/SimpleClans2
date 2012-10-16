@@ -43,6 +43,7 @@ public class BBAddCommand extends GenericPlayerCommand {
         setUsages(MessageFormat.format(Language.getTranslation("usage.bb.add"), plugin.getSettingsManager().getClanCommand()));
         setIdentifiers(Language.getTranslation("bb.add.command"));
         setPermission("simpleclans.member.bb-add");
+        setType(Type.BB);
     }
 
     @Override

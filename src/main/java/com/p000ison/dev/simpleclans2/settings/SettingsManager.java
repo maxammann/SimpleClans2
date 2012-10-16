@@ -81,6 +81,8 @@ public class SettingsManager {
 
     private String defaultCape;
     private boolean capesEnabled;
+    private String defaultAlertSound;
+    private boolean alertSoundEnabled;
 
     private String clanAnnounce, clanPlayerAnnounce, defaultAnnounce;
 
@@ -92,6 +94,7 @@ public class SettingsManager {
 
 
     private ChatColor headingPageColor, subPageColor, clanColor, leaderColor, trustedColor, untrustedColor;
+    private boolean trustMembersByDefault;
 
     public SettingsManager(SimpleClans plugin)
     {
@@ -168,6 +171,7 @@ public class SettingsManager {
             unRivalAbleClans = new HashSet<Long>(clan.getLongList("unrivalable-clans"));
             rivalLimitPercent = clan.getDouble("rival-limit-percent");
             modifyTagCompletely = clan.getBoolean("modify-tag-completely");
+            trustMembersByDefault = clan.getBoolean("trust-members-by-default");
 
             ConfigurationSection clanEconomy = clan.getConfigurationSection("economy");
 
@@ -218,8 +222,8 @@ public class SettingsManager {
             trustedColor = ChatColor.getByChar(pageColors.getString("trusted-color"));
             untrustedColor = ChatColor.getByChar(pageColors.getString("untrusted-color"));
 
-
-            ConfigurationSection capes = clan.getConfigurationSection("capes");
+            ConfigurationSection spout = clan.getConfigurationSection("spout");
+            ConfigurationSection capes = spout.getConfigurationSection("capes");
 
             defaultCape = capes.getString("default");
             capesEnabled = capes.getBoolean("enabled");
@@ -609,5 +613,20 @@ public class SettingsManager {
     public boolean isModifyTagCompletely()
     {
         return modifyTagCompletely;
+    }
+
+    public String getDefaultAlertSound()
+    {
+        return defaultAlertSound;
+    }
+
+    public boolean isAlertSoundEnabled()
+    {
+        return alertSoundEnabled;
+    }
+
+    public boolean isTrustMembersByDefault()
+    {
+        return trustMembersByDefault;
     }
 }

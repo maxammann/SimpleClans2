@@ -30,6 +30,8 @@ import com.p000ison.dev.simpleclans2.util.DateHelper;
 import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
 
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
@@ -554,8 +556,13 @@ public class Clan implements KDR, Comparable<Clan> {
             clanPlayer.addPastClan(pastClan);
         }
 
+        if (plugin.getSettingsManager().isTrustMembersByDefault()) {
+            clanPlayer.setTrusted(true);
+        }
+
         allMembers.add(clanPlayer);
         clanPlayer.setClan(this);
+        clanPlayer.update();
     }
 
 
@@ -1090,5 +1097,33 @@ public class Clan implements KDR, Comparable<Clan> {
         double limit = (double) clanCount * rivalPercent / 100.0D;
 
         return rivalCount > limit;
+    }
+
+    public void removePermissions()
+    {
+        plugin.getServer().getPluginManager().removePermission(String.valueOf(id));
+        plugin.getServer().getPluginManager().removePermission("^" + id);
+    }
+
+    public void setupPermissions(Map<String, Boolean> permissions)
+    {
+        removePermissions();
+
+        Map<String, Boolean> positiveSet = new HashMap<String, Boolean>();
+        Map<String, Boolean> negativeSet = new HashMap<String, Boolean>();
+
+        for (Map.Entry<String, Boolean> entry : permissions.entrySet()) {
+            if (entry.getValue()) {
+                positiveSet.put(entry.getKey(), true);
+            } else {
+                negativeSet.put(entry.getKey(), false);
+            }
+        }
+
+        Permission positive = new Permission(String.valueOf(id), PermissionDefault.FALSE, positiveSet);
+        Permission negative = new Permission("^" + id, PermissionDefault.FALSE, negativeSet);
+
+        plugin.getServer().getPluginManager().addPermission(positive);
+        plugin.getServer().getPluginManager().addPermission(negative);
     }
 }

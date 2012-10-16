@@ -44,8 +44,8 @@ public class ClanPlayer implements KDR {
     private long lastSeen, joinDate;
     private int neutralKills, rivalKills, civilianKills, deaths;
     private PlayerFlags flags;
-    private VoteResult lastVoteResult = VoteResult.UNKNOWN;
     private Rank rank;
+    private OnlineClanPlayer onlineVersion = null;
 
     private boolean update;
 
@@ -244,12 +244,18 @@ public class ClanPlayer implements KDR {
 
     public VoteResult getLastVoteResult()
     {
-        return lastVoteResult;
+        if (onlineVersion == null) {
+            return null;
+        }
+        return onlineVersion.getLastVoteResult();
     }
 
     public void setLastVoteResult(VoteResult lastVoteResult)
     {
-        this.lastVoteResult = lastVoteResult;
+        if (onlineVersion == null) {
+            return;
+        }
+        onlineVersion.setLastVoteResult(lastVoteResult);
     }
 
     /**
@@ -286,6 +292,9 @@ public class ClanPlayer implements KDR {
      */
     public Player toPlayer()
     {
+        if (onlineVersion == null) {
+            return null;
+        }
         return plugin.getServer().getPlayerExact(name);
     }
 
@@ -417,5 +426,15 @@ public class ClanPlayer implements KDR {
                 ", trusted=" + trusted +
                 ", banned=" + banned +
                 '}';
+    }
+
+    public void removeOnlineVersion()
+    {
+        this.onlineVersion = null;
+    }
+
+    public void setupOnlineVersion()
+    {
+        this.onlineVersion = new OnlineClanPlayer(plugin, this);
     }
 }

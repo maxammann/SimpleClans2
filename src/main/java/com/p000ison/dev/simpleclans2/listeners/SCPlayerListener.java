@@ -54,11 +54,12 @@ public class SCPlayerListener implements Listener {
 
         ClanPlayer clanPlayer = plugin.getClanPlayerManager().getClanPlayer(player);
 
+        plugin.getRequestManager().clearRequests(player.getName());
+
         if (clanPlayer != null) {
             clanPlayer.updateLastSeen();
+            clanPlayer.removeOnlineVersion();
         }
-
-        plugin.getRequestManager().clearRequests(player.getName());
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -69,6 +70,7 @@ public class SCPlayerListener implements Listener {
         ClanPlayer clanPlayer = plugin.getClanPlayerManager().getClanPlayer(player);
 
         if (clanPlayer != null) {
+            clanPlayer.setupOnlineVersion();
             Clan clan = clanPlayer.getClan();
 
             if (plugin.getSettingsManager().isMotdBBEnabled()) {

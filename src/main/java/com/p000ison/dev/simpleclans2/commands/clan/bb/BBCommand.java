@@ -43,6 +43,7 @@ public class BBCommand extends GenericPlayerCommand {
         setUsages(MessageFormat.format(Language.getTranslation("usage.bb"), plugin.getSettingsManager().getClanCommand()));
         setIdentifiers(Language.getTranslation("bb.command"));
         setPermission("simpleclans.member.bb");
+        setType(Type.BB);
     }
 
     @Override

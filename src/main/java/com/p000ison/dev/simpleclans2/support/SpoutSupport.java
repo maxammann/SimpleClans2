@@ -41,9 +41,11 @@ import static org.getspout.spoutapi.SpoutManager.getPlayer;
 public class SpoutSupport {
 
     private boolean enabled = false;
+    private SimpleClans plugin;
 
     public SpoutSupport(SimpleClans plugin)
     {
+        this.plugin = plugin;
         Plugin spout = Bukkit.getPluginManager().getPlugin("Spout");
 
         if (!(spout instanceof Spout)) {
@@ -87,7 +89,11 @@ public class SpoutSupport {
         String url = clan.getFlags().getClanCapeURL();
 
         if (url == null) {
-            return;
+            if (plugin.getSettingsManager().isCapesEnabled()) {
+                url = plugin.getSettingsManager().getDefaultCape();
+            } else {
+                return;
+            }
         }
 
         spoutPlayer.setCape(url);

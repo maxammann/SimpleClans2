@@ -498,9 +498,7 @@ public class DataManager {
                 clanPlayer.setDeaths(result.getInt("deaths"));
 
                 PlayerFlags flags = new PlayerFlags();
-
                 flags.write(result.getString("flags"));
-
                 clanPlayer.setFlags(flags);
 
                 long clanId = result.getLong("clan");

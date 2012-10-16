@@ -25,7 +25,7 @@ import org.bukkit.permissions.Permissible;
 /**
  * Represents a Command
  */
-public interface Command {
+interface Command {
 
     String getName();
 

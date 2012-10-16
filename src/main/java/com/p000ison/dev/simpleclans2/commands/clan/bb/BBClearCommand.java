@@ -43,6 +43,7 @@ public class BBClearCommand extends GenericPlayerCommand {
         setUsages(MessageFormat.format(Language.getTranslation("usage.bb.clear"), plugin.getSettingsManager().getClanCommand()));
         setIdentifiers(Language.getTranslation("bb.clear.command"));
         setPermission("simpleclans.member.bb-clear");
+        setType(Type.BB);
     }
 
     @Override
