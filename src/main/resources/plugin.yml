@@ -4,6 +4,7 @@ version: maven-version-number
 commands:
   sc:
   rank:
+  bb:
 permissions:
   simpleclans.admin.permissions:
     description: Can grant clans permissions

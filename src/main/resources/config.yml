@@ -36,6 +36,7 @@ clan:
    minimal-size-to-ally: 1
    minimal-size-to-rival: 1
    rival-limit-percent: 20
+   require-verification: true
    purge:
        inactive-player-data-days: 30
        inactive-clan-days: 7
@@ -56,9 +57,10 @@ clan:
    voting:
        demote: true
        promote: true
-   capes:
-       default: 'http://dl.dropbox.com/u/20831395/simpleclans/cape.png'
-       enabled: true
+   spout:
+       capes:
+           default: 'http://dl.dropbox.com/u/20831395/simpleclans/cape.png'
+           enabled: true
    motd:
        bb: true
        lines: 5

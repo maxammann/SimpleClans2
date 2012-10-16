@@ -82,5 +82,5 @@ interface Command {
         }
     }
 
-    public Type getType();
+    Type getType();
 }
