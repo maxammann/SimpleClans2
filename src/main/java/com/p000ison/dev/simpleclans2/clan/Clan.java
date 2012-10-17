@@ -24,6 +24,7 @@ import com.p000ison.dev.simpleclans2.KDR;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.ranks.Rank;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
+import com.p000ison.dev.simpleclans2.clanplayer.OnlineClanPlayer;
 import com.p000ison.dev.simpleclans2.database.data.response.responses.BBAddResponse;
 import com.p000ison.dev.simpleclans2.language.Language;
 import com.p000ison.dev.simpleclans2.util.DateHelper;
@@ -1099,12 +1100,20 @@ public class Clan implements KDR, Comparable<Clan> {
         return rivalCount > limit;
     }
 
+    /**
+     * Deletes the permission sets
+     */
     public void removePermissions()
     {
         plugin.getServer().getPluginManager().removePermission(String.valueOf(id));
         plugin.getServer().getPluginManager().removePermission("^" + id);
     }
 
+    /**
+     * Creates a permission set for this clan and registers it
+     *
+     * @param permissions The set of permissions
+     */
     public void setupPermissions(Map<String, Boolean> permissions)
     {
         removePermissions();
@@ -1126,4 +1135,22 @@ public class Clan implements KDR, Comparable<Clan> {
         plugin.getServer().getPluginManager().addPermission(positive);
         plugin.getServer().getPluginManager().addPermission(negative);
     }
+
+    /**
+     * Updates the permissions for every clanplayer of this clan
+     */
+    public void updatePermissions()
+    {
+        for (ClanPlayer clanPlayer : getAllMembers()) {
+            OnlineClanPlayer online = clanPlayer.getOnlineVersion();
+            if (online == null) {
+                continue;
+            }
+
+            online.removePermissions();
+            online.setupPermissions();
+        }
+    }
+
+
 }

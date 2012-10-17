@@ -437,4 +437,28 @@ public class ClanPlayer implements KDR {
     {
         this.onlineVersion = new OnlineClanPlayer(plugin, this);
     }
+
+    public OnlineClanPlayer getOnlineVersion()
+    {
+        return onlineVersion;
+    }
+
+    public void updatePermissions()
+    {
+        if (onlineVersion == null) {
+            return;
+
+        }
+        onlineVersion.removePermissions();
+        onlineVersion.setupPermissions();
+    }
+
+    public void removePermissions()
+    {
+        if (onlineVersion == null) {
+            return;
+
+        }
+        onlineVersion.removePermissions();
+    }
 }

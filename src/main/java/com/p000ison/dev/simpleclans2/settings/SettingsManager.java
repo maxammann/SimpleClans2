@@ -29,11 +29,11 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Set;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
 import java.util.logging.Level;
 
 /**
@@ -269,6 +269,62 @@ public class SettingsManager {
         long finish = System.currentTimeMillis();
 
         Logging.debug("Loading the settings finished! Took %s ms!", finish - start);
+
+        loadPermissions();
+    }
+
+    public void loadPermissions()
+    {
+        File file = new File(plugin.getDataFolder(), "permissions.yml");
+        FileConfiguration permissionsConfig = YamlConfiguration.loadConfiguration(file);
+        permissionsConfig.options().copyDefaults(true);
+
+        List<String> defaultPermissions = new ArrayList<String>();
+        defaultPermissions.add("test.test");
+        permissionsConfig.addDefault("permissions.clanID", defaultPermissions);
+
+        ConfigurationSection permissions = permissionsConfig.getConfigurationSection("permissions");
+
+        for (String clanId : permissions.getKeys(false)) {
+            long id;
+            try {
+                id = Long.parseLong(clanId);
+            } catch (NumberFormatException e) {
+                Logging.debug("Failed at parsing clan id in the permissions.yml: %s", clanId);
+                continue;
+            }
+
+            Clan clan = plugin.getClanManager().getClan(id);
+
+            if (clan == null) {
+                Logging.debug("The clan with the id %s does not exist!", id);
+                continue;
+            }
+
+            List<String> clanPermissions = permissions.getStringList(clanId);
+
+            if (clanPermissions.isEmpty()) {
+                continue;
+            }
+
+            Map<String, Boolean> permSet = new HashMap<String, Boolean>();
+
+            for (String permission : clanPermissions) {
+                if (permission.charAt(0) == '^') {
+                    permSet.put(permission.substring(1), false);
+                } else {
+                    permSet.put(permission, true);
+                }
+            }
+            clan.setupPermissions(permSet);
+            clan.updatePermissions();
+        }
+
+        try {
+            permissionsConfig.save(file);
+        } catch (IOException e) {
+            Logging.debug(e, false);
+        }
     }
 
     public void save()

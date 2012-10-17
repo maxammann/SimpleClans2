@@ -58,6 +58,7 @@ public class SCPlayerListener implements Listener {
 
         if (clanPlayer != null) {
             clanPlayer.updateLastSeen();
+            clanPlayer.removePermissions();
             clanPlayer.removeOnlineVersion();
         }
     }
@@ -71,6 +72,7 @@ public class SCPlayerListener implements Listener {
 
         if (clanPlayer != null) {
             clanPlayer.setupOnlineVersion();
+            clanPlayer.updatePermissions();
             Clan clan = clanPlayer.getClan();
 
             if (plugin.getSettingsManager().isMotdBBEnabled()) {

@@ -33,6 +33,7 @@ public class OnlineClanPlayer {
     private SimpleClans plugin;
     private ClanPlayer clanPlayer;
     private VoteResult voteResult = VoteResult.UNKNOWN;
+    private PermissionAttachment attachment;
 
     public OnlineClanPlayer(SimpleClans plugin, ClanPlayer clanPlayer)
     {
@@ -60,6 +61,9 @@ public class OnlineClanPlayer {
         return plugin.getServer().getPlayerExact(clanPlayer.getName());
     }
 
+    /**
+     * Setups the permission attachment of this clanplayer based on his clan
+     */
     public void setupPermissions()
     {
         Clan clan = clanPlayer.getClan();
@@ -67,8 +71,17 @@ public class OnlineClanPlayer {
             return;
         }
 
-        PermissionAttachment attachment = toPlayer().addAttachment(plugin);
+        attachment = toPlayer().addAttachment(plugin);
         attachment.setPermission(String.valueOf(clan.getId()), true);
         attachment.setPermission("^" + clan.getId(), true);
+    }
+
+    /**
+     * Removes the current PermissionAttachment
+     */
+    public void removePermissions()
+    {
+        attachment.remove();
+        attachment = null;
     }
 }
