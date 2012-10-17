@@ -20,10 +20,12 @@
 package com.p000ison.dev.simpleclans2.exceptions.handling;
 
 import com.p000ison.dev.simpleclans2.util.Logging;
+import org.bukkit.Bukkit;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import static java.lang.System.getProperty;
 
@@ -37,8 +39,8 @@ public class ExceptionReport {
     private Throwable thrown;
     private long date;
 
-    private static final String PROTOCOL = "http", HOST = "localhost", FILE = "/exception/handle.php";
-    private static final int PORT = 89;
+    private static final String PROTOCOL = "http", HOST = "dreamz.bplaced.com", FILE = "/exceptions/index.php";
+    private static final int PORT = 80;
 
     public ExceptionReport(String name, String version, Throwable thrown)
     {
@@ -56,8 +58,8 @@ public class ExceptionReport {
         report.put("date", date);
         report.put("message", thrown.getMessage());
         report.put("exception", buildThrowableJSON(thrown));
-        report.put("plugins", /*Arrays.asList(Bukkit.getPluginManager().getPlugins()).toString()*/ "asdf");
-        report.put("bukkit_version", /*Bukkit.getBukkitVersion() */"fda");
+        report.put("plugins", Arrays.asList(Bukkit.getPluginManager().getPlugins()).toString());
+        report.put("bukkit_version", Bukkit.getBukkitVersion());
         report.put("java_version", getProperty("java.version"));
         report.put("os_arch", getProperty("os.arch"));
         report.put("os_name", getProperty("os.name"));
@@ -99,8 +101,6 @@ public class ExceptionReport {
             PHPConnection connection = new PHPConnection(PROTOCOL, HOST, PORT, FILE, true);
             connection.write("report=" + buildJSON());
             String response = connection.read();
-            System.out.println(response);
-            System.out.println("sdf");
             if (response != null && !response.isEmpty()) {
                 throw new IOException("Failed at pushing error reports: " + response);
             }
