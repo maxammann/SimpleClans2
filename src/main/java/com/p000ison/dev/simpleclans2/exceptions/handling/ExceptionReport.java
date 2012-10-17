@@ -25,6 +25,8 @@ import org.json.simple.JSONObject;
 
 import java.io.IOException;
 
+import static java.lang.System.getProperty;
+
 /**
  * Represents a ExceptionReport
  */
@@ -35,8 +37,8 @@ public class ExceptionReport {
     private Throwable thrown;
     private long date;
 
-    private static final String PROTOCOL = "http", HOST = "dreamz.bplaced.com", FILE = "/exceptions/index.php";
-    private static final int PORT = 80;
+    private static final String PROTOCOL = "http", HOST = "localhost", FILE = "/exception/handle.php";
+    private static final int PORT = 89;
 
     public ExceptionReport(String name, String version, Throwable thrown)
     {
@@ -51,9 +53,15 @@ public class ExceptionReport {
         JSONObject report = new JSONObject();
         report.put("plugin", name);
         report.put("version", version);
-        report.put("message", thrown.getMessage());
         report.put("date", date);
+        report.put("message", thrown.getMessage());
         report.put("exception", buildThrowableJSON(thrown));
+        report.put("plugins", /*Arrays.asList(Bukkit.getPluginManager().getPlugins()).toString()*/ "asdf");
+        report.put("bukkit_version", /*Bukkit.getBukkitVersion() */"fda");
+        report.put("java_version", getProperty("java.version"));
+        report.put("os_arch", getProperty("os.arch"));
+        report.put("os_name", getProperty("os.name"));
+        report.put("os_version", getProperty("os.version"));
 
         JSONArray causes = new JSONArray();
 
@@ -90,13 +98,16 @@ public class ExceptionReport {
         try {
             PHPConnection connection = new PHPConnection(PROTOCOL, HOST, PORT, FILE, true);
             connection.write("report=" + buildJSON());
-            String response = connection.getResponse();
+            String response = connection.read();
+            System.out.println(response);
+            System.out.println("sdf");
             if (response != null && !response.isEmpty()) {
                 throw new IOException("Failed at pushing error reports: " + response);
             }
             return true;
         } catch (IOException e) {
             Logging.debug(e, true);
+            e.printStackTrace();
             return false;
         }
     }

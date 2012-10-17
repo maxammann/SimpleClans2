@@ -28,6 +28,7 @@ import java.util.*;
 /**
  * Represents a JSONUtil
  */
+@SuppressWarnings("unchecked")
 public final class JSONUtil {
 
     private JSONUtil()

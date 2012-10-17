@@ -47,7 +47,7 @@ public class ViewPermissionsCommand extends GenericConsoleCommand {
     @Override
     public String getMenu()
     {
-        return null;
+        return Language.getTranslation("menu.rank.permissions", plugin.getSettingsManager().getClanCommand());
     }
 
     @Override

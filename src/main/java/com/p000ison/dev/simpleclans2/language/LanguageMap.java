@@ -87,12 +87,12 @@ public class LanguageMap {
 
         File parentDir = target.getParentFile();
 
-        if (!parentDir.isDirectory()) {
-            throw new IllegalArgumentException("The parent of this file is no directory!?");
+        if (!parentDir.mkdirs()) {
+            throw new IllegalArgumentException("Failed at creating directories!");
         }
 
-        if (!parentDir.exists() && parentDir.mkdirs()) {
-            throw new IllegalArgumentException("Failed at creating directories!");
+        if (!parentDir.isDirectory()) {
+            throw new IllegalArgumentException("The parent of this file is no directory!?");
         }
 
         if (!target.createNewFile()) {

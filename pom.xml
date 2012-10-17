@@ -221,6 +221,13 @@
             <artifactId>junit</artifactId>
             <version>4.9</version>
         </dependency>
+        <dependency>
+            <groupId>org.mcstats</groupId>
+            <artifactId>metrics</artifactId>
+            <version>1.1</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
     <!-- Repositories -->
@@ -241,6 +248,10 @@
         <repository>
             <id>spout-repo</id>
             <url>http://repo.spout.org</url>
+        </repository>
+        <repository>
+            <id>metrics</id>
+            <url>http://repo.mcstats.org/content/repositories/releases/</url>
         </repository>
     </repositories>
 </project>

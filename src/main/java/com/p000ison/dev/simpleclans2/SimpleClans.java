@@ -49,6 +49,8 @@ import com.p000ison.dev.simpleclans2.exceptions.handling.ExceptionReporterTask;
 import com.p000ison.dev.simpleclans2.language.Language;
 import com.p000ison.dev.simpleclans2.listeners.SCEntityListener;
 import com.p000ison.dev.simpleclans2.listeners.SCPlayerListener;
+import com.p000ison.dev.simpleclans2.metrics.OfflinePlotter;
+import com.p000ison.dev.simpleclans2.metrics.OnlinePlotter;
 import com.p000ison.dev.simpleclans2.requests.RequestManager;
 import com.p000ison.dev.simpleclans2.settings.SettingsManager;
 import com.p000ison.dev.simpleclans2.support.PreciousStonesSupport;
@@ -60,8 +62,10 @@ import net.milkbowl.vault.economy.Economy;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.mcstats.Metrics;
 
 import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.logging.Level;
 
@@ -92,6 +96,8 @@ public class SimpleClans extends JavaPlugin implements Core {
 
         try {
             Logging.setInstance(getLogger());
+
+            setupMetrics();
 
             name = getName();
             version = getDescription().getVersion();
@@ -134,6 +140,23 @@ public class SimpleClans extends JavaPlugin implements Core {
         Logging.debug(String.format("Enabling took %s ms", finish - startup));
     }
 
+    public void setupMetrics()
+    {
+        try {
+            Metrics metrics = new Metrics(this);
+            metrics.start();
+
+            Metrics.Graph authGraph = metrics.createGraph("How many servers run in offline mode?");
+
+            if (getServer().getOnlineMode()) {
+                authGraph.addPlotter(new OnlinePlotter());
+            } else {
+                authGraph.addPlotter(new OfflinePlotter());
+            }
+        } catch (IOException e) {
+            Logging.debug(e, true, "Failed at connection to metrics!");
+        }
+    }
 
     @Override
     public void onDisable()

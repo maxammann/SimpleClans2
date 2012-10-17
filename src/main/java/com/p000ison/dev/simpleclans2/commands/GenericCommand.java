@@ -32,7 +32,7 @@ abstract class GenericCommand implements Command {
     private String[] usage;
     protected SimpleClans plugin;
     private String permission;
-    private Type type;
+    private Type type = Type.CLAN;
 
     protected GenericCommand(String name, SimpleClans plugin)
     {

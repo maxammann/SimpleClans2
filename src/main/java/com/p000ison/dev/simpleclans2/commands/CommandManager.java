@@ -170,7 +170,7 @@ public class CommandManager {
     private void displayHelp(CommandSender sender, Command.Type commandType, int page)
     {
         Set<Command> sortCommands = plugin.getCommandManager().getCommands();
-        List<Command> commands = new ArrayList<Command>();
+        List<String> commands = new ArrayList<String>();
 
         ClanPlayer cp = null;
 
@@ -189,12 +189,16 @@ public class CommandManager {
             }
 
             if (cmd instanceof GenericConsoleCommand) {
+                String menu = ((GenericConsoleCommand) cmd).getMenu();
                 if (((GenericConsoleCommand) cmd).getMenu() != null) {
-                    commands.add(cmd);
+                    commands.add(menu);
                 }
             } else {
-                if (cp != null && ((GenericPlayerCommand) cmd).getMenu(cp) != null) {
-                    commands.add(cmd);
+                if (cp != null) {
+                    String menu = ((GenericPlayerCommand) cmd).getMenu(cp);
+                    if (menu != null) {
+                        commands.add(menu);
+                    }
                 }
             }
         }
@@ -210,19 +214,19 @@ public class CommandManager {
 
 
         for (int c = boundings[0]; c < boundings[1]; c++) {
-            Command cmd = commands.get(c);
+            String cmdMenu = commands.get(c);
 
-            String commandMenu;
+//            String commandMenu;
 
-            if (cmd instanceof GenericConsoleCommand) {
-                commandMenu = ((GenericConsoleCommand) cmd).getMenu();
-            } else if (cp != null) {
-                commandMenu = ((GenericPlayerCommand) cmd).getMenu(cp);
-            } else {
-                continue;
-            }
+//            if (cmd instanceof GenericConsoleCommand) {
+//                commandMenu = ((GenericConsoleCommand) cmd).getMenu();
+//            } else if (cp != null) {
+//                commandMenu = ((GenericPlayerCommand) cmd).getMenu(cp);
+//            } else {
+//                continue;
+//            }
 
-            menu.append(MessageFormat.format(plugin.getSettingsManager().getHelpFormat(), commandMenu)).append(ChatColor.RESET);
+            menu.append(MessageFormat.format(plugin.getSettingsManager().getHelpFormat(), cmdMenu)).append(ChatColor.RESET);
 
             if (c != boundings[1]) {
                 menu.append('\n');
