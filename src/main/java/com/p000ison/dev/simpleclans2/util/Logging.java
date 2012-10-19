@@ -21,6 +21,7 @@
 package com.p000ison.dev.simpleclans2.util;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
+import com.p000ison.dev.simpleclans2.exceptions.handling.ExceptionReporterTask;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -93,8 +94,13 @@ public final class Logging {
             instance.log(level, msg);
         } else if (reportException) {
             instance.log(level, msg, ex);
-            boolean success = plugin.getExceptionReporter().addReport(ex);
-            instance.log(Level.INFO, success ? "----------------------\nException has been reported!\n----------------------" : "----------------------\nQueue overflow!!\n----------------------");
+            ExceptionReporterTask task = plugin.getExceptionReporter();
+            if (task != null) {
+                boolean success = plugin.getExceptionReporter().addReport(ex, plugin.getName(), plugin.getDescription().getVersion(), plugin.getSettingsManager() == null ? null : plugin.getSettingsManager().getEmail());
+                instance.log(Level.INFO, "------------------------------------------------------------");
+                instance.log(Level.INFO, success ? "Exception has been reported!" : "Queue overflow!");
+                instance.log(Level.INFO, "------------------------------------------------------------");
+            }
         }
     }
 }

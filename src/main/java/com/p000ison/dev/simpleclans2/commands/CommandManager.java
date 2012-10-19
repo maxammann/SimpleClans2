@@ -38,13 +38,13 @@ import java.util.logging.Level;
  */
 public class CommandManager {
 
-    private Set<Command> commands;
+    private List<Command> commands;
     private final SimpleClans plugin;
 
     public CommandManager(SimpleClans plugin)
     {
         this.plugin = plugin;
-        commands = new HashSet<Command>();
+        commands = new ArrayList<Command>();
     }
 
     public void addCommand(Command command)
@@ -68,7 +68,7 @@ public class CommandManager {
         return null;
     }
 
-    public Set<Command> getCommands()
+    public List<Command> getCommands()
     {
         return commands;
     }
@@ -169,7 +169,7 @@ public class CommandManager {
 
     private void displayHelp(CommandSender sender, Command.Type commandType, int page)
     {
-        Set<Command> sortCommands = plugin.getCommandManager().getCommands();
+        List<Command> sortCommands = plugin.getCommandManager().getCommands();
         List<String> commands = new ArrayList<String>();
 
         ClanPlayer cp = null;

@@ -53,6 +53,9 @@ public class ViewRanksCommand extends GenericPlayerCommand {
     @Override
     public String getMenu(ClanPlayer clanPlayer)
     {
+        if (clanPlayer != null) {
+            return Language.getTranslation("menu.rank.view", plugin.getSettingsManager().getClanCommand());
+        }
         return null;
     }
 
@@ -89,22 +92,21 @@ public class ViewRanksCommand extends GenericPlayerCommand {
             }
         }
 
-
         ChatBlock chatBlock = new ChatBlock();
 
         ChatBlock.sendHead(player, plugin.getSettingsManager().getClanColor() + clan.getTag(), Language.getTranslation("ranks"));
 
         ChatBlock.sendBlank(player);
 
-        chatBlock.setAlignment(Align.CENTER, Align.LEFT, Align.CENTER);
-        chatBlock.addRow(Language.getTranslation("id"), Language.getTranslation("tag"), Language.getTranslation("priority"));
+        chatBlock.setAlignment(Align.CENTER, Align.LEFT, Align.LEFT, Align.CENTER);
+        chatBlock.addRow(Language.getTranslation("id"), Language.getTranslation("tag"), Language.getTranslation("name"), Language.getTranslation("priority"));
 
         int[] boundings = getBoundings(completeSize, page);
 
         for (int i = boundings[0]; i < boundings[1]; i++) {
             Rank rank = sorted.get(i);
 
-            chatBlock.addRow(ChatColor.GRAY.toString() + rank.getId(), ChatColor.GRAY + rank.getTag(), ChatColor.GRAY.toString() + rank.getPriority());
+            chatBlock.addRow(ChatColor.GRAY.toString() + rank.getId(), ChatColor.GRAY + rank.getTag(), ChatColor.GRAY + rank.getName(), ChatColor.GRAY.toString() + rank.getPriority());
         }
 
 

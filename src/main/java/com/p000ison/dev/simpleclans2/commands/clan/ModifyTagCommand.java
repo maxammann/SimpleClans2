@@ -39,7 +39,7 @@ public class ModifyTagCommand extends GenericPlayerCommand {
     {
         super("Modtag", plugin);
         setArgumentRange(1, 1);
-        setUsages(MessageFormat.format(Language.getTranslation("usage.modtag"), plugin.getSettingsManager().getClanCommand()), ChatColor.RED + Language.getTranslation("example.clan.modtag.4kfo.4l"));
+        setUsages(MessageFormat.format(Language.getTranslation("usage.modtag"), plugin.getSettingsManager().getClanCommand()), ChatColor.RED + Language.getTranslation("example.clan.modtag"));
         setIdentifiers(Language.getTranslation("modtag.command"));
         setPermission("simpleclans.leader.modtag");
     }

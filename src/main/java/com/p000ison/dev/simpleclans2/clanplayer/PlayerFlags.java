@@ -60,11 +60,11 @@ public class PlayerFlags extends Flags {
 
     public void setFriendlyFire(boolean bool)
     {
-        super.setBoolean("friendlyFire", bool);
+        super.setBoolean("ff", bool);
     }
 
     public boolean isFriendlyFireEnabled()
     {
-        return super.getBoolean("friendlyFire");
+        return super.getBoolean("ff");
     }
 }

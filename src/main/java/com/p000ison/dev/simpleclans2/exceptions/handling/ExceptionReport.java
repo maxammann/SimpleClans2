@@ -19,7 +19,6 @@
 
 package com.p000ison.dev.simpleclans2.exceptions.handling;
 
-import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.util.Logging;
 import org.bukkit.Bukkit;
 import org.json.simple.JSONArray;
@@ -38,16 +37,18 @@ public class ExceptionReport {
     private String name;
     private String version;
     private Throwable thrown;
+    private String email;
     private long date;
 
     private static final String PROTOCOL = "http", HOST = "dreamz.bplaced.com", FILE = "/exceptions/index.php";
     private static final int PORT = 80;
 
-    public ExceptionReport(String name, String version, Throwable thrown)
+    public ExceptionReport(String name, String version, Throwable thrown, String email)
     {
         this.name = name;
         this.version = version;
         this.thrown = thrown;
+        this.email = email;
         date = System.currentTimeMillis();
     }
 
@@ -65,7 +66,6 @@ public class ExceptionReport {
         report.put("os_arch", getProperty("os.arch"));
         report.put("os_name", getProperty("os.name"));
         report.put("os_version", getProperty("os.version"));
-        String email = SimpleClans.getUserEmail();
 
         if (email != null) {
             report.put("email", email);
@@ -96,7 +96,7 @@ public class ExceptionReport {
                 }
             }
         } catch (Exception e) {
-            ExceptionReport report = new ExceptionReport("SimpleClans", "2.0", e);
+            ExceptionReport report = new ExceptionReport("SimpleClans", "2.0", e, "test");
             report.report();
         }
     }

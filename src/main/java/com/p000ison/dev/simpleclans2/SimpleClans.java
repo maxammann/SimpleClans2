@@ -89,15 +89,17 @@ public class SimpleClans extends JavaPlugin implements Core {
     private ExceptionReporterTask exceptionReporterTask;
     private static Economy economy;
 
-    private static String name, version, email;
-
     @Override
     public void onEnable()
     {
         long startup = System.currentTimeMillis();
 
         try {
+            exceptionReporterTask = new ExceptionReporterTask();
             Logging.setInstance(getLogger(), this);
+
+            //we need to load the settingsManager already here, because we need the data!
+            settingsManager = new SettingsManager(this);
 
             setupMetrics();
 
@@ -112,27 +114,24 @@ public class SimpleClans extends JavaPlugin implements Core {
                 Logging.debug("Hooked economy system: %s!", economy.getName());
             }
 
-            Logging.debug("Loading managers...");
             loadManagers();
-            Logging.debug("Loading the managers finished!");
-
-            if (getSettingsManager().isReportErrors()) {
-                exceptionReporterTask = new ExceptionReporterTask();
-                getServer().getScheduler().scheduleAsyncRepeatingTask(this, exceptionReporterTask, 0L, 1200L);
-            }
-
-            email = getSettingsManager().getEmail();
-            name = getName();
-            version = getDescription().getVersion();
 
             com.p000ison.dev.simpleclans2.util.chat.ChatBlock.setHeadColor(getSettingsManager().getHeadingPageColor());
             com.p000ison.dev.simpleclans2.util.chat.ChatBlock.setSubColor(getSettingsManager().getSubPageColor());
 
             registerEvents();
+
+            if (getSettingsManager().isReportErrors()) {
+                getServer().getScheduler().scheduleAsyncRepeatingTask(this, exceptionReporterTask, 0L, 1200L);
+            } else {
+                exceptionReporterTask = null;
+            }
+
         } catch (RuntimeException e) {
-            Logging.debug("------------------------------------------------------------");
             Logging.debug(e, "Failed at loading SimpleClans! Disabling...", true);
-            Logging.debug("------------------------------------------------------------");
+            if (exceptionReporterTask != null) {
+                exceptionReporterTask.run();
+            }
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
@@ -202,7 +201,6 @@ public class SimpleClans extends JavaPlugin implements Core {
 
     private void loadManagers()
     {
-        settingsManager = new SettingsManager(this);
         try {
             databaseManager = new DatabaseManager(this);
         } catch (SQLException e) {
@@ -214,6 +212,7 @@ public class SimpleClans extends JavaPlugin implements Core {
         }
         clanManager = new ClanManager(this);
         clanPlayerManager = new ClanPlayerManager(this);
+        settingsManager.loadPermissions();
         dataManager = new DataManager(this);
         requestManager = new RequestManager();
         teleportManager = new TeleportManager(this);
@@ -388,21 +387,6 @@ public class SimpleClans extends JavaPlugin implements Core {
     public SpoutSupport getSpoutSupport()
     {
         return spoutSupport;
-    }
-
-    public static String getPluginName()
-    {
-        return name;
-    }
-
-    public static String getPluginVersion()
-    {
-        return version;
-    }
-
-    public static String getUserEmail()
-    {
-        return email;
     }
 
     public void serverAnnounce(String message)

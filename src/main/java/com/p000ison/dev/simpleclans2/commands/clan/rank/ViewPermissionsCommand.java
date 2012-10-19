@@ -25,6 +25,7 @@ import com.p000ison.dev.simpleclans2.commands.GenericConsoleCommand;
 import com.p000ison.dev.simpleclans2.language.Language;
 import com.p000ison.dev.simpleclans2.util.chat.Align;
 import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 import java.util.Map;
@@ -63,7 +64,7 @@ public class ViewPermissionsCommand extends GenericConsoleCommand {
         chatBlock.addRow(ChatBlock.getHeadingColor() + "ID", ChatBlock.getHeadingColor() + Language.getTranslation("permission"));
 
         for (Map.Entry<Integer, String> entry : Rank.getAvailablePermissions().entrySet()) {
-            chatBlock.addRow(entry.getKey(), entry.getValue());
+            chatBlock.addRow(ChatColor.GRAY.toString() + entry.getKey(), ChatColor.GRAY + entry.getValue());
         }
 
         chatBlock.sendBlock(sender);

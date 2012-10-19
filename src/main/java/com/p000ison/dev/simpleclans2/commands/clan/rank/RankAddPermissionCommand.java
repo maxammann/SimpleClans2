@@ -25,7 +25,6 @@ import com.p000ison.dev.simpleclans2.clan.ranks.Rank;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
 import com.p000ison.dev.simpleclans2.language.Language;
-import com.p000ison.dev.simpleclans2.util.GeneralHelper;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -70,14 +69,14 @@ public class RankAddPermissionCommand extends GenericPlayerCommand {
             return;
         }
 
-        Rank rank = clan.getRank(GeneralHelper.arrayBoundsToString(1, args));
+        Rank rank = clan.getRank(args[0]);
 
         if (rank == null) {
             player.sendMessage(Language.getTranslation("rank.not.found"));
             return;
         }
 
-        String added = rank.addPermission(args[0]);
+        String added = rank.addPermission(args[1]);
 
         if (added == null) {
             player.sendMessage(ChatColor.DARK_RED + Language.getTranslation("permission.not.found"));
@@ -85,7 +84,6 @@ public class RankAddPermissionCommand extends GenericPlayerCommand {
         }
 
         rank.update(true);
-
         player.sendMessage(ChatColor.AQUA + Language.getTranslation("rank.permission.added", added, rank.getName()));
     }
 }

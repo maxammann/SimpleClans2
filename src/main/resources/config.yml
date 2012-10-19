@@ -7,7 +7,7 @@ general:
     auto-save: 5
     reporting:
         errors: true
-        email:
+        email: ''
 database:
     mode: 'mysql'
     host: 'localhost'

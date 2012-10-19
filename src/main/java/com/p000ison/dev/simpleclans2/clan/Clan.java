@@ -795,7 +795,6 @@ public class Clan implements KDR, Comparable<Clan> {
             clanPlayers.remove();
         }
 
-
         for (Clan warringClan : warring) {
             warringClan.removeWarringClan(this);
         }

@@ -49,7 +49,7 @@ public class DataManager {
     private ResponseTask responseTask;
 
     private PreparedStatement DELETE_CLAN, UPDATE_CLAN, INSERT_CLAN, RETRIEVE_CLAN_BY_TAG;
-    private PreparedStatement DELETE_CLANPLAYER, UPDATE_CLANPLAYER, INSERT_CLANPLAYER, RETRIEVE_CLANPLAYER_BY_NAME;
+    private PreparedStatement DELETE_CLANPLAYER, UPDATE_CLANPLAYER, INSERT_CLANPLAYER, RETRIEVE_CLANPLAYER_BY_NAME, UNSET_CLANPLAYER;
     private PreparedStatement RETRIEVE_TOTAL_DEATHS_PER_PLAYER;
     public PreparedStatement INSERT_KILL;
     private PreparedStatement INSERT_RANK, UPDATE_RANK, RETRIEVE_RANK_BY_NAME;
@@ -95,6 +95,7 @@ public class DataManager {
         UPDATE_CLANPLAYER = database.prepareStatement("UPDATE `sc2_players` SET leader = ?, rank = ?, trusted = ?, banned = ?, last_seen = ?, clan = ?, neutral_kills = ?, rival_kills = ?, civilian_kills = ?, deaths = ?, flags = ? WHERE id = ?;");
         INSERT_CLANPLAYER = database.prepareStatement("INSERT INTO `sc2_players` ( `name`, `leader`, `rank`, `trusted`, `last_seen`, `clan`, `flags` ) VALUES ( ?, ?, ?, ?, ?, ?, ? )");
         RETRIEVE_CLANPLAYER_BY_NAME = database.prepareStatement("SELECT id FROM `sc2_players` WHERE name = ?;");
+        UNSET_CLANPLAYER = database.prepareStatement("UPDATE `sc2_players` SET clan = -1, trusted = 0, rank = 0 WHERE clan = ?;");
 
         INSERT_KILL = database.prepareStatement("INSERT INTO `sc2_kills` ( `attacker`, `attacker_tag`, `victim`, `kill_type`, `victim_tag, `war` ) VALUES ( ?, ?, ?, ?, ?, ? );");
         RETRIEVE_TOTAL_DEATHS_PER_PLAYER = database.prepareStatement("SELECT victim, count(victim) AS kills FROM `sc_kills` GROUP BY victim ORDER BY 2 DESC;");
@@ -259,12 +260,6 @@ public class DataManager {
                 UPDATE_CLAN.setNull(6, Types.VARCHAR);
             }
 
-//            if (clan.hasBB()) {
-//                UPDATE_CLAN.setString(7, JSONUtil.collectionToJSON(clan.getBB()));
-//            } else {
-//                UPDATE_CLAN.setNull(7, Types.VARCHAR);
-//            }
-
             if (clan.getFlags().hasFlags()) {
                 UPDATE_CLAN.setString(7, clan.getFlags().read());
             } else {
@@ -306,8 +301,14 @@ public class DataManager {
         try {
             DELETE_CLAN.setLong(1, id);
             DELETE_CLAN.executeUpdate();
+
+            PURGE_BB.setLong(1, id);
+            PURGE_BB.executeUpdate();
+
+            UNSET_CLANPLAYER.setLong(1, id);
+            UNSET_CLANPLAYER.executeUpdate();
         } catch (SQLException e) {
-            Logging.debug(Level.SEVERE, "Failed to delete clan %s.", id);
+            Logging.debug(e, true, "Failed to delete clan %s.", id);
         }
     }
 
@@ -330,20 +331,23 @@ public class DataManager {
                 long lastAction = result.getTimestamp("last_action").getTime();
                 boolean verified = result.getBoolean("verified");
                 long id = result.getLong("id");
+                String tag = result.getString("tag");
 
                 if (verified) {
                     if (DateHelper.differenceInDays(lastAction, currentTime) > plugin.getSettingsManager().getPurgeInactiveClansDays()) {
+                        Logging.debug("Purging clan %s! (id=%s)", tag, id);
                         deleteClan(id);
                         continue;
                     }
                 } else {
                     if (DateHelper.differenceInDays(lastAction, currentTime) > plugin.getSettingsManager().getPurgeUnverifiedClansDays()) {
+                        Logging.debug("Purging clan %s! (id=%s)", tag, id);
                         deleteClan(id);
                         continue;
                     }
                 }
 
-                Clan clan = new Clan(plugin, id, result.getString("tag"), result.getString("name"));
+                Clan clan = new Clan(plugin, id, tag, result.getString("name"));
 
                 clan.setVerified(verified);
                 clan.setFoundedDate(result.getLong("founded"));
@@ -354,13 +358,6 @@ public class DataManager {
                 flags.write(result.getString("flags"));
 
                 clan.setFlags(flags);
-
-                //bb
-//                List<String> rawBB = JSONUtil.JSONToStringList(result.getString("bb"));
-//
-//                if (rawBB != null) {
-//                    clan.loadBB(new LinkedList<String>(rawBB));
-//                }
 
                 //allies
                 Set<Long> rawAllies = JSONUtil.JSONToLongSet(result.getString("allies"));
@@ -509,7 +506,7 @@ public class DataManager {
 
                     if (clan == null) {
                         if (clanPlayer.isTrusted()) {
-                            Logging.debug("%s was trusted although the player had no clan!");
+                            Logging.debug("%s was trusted although the player had no clan!", clanPlayer.getName());
                             clanPlayer.setTrusted(false);
                         }
                         Logging.debug(Level.WARNING, "Failed to find clan for %s.", clanPlayer.getName());

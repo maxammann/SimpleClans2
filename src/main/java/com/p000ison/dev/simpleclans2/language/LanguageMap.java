@@ -79,24 +79,24 @@ public class LanguageMap {
         return new FileWriter(new File(location), true);
     }
 
-    public static boolean copy(InputStream input, File target) throws IOException
+    public static void copy(InputStream input, File target) throws IOException
     {
         if (target.exists()) {
-            throw new IllegalArgumentException("File exists already!");
+            throw new IOException("File already exists!");
         }
 
         File parentDir = target.getParentFile();
 
         if (!parentDir.mkdirs()) {
-            throw new IllegalArgumentException("Failed at creating directories!");
+            throw new IOException("Failed at creating directories!");
         }
 
         if (!parentDir.isDirectory()) {
-            throw new IllegalArgumentException("The parent of this file is no directory!?");
+            throw new IOException("The parent of this file is no directory!?");
         }
 
         if (!target.createNewFile()) {
-            throw new IllegalArgumentException("Failed at creating new empty file!");
+            throw new IOException("Failed at creating new empty file!");
         }
 
         byte[] buffer = new byte[1024];
@@ -111,7 +111,6 @@ public class LanguageMap {
 
         output.flush();
         output.close();
-        return true;
     }
 
     public void load()

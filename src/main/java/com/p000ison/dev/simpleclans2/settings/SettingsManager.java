@@ -130,7 +130,7 @@ public class SettingsManager {
             ConfigurationSection reporting = general.getConfigurationSection("reporting");
             reportErrors = reporting.getBoolean("errors");
             String tmpEmail = reporting.getString("email");
-            if (GeneralHelper.isValidEmailAddress(tmpEmail)) {
+            if (tmpEmail != null && !tmpEmail.isEmpty() && GeneralHelper.isValidEmailAddress(tmpEmail)) {
                 email = tmpEmail;
             }
 
@@ -279,8 +279,6 @@ public class SettingsManager {
         long finish = System.currentTimeMillis();
 
         Logging.debug("Loading the settings finished! Took %s ms!", finish - start);
-
-        loadPermissions();
     }
 
     public void loadPermissions()
@@ -291,7 +289,7 @@ public class SettingsManager {
 
         List<String> defaultPermissions = new ArrayList<String>();
         defaultPermissions.add("test.test");
-        permissionsConfig.addDefault("permissions.clanID", defaultPermissions);
+        permissionsConfig.addDefault("permissions.123", defaultPermissions);
 
         ConfigurationSection permissions = permissionsConfig.getConfigurationSection("permissions");
 
