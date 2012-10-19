@@ -563,6 +563,7 @@ public class Clan implements KDR, Comparable<Clan> {
 
         allMembers.add(clanPlayer);
         clanPlayer.setClan(this);
+        clanPlayer.updatePermissions();
         clanPlayer.update();
     }
 
@@ -707,8 +708,6 @@ public class Clan implements KDR, Comparable<Clan> {
 //            }
 
             plugin.getDataManager().addResponse(new BBAddResponse(plugin, message, this));
-
-//            bb.add(message);
         }
     }
 
@@ -716,11 +715,6 @@ public class Clan implements KDR, Comparable<Clan> {
     {
         plugin.getDataManager().purgeBB(this);
     }
-
-//    public void loadBB(LinkedList<String> bb)
-//    {
-//        this.bb = bb;
-//    }
 
     @Override
     public boolean equals(Object o)
@@ -835,40 +829,6 @@ public class Clan implements KDR, Comparable<Clan> {
         plugin.getDataManager().deleteClan(this);
     }
 
-//    public void displayBb(CommandSender sender, int maxLines)
-//    {
-//        if (bb == null || bb.isEmpty()) {
-//            sender.sendMessage(Language.getTranslation("bb.is.empty"));
-//            return;
-//        }
-//
-//        int start;
-//
-//        if (bb.size() - maxLines < 0) {
-//            start = 0;
-//        } else {
-//            start = bb.size() - maxLines;
-//        }
-//
-//        int end = bb.size();
-//
-//        for (; start < end; start++) {
-//            sender.sendMessage(bb.get(start));
-//        }
-//    }
-//
-//    public void displayBb(CommandSender sender)
-//    {
-//        if (bb == null || bb.isEmpty()) {
-//            sender.sendMessage(Language.getTranslation("bb.is.empty"));
-//            return;
-//        }
-//
-//        for (String bbMessage : bb) {
-//            sender.sendMessage(bbMessage);
-//        }
-//    }
-
     public boolean hasAllies()
     {
         return allies != null && !allies.isEmpty();
@@ -883,16 +843,6 @@ public class Clan implements KDR, Comparable<Clan> {
     {
         return warring != null && !warring.isEmpty();
     }
-
-//    public boolean hasBB()
-//    {
-//        return bb != null && !bb.isEmpty();
-//    }
-//
-//    public LinkedList<String> getBB()
-//    {
-//        return bb;
-//    }
 
     public boolean allLeadersOnline()
     {
@@ -1092,10 +1042,10 @@ public class Clan implements KDR, Comparable<Clan> {
     {
         int rivalCount = rivals.size();
         //minus 1 because this clan is rivable
-        int clanCount = plugin.getClanManager().getRivalAbleClanCount() - 1;
+        double clanCount = plugin.getClanManager().getRivalAbleClanCount() - 1;
         double rivalPercent = plugin.getSettingsManager().getRivalLimitPercent();
 
-        double limit = (double) clanCount * rivalPercent / 100.0D;
+        double limit = clanCount * rivalPercent / 100.0D;
 
         return rivalCount > limit;
     }
@@ -1152,5 +1102,9 @@ public class Clan implements KDR, Comparable<Clan> {
         }
     }
 
+    public void serverAnnounce(String message)
+    {
+        SimpleClans.serverAnnounceRaw(ChatBlock.parseColors(plugin.getSettingsManager().getClanAnnounce().replace("+clan", this.getTag()).replace("+message", message)));
+    }
 
 }

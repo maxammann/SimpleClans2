@@ -113,6 +113,7 @@ public class ProfileCommand extends GenericPlayerCommand {
 
         String status = ChatColor.WHITE + (clan.isVerified() ? plugin.getSettingsManager().getTrustedColor() + Language.getTranslation("verified") : plugin.getSettingsManager().getUntrustedColor() + Language.getTranslation("unverified"));
 
+        sender.sendMessage("  " + subColor + MessageFormat.format(Language.getTranslation("id"), clan.getId()));
         sender.sendMessage("  " + subColor + MessageFormat.format(Language.getTranslation("name.0"), name));
         sender.sendMessage("  " + subColor + MessageFormat.format(Language.getTranslation("status.0"), status));
         sender.sendMessage("  " + subColor + MessageFormat.format(Language.getTranslation("leaders.0"), leaders));

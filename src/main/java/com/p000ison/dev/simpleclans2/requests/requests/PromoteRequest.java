@@ -19,6 +19,7 @@
 
 package com.p000ison.dev.simpleclans2.requests.requests;
 
+import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.language.Language;
@@ -34,9 +35,9 @@ public class PromoteRequest extends MultipleAcceptorsRequest {
 
     private ClanPlayer targetPlayer;
 
-    public PromoteRequest(Set<ClanPlayer> acceptors, ClanPlayer requester, Clan clan, ClanPlayer targetPlayer)
+    public PromoteRequest(SimpleClans plugin, Set<ClanPlayer> acceptors, ClanPlayer requester, Clan clan, ClanPlayer targetPlayer)
     {
-        super(acceptors, requester, clan, MessageFormat.format(Language.getTranslation("asking.for.the.promotion"), requester.getName(), targetPlayer.getName()));
+        super(plugin, acceptors, requester, clan, MessageFormat.format(Language.getTranslation("asking.for.the.promotion"), requester.getName(), targetPlayer.getName()));
         this.targetPlayer = targetPlayer;
     }
 

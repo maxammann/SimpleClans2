@@ -56,9 +56,10 @@ import com.p000ison.dev.simpleclans2.settings.SettingsManager;
 import com.p000ison.dev.simpleclans2.support.PreciousStonesSupport;
 import com.p000ison.dev.simpleclans2.support.SpoutSupport;
 import com.p000ison.dev.simpleclans2.teleportation.TeleportManager;
-import com.p000ison.dev.simpleclans2.util.Announcer;
 import com.p000ison.dev.simpleclans2.util.Logging;
+import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import net.milkbowl.vault.economy.Economy;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -85,9 +86,10 @@ public class SimpleClans extends JavaPlugin implements Core {
     private TeleportManager teleportManager;
     private PreciousStonesSupport preciousStonesSupport;
     private SpoutSupport spoutSupport;
+    private ExceptionReporterTask exceptionReporterTask;
     private static Economy economy;
 
-    private static String name, version;
+    private static String name, version, email;
 
     @Override
     public void onEnable()
@@ -95,12 +97,9 @@ public class SimpleClans extends JavaPlugin implements Core {
         long startup = System.currentTimeMillis();
 
         try {
-            Logging.setInstance(getLogger());
+            Logging.setInstance(getLogger(), this);
 
             setupMetrics();
-
-            name = getName();
-            version = getDescription().getVersion();
 
             Logging.debug("Loading the language file..");
             long startLanguage = System.currentTimeMillis();
@@ -118,15 +117,18 @@ public class SimpleClans extends JavaPlugin implements Core {
             Logging.debug("Loading the managers finished!");
 
             if (getSettingsManager().isReportErrors()) {
-                getServer().getScheduler().scheduleAsyncRepeatingTask(this, new ExceptionReporterTask(), 0L, 1200L);
+                exceptionReporterTask = new ExceptionReporterTask();
+                getServer().getScheduler().scheduleAsyncRepeatingTask(this, exceptionReporterTask, 0L, 1200L);
             }
+
+            email = getSettingsManager().getEmail();
+            name = getName();
+            version = getDescription().getVersion();
 
             com.p000ison.dev.simpleclans2.util.chat.ChatBlock.setHeadColor(getSettingsManager().getHeadingPageColor());
             com.p000ison.dev.simpleclans2.util.chat.ChatBlock.setSubColor(getSettingsManager().getSubPageColor());
 
             registerEvents();
-
-            Announcer.setPlugin(this);
         } catch (RuntimeException e) {
             Logging.debug("------------------------------------------------------------");
             Logging.debug(e, "Failed at loading SimpleClans! Disabling...", true);
@@ -144,8 +146,6 @@ public class SimpleClans extends JavaPlugin implements Core {
     {
         try {
             Metrics metrics = new Metrics(this);
-            metrics.start();
-
             Metrics.Graph authGraph = metrics.createGraph("How many servers run in offline mode?");
 
             if (getServer().getOnlineMode()) {
@@ -153,6 +153,7 @@ public class SimpleClans extends JavaPlugin implements Core {
             } else {
                 authGraph.addPlotter(new OfflinePlotter());
             }
+            metrics.start();
         } catch (IOException e) {
             Logging.debug(e, true, "Failed at connection to metrics!");
         }
@@ -227,54 +228,56 @@ public class SimpleClans extends JavaPlugin implements Core {
     {
         commandManager.addCommand(new ListCommand(this));
         commandManager.addCommand(new CreateCommand(this));
+        commandManager.addCommand(new ProfileCommand(this));
+        commandManager.addCommand(new AnyProfileCommand(this));
+        //commandManager.addCommand(new LookupCommand(this));
+        commandManager.addCommand(new LeaderboardCommand(this));
         commandManager.addCommand(new AlliancesCommand(this));
+        commandManager.addCommand(new RivalriesCommand(this));
+        //commandManager.addCommand(new RosterCommand(this));
+        commandManager.addCommand(new VitalsCommand(this));
+        commandManager.addCommand(new CoordsCommand(this));
+        //commandManager.addCommand(new StatsCommand(this));
+        //kills
         commandManager.addCommand(new AllyCommand(this));
-        commandManager.addCommand(new CreateCommand(this));
+        commandManager.addCommand(new RivalCommand(this));
+        commandManager.addCommand(new HomeCommand(this));
+        commandManager.addCommand(new HomeSetCommand(this));
+        commandManager.addCommand(new HomeRegroupCommand(this));
+        //war
+        commandManager.addCommand(new BBCommand(this));
+        commandManager.addCommand(new BBAddCommand(this));
+        commandManager.addCommand(new BBClearCommand(this));
+        commandManager.addCommand(new ModifyTagCommand(this));
+        //toggle
+        commandManager.addCommand(new InviteCommand(this));
+        commandManager.addCommand(new KickCommand(this));
+        commandManager.addCommand(new ViewRanksCommand(this));
+        commandManager.addCommand(new RankCreateCommand(this));
+        commandManager.addCommand(new RankSetCommand(this));
+        commandManager.addCommand(new RankAddPermissionCommand(this));
+        commandManager.addCommand(new ViewPermissionsCommand(this));
+        commandManager.addCommand(new TrustCommand(this));
+        commandManager.addCommand(new UnTrustCommand(this));
+        commandManager.addCommand(new PromoteCommand(this));
+        commandManager.addCommand(new DemoteCommand(this));
+        commandManager.addCommand(new CapeCommand(this));
+        commandManager.addCommand(new ClanFFCommand(this));
+        commandManager.addCommand(new FFCommand(this));
+        commandManager.addCommand(new ResignCommand(this));
+        commandManager.addCommand(new VerifyCommand(this));
+        //mostkilled
+        commandManager.addCommand(new DisbandCommand(this));
+        commandManager.addCommand(new BanCommand(this));
+        commandManager.addCommand(new UnbanCommand(this));
+        commandManager.addCommand(new GlobalFFCommand(this));
+        commandManager.addCommand(new SaveCommand(this));
+        commandManager.addCommand(new ReloadCommand(this));
+        commandManager.addCommand(new InfoCommand(this));
+
         commandManager.addCommand(new AcceptCommand(this));
         commandManager.addCommand(new DenyCommand(this));
         commandManager.addCommand(new AbstainCommand(this));
-        commandManager.addCommand(new RankCreateCommand(this));
-        commandManager.addCommand(new BBAddCommand(this));
-        commandManager.addCommand(new BBClearCommand(this));
-        commandManager.addCommand(new BBCommand(this));
-        commandManager.addCommand(new CoordsCommand(this));
-        commandManager.addCommand(new DemoteCommand(this));
-        commandManager.addCommand(new BanCommand(this));
-        commandManager.addCommand(new HomeCommand(this));
-        commandManager.addCommand(new HomeRegroupCommand(this));
-        commandManager.addCommand(new HomeSetCommand(this));
-        commandManager.addCommand(new GlobalFFCommand(this));
-        commandManager.addCommand(new DisbandCommand(this));
-        commandManager.addCommand(new LeaderboardCommand(this));
-        commandManager.addCommand(new KickCommand(this));
-        commandManager.addCommand(new InviteCommand(this));
-        commandManager.addCommand(new ReloadCommand(this));
-        commandManager.addCommand(new CapeCommand(this));
-        commandManager.addCommand(new ResignCommand(this));
-        commandManager.addCommand(new ProfileCommand(this));
-        commandManager.addCommand(new AnyProfileCommand(this));
-        commandManager.addCommand(new VerifyCommand(this));
-        commandManager.addCommand(new RankSetCommand(this));
-        commandManager.addCommand(new SaveCommand(this));
-        commandManager.addCommand(new RankAddPermissionCommand(this));
-        commandManager.addCommand(new InfoCommand(this));
-        commandManager.addCommand(new FFCommand(this));
-        commandManager.addCommand(new ViewPermissionsCommand(this));
-        commandManager.addCommand(new ViewRanksCommand(this));
-        commandManager.addCommand(new VitalsCommand(this));
-        commandManager.addCommand(new RivalriesCommand(this));
-        commandManager.addCommand(new PromoteCommand(this));
-        commandManager.addCommand(new TrustCommand(this));
-        commandManager.addCommand(new UnTrustCommand(this));
-        commandManager.addCommand(new RivalCommand(this));
-        commandManager.addCommand(new ClanFFCommand(this));
-        commandManager.addCommand(new UnbanCommand(this));
-        commandManager.addCommand(new ModifyTagCommand(this));
-
-//        commandManager.addCommand(new LookupCommand(this));
-//        commandManager.addCommand(new RosterCommand(this));
-//        commandManager.addCommand(new StatsCommand(this));
-
 //        commandManager.addCommand(new StrifesCommand(this));
 //        commandManager.addCommand(new KillsCommand(this));
 //        commandManager.addCommand(new BankCommand(this));
@@ -395,5 +398,29 @@ public class SimpleClans extends JavaPlugin implements Core {
     public static String getPluginVersion()
     {
         return version;
+    }
+
+    public static String getUserEmail()
+    {
+        return email;
+    }
+
+    public void serverAnnounce(String message)
+    {
+        serverAnnounceRaw(ChatBlock.parseColors(this.getSettingsManager().getDefaultAnnounce().replace("+message", message)));
+    }
+
+    public static void serverAnnounceRaw(String message)
+    {
+        if (message == null) {
+            return;
+        }
+
+        Bukkit.broadcastMessage(message);
+    }
+
+    public ExceptionReporterTask getExceptionReporter()
+    {
+        return exceptionReporterTask;
     }
 }

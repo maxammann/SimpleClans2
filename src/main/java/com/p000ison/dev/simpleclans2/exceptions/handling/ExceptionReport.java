@@ -19,6 +19,7 @@
 
 package com.p000ison.dev.simpleclans2.exceptions.handling;
 
+import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.util.Logging;
 import org.bukkit.Bukkit;
 import org.json.simple.JSONArray;
@@ -64,6 +65,11 @@ public class ExceptionReport {
         report.put("os_arch", getProperty("os.arch"));
         report.put("os_name", getProperty("os.name"));
         report.put("os_version", getProperty("os.version"));
+        String email = SimpleClans.getUserEmail();
+
+        if (email != null) {
+            report.put("email", email);
+        }
 
         JSONArray causes = new JSONArray();
 
@@ -100,14 +106,13 @@ public class ExceptionReport {
         try {
             PHPConnection connection = new PHPConnection(PROTOCOL, HOST, PORT, FILE, true);
             connection.write("report=" + buildJSON());
-            String response = connection.read();
+            String response = connection.getResponse();
             if (response != null && !response.isEmpty()) {
                 throw new IOException("Failed at pushing error reports: " + response);
             }
             return true;
         } catch (IOException e) {
             Logging.debug(e, true);
-            e.printStackTrace();
             return false;
         }
     }

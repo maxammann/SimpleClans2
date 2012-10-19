@@ -32,6 +32,8 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Represents a GeneralHelper
@@ -56,6 +58,14 @@ public final class GeneralHelper {
         }
 
         return out.substring(0, out.length() - 1);
+    }
+
+    public static boolean isValidEmailAddress(String emailAddress)
+    {
+        String expression = "^[\\w\\-]([\\.\\w\\-])+[\\w]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
+        Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(emailAddress);
+        return matcher.matches();
     }
 
     public static boolean isOnline(Player player)

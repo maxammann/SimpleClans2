@@ -24,7 +24,6 @@ import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
 import com.p000ison.dev.simpleclans2.language.Language;
-import com.p000ison.dev.simpleclans2.util.Announcer;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -63,7 +62,7 @@ public class ResignCommand extends GenericPlayerCommand {
                 clan.addBBMessage(cp, MessageFormat.format(Language.getTranslation("0.has.resigned"), player.getName()));
                 clan.removeMember(cp);
             } else if (clan.isLeader(cp) && clan.getLeaders().size() == 1) {
-                Announcer.announce(ChatColor.AQUA + MessageFormat.format(Language.getTranslation("clan.has.been.disbanded"), clan.getName()));
+                plugin.serverAnnounce(ChatColor.AQUA + MessageFormat.format(Language.getTranslation("clan.has.been.disbanded"), clan.getName()));
                 clan.disband();
             } else {
                 player.sendMessage(ChatColor.RED + Language.getTranslation("last.leader.cannot.resign.you.must.appoint.another.leader.or.disband.the.clan"));

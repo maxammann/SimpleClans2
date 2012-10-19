@@ -19,11 +19,11 @@
 
 package com.p000ison.dev.simpleclans2.requests.requests;
 
+import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.language.Language;
 import com.p000ison.dev.simpleclans2.requests.SingleAcceptorRequest;
-import com.p000ison.dev.simpleclans2.util.Announcer;
 
 import java.text.MessageFormat;
 
@@ -32,9 +32,9 @@ import java.text.MessageFormat;
  */
 public class InviteRequest extends SingleAcceptorRequest {
 
-    public InviteRequest(ClanPlayer invited, ClanPlayer requester, Clan clan)
+    public InviteRequest(SimpleClans plugin, ClanPlayer invited, ClanPlayer requester, Clan clan)
     {
-        super(invited, requester, clan, MessageFormat.format(Language.getTranslation("you.have.been.invited"), clan.getTag()));
+        super(plugin, invited, requester, clan, MessageFormat.format(Language.getTranslation("you.have.been.invited"), clan.getTag()));
     }
 
     @Override
@@ -50,7 +50,7 @@ public class InviteRequest extends SingleAcceptorRequest {
         acceptor.setClan(getClan());
 
         getClan().addBBMessage(MessageFormat.format(Language.getTranslation("joined.the.clan"), acceptor.getName()));
-        Announcer.announce(MessageFormat.format(Language.getTranslation("has.joined"), acceptor.getName(), getClan().getName()));
+        plugin.serverAnnounce(MessageFormat.format(Language.getTranslation("has.joined"), acceptor.getName(), getClan().getName()));
 
         acceptor.update(true);
         return true;

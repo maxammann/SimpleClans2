@@ -19,6 +19,7 @@
 
 package com.p000ison.dev.simpleclans2.requests;
 
+import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import org.bukkit.entity.Player;
@@ -29,9 +30,9 @@ import org.bukkit.entity.Player;
 public abstract class SingleAcceptorRequest extends Request {
     private final ClanPlayer acceptor;
 
-    public SingleAcceptorRequest(ClanPlayer acceptor, ClanPlayer requester, Clan clan, String message)
+    public SingleAcceptorRequest(SimpleClans plugin, ClanPlayer acceptor, ClanPlayer requester, Clan clan, String message)
     {
-        super(requester, clan, message);
+        super(plugin, requester, clan, message);
         this.acceptor = acceptor;
     }
 

@@ -20,6 +20,7 @@
 
 package com.p000ison.dev.simpleclans2.requests;
 
+import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 
@@ -32,9 +33,11 @@ public abstract class Request implements Executable {
     private Clan clan;
     private String message;
     private long created;
+    protected SimpleClans plugin;
 
-    protected Request(ClanPlayer requester, Clan clan, String message)
+    protected Request(SimpleClans plugin, ClanPlayer requester, Clan clan, String message)
     {
+        this.plugin = plugin;
         this.requester = requester;
         this.clan = clan;
         this.message = message;

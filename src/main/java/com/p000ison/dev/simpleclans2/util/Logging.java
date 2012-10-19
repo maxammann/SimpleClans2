@@ -20,7 +20,7 @@
 
 package com.p000ison.dev.simpleclans2.util;
 
-import com.p000ison.dev.simpleclans2.exceptions.handling.ExceptionReporterTask;
+import com.p000ison.dev.simpleclans2.SimpleClans;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -30,15 +30,17 @@ import java.util.logging.Logger;
  */
 public final class Logging {
     private static Logger instance;
+    private static SimpleClans plugin;
 
-    public static void setInstance(Logger instance)
+    public static void setInstance(Logger instance, SimpleClans plugin)
     {
         Logging.instance = instance;
+        Logging.plugin = plugin;
     }
 
     public static void close()
     {
-        setInstance(null);
+        setInstance(null, null);
     }
 
     public static void debug(String msg, Object... args)
@@ -91,7 +93,8 @@ public final class Logging {
             instance.log(level, msg);
         } else if (reportException) {
             instance.log(level, msg, ex);
-            ExceptionReporterTask.addReport(ex);
+            boolean success = plugin.getExceptionReporter().addReport(ex);
+            instance.log(Level.INFO, success ? "----------------------\nException has been reported!\n----------------------" : "----------------------\nQueue overflow!!\n----------------------");
         }
     }
 }

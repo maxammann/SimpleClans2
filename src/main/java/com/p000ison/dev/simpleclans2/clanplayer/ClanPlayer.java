@@ -26,6 +26,7 @@ import com.p000ison.dev.simpleclans2.clan.ranks.Rank;
 import com.p000ison.dev.simpleclans2.language.Language;
 import com.p000ison.dev.simpleclans2.requests.VoteResult;
 import com.p000ison.dev.simpleclans2.util.DateHelper;
+import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import org.bukkit.entity.Player;
 
 import java.util.Set;
@@ -460,5 +461,10 @@ public class ClanPlayer implements KDR {
 
         }
         onlineVersion.removePermissions();
+    }
+
+    public void serverAnnounce(String message)
+    {
+        SimpleClans.serverAnnounceRaw(ChatBlock.parseColors(plugin.getSettingsManager().getClanPlayerAnnounce().replace("+player", this.getName()).replace("+message", message)));
     }
 }

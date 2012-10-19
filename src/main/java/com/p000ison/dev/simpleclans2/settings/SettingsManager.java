@@ -23,6 +23,7 @@ package com.p000ison.dev.simpleclans2.settings;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.util.ExceptionHelper;
+import com.p000ison.dev.simpleclans2.util.GeneralHelper;
 import com.p000ison.dev.simpleclans2.util.Logging;
 import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import org.bukkit.ChatColor;
@@ -61,7 +62,9 @@ public class SettingsManager {
     private boolean globalFF;
     private int autoSave;
     private String helpFormat;
+
     private boolean reportErrors;
+    private String email;
 
     private int maxTagLenght, minTagLenght, maxNameLenght, minNameLenght;
     private char[] disallowedColors;
@@ -123,7 +126,13 @@ public class SettingsManager {
             globalFF = general.getBoolean("global-ff");
             autoSave = general.getInt("auto-save");
             helpFormat = ChatBlock.parseColors(general.getString("help-format"));
-            reportErrors = general.getBoolean("report-errors");
+
+            ConfigurationSection reporting = general.getConfigurationSection("reporting");
+            reportErrors = reporting.getBoolean("errors");
+            String tmpEmail = reporting.getString("email");
+            if (GeneralHelper.isValidEmailAddress(tmpEmail)) {
+                email = tmpEmail;
+            }
 
             ConfigurationSection databaseSection = config.getConfigurationSection("database");
             databaseConfiguration = new DatabaseConfiguration();
@@ -264,6 +273,7 @@ public class SettingsManager {
 
         } catch (RuntimeException e) {
             ExceptionHelper.handleException(e, getClass());
+            return;
         }
 
         long finish = System.currentTimeMillis();
@@ -684,5 +694,10 @@ public class SettingsManager {
     public boolean isTrustMembersByDefault()
     {
         return trustMembersByDefault;
+    }
+
+    public String getEmail()
+    {
+        return email;
     }
 }

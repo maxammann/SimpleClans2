@@ -29,15 +29,15 @@ import java.util.Queue;
  */
 public class ExceptionReporterTask extends LinkedList<String> implements Runnable {
 
-    private static Queue<ExceptionReport> queue;
+    private Queue<ExceptionReport> queue;
     private static final int MAX_REPORTS = 15;
 
     public ExceptionReporterTask()
     {
-        ExceptionReporterTask.queue = new LinkedList<ExceptionReport>();
+        this.queue = new LinkedList<ExceptionReport>();
     }
 
-    public static boolean addReport(ExceptionReport exceptionReport)
+    public boolean addReport(ExceptionReport exceptionReport)
     {
         if (queue == null) {
             return false;
@@ -50,7 +50,7 @@ public class ExceptionReporterTask extends LinkedList<String> implements Runnabl
         return false;
     }
 
-    public static boolean addReport(Throwable thrown)
+    public boolean addReport(Throwable thrown)
     {
         if (queue == null) {
             return false;

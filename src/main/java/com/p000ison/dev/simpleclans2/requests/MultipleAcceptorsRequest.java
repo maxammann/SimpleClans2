@@ -19,6 +19,7 @@
 
 package com.p000ison.dev.simpleclans2.requests;
 
+import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import org.bukkit.entity.Player;
@@ -36,9 +37,9 @@ public abstract class MultipleAcceptorsRequest extends Request {
     private Set<ClanPlayer> denies = new HashSet<ClanPlayer>();
     private Set<ClanPlayer> abstains = new HashSet<ClanPlayer>();
 
-    public MultipleAcceptorsRequest(Set<ClanPlayer> acceptors, ClanPlayer requester, Clan clan, String message)
+    public MultipleAcceptorsRequest(SimpleClans plugin,Set<ClanPlayer> acceptors, ClanPlayer requester, Clan clan, String message)
     {
-        super(requester, clan, message);
+        super(plugin, requester, clan, message);
         this.acceptors = acceptors;
     }
 

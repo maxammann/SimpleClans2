@@ -19,6 +19,7 @@
 
 package com.p000ison.dev.simpleclans2.requests.requests;
 
+import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.language.Language;
@@ -34,9 +35,9 @@ public class AllyCreateRequest extends MultipleAcceptorsRequest {
 
     private Clan ally;
 
-    public AllyCreateRequest(Set<ClanPlayer> acceptors, ClanPlayer requester, Clan clan, Clan ally)
+    public AllyCreateRequest(SimpleClans plugin, Set<ClanPlayer> acceptors, ClanPlayer requester, Clan clan, Clan ally)
     {
-        super(acceptors, requester, clan, MessageFormat.format(Language.getTranslation("proposing.an.alliance"), clan.getName(), ally.getTag()));
+        super(plugin, acceptors, requester, clan, MessageFormat.format(Language.getTranslation("proposing.an.alliance"), clan.getName(), ally.getTag()));
         this.ally = ally;
     }
 
