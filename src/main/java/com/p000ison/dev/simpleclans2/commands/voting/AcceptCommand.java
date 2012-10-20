@@ -50,7 +50,7 @@ public class AcceptCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public void execute(Player player, String command, String[] args)
+    public void execute(Player player, String[] args)
     {
         ClanPlayer clanPlayer = plugin.getClanPlayerManager().getCreateClanPlayerExact(player);
         Request request = plugin.getRequestManager().vote(clanPlayer, VoteResult.ACCEPT);

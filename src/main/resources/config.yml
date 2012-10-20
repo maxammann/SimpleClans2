@@ -1,13 +1,16 @@
 general:
     elements-per-page: 10
     help-format: '&b    {0}'
-    clan-command: 'clan'
     server-name: 'SimpleClans'
     global-ff: false
     auto-save: 5
     reporting:
         errors: true
         email: ''
+commands:
+    clan: 'clan'
+    rank: 'rank'
+    bb: 'bb'
 database:
     mode: 'mysql'
     host: 'localhost'

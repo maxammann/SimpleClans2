@@ -448,8 +448,8 @@ public class ClanPlayer implements KDR {
     {
         if (onlineVersion == null) {
             return;
-
         }
+
         onlineVersion.removePermissions();
         onlineVersion.setupPermissions();
     }
@@ -467,4 +467,6 @@ public class ClanPlayer implements KDR {
     {
         SimpleClans.serverAnnounceRaw(ChatBlock.parseColors(plugin.getSettingsManager().getClanPlayerAnnounce().replace("+player", this.getName()).replace("+message", message)));
     }
+
+
 }

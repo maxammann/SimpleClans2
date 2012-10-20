@@ -52,7 +52,7 @@ public class VerifyCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public void execute(Player player, String command, String[] args)
+    public void execute(Player player, String[] args)
     {
 
         ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);

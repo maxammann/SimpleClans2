@@ -81,7 +81,9 @@ public class OnlineClanPlayer {
      */
     public void removePermissions()
     {
-        attachment.remove();
-        attachment = null;
+        if (attachment != null) {
+            attachment.remove();
+            attachment = null;
+        }
     }
 }

@@ -58,7 +58,7 @@ public class AlliancesCommand extends GenericConsoleCommand {
     }
 
     @Override
-    public void execute(CommandSender sender, String command, String[] args)
+    public void execute(CommandSender sender, String[] args)
     {
         ChatColor headColor = plugin.getSettingsManager().getHeadingPageColor();
         ChatColor subColor = plugin.getSettingsManager().getSubPageColor();

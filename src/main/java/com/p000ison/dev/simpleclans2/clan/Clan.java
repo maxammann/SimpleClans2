@@ -914,6 +914,43 @@ public class Clan implements KDR, Comparable<Clan> {
         ranks.add(rank);
     }
 
+
+    public long deleteRank(Rank rank)
+    {
+        if (rank == null) {
+            return -1;
+        }
+
+        long id = rank.getId();
+
+        if (ranks.remove(rank)) {
+            return id;
+        }
+
+        return -1;
+    }
+
+    public long deleteRank(String tag)
+    {
+        Iterator<Rank> it = ranks.iterator();
+
+        while (it.hasNext()) {
+            Rank rank = it.next();
+            if (rank.getTag().startsWith(tag)) {
+                long id = rank.getId();
+                for (ClanPlayer member : allMembers) {
+                    if (member.getRank().equals(rank)) {
+                        member.setRank(null);
+                        member.update();
+                    }
+                }
+                it.remove();
+                return id;
+            }
+        }
+        return -1;
+    }
+
     public Set<Rank> getRanks()
     {
         return Collections.unmodifiableSet(ranks);

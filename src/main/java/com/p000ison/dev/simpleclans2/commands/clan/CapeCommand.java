@@ -54,7 +54,7 @@ public class CapeCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public void execute(Player player, String command, String[] args)
+    public void execute(Player player, String[] args)
     {
         if (!plugin.getSettingsManager().isCapesEnabled()) {
             return;

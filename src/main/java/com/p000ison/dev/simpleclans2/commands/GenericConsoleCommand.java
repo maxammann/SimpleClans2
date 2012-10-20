@@ -30,7 +30,7 @@ public abstract class GenericConsoleCommand extends GenericCommand {
         super(name, plugin);
     }
 
-    public abstract void execute(CommandSender sender, String command, String[] args);
+    public abstract void execute(CommandSender sender, String[] args);
 
     public abstract String getMenu();
 }

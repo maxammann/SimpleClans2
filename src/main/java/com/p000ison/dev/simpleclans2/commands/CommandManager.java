@@ -74,7 +74,7 @@ public class CommandManager {
     }
 
 
-    public void execute(CommandSender sender, String command, String[] args)
+    public void execute(CommandSender sender, String command, Command.Type cmdType, String[] args)
     {
         try {
 
@@ -92,14 +92,14 @@ public class CommandManager {
 
             //Display default help
             if (args.length == 0) {
-                displayHelp(sender, Command.Type.getByCommand(command), 0);
+                displayHelp(sender, cmdType, 0);
                 return;
             } else if (args.length > 0 && args[0].equals("help")) {
                 if (args.length == 2) {
-                    displayHelp(sender, Command.Type.getByCommand(command), getPage(args[1]));
+                    displayHelp(sender, cmdType, getPage(args[1]));
                     return;
                 } else {
-                    displayHelp(sender, Command.Type.getByCommand(command), 0);
+                    displayHelp(sender, cmdType, 0);
                     return;
                 }
             }
@@ -111,7 +111,7 @@ public class CommandManager {
 
                     Command.Type type = cmd.getType();
 
-                    if (type != null && !type.equals(cmd.getType())) {
+                    if (type != null && !cmdType.equals(cmd.getType())) {
                         displayCommandHelp(cmd, sender);
                         return;
                     }
@@ -128,11 +128,11 @@ public class CommandManager {
                     }
 
                     if (cmd instanceof GenericConsoleCommand) {
-                        ((GenericConsoleCommand) cmd).execute(sender, command, realArgs);
+                        ((GenericConsoleCommand) cmd).execute(sender, realArgs);
                         return;
                     } else if (cmd instanceof GenericPlayerCommand) {
                         if (sender instanceof Player) {
-                            ((GenericPlayerCommand) cmd).execute((Player) sender, command, realArgs);
+                            ((GenericPlayerCommand) cmd).execute((Player) sender, realArgs);
                             return;
                         }
                     } else {
@@ -205,6 +205,11 @@ public class CommandManager {
 
 
         int size = commands.size();
+
+        if (size == 0) {
+            sender.sendMessage(ChatColor.DARK_RED + "No commands found!");
+            return;
+        }
 
         int[] boundings = getBoundings(size, page);
 

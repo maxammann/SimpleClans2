@@ -25,7 +25,7 @@ import org.bukkit.permissions.Permissible;
 /**
  * Represents a Command
  */
-interface Command {
+public interface Command {
 
     String getName();
 
@@ -48,7 +48,7 @@ interface Command {
     public static enum Type {
         CLAN("clan", "sc"),
         RANK("rank"),
-        BB("bb");
+        BB();
 
         private String[] command;
 

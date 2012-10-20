@@ -49,7 +49,7 @@ public class DisbandCommand extends GenericConsoleCommand {
     }
 
     @Override
-    public void execute(CommandSender sender, String command, String[] args)
+    public void execute(CommandSender sender, String[] args)
     {
         Clan clan = plugin.getClanManager().getClan(args[0]);
 

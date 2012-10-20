@@ -60,11 +60,12 @@ public class ViewRanksCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public void execute(Player player, String command, String[] args)
+    public void execute(Player player, String[] args)
     {
         ClanPlayer clanPlayer = plugin.getClanPlayerManager().getClanPlayer(player);
 
         if (clanPlayer == null) {
+            player.sendMessage(ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
             return;
         }
 
@@ -77,6 +78,7 @@ public class ViewRanksCommand extends GenericPlayerCommand {
         Collections.sort(sorted);
 
         if (ranks.isEmpty()) {
+            player.sendMessage(ChatColor.DARK_RED + Language.getTranslation("no.ranks.created"));
             return;
         }
 

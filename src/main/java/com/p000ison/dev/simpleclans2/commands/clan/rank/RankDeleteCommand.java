@@ -14,7 +14,7 @@
  *     You should have received a copy of the GNU General Public License
  *     along with SimpleClans2.  If not, see <http://www.gnu.org/licenses/>.
  *
- *     Last modified: 10.10.12 21:57
+ *     Last modified: 10/20/12 5:08 PM
  */
 
 package com.p000ison.dev.simpleclans2.commands.clan.rank;
@@ -23,21 +23,22 @@ import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
+import com.p000ison.dev.simpleclans2.database.data.statements.RemoveRankStatement;
 import com.p000ison.dev.simpleclans2.language.Language;
-import com.p000ison.dev.simpleclans2.util.GeneralHelper;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 /**
  * Represents a RankCreateCommand
  */
-public class RankCreateCommand extends GenericPlayerCommand {
-    public RankCreateCommand(SimpleClans plugin)
+public class RankDeleteCommand extends GenericPlayerCommand {
+
+    public RankDeleteCommand(SimpleClans plugin)
     {
-        super("RankCreate", plugin);
-        setArgumentRange(3, 50);
-        setUsages(Language.getTranslation("usage.rank.create", plugin.getSettingsManager().getClanCommand()));
-        setIdentifiers(Language.getTranslation("rank.create.command"));
+        super("RankDelete", plugin);
+        setArgumentRange(1, 1);
+        setUsages(Language.getTranslation("usage.rank.delete", plugin.getSettingsManager().getClanCommand()));
+        setIdentifiers(Language.getTranslation("rank.delete.command"));
         setType(Type.RANK);
     }
 
@@ -45,7 +46,7 @@ public class RankCreateCommand extends GenericPlayerCommand {
     public String getMenu(ClanPlayer clanPlayer)
     {
         if (clanPlayer != null && (clanPlayer.isLeader() || clanPlayer.hasRankPermission("manage.ranks"))) {
-            return Language.getTranslation("menu.rank.create", plugin.getSettingsManager().getClanCommand());
+            return Language.getTranslation("menu.rank.delete", plugin.getSettingsManager().getClanCommand());
         }
         return null;
     }
@@ -67,17 +68,15 @@ public class RankCreateCommand extends GenericPlayerCommand {
             return;
         }
 
-        int priority;
+        long response = clan.deleteRank(args[0]);
 
-        try {
-            priority = Integer.parseInt(args[0]);
-        } catch (NumberFormatException e) {
+        if (response == -1) {
+            player.sendMessage(Language.getTranslation("rank.not.found"));
             return;
         }
 
-        String name = GeneralHelper.arrayBoundsToString(2, args);
+        plugin.getDataManager().addStatement(new RemoveRankStatement(response));
 
-        clan.addRank(plugin.getRankManager().createRank(clan, name, args[1], priority));
-        player.sendMessage(ChatColor.AQUA + Language.getTranslation("rank.created", name));
+        player.sendMessage(ChatColor.AQUA + Language.getTranslation("rank.deleted"));
     }
 }

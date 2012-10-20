@@ -46,7 +46,7 @@ public class InfoCommand extends GenericConsoleCommand {
     }
 
     @Override
-    public void execute(CommandSender sender, String command, String[] args)
+    public void execute(CommandSender sender, String[] args)
     {
         int loadedClans = plugin.getClanManager().getClans().size();
         int loadedClanPlayers = plugin.getClanPlayerManager().getClanPlayers().size();

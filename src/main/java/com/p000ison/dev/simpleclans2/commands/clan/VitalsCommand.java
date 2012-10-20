@@ -59,7 +59,7 @@ public class VitalsCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public void execute(Player player, String command, String[] args)
+    public void execute(Player player, String[] args)
     {
         ChatColor headColor = plugin.getSettingsManager().getHeadingPageColor();
 

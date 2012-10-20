@@ -48,7 +48,7 @@ public class UnbanCommand extends GenericConsoleCommand {
     }
 
     @Override
-    public void execute(CommandSender sender, String command, String[] args)
+    public void execute(CommandSender sender, String[] args)
     {
 
         ClanPlayer banned = plugin.getClanPlayerManager().getAnyClanPlayerExact(args[0]);

@@ -21,12 +21,16 @@
 package com.p000ison.dev.simpleclans2.util;
 
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Date;
 
 /**
  * Represents a DateHelper
  */
 public final class DateHelper {
+    public static final long YEAR = 31556926000L;
     public static final long DAY = 86400000L;
     public static final long HOUR = 3600000L;
     public static final long MINUTE = 60000L;
@@ -108,5 +112,105 @@ public final class DateHelper {
     public static long differenceInMilliseconds(long date1, long date2)
     {
         return Math.abs(date1 - date2);
+    }
+
+    private static final char YEAR_CHAR = 'y', DAY_CHAR = 'd', HOUR_CHAR = 'h', MINUTE_CHAR = 'm', SECOND_CHAR = 's';
+
+    /**
+     * This parses a String which holds a time and returns the duration in ms.
+     * <p/>
+     * <p><strong>Example:</strong> 2d5h2m52s</p>
+     *
+     * @param time The string to parse
+     * @return The duration in ms
+     */
+    public static long parseTime(String time)
+    {
+        char[] chars = time.toCharArray();
+
+        long duration = 0;
+
+        long current = 0;
+        int run = 1;
+        long multi = 1;
+
+        //iterate backwards
+        for (int i = chars.length - 1; i >= 0; i--) {
+            char character = chars[i];
+            int currentNumber = getDigit(character);
+
+            if (currentNumber != -1) {
+                //is number
+                //set the value of the current iteration
+                current += currentNumber * run;
+                //add the current value to the whole
+                duration += current * multi;
+                //we set our run '* 10' because: 112 = 1 * 100 + 1 * 10 + 2 * 1
+                run *= 10;
+            } else {
+                //is character
+                //lets find our multiplicator
+                switch (character) {
+                    case YEAR_CHAR:
+                        multi = YEAR;
+                        break;
+                    case DAY_CHAR:
+                        multi = DAY;
+                        break;
+                    case HOUR_CHAR:
+                        multi = HOUR;
+                        break;
+                    case MINUTE_CHAR:
+                        multi = MINUTE;
+                        break;
+                    case SECOND_CHAR:
+                        multi = SECOND;
+                        break;
+                    case ' ':
+                    case '_':
+                        continue;
+                    default:
+                        throw new IllegalArgumentException(String.format("Invalid character found! %s", character));
+                }
+                //everytime we get a new character which signs the multiplicator we reset our values
+                current = 0;
+                run = 1;
+            }
+        }
+
+        return duration;
+    }
+
+    /**
+     * Returns the number of a character. '9' will return the integer 9, '2' will return the integer 2
+     *
+     * @param character The character to parse
+     * @return The integer which matches, or -1 if the parse fails
+     */
+    public static int getDigit(int character)
+    {
+        final int MINIMAL_DIGIT = 48, MAXIMAL_DIGIT = 57;
+
+        if (character >= MINIMAL_DIGIT && character <= MAXIMAL_DIGIT) {
+            return character - MINIMAL_DIGIT;
+        }
+
+        return -1;
+    }
+
+    public static void main(String[] args)
+    {
+        String input;
+        System.out.print("Wann? ");
+
+        try {
+            BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));
+            input = bufferRead.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        System.out.println(new Date(System.currentTimeMillis() + parseTime(input)));
     }
 }

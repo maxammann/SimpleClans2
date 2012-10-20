@@ -24,6 +24,7 @@ import com.p000ison.dev.simpleclans2.api.Core;
 import com.p000ison.dev.simpleclans2.clan.ClanManager;
 import com.p000ison.dev.simpleclans2.clan.ranks.RankManager;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayerManager;
+import com.p000ison.dev.simpleclans2.commands.Command;
 import com.p000ison.dev.simpleclans2.commands.CommandManager;
 import com.p000ison.dev.simpleclans2.commands.admin.*;
 import com.p000ison.dev.simpleclans2.commands.clan.*;
@@ -116,8 +117,8 @@ public class SimpleClans extends JavaPlugin implements Core {
 
             loadManagers();
 
-            com.p000ison.dev.simpleclans2.util.chat.ChatBlock.setHeadColor(getSettingsManager().getHeadingPageColor());
-            com.p000ison.dev.simpleclans2.util.chat.ChatBlock.setSubColor(getSettingsManager().getSubPageColor());
+            ChatBlock.setHeadColor(getSettingsManager().getHeadingPageColor());
+            ChatBlock.setSubColor(getSettingsManager().getSubPageColor());
 
             registerEvents();
 
@@ -154,7 +155,7 @@ public class SimpleClans extends JavaPlugin implements Core {
             }
             metrics.start();
         } catch (IOException e) {
-            Logging.debug(e, true, "Failed at connection to metrics!");
+            Logging.debug(e, true);
         }
     }
 
@@ -291,7 +292,10 @@ public class SimpleClans extends JavaPlugin implements Core {
     @Override
     public boolean onCommand(org.bukkit.command.CommandSender sender, org.bukkit.command.Command command, java.lang.String label, java.lang.String[] args)
     {
-        commandManager.execute(sender, command.getName(), args);
+        Command.Type type = Command.Type.getByCommand(command.getName());
+        if (type != null) {
+            commandManager.execute(sender, command.getName(), type, args);
+        }
         return true;
     }
 
@@ -360,11 +364,6 @@ public class SimpleClans extends JavaPlugin implements Core {
     public static boolean hasEconomy()
     {
         return economy != null;
-    }
-
-    public static Economy getEconomy()
-    {
-        return economy;
     }
 
     @Override

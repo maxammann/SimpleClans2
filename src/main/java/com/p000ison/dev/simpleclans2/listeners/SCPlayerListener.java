@@ -23,13 +23,14 @@ package com.p000ison.dev.simpleclans2.listeners;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
+import com.p000ison.dev.simpleclans2.commands.Command;
 import com.p000ison.dev.simpleclans2.database.data.response.responses.BBRetrieveResponse;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.Arrays;
@@ -64,7 +65,7 @@ public class SCPlayerListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onPlayerLogin(PlayerLoginEvent event)
+    public void onPlayerLogin(PlayerJoinEvent event)
     {
         Player player = event.getPlayer();
 
@@ -95,11 +96,22 @@ public class SCPlayerListener implements Listener {
         int lenght = args.length;
 
         String clanCommand = plugin.getSettingsManager().getClanCommand();
+        String rankCommand = plugin.getSettingsManager().getClanCommand();
+        String bbCommand = plugin.getSettingsManager().getClanCommand();
+
+        Command.Type type = null;
 
         if (args[0].equalsIgnoreCase(clanCommand)) {
-            plugin.getCommandManager().execute(player, clanCommand, Arrays.copyOfRange(args, 1, lenght));
+            type = Command.Type.CLAN;
+        } else if (args[0].equalsIgnoreCase(rankCommand)) {
+            type = Command.Type.RANK;
+        } else if (args[0].equalsIgnoreCase(bbCommand)) {
+            type = Command.Type.BB;
+        }
+
+        if (type != null) {
+            plugin.getCommandManager().execute(player, args[0], type, Arrays.copyOfRange(args, 1, lenght));
             event.setCancelled(true);
-//            return;
         }
     }
 }
