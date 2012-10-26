@@ -32,7 +32,7 @@ public class ClanFlags extends Flags {
     /**
      * Sets the home point of this clan to a {@link Location}
      *
-     * @param location
+     * @param location The location to set
      * @see Location
      */
     public void setHomeLocation(Location location)

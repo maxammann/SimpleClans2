@@ -27,12 +27,12 @@ import org.bukkit.entity.Player;
 /**
  * Represents a MultipleAcceptorsRequest
  */
-public abstract class SingleAcceptorRequest extends Request {
+public abstract class SingleAcceptorRequest extends AbstractRequest {
     private final ClanPlayer acceptor;
 
-    public SingleAcceptorRequest(SimpleClans plugin, ClanPlayer acceptor, ClanPlayer requester, Clan clan, String message)
+    public SingleAcceptorRequest(SimpleClans plugin, ClanPlayer acceptor, ClanPlayer requester, String message)
     {
-        super(plugin, requester, clan, message);
+        super(plugin, requester, message);
         this.acceptor = acceptor;
     }
 
@@ -49,7 +49,7 @@ public abstract class SingleAcceptorRequest extends Request {
     }
 
     @Override
-    public boolean hasRequestToHandle(ClanPlayer clanPlayer)
+    public boolean isClanPlayerInvolved(ClanPlayer clanPlayer)
     {
         return acceptor.equals(clanPlayer) || requester.equals(clanPlayer);
     }
@@ -74,6 +74,19 @@ public abstract class SingleAcceptorRequest extends Request {
     public void deny(ClanPlayer clanPlayer)
     {
         clanPlayer.setLastVoteResult(VoteResult.DENY);
+    }
+
+    @Override
+    public boolean isClanInvolved(Clan clan)
+    {
+        if (clan.equals(getRequester().getClan())) {
+            return true;
+        }
+
+        if (getAcceptor().getClan().equals(clan)) {
+            return true;
+        }
+        return false;
     }
 
     @Override

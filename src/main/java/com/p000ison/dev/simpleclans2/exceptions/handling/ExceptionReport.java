@@ -19,13 +19,8 @@
 
 package com.p000ison.dev.simpleclans2.exceptions.handling;
 
-import com.p000ison.dev.simpleclans2.util.Logging;
-import org.bukkit.Bukkit;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-
-import java.io.IOException;
-import java.util.Arrays;
 
 import static java.lang.System.getProperty;
 
@@ -40,9 +35,6 @@ public class ExceptionReport {
     private String email;
     private long date;
 
-    private static final String PROTOCOL = "http", HOST = "dreamz.bplaced.com", FILE = "/exceptions/index.php";
-    private static final int PORT = 80;
-
     public ExceptionReport(String name, String version, Throwable thrown, String email)
     {
         this.name = name;
@@ -52,7 +44,7 @@ public class ExceptionReport {
         date = System.currentTimeMillis();
     }
 
-    private String buildJSON()
+    public JSONObject getJSONObject()
     {
         JSONObject report = new JSONObject();
         report.put("plugin", name);
@@ -60,8 +52,8 @@ public class ExceptionReport {
         report.put("date", date);
         report.put("message", thrown.getMessage());
         report.put("exception", buildThrowableJSON(thrown));
-        report.put("plugins", Arrays.asList(Bukkit.getPluginManager().getPlugins()).toString());
-        report.put("bukkit_version", Bukkit.getBukkitVersion());
+        report.put("plugins", /*Arrays.asList(Bukkit.getPluginManager().getPlugins()).toString()*/"b");
+        report.put("bukkit_version", /*Bukkit.getBukkitVersion()*/"a");
         report.put("java_version", getProperty("java.version"));
         report.put("os_arch", getProperty("os.arch"));
         report.put("os_name", getProperty("os.name"));
@@ -80,43 +72,8 @@ public class ExceptionReport {
         }
 
         report.put("causes", causes);
-        return report.toJSONString();
+        return report;
     }
-
-    public static void main(String[] args)
-    {
-        try {
-            try {
-                throw new Exception();
-            } catch (Exception e) {
-                try {
-                    throw new Exception(e);
-                } catch (Exception ex) {
-                    throw new Exception(ex);
-                }
-            }
-        } catch (Exception e) {
-            ExceptionReport report = new ExceptionReport("SimpleClans", "2.0", e, "test");
-            report.report();
-        }
-    }
-
-    public boolean report()
-    {
-        try {
-            PHPConnection connection = new PHPConnection(PROTOCOL, HOST, PORT, FILE, true);
-            connection.write("report=" + buildJSON());
-            String response = connection.getResponse();
-            if (response != null && !response.isEmpty()) {
-                throw new IOException("Failed at pushing error reports: " + response);
-            }
-            return true;
-        } catch (IOException e) {
-            Logging.debug(e, true);
-            return false;
-        }
-    }
-
 
     private static Object buildThrowableJSON(Throwable thrown)
     {

@@ -19,16 +19,23 @@
 
 package com.p000ison.dev.simpleclans2.exceptions.handling;
 
+import com.p000ison.dev.simpleclans2.util.Logging;
+import org.json.simple.JSONArray;
+
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Queue;
 
 /**
  * Represents a ExceptionReporterTask
  */
-public class ExceptionReporterTask extends LinkedList<String> implements Runnable {
+public class ExceptionReporterTask implements Runnable {
 
     private Queue<ExceptionReport> queue;
     private static final int MAX_REPORTS = 15;
+
+    private static final String PROTOCOL = "http", HOST = "dreamz.bplaced.com", FILE = "/exceptions/index.php";
+    private static final int PORT = 80;
 
     public ExceptionReporterTask()
     {
@@ -54,12 +61,54 @@ public class ExceptionReporterTask extends LinkedList<String> implements Runnabl
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void run()
     {
+        if (queue.isEmpty()) {
+            return;
+        }
+
+        JSONArray reports = new JSONArray();
+
         ExceptionReport report;
 
         while ((report = queue.poll()) != null) {
-            report.report();
+            reports.add(report.getJSONObject());
         }
+
+        try {
+            PHPConnection connection = new PHPConnection(PROTOCOL, HOST, PORT, FILE, true);
+            connection.write("report=" + reports.toJSONString());
+            String response = connection.read();
+            if (response != null && !response.isEmpty()) {
+                throw new IOException("Failed at pushing error reports: " + response);
+            }
+        } catch (IOException e) {
+            Logging.debug(e, true);
+        }
+    }
+
+    public static void main(String[] args)
+    {
+        ExceptionReporterTask test = new ExceptionReporterTask();
+        for (int i = 0; i < 20; i++) {
+            try {
+                try {
+                    throw new Exception();
+                } catch (Exception e) {
+                    try {
+                        throw new Exception(e);
+                    } catch (Exception ex) {
+                        throw new Exception(ex);
+                    }
+                }
+            } catch (Exception e) {
+
+                ExceptionReport report = new ExceptionReport("SimpleClans", "2.0", e, "test");
+                test.addReport(report);
+
+            }
+        }
+        test.run();
     }
 }

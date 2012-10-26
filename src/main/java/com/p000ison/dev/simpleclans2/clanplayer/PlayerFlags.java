@@ -27,6 +27,7 @@ import java.util.Set;
 /**
  * Represents a Flag of a player
  */
+@SuppressWarnings("unchecked")
 public class PlayerFlags extends Flags {
 
     /**

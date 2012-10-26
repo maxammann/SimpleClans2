@@ -142,6 +142,19 @@ public class SimpleClans extends JavaPlugin implements Core {
         Logging.debug(String.format("Enabling took %s ms", finish - startup));
     }
 
+//    private void enableDebuggingConsole()
+//    {
+//        Interpreter beanshell = new Interpreter();
+//        try {
+//            beanshell.set("plugin", this);
+//            beanshell.set("portnum", 1234);
+//            beanshell.eval("setAccessibility(true)");
+//            beanshell.eval("server(portnum)");
+//        } catch (Exception e) {
+//            Logging.debug(e, true);
+//        }
+//    }
+
     public void setupMetrics()
     {
         try {

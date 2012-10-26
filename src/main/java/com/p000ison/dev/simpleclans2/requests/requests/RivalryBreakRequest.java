@@ -37,7 +37,7 @@ public class RivalryBreakRequest extends MultipleAcceptorsRequest {
 
     public RivalryBreakRequest(SimpleClans plugin, Set<ClanPlayer> acceptors, ClanPlayer requester, Clan clan, Clan rival)
     {
-        super(plugin, acceptors, requester, clan, MessageFormat.format(Language.getTranslation("proposing.to.end.the.rivalry"), clan.getTag(), rival.getTag()));
+        super(plugin, acceptors, requester, MessageFormat.format(Language.getTranslation("proposing.to.end.the.rivalry"), clan.getTag(), rival.getTag()));
         this.rival = rival;
     }
 
@@ -45,7 +45,7 @@ public class RivalryBreakRequest extends MultipleAcceptorsRequest {
     public boolean execute()
     {
         ClanPlayer cp = getRequester();
-        Clan clan = getClan();
+        Clan clan = requester.getClan();
 
 
         if (rival != null && clan != null) {

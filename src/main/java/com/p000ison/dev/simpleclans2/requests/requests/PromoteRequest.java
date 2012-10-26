@@ -35,9 +35,9 @@ public class PromoteRequest extends MultipleAcceptorsRequest {
 
     private ClanPlayer targetPlayer;
 
-    public PromoteRequest(SimpleClans plugin, Set<ClanPlayer> acceptors, ClanPlayer requester, Clan clan, ClanPlayer targetPlayer)
+    public PromoteRequest(SimpleClans plugin, Set<ClanPlayer> acceptors, ClanPlayer requester, ClanPlayer targetPlayer)
     {
-        super(plugin, acceptors, requester, clan, MessageFormat.format(Language.getTranslation("asking.for.the.promotion"), requester.getName(), targetPlayer.getName()));
+        super(plugin, acceptors, requester, MessageFormat.format(Language.getTranslation("asking.for.the.promotion"), requester.getName(), targetPlayer.getName()));
         this.targetPlayer = targetPlayer;
     }
 
@@ -45,7 +45,7 @@ public class PromoteRequest extends MultipleAcceptorsRequest {
     public boolean execute()
     {
         ClanPlayer cp = getRequester();
-        Clan clan = getClan();
+        Clan clan = requester.getClan();
 
 
         if (clan != null && clan.equals(cp.getClan())) {

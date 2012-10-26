@@ -28,13 +28,17 @@ import com.p000ison.dev.simpleclans2.clanplayer.OnlineClanPlayer;
 import com.p000ison.dev.simpleclans2.database.data.response.responses.BBAddResponse;
 import com.p000ison.dev.simpleclans2.language.Language;
 import com.p000ison.dev.simpleclans2.util.DateHelper;
+import com.p000ison.dev.simpleclans2.util.GeneralHelper;
 import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
+import java.text.DecimalFormat;
 import java.text.MessageFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -770,6 +774,11 @@ public class Clan implements KDR, Comparable<Clan> {
         addBBMessage(warringClan, MessageFormat.format(Language.getTranslation("you.are.no.longer.at.war"), warringClan.getName(), getTag()));
     }
 
+    /**
+     * Removes a member from this clan
+     *
+     * @param clanPlayer The member to remove
+     */
     public void removeMember(ClanPlayer clanPlayer)
     {
         if (allMembers.remove(clanPlayer)) {
@@ -781,6 +790,9 @@ public class Clan implements KDR, Comparable<Clan> {
         }
     }
 
+    /**
+     * Disbands this (performs all necessary steps)
+     */
     public void disband()
     {
         Iterator<ClanPlayer> clanPlayers = allMembers.iterator();
@@ -808,46 +820,71 @@ public class Clan implements KDR, Comparable<Clan> {
         }
 
 
-//        for (Clan c : clans) {
-//            String disbanded = plugin.getLang("clan.disbanded");
-//
-//            if (c.removeWarringClan(this)) {
-//                c.addBb(disbanded, ChatColor.AQUA + MessageFormat.format(plugin.getLang("you.are.no.longer.at.war"), Helper.capitalize(c.getName()), getColorTag()));
-//            }
-//
-//            if (c.removeRival(getTag())) {
-//                c.addBb(disbanded, ChatColor.AQUA + MessageFormat.format(plugin.getLang("has.been.disbanded.rivalry.ended"), Helper.capitalize(getName())));
-//            }
-//
-//            if (c.removeAlly(getTag())) {
-//                c.addBb(disbanded, ChatColor.AQUA + MessageFormat.format(plugin.getLang("has.been.disbanded.alliance.ended"), Helper.capitalize(getName())));
-//            }
-//        }
+        for (Clan rival : rivals) {
+            rival.removeRival(this);
+            rival.addBBMessage(this, Language.getTranslation("has.been.disbanded.rivalry.ended", this.getTag()));
+        }
+
+        for (Clan ally : allies) {
+            ally.removeAlly(this);
+            ally.addBBMessage(this, Language.getTranslation("has.been.disbanded.alliance.ended", this.getTag()));
+        }
+
+        for (Clan warringClan : warring) {
+            warringClan.removeWarringClan(this);
+            warringClan.addBBMessage(this, Language.getTranslation("you.are.no.longer.at.war", this.getTag(), warringClan.getTag()));
+        }
 
         plugin.getClanManager().removeClan(this);
         plugin.getDataManager().deleteClan(this);
     }
 
+    /**
+     * Checks if this clan has allies
+     *
+     * @return Weather this clan has allies
+     */
     public boolean hasAllies()
     {
         return allies != null && !allies.isEmpty();
     }
 
+    /**
+     * Checks if this clan has rivals
+     *
+     * @return Weather this clan has rivals
+     */
     public boolean hasRivals()
     {
         return rivals != null && !rivals.isEmpty();
     }
 
+    /**
+     * Checks if this clan has warring clans
+     *
+     * @return Weather this clan has warring clans
+     */
     public boolean hasWarringClans()
     {
         return warring != null && !warring.isEmpty();
     }
 
+    /**
+     * Checks if all leaders are online
+     *
+     * @return Weather all players are online
+     */
     public boolean allLeadersOnline()
     {
         return allLeadersOnline(null);
     }
 
+    /**
+     * Checks if all leaders are online
+     *
+     * @param ignore Null or a player to ignore
+     * @return Weather all players are online
+     */
     public boolean allLeadersOnline(ClanPlayer ignore)
     {
         for (ClanPlayer clanPlayer : getLeaders()) {
@@ -863,16 +900,29 @@ public class Clan implements KDR, Comparable<Clan> {
         return true;
     }
 
+    /**
+     * Checks if this clan needs a update
+     *
+     * @return Weather this clan needs a update
+     */
     public boolean needsUpdate()
     {
         return update;
     }
 
+    /**
+     * Marks this clan to update
+     */
     public void update()
     {
         this.update = true;
     }
 
+    /**
+     * Marks this clan to update
+     *
+     * @param update Weather to update
+     */
     public void update(boolean update)
     {
         this.update = update;
@@ -905,6 +955,11 @@ public class Clan implements KDR, Comparable<Clan> {
         return new int[]{totalDeaths, totalRivalKills, totalCivilianKills, totalCivilianKills, totalNeutralKills};
     }
 
+    /**
+     * Adds a rank to this clan
+     *
+     * @param rank The rank to add
+     */
     public void addRank(Rank rank)
     {
         if (rank == null) {
@@ -915,6 +970,12 @@ public class Clan implements KDR, Comparable<Clan> {
     }
 
 
+    /**
+     * Removes a rank and removes them also from the players
+     *
+     * @param rank The rank to look for
+     * @return Weather is was successfully
+     */
     public long deleteRank(Rank rank)
     {
         if (rank == null) {
@@ -924,12 +985,24 @@ public class Clan implements KDR, Comparable<Clan> {
         long id = rank.getId();
 
         if (ranks.remove(rank)) {
+            for (ClanPlayer member : allMembers) {
+                if (member.getRank().equals(rank)) {
+                    member.setRank(null);
+                    member.update();
+                }
+            }
             return id;
         }
 
         return -1;
     }
 
+    /**
+     * Searches for a rank and removes it.
+     *
+     * @param tag The search query
+     * @return Weather it was sucessfully
+     */
     public long deleteRank(String tag)
     {
         Iterator<Rank> it = ranks.iterator();
@@ -951,60 +1024,33 @@ public class Clan implements KDR, Comparable<Clan> {
         return -1;
     }
 
+    /**
+     * Gets a set of all ranks of this clan
+     *
+     * @return All ranks of this clan
+     */
     public Set<Rank> getRanks()
     {
         return Collections.unmodifiableSet(ranks);
     }
 
-    public boolean removeRank(String query)
-    {
-        for (ClanPlayer clanPlayer : allMembers) {
-            Rank rank = clanPlayer.getRank();
 
-            if (rank == null) {
-                continue;
-            }
-
-            if (rank.getName().equals(query)) {
-                clanPlayer.setRank(null);
-            }
-        }
-
-        Iterator<Rank> rankIterator = ranks.iterator();
-
-        while (rankIterator.hasNext()) {
-            Rank currentRank = rankIterator.next();
-            if (currentRank.getName().equals(query)) {
-                plugin.getDataManager().deleteRank(currentRank.getId());
-                rankIterator.remove();
-            }
-        }
-
-        return true;
-    }
-
-    public boolean removeRank(Rank query)
-    {
-        for (ClanPlayer clanPlayer : allMembers) {
-            Rank rank = clanPlayer.getRank();
-
-            if (rank == null) {
-                continue;
-            }
-
-            if (rank.equals(query)) {
-                clanPlayer.setRank(null);
-            }
-        }
-
-        return ranks.remove(query);
-    }
-
-    public void setRanks(Set<Rank> ranks)
+    /**
+     * Loads the ranks for this clan
+     *
+     * @param ranks The ranks to load
+     */
+    public void loadRanks(Set<Rank> ranks)
     {
         this.ranks = ranks;
     }
 
+    /**
+     * Returns a rank of this clan
+     *
+     * @param id The id to look for
+     * @return The rank
+     */
     public Rank getRank(long id)
     {
         for (Rank rank : ranks) {
@@ -1035,6 +1081,11 @@ public class Clan implements KDR, Comparable<Clan> {
     }
 
 
+    /**
+     * Turns the most important information about this clan into a string
+     *
+     * @return A string with information about this clan
+     */
     @Override
     public String toString()
     {
@@ -1048,6 +1099,11 @@ public class Clan implements KDR, Comparable<Clan> {
                 '}';
     }
 
+    /**
+     * Compares this clan to another clan based on the inactive days.
+     *
+     * @param anotherClan Another clan
+     */
     @Override
     public int compareTo(Clan anotherClan)
     {
@@ -1056,6 +1112,11 @@ public class Clan implements KDR, Comparable<Clan> {
         return (thisInactiveDate < anotherInactiveDate ? -1 : (thisInactiveDate == anotherInactiveDate ? 0 : 1));
     }
 
+    /**
+     * Returns all members, including the leaders
+     *
+     * @return All members of this clan
+     */
     public Set<ClanPlayer> getAllAllyMembers()
     {
         Set<ClanPlayer> allyMembers = new HashSet<ClanPlayer>();
@@ -1138,9 +1199,68 @@ public class Clan implements KDR, Comparable<Clan> {
         }
     }
 
+    /**
+     * Announces a message to the server
+     *
+     * @param message The message
+     */
     public void serverAnnounce(String message)
     {
         SimpleClans.serverAnnounceRaw(ChatBlock.parseColors(plugin.getSettingsManager().getClanAnnounce().replace("+clan", this.getTag()).replace("+message", message)));
     }
 
+    private static final NumberFormat formatter = new DecimalFormat("#.#");
+
+    /**
+     * Displays a profile of the clan the CommandSender
+     *
+     * @param sender The retriever
+     */
+    public void showClanProfile(CommandSender sender)
+    {
+        ChatColor subColor = plugin.getSettingsManager().getSubPageColor();
+        ChatColor headColor = plugin.getSettingsManager().getHeadingPageColor();
+
+        ChatBlock.sendBlank(sender);
+        ChatBlock.sendHead(sender, plugin.getSettingsManager().getClanColor() + this.getName(), Language.getTranslation("profile"));
+        ChatBlock.sendBlank(sender);
+
+        String name = this.getName();
+        String leaders = plugin.getSettingsManager().getLeaderColor() + GeneralHelper.clansPlayersToString(this.getLeaders(), ",");
+        String onlineCount = ChatColor.WHITE.toString() + GeneralHelper.stripOfflinePlayers(this.getAllMembers()).size();
+        String membersOnline = onlineCount + subColor + "/" + ChatColor.WHITE + this.getSize();
+        String inactive = ChatColor.WHITE.toString() + this.getInactiveDays() + subColor + "/" + ChatColor.WHITE.toString() + (this.isVerified() ? plugin.getSettingsManager().getPurgeInactiveClansDays() : plugin.getSettingsManager().getPurgeUnverifiedClansDays()) + " " + Language.getTranslation("days");
+        String founded = ChatColor.WHITE + this.getFounded();
+
+        String rawAllies = GeneralHelper.clansToString(this.getAllies(), ",");
+        String allies = ChatColor.WHITE + (rawAllies == null ? Language.getTranslation("none") : rawAllies);
+
+        String rawRivals = GeneralHelper.clansToString(this.getRivals(), ",");
+        String rivals = ChatColor.WHITE + (rawRivals == null ? Language.getTranslation("none") : rawRivals);
+        String kdr = ChatColor.YELLOW + formatter.format(this.getKDR());
+
+        int[] kills = this.getTotalKills();
+
+        String deaths = ChatColor.WHITE.toString() + kills[0];
+        String rival = ChatColor.WHITE.toString() + kills[1];
+        String civ = ChatColor.WHITE.toString() + kills[2];
+        String neutral = ChatColor.WHITE.toString() + kills[3];
+
+        String status = ChatColor.WHITE + (this.isVerified() ? plugin.getSettingsManager().getTrustedColor() + Language.getTranslation("verified") : plugin.getSettingsManager().getUntrustedColor() + Language.getTranslation("unverified"));
+
+        sender.sendMessage("  " + subColor + MessageFormat.format(Language.getTranslation("id"), this.getId()));
+        sender.sendMessage("  " + subColor + MessageFormat.format(Language.getTranslation("name.0"), name));
+        sender.sendMessage("  " + subColor + MessageFormat.format(Language.getTranslation("status.0"), status));
+        sender.sendMessage("  " + subColor + MessageFormat.format(Language.getTranslation("leaders.0"), leaders));
+        sender.sendMessage("  " + subColor + MessageFormat.format(Language.getTranslation("members.online.0"), membersOnline));
+        sender.sendMessage("  " + subColor + MessageFormat.format(Language.getTranslation("kdr.0"), kdr));
+        sender.sendMessage("  " + subColor + Language.getTranslation("kill.totals") + " " + headColor + "[" + Language.getTranslation("rival") + ":" + rival + " " + headColor + Language.getTranslation("neutral") + ":" + neutral + " " + headColor + Language.getTranslation("civilian") + ":" + civ + headColor + "]");
+        sender.sendMessage("  " + subColor + MessageFormat.format(Language.getTranslation("deaths.0"), deaths));
+        sender.sendMessage("  " + subColor + MessageFormat.format(Language.getTranslation("allies.0"), allies));
+        sender.sendMessage("  " + subColor + MessageFormat.format(Language.getTranslation("rivals.0"), rivals));
+        sender.sendMessage("  " + subColor + MessageFormat.format(Language.getTranslation("founded.0"), founded));
+        sender.sendMessage("  " + subColor + MessageFormat.format(Language.getTranslation("inactive.0"), inactive));
+
+        ChatBlock.sendBlank(sender);
+    }
 }

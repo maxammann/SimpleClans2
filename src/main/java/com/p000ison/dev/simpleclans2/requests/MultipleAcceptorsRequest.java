@@ -31,15 +31,15 @@ import java.util.Set;
 /**
  * Represents a MultipleAcceptorsRequest
  */
-public abstract class MultipleAcceptorsRequest extends Request {
+public abstract class MultipleAcceptorsRequest extends AbstractRequest {
     private final Set<ClanPlayer> acceptors;
     private Set<ClanPlayer> accepts = new HashSet<ClanPlayer>();
     private Set<ClanPlayer> denies = new HashSet<ClanPlayer>();
     private Set<ClanPlayer> abstains = new HashSet<ClanPlayer>();
 
-    public MultipleAcceptorsRequest(SimpleClans plugin,Set<ClanPlayer> acceptors, ClanPlayer requester, Clan clan, String message)
+    public MultipleAcceptorsRequest(SimpleClans plugin, Set<ClanPlayer> acceptors, ClanPlayer requester, String message)
     {
-        super(plugin, requester, clan, message);
+        super(plugin, requester, message);
         this.acceptors = acceptors;
     }
 
@@ -49,7 +49,7 @@ public abstract class MultipleAcceptorsRequest extends Request {
     }
 
     @Override
-    public boolean hasRequestToHandle(ClanPlayer clanPlayer)
+    public boolean isClanPlayerInvolved(ClanPlayer clanPlayer)
     {
         return requester.equals(clanPlayer) || acceptors.contains(clanPlayer);
     }
@@ -69,6 +69,12 @@ public abstract class MultipleAcceptorsRequest extends Request {
         for (ClanPlayer acceptor : getAcceptors()) {
             acceptor.setLastVoteResult(VoteResult.UNKNOWN);
         }
+    }
+
+    @Override
+    public boolean isClanInvolved(Clan clan)
+    {
+        return false;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override

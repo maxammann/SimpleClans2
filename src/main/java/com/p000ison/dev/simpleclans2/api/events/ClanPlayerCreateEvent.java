@@ -22,7 +22,7 @@ package com.p000ison.dev.simpleclans2.api.events;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 
 /**
- * Represents a ClanPlayerCreateEvent
+ * This event is fired, when ever a clanplayer gets created
  */
 public class ClanPlayerCreateEvent extends ClanPlayerEvent {
 

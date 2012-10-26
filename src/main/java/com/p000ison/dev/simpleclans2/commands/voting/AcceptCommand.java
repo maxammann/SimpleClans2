@@ -24,7 +24,7 @@ import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
 import com.p000ison.dev.simpleclans2.language.Language;
 import com.p000ison.dev.simpleclans2.requests.MultipleAcceptorsRequest;
-import com.p000ison.dev.simpleclans2.requests.Request;
+import com.p000ison.dev.simpleclans2.requests.AbstractRequest;
 import com.p000ison.dev.simpleclans2.requests.VoteResult;
 import org.bukkit.entity.Player;
 
@@ -53,7 +53,7 @@ public class AcceptCommand extends GenericPlayerCommand {
     public void execute(Player player, String[] args)
     {
         ClanPlayer clanPlayer = plugin.getClanPlayerManager().getCreateClanPlayerExact(player);
-        Request request = plugin.getRequestManager().vote(clanPlayer, VoteResult.ACCEPT);
+        AbstractRequest request = plugin.getRequestManager().vote(clanPlayer, VoteResult.ACCEPT);
 
         if (request != null) {
             if (request instanceof MultipleAcceptorsRequest) {

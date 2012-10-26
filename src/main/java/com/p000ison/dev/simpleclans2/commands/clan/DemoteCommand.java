@@ -85,7 +85,7 @@ public class DemoteCommand extends GenericPlayerCommand {
                     Set<ClanPlayer> acceptors = GeneralHelper.stripOfflinePlayers(clan.getLeaders());
                     acceptors.remove(demoted);
 
-                    plugin.getRequestManager().createRequest(new DemoteRequest(plugin, acceptors, cp, clan, demoted));
+                    plugin.getRequestManager().createRequest(new DemoteRequest(plugin, acceptors, cp, demoted));
                     player.sendMessage(ChatColor.AQUA + Language.getTranslation("demotion.vote.has.been.requested.from.all.leaders"));
                 }
 

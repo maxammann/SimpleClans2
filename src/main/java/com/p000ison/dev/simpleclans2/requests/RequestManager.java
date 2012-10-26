@@ -20,6 +20,7 @@
 
 package com.p000ison.dev.simpleclans2.requests;
 
+import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 
 import java.util.HashSet;
@@ -30,9 +31,9 @@ import java.util.Set;
  * Represents a RequestManager
  */
 public class RequestManager {
-    public Set<Request> requests = new HashSet<Request>();
+    public Set<AbstractRequest> requests = new HashSet<AbstractRequest>();
 
-    public boolean createRequest(Request created)
+    public boolean createRequest(AbstractRequest created)
     {
 
         //hmm damn you DAUs ....
@@ -41,9 +42,9 @@ public class RequestManager {
             MultipleAcceptorsRequest multiCreated = (MultipleAcceptorsRequest) created;
 
             //go through all requests
-            for (Request request : requests) {
+            for (AbstractRequest request : requests) {
                 for (ClanPlayer clanPlayer : multiCreated.getAcceptors()) {
-                    if (request.hasRequestToHandle(clanPlayer)) {
+                    if (request.isClanPlayerInvolved(clanPlayer)) {
                         return false;
                     }
                 }
@@ -52,9 +53,9 @@ public class RequestManager {
             SingleAcceptorRequest singleCreated = (SingleAcceptorRequest) created;
 
             //go through all requests
-            for (Request request : requests) {
+            for (AbstractRequest request : requests) {
 
-                if (request.hasRequestToHandle(singleCreated.getAcceptor())) {
+                if (request.isClanPlayerInvolved(singleCreated.getAcceptor())) {
                     return false;
                 }
             }
@@ -66,12 +67,12 @@ public class RequestManager {
         return true;
     }
 
-    public Request vote(ClanPlayer acceptor, VoteResult result)
+    public AbstractRequest vote(ClanPlayer acceptor, VoteResult result)
     {
 
-        Iterator<Request> it = requests.iterator();
+        Iterator<AbstractRequest> it = requests.iterator();
         while (it.hasNext()) {
-            Request request = it.next();
+            AbstractRequest request = it.next();
 
             if (request.isAcceptor(acceptor)) {
 
@@ -112,6 +113,16 @@ public class RequestManager {
         return null;
     }
 
+    public void clearRequests(Clan clan)
+    {
+        Iterator<AbstractRequest> it = requests.iterator();
+
+        while (it.hasNext()) {
+            AbstractRequest request = it.next();
+//            request.get
+        }
+    }
+
     public int getRequests()
     {
         return requests.size();
@@ -119,10 +130,10 @@ public class RequestManager {
 
     public void clearRequests(String player)
     {
-        Iterator<Request> it = requests.iterator();
+        Iterator<AbstractRequest> it = requests.iterator();
 
         while (it.hasNext()) {
-            Request request = it.next();
+            AbstractRequest request = it.next();
 
             if (request.getRequester().getName().equals(player)) {
                 it.remove();

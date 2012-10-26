@@ -34,23 +34,25 @@ public class InviteRequest extends SingleAcceptorRequest {
 
     public InviteRequest(SimpleClans plugin, ClanPlayer invited, ClanPlayer requester, Clan clan)
     {
-        super(plugin, invited, requester, clan, MessageFormat.format(Language.getTranslation("you.have.been.invited"), clan.getTag()));
+        super(plugin, invited, requester, MessageFormat.format(Language.getTranslation("you.have.been.invited"), clan.getTag()));
     }
 
     @Override
     public boolean execute()
     {
-        if (getClan() == null || getAcceptor() == null) {
+        Clan clan = requester.getClan();
+
+        if (clan == null || getAcceptor() == null) {
             return false;
         }
 
         ClanPlayer acceptor = getAcceptor();
 
-        getClan().addMember(acceptor);
-        acceptor.setClan(getClan());
+        clan.addMember(acceptor);
+        acceptor.setClan(clan);
 
-        getClan().addBBMessage(MessageFormat.format(Language.getTranslation("joined.the.clan"), acceptor.getName()));
-        plugin.serverAnnounce(MessageFormat.format(Language.getTranslation("has.joined"), acceptor.getName(), getClan().getName()));
+        clan.addBBMessage(MessageFormat.format(Language.getTranslation("joined.the.clan"), acceptor.getName()));
+        plugin.serverAnnounce(MessageFormat.format(Language.getTranslation("has.joined"), acceptor.getName(), clan.getName()));
 
         acceptor.update(true);
         return true;

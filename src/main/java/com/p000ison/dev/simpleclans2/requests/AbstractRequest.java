@@ -14,35 +14,47 @@
  *     You should have received a copy of the GNU General Public License
  *     along with SimpleClans2.  If not, see <http://www.gnu.org/licenses/>.
  *
- *     Last modified: 11.10.12 14:28
+ *     Last modified: 10.10.12 21:57
  */
 
-package com.p000ison.dev.simpleclans2.api.events;
 
+package com.p000ison.dev.simpleclans2.requests;
+
+import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
-import org.bukkit.event.Event;
-import org.bukkit.event.HandlerList;
 
 /**
- * This even is used to store a clanplayer for the event
+ * Represents a AbstractRequest
  */
-class ClanPlayerEvent extends Event {
-    private static final HandlerList handlers = new HandlerList();
-    private final ClanPlayer clanPlayer;
+public abstract class AbstractRequest implements Request {
 
-    public ClanPlayerEvent(ClanPlayer clanPlayer)
+    protected ClanPlayer requester;
+    private String message;
+    private long created;
+    protected SimpleClans plugin;
+
+    protected AbstractRequest(SimpleClans plugin, ClanPlayer requester, String message)
     {
-        this.clanPlayer = clanPlayer;
+        this.plugin = plugin;
+        this.requester = requester;
+        this.message = message;
+        this.created = System.currentTimeMillis();
+    }
+
+    public String getMessage()
+    {
+        return message;
     }
 
     @Override
-    public HandlerList getHandlers()
+    public ClanPlayer getRequester()
     {
-        return handlers;
+        return requester;
     }
 
-    public ClanPlayer getClanPlayer()
+    @Override
+    public long getCreatedDate()
     {
-        return clanPlayer;
+        return created;
     }
 }

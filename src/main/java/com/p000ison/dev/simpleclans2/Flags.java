@@ -141,7 +141,7 @@ public class Flags {
 
         setSet(key, empty);
 
-        return (Set) empty;
+        return empty;
     }
 
     public void setSet(String key, Set set)

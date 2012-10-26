@@ -49,15 +49,15 @@ public class AnyProfileCommand extends GenericConsoleCommand {
     }
 
     @Override
-    public void execute(CommandSender player, String[] args)
+    public void execute(CommandSender sender, String[] args)
     {
         Clan clan = plugin.getClanManager().getClan(args[0]);
 
         if (clan == null) {
-            player.sendMessage(ChatColor.RED + Language.getTranslation("no.clan.matched"));
+            sender.sendMessage(ChatColor.RED + Language.getTranslation("no.clan.matched"));
             return;
         }
 
-        ProfileCommand.showClanProfile(player, clan, plugin);
+        clan.showClanProfile(sender);
     }
 }

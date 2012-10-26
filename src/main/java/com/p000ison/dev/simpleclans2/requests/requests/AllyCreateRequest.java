@@ -35,9 +35,9 @@ public class AllyCreateRequest extends MultipleAcceptorsRequest {
 
     private Clan ally;
 
-    public AllyCreateRequest(SimpleClans plugin, Set<ClanPlayer> acceptors, ClanPlayer requester, Clan clan, Clan ally)
+    public AllyCreateRequest(SimpleClans plugin, Set<ClanPlayer> acceptors, ClanPlayer requester, Clan ally)
     {
-        super(plugin, acceptors, requester, clan, MessageFormat.format(Language.getTranslation("proposing.an.alliance"), clan.getName(), ally.getTag()));
+        super(plugin, acceptors, requester, MessageFormat.format(Language.getTranslation("proposing.an.alliance"), requester.getClan().getTag(), ally.getTag()));
         this.ally = ally;
     }
 
@@ -45,7 +45,7 @@ public class AllyCreateRequest extends MultipleAcceptorsRequest {
     public boolean execute()
     {
         ClanPlayer cp = getRequester();
-        Clan clan = getClan();
+        Clan clan = requester.getClan();
 
 
         if (ally != null && clan != null) {

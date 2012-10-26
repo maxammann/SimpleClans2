@@ -116,7 +116,7 @@ public class PromoteCommand extends GenericPlayerCommand {
         } else {
             Set<ClanPlayer> acceptors = GeneralHelper.stripOfflinePlayers(clan.getLeaders());
 
-            plugin.getRequestManager().createRequest(new PromoteRequest(plugin, acceptors, cp, clan, promoted));
+            plugin.getRequestManager().createRequest(new PromoteRequest(plugin, acceptors, cp, promoted));
             player.sendMessage(ChatColor.AQUA + Language.getTranslation("promote.vote.has.been.requested.from.all.leaders"));
         }
     }

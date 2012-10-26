@@ -14,82 +14,113 @@
  *     You should have received a copy of the GNU General Public License
  *     along with SimpleClans2.  If not, see <http://www.gnu.org/licenses/>.
  *
- *     Last modified: 10.10.12 21:57
+ *     Last modified: 26.10.12 16:19
  */
 
 
 package com.p000ison.dev.simpleclans2.requests;
 
-import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 
 /**
- * Represents a Request
+ * Represents a AbstractRequest
  */
-public abstract class Request implements Executable {
+interface Request extends Executable {
 
-    protected ClanPlayer requester;
-    private Clan clan;
-    private String message;
-    private long created;
-    protected SimpleClans plugin;
+    /**
+     * Gets the requester of this request. The person who started the request.
+     *
+     * @return The requester
+     */
+    ClanPlayer getRequester();
 
-    protected Request(SimpleClans plugin, ClanPlayer requester, Clan clan, String message)
-    {
-        this.plugin = plugin;
-        this.requester = requester;
-        this.clan = clan;
-        this.message = message;
-        this.created = System.currentTimeMillis();
-    }
+    /**
+     * Returns the date when this request was created
+     *
+     * @return The date when this request was created
+     */
+    long getCreatedDate();
 
-    public Clan getClan()
-    {
-        return clan;
-    }
+    /**
+     * Checks if a clan is involved in this request.
+     *
+     * @param clan The clan to check.
+     * @return Checks if a clan is involved in this request.
+     */
+    boolean isClanInvolved(Clan clan);
 
-    public String getMessage()
-    {
-        return message;
-    }
+    /**
+     * Checks if a clanplayer is involved in this request.
+     *
+     * @param clanPlayer The player to check.
+     * @return Checks if a player is involved in this request.
+     */
+    boolean isClanPlayerInvolved(ClanPlayer clanPlayer);
 
-    public ClanPlayer getRequester()
-    {
-        return requester;
-    }
+    /**
+     * Performs a vote on this request
+     *
+     * @param clanPlayer The player
+     */
+    void accept(ClanPlayer clanPlayer);
 
-    public long getCreatedDate()
-    {
-        return created;
-    }
+    /**
+     * Performs a vote on this request
+     *
+     * @param clanPlayer The player
+     */
+    void deny(ClanPlayer clanPlayer);
 
-    public void setMessage(String message)
-    {
-        this.message = message;
-    }
+    /**
+     * Performs a vote on this request. This will only work with a {@link MultipleAcceptorsRequest}. Not with a {@link SingleAcceptorRequest}.
+     *
+     * @param clanPlayer The player
+     */
+    void abstain(ClanPlayer clanPlayer);
 
-    public abstract void accept(ClanPlayer clanPlayer);
+    /**
+     * Checks if every one has voted.
+     *
+     * @return If everyone has voted.
+     */
+    boolean hasEveryoneVoted();
 
-    public abstract void deny(ClanPlayer clanPlayer);
+    /**
+     * Executes this request and resets the acceptors
+     */
+    void processRequest();
 
-    public abstract void abstain(ClanPlayer clanPlayer);
+    /**
+     * Cancels the this request.
+     */
+    void cancelRequest();
 
-    public abstract boolean hasEveryoneVoted();
+    /**
+     * Checks if this request can be processed.
+     *
+     * @return Weather this can be processed.
+     */
+    boolean checkRequest();
 
-    public abstract void processRequest();
+    /**
+     * Sends the initial message. This message is only sent once.
+     */
+    void sendRequest();
 
-    public abstract void cancelRequest();
+    /**
+     * Checks if the clanplayer is an acceptor
+     *
+     * @param clanPlayer The acceptor
+     * @return Weather the clanplayer is an acceptor
+     */
+    boolean isAcceptor(ClanPlayer clanPlayer);
 
-    public abstract boolean checkRequest();
-
-    public abstract void sendRequest();
-
-    public abstract boolean isAcceptor(ClanPlayer clanPlayer);
-
-    public abstract void announceMessage(String message);
-
-    public abstract boolean hasRequestToHandle(ClanPlayer clanPlayer);
-
+    /**
+     * Announces a message to all players, who are involved.
+     *
+     * @param message The message to send
+     */
+    void announceMessage(String message);
 
 }

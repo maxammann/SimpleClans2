@@ -102,7 +102,7 @@ public class AllyCommand extends GenericPlayerCommand {
                     GeneralHelper.stripOfflinePlayers(leaders);
 
                     if (!leaders.isEmpty()) {
-                        plugin.getRequestManager().createRequest(new AllyCreateRequest(plugin, leaders, cp, clan, ally));
+                        plugin.getRequestManager().createRequest(new AllyCreateRequest(plugin, leaders, cp, ally));
                         player.sendMessage(ChatColor.AQUA + MessageFormat.format(Language.getTranslation("leaders.have.been.asked.for.an.alliance"), ally.getName()));
                     } else {
                         player.sendMessage(ChatColor.RED + Language.getTranslation("at.least.one.leader.accept.the.alliance"));

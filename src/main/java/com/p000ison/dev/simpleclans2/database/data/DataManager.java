@@ -380,7 +380,7 @@ public class DataManager {
                     warringToAdd.put(clan, rawWarring);
                 }
 
-                clan.setRanks(retrieveRanks(id));
+                clan.loadRanks(retrieveRanks(id));
 
                 clans.add(clan);
             }
