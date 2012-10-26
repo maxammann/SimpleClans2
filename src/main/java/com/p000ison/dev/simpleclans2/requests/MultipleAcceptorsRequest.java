@@ -25,7 +25,6 @@ import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import org.bukkit.entity.Player;
 
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -33,9 +32,9 @@ import java.util.Set;
  */
 public abstract class MultipleAcceptorsRequest extends AbstractRequest {
     private final Set<ClanPlayer> acceptors;
-    private Set<ClanPlayer> accepts = new HashSet<ClanPlayer>();
-    private Set<ClanPlayer> denies = new HashSet<ClanPlayer>();
-    private Set<ClanPlayer> abstains = new HashSet<ClanPlayer>();
+    private short accepts = 0;
+    private short denies = 0;
+    private short abstains = 0;
 
     public MultipleAcceptorsRequest(SimpleClans plugin, Set<ClanPlayer> acceptors, ClanPlayer requester, String message)
     {
@@ -56,64 +55,73 @@ public abstract class MultipleAcceptorsRequest extends AbstractRequest {
 
     public void processRequest()
     {
-        for (ClanPlayer acceptor : getAcceptors()) {
-            acceptor.setLastVoteResult(VoteResult.UNKNOWN);
-        }
-
         execute();
-    }
-
-    public void cancelRequest()
-    {
-
-        for (ClanPlayer acceptor : getAcceptors()) {
-            acceptor.setLastVoteResult(VoteResult.UNKNOWN);
-        }
     }
 
     @Override
     public boolean isClanInvolved(Clan clan)
     {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        Clan requesterClan = requester.getClan();
+
+        if (clan.equals(requesterClan)) {
+            return true;
+        }
+
+        for (ClanPlayer clanPlayer : acceptors) {
+            if (clanPlayer == null) {
+                continue;
+            }
+
+            if (clan.equals(clanPlayer.getClan())) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Override
-    public void accept(ClanPlayer clanPlayer)
+    public void accept()
     {
-        accepts.add(clanPlayer);
+        accepts++;
     }
 
     @Override
-    public void deny(ClanPlayer clanPlayer)
+    public void deny()
     {
-        denies.add(clanPlayer);
+        denies++;
     }
 
     @Override
-    public void abstain(ClanPlayer clanPlayer)
+    public void abstain()
     {
-        abstains.add(clanPlayer);
+        abstains++;
     }
 
     public boolean checkRequest()
     {
-        return accepts.size() * 2 > acceptors.size();
+        return accepts * 2 > acceptors.size();
     }
 
     @Override
     public boolean hasEveryoneVoted()
     {
-        return accepts.size() + denies.size() + abstains.size() >= acceptors.size();
+        return accepts + denies + abstains >= acceptors.size();
     }
 
     public int getAccepts()
     {
-        return accepts.size();
+        return accepts;
+    }
+
+    public int getAbstains()
+    {
+        return abstains;
     }
 
     public int getDenies()
     {
-        return denies.size();
+        return denies;
     }
 
     @Override

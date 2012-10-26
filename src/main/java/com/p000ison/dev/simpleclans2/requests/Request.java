@@ -63,21 +63,21 @@ interface Request extends Executable {
      *
      * @param clanPlayer The player
      */
-    void accept(ClanPlayer clanPlayer);
+    void accept();
 
     /**
      * Performs a vote on this request
      *
      * @param clanPlayer The player
      */
-    void deny(ClanPlayer clanPlayer);
+    void deny();
 
     /**
      * Performs a vote on this request. This will only work with a {@link MultipleAcceptorsRequest}. Not with a {@link SingleAcceptorRequest}.
      *
      * @param clanPlayer The player
      */
-    void abstain(ClanPlayer clanPlayer);
+    void abstain();
 
     /**
      * Checks if every one has voted.
@@ -90,11 +90,6 @@ interface Request extends Executable {
      * Executes this request and resets the acceptors
      */
     void processRequest();
-
-    /**
-     * Cancels the this request.
-     */
-    void cancelRequest();
 
     /**
      * Checks if this request can be processed.

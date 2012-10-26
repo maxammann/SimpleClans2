@@ -24,7 +24,6 @@ import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clan.ranks.Rank;
 import com.p000ison.dev.simpleclans2.language.Language;
-import com.p000ison.dev.simpleclans2.requests.VoteResult;
 import com.p000ison.dev.simpleclans2.util.DateHelper;
 import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import org.bukkit.entity.Player;
@@ -241,22 +240,6 @@ public class ClanPlayer implements KDR {
     public double getInactiveDays()
     {
         return DateHelper.differenceInDays(lastSeen, System.currentTimeMillis());
-    }
-
-    public VoteResult getLastVoteResult()
-    {
-        if (onlineVersion == null) {
-            return null;
-        }
-        return onlineVersion.getLastVoteResult();
-    }
-
-    public void setLastVoteResult(VoteResult lastVoteResult)
-    {
-        if (onlineVersion == null) {
-            return;
-        }
-        onlineVersion.setLastVoteResult(lastVoteResult);
     }
 
     /**

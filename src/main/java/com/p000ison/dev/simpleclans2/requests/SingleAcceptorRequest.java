@@ -29,6 +29,7 @@ import org.bukkit.entity.Player;
  */
 public abstract class SingleAcceptorRequest extends AbstractRequest {
     private final ClanPlayer acceptor;
+    private boolean accepted = false;
 
     public SingleAcceptorRequest(SimpleClans plugin, ClanPlayer acceptor, ClanPlayer requester, String message)
     {
@@ -43,7 +44,7 @@ public abstract class SingleAcceptorRequest extends AbstractRequest {
 
     public void processRequest()
     {
-        acceptor.setLastVoteResult(VoteResult.UNKNOWN);
+        accepted = false;
 
         execute();
     }
@@ -54,51 +55,42 @@ public abstract class SingleAcceptorRequest extends AbstractRequest {
         return acceptor.equals(clanPlayer) || requester.equals(clanPlayer);
     }
 
-    public void cancelRequest()
-    {
-        acceptor.setLastVoteResult(VoteResult.UNKNOWN);
-    }
-
     public boolean checkRequest()
     {
-        return getAcceptor().getLastVoteResult().equals(VoteResult.ACCEPT);
+        return accepted;
     }
 
     @Override
     public boolean hasEveryoneVoted()
     {
-        return !acceptor.getLastVoteResult().equals(VoteResult.UNKNOWN);
+        return accepted;
     }
 
     @Override
-    public void deny(ClanPlayer clanPlayer)
+    public void deny()
     {
-        clanPlayer.setLastVoteResult(VoteResult.DENY);
+        accepted = false;
     }
 
     @Override
     public boolean isClanInvolved(Clan clan)
     {
-        if (clan.equals(getRequester().getClan())) {
-            return true;
-        }
+        Clan acceptorClan = acceptor.getClan();
+        Clan requesterClan = requester.getClan();
 
-        if (getAcceptor().getClan().equals(clan)) {
-            return true;
-        }
-        return false;
+        return clan.equals(acceptorClan) && !clan.equals(requesterClan);
     }
 
     @Override
-    public void accept(ClanPlayer clanPlayer)
+    public void accept()
     {
-        clanPlayer.setLastVoteResult(VoteResult.ACCEPT);
+        accepted = true;
     }
 
     @Override
-    public void abstain(ClanPlayer clanPlayer)
+    public void abstain()
     {
-        clanPlayer.setLastVoteResult(VoteResult.ABSTAINED);
+        throw new IllegalArgumentException("You can not abstain a SingleAcceptorRequest!");
     }
 
     public void sendRequest()

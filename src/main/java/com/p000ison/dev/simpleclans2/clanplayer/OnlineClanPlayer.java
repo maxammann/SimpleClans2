@@ -21,7 +21,6 @@ package com.p000ison.dev.simpleclans2.clanplayer;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
-import com.p000ison.dev.simpleclans2.requests.VoteResult;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachment;
 
@@ -32,23 +31,12 @@ public class OnlineClanPlayer {
 
     private SimpleClans plugin;
     private ClanPlayer clanPlayer;
-    private VoteResult voteResult = VoteResult.UNKNOWN;
     private PermissionAttachment attachment;
 
     public OnlineClanPlayer(SimpleClans plugin, ClanPlayer clanPlayer)
     {
         this.plugin = plugin;
         this.clanPlayer = clanPlayer;
-    }
-
-    public VoteResult getLastVoteResult()
-    {
-        return voteResult;
-    }
-
-    public void setLastVoteResult(VoteResult voteResult)
-    {
-        this.voteResult = voteResult;
     }
 
     /**
