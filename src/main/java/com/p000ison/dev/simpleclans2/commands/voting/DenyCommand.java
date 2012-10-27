@@ -25,7 +25,7 @@ import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
 import com.p000ison.dev.simpleclans2.language.Language;
 import com.p000ison.dev.simpleclans2.requests.AbstractRequest;
 import com.p000ison.dev.simpleclans2.requests.MultipleAcceptorsRequest;
-import com.p000ison.dev.simpleclans2.requests.VoteResult;
+import com.p000ison.dev.simpleclans2.requests.RequestManager;
 import org.bukkit.entity.Player;
 
 import java.text.MessageFormat;
@@ -53,7 +53,7 @@ public class DenyCommand extends GenericPlayerCommand {
     public void execute(Player player, String[] args)
     {
         ClanPlayer clanPlayer = plugin.getClanPlayerManager().getCreateClanPlayerExact(player);
-        AbstractRequest request = plugin.getRequestManager().vote(clanPlayer, VoteResult.DENY);
+        AbstractRequest request = plugin.getRequestManager().vote(clanPlayer, RequestManager.Result.DENY);
 
         if (request != null) {
             if (request instanceof MultipleAcceptorsRequest) {

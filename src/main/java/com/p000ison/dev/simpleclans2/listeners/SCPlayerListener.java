@@ -55,7 +55,7 @@ public class SCPlayerListener implements Listener {
 
         ClanPlayer clanPlayer = plugin.getClanPlayerManager().getClanPlayer(player);
 
-        plugin.getRequestManager().clearRequests(player.getName());
+        plugin.getRequestManager().clearRequests(clanPlayer);
 
         if (clanPlayer != null) {
             clanPlayer.updateLastSeen();
