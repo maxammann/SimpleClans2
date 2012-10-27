@@ -36,7 +36,7 @@ public class ProfileCommand extends GenericPlayerCommand {
 
     public ProfileCommand(SimpleClans plugin)
     {
-        super("Profile", plugin);
+        super("ProfileCommand", plugin);
         setArgumentRange(0, 0);
         setUsages(MessageFormat.format(Language.getTranslation("usage.profile"), plugin.getSettingsManager().getClanCommand()));
         setIdentifiers(Language.getTranslation("profile.command"));

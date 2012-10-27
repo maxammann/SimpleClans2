@@ -48,13 +48,18 @@ public class LanguageMap {
     private Reader getReader() throws IOException
     {
         File file = new File(location);
-        if (!file.exists()) {
-            String DEFAULT_LOCATION = "/languages/lang.properties";
-            InputStream fromJar = getResource(DEFAULT_LOCATION);
-            copy(fromJar, file);
-            fromJar.close();
+        System.out.printf(file.getAbsolutePath());
+        if (inJar) {
+            return new InputStreamReader(getResource(location));
+        } else {
+            if (!file.exists()) {
+                String DEFAULT_LOCATION = "/languages/lang.properties";
+                InputStream fromJar = getResource(DEFAULT_LOCATION);
+                copy(fromJar, file);
+                fromJar.close();
+            }
+            return new FileReader(file);
         }
-        return inJar ? new InputStreamReader(getResource(location)) : new FileReader(file);
     }
 
     public static InputStream getResource(String filename) throws IOException
@@ -125,6 +130,7 @@ public class LanguageMap {
             map = new ColorizedMap();
             map.importMap(properties);
         } catch (IOException e) {
+            e.printStackTrace();
             Logging.debug(e, false, "Failed at loading the language file!");
         } finally {
             try {
@@ -185,6 +191,10 @@ public class LanguageMap {
 
     public Set<Map.Entry<String, String>> getEntries()
     {
+        if (map == null) {
+            return null;
+        }
+
         return map.entrySet();
     }
 

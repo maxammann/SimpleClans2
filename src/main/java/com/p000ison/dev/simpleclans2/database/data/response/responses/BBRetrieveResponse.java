@@ -36,14 +36,16 @@ public class BBRetrieveResponse extends Response {
     private Clan clan;
     private int page, maxLines;
     private String format;
+    private boolean showError;
 
-    public BBRetrieveResponse(SimpleClans plugin, CommandSender sender, Clan clan, int page, int maxLines, String format)
+    public BBRetrieveResponse(SimpleClans plugin, CommandSender sender, Clan clan, int page, int maxLines, String format, boolean showError)
     {
         super(plugin, sender);
         this.clan = clan;
         this.page = page;
         this.maxLines = maxLines;
         this.format = format;
+        this.showError = showError;
     }
 
     @Override
@@ -64,7 +66,9 @@ public class BBRetrieveResponse extends Response {
         if (bb == null) {
             return false;
         } else if (bb.isEmpty()) {
-            sender.sendMessage(Language.getTranslation("bb.is.empty.or.not.found"));
+            if (showError) {
+                sender.sendMessage(Language.getTranslation("bb.is.empty.or.not.found"));
+            }
             return true;
         }
 

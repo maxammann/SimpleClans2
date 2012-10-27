@@ -108,9 +108,9 @@ public class ClanManager {
     {
         if (plugin.getDataManager().insertClan(clan)) {
             clan.setId(plugin.getDataManager().retrieveClanId(clan.getTag()));
+            clan.updateLastAction();
             clans.add(clan);
         }
-
 
         return clan;
     }

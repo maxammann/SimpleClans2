@@ -131,7 +131,7 @@ public class DataManager {
         importClanPlayers();
     }
 
-    public synchronized void updateClanPlayer(ClanPlayer clanPlayer)
+    public synchronized boolean updateClanPlayer(ClanPlayer clanPlayer)
     {
         try {
             UPDATE_CLANPLAYER.setBoolean(1, clanPlayer.isLeader());
@@ -152,8 +152,11 @@ public class DataManager {
 
             UPDATE_CLANPLAYER.executeUpdate();
         } catch (SQLException e) {
-            Logging.debug("Failed to update player %s.", clanPlayer.getName());
+            Logging.debug(e, true, "Failed to update player %s.", clanPlayer.getName());
+            return false;
         }
+
+        return true;
     }
 
     public void deleteClanPlayer(ClanPlayer clanPlayer)
@@ -235,7 +238,7 @@ public class DataManager {
         return false;
     }
 
-    public void updateClan(Clan clan)
+    public boolean updateClan(Clan clan)
     {
         try {
             UPDATE_CLAN.setString(1, clan.getTag());
@@ -271,7 +274,10 @@ public class DataManager {
             UPDATE_CLAN.executeUpdate();
         } catch (SQLException e) {
             Logging.debug(e, true, "Failed to update clan %s.", clan);
+            return false;
         }
+
+        return true;
     }
 
 

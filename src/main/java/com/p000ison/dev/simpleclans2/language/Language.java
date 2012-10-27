@@ -16,8 +16,10 @@ public class Language {
     {
         defaultBundle = new LanguageMap("/languages/" + DEFAULT_FILE_NAME, true);
         defaultBundle.load();
+        System.out.println("loading defaults");
         bundle = new LanguageMap(new File(folder, DEFAULT_FILE_NAME).getAbsolutePath(), false);
         bundle.setDefault(defaultBundle);
+        System.out.println("loading normal");
         bundle.load();
         bundle.save();
     }

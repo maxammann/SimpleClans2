@@ -183,10 +183,16 @@ public class CommandManager {
         // Build list of permitted commands
         for (Command cmd : sortCommands) {
             if (!cmd.hasPermission(sender)) {
+                if (cmd.getName().equals("CreateCommand")) {
+                    System.out.println("permissions");
+                }
                 continue;
             }
 
             if (cmd.getType() != null && cmd.getType() != commandType) {
+                if (cmd.getName().equals("CreateCommand")) {
+                    System.out.println("type");
+                }
                 continue;
             }
 
@@ -196,12 +202,12 @@ public class CommandManager {
                     commands.add(menu);
                 }
             } else {
-                if (cp != null) {
+//                if (cp != null) {
                     String menu = ((GenericPlayerCommand) cmd).getMenu(cp);
                     if (menu != null) {
                         commands.add(menu);
                     }
-                }
+//                }
             }
         }
 

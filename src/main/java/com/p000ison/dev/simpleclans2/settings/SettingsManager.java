@@ -121,7 +121,6 @@ public class SettingsManager {
             ConfigurationSection general = config.getConfigurationSection("general");
 
             elementsPerPage = general.getInt("elements-per-page");
-            clanCommand = general.getString("clan-command");
             serverName = general.getString("server-name");
             globalFF = general.getBoolean("global-ff");
             autoSave = general.getInt("auto-save");
@@ -134,7 +133,13 @@ public class SettingsManager {
                 email = tmpEmail;
             }
 
+            ConfigurationSection commands = config.getConfigurationSection("commands");
+
+            clanCommand = commands.getString("clan");
+
+
             ConfigurationSection databaseSection = config.getConfigurationSection("database");
+
             databaseConfiguration = new DatabaseConfiguration();
             databaseConfiguration.setHost(databaseSection.getString("host"));
             databaseConfiguration.setUsername(databaseSection.getString("username"));

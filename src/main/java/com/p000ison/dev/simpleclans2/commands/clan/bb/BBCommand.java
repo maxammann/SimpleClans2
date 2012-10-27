@@ -58,7 +58,6 @@ public class BBCommand extends GenericPlayerCommand {
     @Override
     public void execute(Player player, String[] args)
     {
-
         ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
 
         if (cp == null) {
@@ -80,7 +79,6 @@ public class BBCommand extends GenericPlayerCommand {
             return;
         }
 
-        plugin.getDataManager().addResponse(new BBRetrieveResponse(plugin, player, clan, page, -1, null));
-//        clan.displayBb(player, /*plugin.getSettingsManager().getMaxBBDisplayLines()*/10);
+        plugin.getDataManager().addResponse(new BBRetrieveResponse(plugin, player, clan, page, -1, null, true));
     }
 }

@@ -48,22 +48,25 @@ public class AutoSaver extends LinkedList<Executable> implements Runnable {
     {
         for (Clan clan : plugin.getClanManager().getClans()) {
             if (clan.needsUpdate()) {
-                dataManager.updateClan(clan);
-                clan.update(false);
+                if (dataManager.updateClan(clan)) {
+                    clan.update(false);
+                }
             }
 
             for (Rank rank : clan.getRanks()) {
                 if (rank.needsUpdate()) {
-                    rank.update(false);
-                    dataManager.updateRank(clan, rank);
+                    if (dataManager.updateRank(clan, rank)) {
+                        rank.update(false);
+                    }
                 }
             }
         }
 
         for (ClanPlayer clanPlayer : plugin.getClanPlayerManager().getClanPlayers()) {
             if (clanPlayer.needsUpdate()) {
-                dataManager.updateClanPlayer(clanPlayer);
-                clanPlayer.update(false);
+                if (dataManager.updateClanPlayer(clanPlayer)) {
+                    clanPlayer.update(false);
+                }
             }
         }
 

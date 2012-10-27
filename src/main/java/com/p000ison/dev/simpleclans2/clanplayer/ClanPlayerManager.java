@@ -77,6 +77,7 @@ public class ClanPlayerManager {
         }
 
         clanPlayer.setId(id);
+        clanPlayer.updateLastSeen();
 
         plugin.getServer().getPluginManager().callEvent(new ClanPlayerCreateEvent(clanPlayer));
 

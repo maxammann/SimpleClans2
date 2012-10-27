@@ -77,7 +77,7 @@ public class SCPlayerListener implements Listener {
             Clan clan = clanPlayer.getClan();
 
             if (plugin.getSettingsManager().isMotdBBEnabled()) {
-                plugin.getDataManager().addResponse(new BBRetrieveResponse(plugin, player, clan, -1, plugin.getSettingsManager().getMotdBBLines(), plugin.getSettingsManager().getMotdBBFormat()));
+                plugin.getDataManager().addResponse(new BBRetrieveResponse(plugin, player, clan, -1, plugin.getSettingsManager().getMotdBBLines(), plugin.getSettingsManager().getMotdBBFormat(), false));
             }
 
             clan.updateLastAction();

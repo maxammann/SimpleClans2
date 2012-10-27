@@ -92,14 +92,16 @@ public final class Logging {
 
         if (ex == null) {
             instance.log(level, msg);
-        } else if (reportException) {
+        } else {
             instance.log(level, msg, ex);
-            ExceptionReporterTask task = plugin.getExceptionReporter();
-            if (task != null) {
-                boolean success = plugin.getExceptionReporter().addReport(ex, plugin.getName(), plugin.getDescription().getVersion(), plugin.getSettingsManager() == null ? null : plugin.getSettingsManager().getEmail());
-                instance.log(Level.INFO, "------------------------------------------------------------------");
-                instance.log(Level.INFO, success ? "Exception has been reported!" : "Queue overflow!");
-                instance.log(Level.INFO, "------------------------------------------------------------------");
+            if (reportException) {
+                ExceptionReporterTask task = plugin.getExceptionReporter();
+                if (task != null) {
+                    boolean success = plugin.getExceptionReporter().addReport(ex, plugin.getName(), plugin.getDescription().getVersion(), plugin.getSettingsManager() == null ? null : plugin.getSettingsManager().getEmail());
+                    instance.log(Level.INFO, "------------------------------------------------------------------");
+                    instance.log(Level.INFO, success ? "Exception has been reported!" : "Queue overflow!");
+                    instance.log(Level.INFO, "------------------------------------------------------------------");
+                }
             }
         }
     }
