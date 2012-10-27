@@ -35,7 +35,6 @@ public class RequestManager {
 
     public boolean createRequest(AbstractRequest created)
     {
-
         //hmm damn you DAUs ....
 
         if (created instanceof MultipleAcceptorsRequest) {
@@ -67,8 +66,11 @@ public class RequestManager {
         return true;
     }
 
-    public AbstractRequest vote(ClanPlayer acceptor, VoteResult result)
+    public AbstractRequest vote(ClanPlayer acceptor, Result result)
     {
+        if (requests.isEmpty()) {
+            return null;
+        }
 
         Iterator<AbstractRequest> it = requests.iterator();
         while (it.hasNext()) {
@@ -78,16 +80,16 @@ public class RequestManager {
 
                 switch (result) {
                     case ACCEPT:
-                        request.accept(acceptor);
+                        request.accept();
                         break;
                     case DENY:
-                        request.deny(acceptor);
+                        request.deny();
                         break;
-                    case ABSTAINED:
+                    case ABSTAIN:
                         if (request instanceof SingleAcceptorRequest) {
                             return request;
                         }
-                        request.abstain(acceptor);
+                        request.abstain();
                         break;
                     default:
                         return null;
@@ -101,7 +103,6 @@ public class RequestManager {
                 } else {
                     //check if everyone has voted if yes and no success -> remove
                     if (request.hasEveryoneVoted()) {
-                        request.cancelRequest();
                         it.remove();
                     }
                 }
@@ -115,11 +116,18 @@ public class RequestManager {
 
     public void clearRequests(Clan clan)
     {
+        if (requests.isEmpty()) {
+            return;
+        }
+
         Iterator<AbstractRequest> it = requests.iterator();
 
         while (it.hasNext()) {
             AbstractRequest request = it.next();
-//            request.get
+            if (request.isClanInvolved(clan)) {
+                it.remove();
+                return;
+            }
         }
     }
 
@@ -128,34 +136,25 @@ public class RequestManager {
         return requests.size();
     }
 
-    public void clearRequests(String player)
+    public void clearRequests(ClanPlayer clanPlayer)
     {
+        if (requests.isEmpty()) {
+            return;
+        }
+
         Iterator<AbstractRequest> it = requests.iterator();
 
         while (it.hasNext()) {
             AbstractRequest request = it.next();
 
-            if (request.getRequester().getName().equals(player)) {
+            if (request.isClanPlayerInvolved(clanPlayer)) {
                 it.remove();
-                //we cancel here because a player can be only once a requester of a acceptor
                 return;
             }
-
-            if (request instanceof MultipleAcceptorsRequest) {
-                for (ClanPlayer clanPlayer : ((MultipleAcceptorsRequest) request).getAcceptors()) {
-                    if (clanPlayer.getName().equals(player)) {
-                        it.remove();
-                        //we cancel here because a player can be only once a requester of a acceptor
-                        return;
-                    }
-                }
-            } else {
-                if (((SingleAcceptorRequest) request).getAcceptor().getName().equals(player)) {
-                    it.remove();
-                    //we cancel here because a player can be only once a requester of a acceptor
-                    return;
-                }
-            }
         }
+    }
+
+    public static enum Result {
+        ACCEPT, DENY, ABSTAIN
     }
 }

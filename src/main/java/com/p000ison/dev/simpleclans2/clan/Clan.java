@@ -787,6 +787,7 @@ public class Clan implements KDR, Comparable<Clan> {
             if (clanPlayer.isLeader()) {
                 disband();
             }
+            plugin.getRequestManager().clearRequests(clanPlayer);
         }
     }
 
@@ -795,16 +796,10 @@ public class Clan implements KDR, Comparable<Clan> {
      */
     public void disband()
     {
-        Iterator<ClanPlayer> clanPlayers = allMembers.iterator();
 
-        while (clanPlayers.hasNext()) {
-
-            ClanPlayer clanPlayer = clanPlayers.next();
-
+        for (ClanPlayer clanPlayer : allMembers) {
             clanPlayer.unset();
             clanPlayer.update();
-
-            clanPlayers.remove();
         }
 
         for (Clan warringClan : warring) {
@@ -835,6 +830,7 @@ public class Clan implements KDR, Comparable<Clan> {
             warringClan.addBBMessage(this, Language.getTranslation("you.are.no.longer.at.war", this.getTag(), warringClan.getTag()));
         }
 
+        plugin.getRequestManager().clearRequests(this);
         plugin.getClanManager().removeClan(this);
         plugin.getDataManager().deleteClan(this);
     }

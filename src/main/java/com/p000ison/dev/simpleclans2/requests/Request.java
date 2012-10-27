@@ -60,22 +60,16 @@ interface Request extends Executable {
 
     /**
      * Performs a vote on this request
-     *
-     * @param clanPlayer The player
      */
     void accept();
 
     /**
      * Performs a vote on this request
-     *
-     * @param clanPlayer The player
      */
     void deny();
 
     /**
      * Performs a vote on this request. This will only work with a {@link MultipleAcceptorsRequest}. Not with a {@link SingleAcceptorRequest}.
-     *
-     * @param clanPlayer The player
      */
     void abstain();
 
