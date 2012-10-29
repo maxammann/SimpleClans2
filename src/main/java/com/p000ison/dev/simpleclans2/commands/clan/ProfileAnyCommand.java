@@ -29,11 +29,11 @@ import org.bukkit.command.CommandSender;
 import java.text.MessageFormat;
 
 /**
- * Represents a AnyProfileCommand
+ * Represents a ProfileAnyCommand
  */
-public class AnyProfileCommand extends GenericConsoleCommand {
+public class ProfileAnyCommand extends GenericConsoleCommand {
 
-    public AnyProfileCommand(SimpleClans plugin)
+    public ProfileAnyCommand(SimpleClans plugin)
     {
         super("ProfileAnyCommand", plugin);
         setArgumentRange(1, 1);

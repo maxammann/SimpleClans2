@@ -25,10 +25,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Represents a ClanFlags
@@ -100,11 +97,15 @@ public class Flags {
                 continue;
             }
 
-            if (value instanceof Set) {
-                Set set = (Set) value;
-                if (set.isEmpty()) {
+            if (value instanceof Collection) {
+                Collection collection = (Collection) value;
+                if (collection.isEmpty()) {
                     continue;
                 }
+                JSONArray list = new JSONArray();
+                list.addAll(collection);
+                value = list;
+
             }
 
             json.put(key, value);
@@ -139,14 +140,29 @@ public class Flags {
 
         Set empty = new HashSet();
 
-        setSet(key, empty);
+        set(key, empty);
 
         return empty;
     }
 
-    public void setSet(String key, Set set)
+    public Set<String> getStringSet(String key)
     {
-        data.put(key, set);
+        Object set = data.get(key);
+
+        if (set instanceof Set) {
+            return (Set) set;
+        }
+
+        Set<String> empty = new HashSet<String>();
+
+        set(key, empty);
+
+        return empty;
+    }
+
+    public void set(String key, Object obj)
+    {
+        data.put(key, obj);
     }
 
 

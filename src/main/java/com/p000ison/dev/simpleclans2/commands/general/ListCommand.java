@@ -62,7 +62,7 @@ public class ListCommand extends GenericConsoleCommand {
     @Override
     public void execute(CommandSender sender, String[] args)
     {
-        ChatColor headColor = plugin.getSettingsManager().getHeadingPageColor();
+        ChatColor headColor = plugin.getSettingsManager().getHeaderPageColor();
         ChatColor subColor = plugin.getSettingsManager().getSubPageColor();
 
 

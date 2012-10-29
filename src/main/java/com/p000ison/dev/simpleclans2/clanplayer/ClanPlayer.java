@@ -25,9 +25,15 @@ import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clan.ranks.Rank;
 import com.p000ison.dev.simpleclans2.language.Language;
 import com.p000ison.dev.simpleclans2.util.DateHelper;
+import com.p000ison.dev.simpleclans2.util.GeneralHelper;
 import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
+import com.p000ison.dev.simpleclans2.util.chat.Row;
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.text.MessageFormat;
+import java.util.Date;
 import java.util.Set;
 
 /**
@@ -237,9 +243,9 @@ public class ClanPlayer implements KDR {
      *
      * @return The days this clanPlayer is inactive
      */
-    public double getInactiveDays()
+    public int getInactiveDays()
     {
-        return DateHelper.differenceInDays(lastSeen, System.currentTimeMillis());
+        return (int) Math.round(DateHelper.differenceInDays(lastSeen, System.currentTimeMillis()));
     }
 
     /**
@@ -451,5 +457,114 @@ public class ClanPlayer implements KDR {
         SimpleClans.serverAnnounceRaw(ChatBlock.parseColors(plugin.getSettingsManager().getClanPlayerAnnounce().replace("+player", this.getName()).replace("+message", message)));
     }
 
+    /**
+     * Gets the name of this player, with the colors this player has. Like leader, trusted, untrusted...
+     *
+     * @return The colorized name of this player
+     */
+    public String getRankedName()
+    {
+        return (this.isLeader() ? plugin.getSettingsManager().getLeaderColor() : ((this.isTrusted() ? plugin.getSettingsManager().getTrustedColor() : plugin.getSettingsManager().getUntrustedColor()))) + this.getName();
+    }
+
+    public Row getStatisticRow()
+    {
+        String name = this.getRankedName();
+        int rival = this.getRivalKills();
+        int neutral = this.getNeutralKills();
+        int civilian = this.getCivilianKills();
+        int deaths = this.getDeaths();
+        String kdr = Clan.DECIMAL_FORMAT.format(this.getKDR());
+
+        return new Row(name, ChatColor.YELLOW + kdr, ChatColor.WHITE.toString() + rival, ChatColor.GRAY.toString() + neutral, ChatColor.DARK_GRAY.toString() + civilian, ChatColor.DARK_RED.toString() + deaths);
+    }
+
+
+    /**
+     * @param sender The retriever of the message
+     * @param clan   The clan of the retriever to display the relation to this clanPlayer
+     */
+    public void showProfile(CommandSender sender, Clan clan)
+    {
+        ChatColor headColor = plugin.getSettingsManager().getHeaderPageColor();
+        ChatColor subColor = plugin.getSettingsManager().getSubPageColor();
+
+        ChatBlock.sendBlank(sender);
+        ChatBlock.sendHead(sender, Language.getTranslation("s.player.info", plugin.getSettingsManager().getClanColor() + this.getName()), null);
+        ChatBlock.sendBlank(sender);
+
+        String clanName;
+
+        if (getClan() != null) {
+            clanName = Language.getTranslation("clan.lookup", getClan().getTag(), getClan().getName());
+        } else {
+            clanName = ChatColor.WHITE + Language.getTranslation("none");
+        }
+
+        String rankName;
+
+        if (getRank() != null) {
+            rankName = Language.getTranslation("clan.lookup", rank.getTag(), getRank().getName());
+        } else {
+            rankName = ChatColor.WHITE + Language.getTranslation("none");
+        }
+
+        String status = getClan() == null ? ChatColor.WHITE + Language.getTranslation("free.agent") : (this.isLeader() ? plugin.getSettingsManager().getLeaderColor() + Language.getTranslation("leader") : (this.isTrusted() ? plugin.getSettingsManager().getTrustedColor() + Language.getTranslation("trusted") : plugin.getSettingsManager().getUntrustedColor() + Language.getTranslation("untrusted")));
+        String joinDate = ChatColor.WHITE.toString() + this.getFormattedJoinDate();
+        String lastSeen = ChatColor.WHITE.toString() + this.getFormattedLastSeenDate();
+        String inactive = ChatColor.WHITE.toString() + this.getInactiveDays() + subColor + "/" + ChatColor.WHITE + plugin.getSettingsManager().getPurgeInactivePlayersDays() + " days";
+        String rival = ChatColor.WHITE.toString() + this.getRivalKills();
+        String neutral = ChatColor.WHITE.toString() + this.getNeutralKills();
+        String civilian = ChatColor.WHITE.toString() + this.getCivilianKills();
+        String deaths = ChatColor.WHITE.toString() + this.getDeaths();
+        String kdr = ChatColor.YELLOW + Clan.DECIMAL_FORMAT.format(this.getKDR());
+        String pastClans = ChatColor.WHITE + GeneralHelper.arrayToString(", ", this.getPastClans());
+        System.out.println(getFlags().read());
+
+        ChatBlock.sendMessage(sender, "  " + subColor + MessageFormat.format(Language.getTranslation("clan.0"), clanName));
+        ChatBlock.sendMessage(sender, "  " + subColor + MessageFormat.format(Language.getTranslation("rank.0"), rankName));
+        ChatBlock.sendMessage(sender, "  " + subColor + MessageFormat.format(Language.getTranslation("status.0"), status));
+        ChatBlock.sendMessage(sender, "  " + subColor + MessageFormat.format(Language.getTranslation("kdr.0"), kdr));
+        ChatBlock.sendMessage(sender, "  " + subColor + Language.getTranslation("kill.totals") + " " + headColor + "[" + Language.getTranslation("rival") + ":" + rival + " " + headColor + Language.getTranslation("neutral") + ":" + neutral + " " + headColor + Language.getTranslation("civilian") + ":" + civilian + headColor + "]");
+        ChatBlock.sendMessage(sender, "  " + subColor + MessageFormat.format(Language.getTranslation("deaths.0"), deaths));
+        ChatBlock.sendMessage(sender, "  " + subColor + MessageFormat.format(Language.getTranslation("join.date.0"), joinDate));
+        ChatBlock.sendMessage(sender, "  " + subColor + MessageFormat.format(Language.getTranslation("last.seen.0"), lastSeen));
+        ChatBlock.sendMessage(sender, "  " + subColor + MessageFormat.format(Language.getTranslation("past.clans.0"), pastClans));
+        ChatBlock.sendMessage(sender, "  " + subColor + MessageFormat.format(Language.getTranslation("inactive.0"), inactive));
+
+        if (getClan() != null) {
+            if (!sender.getName().equals(name)) {
+                String killType = ChatColor.GRAY + Language.getTranslation("neutral");
+
+                if (getClan() == null) {
+                    killType = ChatColor.DARK_GRAY + Language.getTranslation("civilian");
+                } else if (clan != null && clan.isRival(getClan())) {
+                    killType = ChatColor.WHITE + Language.getTranslation("rival");
+                }
+
+                ChatBlock.sendMessage(sender, "  " + subColor + MessageFormat.format(Language.getTranslation("kill.type.0"), killType));
+            }
+        }
+    }
+
+    /**
+     * Returns a formated string of the date this clanplayer has first joined
+     *
+     * @return Returns a formatted date
+     */
+    public String getFormattedJoinDate()
+    {
+        return Clan.DATE_FORMAT.format(new Date(this.joinDate));
+    }
+
+    /**
+     * Returns a formated string of the date this clanplayer was last seen
+     *
+     * @return Returns a formatted date
+     */
+    public String getFormattedLastSeenDate()
+    {
+        return Clan.DATE_FORMAT.format(new Date(this.lastSeen));
+    }
 
 }

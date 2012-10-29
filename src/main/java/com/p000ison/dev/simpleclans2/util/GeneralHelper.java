@@ -46,6 +46,11 @@ public final class GeneralHelper {
 
     public static String arrayToString(String... args)
     {
+        return arrayToString(" ", args);
+    }
+
+    public static String arrayToString(String seperator, String... args)
+    {
         if (args == null || args.length == 0) {
             return null;
         }
@@ -53,11 +58,27 @@ public final class GeneralHelper {
         StringBuilder out = new StringBuilder();
 
         for (Object string : args) {
-            out.append(string).append(' ');
+            out.append(string).append(seperator);
 
         }
 
-        return out.substring(0, out.length() - 1);
+        return out.substring(0, out.length() - seperator.length());
+    }
+
+    public static String arrayToString(String seperator, Collection collection)
+    {
+        if (collection == null || collection.size() == 0) {
+            return null;
+        }
+
+        StringBuilder out = new StringBuilder();
+
+        for (Object string : collection) {
+            out.append(string.toString()).append(seperator);
+
+        }
+
+        return out.substring(0, out.length() - seperator.length());
     }
 
     public static boolean isValidEmailAddress(String emailAddress)
@@ -88,13 +109,18 @@ public final class GeneralHelper {
 
     public static String arrayToString(char... args)
     {
+        return arrayToString(" ", args);
+    }
+
+    public static String arrayToString(String seperator, char... args)
+    {
         StringBuilder string = new StringBuilder();
 
         for (char color : args) {
-            string.append(ChatColor.getByChar(color).name().toLowerCase(Locale.US)).append(' ');
+            string.append(ChatColor.getByChar(color).name().toLowerCase(Locale.US)).append(seperator);
         }
 
-        return string.substring(0, string.length() - 1);
+        return string.substring(0, string.length() - seperator.length());
     }
 
     public static Set<ClanPlayer> stripOfflinePlayers(Set<ClanPlayer> players)

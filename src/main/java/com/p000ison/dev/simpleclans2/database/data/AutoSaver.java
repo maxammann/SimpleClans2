@@ -74,7 +74,7 @@ public class AutoSaver extends LinkedList<Executable> implements Runnable {
 
         while ((statement = this.poll()) != null) {
             if (!statement.execute(dataManager)) {
-                Logging.debug("Failed to response query!");
+                Logging.debug("Failed to execute saving statement!");
             }
         }
     }

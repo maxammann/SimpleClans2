@@ -494,6 +494,7 @@ public class DataManager {
                 clanPlayer.setLeader(result.getBoolean("leader"));
                 clanPlayer.setTrusted(result.getBoolean("trusted"));
                 clanPlayer.setLastSeenDate(lastSeen);
+                System.out.println(result.getLong("join_date"));
                 clanPlayer.setJoinDate(result.getLong("join_date"));
                 clanPlayer.setNeutralKills(result.getInt("neutral_kills"));
                 clanPlayer.setRivalKills(result.getInt("rival_kills"));

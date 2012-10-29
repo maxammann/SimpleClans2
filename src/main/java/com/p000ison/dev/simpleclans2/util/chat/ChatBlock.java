@@ -39,7 +39,7 @@ public class ChatBlock {
     private static String prefix = null;
     private static ChatColor headColor, subColor;
 
-    private List<StringBuilder[]> rows = new ArrayList<StringBuilder[]>();
+    private List<Row> rows = new ArrayList<Row>();
     private Align[] alignment = null;
     private double[] columnSizes = null;
 
@@ -64,13 +64,14 @@ public class ChatBlock {
      * @param col The index of the column.
      * @return The width
      */
-    public double getMaxWidth(double col)
+    public double getMaxWidth(int col)
     {
         double maxWidth = 0;
 
-        for (StringBuilder[] row : rows) {
-            if (col < row.length) {
-                maxWidth = Math.max(maxWidth, msgLength(row[(int) col]));
+        for (Row row : rows) {
+            StringBuilder[] columns = row.getColumns();
+            if (col < columns.length) {
+                maxWidth = Math.max(maxWidth, msgLength(columns[col]));
             }
         }
 
@@ -85,7 +86,7 @@ public class ChatBlock {
         if (columnSizes == null) {
             // generate columns sizes
 
-            int col_count = rows.get(0).length;
+            int col_count = rows.get(0).getLenght();
 
             columnSizes = new double[col_count];
 
@@ -116,7 +117,12 @@ public class ChatBlock {
             builderSections[i] = new StringBuilder(toAdd.toString());
         }
 
-        rows.add(builderSections);
+        rows.add(new Row(builderSections));
+    }
+
+    public void addRow(Row row)
+    {
+        rows.add(row);
     }
 
     /**
@@ -134,7 +140,7 @@ public class ChatBlock {
 
         generateColumnSizes();
 
-        int firstRowLength = rows.get(0).length;
+        int firstRowLength = rows.get(0).getLenght();
 
         if (alignment.length != firstRowLength) {
             throw new IllegalArgumentException(String.format("The number of alignments must equal the number of sections! %s != %s", alignment.length, firstRowLength));
@@ -144,12 +150,12 @@ public class ChatBlock {
             throw new IllegalArgumentException(String.format("The number of alignments must equal the number of sections! %s != %s", columnSizes.length, firstRowLength));
         }
 
-        for (StringBuilder[] row : rows) {
-
+        for (Row row : rows) {
+            StringBuilder[] columns = row.getColumns();
             StringBuilder finalRow = new StringBuilder();
 
-            for (int column = 0; column < row.length; column++) {
-                StringBuilder section = row[column];
+            for (int column = 0; column < row.getLenght(); column++) {
+                StringBuilder section = columns[column];
                 double columnSize = columnSizes[column];
                 Align align = getAlign(column);
 
@@ -494,11 +500,13 @@ public class ChatBlock {
     {
         StringBuilder header = new StringBuilder(head).append(' ');
 
-        if (subColor != null) {
-            header.append(subColor);
-        }
+        if (subtitle != null) {
+            if (subColor != null) {
+                header.append(subColor);
+            }
 
-        header.append(subtitle).append(' ');
+            header.append(subtitle).append(' ');
+        }
 
         if (headColor != null) {
             header.append(headColor);

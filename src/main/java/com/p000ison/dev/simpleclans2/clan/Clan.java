@@ -55,12 +55,17 @@ public class Clan implements KDR, Comparable<Clan> {
     private long foundedDate;
     private long lastActionDate;
     private boolean verified;
+
     private Set<Clan> allies = new HashSet<Clan>();
     private Set<Clan> rivals = new HashSet<Clan>();
     private Set<Clan> warring = new HashSet<Clan>();
     private Set<ClanPlayer> allMembers = new HashSet<ClanPlayer>();
     private Set<Rank> ranks = new HashSet<Rank>();
+
     private boolean update;
+
+    public static final SimpleDateFormat DATE_FORMAT = new java.text.SimpleDateFormat("MMM dd, yyyy h:mm a");
+    public static final NumberFormat DECIMAL_FORMAT = new DecimalFormat("#.#");
 
     /**
      * Creates a new clan
@@ -100,8 +105,6 @@ public class Clan implements KDR, Comparable<Clan> {
         this(plugin, tag, name);
         this.id = id;
     }
-
-    public static final SimpleDateFormat DATE_FORMAT = new java.text.SimpleDateFormat("MMM dd, yyyy h:mm a");
 
     /**
      * Returns a formated string of the date this clan was founded
@@ -799,6 +802,14 @@ public class Clan implements KDR, Comparable<Clan> {
 
         for (ClanPlayer clanPlayer : allMembers) {
             clanPlayer.unset();
+
+            String pastClan = getTag();
+
+            if (clanPlayer.isLeader()) {
+                pastClan += '*';
+            }
+
+            clanPlayer.addPastClan(pastClan);
             clanPlayer.update();
         }
 
@@ -1205,8 +1216,6 @@ public class Clan implements KDR, Comparable<Clan> {
         SimpleClans.serverAnnounceRaw(ChatBlock.parseColors(plugin.getSettingsManager().getClanAnnounce().replace("+clan", this.getTag()).replace("+message", message)));
     }
 
-    private static final NumberFormat formatter = new DecimalFormat("#.#");
-
     /**
      * Displays a profile of the clan the CommandSender
      *
@@ -1215,10 +1224,11 @@ public class Clan implements KDR, Comparable<Clan> {
     public void showClanProfile(CommandSender sender)
     {
         ChatColor subColor = plugin.getSettingsManager().getSubPageColor();
-        ChatColor headColor = plugin.getSettingsManager().getHeadingPageColor();
+        ChatColor headColor = plugin.getSettingsManager().getHeaderPageColor();
 
+        System.out.println( Language.getTranslation("profile"));
         ChatBlock.sendBlank(sender);
-        ChatBlock.sendHead(sender, plugin.getSettingsManager().getClanColor() + this.getName(), Language.getTranslation("profile"));
+        ChatBlock.sendHead(sender, Language.getTranslation("profile", plugin.getSettingsManager().getClanColor() + this.getName()), null);
         ChatBlock.sendBlank(sender);
 
         String name = this.getName();
@@ -1233,7 +1243,7 @@ public class Clan implements KDR, Comparable<Clan> {
 
         String rawRivals = GeneralHelper.clansToString(this.getRivals(), ",");
         String rivals = ChatColor.WHITE + (rawRivals == null ? Language.getTranslation("none") : rawRivals);
-        String kdr = ChatColor.YELLOW + formatter.format(this.getKDR());
+        String kdr = ChatColor.YELLOW + DECIMAL_FORMAT.format(this.getKDR());
 
         int[] kills = this.getTotalKills();
 

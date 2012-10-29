@@ -38,7 +38,6 @@ public class RemoveRankStatement implements Executable {
         this.id = id;
     }
 
-
     @Override
     public boolean execute(DataManager dataManager)
     {

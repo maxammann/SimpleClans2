@@ -59,7 +59,7 @@ public class RivalriesCommand extends GenericConsoleCommand {
     @Override
     public void execute(CommandSender sender, String[] args)
     {
-        ChatColor headColor = plugin.getSettingsManager().getHeadingPageColor();
+        ChatColor headColor = plugin.getSettingsManager().getHeaderPageColor();
 
         if (sender.hasPermission("simpleclans.anyone.rivalries")) {
 

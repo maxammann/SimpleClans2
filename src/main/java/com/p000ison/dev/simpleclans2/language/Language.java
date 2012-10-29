@@ -55,13 +55,6 @@ public class Language {
 
     public static void clear()
     {
-        if (bundle != null) {
-            bundle.clear();
-        }
-        if (defaultBundle != null) {
-            defaultBundle.clear();
-        }
-
         defaultBundle = null;
         bundle = null;
     }

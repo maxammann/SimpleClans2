@@ -40,6 +40,7 @@ import com.p000ison.dev.simpleclans2.commands.general.LeaderboardCommand;
 import com.p000ison.dev.simpleclans2.commands.general.ListCommand;
 import com.p000ison.dev.simpleclans2.commands.general.RivalriesCommand;
 import com.p000ison.dev.simpleclans2.commands.members.FFCommand;
+import com.p000ison.dev.simpleclans2.commands.members.StatsCommand;
 import com.p000ison.dev.simpleclans2.commands.voting.AbstainCommand;
 import com.p000ison.dev.simpleclans2.commands.voting.AcceptCommand;
 import com.p000ison.dev.simpleclans2.commands.voting.DenyCommand;
@@ -117,7 +118,7 @@ public class SimpleClans extends JavaPlugin implements Core {
 
             loadManagers();
 
-            ChatBlock.setHeadColor(getSettingsManager().getHeadingPageColor());
+            ChatBlock.setHeadColor(getSettingsManager().getHeaderPageColor());
             ChatBlock.setSubColor(getSettingsManager().getSubPageColor());
 
             registerEvents();
@@ -242,15 +243,15 @@ public class SimpleClans extends JavaPlugin implements Core {
         commandManager.addCommand(new ListCommand(this));
         commandManager.addCommand(new CreateCommand(this));
         commandManager.addCommand(new ProfileCommand(this));
-        commandManager.addCommand(new AnyProfileCommand(this));
-        //commandManager.addCommand(new LookupCommand(this));
+        commandManager.addCommand(new ProfileAnyCommand(this));
+        commandManager.addCommand(new LookupCommand(this));
         commandManager.addCommand(new LeaderboardCommand(this));
         commandManager.addCommand(new AlliancesCommand(this));
         commandManager.addCommand(new RivalriesCommand(this));
         //commandManager.addCommand(new RosterCommand(this));
         commandManager.addCommand(new VitalsCommand(this));
         commandManager.addCommand(new CoordsCommand(this));
-        //commandManager.addCommand(new StatsCommand(this));
+        commandManager.addCommand(new StatsCommand(this));
         //kills
         commandManager.addCommand(new AllyCommand(this));
         commandManager.addCommand(new RivalCommand(this));

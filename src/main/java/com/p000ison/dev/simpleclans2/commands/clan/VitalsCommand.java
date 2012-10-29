@@ -61,7 +61,7 @@ public class VitalsCommand extends GenericPlayerCommand {
     @Override
     public void execute(Player player, String[] args)
     {
-        ChatColor headColor = plugin.getSettingsManager().getHeadingPageColor();
+        ChatColor headColor = plugin.getSettingsManager().getHeaderPageColor();
 
 
         ClanPlayer clanPlayer = plugin.getClanPlayerManager().getClanPlayer(player);

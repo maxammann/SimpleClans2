@@ -205,6 +205,9 @@ public class LanguageMap {
 
     public void clear()
     {
+        if (map == null) {
+            return;
+        }
         map.clear();
     }
 

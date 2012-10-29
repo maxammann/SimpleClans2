@@ -78,6 +78,8 @@ public class ClanPlayerManager {
 
         clanPlayer.setId(id);
         clanPlayer.updateLastSeen();
+        clanPlayer.setJoinDate(System.currentTimeMillis());
+        clanPlayer.update();
 
         plugin.getServer().getPluginManager().callEvent(new ClanPlayerCreateEvent(clanPlayer));
 

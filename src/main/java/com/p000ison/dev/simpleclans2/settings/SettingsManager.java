@@ -462,7 +462,7 @@ public class SettingsManager {
         return purgeUnverifiedClansDays;
     }
 
-    public ChatColor getHeadingPageColor()
+    public ChatColor getHeaderPageColor()
     {
         return headingPageColor;
     }
