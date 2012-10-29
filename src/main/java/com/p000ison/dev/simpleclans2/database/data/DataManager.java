@@ -356,7 +356,7 @@ public class DataManager {
                 Clan clan = new Clan(plugin, id, tag, result.getString("name"));
 
                 clan.setVerified(verified);
-                clan.setFoundedDate(result.getLong("founded"));
+                clan.setFoundedDate(result.getTimestamp("founded").getTime());
                 clan.setLastActionDate(lastAction);
 
                 //flags
@@ -494,8 +494,7 @@ public class DataManager {
                 clanPlayer.setLeader(result.getBoolean("leader"));
                 clanPlayer.setTrusted(result.getBoolean("trusted"));
                 clanPlayer.setLastSeenDate(lastSeen);
-                System.out.println(result.getLong("join_date"));
-                clanPlayer.setJoinDate(result.getLong("join_date"));
+                clanPlayer.setJoinDate(result.getTimestamp("join_date").getTime());
                 clanPlayer.setNeutralKills(result.getInt("neutral_kills"));
                 clanPlayer.setRivalKills(result.getInt("rival_kills"));
                 clanPlayer.setCivilianKills(result.getInt("civilian_kills"));

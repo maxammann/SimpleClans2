@@ -48,7 +48,6 @@ public class LanguageMap {
     private Reader getReader() throws IOException
     {
         File file = new File(location);
-        System.out.printf(file.getAbsolutePath());
         if (inJar) {
             return new InputStreamReader(getResource(location));
         } else {

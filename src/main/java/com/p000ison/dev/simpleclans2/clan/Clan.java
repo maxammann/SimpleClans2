@@ -1226,7 +1226,6 @@ public class Clan implements KDR, Comparable<Clan> {
         ChatColor subColor = plugin.getSettingsManager().getSubPageColor();
         ChatColor headColor = plugin.getSettingsManager().getHeaderPageColor();
 
-        System.out.println( Language.getTranslation("profile"));
         ChatBlock.sendBlank(sender);
         ChatBlock.sendHead(sender, Language.getTranslation("profile", plugin.getSettingsManager().getClanColor() + this.getName()), null);
         ChatBlock.sendBlank(sender);

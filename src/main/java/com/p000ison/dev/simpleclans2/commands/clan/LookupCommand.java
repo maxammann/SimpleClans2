@@ -34,7 +34,7 @@ public class LookupCommand extends GenericPlayerCommand {
 
     public LookupCommand(SimpleClans plugin)
     {
-        super("Lookup", plugin);
+        super("LookupCommand", plugin);
         setArgumentRange(0, 0);
         setUsages(Language.getTranslation("usage.lookup", plugin.getSettingsManager().getClanCommand()));
         setIdentifiers(Language.getTranslation("lookup.command"));
@@ -59,7 +59,7 @@ public class LookupCommand extends GenericPlayerCommand {
             Clan clan = clanPlayer.getClan();
             clanPlayer.showProfile(player, clan);
         } else {
-            player.sendMessage(ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
+            player.sendMessage(ChatColor.RED + Language.getTranslation("no.player.data.found"));
         }
     }
 }

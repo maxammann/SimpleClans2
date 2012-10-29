@@ -19,8 +19,44 @@
 
 package com.p000ison.dev.simpleclans2.commands.clan;
 
+import com.p000ison.dev.simpleclans2.SimpleClans;
+import com.p000ison.dev.simpleclans2.clan.Clan;
+import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
+import com.p000ison.dev.simpleclans2.commands.GenericConsoleCommand;
+import com.p000ison.dev.simpleclans2.language.Language;
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
+
 /**
  * Represents a LookupAnyCommand
  */
-public class LookupAnyCommand {
+public class LookupAnyCommand extends GenericConsoleCommand {
+
+    public LookupAnyCommand(SimpleClans plugin)
+    {
+        super("LookupAnyCommand", plugin);
+        setArgumentRange(1, 1);
+        setUsages(Language.getTranslation("usage.lookup.any", plugin.getSettingsManager().getClanCommand()));
+        setIdentifiers(Language.getTranslation("lookup.command"));
+        setPermission("simpleclans.anyone.lookup");
+    }
+
+    @Override
+    public String getMenu()
+    {
+        return Language.getTranslation("menu.lookup.any", plugin.getSettingsManager().getClanCommand());
+    }
+
+    @Override
+    public void execute(CommandSender sender, String[] args)
+    {
+        ClanPlayer clanPlayer = plugin.getClanPlayerManager().getAnyClanPlayer(args[0]);
+
+        if (clanPlayer != null) {
+            Clan clan = clanPlayer.getClan();
+            clanPlayer.showProfile(sender, clan);
+        } else {
+            sender.sendMessage(ChatColor.RED + Language.getTranslation("no.player.data.found"));
+        }
+    }
 }
