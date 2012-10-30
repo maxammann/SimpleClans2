@@ -30,7 +30,8 @@ public class Row {
         this.columns = columns;
     }
 
-    public Row(Object... columns) {
+    public Row(Object... columns)
+    {
         this.columns = new StringBuilder[columns.length];
 
         for (int i = 0; i < columns.length; i++) {

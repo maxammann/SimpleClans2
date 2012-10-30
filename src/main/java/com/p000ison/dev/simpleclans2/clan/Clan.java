@@ -1295,4 +1295,9 @@ public class Clan implements KDR, Comparable<Clan>, Balance {
     {
         return bank.getBalance();
     }
+
+    public void setBalance(double balance)
+    {
+        this.bank.setBalance(balance);
+    }
 }

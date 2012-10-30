@@ -73,7 +73,7 @@ public class StatsCommand extends GenericPlayerCommand {
             if (clan.isVerified()) {
                 if (cp.isTrusted()) {
 
-                    int page =  CommandManager.getPage(args);
+                    int page = CommandManager.getPage(args);
 
                     if (page == -1) {
                         player.sendMessage(Language.getTranslation("number.format"));

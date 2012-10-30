@@ -203,10 +203,10 @@ public class CommandManager {
                 }
             } else {
 //                if (cp != null) {
-                    String menu = ((GenericPlayerCommand) cmd).getMenu(cp);
-                    if (menu != null) {
-                        commands.add(menu);
-                    }
+                String menu = ((GenericPlayerCommand) cmd).getMenu(cp);
+                if (menu != null) {
+                    commands.add(menu);
+                }
 //                }
             }
         }

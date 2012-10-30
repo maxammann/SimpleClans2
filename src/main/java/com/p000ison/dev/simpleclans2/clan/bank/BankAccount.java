@@ -25,6 +25,8 @@ package com.p000ison.dev.simpleclans2.clan.bank;
 public class BankAccount implements Balance {
     private double balance;
 
+    public static final double MAX_BALANCE = 10E18;
+
     public BankAccount(double balance)
     {
         this.balance = balance;
@@ -36,18 +38,27 @@ public class BankAccount implements Balance {
         return balance;
     }
 
+    public void setBalance(double balance)
+    {
+        if (balance < 0.0D) {
+            throw new IllegalArgumentException("The balance can not be negative!");
+        }
+
+        this.balance = balance;
+    }
+
     @Override
     public boolean withdraw(double amount)
     {
         if (amount < 0.0D) {
             throw new IllegalArgumentException("The amount can not be negative if you withdraw something!");
         }
+
         if (amount > balance) {
             return false;
         }
 
         balance -= amount;
-        System.out.println("Balance: " + amount);
         return true;
     }
 
@@ -57,7 +68,7 @@ public class BankAccount implements Balance {
         if (amount < 0.0D) {
             throw new IllegalArgumentException("The amount can not be negative if you withdraw something!");
         }
-        System.out.println("Balance: " + amount);
+
         balance += amount;
     }
 
@@ -82,16 +93,5 @@ public class BankAccount implements Balance {
         }
 
         return true;
-    }
-
-    public static void main(String[] args)
-    {
-        BankAccount account1 = new BankAccount(5000.0);
-        BankAccount account2 = new BankAccount(1000.0);
-
-        System.out.println(account1.transfer(500, account2));
-        System.out.println("Account1: " + account1.getBalance());
-        System.out.println("Account2: " + account2.getBalance());
-        System.out.println(Double.MAX_VALUE);
     }
 }

@@ -588,7 +588,7 @@ public class ClanPlayer implements KDR, Balance {
     public void deposit(double amount)
     {
         if (amount < 0.0D) {
-            throw new IllegalArgumentException("The amount can not be negative if you withdraw something!");
+            throw new IllegalArgumentException("The amount can not be negative if you deposit something!");
         }
         SimpleClans.depositBalance(name, amount);
     }
@@ -600,7 +600,6 @@ public class ClanPlayer implements KDR, Balance {
             amount = Math.abs(amount);
 
             if (!this.withdraw(amount)) {
-                System.out.println("test");
                 return false;
             }
 
