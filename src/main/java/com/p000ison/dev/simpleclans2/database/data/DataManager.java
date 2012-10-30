@@ -88,7 +88,7 @@ public class DataManager {
     {
         DELETE_CLAN = database.prepareStatement("DELETE FROM `sc2_clans` WHERE id = ?;");
         INSERT_CLAN = database.prepareStatement("INSERT INTO `sc2_clans` ( `tag`, `name`, `verified`, `last_action` ) VALUES ( ?, ?, ?, ? );");
-        UPDATE_CLAN = database.prepareStatement("UPDATE `sc2_clans` SET tag = ?, name = ?, verified = ?, allies = ?, rivals = ?, warring = ?, last_action = CURRENT_TIMESTAMP, flags = ? WHERE id = ?;");
+        UPDATE_CLAN = database.prepareStatement("UPDATE `sc2_clans` SET tag = ?, name = ?, verified = ?, allies = ?, rivals = ?, warring = ?, last_action = CURRENT_TIMESTAMP, flags = ?, balance = ? WHERE id = ?;");
         RETRIEVE_CLAN_BY_TAG = database.prepareStatement("SELECT id FROM `sc2_clans` WHERE tag = ?;");
 
         DELETE_CLANPLAYER = database.prepareStatement("DELETE FROM `sc2_players` WHERE id = ?;");
@@ -269,7 +269,8 @@ public class DataManager {
                 UPDATE_CLAN.setNull(7, Types.VARCHAR);
             }
 
-            UPDATE_CLAN.setLong(8, clan.getId());
+            UPDATE_CLAN.setDouble(8, clan.getBalance());
+            UPDATE_CLAN.setLong(9, clan.getId());
 
             UPDATE_CLAN.executeUpdate();
         } catch (SQLException e) {

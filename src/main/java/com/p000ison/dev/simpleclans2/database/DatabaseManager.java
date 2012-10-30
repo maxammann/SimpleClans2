@@ -53,7 +53,7 @@ public class DatabaseManager {
         if (!database.existsTable("sc2_clans")) {
             Logging.debug("Creating table: sc2_clans");
 
-            String clanTable = "CREATE TABLE IF NOT EXISTS `sc2_clans` ( `id` INT NOT NULL AUTO_INCREMENT, `tag` VARCHAR(26) NOT NULL, `name` VARCHAR(100) NOT NULL, `verified` TINYINT(1) default 0, `founded` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, `last_action` TIMESTAMP NOT NULL, `allies` TEXT, `rivals` TEXT, `warring` TEXT, `flags` MEDIUMTEXT, PRIMARY KEY (`id`), UNIQUE KEY `id` (`id`), UNIQUE KEY `tag` (`tag`));";
+            String clanTable = "CREATE TABLE IF NOT EXISTS `sc2_clans` ( `id` INT NOT NULL AUTO_INCREMENT, `tag` VARCHAR(26) NOT NULL, `name` VARCHAR(100) NOT NULL, `verified` TINYINT(1) default 0, `founded` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, `last_action` TIMESTAMP NOT NULL, `allies` TEXT, `rivals` TEXT, `warring` TEXT, `flags` MEDIUMTEXT, `balance` DOUBLE( 20, 2 ) default 0.00, PRIMARY KEY (`id`), UNIQUE KEY `id` (`id`), UNIQUE KEY `tag` (`tag`));";
 
 
             database.execute(clanTable);
@@ -70,7 +70,7 @@ public class DatabaseManager {
         if (!database.existsTable("sc2_ranks")) {
             Logging.debug("Creating table: sc2_ranks");
 
-            String clanTable = "CREATE TABLE IF NOT EXISTS `sc2_ranks` ( `id` INT NOT NULL AUTO_INCREMENT, `clan` INT NOT NULL, `name` VARCHAR(16) NOT NULL UNIQUE KEY, `tag` VARCHAR(16) NOT NULL UNIQUE KEY,`permissions` MEDIUMTEXT, `priority` INT(3) default -1, PRIMARY KEY (`id`), UNIQUE KEY `id` (`id`) );";
+            String clanTable = "CREATE TABLE IF NOT EXISTS `sc2_ranks` ( `id` INT NOT NULL AUTO_INCREMENT, `clan` INT NOT NULL, `name` VARCHAR(16) NOT NULL UNIQUE KEY, `tag` VARCHAR(16) NOT NULL UNIQUE KEY,`permissions` MEDIUMTEXT, `priority` INT(3) default -1, PRIMARY KEY (`id`), UNIQUE KEY `id` (`id`), INDEX (`clan`) );";
 
             database.execute(clanTable);
         }
@@ -79,7 +79,7 @@ public class DatabaseManager {
         if (!database.existsTable("sc2_bb")) {
             Logging.debug("Creating table: sc2_bb");
 
-            String clanTable = "CREATE TABLE IF NOT EXISTS `sc2_bb` ( `id` INT NOT NULL AUTO_INCREMENT, `clan` INT NOT NULL, `text` TEXT, `date` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, UNIQUE KEY `id` (`id`) );";
+            String clanTable = "CREATE TABLE IF NOT EXISTS `sc2_bb` ( `id` INT NOT NULL AUTO_INCREMENT, `clan` INT NOT NULL, `text` TEXT, `date` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, UNIQUE KEY `id` (`id`), INDEX (`clan`) );";
 
             database.execute(clanTable);
         }

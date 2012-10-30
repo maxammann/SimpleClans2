@@ -111,9 +111,10 @@ public class BankCommand extends GenericPlayerCommand {
 
             ChatBlock.sendBlank(player);
 
-            player.sendMessage(ChatColor.AQUA + Language.getTranslation("now.clan.balance", cp.getBalance()));
-            player.sendMessage(ChatColor.AQUA + Language.getTranslation("now.player.balance", cp.getBalance()));
+            player.sendMessage(ChatColor.AQUA + Language.getTranslation("now.clan.balance", clan.getBalance()));
 
+            player.sendMessage(ChatColor.AQUA + Language.getTranslation("now.player.balance", cp.getBalance()));
+            clan.update();
         } else {
             player.sendMessage(ChatColor.AQUA + Language.getTranslation("current.clan.balance", clan.getBalance()));
         }
