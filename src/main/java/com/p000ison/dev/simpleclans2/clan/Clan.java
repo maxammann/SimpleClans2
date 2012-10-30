@@ -22,6 +22,8 @@ package com.p000ison.dev.simpleclans2.clan;
 
 import com.p000ison.dev.simpleclans2.KDR;
 import com.p000ison.dev.simpleclans2.SimpleClans;
+import com.p000ison.dev.simpleclans2.clan.bank.Balance;
+import com.p000ison.dev.simpleclans2.clan.bank.BankAccount;
 import com.p000ison.dev.simpleclans2.clan.ranks.Rank;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.clanplayer.OnlineClanPlayer;
@@ -45,13 +47,14 @@ import java.util.*;
 /**
  * Represents a Clan
  */
-public class Clan implements KDR, Comparable<Clan> {
+public class Clan implements KDR, Comparable<Clan>, Balance {
 
     private SimpleClans plugin;
+    private ClanFlags flags;
+    private BankAccount bank = new BankAccount(0.0D);
 
     private long id = -1;
     private String tag, name;
-    private ClanFlags flags;
     private long foundedDate;
     private long lastActionDate;
     private boolean verified;
@@ -1267,5 +1270,29 @@ public class Clan implements KDR, Comparable<Clan> {
         sender.sendMessage("  " + subColor + MessageFormat.format(Language.getTranslation("inactive.0"), inactive));
 
         ChatBlock.sendBlank(sender);
+    }
+
+    @Override
+    public boolean withdraw(double amount)
+    {
+        return bank.withdraw(amount);
+    }
+
+    @Override
+    public void deposit(double amount)
+    {
+        bank.deposit(amount);
+    }
+
+    @Override
+    public boolean transfer(double amount, Balance account)
+    {
+        return bank.transfer(amount, account);
+    }
+
+    @Override
+    public double getBalance()
+    {
+        return bank.getBalance();
     }
 }

@@ -130,6 +130,24 @@ public class Flags {
         return false;
     }
 
+
+    public double getDouble(String key)
+    {
+        Object doubl = data.get(key);
+
+        if (doubl instanceof Double) {
+            return (Double) doubl;
+        }
+
+        return -1;
+    }
+
+    public boolean removeEntry(String key)
+    {
+        return data.remove(key) != null;
+    }
+
+
     public Set getSet(String key)
     {
         Object set = data.get(key);

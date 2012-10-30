@@ -22,6 +22,7 @@ package com.p000ison.dev.simpleclans2.clanplayer;
 import com.p000ison.dev.simpleclans2.KDR;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
+import com.p000ison.dev.simpleclans2.clan.bank.Balance;
 import com.p000ison.dev.simpleclans2.clan.ranks.Rank;
 import com.p000ison.dev.simpleclans2.language.Language;
 import com.p000ison.dev.simpleclans2.util.DateHelper;
@@ -39,7 +40,7 @@ import java.util.Set;
 /**
  * Represents a ClanPlayer
  */
-public class ClanPlayer implements KDR {
+public class ClanPlayer implements KDR, Balance {
 
     private SimpleClans plugin;
 
@@ -566,4 +567,59 @@ public class ClanPlayer implements KDR {
         return Clan.DATE_FORMAT.format(new Date(this.lastSeen));
     }
 
+    @Override
+    public boolean withdraw(double amount)
+    {
+        if (amount < 0.0D) {
+            throw new IllegalArgumentException("The amount can not be negative if you withdraw something!");
+        }
+
+        double balance = SimpleClans.getBalance(name);
+
+        if (balance < amount) {
+            System.out.println(balance);
+            return false;
+        }
+
+        return SimpleClans.withdrawBalance(name, amount);
+    }
+
+    @Override
+    public void deposit(double amount)
+    {
+        if (amount < 0.0D) {
+            throw new IllegalArgumentException("The amount can not be negative if you withdraw something!");
+        }
+        SimpleClans.depositBalance(name, amount);
+    }
+
+    @Override
+    public boolean transfer(double amount, Balance account)
+    {
+        if (amount > 0.0D) {
+            amount = Math.abs(amount);
+
+            if (!this.withdraw(amount)) {
+                System.out.println("test");
+                return false;
+            }
+
+            account.deposit(amount);
+        } else {
+            amount = Math.abs(amount);
+            if (!account.withdraw(amount)) {
+                return false;
+            }
+
+            this.deposit(amount);
+        }
+
+        return true;
+    }
+
+    @Override
+    public double getBalance()
+    {
+        return SimpleClans.getBalance(name);
+    }
 }

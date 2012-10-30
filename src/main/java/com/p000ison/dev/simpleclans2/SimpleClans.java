@@ -61,6 +61,7 @@ import com.p000ison.dev.simpleclans2.teleportation.TeleportManager;
 import com.p000ison.dev.simpleclans2.util.Logging;
 import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import net.milkbowl.vault.economy.Economy;
+import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -256,6 +257,7 @@ public class SimpleClans extends JavaPlugin implements Core {
         //kills
         commandManager.addCommand(new AllyCommand(this));
         commandManager.addCommand(new RivalCommand(this));
+        commandManager.addCommand(new BankCommand(this));
         commandManager.addCommand(new HomeCommand(this));
         commandManager.addCommand(new HomeSetCommand(this));
         commandManager.addCommand(new HomeRegroupCommand(this));
@@ -366,19 +368,56 @@ public class SimpleClans extends JavaPlugin implements Core {
         return dataManager;
     }
 
+    /**
+     * Withdraws money from a player's account using Vault. This should work else it will throw a RuntimeException. So be sure that this will not get thrown.
+     *
+     * @param player  The name of the player
+     * @param balance The balance to withdraw
+     * @return Weather it was successfully.
+     * @throws RuntimeException If something was wrong
+     */
     public static boolean withdrawBalance(String player, double balance)
     {
-        return economy.withdrawPlayer(player, balance).transactionSuccess();
+        EconomyResponse response = economy.withdrawPlayer(player, balance);
+
+        if (!response.transactionSuccess()) {
+            throw new RuntimeException(response.errorMessage);
+        }
+        return true;
     }
 
-    public static void depositBalance(String player, double balance)
+    /**
+     * Deposits money to a player's account using Vault. This should work else it will throw a RuntimeException. So be sure that this will not get thrown.
+     *
+     * @param player  The name of the player
+     * @param balance The balance to deposit
+     * @return Weather it was successfully.
+     * @throws RuntimeException If something was wrong
+     */
+    public static boolean depositBalance(String player, double balance)
     {
-        economy.withdrawPlayer(player, balance);
+        EconomyResponse response = economy.depositPlayer(player, balance);
+
+        if (!response.transactionSuccess()) {
+            throw new RuntimeException(response.errorMessage);
+        }
+
+        return true;
+    }
+
+    public static double getBalance(String player)
+    {
+        return economy.getBalance(player);
     }
 
     public static boolean hasEconomy()
     {
         return economy != null;
+    }
+
+    public static Economy getEconomy()
+    {
+        return economy;
     }
 
     @Override
