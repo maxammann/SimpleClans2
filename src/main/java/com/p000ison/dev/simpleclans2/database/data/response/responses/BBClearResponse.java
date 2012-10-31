@@ -49,4 +49,10 @@ public class BBClearResponse extends Response {
         sender.sendMessage(ChatColor.AQUA + Language.getTranslation("cleared.bb"));
         return true;
     }
+
+    @Override
+    public boolean needsRetriever()
+    {
+        return false;
+    }
 }

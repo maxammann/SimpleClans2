@@ -57,7 +57,7 @@ public class SettingsManager {
     private double killWeightRival, killWeightNeutral, killWeightCivilian;
 
     private int elementsPerPage;
-    private String clanCommand;
+    private String clanCommand, bbCommand, rankCommand, bankCommand;
     private String serverName;
     private boolean globalFF;
     private int autoSave;
@@ -136,6 +136,9 @@ public class SettingsManager {
             ConfigurationSection commands = config.getConfigurationSection("commands");
 
             clanCommand = commands.getString("clan");
+            bbCommand = commands.getString("bb");
+            rankCommand = commands.getString("rank");
+            bankCommand = commands.getString("bank");
 
 
             ConfigurationSection databaseSection = config.getConfigurationSection("database");
@@ -702,5 +705,20 @@ public class SettingsManager {
     public String getEmail()
     {
         return email;
+    }
+
+    public String getBBCommand()
+    {
+        return bbCommand;
+    }
+
+    public String getRankCommand()
+    {
+        return rankCommand;
+    }
+
+    public String getBankCommand()
+    {
+        return bankCommand;
     }
 }

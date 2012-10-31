@@ -48,4 +48,6 @@ public abstract class Response implements ResponseAble {
 
         return new int[]{start, end};
     }
+
+    public abstract boolean needsRetriever();
 }

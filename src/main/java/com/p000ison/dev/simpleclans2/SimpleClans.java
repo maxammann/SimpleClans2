@@ -28,6 +28,9 @@ import com.p000ison.dev.simpleclans2.commands.Command;
 import com.p000ison.dev.simpleclans2.commands.CommandManager;
 import com.p000ison.dev.simpleclans2.commands.admin.*;
 import com.p000ison.dev.simpleclans2.commands.clan.*;
+import com.p000ison.dev.simpleclans2.commands.clan.bank.BalanceCommand;
+import com.p000ison.dev.simpleclans2.commands.clan.bank.DepositCommand;
+import com.p000ison.dev.simpleclans2.commands.clan.bank.WithdrawCommand;
 import com.p000ison.dev.simpleclans2.commands.clan.bb.BBAddCommand;
 import com.p000ison.dev.simpleclans2.commands.clan.bb.BBClearCommand;
 import com.p000ison.dev.simpleclans2.commands.clan.bb.BBCommand;
@@ -257,23 +260,14 @@ public class SimpleClans extends JavaPlugin implements Core {
         //kills
         commandManager.addCommand(new AllyCommand(this));
         commandManager.addCommand(new RivalCommand(this));
-        commandManager.addCommand(new BankCommand(this));
         commandManager.addCommand(new HomeCommand(this));
         commandManager.addCommand(new HomeSetCommand(this));
         commandManager.addCommand(new HomeRegroupCommand(this));
         //war
-        commandManager.addCommand(new BBCommand(this));
-        commandManager.addCommand(new BBAddCommand(this));
-        commandManager.addCommand(new BBClearCommand(this));
         commandManager.addCommand(new ModifyTagCommand(this));
         //toggle
         commandManager.addCommand(new InviteCommand(this));
         commandManager.addCommand(new KickCommand(this));
-        commandManager.addCommand(new ViewRanksCommand(this));
-        commandManager.addCommand(new RankCreateCommand(this));
-        commandManager.addCommand(new RankSetCommand(this));
-        commandManager.addCommand(new RankAddPermissionCommand(this));
-        commandManager.addCommand(new ViewPermissionsCommand(this));
         commandManager.addCommand(new TrustCommand(this));
         commandManager.addCommand(new UnTrustCommand(this));
         commandManager.addCommand(new PromoteCommand(this));
@@ -295,9 +289,24 @@ public class SimpleClans extends JavaPlugin implements Core {
         commandManager.addCommand(new AcceptCommand(this));
         commandManager.addCommand(new DenyCommand(this));
         commandManager.addCommand(new AbstainCommand(this));
+
+        commandManager.addCommand(new DepositCommand(this));
+        commandManager.addCommand(new WithdrawCommand(this));
+        commandManager.addCommand(new BalanceCommand(this));
+
+        commandManager.addCommand(new BBCommand(this));
+        commandManager.addCommand(new BBAddCommand(this));
+        commandManager.addCommand(new BBClearCommand(this));
+
+        commandManager.addCommand(new ViewRanksCommand(this));
+        commandManager.addCommand(new RankCreateCommand(this));
+        commandManager.addCommand(new RankSetCommand(this));
+        commandManager.addCommand(new RankAddPermissionCommand(this));
+        commandManager.addCommand(new ViewPermissionsCommand(this));
+
 //        commandManager.addCommand(new StrifesCommand(this));
 //        commandManager.addCommand(new KillsCommand(this));
-//        commandManager.addCommand(new BankCommand(this));
+//        commandManager.addCommand(new DepositCommand(this));
 //        commandManager.addCommand(new WarCommand(this));
 //        commandManager.addCommand(new ModtagCommand(this));
 //        commandManager.addCommand(new ToggleCommand(this));

@@ -42,6 +42,13 @@ public class BBAddResponse extends Response {
     public boolean response()
     {
         plugin.getDataManager().insertBBMessage(clan, message);
+        System.out.println("inserted");
         return true;
+    }
+
+    @Override
+    public boolean needsRetriever()
+    {
+        return false;
     }
 }

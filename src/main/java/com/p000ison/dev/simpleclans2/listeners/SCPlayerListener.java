@@ -96,8 +96,9 @@ public class SCPlayerListener implements Listener {
         int lenght = args.length;
 
         String clanCommand = plugin.getSettingsManager().getClanCommand();
-        String rankCommand = plugin.getSettingsManager().getClanCommand();
-        String bbCommand = plugin.getSettingsManager().getClanCommand();
+        String rankCommand = plugin.getSettingsManager().getRankCommand();
+        String bbCommand = plugin.getSettingsManager().getBBCommand();
+        String bankCommand = plugin.getSettingsManager().getBankCommand();
 
         Command.Type type = null;
 
@@ -107,6 +108,8 @@ public class SCPlayerListener implements Listener {
             type = Command.Type.RANK;
         } else if (args[0].equalsIgnoreCase(bbCommand)) {
             type = Command.Type.BB;
+        } else if (args[0].equalsIgnoreCase(bankCommand)) {
+            type = Command.Type.BANK;
         }
 
         if (type != null) {

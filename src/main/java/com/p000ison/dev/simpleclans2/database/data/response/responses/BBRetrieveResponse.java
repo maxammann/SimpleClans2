@@ -78,4 +78,10 @@ public class BBRetrieveResponse extends Response {
 
         return true;
     }
+
+    @Override
+    public boolean needsRetriever()
+    {
+        return true;
+    }
 }

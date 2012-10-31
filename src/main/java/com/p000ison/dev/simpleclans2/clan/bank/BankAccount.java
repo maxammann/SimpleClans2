@@ -20,7 +20,7 @@
 package com.p000ison.dev.simpleclans2.clan.bank;
 
 /**
- * Represents a BankCommand
+ * Represents a DepositCommand
  */
 public class BankAccount implements Balance {
     private double balance;

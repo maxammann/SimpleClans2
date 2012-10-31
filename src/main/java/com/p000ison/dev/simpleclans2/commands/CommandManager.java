@@ -140,6 +140,7 @@ public class CommandManager {
                     } else {
                         Logging.debug(Level.WARNING, "Failed at parsing the command :(");
                     }
+
                 }
             }
 

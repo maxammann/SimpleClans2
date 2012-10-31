@@ -48,7 +48,8 @@ public interface Command {
     public static enum Type {
         CLAN("clan", "sc"),
         RANK("rank"),
-        BB();
+        BB(),
+        BANK();
 
         private String[] command;
 

@@ -11,6 +11,7 @@ commands:
     clan: 'clan'
     rank: 'rank'
     bb: 'bb'
+    bank: 'bank'
 database:
     mode: 'mysql'
     host: 'localhost'

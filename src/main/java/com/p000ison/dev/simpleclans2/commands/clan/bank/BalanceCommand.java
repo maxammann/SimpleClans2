@@ -14,43 +14,41 @@
  *     You should have received a copy of the GNU General Public License
  *     along with SimpleClans2.  If not, see <http://www.gnu.org/licenses/>.
  *
- *     Last modified: 10.10.12 21:57
+ *     Last modified: 31.10.12 00:56
  */
 
-package com.p000ison.dev.simpleclans2.commands.clan.bb;
+package com.p000ison.dev.simpleclans2.commands.clan.bank;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
 import com.p000ison.dev.simpleclans2.language.Language;
-import com.p000ison.dev.simpleclans2.util.GeneralHelper;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.text.MessageFormat;
 
 /**
- * Represents a BBCommand
+ * Represents a DepositCommand
  */
-public class BBAddCommand extends GenericPlayerCommand {
+public class BalanceCommand extends GenericPlayerCommand {
 
-
-    public BBAddCommand(SimpleClans plugin)
+    public BalanceCommand(SimpleClans plugin)
     {
-        super("BBAdd", plugin);
-        setArgumentRange(0, 500);
-        setUsages(MessageFormat.format(Language.getTranslation("usage.bb.add"), plugin.getSettingsManager().getClanCommand()));
-        setIdentifiers(Language.getTranslation("bb.add.command"));
-        setPermission("simpleclans.member.bb-add");
-        setType(Type.BB);
+        super("BalanceCommand", plugin);
+        setArgumentRange(0, 0);
+        setUsages(MessageFormat.format(Language.getTranslation("usage.bank.balance"), plugin.getSettingsManager().getClanCommand()));
+        setIdentifiers(Language.getTranslation("bank.command.balance"));
+        setPermission("simpleclans.member.bank.balance");
+        setType(Type.BANK);
     }
 
     @Override
     public String getMenu(ClanPlayer cp)
     {
-        if (cp != null && cp.getClan().isVerified()) {
-            return MessageFormat.format(Language.getTranslation("menu.bb.add"), plugin.getSettingsManager().getClanCommand());
+        if (cp != null && cp.getClan().isVerified() && cp.isTrusted()) {
+            return MessageFormat.format(Language.getTranslation("menu.bank.balance"), plugin.getSettingsManager().getClanCommand());
         }
         return null;
     }
@@ -69,20 +67,16 @@ public class BBAddCommand extends GenericPlayerCommand {
 
         if (!clan.isVerified()) {
             player.sendMessage(ChatColor.RED + Language.getTranslation("clan.is.not.verified"));
-
             return;
         }
 
-        if (cp.isTrusted()) {
-            String msg = GeneralHelper.arrayToString(args);
-            if (msg == null) {
-                player.sendMessage(ChatColor.DARK_RED + Language.getTranslation("please.enter.message"));
-                return;
-            }
-            clan.addBBMessage(cp, msg);
-            player.sendMessage(ChatColor.AQUA + Language.getTranslation("bb.added"));
-        } else {
-            player.sendMessage(ChatColor.RED + Language.getTranslation("no.leader.permissions"));
+        if (!cp.isTrusted()) {
+            player.sendMessage(ChatColor.RED + Language.getTranslation("only.trusted.players.can.access.clan.bank"));
+            return;
         }
+
+
+        player.sendMessage(ChatColor.AQUA + Language.getTranslation("current.clan.balance", clan.getBalance()));
+
     }
 }

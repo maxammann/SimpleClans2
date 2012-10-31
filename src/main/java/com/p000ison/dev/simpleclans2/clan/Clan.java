@@ -712,13 +712,12 @@ public class Clan implements KDR, Comparable<Clan>, Balance {
 
     private void addBBRawMessage(String message)
     {
-        if (isVerified()) {
+//        if (isVerified()) {
 //            if (bb.size() > plugin.getSettingsManager().getMaxBBLenght()) {
 //                bb.pollFirst();
 //            }
-
             plugin.getDataManager().addResponse(new BBAddResponse(plugin, message, this));
-        }
+//        }
     }
 
     public void clearBB()
