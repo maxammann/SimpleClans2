@@ -37,7 +37,7 @@ public class RankDeleteCommand extends GenericPlayerCommand {
     {
         super("RankDelete", plugin);
         setArgumentRange(1, 1);
-        setUsages(Language.getTranslation("usage.rank.delete", plugin.getSettingsManager().getClanCommand()));
+        setUsages(Language.getTranslation("usage.rank.delete", plugin.getSettingsManager().getRankCommand()));
         setIdentifiers(Language.getTranslation("rank.delete.command"));
         setType(Type.RANK);
     }
@@ -46,7 +46,7 @@ public class RankDeleteCommand extends GenericPlayerCommand {
     public String getMenu(ClanPlayer clanPlayer)
     {
         if (clanPlayer != null && (clanPlayer.isLeader() || clanPlayer.hasRankPermission("manage.ranks"))) {
-            return Language.getTranslation("menu.rank.delete", plugin.getSettingsManager().getClanCommand());
+            return Language.getTranslation("menu.rank.delete", plugin.getSettingsManager().getRankCommand());
         }
         return null;
     }

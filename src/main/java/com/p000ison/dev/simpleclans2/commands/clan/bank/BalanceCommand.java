@@ -38,7 +38,7 @@ public class BalanceCommand extends GenericPlayerCommand {
     {
         super("BalanceCommand", plugin);
         setArgumentRange(0, 0);
-        setUsages(MessageFormat.format(Language.getTranslation("usage.bank.balance"), plugin.getSettingsManager().getClanCommand()));
+        setUsages(MessageFormat.format(Language.getTranslation("usage.bank.balance"), plugin.getSettingsManager().getBankCommand()));
         setIdentifiers(Language.getTranslation("bank.command.balance"));
         setPermission("simpleclans.member.bank.balance");
         setType(Type.BANK);
@@ -48,7 +48,7 @@ public class BalanceCommand extends GenericPlayerCommand {
     public String getMenu(ClanPlayer cp)
     {
         if (cp != null && cp.getClan().isVerified() && cp.isTrusted()) {
-            return MessageFormat.format(Language.getTranslation("menu.bank.balance"), plugin.getSettingsManager().getClanCommand());
+            return MessageFormat.format(Language.getTranslation("menu.bank.balance"), plugin.getSettingsManager().getBankCommand());
         }
         return null;
     }
@@ -77,6 +77,5 @@ public class BalanceCommand extends GenericPlayerCommand {
 
 
         player.sendMessage(ChatColor.AQUA + Language.getTranslation("current.clan.balance", clan.getBalance()));
-
     }
 }

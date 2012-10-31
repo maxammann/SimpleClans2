@@ -21,6 +21,7 @@ package com.p000ison.dev.simpleclans2.clanplayer;
 
 import com.p000ison.dev.simpleclans2.KDR;
 import com.p000ison.dev.simpleclans2.SimpleClans;
+import com.p000ison.dev.simpleclans2.UpdateAble;
 import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clan.bank.Balance;
 import com.p000ison.dev.simpleclans2.clan.ranks.Rank;
@@ -40,7 +41,7 @@ import java.util.Set;
 /**
  * Represents a ClanPlayer
  */
-public class ClanPlayer implements KDR, Balance {
+public class ClanPlayer implements KDR, Balance, UpdateAble {
 
     private SimpleClans plugin;
 
@@ -620,5 +621,18 @@ public class ClanPlayer implements KDR, Balance {
     public double getBalance()
     {
         return SimpleClans.getBalance(name);
+    }
+
+    public Row getRosterRow()
+    {
+        String name = plugin.getSettingsManager().getLeaderColor() + this.getName();
+        String lastSeen = (GeneralHelper.isOnline(toPlayer()) ? ChatColor.GREEN + Language.getTranslation("online") : ChatColor.WHITE + this.getLastSeen());
+        return new Row(name, ChatColor.YELLOW + this.getRank().getTag(), lastSeen);
+    }
+
+    @Override
+    public long getLastUpdated()
+    {
+        return getLastSeenDate();
     }
 }

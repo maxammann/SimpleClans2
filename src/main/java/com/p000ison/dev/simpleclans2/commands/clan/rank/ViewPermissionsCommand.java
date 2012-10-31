@@ -39,7 +39,7 @@ public class ViewPermissionsCommand extends GenericConsoleCommand {
     {
         super("ViewPermissions", plugin);
         setArgumentRange(0, 0);
-        setUsages(Language.getTranslation("usage.view.permissions", plugin.getSettingsManager().getClanCommand()));
+        setUsages(Language.getTranslation("usage.view.permissions", plugin.getSettingsManager().getRankCommand()));
         setIdentifiers(Language.getTranslation("view.permissions.command"));
         setPermission("simpleclans.rank.view.permissions");
         setType(Type.RANK);
@@ -48,7 +48,7 @@ public class ViewPermissionsCommand extends GenericConsoleCommand {
     @Override
     public String getMenu()
     {
-        return Language.getTranslation("menu.rank.permissions", plugin.getSettingsManager().getClanCommand());
+        return Language.getTranslation("menu.rank.permissions", plugin.getSettingsManager().getRankCommand());
     }
 
     @Override

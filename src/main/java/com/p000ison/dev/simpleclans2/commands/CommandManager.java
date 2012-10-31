@@ -109,14 +109,14 @@ public class CommandManager {
             Command helpCommand = null;
 
             for (Command cmd : commands) {
+
+                Command.Type type = cmd.getType();
+
+                if (type != null && !cmdType.equals(cmd.getType())) {
+                    continue;
+                }
+
                 if (cmd.isIdentifier(identifier)) {
-
-                    Command.Type type = cmd.getType();
-
-                    if (type != null && !cmdType.equals(cmd.getType())) {
-                        displayCommandHelp(cmd, sender);
-                        return;
-                    }
 
                     if (realArgs.length < cmd.getMinArguments() || realArgs.length > cmd.getMaxArguments()) {
                         helpCommand = cmd;

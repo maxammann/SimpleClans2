@@ -40,7 +40,7 @@ public class BBAddCommand extends GenericPlayerCommand {
     {
         super("BBAdd", plugin);
         setArgumentRange(0, 500);
-        setUsages(MessageFormat.format(Language.getTranslation("usage.bb.add"), plugin.getSettingsManager().getClanCommand()));
+        setUsages(MessageFormat.format(Language.getTranslation("usage.bb.add"), plugin.getSettingsManager().getBBCommand()));
         setIdentifiers(Language.getTranslation("bb.add.command"));
         setPermission("simpleclans.member.bb-add");
         setType(Type.BB);
@@ -50,7 +50,7 @@ public class BBAddCommand extends GenericPlayerCommand {
     public String getMenu(ClanPlayer cp)
     {
         if (cp != null && cp.getClan().isVerified()) {
-            return MessageFormat.format(Language.getTranslation("menu.bb.add"), plugin.getSettingsManager().getClanCommand());
+            return MessageFormat.format(Language.getTranslation("menu.bb.add"), plugin.getSettingsManager().getBBCommand());
         }
         return null;
     }

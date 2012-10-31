@@ -39,7 +39,7 @@ public class WithdrawCommand extends GenericPlayerCommand {
     {
         super("WithdrawCommand", plugin);
         setArgumentRange(1, 1);
-        setUsages(MessageFormat.format(Language.getTranslation("usage.bank.withdraw"), plugin.getSettingsManager().getClanCommand()));
+        setUsages(MessageFormat.format(Language.getTranslation("usage.bank.withdraw"), plugin.getSettingsManager().getBankCommand()));
         setIdentifiers(Language.getTranslation("bank.withdraw.command"));
         setPermission("simpleclans.member.bank.withdraw");
         setType(Type.BANK);
@@ -49,7 +49,7 @@ public class WithdrawCommand extends GenericPlayerCommand {
     public String getMenu(ClanPlayer cp)
     {
         if (cp != null && cp.getClan().isVerified() && cp.isTrusted()) {
-            return MessageFormat.format(Language.getTranslation("menu.bank.withdraw"), plugin.getSettingsManager().getClanCommand());
+            return MessageFormat.format(Language.getTranslation("menu.bank.withdraw"), plugin.getSettingsManager().getBankCommand());
         }
         return null;
     }

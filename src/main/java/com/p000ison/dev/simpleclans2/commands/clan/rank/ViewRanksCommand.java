@@ -44,7 +44,7 @@ public class ViewRanksCommand extends GenericPlayerCommand {
     {
         super("ViewPermissions", plugin);
         setArgumentRange(0, 0);
-        setUsages(Language.getTranslation("usage.view.ranks", plugin.getSettingsManager().getClanCommand()));
+        setUsages(Language.getTranslation("usage.view.ranks", plugin.getSettingsManager().getRankCommand()));
         setIdentifiers(Language.getTranslation("view.ranks.command"));
         setPermission("simpleclans.rank.view.ranks");
         setType(Type.RANK);
@@ -54,7 +54,7 @@ public class ViewRanksCommand extends GenericPlayerCommand {
     public String getMenu(ClanPlayer clanPlayer)
     {
         if (clanPlayer != null) {
-            return Language.getTranslation("menu.rank.view", plugin.getSettingsManager().getClanCommand());
+            return Language.getTranslation("menu.rank.view", plugin.getSettingsManager().getRankCommand());
         }
         return null;
     }

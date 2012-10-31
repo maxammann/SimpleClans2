@@ -39,7 +39,7 @@ public class DepositCommand extends GenericPlayerCommand {
     {
         super("DepositCommand", plugin);
         setArgumentRange(1, 1);
-        setUsages(MessageFormat.format(Language.getTranslation("usage.bank.deposit"), plugin.getSettingsManager().getClanCommand()));
+        setUsages(MessageFormat.format(Language.getTranslation("usage.bank.deposit"), plugin.getSettingsManager().getBankCommand()));
         setIdentifiers(Language.getTranslation("bank.deposit.command"));
         setPermission("simpleclans.member.bank.deposit");
         setType(Type.BANK);
@@ -49,7 +49,7 @@ public class DepositCommand extends GenericPlayerCommand {
     public String getMenu(ClanPlayer cp)
     {
         if (cp != null && cp.getClan().isVerified() && cp.isTrusted()) {
-            return MessageFormat.format(Language.getTranslation("menu.bank.deposit"), plugin.getSettingsManager().getClanCommand());
+            return MessageFormat.format(Language.getTranslation("menu.bank.deposit"), plugin.getSettingsManager().getBankCommand());
         }
         return null;
     }

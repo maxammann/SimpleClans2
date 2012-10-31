@@ -40,7 +40,7 @@ public class BBClearCommand extends GenericPlayerCommand {
     {
         super("BBClear", plugin);
         setArgumentRange(0, 0);
-        setUsages(MessageFormat.format(Language.getTranslation("usage.bb.clear"), plugin.getSettingsManager().getClanCommand()));
+        setUsages(MessageFormat.format(Language.getTranslation("usage.bb.clear"), plugin.getSettingsManager().getBBCommand()));
         setIdentifiers(Language.getTranslation("bb.clear.command"));
         setPermission("simpleclans.member.bb-clear");
         setType(Type.BB);
@@ -50,7 +50,7 @@ public class BBClearCommand extends GenericPlayerCommand {
     public String getMenu(ClanPlayer cp)
     {
         if (cp != null && cp.getClan().isVerified()) {
-            return MessageFormat.format(Language.getTranslation("menu.bb.clear"), plugin.getSettingsManager().getClanCommand());
+            return MessageFormat.format(Language.getTranslation("menu.bb.clear"), plugin.getSettingsManager().getBBCommand());
         }
         return null;
     }

@@ -22,6 +22,7 @@ package com.p000ison.dev.simpleclans2.clan;
 
 import com.p000ison.dev.simpleclans2.KDR;
 import com.p000ison.dev.simpleclans2.SimpleClans;
+import com.p000ison.dev.simpleclans2.UpdateAble;
 import com.p000ison.dev.simpleclans2.clan.bank.Balance;
 import com.p000ison.dev.simpleclans2.clan.bank.BankAccount;
 import com.p000ison.dev.simpleclans2.clan.ranks.Rank;
@@ -47,7 +48,7 @@ import java.util.*;
 /**
  * Represents a Clan
  */
-public class Clan implements KDR, Comparable<Clan>, Balance {
+public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble {
 
     private SimpleClans plugin;
     private ClanFlags flags;
@@ -935,6 +936,12 @@ public class Clan implements KDR, Comparable<Clan>, Balance {
     public void update(boolean update)
     {
         this.update = update;
+    }
+
+    @Override
+    public long getLastUpdated()
+    {
+        return getLastActionDate();
     }
 
     /**

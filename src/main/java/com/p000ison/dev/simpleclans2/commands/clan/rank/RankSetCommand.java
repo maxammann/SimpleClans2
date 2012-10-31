@@ -37,7 +37,7 @@ public class RankSetCommand extends GenericPlayerCommand {
     {
         super("RankSet", plugin);
         setArgumentRange(2, 2);
-        setUsages(Language.getTranslation("usage.rank.set", plugin.getSettingsManager().getClanCommand()));
+        setUsages(Language.getTranslation("usage.rank.set", plugin.getSettingsManager().getRankCommand()));
         setIdentifiers(Language.getTranslation("rank.set.command"));
         setType(Type.RANK);
     }
@@ -46,7 +46,7 @@ public class RankSetCommand extends GenericPlayerCommand {
     public String getMenu(ClanPlayer clanPlayer)
     {
         if (clanPlayer != null && (clanPlayer.isLeader() || clanPlayer.hasRankPermission("manage.ranks"))) {
-            return Language.getTranslation("menu.rank.set", plugin.getSettingsManager().getClanCommand());
+            return Language.getTranslation("menu.rank.set", plugin.getSettingsManager().getRankCommand());
         }
         return null;
     }
