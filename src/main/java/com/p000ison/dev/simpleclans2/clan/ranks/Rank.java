@@ -46,6 +46,12 @@ public class Rank implements Comparable<Rank> {
         availablePermissions.put(2, "manage.ally");
         availablePermissions.put(3, "manage.clanff");
         availablePermissions.put(4, "manage.ranks");
+
+        //unimplemented
+        availablePermissions.put(5, "bank.deposit");
+        availablePermissions.put(6, "bank.withdraw");
+        availablePermissions.put(7, "invite");
+        availablePermissions.put(5, "trust");
     }
 
     /**
