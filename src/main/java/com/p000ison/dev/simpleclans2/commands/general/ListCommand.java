@@ -65,7 +65,6 @@ public class ListCommand extends GenericConsoleCommand {
         ChatColor headColor = plugin.getSettingsManager().getHeaderPageColor();
         ChatColor subColor = plugin.getSettingsManager().getSubPageColor();
 
-
         List<Clan> clans = new ArrayList<Clan>(plugin.getClanManager().getClans());
 
         if (clans.isEmpty()) {

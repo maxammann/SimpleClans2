@@ -112,7 +112,6 @@ public class DataManager {
 
     public void addResponse(Response response)
     {
-        System.out.println("added");
         responseTask.add(response);
     }
 

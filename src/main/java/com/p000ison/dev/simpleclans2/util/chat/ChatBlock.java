@@ -136,6 +136,8 @@ public class ChatBlock {
     {
         if (rows.isEmpty()) {
             throw new IllegalArgumentException("No rows added!");
+        } else if (alignment == null) {
+            throw new IllegalArgumentException("You have to set the alignment first!");
         }
 
         generateColumnSizes();

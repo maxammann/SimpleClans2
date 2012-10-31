@@ -1,7 +1,7 @@
 general:
     elements-per-page: 10
     help-format: '&b    {0}'
-    server-name: 'SimpleClans'
+    server-name: '&8SimpleClans'
     global-ff: false
     auto-save: 5
     reporting:

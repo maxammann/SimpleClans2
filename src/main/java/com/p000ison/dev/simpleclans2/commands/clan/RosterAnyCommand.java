@@ -52,7 +52,7 @@ public class RosterAnyCommand extends GenericPlayerCommand {
     @Override
     public String getMenu(ClanPlayer cp)
     {
-        return MessageFormat.format(Language.getTranslation("0.roster.tag.1.view.a.clan.s.member.list"), plugin.getSettingsManager().getClanCommand());
+        return MessageFormat.format(Language.getTranslation("menu.roster.any"), plugin.getSettingsManager().getClanCommand());
     }
 
     @Override

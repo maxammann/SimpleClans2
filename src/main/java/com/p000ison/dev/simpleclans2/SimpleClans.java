@@ -299,10 +299,12 @@ public class SimpleClans extends JavaPlugin implements Core {
         commandManager.addCommand(new BBAddCommand(this));
         commandManager.addCommand(new BBClearCommand(this));
 
-        commandManager.addCommand(new ViewRanksCommand(this));
+
         commandManager.addCommand(new RankCreateCommand(this));
-        commandManager.addCommand(new RankSetCommand(this));
+        commandManager.addCommand(new ViewRanksCommand(this));
+        commandManager.addCommand(new ViewRankCommand(this));
         commandManager.addCommand(new RankAddPermissionCommand(this));
+        commandManager.addCommand(new RankSetCommand(this));
         commandManager.addCommand(new ViewPermissionsCommand(this));
 
 //        commandManager.addCommand(new StrifesCommand(this));

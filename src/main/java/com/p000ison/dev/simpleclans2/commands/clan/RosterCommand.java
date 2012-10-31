@@ -25,6 +25,7 @@ import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.commands.CommandManager;
 import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
 import com.p000ison.dev.simpleclans2.language.Language;
+import com.p000ison.dev.simpleclans2.util.chat.Align;
 import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.util.comparators.LastSeenComparator;
 import org.bukkit.ChatColor;
@@ -83,6 +84,8 @@ public class RosterCommand extends GenericPlayerCommand {
 
         if (clan.isVerified()) {
             ChatBlock chatBlock = new ChatBlock();
+
+            chatBlock.setAlignment(Align.LEFT, Align.LEFT, Align.LEFT);
 
             ChatBlock.sendBlank(player);
             ChatBlock.sendHead(player, plugin.getSettingsManager().getClanColor() + clan.getName(), Language.getTranslation("roster"));

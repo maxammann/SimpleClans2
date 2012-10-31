@@ -121,7 +121,7 @@ public class SettingsManager {
             ConfigurationSection general = config.getConfigurationSection("general");
 
             elementsPerPage = general.getInt("elements-per-page");
-            serverName = general.getString("server-name");
+            serverName = ChatBlock.parseColors(general.getString("server-name"));
             globalFF = general.getBoolean("global-ff");
             autoSave = general.getInt("auto-save");
             helpFormat = ChatBlock.parseColors(general.getString("help-format"));
