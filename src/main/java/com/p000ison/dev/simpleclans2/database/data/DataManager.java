@@ -33,6 +33,7 @@ import com.p000ison.dev.simpleclans2.database.data.statements.RemoveRankStatemen
 import com.p000ison.dev.simpleclans2.util.DateHelper;
 import com.p000ison.dev.simpleclans2.util.JSONUtil;
 import com.p000ison.dev.simpleclans2.util.Logging;
+import com.p000ison.dev.simpleclans2.util.comparators.ReverseIntegerComparator;
 
 import java.sql.*;
 import java.util.*;
@@ -50,7 +51,7 @@ public class DataManager {
 
     private PreparedStatement DELETE_CLAN, UPDATE_CLAN, INSERT_CLAN, RETRIEVE_CLAN_BY_TAG;
     private PreparedStatement DELETE_CLANPLAYER, UPDATE_CLANPLAYER, INSERT_CLANPLAYER, RETRIEVE_CLANPLAYER_BY_NAME, UNSET_CLANPLAYER;
-    private PreparedStatement RETRIEVE_TOTAL_DEATHS_PER_PLAYER;
+    private PreparedStatement RETRIEVE_TOTAL_DEATHS_PER_PLAYER, RETRIEVE_KILLS_PER_PLAYER;
     public PreparedStatement INSERT_KILL;
     private PreparedStatement INSERT_RANK, UPDATE_RANK, RETRIEVE_RANK_BY_NAME;
     public PreparedStatement DELETE_RANK_BY_ID;
@@ -97,8 +98,9 @@ public class DataManager {
         RETRIEVE_CLANPLAYER_BY_NAME = database.prepareStatement("SELECT id FROM `sc2_players` WHERE name = ?;");
         UNSET_CLANPLAYER = database.prepareStatement("UPDATE `sc2_players` SET clan = -1, trusted = 0, rank = 0 WHERE clan = ?;");
 
-        INSERT_KILL = database.prepareStatement("INSERT INTO `sc2_kills` ( `attacker`, `attacker_tag`, `victim`, `kill_type`, `victim_tag, `war` ) VALUES ( ?, ?, ?, ?, ?, ? );");
+        INSERT_KILL = database.prepareStatement("INSERT INTO `sc2_kills` ( `attacker`, `attacker_tag`, `victim`, `victim_tag`, `war`, `type`, `date` ) VALUES ( ?, ?, ?, ?, ?, ?, ? );");
         RETRIEVE_TOTAL_DEATHS_PER_PLAYER = database.prepareStatement("SELECT victim, count(victim) AS kills FROM `sc_kills` GROUP BY victim ORDER BY 2 DESC;");
+        RETRIEVE_KILLS_PER_PLAYER = database.prepareStatement("SELECT victim, count(victim) AS kills FROM `sc2_kills` WHERE attacker = ? GROUP BY victim ORDER BY count(victim) DESC;");
 
         INSERT_RANK = database.prepareStatement("INSERT INTO `sc2_ranks` ( `name`, `tag`, `priority`, `clan` ) VALUES ( ?, ?, ?, ? );");
         UPDATE_RANK = database.prepareStatement("UPDATE `sc2_ranks` SET name = ?, tag = ?, permissions = ?, priority = ? WHERE clan = ?;");
@@ -689,5 +691,33 @@ public class DataManager {
         } catch (SQLException e) {
             Logging.debug(e, true, "Failed at inserting bb message!");
         }
+    }
+
+    /**
+     * Returns a map of victim->count of all kills that specific player did
+     *
+     * @param playerId The player to look for
+     * @return A map of victims and a count
+     */
+    public SortedMap<Integer, Long> getKillsPerPlayer(long playerId)
+    {
+        TreeMap<Integer, Long> out = new TreeMap<Integer, Long>(new ReverseIntegerComparator());
+
+        try {
+            RETRIEVE_KILLS_PER_PLAYER.setLong(1, playerId);
+            ResultSet res = RETRIEVE_KILLS_PER_PLAYER.executeQuery();
+
+            if (res != null) {
+                while (res.next()) {
+                    Long victim = res.getLong("victim");
+                    int kills = res.getInt("kills");
+                    out.put(kills, victim);
+                }
+            }
+        } catch (SQLException e) {
+            Logging.debug(e, true, "Failed at querying the kills of %s!", playerId);
+        }
+
+        return out;
     }
 }

@@ -146,6 +146,20 @@ public class ClanPlayerManager {
         return null;
     }
 
+    public ClanPlayer getClanPlayer(long id)
+    {
+
+        if (id == -1) {
+            return null;
+        }
+        for (ClanPlayer clanPlayer : players) {
+            if (clanPlayer.getId() == id) {
+                return clanPlayer;
+            }
+        }
+        return null;
+    }
+
     public ClanPlayer getClanPlayer(Player player)
     {
         return getClanPlayerExact(player.getName());

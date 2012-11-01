@@ -34,22 +34,22 @@ import java.sql.Timestamp;
  */
 public class KillStatement implements Executable {
 
-    private String attacker;
+    private long attacker;
     private String attackerTag;
-    private String victim;
+    private long victim;
     private String victimTag;
     private boolean war;
-    private Timestamp date;
+    private long date;
     private byte killType;
 
-    public KillStatement(String attacker, String attackerTag, String victim, String victimTag, boolean war, KillType killType)
+    public KillStatement(long attacker, String attackerTag, long victim, String victimTag, boolean war, KillType killType)
     {
         this.attacker = attacker;
         this.attackerTag = attackerTag;
         this.victim = victim;
         this.victimTag = victimTag;
         this.war = war;
-        this.date = new Timestamp(System.currentTimeMillis());
+        this.date = System.currentTimeMillis();
         this.killType = killType.getType();
     }
 
@@ -58,17 +58,18 @@ public class KillStatement implements Executable {
     {
         try {
             PreparedStatement kill = dataManager.INSERT_KILL;
-            kill.setString(1, attacker);
+            kill.setLong(1, attacker);
             kill.setString(2, attackerTag);
-            kill.setString(3, victim);
+            kill.setLong(3, victim);
             kill.setString(4, victimTag);
-            kill.setTimestamp(5, date);
+            kill.setBoolean(5, war);
             kill.setByte(6, killType);
-            kill.setBoolean(7, war);
-            kill.execute();
+            kill.setTimestamp(7, new Timestamp(date));
+
+            return kill.executeUpdate() != 0;
         } catch (SQLException e) {
             Logging.debug(e, true, "Failed to insert kill for victim attacker %s and victim %s.", attacker, victim);
+            return false;
         }
-        return false;
     }
 }

@@ -142,7 +142,7 @@ public class SCEntityListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerDeath(PlayerDeathEvent event)
     {
-
+        System.out.println("dath");
         Player victimPlayer = event.getEntity();
 
         if (victimPlayer != null) {
@@ -196,8 +196,8 @@ public class SCEntityListener implements Listener {
                     type = KillType.NEUTRAL;
                 }
 
-                plugin.getDataManager().addStatement(new KillStatement(attacker.getName(), attackerClan == null ? null : attackerClan.getTag(),
-                        victim.getName(), victimClan == null ? null : victimClan.getTag(), war, type));
+                plugin.getDataManager().addStatement(new KillStatement(attacker.getId(), attackerClan == null ? null : attackerClan.getTag(),
+                        victim.getId(), victimClan == null ? null : victimClan.getTag(), war, type));
             }
         }
     }

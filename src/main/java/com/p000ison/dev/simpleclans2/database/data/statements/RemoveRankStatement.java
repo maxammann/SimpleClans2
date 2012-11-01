@@ -47,7 +47,7 @@ public class RemoveRankStatement implements Executable {
             return delete.executeUpdate() != 0;
         } catch (SQLException e) {
             Logging.debug(e, true, "Failed to remove rank %s.", id);
+            return false;
         }
-        return false;
     }
 }
