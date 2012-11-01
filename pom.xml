@@ -231,14 +231,14 @@
             <id>SacredCoding</id>
             <url>http://repo.sacredlabyrinth.net:8081/artifactory/releases</url>
         </repository>
-        <repository>
+<!--        <repository>
             <id>bukkit-repo</id>
             <url>http://repo.bukkit.org/content/groups/public/</url>
         </repository>
         <repository>
             <id>vault-repo</id>
             <url>http://ci.herocraftonline.com/plugin/repository/everything</url>
-        </repository>
+        </repository>       -->
         <repository>
             <id>spout-repo</id>
             <url>http://repo.spout.org</url>
