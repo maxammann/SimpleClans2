@@ -14,7 +14,7 @@
  *     You should have received a copy of the GNU General Public License
  *     along with SimpleClans2.  If not, see <http://www.gnu.org/licenses/>.
  *
- *     Last modified: 02.11.12 18:13
+ *     Last modified: 02.11.12 21:02
  */
 
 package com.p000ison.dev.simpleclans2.requests.requests;
@@ -28,15 +28,15 @@ import com.p000ison.dev.simpleclans2.requests.MultipleAcceptorsRequest;
 import java.util.Set;
 
 /**
- * Represents a StartWarRequest
+ * Represents a WarStartRequest
  */
-public class StartWarRequest extends MultipleAcceptorsRequest {
+public class WarStopRequest extends MultipleAcceptorsRequest {
 
     private Clan warring;
 
-    public StartWarRequest(SimpleClans plugin, Set<ClanPlayer> acceptors, ClanPlayer requester, Clan clan, Clan warring)
+    public WarStopRequest(SimpleClans plugin, Set<ClanPlayer> acceptors, ClanPlayer requester, Clan warring)
     {
-        super(plugin, acceptors, requester, Language.getTranslation("proposing.war", clan.getTag(), warring.getTag()));
+        super(plugin, acceptors, requester, Language.getTranslation("proposing.to.end.the.war", requester.getClan().getTag(), warring.getTag()));
         this.warring = warring;
     }
 
@@ -45,7 +45,6 @@ public class StartWarRequest extends MultipleAcceptorsRequest {
     {
         ClanPlayer cp = getRequester();
         Clan clan = requester.getClan();
-
 
         if (warring != null && clan != null) {
 

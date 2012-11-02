@@ -34,6 +34,8 @@ public class ColorizedMap extends HashMap<String, String> {
         for (Map.Entry<Object, Object> current : otherMap.entrySet()) {
             this.put(current.getKey().toString(), current.getValue().toString());
         }
+
+
     }
 
     @Override

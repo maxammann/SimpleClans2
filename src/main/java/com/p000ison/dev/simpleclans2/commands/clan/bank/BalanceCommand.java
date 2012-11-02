@@ -39,7 +39,7 @@ public class BalanceCommand extends GenericPlayerCommand {
         super("BalanceCommand", plugin);
         setArgumentRange(0, 0);
         setUsages(MessageFormat.format(Language.getTranslation("usage.bank.balance"), plugin.getSettingsManager().getBankCommand()));
-        setIdentifiers(Language.getTranslation("bank.command.balance"));
+        setIdentifiers(Language.getTranslation("bank.balance.command"));
         setPermission("simpleclans.member.bank.balance");
         setType(Type.BANK);
     }

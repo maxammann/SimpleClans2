@@ -717,7 +717,7 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble {
 //            if (bb.size() > plugin.getSettingsManager().getMaxBBLenght()) {
 //                bb.pollFirst();
 //            }
-            plugin.getDataManager().addResponse(new BBAddResponse(plugin, message, this));
+        plugin.getDataManager().addResponse(new BBAddResponse(plugin, message, this));
 //        }
     }
 
