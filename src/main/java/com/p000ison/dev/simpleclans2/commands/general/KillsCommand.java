@@ -20,13 +20,11 @@
 package com.p000ison.dev.simpleclans2.commands.general;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
-import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.commands.CommandManager;
 import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
 import com.p000ison.dev.simpleclans2.database.data.response.responses.KillsResponse;
 import com.p000ison.dev.simpleclans2.language.Language;
-import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -47,19 +45,7 @@ public class KillsCommand extends GenericPlayerCommand {
     @Override
     public String getMenu(ClanPlayer cp)
     {
-        if (cp != null) {
-            if (cp.isTrusted() && cp.getClan().isVerified()) {
-//                String out = "";
-
-                return Language.getTranslation("0.kills", plugin.getSettingsManager().getClanCommand());
-
-//                if (plugin.getPermissionsManager().has(sender, "simpleclans.member.kills")) {
-//                    return MessageFormat.format(Language.getTranslation("0.killsplayer"), plugin.getSettingsManager().getCommandClan(), ChatColor.WHITE);
-//                }
-//                return out.isEmpty() ? null : out;
-            }
-        }
-        return null;
+        return Language.getTranslation("menu.kills", plugin.getSettingsManager().getClanCommand());
     }
 
     @Override
@@ -67,21 +53,13 @@ public class KillsCommand extends GenericPlayerCommand {
     {
         ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
 
-        if (cp != null) {
-            Clan clan = cp.getClan();
+        int page = CommandManager.getPage(args);
 
-            if (clan.isVerified()) {
-                if (cp.isTrusted()) {
-                    String polledPlayer = player.getName();
-                    plugin.getDataManager().addResponse(new KillsResponse(plugin, player, cp, CommandManager.getPage(args[0])));
-                } else {
-                    ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("only.trusted.players.can.access.clan.stats"));
-                }
-            } else {
-                ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("clan.is.not.verified"));
-            }
-        } else {
-            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
+        if (page == -1) {
+            player.sendMessage(ChatColor.DARK_RED + Language.getTranslation("number.format"));
+            return;
         }
+
+        plugin.getDataManager().addResponse(new KillsResponse(plugin, player, cp, page));
     }
 }
