@@ -48,10 +48,10 @@ clan:
        inactive-clan-days: 7
        unverified-clan-days: 2
    bb:
-       clan: '+clan: +message'
-       clanplayer: '+player: +message'
-       default: '+message'
-       max-lines: 1000
+       clan: '&8* +clan: &b+message'
+       clanplayer: '&8* +player: &b+message'
+       default: '&8* &b+message'
+       max-lines: 3000
        max-display-lines: 10
    announce:
        clan: '+clan: +message'

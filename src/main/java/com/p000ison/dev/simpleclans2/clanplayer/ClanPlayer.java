@@ -636,4 +636,30 @@ public class ClanPlayer implements KDR, Balance, UpdateAble {
     {
         return getLastSeenDate();
     }
+
+    public boolean isCapeEnabled()
+    {
+        return getFlags() == null || getFlags().isCapeEnabled();
+    }
+
+    public void setCapeEnabled(boolean enabled)
+    {
+        if (getFlags() == null) {
+            return;
+        }
+        getFlags().setCapeEnabled(enabled);
+    }
+
+    public boolean isBBEnabled()
+    {
+        return getFlags() == null || getFlags().isBBEnabled();
+    }
+
+    public void setBBEnabled(boolean enabled)
+    {
+        if (getFlags() == null) {
+            return;
+        }
+        getFlags().setBBEnabled(enabled);
+    }
 }

@@ -76,4 +76,24 @@ public class PlayerFlags extends Flags {
 //        flags.set("1", set);
 //        System.out.println(flags.read());
 //    }
+
+    public boolean isCapeEnabled()
+    {
+        return super.getBoolean("cape");
+    }
+
+    public void setCapeEnabled(boolean enabled)
+    {
+        super.setBoolean("cape", enabled);
+    }
+
+    public boolean isBBEnabled()
+    {
+        return super.getBoolean("bb");
+    }
+
+    public void setBBEnabled(boolean enabled)
+    {
+        super.setBoolean("bb", enabled);
+    }
 }

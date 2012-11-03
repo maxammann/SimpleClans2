@@ -64,7 +64,7 @@ public class ClanFlags extends Flags {
      */
     public void setClanCapeURL(String url)
     {
-        super.setString("cape", url);
+        super.setString("cape-url", url);
     }
 
     /**
@@ -74,7 +74,7 @@ public class ClanFlags extends Flags {
      */
     public String getClanCapeURL()
     {
-        return super.getString("cape");
+        return super.getString("cape-url");
     }
 
     public void setFriendlyFire(boolean bool)

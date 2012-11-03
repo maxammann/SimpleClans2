@@ -21,6 +21,7 @@ package com.p000ison.dev.simpleclans2.support;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
+import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.listeners.SCPlayerListener;
 import com.p000ison.dev.simpleclans2.util.Logging;
 import org.bukkit.Bukkit;
@@ -99,6 +100,11 @@ public class SpoutSupport {
         spoutPlayer.setCape(url);
     }
 
+    public static SpoutPlayer getSpoutPlayerExact(ClanPlayer clanplayer)
+    {
+        return getSpoutPlayer(clanplayer.getName());
+    }
+
     public static SpoutPlayer getSpoutPlayerExact(Player player)
     {
         return getPlayer(player);
@@ -113,6 +119,16 @@ public class SpoutSupport {
         }
 
         return null;
+    }
+
+    public void clearCape(ClanPlayer clanPlayer)
+    {
+        SpoutPlayer spoutPlayer = getSpoutPlayerExact(clanPlayer);
+
+        if (spoutPlayer == null) {
+            return;
+        }
+        spoutPlayer.setCape(null);
     }
 
     public static SpoutPlayer getSpoutPlayer(String player)
