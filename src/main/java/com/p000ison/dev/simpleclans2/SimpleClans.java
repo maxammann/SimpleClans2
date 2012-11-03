@@ -62,13 +62,7 @@ import com.p000ison.dev.simpleclans2.util.Logging;
 import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
-import net.minecraft.server.NBTTagCompound;
 import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.inventory.CraftItemStack;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.Recipe;
-import org.bukkit.inventory.ShapedRecipe;
-import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -77,7 +71,6 @@ import org.mcstats.Metrics;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.logging.Level;
 
 /**
@@ -98,65 +91,6 @@ public class SimpleClans extends JavaPlugin implements Core {
     private SpoutSupport spoutSupport;
     private ExceptionReporterTask exceptionReporterTask;
     private static Economy economy;
-
-    public ItemStack setOwner(ItemStack itemStack, String owner)
-    {
-
-        if (owner == null || owner.isEmpty()) {
-            throw new IllegalArgumentException("The owner can not be null or empty!");
-        }
-
-        //Craft a craftitemstack
-        CraftItemStack craftItemStack = new CraftItemStack(itemStack);
-        net.minecraft.server.ItemStack item = craftItemStack.getHandle();
-
-        NBTTagCompound tags = item.tag;
-        if (tags == null) {
-            tags = item.tag = new NBTTagCompound();
-        }
-
-        tags.setString("SkullOwner", owner);
-
-        return craftItemStack;
-    }
-
-    public static boolean equalRecipe(Recipe recipe, Recipe recipe1)
-    {
-        if (!recipe.getResult().equals(recipe1.getResult())) {
-            return false;
-        }
-
-        if (recipe instanceof ShapelessRecipe) {
-            if (!(recipe1 instanceof ShapelessRecipe)) {
-                return false;
-            }
-
-            ShapelessRecipe shapelessRecipe = (ShapelessRecipe) recipe;
-            ShapelessRecipe shapelessRecipe1 = (ShapelessRecipe) recipe1;
-
-            if (!shapelessRecipe.getIngredientList().equals(shapelessRecipe1.getIngredientList())) {
-                return false;
-            }
-
-        } else if (recipe instanceof ShapedRecipe) {
-            if (!(recipe1 instanceof ShapedRecipe)) {
-                return false;
-            }
-
-            ShapedRecipe shapedRecipe = (ShapedRecipe) recipe;
-            ShapedRecipe shapedRecipe1 = (ShapedRecipe) recipe1;
-
-            if (!shapedRecipe.getIngredientMap().values().equals(shapedRecipe1.getIngredientMap().values())) {
-                return false;
-            }
-
-            if (!Arrays.equals(shapedRecipe.getShape(), shapedRecipe1.getShape())) {
-                return false;
-            }
-        }
-
-        return true;
-    }
 
     @Override
     public void onEnable()
