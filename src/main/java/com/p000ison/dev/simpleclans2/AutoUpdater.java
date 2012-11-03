@@ -28,6 +28,7 @@ import org.bukkit.plugin.Plugin;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.Set;
 
 /**
  * Represents a AutoUpdater
@@ -73,9 +74,32 @@ public class AutoUpdater {
                 Logging.debug("Build: " + fetched.getBuildNumber());
                 Logging.debug("Type: " + (fetched.getUpdateType() == Build.UpdateType.LATEST ? "Unofficial" : "Official"));
                 Logging.debug("Release date: " + new Date(fetched.getStarted()));
-                Logging.debug("Compiling duration: " + DurationFormatUtils.formatDuration(fetched.getDuration(), "HH:mm:ss"));
-                Logging.debug("Compiling result:  " + fetched.getResult());
-                Logging.debug("Compiling cause:  " + fetched.getCause());
+                Logging.debug("Compiling duration: " + DurationFormatUtils.formatDuration(85254L, "HH:mm:ss"));
+                Logging.debug("Author:  " + fetched.getAuthor());
+                Logging.debug("Comment:  " + fetched.getComment() + "(" + fetched.getCommitURL() + ")");
+
+                Set<String> modified = fetched.getModifiedFiles();
+                Set<String> created = fetched.getCreatedFiles();
+                Set<String> deleted = fetched.getDeletedFiles();
+
+                if (!modified.isEmpty()) {
+                    Logging.debug("Modified files(%s):", modified.size());
+                    for (String file : modified) {
+                        Logging.debug("  * " + file);
+                    }
+                }
+                if (!created.isEmpty()) {
+                    Logging.debug("Created files(%s):", created.size());
+                    for (String file : created) {
+                        Logging.debug("  * " + file);
+                    }
+                }
+                if (!deleted.isEmpty()) {
+                    Logging.debug("Deleted files(%s):", deleted.size());
+                    for (String file : deleted) {
+                        Logging.debug("  * " + file);
+                    }
+                }
                 Logging.debug("------------------------------------------------------------------------------------------------------");
             }
         } catch (IOException e) {

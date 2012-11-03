@@ -27,6 +27,8 @@ import org.json.simple.JSONValue;
 import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Represents a Build
@@ -34,6 +36,7 @@ import java.net.URLConnection;
 public class Build {
 
     private static final String DEFAULT_ARTIFACT = "SimpleClans2-1.0.jar";
+    private static final String PROJECT_GITHUB_URL = "https://github.com/p000ison/SimpleClans2/commit/";
     private static final String JENKINS_HOST = "jenkins.greatmancode.com";
     private static final String API_FILE = "/api/json";
     // --> http://
@@ -41,14 +44,18 @@ public class Build {
 
     private int buildNumber;
     private String fetchFile;
-    private String result;
     private boolean isBuilding;
 
     private String job;
     private UpdateType updateType;
 
-    private String cause;
     private long started, duration;
+
+    private String pusher;
+    private String commitId, comment;
+    private Set<String> modifiedFiles = new HashSet<String>();
+    private Set<String> createdFiles = new HashSet<String>();
+    private Set<String> deletedFiles = new HashSet<String>();
 
 
     public Build(String job, UpdateType updateType)
@@ -73,19 +80,35 @@ public class Build {
             return;
         }
 
-        this.result = content.get("result").toString();
-        this.started = content.get("timestamp").hashCode();
-        this.duration = content.get("duration").hashCode();
+        this.started = (Long)content.get("timestamp");
+        this.duration = (Long) content.get("duration");
         this.fetchFile = content.get("url").toString().substring(httpLength + JENKINS_HOST.length()) + "artifact/target/" + DEFAULT_ARTIFACT;
 
         try {
-            JSONArray actions = (JSONArray) content.get("actions");
-            JSONObject causesEntry = (JSONObject) actions.get(0);
-            JSONArray causes = (JSONArray) causesEntry.get("causes");
-            JSONObject causeEntry = (JSONObject) causes.get(0);
-            this.cause = causeEntry.get("shortDescription").toString();
+            JSONObject changes = (JSONObject) content.get("changeSet");
+            JSONArray items = (JSONArray) changes.get("items");
+            if (!items.isEmpty()) {
+                JSONObject buildInfo = (JSONObject) items.get(0);
+
+                this.commitId = buildInfo.get("commitId").toString();
+                this.pusher = ((JSONObject) buildInfo.get("author")).get("fullName").toString();
+                this.comment = buildInfo.get("msg").toString();
+
+                for (Object element : (JSONArray) buildInfo.get("paths")) {
+                    JSONObject entry = (JSONObject) element;
+
+                    if (entry.get("editType").equals("edit")) {
+                        modifiedFiles.add(entry.get("file").toString());
+                    } else if (entry.get("editType").equals("delete")) {
+                        deletedFiles.add(entry.get("file").toString());
+                    } else if (entry.get("editType").equals("add")) {
+                        createdFiles.add(entry.get("file").toString());
+                    }
+                }
+            }
         } catch (ClassCastException e) {
             Logging.debug(e, true, "The format of the api changed! Could not fetch the cause!");
+            e.printStackTrace();
         }
     }
 
@@ -155,16 +178,6 @@ public class Build {
         return started;
     }
 
-    public String getCause()
-    {
-        return cause;
-    }
-
-    public String getResult()
-    {
-        return result;
-    }
-
     public int getBuildNumber()
     {
         return buildNumber;
@@ -176,8 +189,8 @@ public class Build {
     }
 
     public static enum UpdateType {
-        LATEST("Promoted"),
-        LATEST_PROMOTED("lastSuccessfulBuild");
+        LATEST("lastSuccessfulBuild"),
+        LATEST_PROMOTED("Promoted");
 
         private String type;
 
@@ -196,5 +209,45 @@ public class Build {
         {
             return type;
         }
+    }
+
+    public Build(Set<String> deletedFiles, Set<String> createdFiles, Set<String> modifiedFiles, String comment, String commitId, String pusher)
+    {
+        this.deletedFiles = deletedFiles;
+        this.createdFiles = createdFiles;
+        this.modifiedFiles = modifiedFiles;
+        this.comment = comment;
+        this.commitId = commitId;
+        this.pusher = pusher;
+    }
+
+    public Set<String> getDeletedFiles()
+    {
+        return deletedFiles;
+    }
+
+    public String getCommitURL()
+    {
+        return PROJECT_GITHUB_URL + commitId;
+    }
+
+    public String getComment()
+    {
+        return comment;
+    }
+
+    public Set<String> getModifiedFiles()
+    {
+        return modifiedFiles;
+    }
+
+    public Set<String> getCreatedFiles()
+    {
+        return createdFiles;
+    }
+
+    public String getAuthor()
+    {
+        return pusher;
     }
 }
