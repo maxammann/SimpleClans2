@@ -19,6 +19,7 @@
 
 package com.p000ison.dev.simpleclans2.updater;
 
+import com.p000ison.dev.simpleclans2.util.Logging;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
@@ -35,28 +36,47 @@ public class Build {
     private static final String DEFAULT_ARTIFACT = "SimpleClans2-1.0.jar";
     private static final String JENKINS_HOST = "jenkins.greatmancode.com";
     private static final String API_FILE = "/api/json";
+    // --> http://
+    private static final byte httpLength = 7;
 
-    private int build;
+    private int buildNumber;
     private String fetchFile;
     private String result;
+    private boolean isBuilding;
+
+    private String job;
+    private UpdateType updateType;
 
     private String cause;
     private long started, duration;
 
 
-    public Build(String job, String buildInfo) throws IOException
+    public Build(String job, UpdateType updateType)
     {
-        URL buildAPIURL = new URL("http", JENKINS_HOST, 80, "/job/" + job + "/" + buildInfo + "/" + API_FILE);
+        this.job = job;
+        this.updateType = updateType;
+    }
+
+    public void fetchInformation() throws IOException
+    {
+        URL buildAPIURL = new URL("http", JENKINS_HOST, 80, "/job/" + job + "/" + updateType + "/" + API_FILE);
 
         URLConnection connection = buildAPIURL.openConnection();
         Reader reader = new InputStreamReader(connection.getInputStream());
 
         JSONObject content = parseJSON(reader);
 
-//        System.out.println(content);
+        this.buildNumber = content.get("number").hashCode();
+        this.isBuilding = content.get("building").hashCode() == 1231;
 
-        this.build = content.get("number").hashCode();
+        if (isBuilding) {
+            return;
+        }
+
         this.result = content.get("result").toString();
+        this.started = content.get("timestamp").hashCode();
+        this.duration = content.get("duration").hashCode();
+        this.fetchFile = content.get("url").toString().substring(httpLength + JENKINS_HOST.length()) + "artifact/target/" + DEFAULT_ARTIFACT;
 
         try {
             JSONArray actions = (JSONArray) content.get("actions");
@@ -65,18 +85,8 @@ public class Build {
             JSONObject causeEntry = (JSONObject) causes.get(0);
             this.cause = causeEntry.get("shortDescription").toString();
         } catch (ClassCastException e) {
-            System.out.println("The format of the api changed! Could not fetch the cause!");
+            Logging.debug(e, true, "The format of the api changed! Could not fetch the cause!");
         }
-
-        this.started = content.get("timestamp").hashCode();
-        this.duration = content.get("duration").hashCode();
-        // --> http://jenkins.greatmancode.com
-
-        final int httpLength = 7;
-
-        this.fetchFile = content.get("url").toString().substring(httpLength + JENKINS_HOST.length()) + "artifact/target/" + DEFAULT_ARTIFACT;
-
-        System.out.println(fetchFile);
     }
 
     public static JSONObject parseJSON(Reader reader)
@@ -88,16 +98,6 @@ public class Build {
         }
 
         return (JSONObject) parse;
-    }
-
-    public static void main(String[] args)
-    {
-        try {
-            new Build("SimpleClans2", "lastSuccessfulBuild").saveToFile(new File("/home/max/Arbeitsfläche/test.jar"));
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public InputStream getDownloadStream() throws IOException
@@ -122,5 +122,79 @@ public class Build {
 
         output.flush();
         output.close();
+    }
+
+    public boolean saveToDirectory(File directory) throws IOException
+    {
+        if (!directory.mkdirs()) {
+            return false;
+        }
+
+        if (!directory.isDirectory()) {
+            return false;
+        }
+
+        File file = new File(directory, DEFAULT_ARTIFACT);
+
+        saveToFile(file);
+        return true;
+    }
+
+    public UpdateType getUpdateType()
+    {
+        return updateType;
+    }
+
+    public long getDuration()
+    {
+        return duration;
+    }
+
+    public long getStarted()
+    {
+        return started;
+    }
+
+    public String getCause()
+    {
+        return cause;
+    }
+
+    public String getResult()
+    {
+        return result;
+    }
+
+    public int getBuildNumber()
+    {
+        return buildNumber;
+    }
+
+    public boolean wasBuilding()
+    {
+        return isBuilding;
+    }
+
+    public static enum UpdateType {
+        LATEST("Promoted"),
+        LATEST_PROMOTED("lastSuccessfulBuild");
+
+        private String type;
+
+        private UpdateType(String type)
+        {
+            this.type = type;
+        }
+
+        @Override
+        public String toString()
+        {
+            return type;
+        }
+
+        public String getType()
+        {
+            return type;
+        }
     }
 }

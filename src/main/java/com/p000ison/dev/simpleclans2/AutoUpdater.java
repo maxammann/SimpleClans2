@@ -19,20 +19,126 @@
 
 package com.p000ison.dev.simpleclans2;
 
+import com.p000ison.dev.simpleclans2.updater.Build;
+import com.p000ison.dev.simpleclans2.util.DateHelper;
+import com.p000ison.dev.simpleclans2.util.Logging;
+import org.apache.commons.lang.time.DurationFormatUtils;
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
+
+import java.io.IOException;
+import java.util.Date;
+
 /**
  * Represents a AutoUpdater
  */
 public class AutoUpdater {
-
-    private static final String JENKINS_HOST = "jenkins.greatmancode.com";
     private static final String JOB = "SimpleClans2";
+    private Build toUpdate = null;
 
-    public AutoUpdater()
+    public AutoUpdater(Plugin plugin)
     {
+        String version = plugin.getDescription().getVersion();
+
+        if (version.equals("unknown-version")) {
+            Logging.debug("No maven, heh?");
+            return;
+        } else if (version.contains("UNKNOWN")) {
+            Logging.debug("No jenkins build, heh?");
+            return;
+        }
+
+        int versionValue = parseVersion(version);
+
+        if (versionValue == -1) {
+            Logging.debug("The version string is malformatted: %s", version);
+            return;
+        }
+
+        Build fetched;
+
+        try {
+            if (version.contains("b")) {
+                fetched = getLatestBuild();
+            } else {
+                fetched = getLatestPromotedBuild();
+            }
+
+            fetched.fetchInformation();
+
+            if (versionValue < fetched.getBuildNumber()) {
+                toUpdate = fetched;
+                Logging.debug("------------------------------------------------------------------------------------------------------");
+                Logging.debug("There is a update for your SimpleClans version!");
+                Logging.debug("Build: " + fetched.getBuildNumber());
+                Logging.debug("Type: " + (fetched.getUpdateType() == Build.UpdateType.LATEST ? "Unofficial" : "Official"));
+                Logging.debug("Release date: " + new Date(fetched.getStarted()));
+                Logging.debug("Compiling duration: " + DurationFormatUtils.formatDuration(fetched.getDuration(), "HH:mm:ss"));
+                Logging.debug("Compiling result:  " + fetched.getResult());
+                Logging.debug("Compiling cause:  " + fetched.getCause());
+                Logging.debug("------------------------------------------------------------------------------------------------------");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
+    public boolean update()
+    {
+        if (toUpdate == null) {
+            return false;
+        }
 
-    public void getLatestBuild() {
+        try {
+            toUpdate.saveToDirectory(Bukkit.getUpdateFolderFile());
+        } catch (IOException e) {
+            Logging.debug(e, true);
+            return false;
+        }
+        return true;
+    }
 
+    private static int parseVersion(String version)
+    {
+        char[] versionArray = version.toCharArray();
+
+        int versionNumber = 0;
+        int run = 1;
+
+        for (int i = versionArray.length - 1; i >= 0; i--) {
+            char current = versionArray[i];
+
+            switch (current) {
+                case '-':
+                case 'b':
+                    break;
+                case '.':
+                    continue;
+            }
+
+            int number = DateHelper.getDigit(current);
+
+            if (number == -1) {
+                if (versionNumber == 0) {
+                    return -1;
+                }
+                break;
+            }
+
+            versionNumber += number * run;
+            run *= 10;
+        }
+
+        return versionNumber;
+    }
+
+    public static Build getLatestBuild()
+    {
+        return new Build(JOB, Build.UpdateType.LATEST);
+    }
+
+    public static Build getLatestPromotedBuild()
+    {
+        return new Build(JOB, Build.UpdateType.LATEST_PROMOTED);
     }
 }

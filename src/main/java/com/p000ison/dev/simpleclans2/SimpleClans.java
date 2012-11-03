@@ -104,6 +104,8 @@ public class SimpleClans extends JavaPlugin implements Core {
             //we need to load the settingsManager already here, because we need the data!
             settingsManager = new SettingsManager(this);
 
+            AutoUpdater updater = new AutoUpdater(this);
+
             setupMetrics();
 
             Logging.debug("Loading the language file..");
