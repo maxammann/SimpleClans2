@@ -118,29 +118,12 @@ public class AutoUpdater {
             File updateDirectory = Bukkit.getUpdateFolderFile();
             File pluginDirectory = updateDirectory.getParentFile();
 
-
             if (pluginDirectory.listFiles() == null || !pluginDirectory.isDirectory()) {
                 return false;
             }
 
-            String name = null;
-
-            for (File file : pluginDirectory.listFiles())  {
-                if (file.isDirectory()) {
-                    continue;
-                }
-                String absolutePath = file.getCanonicalPath();
-
-                String completeName = absolutePath.substring(absolutePath.lastIndexOf('/') + 1);
-                if (completeName.contains("SimpleClans")){
-                    name = completeName;
-                }
-            }
-
-            if (name == null) {
-                Logging.debug("Failed at searching for the plugin jar! Update failed!");
-                return false;
-            }
+            String absolutePath = getClass().getProtectionDomain().getCodeSource().getLocation().getFile();
+            String name = absolutePath.substring(absolutePath.lastIndexOf('/') + 1);
 
             if (!toUpdate.saveToDirectory(updateDirectory, name)) {
                 return false;
