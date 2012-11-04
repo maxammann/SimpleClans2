@@ -139,17 +139,20 @@ public class Build {
         output.close();
     }
 
-    public boolean saveToDirectory(File directory) throws IOException
+    public boolean saveToDirectory(File directory, String name) throws IOException
     {
-        if (!directory.mkdirs()) {
-            return false;
+        if (!directory.exists()) {
+            if (!directory.mkdirs()) {
+                return false;
+            }
         }
 
         if (!directory.isDirectory()) {
+            Logging.debug("The update folder is no directory?!");
             return false;
         }
 
-        File file = new File(directory, DEFAULT_ARTIFACT);
+        File file = new File(directory, name);
 
         saveToFile(file);
         return true;

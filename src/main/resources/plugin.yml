@@ -1,6 +1,7 @@
 name: SimpleClans2
 main: com.p000ison.dev.simpleclans2.SimpleClans
-version: unknown-version
+#version: unknown-version
+version: 1.0-b49
 commands:
   sc:
   rank:
@@ -60,7 +61,7 @@ permissions:
     description: Can view his clan's bulletin board
   simpleclans.member.bb-add:
     description: Can add to his clan's bulletin board
-  simpleclans.member.bb-toggle:
+  simpleclans.member.toggle.bb:
     description: Can toggle bb on/off
   simpleclans.member.ff:
     description: Can toggle his own friendly fire
@@ -86,12 +87,10 @@ permissions:
     description: Can modify his clan's tag
   simpleclans.leader.cape:
     description: Can set his clan's cape url
-  simpleclans.member.cape-toggle:
+  simpleclans.member.toggle.cape:
     description: Can toggle his cape on/off
   simpleclans.member.kills:
     description: Can view his and other's kills
-  simpleclans.member.tag-toggle:
-    description: Can hide his own clan tag
   simpleclans.mod.mostkilled:
     description: Can view his and other's clans mostkilled
   simpleclans.mod.keep-items:
@@ -162,9 +161,8 @@ permissions:
       simpleclans.member.stats: true
       simpleclans.member.bb: true
       simpleclans.member.bb-add: true
-      simpleclans.member.bb-toggle: true
-      simpleclans.member.cape-toggle: true
-      simpleclans.member.tag-toggle: true
+      simpleclans.member.toggle.bb: true
+      simpleclans.member.toggle.cape: true
       simpleclans.member.ff: true
       simpleclans.member.resign: true
       simpleclans.member.ally: true

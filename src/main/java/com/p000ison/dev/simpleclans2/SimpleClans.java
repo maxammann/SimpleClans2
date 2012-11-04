@@ -58,6 +58,7 @@ import com.p000ison.dev.simpleclans2.settings.SettingsManager;
 import com.p000ison.dev.simpleclans2.support.PreciousStonesSupport;
 import com.p000ison.dev.simpleclans2.support.SpoutSupport;
 import com.p000ison.dev.simpleclans2.teleportation.TeleportManager;
+import com.p000ison.dev.simpleclans2.updater.AutoUpdater;
 import com.p000ison.dev.simpleclans2.util.Logging;
 import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import net.milkbowl.vault.economy.Economy;
@@ -309,6 +310,7 @@ public class SimpleClans extends JavaPlugin implements Core {
         commandManager.addCommand(new SaveCommand(this));
         commandManager.addCommand(new ReloadCommand(this));
         commandManager.addCommand(new InfoCommand(this));
+        commandManager.addCommand(new UpgradeCommand(this));
 
         commandManager.addCommand(new AcceptCommand(this));
         commandManager.addCommand(new DenyCommand(this));

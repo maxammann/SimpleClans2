@@ -17,16 +17,15 @@
  *     Last modified: 03.11.12 17:29
  */
 
-package com.p000ison.dev.simpleclans2;
+package com.p000ison.dev.simpleclans2.updater;
 
-import com.p000ison.dev.simpleclans2.updater.Build;
-import com.p000ison.dev.simpleclans2.updater.UpdateType;
 import com.p000ison.dev.simpleclans2.util.DateHelper;
 import com.p000ison.dev.simpleclans2.util.Logging;
 import org.apache.commons.lang.time.DurationFormatUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 import java.util.Set;
@@ -37,9 +36,11 @@ import java.util.Set;
 public class AutoUpdater {
     private static final String JOB = "SimpleClans2";
     private Build toUpdate = null;
+    private Plugin plugin;
 
     public AutoUpdater(Plugin plugin, UpdateType type)
     {
+        this.plugin = plugin;
         String version = plugin.getDescription().getVersion();
 
         if (version.equals("unknown-version")) {
@@ -66,10 +67,10 @@ public class AutoUpdater {
                 toUpdate = fetched;
                 Logging.debug("------------------------------------------------------------------------------------------------------");
                 Logging.debug("There is a update for your SimpleClans version!");
-                Logging.debug("Build: " + fetched.getBuildNumber());
-                Logging.debug("Type: " + (fetched.getUpdateType() == UpdateType.LATEST ? "Unofficial" : "Official"));
-                Logging.debug("Release date: " + new Date(fetched.getStarted()));
-                Logging.debug("Compiling duration: " + DurationFormatUtils.formatDuration(fetched.getDuration(), "HH:mm:ss"));
+                Logging.debug("Build:  " + fetched.getBuildNumber());
+                Logging.debug("Type:  " + (fetched.getUpdateType() == UpdateType.LATEST ? "Unofficial" : "Official"));
+                Logging.debug("Release date:  " + new Date(fetched.getStarted()));
+                Logging.debug("Compiling duration:  " + DurationFormatUtils.formatDuration(fetched.getDuration(), "HH:mm:ss"));
                 Logging.debug("Author:  " + fetched.getAuthor());
                 Logging.debug("Comment:  " + fetched.getComment() + "(" + fetched.getCommitURL() + ")");
 
@@ -114,7 +115,36 @@ public class AutoUpdater {
         }
 
         try {
-            toUpdate.saveToDirectory(Bukkit.getUpdateFolderFile());
+            File updateDirectory = Bukkit.getUpdateFolderFile();
+            File pluginDirectory = updateDirectory.getParentFile();
+
+
+            if (pluginDirectory.listFiles() == null || !pluginDirectory.isDirectory()) {
+                return false;
+            }
+
+            String name = null;
+
+            for (File file : pluginDirectory.listFiles())  {
+                if (file.isDirectory()) {
+                    continue;
+                }
+                String absolutePath = file.getCanonicalPath();
+
+                String completeName = absolutePath.substring(absolutePath.lastIndexOf('/') + 1);
+                if (completeName.contains("SimpleClans")){
+                    name = completeName;
+                }
+            }
+
+            if (name == null) {
+                Logging.debug("Failed at searching for the plugin jar! Update failed!");
+                return false;
+            }
+
+            if (!toUpdate.saveToDirectory(updateDirectory, name)) {
+                return false;
+            }
         } catch (IOException e) {
             Logging.debug(e, true);
             return false;

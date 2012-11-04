@@ -14,49 +14,52 @@
  *     You should have received a copy of the GNU General Public License
  *     along with SimpleClans2.  If not, see <http://www.gnu.org/licenses/>.
  *
- *     Last modified: 04.11.12 00:52
+ *     Last modified: 04.11.12 15:24
  */
 
 package com.p000ison.dev.simpleclans2.commands.admin;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
-import com.p000ison.dev.simpleclans2.commands.CommandManager;
 import com.p000ison.dev.simpleclans2.commands.GenericConsoleCommand;
-import com.p000ison.dev.simpleclans2.database.data.response.responses.MostKilledResponse;
 import com.p000ison.dev.simpleclans2.language.Language;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
-/**
- * Represents a MostKilledCommand
- */
-public class MostKilledCommand extends GenericConsoleCommand {
+import java.text.MessageFormat;
 
-    public MostKilledCommand(SimpleClans plugin)
+/**
+ * Represents a UpdateCommand
+ */
+public class UpgradeCommand extends GenericConsoleCommand {
+
+    public UpgradeCommand(SimpleClans plugin)
     {
-        super("MostKilled", plugin);
+        super("UpgradeCommand", plugin);
         setArgumentRange(0, 0);
-        setUsages(Language.getTranslation("usage.mostkilled", plugin.getSettingsManager().getClanCommand()));
-        setIdentifiers(Language.getTranslation("mostkilled.command"));
-        setPermission("simpleclans.mod.mostkilled");
+        setUsages(MessageFormat.format(Language.getTranslation("usage.upgrade"), plugin.getSettingsManager().getClanCommand()));
+        setIdentifiers(Language.getTranslation("upgrade.command"));
+        setPermission("simpleclans.admin.upgrade");
     }
 
     @Override
     public String getMenu()
     {
-        return Language.getTranslation("menu.mostkilled", plugin.getSettingsManager().getClanCommand());
+        return Language.getTranslation("menu.upgrade", plugin.getSettingsManager().getClanCommand());
     }
 
     @Override
     public void execute(CommandSender sender, String[] args)
     {
-        int page = CommandManager.getPage(args);
-
-        if (page == -1) {
-            sender.sendMessage(ChatColor.DARK_RED + Language.getTranslation("number.format"));
+        if (!plugin.isUpdate()) {
+            sender.sendMessage(ChatColor.DARK_RED + Language.getTranslation("no.upgrade"));
             return;
         }
 
-        plugin.getDataManager().addResponse(new MostKilledResponse(plugin, sender, page));
+        if (!plugin.update()) {
+            sender.sendMessage(ChatColor.DARK_RED + Language.getTranslation("upgrade.failed"));
+            return;
+        }
+
+        sender.sendMessage(ChatColor.GREEN + Language.getTranslation("upgrade.successfully"));
     }
 }
