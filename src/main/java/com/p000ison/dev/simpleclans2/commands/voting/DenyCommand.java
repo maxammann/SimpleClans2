@@ -26,6 +26,7 @@ import com.p000ison.dev.simpleclans2.language.Language;
 import com.p000ison.dev.simpleclans2.requests.AbstractRequest;
 import com.p000ison.dev.simpleclans2.requests.MultipleAcceptorsRequest;
 import com.p000ison.dev.simpleclans2.requests.RequestManager;
+import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import org.bukkit.entity.Player;
 
 import java.text.MessageFormat;
