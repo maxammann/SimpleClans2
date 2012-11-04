@@ -103,7 +103,7 @@ public class AutoUpdater {
                 Logging.debug("------------------------------------------------------------------------------------------------------");
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            Logging.debug(e, true, "Failed at fetching the Update information!");
         }
     }
 

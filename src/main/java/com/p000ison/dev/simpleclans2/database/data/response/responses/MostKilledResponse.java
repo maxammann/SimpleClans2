@@ -14,13 +14,14 @@
  *     You should have received a copy of the GNU General Public License
  *     along with SimpleClans2.  If not, see <http://www.gnu.org/licenses/>.
  *
- *     Last modified: 01.11.12 19:25
+ *     Last modified: 04.11.12 00:59
  */
 
 package com.p000ison.dev.simpleclans2.database.data.response.responses;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
+import com.p000ison.dev.simpleclans2.database.data.Conflicts;
 import com.p000ison.dev.simpleclans2.database.data.response.Response;
 import com.p000ison.dev.simpleclans2.language.Language;
 import com.p000ison.dev.simpleclans2.util.chat.Align;
@@ -28,52 +29,55 @@ import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
-import java.util.Map;
-import java.util.SortedMap;
+import java.util.Set;
 
 /**
  * Represents a KillsResponse
  */
-public class KillsResponse extends Response {
+public class MostKilledResponse extends Response {
 
-    private ClanPlayer otherPlayer;
     private int page;
 
-    public KillsResponse(SimpleClans plugin, CommandSender sender, ClanPlayer polledPlayer, int page)
+    public MostKilledResponse(SimpleClans plugin, CommandSender sender, int page)
     {
         super(plugin, sender);
-        this.otherPlayer = polledPlayer;
         this.page = page;
     }
 
     @Override
     public boolean response()
     {
-        SortedMap<Integer, Long> killsPerPlayer = plugin.getDataManager().getKillsPerPlayer(otherPlayer.getId());
+        ChatBlock chatBlock = new ChatBlock();
+        ChatColor headColor = plugin.getSettingsManager().getHeaderPageColor();
 
-        if (killsPerPlayer.isEmpty()) {
+        chatBlock.setAlignment(Align.LEFT, Align.CENTER, Align.LEFT);
+
+        chatBlock.addRow("  " + headColor + Language.getTranslation("victim"), headColor + Language.getTranslation("killcount"), headColor + Language.getTranslation("attacker"));
+
+        Set<Conflicts> mostKilledSet = plugin.getDataManager().getMostKilled();
+
+        if (mostKilledSet.isEmpty()) {
             ChatBlock.sendMessage(sender, ChatColor.RED + Language.getTranslation("nokillsfound"));
             return true;
         }
 
-        ChatBlock chatBlock = new ChatBlock();
-        chatBlock.setAlignment(Align.LEFT, Align.CENTER);
-
-        chatBlock.addRow(Language.getTranslation("victim"), Language.getTranslation("killcount"));
-
-        int[] boundings = getBoundings(killsPerPlayer.size(), page);
+        int[] boundings = getBoundings(mostKilledSet.size(), page);
 
         int i = 0;
-        for (Map.Entry<Integer, Long> entry : killsPerPlayer.entrySet()) {
+        for (Conflicts conflict : mostKilledSet) {
             if (i < boundings[0]) {
                 continue;
             } else if (i > boundings[1]) {
                 break;
             }
-            chatBlock.addRow(plugin.getClanPlayerManager().getClanPlayer(entry.getValue()).getName(), ChatColor.AQUA.toString() + entry.getKey());
+
+            ClanPlayer attacker = plugin.getClanPlayerManager().getClanPlayer(conflict.getAttacker());
+            ClanPlayer victim = plugin.getClanPlayerManager().getClanPlayer(conflict.getVictim());
+
+            chatBlock.addRow("  " + ChatColor.WHITE + victim.getName(), ChatColor.AQUA.toString() + conflict.getConflicts(), ChatColor.YELLOW + attacker.getName());
         }
 
-        ChatBlock.sendHead(sender, plugin.getSettingsManager().getClanColor() + otherPlayer.getName(), Language.getTranslation("kills"));
+        ChatBlock.sendHead(sender, plugin.getSettingsManager().getServerName(), Language.getTranslation("mostkilled"));
         ChatBlock.sendBlank(sender);
 
         chatBlock.sendBlock(sender);

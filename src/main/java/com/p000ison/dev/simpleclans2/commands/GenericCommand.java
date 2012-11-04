@@ -31,7 +31,7 @@ abstract class GenericCommand implements Command {
     private String[] identifiers;
     private String[] usage;
     protected SimpleClans plugin;
-    private String permission;
+    private String[] permissions;
     private Type type = Type.CLAN;
 
     protected GenericCommand(String name, SimpleClans plugin)
@@ -106,12 +106,22 @@ abstract class GenericCommand implements Command {
     @Override
     public boolean hasPermission(Permissible sender)
     {
-        return permission == null || sender.hasPermission(permission);
+        if ( permissions == null) {
+            return true;
+        }
+
+        for (String perm : permissions) {
+            if (sender.hasPermission(perm)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
-    public void setPermission(String permission)
+    public void setPermission(String... permissions)
     {
-        this.permission = permission;
+        this.permissions = permissions;
     }
 
     @Override
@@ -132,7 +142,7 @@ abstract class GenericCommand implements Command {
         return "GenericCommand{" +
                 "name='" + name + '\'' +
                 ", minArgs=" + minArgs +
-                ", permission='" + permission + '\'' +
+                ", permission='" + Arrays.asList(permissions) + '\'' +
                 ", identifiers=" + (identifiers == null ? null : Arrays.asList(identifiers)) +
                 ", maxArgs=" + maxArgs +
                 '}';

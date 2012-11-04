@@ -51,7 +51,7 @@ public class DataManager {
 
     private PreparedStatement DELETE_CLAN, UPDATE_CLAN, INSERT_CLAN, RETRIEVE_CLAN_BY_TAG;
     private PreparedStatement DELETE_CLANPLAYER, UPDATE_CLANPLAYER, INSERT_CLANPLAYER, RETRIEVE_CLANPLAYER_BY_NAME, UNSET_CLANPLAYER;
-    private PreparedStatement RETRIEVE_TOTAL_DEATHS_PER_PLAYER, RETRIEVE_KILLS_PER_PLAYER;
+    private PreparedStatement RETRIEVE_TOTAL_DEATHS_PER_PLAYER, RETRIEVE_KILLS_PER_PLAYER, RETRIEVE_MOST_KILLS;
     public PreparedStatement INSERT_KILL;
     private PreparedStatement INSERT_RANK, UPDATE_RANK, RETRIEVE_RANK_BY_NAME;
     public PreparedStatement DELETE_RANK_BY_ID;
@@ -101,6 +101,7 @@ public class DataManager {
         INSERT_KILL = database.prepareStatement("INSERT INTO `sc2_kills` ( `attacker`, `attacker_tag`, `victim`, `victim_tag`, `war`, `type`, `date` ) VALUES ( ?, ?, ?, ?, ?, ?, ? );");
         RETRIEVE_TOTAL_DEATHS_PER_PLAYER = database.prepareStatement("SELECT victim, count(victim) AS kills FROM `sc_kills` GROUP BY victim ORDER BY 2 DESC;");
         RETRIEVE_KILLS_PER_PLAYER = database.prepareStatement("SELECT victim, count(victim) AS kills FROM `sc2_kills` WHERE attacker = ? GROUP BY victim ORDER BY count(victim) DESC;");
+        RETRIEVE_MOST_KILLS = database.prepareStatement("SELECT attacker, victim, count(victim) AS kills FROM `sc_kills` GROUP BY attacker, victim ORDER BY 3 DESC;");
 
         INSERT_RANK = database.prepareStatement("INSERT INTO `sc2_ranks` ( `name`, `tag`, `priority`, `clan` ) VALUES ( ?, ?, ?, ? );");
         UPDATE_RANK = database.prepareStatement("UPDATE `sc2_ranks` SET name = ?, tag = ?, permissions = ?, priority = ? WHERE clan = ?;");
@@ -720,4 +721,32 @@ public class DataManager {
 
         return out;
     }
+
+    /**
+     * Returns a map of tag->count of all kills
+     *
+     * @return A map of tag->count of all kills
+     */
+    public Set<Conflicts> getMostKilled()
+    {
+        Set<Conflicts> out = new HashSet<Conflicts>();
+        try {
+            ResultSet res = RETRIEVE_KILLS_PER_PLAYER.executeQuery();
+
+            if (res != null) {
+
+                while (res.next()) {
+                    long attacker = res.getLong("attacker");
+                    long victim = res.getLong("victim");
+                    int kills = res.getInt("kills");
+                    out.add(new Conflicts(attacker, victim, kills));
+                }
+            }
+        } catch (SQLException e) {
+            Logging.debug(e, true, "Failed at collecting the most killed useres!");
+        }
+
+        return out;
+    }
+
 }

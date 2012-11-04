@@ -14,41 +14,51 @@
  *     You should have received a copy of the GNU General Public License
  *     along with SimpleClans2.  If not, see <http://www.gnu.org/licenses/>.
  *
- *     Last modified: 29.10.12 22:42
+ *     Last modified: 04.11.12 00:52
  */
 
 package com.p000ison.dev.simpleclans2.commands.admin;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
+import com.p000ison.dev.simpleclans2.commands.CommandManager;
 import com.p000ison.dev.simpleclans2.commands.GenericConsoleCommand;
+import com.p000ison.dev.simpleclans2.database.data.response.responses.MostKilledResponse;
 import com.p000ison.dev.simpleclans2.language.Language;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
-import java.text.MessageFormat;
-
 /**
- * Represents a UpdateCommand
+ * Represents a MostKilledCommand
  */
-public class UpdateCommand extends GenericConsoleCommand {
+public class MostKilledCommand extends GenericConsoleCommand {
 
-    public UpdateCommand(SimpleClans plugin)
+    private SimpleClans plugin;
+
+    public MostKilledCommand(SimpleClans plugin)
     {
-        super("UpdateCommand", plugin);
+        super("MostKilled", plugin);
         setArgumentRange(0, 0);
-        setUsages(MessageFormat.format(Language.getTranslation("usage.update"), plugin.getSettingsManager().getClanCommand()));
-        setIdentifiers(Language.getTranslation("command.update"));
-        setPermission("simpleclans.admin.update");
+        setUsages(Language.getTranslation("usage.mostkilled", plugin.getSettingsManager().getClanCommand()));
+        setIdentifiers(Language.getTranslation("mostkilled.command"));
+        setPermission("simpleclans.mod.mostkilled");
     }
 
     @Override
     public String getMenu()
     {
-        return MessageFormat.format(Language.getTranslation("menu.update"), plugin.getSettingsManager().getClanCommand());
+        return Language.getTranslation("menu.mostkilled", plugin.getSettingsManager().getClanCommand());
     }
 
     @Override
     public void execute(CommandSender sender, String[] args)
     {
+        int page = CommandManager.getPage(args);
 
+        if (page == -1) {
+            sender.sendMessage(ChatColor.DARK_RED + Language.getTranslation("number.format"));
+            return;
+        }
+
+        plugin.getDataManager().addResponse(new MostKilledResponse(plugin, sender, page));
     }
 }

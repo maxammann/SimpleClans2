@@ -37,36 +37,18 @@ public class ToggleCommand extends GenericPlayerCommand {
     public ToggleCommand(SimpleClans plugin)
     {
         super("Command", plugin);
-        setArgumentRange(1, 2);
+        setArgumentRange(1, 1);
         setUsages(Language.getTranslation("usage.toggle", plugin.getSettingsManager().getClanCommand()));
         setIdentifiers(Language.getTranslation("toggle.command"));
-        setPermission("simpleclans.member.toggle.*");
+        setPermission("simpleclans.member.toggle.cape", "simpleclans.member.toggle.bb");
     }
 
     @Override
     public String getMenu(ClanPlayer cp)
     {
-//        if (cp != null) {
-//            StringBuilder toggles = new StringBuilder();
-//
-//            if (cp.isLeader() && plugin.getPermissionsManager().has(sender, "simpleclans.member.tag-toggle")) {
-//                toggles.append("tag/");
-//            }
-//            if (cp.getClan().isVerified()) {
-//                if (plugin.hasSpout() && plugin.getSettingsManager().isClanCapes() && plugin.getPermissionsManager().has(sender, "simpleclans.member.cape-toggle")) {
-//                    toggles.append("cape/");
-//                }
-//                if (cp.isTrusted()) {
-//                    if (plugin.getPermissionsManager().has(sender, "simpleclans.member.bb-toggle")) {
-//                        toggles.append("bb/");
-//                    }
-//                    if (plugin.getPermissionsManager().has(sender, "simpleclans.member.tag-toggle")) {
-//                        toggles.append("tag/");
-//                    }
-//                }
-//            }
-//            return toggles.length() == 0 ? null : MessageFormat.format(Language.getTranslation("0.toggle.command"), plugin.getSettingsManager().getCommandClan(), ChatColor.WHITE, Helper.stripTrailing(toggles.toString(), "/"));
-//        }
+        if (cp != null) {
+            return Language.getTranslation("menu.toggle", plugin.getSettingsManager().getClanCommand());
+        }
 
         return null;
     }
@@ -74,10 +56,10 @@ public class ToggleCommand extends GenericPlayerCommand {
     @Override
     public void execute(Player player, String[] args)
     {
-        String cmd = args[0];
+        String action = args[0];
 
-        if (cmd.equalsIgnoreCase("cape")) {
-            if (player.hasPermission("simpleclans.member.cape-toggle")) {
+        if (action.equalsIgnoreCase("cape")) {
+            if (player.hasPermission("simpleclans.member.toggle.cape")) {
                 ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
 
                 if (cp != null) {
@@ -105,10 +87,8 @@ public class ToggleCommand extends GenericPlayerCommand {
             } else {
                 ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("insufficient.permissions"));
             }
-        }
-
-        if (cmd.equalsIgnoreCase("bb")) {
-            if (player.hasPermission("simpleclans.member.bb-toggle")) {
+        } else if (action.equalsIgnoreCase("bb")) {
+            if (player.hasPermission("simpleclans.member.toggle.bb")) {
                 ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
 
                 if (cp != null) {
@@ -127,59 +107,5 @@ public class ToggleCommand extends GenericPlayerCommand {
                 }
             }
         }
-
-        if (cmd.equalsIgnoreCase("list")) {
-            if (player.hasPermission("simpleclans.member.toggle.list")) {
-                ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
-
-                if (cp != null) {
-                    Clan clan = cp.getClan();
-
-                    if (clan.isVerified()) {
-                        if (cp.isBBEnabled()) {
-                            ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("bboff"));
-                            cp.setBBEnabled(false);
-                        } else {
-                            ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("bbon"));
-                            cp.setBBEnabled(true);
-                        }
-                        clan.update();
-                    }
-                }
-            }
-        }
-
-//        if (cmd.equalsIgnoreCase("tag")) {
-//            if (plugin.getPermissionsManager().has(player, "simpleclans.member.tag-toggle")) {
-//                ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
-//
-//                if (cp != null) {
-//                    Clan clan = cp.getClan();
-//
-//                    if (clan.isVerified()) {
-//                        if (cp.isTagEnabled()) {
-//                            ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("tagoff"));
-//                            cp.setTagEnabled(false);
-//                        } else {
-//                            ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("tagon"));
-//                            cp.setTagEnabled(true);
-//                        }
-//                        plugin.getStorageManager().updateClanPlayer(cp);
-//                    }
-//                }
-//            }
-//        }
-
-//        if (cmd.equalsIgnoreCase("all-seeing-eye") || cmd.equalsIgnoreCase("ase")) {
-//            if (plugin.getPermissionsManager().has(sender, "simpleclans.admin.all-seeing-eye-toggle")) {
-//                ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
-//
-//                if (cp != null) {
-//                    cp.setAllSeeingEyeEnabled(!cp.isAllSeeingEyeEnabled());
-//                } else {
-//                    ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("insufficient.permissions"));
-//                }
-//            }
-//        }
     }
 }
