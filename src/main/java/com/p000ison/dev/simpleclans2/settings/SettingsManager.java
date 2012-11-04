@@ -22,6 +22,7 @@ package com.p000ison.dev.simpleclans2.settings;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
+import com.p000ison.dev.simpleclans2.updater.UpdateType;
 import com.p000ison.dev.simpleclans2.util.ExceptionHelper;
 import com.p000ison.dev.simpleclans2.util.GeneralHelper;
 import com.p000ison.dev.simpleclans2.util.Logging;
@@ -62,6 +63,7 @@ public class SettingsManager {
     private boolean globalFF;
     private int autoSave;
     private String helpFormat;
+    private UpdateType buildChannel;
 
     private boolean reportErrors;
     private String email;
@@ -84,8 +86,6 @@ public class SettingsManager {
 
     private String defaultCape;
     private boolean capesEnabled;
-    private String defaultAlertSound;
-    private boolean alertSoundEnabled;
 
     private String clanAnnounce, clanPlayerAnnounce, defaultAnnounce;
 
@@ -109,6 +109,7 @@ public class SettingsManager {
     {
         config = plugin.getConfig();
         config.options().copyDefaults(true);
+        config.options().header("Available options for the 'build-channel' settings are rb and dev. Use 'rb' to update only recommended builds or dev to update also to dev versions!");
         save();
         load();
     }
@@ -125,10 +126,19 @@ public class SettingsManager {
             globalFF = general.getBoolean("global-ff");
             autoSave = general.getInt("auto-save");
             helpFormat = ChatBlock.parseColors(general.getString("help-format"));
+            UpdateType updateType = UpdateType.getUpdateType(general.getString("build-channel"));
+
+            if (updateType == null) {
+                Logging.debug("Invalid build-channel! Switching to recommended!");
+                updateType = UpdateType.LATEST_RECOMMENDED;
+            }
+
+            this.buildChannel = updateType;
 
             ConfigurationSection reporting = general.getConfigurationSection("reporting");
             reportErrors = reporting.getBoolean("errors");
             String tmpEmail = reporting.getString("email");
+
             if (tmpEmail != null && !tmpEmail.isEmpty() && GeneralHelper.isValidEmailAddress(tmpEmail)) {
                 email = tmpEmail;
             }
@@ -139,7 +149,6 @@ public class SettingsManager {
             bbCommand = commands.getString("bb");
             rankCommand = commands.getString("rank");
             bankCommand = commands.getString("bank");
-
 
             ConfigurationSection databaseSection = config.getConfigurationSection("database");
 
@@ -687,16 +696,6 @@ public class SettingsManager {
         return modifyTagCompletely;
     }
 
-    public String getDefaultAlertSound()
-    {
-        return defaultAlertSound;
-    }
-
-    public boolean isAlertSoundEnabled()
-    {
-        return alertSoundEnabled;
-    }
-
     public boolean isTrustMembersByDefault()
     {
         return trustMembersByDefault;
@@ -720,5 +719,10 @@ public class SettingsManager {
     public String getBankCommand()
     {
         return bankCommand;
+    }
+
+    public UpdateType getBuildChannel()
+    {
+        return buildChannel;
     }
 }

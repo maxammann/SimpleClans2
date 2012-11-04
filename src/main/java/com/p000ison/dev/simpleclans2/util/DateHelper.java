@@ -198,34 +198,6 @@ public final class DateHelper {
         return -1;
     }
 
-//    public static void main(String[] args) {
-//
-//        long start = System.currentTimeMillis();
-//
-//        for (int i = 0; i < 10000000; i++) {
-//              parseTime("5d2h20m2s");
-//        }
-//
-//        long finish = System.currentTimeMillis();
-//        System.out.printf("Check took %s!", finish - start);
-//
-//         start = System.currentTimeMillis();
-//
-//        SimpleDateFormat dateFormat = new SimpleDateFormat("d'd'k'h'm'm's's'");
-//        for (int i = 0; i < 10000000; i++) {
-//            Date date = null;
-//            try {
-//                date = dateFormat.parse("5d2h20m2s");
-//            } catch (ParseException e) {
-//                e.printStackTrace();
-//            }
-//            date.getTime();
-//        }
-//         finish = System.currentTimeMillis();
-//        System.out.printf("Check 2 took %s!", finish - start);
-//    }
-
-
     public static void main(String[] args)
     {
         String input;

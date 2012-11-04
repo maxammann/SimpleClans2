@@ -90,6 +90,7 @@ public class SimpleClans extends JavaPlugin implements Core {
     private PreciousStonesSupport preciousStonesSupport;
     private SpoutSupport spoutSupport;
     private ExceptionReporterTask exceptionReporterTask;
+    private AutoUpdater updater;
     private static Economy economy;
 
     @Override
@@ -103,8 +104,6 @@ public class SimpleClans extends JavaPlugin implements Core {
 
             //we need to load the settingsManager already here, because we need the data!
             settingsManager = new SettingsManager(this);
-
-            AutoUpdater updater = new AutoUpdater(this);
 
             setupMetrics();
 
@@ -123,6 +122,8 @@ public class SimpleClans extends JavaPlugin implements Core {
 
             ChatBlock.setHeadColor(getSettingsManager().getHeaderPageColor());
             ChatBlock.setSubColor(getSettingsManager().getSubPageColor());
+
+            this.updater = new AutoUpdater(this, getSettingsManager().getBuildChannel());
 
             registerEvents();
 
@@ -158,6 +159,26 @@ public class SimpleClans extends JavaPlugin implements Core {
 //            Logging.debug(e, true);
 //        }
 //    }
+
+    /**
+     * Gets if there is a update
+     *
+     * @return Weather there is a update for this plugin.
+     */
+    public boolean isUpdate()
+    {
+        return updater.isUpdate();
+    }
+
+    /**
+     * Updates this plugin
+     *
+     * @return Weather a update was performed or not.
+     */
+    public boolean update()
+    {
+        return updater.update();
+    }
 
     public void setupMetrics()
     {
@@ -280,6 +301,7 @@ public class SimpleClans extends JavaPlugin implements Core {
         commandManager.addCommand(new VerifyCommand(this));
         commandManager.addCommand(new MostKilledCommand(this));
 //      commandManager.addCommand(new VerifyModCommand(this));
+//        commandManager.addCommand(new WarAdminCommand(this));
         commandManager.addCommand(new DisbandCommand(this));
         commandManager.addCommand(new BanCommand(this));
         commandManager.addCommand(new UnbanCommand(this));
@@ -308,7 +330,6 @@ public class SimpleClans extends JavaPlugin implements Core {
         commandManager.addCommand(new ViewPermissionsCommand(this));
 
 //        commandManager.addCommand(new StrifesCommand(this));
-//        commandManager.addCommand(new WarAdminCommand(this));
     }
 
     @Override

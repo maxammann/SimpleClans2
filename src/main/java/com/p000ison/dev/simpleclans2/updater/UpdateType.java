@@ -14,40 +14,46 @@
  *     You should have received a copy of the GNU General Public License
  *     along with SimpleClans2.  If not, see <http://www.gnu.org/licenses/>.
  *
- *     Last modified: 10.10.12 21:57
+ *     Last modified: 04.11.12 14:53
  */
 
-package com.p000ison.dev.simpleclans2.database.data.response.responses;
-
-import com.p000ison.dev.simpleclans2.SimpleClans;
-import com.p000ison.dev.simpleclans2.clan.Clan;
-import com.p000ison.dev.simpleclans2.database.data.response.Response;
+package com.p000ison.dev.simpleclans2.updater;
 
 /**
- * Represents a BBRetrieveResponse
+ * Represents a UpdateType
  */
-public class BBAddResponse extends Response {
+public enum UpdateType {
+    LATEST("lastSuccessfulBuild", "dev"),
+    LATEST_RECOMMENDED("Recommended", "rb");
 
-    private String message;
-    private Clan clan;
+    private String type;
+    private String name;
 
-    public BBAddResponse(SimpleClans plugin, String message, Clan clan)
+    private UpdateType(String type, String name)
     {
-        super(plugin, null);
-        this.message = message;
-        this.clan = clan;
+        this.type = type;
+        this.name = name;
+    }
+
+    public static UpdateType getUpdateType(String query)
+    {
+        for (UpdateType update : UpdateType.values()) {
+            if (update.getName().equalsIgnoreCase(query)) {
+                return update;
+            }
+        }
+
+        return null;
     }
 
     @Override
-    public boolean response()
+    public String toString()
     {
-        plugin.getDataManager().insertBBMessage(clan, message);
-        return true;
+        return type;
     }
 
-    @Override
-    public boolean needsRetriever()
+    public String getName()
     {
-        return false;
+        return name;
     }
 }

@@ -74,7 +74,6 @@ public class HomeRegroupCommand extends GenericPlayerCommand {
                     if (cp.isLeader()) {
 
                         Set<ClanPlayer> members = clan.getAllMembers();
-                        System.out.println(members);
 
                         for (ClanPlayer clanPlayer : members) {
                             Player iPlayer = clanPlayer.toPlayer();

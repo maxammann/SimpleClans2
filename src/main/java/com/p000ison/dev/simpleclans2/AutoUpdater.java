@@ -20,6 +20,7 @@
 package com.p000ison.dev.simpleclans2;
 
 import com.p000ison.dev.simpleclans2.updater.Build;
+import com.p000ison.dev.simpleclans2.updater.UpdateType;
 import com.p000ison.dev.simpleclans2.util.DateHelper;
 import com.p000ison.dev.simpleclans2.util.Logging;
 import org.apache.commons.lang.time.DurationFormatUtils;
@@ -37,7 +38,7 @@ public class AutoUpdater {
     private static final String JOB = "SimpleClans2";
     private Build toUpdate = null;
 
-    public AutoUpdater(Plugin plugin)
+    public AutoUpdater(Plugin plugin, UpdateType type)
     {
         String version = plugin.getDescription().getVersion();
 
@@ -56,14 +57,8 @@ public class AutoUpdater {
             return;
         }
 
-        Build fetched;
-
         try {
-            if (version.contains("b")) {
-                fetched = getLatestBuild();
-            } else {
-                fetched = getLatestPromotedBuild();
-            }
+            Build fetched = getBuild(type);
 
             fetched.fetchInformation();
 
@@ -72,9 +67,9 @@ public class AutoUpdater {
                 Logging.debug("------------------------------------------------------------------------------------------------------");
                 Logging.debug("There is a update for your SimpleClans version!");
                 Logging.debug("Build: " + fetched.getBuildNumber());
-                Logging.debug("Type: " + (fetched.getUpdateType() == Build.UpdateType.LATEST ? "Unofficial" : "Official"));
+                Logging.debug("Type: " + (fetched.getUpdateType() == UpdateType.LATEST ? "Unofficial" : "Official"));
                 Logging.debug("Release date: " + new Date(fetched.getStarted()));
-                Logging.debug("Compiling duration: " + DurationFormatUtils.formatDuration(85254L, "HH:mm:ss"));
+                Logging.debug("Compiling duration: " + DurationFormatUtils.formatDuration(fetched.getDuration(), "HH:mm:ss"));
                 Logging.debug("Author:  " + fetched.getAuthor());
                 Logging.debug("Comment:  " + fetched.getComment() + "(" + fetched.getCommitURL() + ")");
 
@@ -105,6 +100,11 @@ public class AutoUpdater {
         } catch (IOException e) {
             Logging.debug(e, true, "Failed at fetching the Update information!");
         }
+    }
+
+    public boolean isUpdate()
+    {
+        return toUpdate != null;
     }
 
     public boolean update()
@@ -156,13 +156,8 @@ public class AutoUpdater {
         return versionNumber;
     }
 
-    public static Build getLatestBuild()
+    public static Build getBuild(UpdateType type)
     {
-        return new Build(JOB, Build.UpdateType.LATEST);
-    }
-
-    public static Build getLatestPromotedBuild()
-    {
-        return new Build(JOB, Build.UpdateType.LATEST_PROMOTED);
+        return new Build(JOB, type);
     }
 }

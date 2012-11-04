@@ -69,14 +69,6 @@ public class PlayerFlags extends Flags {
         return super.getBoolean("ff");
     }
 
-//    public static void main(String[] args) {
-//        Flags flags = new Flags();
-//        Set<String> set = new HashSet<String>();
-//        set.add("test") ;
-//        flags.set("1", set);
-//        System.out.println(flags.read());
-//    }
-
     public boolean isCapeEnabled()
     {
         return super.getBoolean("cape");

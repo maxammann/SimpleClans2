@@ -38,13 +38,12 @@ public class Build {
     private static final String DEFAULT_ARTIFACT = "SimpleClans2-1.0.jar";
     private static final String PROJECT_GITHUB_URL = "https://github.com/p000ison/SimpleClans2/commit/";
     private static final String JENKINS_HOST = "jenkins.greatmancode.com";
-    private static final String API_FILE = "/api/json";
+    private static final String API_FILE = "api/json";
     // --> http://
     private static final byte httpLength = 7;
 
     private int buildNumber;
     private String fetchFile;
-    private boolean isBuilding;
 
     private String job;
     private UpdateType updateType;
@@ -74,13 +73,7 @@ public class Build {
         JSONObject content = parseJSON(reader);
 
         this.buildNumber = content.get("number").hashCode();
-        this.isBuilding = content.get("building").hashCode() == 1231;
-
-        if (isBuilding) {
-            return;
-        }
-
-        this.started = (Long)content.get("timestamp");
+        this.started = (Long) content.get("timestamp");
         this.duration = (Long) content.get("duration");
         this.fetchFile = content.get("url").toString().substring(httpLength + JENKINS_HOST.length()) + "artifact/target/" + DEFAULT_ARTIFACT;
 
@@ -108,7 +101,6 @@ public class Build {
             }
         } catch (ClassCastException e) {
             Logging.debug(e, true, "The format of the api changed! Could not fetch the cause!");
-            e.printStackTrace();
         }
     }
 
@@ -183,44 +175,6 @@ public class Build {
         return buildNumber;
     }
 
-    public boolean wasBuilding()
-    {
-        return isBuilding;
-    }
-
-    public static enum UpdateType {
-        LATEST("lastSuccessfulBuild"),
-        LATEST_PROMOTED("Promoted");
-
-        private String type;
-
-        private UpdateType(String type)
-        {
-            this.type = type;
-        }
-
-        @Override
-        public String toString()
-        {
-            return type;
-        }
-
-        public String getType()
-        {
-            return type;
-        }
-    }
-
-    public Build(Set<String> deletedFiles, Set<String> createdFiles, Set<String> modifiedFiles, String comment, String commitId, String pusher)
-    {
-        this.deletedFiles = deletedFiles;
-        this.createdFiles = createdFiles;
-        this.modifiedFiles = modifiedFiles;
-        this.comment = comment;
-        this.commitId = commitId;
-        this.pusher = pusher;
-    }
-
     public Set<String> getDeletedFiles()
     {
         return deletedFiles;
@@ -228,12 +182,12 @@ public class Build {
 
     public String getCommitURL()
     {
-        return PROJECT_GITHUB_URL + commitId;
+        return commitId == null ? "None" : PROJECT_GITHUB_URL + commitId;
     }
 
     public String getComment()
     {
-        return comment;
+        return comment == null ? "None" : comment;
     }
 
     public Set<String> getModifiedFiles()
@@ -248,6 +202,6 @@ public class Build {
 
     public String getAuthor()
     {
-        return pusher;
+        return pusher == null ? "None" : pusher;
     }
 }
