@@ -61,21 +61,21 @@ public class BBCommand extends GenericPlayerCommand {
         ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
 
         if (cp == null) {
-            player.sendMessage(ChatColor.RED + Language.getTranslation("clan.is.not.verified"));
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("clan.is.not.verified"));
             return;
         }
 
         Clan clan = cp.getClan();
 
         if (!clan.isVerified()) {
-            player.sendMessage(ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
             return;
         }
 
         int page = CommandManager.getPage(args);
 
         if (page == -1) {
-            player.sendMessage(Language.getTranslation("number.format"));
+            ChatBlock.sendMessage(player, Language.getTranslation("number.format"));
             return;
         }
 

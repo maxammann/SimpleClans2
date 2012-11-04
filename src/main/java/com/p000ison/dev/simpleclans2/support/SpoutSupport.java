@@ -24,6 +24,7 @@ import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.listeners.SCPlayerListener;
 import com.p000ison.dev.simpleclans2.util.Logging;
+import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -68,7 +69,7 @@ public class SpoutSupport {
         if (!isEnabled()) {
             getSpoutPlayerExact(player).sendNotification(title, message, material);
         } else {
-            player.sendMessage(message);
+            ChatBlock.sendMessage(player, message);
         }
     }
 

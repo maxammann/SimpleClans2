@@ -62,21 +62,21 @@ public class BBClearCommand extends GenericPlayerCommand {
         ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
 
         if (cp == null) {
-            player.sendMessage(ChatColor.RED + Language.getTranslation("clan.is.not.verified"));
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("clan.is.not.verified"));
             return;
         }
 
         Clan clan = cp.getClan();
 
         if (!clan.isVerified()) {
-            player.sendMessage(ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
             return;
         }
 
         if (cp.isTrusted() && (cp.isLeader() || cp.hasRankPermission("manage.bb"))) {
             plugin.getDataManager().addResponse(new BBClearResponse(plugin, player, clan));
         } else {
-            player.sendMessage(ChatColor.RED + Language.getTranslation("no.leader.permissions"));
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("no.leader.permissions"));
         }
     }
 }

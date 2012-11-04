@@ -60,7 +60,7 @@ public class AcceptCommand extends GenericPlayerCommand {
                 request.announceMessage(Language.getTranslation("voted.to.accept", player.getDisplayName()));
             }
         } else {
-            player.sendMessage(Language.getTranslation("nothing.to.accept"));
+            ChatBlock.sendMessage(player, Language.getTranslation("nothing.to.accept"));
         }
     }
 }

@@ -24,6 +24,7 @@ import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
 import com.p000ison.dev.simpleclans2.language.Language;
+import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -59,23 +60,23 @@ public class BalanceCommand extends GenericPlayerCommand {
         ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
 
         if (cp == null) {
-            player.sendMessage(ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
             return;
         }
 
         Clan clan = cp.getClan();
 
         if (!clan.isVerified()) {
-            player.sendMessage(ChatColor.RED + Language.getTranslation("clan.is.not.verified"));
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("clan.is.not.verified"));
             return;
         }
 
         if (!cp.isTrusted()) {
-            player.sendMessage(ChatColor.RED + Language.getTranslation("only.trusted.players.can.access.clan.bank"));
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("only.trusted.players.can.access.clan.bank"));
             return;
         }
 
 
-        player.sendMessage(ChatColor.AQUA + Language.getTranslation("current.clan.balance", clan.getBalance()));
+        ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("current.clan.balance", clan.getBalance()));
     }
 }

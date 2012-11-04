@@ -59,10 +59,10 @@ public class AbstainCommand extends GenericPlayerCommand {
             if (request instanceof MultipleAcceptorsRequest) {
                 request.announceMessage(Language.getTranslation("voted.to.abstain", player.getDisplayName()));
             } else {
-                player.sendMessage("You can only abstein if multi");
+                ChatBlock.sendMessage(player, "You can only abstein if multi");
             }
         } else {
-            player.sendMessage(Language.getTranslation("nothing.to.abstain"));
+            ChatBlock.sendMessage(player, Language.getTranslation("nothing.to.abstain"));
         }
     }
 }

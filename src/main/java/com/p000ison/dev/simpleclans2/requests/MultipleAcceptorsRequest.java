@@ -22,6 +22,7 @@ package com.p000ison.dev.simpleclans2.requests;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
+import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import org.bukkit.entity.Player;
 
 import java.util.Collections;
@@ -134,13 +135,13 @@ public abstract class MultipleAcceptorsRequest extends AbstractRequest {
                 continue;
             }
 
-            player.sendMessage(message);
+            ChatBlock.sendMessage(player, message);
         }
 
         Player player = requester.toPlayer();
 
         if (player != null) {
-            player.sendMessage(message);
+            ChatBlock.sendMessage(player, message);
         }
     }
 

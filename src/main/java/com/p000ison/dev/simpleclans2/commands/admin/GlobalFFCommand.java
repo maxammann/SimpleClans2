@@ -22,6 +22,7 @@ package com.p000ison.dev.simpleclans2.commands.admin;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.commands.GenericConsoleCommand;
 import com.p000ison.dev.simpleclans2.language.Language;
+import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import org.bukkit.command.CommandSender;
 
 import java.text.MessageFormat;
@@ -54,20 +55,20 @@ public class GlobalFFCommand extends GenericConsoleCommand {
 
         if (action.equalsIgnoreCase(Language.getTranslation("allow"))) {
             if (plugin.getSettingsManager().isGlobalFF()) {
-                sender.sendMessage(Language.getTranslation("global.friendly.fire.is.already.being.allowed"));
+                ChatBlock.sendMessage(sender, Language.getTranslation("global.friendly.fire.is.already.being.allowed"));
             } else {
                 plugin.getSettingsManager().setGlobalFF(true);
-                sender.sendMessage(Language.getTranslation("global.friendly.fire.is.set.to.allowed"));
+                ChatBlock.sendMessage(sender, Language.getTranslation("global.friendly.fire.is.set.to.allowed"));
             }
         } else if (action.equalsIgnoreCase(Language.getTranslation("auto"))) {
             if (!plugin.getSettingsManager().isGlobalFF()) {
-                sender.sendMessage(Language.getTranslation("global.friendy.fire.is.already.being.managed.by.each.clan"));
+                ChatBlock.sendMessage(sender, Language.getTranslation("global.friendy.fire.is.already.being.managed.by.each.clan"));
             } else {
                 plugin.getSettingsManager().setGlobalFF(false);
-                sender.sendMessage(Language.getTranslation("global.friendy.fire.is.now.managed.by.each.clan"));
+                ChatBlock.sendMessage(sender, Language.getTranslation("global.friendy.fire.is.now.managed.by.each.clan"));
             }
         } else {
-            sender.sendMessage(MessageFormat.format(Language.getTranslation("usage.globalff"), plugin.getSettingsManager().getClanCommand()));
+            ChatBlock.sendMessage(sender, MessageFormat.format(Language.getTranslation("usage.globalff"), plugin.getSettingsManager().getClanCommand()));
         }
     }
 }

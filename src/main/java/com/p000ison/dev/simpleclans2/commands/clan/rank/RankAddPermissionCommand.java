@@ -25,6 +25,7 @@ import com.p000ison.dev.simpleclans2.clan.ranks.Rank;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
 import com.p000ison.dev.simpleclans2.language.Language;
+import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -58,32 +59,32 @@ public class RankAddPermissionCommand extends GenericPlayerCommand {
         ClanPlayer clanPlayer = plugin.getClanPlayerManager().getClanPlayer(player);
 
         if (clanPlayer == null) {
-            player.sendMessage(ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
             return;
         }
 
         Clan clan = clanPlayer.getClan();
 
         if (!clan.isLeader(clanPlayer) && !clanPlayer.hasRankPermission("manage.ranks")) {
-            player.sendMessage(ChatColor.RED + Language.getTranslation("no.leader.permissions"));
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("no.leader.permissions"));
             return;
         }
 
         Rank rank = clan.getRank(args[0]);
 
         if (rank == null) {
-            player.sendMessage(Language.getTranslation("rank.not.found"));
+            ChatBlock.sendMessage(player, Language.getTranslation("rank.not.found"));
             return;
         }
 
         String added = rank.addPermission(args[1]);
 
         if (added == null) {
-            player.sendMessage(ChatColor.DARK_RED + Language.getTranslation("permission.not.found"));
+            ChatBlock.sendMessage(player, ChatColor.DARK_RED + Language.getTranslation("permission.not.found"));
             return;
         }
 
         rank.update(true);
-        player.sendMessage(ChatColor.AQUA + Language.getTranslation("rank.permission.added", added, rank.getName()));
+        ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("rank.permission.added", added, rank.getName()));
     }
 }

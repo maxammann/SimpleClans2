@@ -68,7 +68,7 @@ public class ListCommand extends GenericConsoleCommand {
         List<Clan> clans = new ArrayList<Clan>(plugin.getClanManager().getClans());
 
         if (clans.isEmpty()) {
-            sender.sendMessage(ChatColor.RED + Language.getTranslation("no.clans.have.been.created"));
+            ChatBlock.sendMessage(sender, ChatColor.RED + Language.getTranslation("no.clans.have.been.created"));
             return;
         }
 
@@ -79,7 +79,7 @@ public class ListCommand extends GenericConsoleCommand {
             try {
                 page = Integer.parseInt(args[0]) - 1;
             } catch (NumberFormatException e) {
-                sender.sendMessage(Language.getTranslation("number.format"));
+                ChatBlock.sendMessage(sender, Language.getTranslation("number.format"));
                 return;
             }
         }
@@ -91,7 +91,7 @@ public class ListCommand extends GenericConsoleCommand {
         ChatBlock.sendBlank(sender);
         ChatBlock.sendHead(sender, plugin.getSettingsManager().getServerName(), Language.getTranslation("clans.lower"));
         ChatBlock.sendBlank(sender);
-        sender.sendMessage(headColor + Language.getTranslation("total.clans") + " " + subColor + clans.size());
+        ChatBlock.sendMessage(sender, headColor + Language.getTranslation("total.clans") + " " + subColor + clans.size());
         ChatBlock.sendBlank(sender);
 
         chatBlock.setAlignment(Align.CENTER, Align.LEFT, Align.CENTER, Align.CENTER);

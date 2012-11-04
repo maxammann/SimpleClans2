@@ -61,12 +61,12 @@ public class ViewRankCommand extends GenericPlayerCommand {
         ClanPlayer clanPlayer = plugin.getClanPlayerManager().getClanPlayer(player);
 
         if (clanPlayer == null) {
-            player.sendMessage(ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
             return;
         }
 
         if (!clanPlayer.isLeader() && !clanPlayer.hasRankPermission("manage.ranks")) {
-            player.sendMessage(ChatColor.RED + Language.getTranslation("no.leader.permissions"));
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("no.leader.permissions"));
             return;
         }
         Clan clan = clanPlayer.getClan();
@@ -83,7 +83,7 @@ public class ViewRankCommand extends GenericPlayerCommand {
         }
 
         if (queried == null) {
-            player.sendMessage(ChatColor.DARK_RED + Language.getTranslation("rank.not.found"));
+            ChatBlock.sendMessage(player, ChatColor.DARK_RED + Language.getTranslation("rank.not.found"));
             return;
         }
 
@@ -97,17 +97,17 @@ public class ViewRankCommand extends GenericPlayerCommand {
         String tag = queried.getTag();
         String name = queried.getName();
 
-        player.sendMessage(subColor + Language.getTranslation("id") + ": " + ChatColor.WHITE + id);
-        player.sendMessage(subColor + Language.getTranslation("tag") + ": " + ChatColor.WHITE + tag);
-        player.sendMessage(subColor + Language.getTranslation("name") + ": " + ChatColor.WHITE + name);
+        ChatBlock.sendMessage(player, subColor + Language.getTranslation("id") + ": " + ChatColor.WHITE + id);
+        ChatBlock.sendMessage(player, subColor + Language.getTranslation("tag") + ": " + ChatColor.WHITE + tag);
+        ChatBlock.sendMessage(player, subColor + Language.getTranslation("name") + ": " + ChatColor.WHITE + name);
 
 
         Set<Integer> permissions = queried.getPermissions();
 
         if (!permissions.isEmpty()) {
-            player.sendMessage(subColor + Language.getTranslation("permissions") + ":");
+            ChatBlock.sendMessage(player, subColor + Language.getTranslation("permissions") + ":");
             for (Integer permissionID : permissions) {
-                player.sendMessage(subColor + "  - " + ChatColor.WHITE + Rank.getAvailablePermissions().get(permissionID));
+                ChatBlock.sendMessage(player, subColor + "  - " + ChatColor.WHITE + Rank.getAvailablePermissions().get(permissionID));
             }
         }
     }

@@ -116,13 +116,13 @@ public abstract class SingleAcceptorRequest extends AbstractRequest {
         Player acceptorPlayer = acceptor.toPlayer();
 
         if (acceptorPlayer != null) {
-            acceptorPlayer.sendMessage(message);
+            acceptorChatBlock.sendMessage(player, message);
         }
 
         Player requesterPlayer = requester.toPlayer();
 
         if (requesterPlayer != null) {
-            requesterPlayer.sendMessage(message);
+            requesterChatBlock.sendMessage(player, message);
         }
     }
 }

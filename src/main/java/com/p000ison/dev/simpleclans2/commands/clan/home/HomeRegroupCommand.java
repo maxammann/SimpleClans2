@@ -25,6 +25,7 @@ import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
 import com.p000ison.dev.simpleclans2.language.Language;
 import com.p000ison.dev.simpleclans2.util.GeneralHelper;
+import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -98,19 +99,19 @@ public class HomeRegroupCommand extends GenericPlayerCommand {
                             iPlayer.teleport(new Location(loc.getWorld(), x + .5, loc.getBlockY(), z + .5));
                         }
 
-                        player.sendMessage(MessageFormat.format(ChatColor.AQUA + Language.getTranslation("clan.regrouped"), ChatColor.YELLOW + GeneralHelper.locationToString(loc)));
+                        ChatBlock.sendMessage(player, MessageFormat.format(ChatColor.AQUA + Language.getTranslation("clan.regrouped"), ChatColor.YELLOW + GeneralHelper.locationToString(loc)));
 
                     } else {
-                        player.sendMessage(ChatColor.RED + Language.getTranslation("no.leader.permissions"));
+                        ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("no.leader.permissions"));
                     }
                 } else {
-                    player.sendMessage(ChatColor.RED + Language.getTranslation("only.trusted.players.can.access.clan.vitals"));
+                    ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("only.trusted.players.can.access.clan.vitals"));
                 }
             } else {
-                player.sendMessage(ChatColor.RED + Language.getTranslation("clan.is.not.verified"));
+                ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("clan.is.not.verified"));
             }
         } else {
-            player.sendMessage(ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
         }
     }
 }

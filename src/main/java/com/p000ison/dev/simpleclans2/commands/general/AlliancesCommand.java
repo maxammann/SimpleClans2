@@ -67,7 +67,7 @@ public class AlliancesCommand extends GenericConsoleCommand {
         List<Clan> clans = new ArrayList<Clan>(plugin.getClanManager().getClans());
 
         if (clans.isEmpty()) {
-            sender.sendMessage(ChatColor.RED + Language.getTranslation("no.clans.have.been.created"));
+            ChatBlock.sendMessage(sender, ChatColor.RED + Language.getTranslation("no.clans.have.been.created"));
             return;
         }
 
@@ -78,7 +78,7 @@ public class AlliancesCommand extends GenericConsoleCommand {
             try {
                 page = Integer.parseInt(args[0]) - 1;
             } catch (NumberFormatException e) {
-                sender.sendMessage(Language.getTranslation("number.format"));
+                ChatBlock.sendMessage(sender, Language.getTranslation("number.format"));
                 return;
             }
         }

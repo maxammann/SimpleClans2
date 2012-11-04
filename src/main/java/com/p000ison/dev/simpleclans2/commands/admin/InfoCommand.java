@@ -22,6 +22,7 @@ package com.p000ison.dev.simpleclans2.commands.admin;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.commands.GenericConsoleCommand;
 import com.p000ison.dev.simpleclans2.language.Language;
+import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import org.bukkit.command.CommandSender;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -53,20 +54,20 @@ public class InfoCommand extends GenericConsoleCommand {
         int dataQueue = plugin.getDataManager().getAutoSaver().size();
         int teleporting = plugin.getTeleportManager().getWaitingPlayers();
 
-        sender.sendMessage("Loaded clans: " + loadedClans);
-        sender.sendMessage("Loaded clan players: " + loadedClanPlayers);
-        sender.sendMessage("Data in queue: " + dataQueue);
-        sender.sendMessage("Teleporting: " + teleporting);
-        sender.sendMessage("Requests: " + plugin.getRequestManager().getRequests());
+        ChatBlock.sendMessage(sender, "Loaded clans: " + loadedClans);
+        ChatBlock.sendMessage(sender, "Loaded clan players: " + loadedClanPlayers);
+        ChatBlock.sendMessage(sender, "Data in queue: " + dataQueue);
+        ChatBlock.sendMessage(sender, "Teleporting: " + teleporting);
+        ChatBlock.sendMessage(sender, "Requests: " + plugin.getRequestManager().getRequests());
 
         for (BukkitTask task : plugin.getServer().getScheduler().getPendingTasks()) {
             if (!task.getOwner().equals(plugin)) {
                 return;
             }
 
-            sender.sendMessage("-----------------------------------------------------");
-            sender.sendMessage("ID: " + task.getTaskId());
-            sender.sendMessage("Sync: " + task.isSync());
+            ChatBlock.sendMessage(sender, "-----------------------------------------------------");
+            ChatBlock.sendMessage(sender, "ID: " + task.getTaskId());
+            ChatBlock.sendMessage(sender, "Sync: " + task.isSync());
         }
     }
 }

@@ -23,6 +23,7 @@ import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.commands.GenericConsoleCommand;
 import com.p000ison.dev.simpleclans2.language.Language;
+import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
@@ -57,7 +58,7 @@ public class DisbandCommand extends GenericConsoleCommand {
             plugin.serverAnnounce(ChatColor.AQUA + MessageFormat.format(Language.getTranslation("clan.has.been.disbanded"), clan.getName()));
             clan.disband();
         } else {
-            sender.sendMessage(Language.getTranslation("no.clan.matched"));
+            ChatBlock.sendMessage(sender, Language.getTranslation("no.clan.matched"));
         }
     }
 }

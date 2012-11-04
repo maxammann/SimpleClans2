@@ -25,6 +25,7 @@ import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
 import com.p000ison.dev.simpleclans2.language.Language;
 import com.p000ison.dev.simpleclans2.util.GeneralHelper;
+import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -63,7 +64,7 @@ public class CreateCommand extends GenericPlayerCommand {
         ClanPlayer cp = plugin.getClanPlayerManager().getCreateClanPlayerExact(player);
 
         if (cp.getClan() != null) {
-            player.sendMessage(ChatColor.RED + MessageFormat.format(Language.getTranslation("you.must.first.resign"), cp.getClan().getName()));
+            ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(Language.getTranslation("you.must.first.resign"), cp.getClan().getName()));
             return;
         }
 
@@ -80,7 +81,7 @@ public class CreateCommand extends GenericPlayerCommand {
         }
 
         if (SimpleClans.hasEconomy() && plugin.getSettingsManager().isPurchaseCreation() && !SimpleClans.withdrawBalance(player.getName(), plugin.getSettingsManager().getPurchaseCreationPrice())) {
-            player.sendMessage(ChatColor.AQUA + Language.getTranslation("not.sufficient.money"));
+            ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("not.sufficient.money"));
             return;
         }
 
@@ -96,7 +97,7 @@ public class CreateCommand extends GenericPlayerCommand {
             boolean verified = !plugin.getSettingsManager().requireVerification() || player.hasPermission("simpleclans.mod.verify");
 
             if (!verified) {
-                player.sendMessage(ChatColor.AQUA + Language.getTranslation("get.your.clan.verified.to.access.advanced.features"));
+                ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("get.your.clan.verified.to.access.advanced.features"));
             }
 
             clan.setVerified(verified);

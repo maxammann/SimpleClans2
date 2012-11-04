@@ -26,6 +26,7 @@ import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
 import com.p000ison.dev.simpleclans2.language.Language;
 import com.p000ison.dev.simpleclans2.requests.requests.DemoteRequest;
 import com.p000ison.dev.simpleclans2.util.GeneralHelper;
+import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -69,12 +70,12 @@ public class DemoteCommand extends GenericPlayerCommand {
                 ClanPlayer demoted = plugin.getClanPlayerManager().getClanPlayer(args[0]);
 
                 if (!clan.allLeadersOnline(demoted)) {
-                    player.sendMessage(ChatColor.RED + Language.getTranslation("leaders.must.be.online.to.vote.on.demotion"));
+                    ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("leaders.must.be.online.to.vote.on.demotion"));
                     return;
                 }
 
                 if (!clan.isLeader(demoted)) {
-                    player.sendMessage(ChatColor.RED + Language.getTranslation("player.is.not.a.leader.of.your.clan"));
+                    ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("player.is.not.a.leader.of.your.clan"));
                     return;
                 }
 
@@ -86,14 +87,14 @@ public class DemoteCommand extends GenericPlayerCommand {
                     acceptors.remove(demoted);
 
                     plugin.getRequestManager().createRequest(new DemoteRequest(plugin, acceptors, cp, demoted));
-                    player.sendMessage(ChatColor.AQUA + Language.getTranslation("demotion.vote.has.been.requested.from.all.leaders"));
+                    ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("demotion.vote.has.been.requested.from.all.leaders"));
                 }
 
             } else {
-                player.sendMessage(ChatColor.RED + Language.getTranslation("no.leader.permissions"));
+                ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("no.leader.permissions"));
             }
         } else {
-            player.sendMessage(ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
         }
     }
 }

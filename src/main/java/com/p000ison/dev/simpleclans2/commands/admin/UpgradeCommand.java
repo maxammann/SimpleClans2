@@ -22,6 +22,7 @@ package com.p000ison.dev.simpleclans2.commands.admin;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.commands.GenericConsoleCommand;
 import com.p000ison.dev.simpleclans2.language.Language;
+import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
@@ -51,15 +52,15 @@ public class UpgradeCommand extends GenericConsoleCommand {
     public void execute(CommandSender sender, String[] args)
     {
         if (!plugin.isUpdate()) {
-            sender.sendMessage(ChatColor.DARK_RED + Language.getTranslation("no.upgrade"));
+            ChatBlock.sendMessage(sender, ChatColor.DARK_RED + Language.getTranslation("no.upgrade"));
             return;
         }
 
         if (!plugin.update()) {
-            sender.sendMessage(ChatColor.DARK_RED + Language.getTranslation("upgrade.failed"));
+            ChatBlock.sendMessage(sender, ChatColor.DARK_RED + Language.getTranslation("upgrade.failed"));
             return;
         }
 
-        sender.sendMessage(ChatColor.GREEN + Language.getTranslation("upgrade.successfully"));
+        ChatBlock.sendMessage(sender, ChatColor.GREEN + Language.getTranslation("upgrade.successfully"));
     }
 }

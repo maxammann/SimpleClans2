@@ -65,7 +65,7 @@ public class ViewRanksCommand extends GenericPlayerCommand {
         ClanPlayer clanPlayer = plugin.getClanPlayerManager().getClanPlayer(player);
 
         if (clanPlayer == null) {
-            player.sendMessage(ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
             return;
         }
 
@@ -78,7 +78,7 @@ public class ViewRanksCommand extends GenericPlayerCommand {
         Collections.sort(sorted);
 
         if (ranks.isEmpty()) {
-            player.sendMessage(ChatColor.DARK_RED + Language.getTranslation("no.ranks.created"));
+            ChatBlock.sendMessage(player, ChatColor.DARK_RED + Language.getTranslation("no.ranks.created"));
             return;
         }
 
@@ -89,7 +89,7 @@ public class ViewRanksCommand extends GenericPlayerCommand {
             try {
                 page = Integer.parseInt(args[0]) - 1;
             } catch (NumberFormatException e) {
-                player.sendMessage(Language.getTranslation("number.format"));
+                ChatBlock.sendMessage(player, Language.getTranslation("number.format"));
                 return;
             }
         }

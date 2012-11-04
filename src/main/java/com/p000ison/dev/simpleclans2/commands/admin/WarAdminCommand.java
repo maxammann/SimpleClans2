@@ -64,7 +64,7 @@ public class WarAdminCommand extends GenericConsoleCommand {
             boolean clan2War = clan2.isWarring(clan1);
 
             if (clan1War || clan2War) {
-                sender.sendMessage("The war was cancelled!");
+                ChatBlock.sendMessage(sender, "The war was cancelled!");
 
                 if (clan1War) {
                     clan1.removeWarringClan(clan2);
@@ -75,7 +75,7 @@ public class WarAdminCommand extends GenericConsoleCommand {
                 }
 
             } else {
-                sender.sendMessage("The clans are not in war!");
+                ChatBlock.sendMessage(sender, "The clans are not in war!");
             }
         }
     }

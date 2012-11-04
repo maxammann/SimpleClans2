@@ -106,7 +106,7 @@ abstract class GenericCommand implements Command {
     @Override
     public boolean hasPermission(Permissible sender)
     {
-        if ( permissions == null) {
+        if (permissions == null) {
             return true;
         }
 

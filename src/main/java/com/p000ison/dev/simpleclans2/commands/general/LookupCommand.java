@@ -59,7 +59,7 @@ public class LookupCommand extends GenericPlayerCommand {
             Clan clan = clanPlayer.getClan();
             clanPlayer.showProfile(player, clan);
         } else {
-            player.sendMessage(ChatColor.RED + Language.getTranslation("no.player.data.found"));
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("no.player.data.found"));
         }
     }
 }

@@ -61,14 +61,14 @@ public class BBAddCommand extends GenericPlayerCommand {
         ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
 
         if (cp == null) {
-            player.sendMessage(ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
             return;
         }
 
         Clan clan = cp.getClan();
 
         if (!clan.isVerified()) {
-            player.sendMessage(ChatColor.RED + Language.getTranslation("clan.is.not.verified"));
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("clan.is.not.verified"));
 
             return;
         }
@@ -76,13 +76,13 @@ public class BBAddCommand extends GenericPlayerCommand {
         if (cp.isTrusted()) {
             String msg = GeneralHelper.arrayToString(args);
             if (msg == null) {
-                player.sendMessage(ChatColor.DARK_RED + Language.getTranslation("please.enter.message"));
+                ChatBlock.sendMessage(player, ChatColor.DARK_RED + Language.getTranslation("please.enter.message"));
                 return;
             }
             clan.addBBMessage(cp, msg);
-            player.sendMessage(ChatColor.AQUA + Language.getTranslation("bb.added"));
+            ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("bb.added"));
         } else {
-            player.sendMessage(ChatColor.RED + Language.getTranslation("no.leader.permissions"));
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("no.leader.permissions"));
         }
     }
 }

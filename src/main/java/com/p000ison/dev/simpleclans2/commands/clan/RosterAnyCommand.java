@@ -61,7 +61,7 @@ public class RosterAnyCommand extends GenericPlayerCommand {
         int page = CommandManager.getPage(args);
 
         if (page == -1) {
-            player.sendMessage(Language.getTranslation("number.format"));
+            ChatBlock.sendMessage(player, Language.getTranslation("number.format"));
             return;
         }
 

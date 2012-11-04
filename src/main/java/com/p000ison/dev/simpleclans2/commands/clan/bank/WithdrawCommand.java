@@ -60,19 +60,19 @@ public class WithdrawCommand extends GenericPlayerCommand {
         ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
 
         if (cp == null) {
-            player.sendMessage(ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
             return;
         }
 
         Clan clan = cp.getClan();
 
         if (!clan.isVerified()) {
-            player.sendMessage(ChatColor.RED + Language.getTranslation("clan.is.not.verified"));
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("clan.is.not.verified"));
             return;
         }
 
         if (!cp.isTrusted()) {
-            player.sendMessage(ChatColor.RED + Language.getTranslation("only.trusted.players.can.access.clan.bank"));
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("only.trusted.players.can.access.clan.bank"));
             return;
         }
 
@@ -81,24 +81,24 @@ public class WithdrawCommand extends GenericPlayerCommand {
         try {
             amount = Double.parseDouble(args[1]);
         } catch (NumberFormatException e) {
-            player.sendMessage(ChatColor.DARK_RED + Language.getTranslation("number.format"));
+            ChatBlock.sendMessage(player, ChatColor.DARK_RED + Language.getTranslation("number.format"));
             return;
         }
 
         if (amount < 0.0D) {
-            player.sendMessage(ChatColor.DARK_RED + Language.getTranslation("amount.can.not.be.negative"));
+            ChatBlock.sendMessage(player, ChatColor.DARK_RED + Language.getTranslation("amount.can.not.be.negative"));
             return;
         }
 
         if (!clan.transfer(amount, cp)) {
-            player.sendMessage(ChatColor.DARK_RED + Language.getTranslation("clan.bank.not.enough.money"));
+            ChatBlock.sendMessage(player, ChatColor.DARK_RED + Language.getTranslation("clan.bank.not.enough.money"));
             return;
         }
 
-        player.sendMessage(ChatColor.AQUA + Language.getTranslation("transaction.successfully"));
+        ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("transaction.successfully"));
         ChatBlock.sendBlank(player);
-        player.sendMessage(ChatColor.AQUA + Language.getTranslation("now.clan.balance", clan.getBalance()));
-        player.sendMessage(ChatColor.AQUA + Language.getTranslation("now.player.balance", cp.getBalance()));
+        ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("now.clan.balance", clan.getBalance()));
+        ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("now.player.balance", cp.getBalance()));
 
         clan.update();
     }

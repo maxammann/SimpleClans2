@@ -25,6 +25,7 @@ import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
 import com.p000ison.dev.simpleclans2.database.data.statements.RemoveRankStatement;
 import com.p000ison.dev.simpleclans2.language.Language;
+import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -57,26 +58,26 @@ public class RankDeleteCommand extends GenericPlayerCommand {
         ClanPlayer clanPlayer = plugin.getClanPlayerManager().getClanPlayer(player);
 
         if (clanPlayer == null) {
-            player.sendMessage(ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
             return;
         }
 
         Clan clan = clanPlayer.getClan();
 
         if (!clan.isLeader(clanPlayer) && !clanPlayer.hasRankPermission("manage.ranks")) {
-            player.sendMessage(ChatColor.RED + Language.getTranslation("no.leader.permissions"));
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("no.leader.permissions"));
             return;
         }
 
         long response = clan.deleteRank(args[0]);
 
         if (response == -1) {
-            player.sendMessage(Language.getTranslation("rank.not.found"));
+            ChatBlock.sendMessage(player, Language.getTranslation("rank.not.found"));
             return;
         }
 
         plugin.getDataManager().addStatement(new RemoveRankStatement(response));
 
-        player.sendMessage(ChatColor.AQUA + Language.getTranslation("rank.deleted"));
+        ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("rank.deleted"));
     }
 }

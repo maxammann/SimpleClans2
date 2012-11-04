@@ -24,6 +24,7 @@ import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
 import com.p000ison.dev.simpleclans2.language.Language;
+import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -62,17 +63,17 @@ public class KickCommand extends GenericPlayerCommand {
                 ClanPlayer kicked = plugin.getClanPlayerManager().getAnyClanPlayer(args[0]);
 
                 if (kicked == null) {
-                    player.sendMessage(ChatColor.RED + Language.getTranslation("no.player.matched"));
+                    ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("no.player.matched"));
                     return;
                 }
 
                 if (kicked.getName().equals(player.getName())) {
-                    player.sendMessage(ChatColor.RED + Language.getTranslation("you.cannot.kick.yourself"));
+                    ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("you.cannot.kick.yourself"));
                     return;
                 }
 
                 if (!clan.isMember(kicked)) {
-                    player.sendMessage(ChatColor.RED + Language.getTranslation("the.player.is.not.a.member.of.your.clan"));
+                    ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("the.player.is.not.a.member.of.your.clan"));
                     return;
                 }
 
@@ -80,14 +81,14 @@ public class KickCommand extends GenericPlayerCommand {
                     clan.addBBMessage(cp, ChatColor.AQUA + MessageFormat.format(Language.getTranslation("has.been.kicked.by"), kicked.getName(), player.getName()));
                     clan.removeMember(kicked);
                 } else {
-                    player.sendMessage(ChatColor.RED + Language.getTranslation("you.cannot.kick.another.leader"));
+                    ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("you.cannot.kick.another.leader"));
                 }
 
             } else {
-                player.sendMessage(ChatColor.RED + Language.getTranslation("no.leader.permissions"));
+                ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("no.leader.permissions"));
             }
         } else {
-            player.sendMessage(ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
         }
 
     }

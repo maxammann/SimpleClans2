@@ -24,6 +24,7 @@ import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
 import com.p000ison.dev.simpleclans2.language.Language;
+import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -75,17 +76,17 @@ public class ClanFFCommand extends GenericPlayerCommand {
                             clan.setFriendlyFire(false);
                             clan.update();
                         } else {
-                            player.sendMessage(ChatColor.RED + MessageFormat.format(Language.getTranslation("usage.clanff"), plugin.getSettingsManager().getClanCommand()));
+                            ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(Language.getTranslation("usage.clanff"), plugin.getSettingsManager().getClanCommand()));
                         }
                     }
                 } else {
-                    player.sendMessage(ChatColor.RED + Language.getTranslation("no.leader.permissions"));
+                    ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("no.leader.permissions"));
                 }
             } else {
-                player.sendMessage(ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
+                ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
             }
         } else {
-            player.sendMessage(ChatColor.RED + Language.getTranslation("insufficient.permissions"));
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("insufficient.permissions"));
         }
     }
 }

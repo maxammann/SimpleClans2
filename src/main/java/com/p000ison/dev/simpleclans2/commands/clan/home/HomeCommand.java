@@ -67,30 +67,30 @@ public class HomeCommand extends GenericPlayerCommand {
                     if (player.hasPermission("simpleclans.member.home")) {
 
                         if (SimpleClans.hasEconomy() && plugin.getSettingsManager().isPurchaseTeleport() && !SimpleClans.withdrawBalance(player.getName(), plugin.getSettingsManager().getPurchaseTeleportPrice())) {
-                            player.sendMessage(ChatColor.AQUA + Language.getTranslation("not.sufficient.money"));
+                            ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("not.sufficient.money"));
                             return;
                         }
 
                         Location loc = clan.getFlags().getHomeLocation();
 
                         if (loc == null) {
-                            player.sendMessage(ChatColor.RED + Language.getTranslation("hombase.not.set"));
+                            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("hombase.not.set"));
                             return;
                         }
 
                         plugin.getTeleportManager().addPlayer(player, loc, ChatColor.AQUA + MessageFormat.format(Language.getTranslation("now.at.homebase"), clan.getName()));
 
                     } else {
-                        player.sendMessage(ChatColor.RED + Language.getTranslation("insufficient.permissions"));
+                        ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("insufficient.permissions"));
                     }
                 } else {
-                    player.sendMessage(ChatColor.RED + Language.getTranslation("only.trusted.players.can.access.clan.vitals"));
+                    ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("only.trusted.players.can.access.clan.vitals"));
                 }
             } else {
-                player.sendMessage(ChatColor.RED + Language.getTranslation("clan.is.not.verified"));
+                ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("clan.is.not.verified"));
             }
         } else {
-            player.sendMessage(ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
         }
     }
 }

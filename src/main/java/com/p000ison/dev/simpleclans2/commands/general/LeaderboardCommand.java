@@ -77,7 +77,7 @@ public class LeaderboardCommand extends GenericConsoleCommand {
             try {
                 page = Integer.parseInt(args[0]) - 1;
             } catch (NumberFormatException e) {
-                sender.sendMessage(Language.getTranslation("number.format"));
+                ChatBlock.sendMessage(sender, Language.getTranslation("number.format"));
                 return;
             }
         }
@@ -89,7 +89,7 @@ public class LeaderboardCommand extends GenericConsoleCommand {
         ChatBlock.sendBlank(sender);
         ChatBlock.sendSingle(sender, plugin.getSettingsManager().getServerName() + subColor + " " + Language.getTranslation("leaderboard.command"));
         ChatBlock.sendBlank(sender);
-        sender.sendMessage(headColor + MessageFormat.format(Language.getTranslation("total.clan.players.0"), subColor.toString() + clanPlayers.size()));
+        ChatBlock.sendMessage(sender, headColor + MessageFormat.format(Language.getTranslation("total.clan.players.0"), subColor.toString() + clanPlayers.size()));
         ChatBlock.sendBlank(sender);
 
         chatBlock.setAlignment(Align.CENTER, Align.LEFT, Align.CENTER, Align.CENTER, Align.CENTER);

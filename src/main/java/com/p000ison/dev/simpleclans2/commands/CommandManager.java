@@ -125,7 +125,7 @@ public class CommandManager {
                         displayCommandHelp(cmd, sender);
                         return;
                     } else if (!cmd.hasPermission(sender)) {
-                        sender.sendMessage(ChatColor.DARK_RED + Language.getTranslation("insufficient.permissions"));
+                        ChatBlock.sendMessage(sender, ChatColor.DARK_RED + Language.getTranslation("insufficient.permissions"));
                         return;
                     }
 
@@ -154,12 +154,12 @@ public class CommandManager {
             return;
         }
 
-        sender.sendMessage(ChatColor.DARK_RED + "Command not found!");
+        ChatBlock.sendMessage(sender, ChatColor.DARK_RED + "Command not found!");
     }
 
     private void displayCommandHelp(Command cmd, CommandSender sender)
     {
-        sender.sendMessage("§cCommand:§e " + cmd.getName());
+        ChatBlock.sendMessage(sender, "§cCommand:§e " + cmd.getName());
         String[] usages = cmd.getUsages();
         StringBuilder sb = new StringBuilder("§cUsage:§e ").append(usages[0]).append("\n");
 
@@ -167,7 +167,7 @@ public class CommandManager {
             sb.append("           ").append(usages[i]).append("\n");
         }
 
-        sender.sendMessage(sb.toString());
+        ChatBlock.sendMessage(sender, sb.toString());
     }
 
     private void displayHelp(CommandSender sender, Command.Type commandType, int page)
@@ -208,7 +208,7 @@ public class CommandManager {
         int size = commands.size();
 
         if (size == 0) {
-            sender.sendMessage(ChatColor.DARK_RED + "No commands found!");
+            ChatBlock.sendMessage(sender, ChatColor.DARK_RED + "No commands found!");
             return;
         }
 
@@ -240,7 +240,7 @@ public class CommandManager {
         }
 
 
-        sender.sendMessage(menu.toString());
+        ChatBlock.sendMessage(sender, menu.toString());
         ChatBlock.sendBlank(sender, 2);
     }
 

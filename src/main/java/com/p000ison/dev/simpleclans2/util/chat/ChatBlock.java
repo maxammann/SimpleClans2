@@ -198,7 +198,7 @@ public class ChatBlock {
 
             cropRight(finalRow, MAX_LINE_LENGTH);
 
-            sender.sendMessage(finalRow.toString());
+            ChatBlock.sendMessage(sender, finalRow.toString());
         }
         return true;
     }
@@ -411,7 +411,7 @@ public class ChatBlock {
             message = prefix + message;
         }
 
-        sender.sendMessage(message);
+        ChatBlock.sendMessage(sender, message);
     }
 
     /**
@@ -428,7 +428,7 @@ public class ChatBlock {
                 messages[i] = prefix + message;
             }
 
-            sender.sendMessage(message);
+            ChatBlock.sendMessage(sender, message);
         }
     }
 
@@ -524,7 +524,7 @@ public class ChatBlock {
             sb.append('a');
         }
 
-        sender.sendMessage(header.toString());
+        ChatBlock.sendMessage(sender, header.toString());
     }
 
     /**

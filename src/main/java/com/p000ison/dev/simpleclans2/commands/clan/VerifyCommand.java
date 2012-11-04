@@ -58,7 +58,7 @@ public class VerifyCommand extends GenericPlayerCommand {
         ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
 
         if (cp == null) {
-            player.sendMessage(ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
             return;
         }
 
@@ -68,19 +68,19 @@ public class VerifyCommand extends GenericPlayerCommand {
             if (!clan.isVerified()) {
 
                 if (SimpleClans.hasEconomy() && plugin.getSettingsManager().isPurchaseVerification() && !SimpleClans.withdrawBalance(player.getName(), plugin.getSettingsManager().getPurchaseVerificationPrice())) {
-                    player.sendMessage(ChatColor.AQUA + Language.getTranslation("not.sufficient.money"));
+                    ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("not.sufficient.money"));
                     return;
                 }
 
                 clan.setVerified(true);
                 clan.addBBMessage(cp, MessageFormat.format(Language.getTranslation("clan.0.has.been.verified"), clan.getName()));
                 clan.update();
-                player.sendMessage(ChatColor.AQUA + Language.getTranslation("the.clan.has.been.verified"));
+                ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("the.clan.has.been.verified"));
             } else {
-                player.sendMessage(ChatColor.GRAY + Language.getTranslation("your.clan.is.already.verified"));
+                ChatBlock.sendMessage(player, ChatColor.GRAY + Language.getTranslation("your.clan.is.already.verified"));
             }
         } else {
-            player.sendMessage(ChatColor.GRAY + Language.getTranslation("you.dont.need.to.verify"));
+            ChatBlock.sendMessage(player, ChatColor.GRAY + Language.getTranslation("you.dont.need.to.verify"));
         }
     }
 }

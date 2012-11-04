@@ -54,7 +54,7 @@ public class KillsAnyCommand extends GenericConsoleCommand {
         ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(args[0]);
 
         if (cp == null) {
-            sender.sendMessage(ChatColor.DARK_RED + Language.getTranslation("no.player.matched"));
+            ChatBlock.sendMessage(sender, ChatColor.DARK_RED + Language.getTranslation("no.player.matched"));
             return;
         }
 
@@ -63,7 +63,7 @@ public class KillsAnyCommand extends GenericConsoleCommand {
             page = CommandManager.getPage(args[1]);
 
             if (page == -1) {
-                sender.sendMessage(ChatColor.DARK_RED + Language.getTranslation("number.format"));
+                ChatBlock.sendMessage(sender, ChatColor.DARK_RED + Language.getTranslation("number.format"));
                 return;
             }
         }

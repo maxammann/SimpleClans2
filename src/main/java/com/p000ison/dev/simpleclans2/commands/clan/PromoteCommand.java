@@ -63,21 +63,21 @@ public class PromoteCommand extends GenericPlayerCommand {
         ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
 
         if (cp == null) {
-            player.sendMessage(ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
             return;
         }
 
         Clan clan = cp.getClan();
 
         if (!clan.isLeader(cp)) {
-            player.sendMessage(ChatColor.RED + Language.getTranslation("no.leader.permissions"));
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("no.leader.permissions"));
             return;
         }
 
         Player promotedPlayer = Bukkit.getPlayer(args[0]);
 
         if (promotedPlayer == null) {
-            player.sendMessage(ChatColor.RED + Language.getTranslation("the.player.does.not.have.the.permissions.to.lead.a.clan"));
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("the.player.does.not.have.the.permissions.to.lead.a.clan"));
             return;
         }
 
@@ -85,27 +85,27 @@ public class PromoteCommand extends GenericPlayerCommand {
 
 
         if (promotedPlayer.equals(player)) {
-            player.sendMessage(ChatColor.RED + Language.getTranslation("you.cannot.promote.yourself"));
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("you.cannot.promote.yourself"));
             return;
         }
 
         if (!clan.isMember(promoted)) {
-            player.sendMessage(ChatColor.RED + Language.getTranslation("the.player.is.not.a.member.of.your.clan"));
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("the.player.is.not.a.member.of.your.clan"));
             return;
         }
 
         if (promoted.isLeader()) {
-            player.sendMessage(ChatColor.RED + Language.getTranslation("the.player.is.already.a.leader"));
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("the.player.is.already.a.leader"));
             return;
         }
 
         if (!promotedPlayer.hasPermission("simpleclans.leader.promotable")) {
-            player.sendMessage(ChatColor.RED + Language.getTranslation("the.member.to.be.promoted.must.be.online"));
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("the.member.to.be.promoted.must.be.online"));
             return;
         }
 
         if (!clan.allLeadersOnline()) {
-            player.sendMessage(ChatColor.RED + Language.getTranslation("all.leaders.must.be.online.to.vote.on.this.promotion"));
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("all.leaders.must.be.online.to.vote.on.this.promotion"));
             return;
         }
 
@@ -117,7 +117,7 @@ public class PromoteCommand extends GenericPlayerCommand {
             Set<ClanPlayer> acceptors = GeneralHelper.stripOfflinePlayers(clan.getLeaders());
 
             plugin.getRequestManager().createRequest(new PromoteRequest(plugin, acceptors, cp, promoted));
-            player.sendMessage(ChatColor.AQUA + Language.getTranslation("promote.vote.has.been.requested.from.all.leaders"));
+            ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("promote.vote.has.been.requested.from.all.leaders"));
         }
     }
 }

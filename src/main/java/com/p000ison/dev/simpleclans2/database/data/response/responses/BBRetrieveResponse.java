@@ -24,6 +24,7 @@ import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.database.data.DataManager;
 import com.p000ison.dev.simpleclans2.database.data.response.Response;
 import com.p000ison.dev.simpleclans2.language.Language;
+import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
@@ -67,13 +68,13 @@ public class BBRetrieveResponse extends Response {
             return false;
         } else if (bb.isEmpty()) {
             if (showError) {
-                sender.sendMessage(Language.getTranslation("bb.is.empty.or.not.found"));
+                ChatBlock.sendMessage(sender, Language.getTranslation("bb.is.empty.or.not.found"));
             }
             return true;
         }
 
         for (String message : bb) {
-            sender.sendMessage(format == null ? message : String.format(format, message));
+            ChatBlock.sendMessage(sender, format == null ? message : String.format(format, message));
         }
 
         return true;

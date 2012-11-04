@@ -24,6 +24,7 @@ import com.p000ison.dev.simpleclans2.commands.CommandManager;
 import com.p000ison.dev.simpleclans2.commands.GenericConsoleCommand;
 import com.p000ison.dev.simpleclans2.database.data.response.responses.MostKilledResponse;
 import com.p000ison.dev.simpleclans2.language.Language;
+import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
@@ -53,7 +54,7 @@ public class MostKilledCommand extends GenericConsoleCommand {
         int page = CommandManager.getPage(args);
 
         if (page == -1) {
-            sender.sendMessage(ChatColor.DARK_RED + Language.getTranslation("number.format"));
+            ChatBlock.sendMessage(sender, ChatColor.DARK_RED + Language.getTranslation("number.format"));
             return;
         }
 

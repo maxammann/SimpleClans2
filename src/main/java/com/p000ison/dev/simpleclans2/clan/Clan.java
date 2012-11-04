@@ -691,7 +691,7 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble {
             Player player = clanPlayer.toPlayer();
 
             if (player != null) {
-                player.sendMessage(message);
+                ChatBlock.sendMessage(player, message);
             }
         }
     }
@@ -1262,18 +1262,18 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble {
 
         String status = ChatColor.WHITE + (this.isVerified() ? plugin.getSettingsManager().getTrustedColor() + Language.getTranslation("verified") : plugin.getSettingsManager().getUntrustedColor() + Language.getTranslation("unverified"));
 
-        sender.sendMessage("  " + subColor + MessageFormat.format(Language.getTranslation("id"), this.getId()));
-        sender.sendMessage("  " + subColor + MessageFormat.format(Language.getTranslation("name.0"), name));
-        sender.sendMessage("  " + subColor + MessageFormat.format(Language.getTranslation("status.0"), status));
-        sender.sendMessage("  " + subColor + MessageFormat.format(Language.getTranslation("leaders.0"), leaders));
-        sender.sendMessage("  " + subColor + MessageFormat.format(Language.getTranslation("members.online.0"), membersOnline));
-        sender.sendMessage("  " + subColor + MessageFormat.format(Language.getTranslation("kdr.0"), kdr));
-        sender.sendMessage("  " + subColor + Language.getTranslation("kill.totals") + " " + headColor + "[" + Language.getTranslation("rival") + ":" + rival + " " + headColor + Language.getTranslation("neutral") + ":" + neutral + " " + headColor + Language.getTranslation("civilian") + ":" + civ + headColor + "]");
-        sender.sendMessage("  " + subColor + MessageFormat.format(Language.getTranslation("deaths.0"), deaths));
-        sender.sendMessage("  " + subColor + MessageFormat.format(Language.getTranslation("allies.0"), allies));
-        sender.sendMessage("  " + subColor + MessageFormat.format(Language.getTranslation("rivals.0"), rivals));
-        sender.sendMessage("  " + subColor + MessageFormat.format(Language.getTranslation("founded.0"), founded));
-        sender.sendMessage("  " + subColor + MessageFormat.format(Language.getTranslation("inactive.0"), inactive));
+        ChatBlock.sendMessage(sender, "  " + subColor + MessageFormat.format(Language.getTranslation("id"), this.getId()));
+        ChatBlock.sendMessage(sender, "  " + subColor + MessageFormat.format(Language.getTranslation("name.0"), name));
+        ChatBlock.sendMessage(sender, "  " + subColor + MessageFormat.format(Language.getTranslation("status.0"), status));
+        ChatBlock.sendMessage(sender, "  " + subColor + MessageFormat.format(Language.getTranslation("leaders.0"), leaders));
+        ChatBlock.sendMessage(sender, "  " + subColor + MessageFormat.format(Language.getTranslation("members.online.0"), membersOnline));
+        ChatBlock.sendMessage(sender, "  " + subColor + MessageFormat.format(Language.getTranslation("kdr.0"), kdr));
+        ChatBlock.sendMessage(sender, "  " + subColor + Language.getTranslation("kill.totals") + " " + headColor + "[" + Language.getTranslation("rival") + ":" + rival + " " + headColor + Language.getTranslation("neutral") + ":" + neutral + " " + headColor + Language.getTranslation("civilian") + ":" + civ + headColor + "]");
+        ChatBlock.sendMessage(sender, "  " + subColor + MessageFormat.format(Language.getTranslation("deaths.0"), deaths));
+        ChatBlock.sendMessage(sender, "  " + subColor + MessageFormat.format(Language.getTranslation("allies.0"), allies));
+        ChatBlock.sendMessage(sender, "  " + subColor + MessageFormat.format(Language.getTranslation("rivals.0"), rivals));
+        ChatBlock.sendMessage(sender, "  " + subColor + MessageFormat.format(Language.getTranslation("founded.0"), founded));
+        ChatBlock.sendMessage(sender, "  " + subColor + MessageFormat.format(Language.getTranslation("inactive.0"), inactive));
 
         ChatBlock.sendBlank(sender);
     }

@@ -63,16 +63,16 @@ public class FFCommand extends GenericPlayerCommand {
             if (action.equalsIgnoreCase(Language.getTranslation("allow"))) {
                 cp.setFriendlyFire(true);
                 cp.update();
-                player.sendMessage(ChatColor.AQUA + Language.getTranslation("personal.friendly.fire.is.set.to.allowed"));
+                ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("personal.friendly.fire.is.set.to.allowed"));
             } else if (action.equalsIgnoreCase(Language.getTranslation("auto"))) {
                 cp.setFriendlyFire(false);
                 cp.update();
-                player.sendMessage(ChatColor.AQUA + Language.getTranslation("friendy.fire.is.now.managed.by.your.clan"));
+                ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("friendy.fire.is.now.managed.by.your.clan"));
             } else {
-                player.sendMessage(ChatColor.RED + MessageFormat.format(Language.getTranslation("usage.0.ff.allow.auto"), plugin.getSettingsManager().getClanCommand()));
+                ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(Language.getTranslation("usage.0.ff.allow.auto"), plugin.getSettingsManager().getClanCommand()));
             }
         } else {
-            player.sendMessage(ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
         }
     }
 }

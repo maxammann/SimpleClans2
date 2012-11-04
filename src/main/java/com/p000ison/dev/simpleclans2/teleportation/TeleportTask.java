@@ -74,17 +74,17 @@ public class TeleportTask implements Runnable {
 
                     player.teleport(state.getDestination());
 
-                    player.sendMessage(state.getMessage());
+                    ChatBlock.sendMessage(player, state.getMessage());
                 } else {
-                    player.sendMessage(ChatColor.RED + Language.getTranslation("you.moved.teleport.cancelled"));
+                    ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("you.moved.teleport.cancelled"));
                 }
 
                 players.remove();
             } else if (!isLocationEqual) {
-                player.sendMessage(ChatColor.RED + Language.getTranslation("you.moved.teleport.cancelled"));
+                ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("you.moved.teleport.cancelled"));
                 players.remove();
             } else {
-                player.sendMessage(ChatColor.AQUA.toString() + state.getCounter());
+                ChatBlock.sendMessage(player, ChatColor.AQUA.toString() + state.getCounter());
             }
 
             state.setProcessing(false);

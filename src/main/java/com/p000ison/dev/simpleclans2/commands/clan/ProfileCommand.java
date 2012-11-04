@@ -59,17 +59,17 @@ public class ProfileCommand extends GenericPlayerCommand {
         ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
 
         if (cp == null) {
-            player.sendMessage(ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
         } else {
             if (cp.getClan().isVerified()) {
                 Clan clan = cp.getClan();
                 if (clan.isVerified()) {
                     clan.showClanProfile(player);
                 } else {
-                    player.sendMessage(ChatColor.RED + Language.getTranslation("clan.is.not.verified"));
+                    ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("clan.is.not.verified"));
                 }
             } else {
-                player.sendMessage(ChatColor.RED + Language.getTranslation("clan.is.not.verified"));
+                ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("clan.is.not.verified"));
             }
         }
     }

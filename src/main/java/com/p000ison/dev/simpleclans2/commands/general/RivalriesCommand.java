@@ -72,7 +72,7 @@ public class RivalriesCommand extends GenericConsoleCommand {
                 try {
                     page = Integer.parseInt(args[0]) - 1;
                 } catch (NumberFormatException e) {
-                    sender.sendMessage(Language.getTranslation("number.format"));
+                    ChatBlock.sendMessage(sender, Language.getTranslation("number.format"));
                     return;
                 }
             }

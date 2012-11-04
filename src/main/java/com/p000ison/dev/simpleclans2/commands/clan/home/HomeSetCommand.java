@@ -25,6 +25,7 @@ import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
 import com.p000ison.dev.simpleclans2.language.Language;
 import com.p000ison.dev.simpleclans2.util.GeneralHelper;
+import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -71,27 +72,27 @@ public class HomeSetCommand extends GenericPlayerCommand {
                     if (cp.isLeader()) {
                         if (plugin.getPreciousStonesSupport().isTeleportAllowed(player, loc)) {
                             if (plugin.getSettingsManager().isSetHomeOnlyOnce() && clan.getFlags().getHomeLocation() != null && !player.hasPermission("simpleclans.mod.home")) {
-                                player.sendMessage(ChatColor.RED + Language.getTranslation("home.base.only.once"));
+                                ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("home.base.only.once"));
                                 return;
                             }
 
                             clan.getFlags().setHomeLocation(loc);
                             clan.update();
-                            player.sendMessage(ChatColor.AQUA + MessageFormat.format(Language.getTranslation("hombase.set"), ChatColor.YELLOW + GeneralHelper.locationToString(loc)));
+                            ChatBlock.sendMessage(player, ChatColor.AQUA + MessageFormat.format(Language.getTranslation("hombase.set"), ChatColor.YELLOW + GeneralHelper.locationToString(loc)));
                         } else {
-                            player.sendMessage(ChatColor.RED + Language.getTranslation("no.teleport"));
+                            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("no.teleport"));
                         }
                     } else {
-                        player.sendMessage(ChatColor.RED + Language.getTranslation("no.leader.permissions"));
+                        ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("no.leader.permissions"));
                     }
                 } else {
-                    player.sendMessage(ChatColor.RED + Language.getTranslation("only.trusted.players.can.access.clan.vitals"));
+                    ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("only.trusted.players.can.access.clan.vitals"));
                 }
             } else {
-                player.sendMessage(ChatColor.RED + Language.getTranslation("clan.is.not.verified"));
+                ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("clan.is.not.verified"));
             }
         } else {
-            player.sendMessage(ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
         }
     }
 }

@@ -76,7 +76,7 @@ public class CoordsCommand extends GenericPlayerCommand {
                     List<ClanPlayer> members = new ArrayList<ClanPlayer>(GeneralHelper.stripOfflinePlayers(clan.getMembers()));
 
                     if (members.isEmpty()) {
-                        player.sendMessage(ChatColor.RED + Language.getTranslation("you.are.the.only.member.online"));
+                        ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("you.are.the.only.member.online"));
                         return;
                     }
 
@@ -87,7 +87,7 @@ public class CoordsCommand extends GenericPlayerCommand {
                         try {
                             page = Integer.parseInt(args[0]) - 1;
                         } catch (NumberFormatException e) {
-                            player.sendMessage(Language.getTranslation("number.format"));
+                            ChatBlock.sendMessage(player, Language.getTranslation("number.format"));
                             return;
                         }
                     }
@@ -128,14 +128,14 @@ public class CoordsCommand extends GenericPlayerCommand {
 
 
                 } else {
-                    player.sendMessage(ChatColor.RED + Language.getTranslation("only.trusted.players.can.access.clan.coords"));
+                    ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("only.trusted.players.can.access.clan.coords"));
                 }
             } else {
-                player.sendMessage(ChatColor.RED + Language.getTranslation("clan.is.not.verified"));
+                ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("clan.is.not.verified"));
             }
 
         } else {
-            player.sendMessage(ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
         }
     }
 }

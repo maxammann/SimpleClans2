@@ -22,6 +22,7 @@ package com.p000ison.dev.simpleclans2.commands.admin;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.commands.GenericConsoleCommand;
 import com.p000ison.dev.simpleclans2.language.Language;
+import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
@@ -53,6 +54,6 @@ public class SaveCommand extends GenericConsoleCommand {
         plugin.getDataManager().getAutoSaver().run();
 
         long end = System.currentTimeMillis();
-        sender.sendMessage(ChatColor.AQUA + MessageFormat.format(Language.getTranslation("data.saved"), end - start));
+        ChatBlock.sendMessage(sender, ChatColor.AQUA + MessageFormat.format(Language.getTranslation("data.saved"), end - start));
     }
 }

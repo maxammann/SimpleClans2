@@ -25,6 +25,7 @@ import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
 import com.p000ison.dev.simpleclans2.language.Language;
 import com.p000ison.dev.simpleclans2.util.GeneralHelper;
+import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -63,19 +64,19 @@ public class CapeCommand extends GenericPlayerCommand {
         ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
 
         if (cp == null) {
-            player.sendMessage(ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
             return;
         }
 
         Clan clan = cp.getClan();
 
         if (!clan.isVerified()) {
-            player.sendMessage(ChatColor.RED + Language.getTranslation("clan.is.not.verified"));
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("clan.is.not.verified"));
             return;
         }
 
         if (!clan.isLeader(cp)) {
-            player.sendMessage(ChatColor.RED + Language.getTranslation("no.leader.permissions"));
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("no.leader.permissions"));
             return;
         }
 
@@ -87,10 +88,10 @@ public class CapeCommand extends GenericPlayerCommand {
                 clan.getFlags().setClanCapeURL(url);
                 clan.update();
             } else {
-                player.sendMessage(ChatColor.RED + Language.getTranslation("url.error"));
+                ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("url.error"));
             }
         } else {
-            player.sendMessage(ChatColor.RED + Language.getTranslation("cape.must.be.png"));
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("cape.must.be.png"));
         }
     }
 }

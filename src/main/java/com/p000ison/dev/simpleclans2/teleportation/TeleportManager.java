@@ -22,6 +22,7 @@ package com.p000ison.dev.simpleclans2.teleportation;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.language.Language;
+import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -65,7 +66,7 @@ public class TeleportManager {
         waitingPlayers.add(new TeleportState(plugin, player, destination, msg, secs));
 
         if (secs > 0) {
-            player.sendMessage(ChatColor.AQUA + MessageFormat.format(Language.getTranslation("waiting.for.teleport.stand.still.for.0.seconds"), secs));
+            ChatBlock.sendMessage(player, ChatColor.AQUA + MessageFormat.format(Language.getTranslation("waiting.for.teleport.stand.still.for.0.seconds"), secs));
         }
     }
 

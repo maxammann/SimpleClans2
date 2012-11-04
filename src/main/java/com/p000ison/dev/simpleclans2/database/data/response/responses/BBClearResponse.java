@@ -24,6 +24,7 @@ import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.database.data.DataManager;
 import com.p000ison.dev.simpleclans2.database.data.response.Response;
 import com.p000ison.dev.simpleclans2.language.Language;
+import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
@@ -46,7 +47,7 @@ public class BBClearResponse extends Response {
         DataManager dataManager = plugin.getDataManager();
 
         dataManager.purgeBB(clan);
-        sender.sendMessage(ChatColor.AQUA + Language.getTranslation("cleared.bb"));
+        ChatBlock.sendMessage(sender, ChatColor.AQUA + Language.getTranslation("cleared.bb"));
         return true;
     }
 

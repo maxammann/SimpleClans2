@@ -250,6 +250,7 @@ public class SimpleClans extends JavaPlugin implements Core {
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
+
         clanManager = new ClanManager(this);
         clanPlayerManager = new ClanPlayerManager(this);
         settingsManager.loadPermissions();

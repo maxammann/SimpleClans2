@@ -25,6 +25,7 @@ import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
 import com.p000ison.dev.simpleclans2.language.Language;
 import com.p000ison.dev.simpleclans2.util.GeneralHelper;
+import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -56,14 +57,14 @@ public class RankCreateCommand extends GenericPlayerCommand {
         ClanPlayer clanPlayer = plugin.getClanPlayerManager().getClanPlayer(player);
 
         if (clanPlayer == null) {
-            player.sendMessage(ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
             return;
         }
 
         Clan clan = clanPlayer.getClan();
 
         if (!clan.isLeader(clanPlayer) && !clanPlayer.hasRankPermission("manage.ranks")) {
-            player.sendMessage(ChatColor.RED + Language.getTranslation("no.leader.permissions"));
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("no.leader.permissions"));
             return;
         }
 
@@ -78,6 +79,6 @@ public class RankCreateCommand extends GenericPlayerCommand {
         String name = GeneralHelper.arrayBoundsToString(2, args);
 
         clan.addRank(plugin.getRankManager().createRank(clan, name, args[1], priority));
-        player.sendMessage(ChatColor.AQUA + Language.getTranslation("rank.created", name));
+        ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("rank.created", name));
     }
 }

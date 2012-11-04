@@ -23,6 +23,7 @@ import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.commands.GenericConsoleCommand;
 import com.p000ison.dev.simpleclans2.language.Language;
+import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -58,13 +59,13 @@ public class BanCommand extends GenericConsoleCommand {
             Player player = plugin.getServer().getPlayerExact(clanPlayer.getName());
 
             if (player != null) {
-                player.sendMessage(ChatColor.AQUA + Language.getTranslation("you.banned"));
+                ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("you.banned"));
             }
 
             plugin.getClanManager().ban(clanPlayer);
-            sender.sendMessage(ChatColor.AQUA + Language.getTranslation("player.added.to.banned.list"));
+            ChatBlock.sendMessage(sender, ChatColor.AQUA + Language.getTranslation("player.added.to.banned.list"));
         } else {
-            sender.sendMessage(ChatColor.RED + Language.getTranslation("this.player.is.already.banned"));
+            ChatBlock.sendMessage(sender, ChatColor.RED + Language.getTranslation("this.player.is.already.banned"));
         }
     }
 }

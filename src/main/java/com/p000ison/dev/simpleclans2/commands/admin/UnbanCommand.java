@@ -23,6 +23,7 @@ import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.commands.GenericConsoleCommand;
 import com.p000ison.dev.simpleclans2.language.Language;
+import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -54,7 +55,7 @@ public class UnbanCommand extends GenericConsoleCommand {
         ClanPlayer banned = plugin.getClanPlayerManager().getAnyClanPlayerExact(args[0]);
 
         if (banned == null) {
-            sender.sendMessage(Language.getTranslation("no.player.matched"));
+            ChatBlock.sendMessage(sender, Language.getTranslation("no.player.matched"));
             return;
         }
 
@@ -62,14 +63,14 @@ public class UnbanCommand extends GenericConsoleCommand {
             Player bannedPlayer = banned.toPlayer();
 
             if (bannedPlayer != null) {
-                bannedPlayer.sendMessage(ChatColor.AQUA + Language.getTranslation("you.have.been.unbanned.from.clan.commands"));
+                ChatBlock.sendMessage(bannedPlayer, ChatColor.AQUA + Language.getTranslation("you.have.been.unbanned.from.clan.commands"));
             }
 
             banned.setBanned(false);
             banned.update();
-            sender.sendMessage(ChatColor.AQUA + Language.getTranslation("player.removed.from.the.banned.list"));
+            ChatBlock.sendMessage(sender, ChatColor.AQUA + Language.getTranslation("player.removed.from.the.banned.list"));
         } else {
-            sender.sendMessage(ChatColor.RED + Language.getTranslation("this.player.is.not.banned"));
+            ChatBlock.sendMessage(sender, ChatColor.RED + Language.getTranslation("this.player.is.not.banned"));
         }
     }
 }

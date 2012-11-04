@@ -60,7 +60,7 @@ public class DenyCommand extends GenericPlayerCommand {
                 request.announceMessage(Language.getTranslation("voted.to.deny", player.getDisplayName()));
             }
         } else {
-            player.sendMessage(Language.getTranslation("nothing.to.deny"));
+            ChatBlock.sendMessage(player, Language.getTranslation("nothing.to.deny"));
         }
     }
 }

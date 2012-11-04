@@ -25,6 +25,7 @@ import com.p000ison.dev.simpleclans2.commands.CommandManager;
 import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
 import com.p000ison.dev.simpleclans2.database.data.response.responses.KillsResponse;
 import com.p000ison.dev.simpleclans2.language.Language;
+import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -56,7 +57,7 @@ public class KillsCommand extends GenericPlayerCommand {
         int page = CommandManager.getPage(args);
 
         if (page == -1) {
-            player.sendMessage(ChatColor.DARK_RED + Language.getTranslation("number.format"));
+            ChatBlock.sendMessage(player, ChatColor.DARK_RED + Language.getTranslation("number.format"));
             return;
         }
 
