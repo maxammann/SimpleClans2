@@ -411,7 +411,7 @@ public class ChatBlock {
             message = prefix + message;
         }
 
-        ChatBlock.sendMessage(sender, message);
+        sender.sendMessage(message);
     }
 
     /**

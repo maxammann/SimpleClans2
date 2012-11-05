@@ -30,7 +30,7 @@ import org.bukkit.scheduler.BukkitTask;
  * Represents a InfoCommand
  */
 public class InfoCommand extends GenericConsoleCommand {
-
+               //com.p000ison.dev.simpleclans2.clan
     public InfoCommand(SimpleClans plugin)
     {
         super("Info", plugin);
@@ -43,7 +43,7 @@ public class InfoCommand extends GenericConsoleCommand {
     @Override
     public String getMenu()
     {
-        return null;
+        return Language.getTranslation("menu.info", plugin.getSettingsManager().getClanCommand());
     }
 
     @Override
@@ -62,7 +62,7 @@ public class InfoCommand extends GenericConsoleCommand {
 
         for (BukkitTask task : plugin.getServer().getScheduler().getPendingTasks()) {
             if (!task.getOwner().equals(plugin)) {
-                return;
+                continue;
             }
 
             ChatBlock.sendMessage(sender, "-----------------------------------------------------");

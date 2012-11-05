@@ -36,15 +36,19 @@ public class WarAdminCommand extends GenericConsoleCommand {
     {
         super("WarAdmin", plugin);
         setArgumentRange(3, 3);
-        setUsages(Language.getTranslation("usage.waradmin", plugin.getSettingsManager().getClanCommand()));
-        setIdentifiers(Language.getTranslation("waradmin.command"));
+        setUsages(Language.getTranslation("usage.war.admin", plugin.getSettingsManager().getClanCommand()));
+        setIdentifiers(Language.getTranslation("war.admin.command"));
         setPermission("simpleclans.admin.warcontrol");
     }
 
     @Override
     public String getMenu()
     {
-        return Language.getTranslation("waradmin", plugin.getSettingsManager().getClanCommand());
+        if (plugin.isUpdate()) {
+            return Language.getTranslation("menu.war.admin", plugin.getSettingsManager().getClanCommand());
+        }
+
+        return null;
     }
 
     @Override
@@ -54,7 +58,7 @@ public class WarAdminCommand extends GenericConsoleCommand {
         Clan clan2 = plugin.getClanManager().getClan(args[2]);
 
         if (clan1 == null || clan2 == null) {
-            ChatBlock.sendMessage(sender, ChatColor.RED + Language.getTranslation("no.clan.matched"));
+            ChatBlock.sendMessage(sender, ChatColor.DARK_RED + Language.getTranslation("no.clan.matched"));
             return;
         }
 
@@ -64,7 +68,7 @@ public class WarAdminCommand extends GenericConsoleCommand {
             boolean clan2War = clan2.isWarring(clan1);
 
             if (clan1War || clan2War) {
-                ChatBlock.sendMessage(sender, "The war was cancelled!");
+                ChatBlock.sendMessage(sender, ChatColor.AQUA + Language.getTranslation("you.are.no.longer.at.war", clan1.getTag(), clan2.getTag()));
 
                 if (clan1War) {
                     clan1.removeWarringClan(clan2);
@@ -75,7 +79,7 @@ public class WarAdminCommand extends GenericConsoleCommand {
                 }
 
             } else {
-                ChatBlock.sendMessage(sender, "The clans are not in war!");
+                ChatBlock.sendMessage(sender, ChatColor.DARK_RED + Language.getTranslation("clans.not.at.war"));
             }
         }
     }

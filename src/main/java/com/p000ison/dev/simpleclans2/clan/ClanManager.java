@@ -112,9 +112,10 @@ public class ClanManager {
             clan.setFoundedDate(System.currentTimeMillis());
             clan.update();
             clans.add(clan);
+            return clan;
         }
 
-        return clan;
+        return null;
     }
 
     public Clan createClan(String tag, String name)

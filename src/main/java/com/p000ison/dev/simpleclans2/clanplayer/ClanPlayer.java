@@ -530,7 +530,8 @@ public class ClanPlayer implements KDR, Balance, UpdateAble {
         String civilian = ChatColor.WHITE.toString() + this.getCivilianKills();
         String deaths = ChatColor.WHITE.toString() + this.getDeaths();
         String kdr = ChatColor.YELLOW + Clan.DECIMAL_FORMAT.format(this.getKDR());
-        String pastClans = ChatColor.WHITE + GeneralHelper.arrayToString(", ", this.getPastClans());
+        String rawPastClans = GeneralHelper.arrayToString(", ", this.getPastClans());
+        String pastClans = ChatColor.WHITE + (rawPastClans == null ? Language.getTranslation("none") : rawPastClans);
 
         ChatBlock.sendMessage(sender, "  " + subColor + MessageFormat.format(Language.getTranslation("clan.0"), clanName));
         ChatBlock.sendMessage(sender, "  " + subColor + MessageFormat.format(Language.getTranslation("rank.0"), rankName));
