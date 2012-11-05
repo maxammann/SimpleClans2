@@ -59,7 +59,7 @@ public class TrustCommand extends GenericPlayerCommand {
         if (cp != null) {
             Clan clan = cp.getClan();
 
-            if (!clan.isLeader(cp)) {
+            if (!clan.isLeader(cp) && !cp.hasRankPermission("manage.trusted")) {
                 ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("no.leader.permissions"));
                 return;
             }

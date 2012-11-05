@@ -416,7 +416,7 @@ public class DataManager {
                 String name = result.getString("name");
                 String tag = result.getString("tag");
                 int priority = result.getInt("priority");
-                Set<Integer> permissions = JSONUtil.JSONToSet("permissions", new HashSet<Integer>());
+                Map<Integer, Boolean> permissions = JSONUtil.JSONToPermissionMap("permissions");
 
                 ranks.add(new Rank(id, name, tag, priority, permissions));
             }
@@ -547,7 +547,7 @@ public class DataManager {
         try {
             UPDATE_RANK.setString(1, rank.getName());
             UPDATE_RANK.setString(2, rank.getTag());
-            UPDATE_RANK.setString(3, JSONUtil.collectionToJSON(rank.getPermissions()));
+            UPDATE_RANK.setString(3, JSONUtil.mapToJSON(rank.getPermissions()));
             UPDATE_RANK.setInt(4, rank.getPriority());
             UPDATE_RANK.setLong(5, clan.getId());
 

@@ -66,6 +66,16 @@ public class WithdrawCommand extends GenericPlayerCommand {
 
         Clan clan = cp.getClan();
 
+        if (!cp.hasRankPermission("bank.withdraw")) {
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("no.rank.permissions"));
+            return;
+        }
+
+        if (!clan.isLeader(cp)) {
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("no.leader.permissions"));
+            return;
+        }
+
         if (!clan.isVerified()) {
             ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("clan.is.not.verified"));
             return;

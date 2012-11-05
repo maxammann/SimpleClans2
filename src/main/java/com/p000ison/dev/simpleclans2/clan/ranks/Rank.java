@@ -21,9 +21,8 @@ package com.p000ison.dev.simpleclans2.clan.ranks;
 
 import org.apache.commons.lang.StringUtils;
 
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
 
 /**
@@ -34,7 +33,7 @@ public class Rank implements Comparable<Rank> {
 
     private String name;
     private String tag;
-    private Set<Integer> permissions = new HashSet<Integer>();
+    private Map<Integer, Boolean> permissions = new HashMap<Integer, Boolean>();
     private int priority;
     private boolean update;
 
@@ -46,12 +45,12 @@ public class Rank implements Comparable<Rank> {
         availablePermissions.put(2, "manage.ally");
         availablePermissions.put(3, "manage.clanff");
         availablePermissions.put(4, "manage.ranks");
+        availablePermissions.put(5, "manage.trusted");
+        availablePermissions.put(7, "manage.invites");
 
         //unimplemented
         availablePermissions.put(5, "bank.deposit");
         availablePermissions.put(6, "bank.withdraw");
-        availablePermissions.put(7, "invite");
-        availablePermissions.put(5, "trust");
     }
 
     /**
@@ -112,11 +111,11 @@ public class Rank implements Comparable<Rank> {
      * @param priority    The priority
      * @param permissions The permissions of this rank
      */
-    public Rank(long id, String name, String tag, int priority, Set<Integer> permissions)
+    public Rank(long id, String name, String tag, int priority, Map<Integer, Boolean> permissions)
     {
         this(name, tag, priority);
         if (permissions == null) {
-            this.permissions = new HashSet<Integer>();
+            this.permissions = new HashMap<Integer, Boolean>();
         } else {
             this.permissions = permissions;
         }
@@ -132,7 +131,7 @@ public class Rank implements Comparable<Rank> {
      */
     public boolean hasPermission(int id)
     {
-        return permissions.contains(id);
+        return permissions.get(id);
     }
 
     /**
@@ -143,7 +142,31 @@ public class Rank implements Comparable<Rank> {
      */
     public boolean hasPermission(String permission)
     {
-        return availablePermissions.values().contains(permission);
+        return hasPermission(getID(permission));
+    }
+
+    public boolean isNegative(int id)
+    {
+        Boolean permission = permissions.get(id);
+        if (permission == null) {
+            return false;
+        }
+        return permission;
+    }
+
+    public static int getID(String permission)
+    {
+        for (Map.Entry<Integer, String> entry : availablePermissions.entrySet()) {
+            if (entry.getValue().equals(permission)) {
+                return entry.getKey();
+            }
+        }
+        return -1;
+    }
+
+    public boolean isNegative(String permission)
+    {
+        return isNegative(getID(permission));
     }
 
     /**
@@ -163,7 +186,7 @@ public class Rank implements Comparable<Rank> {
      * @param permission The permission
      * @return The added permission.
      */
-    public String addPermission(String permission)
+    public String addPermission(String permission, boolean positive)
     {
         String nearest = null;
         int id = -1;
@@ -181,7 +204,7 @@ public class Rank implements Comparable<Rank> {
         }
 
         if (nearest != null && id != -1) {
-            permissions.add(id);
+            permissions.put(id, positive);
             return nearest;
         }
 
@@ -204,7 +227,7 @@ public class Rank implements Comparable<Rank> {
      *
      * @return A set of permissions.
      */
-    public Set<Integer> getPermissions()
+    public Map<Integer, Boolean> getPermissions()
     {
         return permissions;
     }

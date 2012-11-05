@@ -63,49 +63,50 @@ public class InviteCommand extends GenericPlayerCommand {
         if (cp != null) {
             Clan clan = cp.getClan();
 
-            if (clan.isLeader(cp)) {
-                Player invited = Bukkit.getPlayer(args[0]);
+            if (!clan.isLeader(cp) && !cp.hasRankPermission("manage.invites")) {
+                ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("no.leader.permissions"));
+                return;
+            }
 
-                if (invited == null) {
-                    ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("no.player.matched"));
+            Player invited = Bukkit.getPlayer(args[0]);
+
+            if (invited == null) {
+                ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("no.player.matched"));
+                return;
+            }
+
+            if (!invited.hasPermission("simpleclans.member.can-join")) {
+                ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("the.player.doesn.t.not.have.the.permissions.to.join.clans"));
+                return;
+            }
+
+            if (invited.equals(player)) {
+                ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("you.cannot.invite.yourself"));
+                return;
+            }
+
+            if (cp.isBanned()) {
+                ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("this.player.is.banned.from.using.clan.commands"));
+                return;
+            }
+
+            ClanPlayer invitedClanPlayer = plugin.getClanPlayerManager().createClanPlayer(invited);
+
+            if (invitedClanPlayer.getClan() == null) {
+
+                if (SimpleClans.hasEconomy() && plugin.getSettingsManager().isPurchaseInvite() && !SimpleClans.withdrawBalance(player.getName(), plugin.getSettingsManager().getInvitationPrice())) {
+                    ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("not.sufficient.money"));
                     return;
                 }
 
-                if (!invited.hasPermission("simpleclans.member.can-join")) {
-                    ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("the.player.doesn.t.not.have.the.permissions.to.join.clans"));
-                    return;
-                }
-
-                if (invited.equals(player)) {
-                    ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("you.cannot.invite.yourself"));
-                    return;
-                }
-
-                if (cp.isBanned()) {
-                    ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("this.player.is.banned.from.using.clan.commands"));
-                    return;
-                }
-
-                ClanPlayer invitedClanPlayer = plugin.getClanPlayerManager().createClanPlayer(invited);
-
-                if (invitedClanPlayer.getClan() == null) {
-
-                    if (SimpleClans.hasEconomy() && plugin.getSettingsManager().isPurchaseInvite() && !SimpleClans.withdrawBalance(player.getName(), plugin.getSettingsManager().getInvitationPrice())) {
-                        ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("not.sufficient.money"));
-                        return;
-                    }
-
-                    plugin.getRequestManager().createRequest(new InviteRequest(plugin, invitedClanPlayer, cp, cp.getClan()));
-                    ChatBlock.sendMessage(player, ChatColor.AQUA + MessageFormat.format(Language.getTranslation("has.been.asked.to.join"), invited.getName(), clan.getName()));
-
-                } else {
-                    ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("the.player.is.already.member.of.another.clan"));
-                }
-
+                plugin.getRequestManager().createRequest(new InviteRequest(plugin, invitedClanPlayer, cp, cp.getClan()));
+                ChatBlock.sendMessage(player, ChatColor.AQUA + MessageFormat.format(Language.getTranslation("has.been.asked.to.join"), invited.getName(), clan.getName()));
 
             } else {
-                ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("no.leader.permissions"));
+                ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("the.player.is.already.member.of.another.clan"));
             }
+
+
         } else {
             ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
         }

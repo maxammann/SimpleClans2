@@ -59,8 +59,7 @@ public class UnTrustCommand extends GenericPlayerCommand {
         if (cp != null) {
             Clan clan = cp.getClan();
 
-            //todo-perm
-            if (!clan.isLeader(cp)) {
+            if (!clan.isLeader(cp) && !cp.hasRankPermission("manage.trusted")) {
                 ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("no.leader.permissions"));
                 return;
             }

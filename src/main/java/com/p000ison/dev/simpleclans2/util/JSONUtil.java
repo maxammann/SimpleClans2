@@ -21,6 +21,7 @@
 package com.p000ison.dev.simpleclans2.util;
 
 import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
 import java.util.*;
@@ -35,7 +36,6 @@ public final class JSONUtil {
     {
     }
 
-    @SuppressWarnings("unchecked")
     public static String collectionToJSON(Collection collection)
     {
         JSONArray array = new JSONArray();
@@ -43,6 +43,15 @@ public final class JSONUtil {
         array.addAll(collection);
 
         return array.toJSONString();
+    }
+
+    public static String mapToJSON(Map map)
+    {
+        JSONObject JSONMap = new JSONObject();
+
+        JSONMap.putAll(map);
+
+        return JSONMap.toJSONString();
     }
 
     public static List<String> JSONToStringList(String json)
@@ -64,6 +73,25 @@ public final class JSONUtil {
         }
 
         return list;
+    }
+
+    public static Map<Integer, Boolean> JSONToPermissionMap(String json)
+    {
+        if (json == null || json.isEmpty()) {
+            return null;
+        }
+
+        JSONObject parser = (JSONObject) JSONValue.parse(json);
+
+        if (parser == null) {
+            return null;
+        }
+
+        Map<Integer, Boolean> map = new HashMap<Integer, Boolean>();
+
+        map.putAll(parser);
+
+        return map;
     }
 
     public static Set<String> JSONToStringSet(String json)

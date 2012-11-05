@@ -344,6 +344,16 @@ public class ClanPlayer implements KDR, Balance, UpdateAble {
         return rank != null && getRank().hasPermission(id);
     }
 
+    public boolean isRankPermissionNegative(int id)
+    {
+        return rank != null && getRank().isNegative(id);
+    }
+
+    public boolean isRankPermissionNegative(String permission)
+    {
+        return rank != null && getRank().isNegative(permission);
+    }
+
     public void setRank(Rank rank)
     {
         this.rank = rank;

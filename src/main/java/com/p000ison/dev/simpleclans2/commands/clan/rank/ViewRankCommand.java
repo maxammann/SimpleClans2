@@ -29,7 +29,7 @@ import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import java.util.Set;
+import java.util.Map;
 
 /**
  * Represents a ViewPermissionsCommand
@@ -102,12 +102,17 @@ public class ViewRankCommand extends GenericPlayerCommand {
         ChatBlock.sendMessage(player, subColor + Language.getTranslation("name") + ": " + ChatColor.WHITE + name);
 
 
-        Set<Integer> permissions = queried.getPermissions();
+        Map<Integer, Boolean> permissions = queried.getPermissions();
 
         if (!permissions.isEmpty()) {
             ChatBlock.sendMessage(player, subColor + Language.getTranslation("permissions") + ":");
-            for (Integer permissionID : permissions) {
-                ChatBlock.sendMessage(player, subColor + "  - " + ChatColor.WHITE + Rank.getAvailablePermissions().get(permissionID));
+            for (Map.Entry<Integer, Boolean> entry : permissions.entrySet()) {
+                String output = subColor + "  - ";
+
+                if (!entry.getValue()) {
+                    output += '-';
+                }
+                ChatBlock.sendMessage(player, output + ChatColor.WHITE + Rank.getAvailablePermissions().get(entry.getKey()));
             }
         }
     }
