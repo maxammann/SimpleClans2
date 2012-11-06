@@ -51,8 +51,8 @@ public class WarStopRequest extends MultipleAcceptorsRequest {
             clan.addWarringClan(warring);
             warring.addWarringClan(clan);
 
-            warring.addBBMessage(cp, Language.getTranslation("you.are.at.war", warring.getName(), clan.getTag()));
-            clan.addBBMessage(cp, Language.getTranslation("you.are.at.war", clan.getName(), warring.getTag()));
+            warring.addBBMessage(cp, Language.getTranslation("you.are.no.longer.at.war", warring.getName(), clan.getTag()));
+            clan.addBBMessage(cp, Language.getTranslation("you.are.no.longer.at.war", clan.getName(), warring.getTag()));
 
             clan.update(true);
             warring.update(true);

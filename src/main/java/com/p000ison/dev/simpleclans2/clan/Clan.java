@@ -23,6 +23,9 @@ package com.p000ison.dev.simpleclans2.clan;
 import com.p000ison.dev.simpleclans2.KDR;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.UpdateAble;
+import com.p000ison.dev.simpleclans2.api.RelationType;
+import com.p000ison.dev.simpleclans2.api.events.ClanRelationBreakEvent;
+import com.p000ison.dev.simpleclans2.api.events.ClanRelationCreateEvent;
 import com.p000ison.dev.simpleclans2.clan.bank.Balance;
 import com.p000ison.dev.simpleclans2.clan.bank.BankAccount;
 import com.p000ison.dev.simpleclans2.clan.ranks.Rank;
@@ -751,33 +754,74 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble {
 
     public void addRival(Clan rival)
     {
+        ClanRelationCreateEvent relationEvent = new ClanRelationCreateEvent(this, rival, RelationType.RIVAL);
+
+        plugin.getServer().getPluginManager().callEvent(relationEvent);
+
+        if (relationEvent.isCancelled()) {
+            return;
+        }
         rivals.add(rival);
     }
 
     public void addAlly(Clan ally)
     {
+        ClanRelationCreateEvent relationEvent = new ClanRelationCreateEvent(this, ally, RelationType.ALLY);
+
+        plugin.getServer().getPluginManager().callEvent(relationEvent);
+
+        if (relationEvent.isCancelled()) {
+            return;
+        }
         allies.add(ally);
     }
 
     public void addWarringClan(Clan warringClan)
     {
+        ClanRelationCreateEvent relationEvent = new ClanRelationCreateEvent(this, warringClan, RelationType.WAR);
+
+        plugin.getServer().getPluginManager().callEvent(relationEvent);
+
+        if (relationEvent.isCancelled()) {
+            return;
+        }
         warring.add(warringClan);
     }
 
     public void removeRival(Clan rival)
     {
+        ClanRelationBreakEvent relationEvent = new ClanRelationBreakEvent(this, rival, RelationType.RIVAL);
+
+        plugin.getServer().getPluginManager().callEvent(relationEvent);
+
+        if (relationEvent.isCancelled()) {
+            return;
+        }
         rivals.remove(rival);
     }
 
     public void removeAlly(Clan ally)
     {
+        ClanRelationBreakEvent relationEvent = new ClanRelationBreakEvent(this, ally, RelationType.ALLY);
+
+        plugin.getServer().getPluginManager().callEvent(relationEvent);
+
+        if (relationEvent.isCancelled()) {
+            return;
+        }
         allies.remove(ally);
     }
 
     public void removeWarringClan(Clan warringClan)
     {
+        ClanRelationBreakEvent relationEvent = new ClanRelationBreakEvent(this, warringClan, RelationType.WAR);
+
+        plugin.getServer().getPluginManager().callEvent(relationEvent);
+
+        if (relationEvent.isCancelled()) {
+            return;
+        }
         warring.remove(warringClan);
-        addBBMessage(warringClan, MessageFormat.format(Language.getTranslation("you.are.no.longer.at.war"), warringClan.getName(), getTag()));
     }
 
     /**
@@ -1302,7 +1346,8 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble {
         return this.getBank().getBalance();
     }
 
-    private BankAccount getBank() {
+    private BankAccount getBank()
+    {
         if (bank == null) {
             bank = new BankAccount();
         }
