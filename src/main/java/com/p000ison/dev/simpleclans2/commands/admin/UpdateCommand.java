@@ -49,6 +49,5 @@ public class UpdateCommand extends GenericConsoleCommand {
     @Override
     public void execute(CommandSender sender, String[] args)
     {
-
     }
 }

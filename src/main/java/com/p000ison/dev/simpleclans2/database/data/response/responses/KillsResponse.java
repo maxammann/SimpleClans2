@@ -70,6 +70,7 @@ public class KillsResponse extends Response {
             } else if (i > boundings[1]) {
                 break;
             }
+
             chatBlock.addRow(plugin.getClanPlayerManager().getClanPlayer(entry.getValue()).getName(), ChatColor.AQUA.toString() + entry.getKey());
         }
 

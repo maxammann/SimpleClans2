@@ -222,16 +222,6 @@ public class CommandManager {
         for (int c = boundings[0]; c < boundings[1]; c++) {
             String cmdMenu = commands.get(c);
 
-//            String commandMenu;
-
-//            if (cmd instanceof GenericConsoleCommand) {
-//                commandMenu = ((GenericConsoleCommand) cmd).getMenu();
-//            } else if (cp != null) {
-//                commandMenu = ((GenericPlayerCommand) cmd).getMenu(cp);
-//            } else {
-//                continue;
-//            }
-
             menu.append(MessageFormat.format(plugin.getSettingsManager().getHelpFormat(), cmdMenu)).append(ChatColor.RESET);
 
             if (c != boundings[1]) {

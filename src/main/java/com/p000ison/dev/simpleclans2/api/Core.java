@@ -37,28 +37,28 @@ public interface Core {
      *
      * @return The clan manager of SimpleClans.
      */
-    public ClanManager getClanManager();
+    ClanManager getClanManager();
 
     /**
      * Gets the manager, which handles everything about clan players.
      *
      * @return The clan player manager of SimpleClans.
      */
-    public ClanPlayerManager getClanPlayerManager();
+    ClanPlayerManager getClanPlayerManager();
 
     /**
      * Gets the manager, which stores all the settings.
      *
      * @return The settings manager of SimpleClans.
      */
-    public SettingsManager getSettingsManager();
+    SettingsManager getSettingsManager();
 
     /**
      * Gets the manager, which handles all the requests.
      *
      * @return The request manager or SimpleClans.
      */
-    public RequestManager getRequestManager();
+    RequestManager getRequestManager();
 
 
     /**
@@ -66,19 +66,19 @@ public interface Core {
      *
      * @return The rank manager or SimpleClans.
      */
-    public RankManager getRankManager();
+    RankManager getRankManager();
 
     /**
      * Gets the manager, which handles everything about teleports.
      *
      * @return The teleport manager or SimpleClans.
      */
-    public TeleportManager getTeleportManager();
+    TeleportManager getTeleportManager();
 
     /**
      * Gets the database of SimpleClans.
      *
      * @return The database of SimpleClans.
      */
-    public Database getSimpleClansDatabase();
+    Database getSimpleClansDatabase();
 }

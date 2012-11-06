@@ -20,6 +20,7 @@
 package com.p000ison.dev.simpleclans2.converter;
 
 import com.p000ison.dev.simpleclans2.database.Database;
+import com.p000ison.dev.simpleclans2.database.data.KillType;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -42,6 +43,7 @@ public class Converter {
     private PreparedStatement insertClan, insertBB, updateClan, insertKill;
     private PreparedStatement insertClanPlayer;
     private Set<ConvertedClan> clans = new HashSet<ConvertedClan>();
+    private Set<ConvertedClanPlayer> players = new HashSet<ConvertedClanPlayer>();
 
     public Converter(Database from, Database to)
     {
@@ -52,19 +54,21 @@ public class Converter {
         insertBB = to.prepareStatement("INSERT INTO `sc2_bb` (`clan`, `text` ) VALUES ( ?, ? );");
         updateClan = to.prepareStatement("UPDATE `sc2_clans` SET allies = ?, rivals = ?, warring = ? WHERE id = ?;");
         insertClanPlayer = to.prepareStatement("INSERT INTO `sc2_players` ( `name`, `leader`, `trusted`, `join_date`, `last_seen`, `clan`, `neutral_kills`, `rival_Kills`, `civilian_Kills`, `deaths`, `flags` ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )");
-        insertKill = to.prepareStatement("INSERT INTO `sc2_kills` ( `attacker`, `attacker_tag`, `victim`, `victim_tag`, `war`, `type`, `date` ) VALUES ( ?, ?, ?, ?, ?, ?, ? );");
+        insertKill = to.prepareStatement("INSERT INTO `sc2_kills` ( `attacker`, `attacker_clan`, `victim`, `victim_clan`, `war`, `type`, `date` ) VALUES ( ?, ?, ?, ?, ?, ?, ? );");
     }
 
-    public void convertAll() throws SQLException
+    public void convertAll()
     {
         try {
             convertClans();
             convertPlayers();
+            convertKills();
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        convertKills();
+        clans = null;
+        players = null;
     }
 
     public void convertPlayers() throws SQLException
@@ -79,9 +83,18 @@ public class Converter {
                 JSONflags.put("ff", friendlyFire);
                 flags = JSONflags.toJSONString();
             }
-            insertPlayer(result.getString("name"), result.getBoolean("leader"), result.getBoolean("trusted"), result.getLong("join_date"), result.getLong("last_seen"), getIDByTag(result.getString("tag")), result.getBoolean("friendly_fire"), result.getInt("neutral_kills"), result.getInt("rival_kills"), result.getInt("civilian_kills"), result.getInt("deaths"), flags);
+
+            String name = result.getString("name");
+
+            insertPlayer(name, result.getBoolean("leader"), result.getBoolean("trusted"), result.getLong("join_date"), result.getLong("last_seen"), getIDByTag(result.getString("tag")), result.getBoolean("friendly_fire"), result.getInt("neutral_kills"), result.getInt("rival_kills"), result.getInt("civilian_kills"), result.getInt("deaths"), flags);
+
+
+            ResultSet idResult = to.query("SELECT id FROM `sc2_players` WHERE name = '" + name + "';");
+
+            idResult.next();
+
+            players.add(new ConvertedClanPlayer(idResult.getLong("id"), name));
         }
-        clans = null;
     }
 
     public void insertPlayer(String name, boolean leader, boolean trusted, long joinDate, long lastSeen, long clan, boolean friendlyFire, int neutralKills, int rivalKills, int civilianKills, int deaths, String flags) throws SQLException
@@ -105,6 +118,17 @@ public class Converter {
 
 
         insertClanPlayer.executeUpdate();
+    }
+
+    public long getClanPlayerIDbyName(String tag)
+    {
+        for (ConvertedClanPlayer cp : players) {
+            if (cp.getName().equals(tag)) {
+                return cp.getId();
+            }
+        }
+
+        return -1;
     }
 
     @SuppressWarnings("unchecked")
@@ -259,13 +283,55 @@ public class Converter {
         ResultSet result = from.query("SELECT * FROM `sc_kills`;");
 
         while (result.next()) {
-
+            Timestamp date;
+            try {
+                date = result.getTimestamp("date");
+            } catch (Exception e) {
+                date = new Timestamp(System.currentTimeMillis());
+            }
+            insertKill(result.getString("attacker"), result.getString("attacker_tag"), result.getString("victim"), result.getString("victim_tag"), result.getString("kill_type"), result.getBoolean("war"), date);
         }
     }
 
-    public void insertKill()
+    public void insertKill(String attacker, String attacker_clan, String victim, String victim_clan, String type, boolean war, Timestamp date) throws SQLException
     {
-        //`attacker`, `attacker_tag`, `victim`, `victim_tag`, `war`, `type`, `date`
+        long attackerID = getClanPlayerIDbyName(attacker);
 
+        if (attackerID == -1) {
+            return;
+        }
+
+        long victimID = getClanPlayerIDbyName(victim);
+
+        if (victimID == -1) {
+            return;
+        }
+
+        insertKill.setLong(1, attackerID);
+        insertKill.setLong(2, getIDByTag(attacker_clan));
+        insertKill.setLong(3, victimID);
+        insertKill.setLong(4, getIDByTag(victim_clan));
+
+        KillType realType;
+
+        switch (type.charAt(0)) {
+            case 'c':
+                realType = KillType.CIVILIAN;
+                break;
+            case 'n':
+                realType = KillType.NEUTRAL;
+                break;
+            case 'r':
+                realType = KillType.RIVAL;
+                break;
+            default:
+                throw new UnsupportedOperationException("Failed at inserting kill! Type not found: " + type);
+        }
+
+        insertKill.setByte(5, realType.getType());
+        insertKill.setBoolean(6, war);
+        insertKill.setTimestamp(7, date);
+
+        insertKill.executeUpdate();
     }
 }

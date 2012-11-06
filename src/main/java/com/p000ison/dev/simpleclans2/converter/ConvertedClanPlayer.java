@@ -14,21 +14,31 @@
  *     You should have received a copy of the GNU General Public License
  *     along with SimpleClans2.  If not, see <http://www.gnu.org/licenses/>.
  *
- *     Last modified: 30.10.12 00:11
+ *     Last modified: 06.11.12 19:19
  */
 
-package com.p000ison.dev.simpleclans2.clan.bank;
+package com.p000ison.dev.simpleclans2.converter;
 
 /**
- *
+ * Represents a ConvertedClan
  */
-public interface Balance {
+public class ConvertedClanPlayer {
+    private long id;
+    private String name;
 
-    boolean withdraw(double amount);
+    public ConvertedClanPlayer(long id, String name)
+    {
+        this.id = id;
+        this.name = name;
+    }
 
-    void deposit(double amount);
+    public long getId()
+    {
+        return id;
+    }
 
-    boolean transfer(double amount, Balance account);
-
-    double getBalance();
+    public String getName()
+    {
+        return name;
+    }
 }

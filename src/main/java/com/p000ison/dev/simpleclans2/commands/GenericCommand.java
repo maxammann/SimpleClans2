@@ -26,8 +26,7 @@ import java.util.Arrays;
 
 abstract class GenericCommand implements Command {
     private String name;
-    private int minArgs;
-    private int maxArgs;
+    private int minArgs, maxArgs;
     private String[] identifiers;
     private String[] usage;
     protected SimpleClans plugin;

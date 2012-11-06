@@ -46,6 +46,7 @@ import com.p000ison.dev.simpleclans2.commands.voting.AcceptCommand;
 import com.p000ison.dev.simpleclans2.commands.voting.DenyCommand;
 import com.p000ison.dev.simpleclans2.database.Database;
 import com.p000ison.dev.simpleclans2.database.DatabaseManager;
+import com.p000ison.dev.simpleclans2.database.data.AutoSaver;
 import com.p000ison.dev.simpleclans2.database.data.DataManager;
 import com.p000ison.dev.simpleclans2.exceptions.handling.ExceptionReporterTask;
 import com.p000ison.dev.simpleclans2.language.Language;
@@ -139,7 +140,7 @@ public class SimpleClans extends JavaPlugin implements Core {
             if (exceptionReporterTask != null) {
                 exceptionReporterTask.run();
             }
-            getServer().getPluginManager().disablePlugin(this);
+            disable();
             return;
         }
 
@@ -160,6 +161,17 @@ public class SimpleClans extends JavaPlugin implements Core {
 //            Logging.debug(e, true);
 //        }
 //    }
+
+    public void disable() {
+        if (dataManager != null) {
+            AutoSaver saver = dataManager.getAutoSaver();
+            if (saver != null) {
+                saver.run();
+            }
+        }
+
+        getServer().getPluginManager().disablePlugin(this);
+    }
 
     /**
      * Gets if there is a update

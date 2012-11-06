@@ -28,5 +28,5 @@ public interface UpdateAble {
 
     void update(boolean update);
 
-    public long getLastUpdated();
+    long getLastUpdated();
 }
