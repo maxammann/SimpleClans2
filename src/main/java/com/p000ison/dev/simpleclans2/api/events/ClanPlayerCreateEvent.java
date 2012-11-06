@@ -24,7 +24,7 @@ import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 /**
  * This event is fired, when ever a clanplayer gets created
  */
-public class ClanPlayerCreateEvent extends ClanPlayerEvent {
+public final class ClanPlayerCreateEvent extends ClanPlayerEvent {
 
     public ClanPlayerCreateEvent(ClanPlayer clanPlayer)
     {

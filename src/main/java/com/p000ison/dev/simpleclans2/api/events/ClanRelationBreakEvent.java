@@ -25,7 +25,7 @@ import com.p000ison.dev.simpleclans2.clan.Clan;
 /**
  * This event is fired, when ever a clan breaks a relation
  */
-public class ClanRelationBreakEvent extends ClanRelationEvent {
+public final class ClanRelationBreakEvent extends ClanRelationEvent {
 
     public ClanRelationBreakEvent(Clan clan, Clan otherClan, RelationType type)
     {

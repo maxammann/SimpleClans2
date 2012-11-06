@@ -26,7 +26,7 @@ import org.bukkit.event.Cancellable;
 /**
  * This event is fired, when ever something happens with the relations of a clan
  */
-public class ClanRelationEvent extends ClanEvent implements Cancellable {
+abstract class ClanRelationEvent extends ClanEvent implements Cancellable {
 
     protected Clan otherClan;
     protected RelationType type;

@@ -25,7 +25,7 @@ import org.bukkit.event.Cancellable;
 /**
  * This event is fired, when ever a clan gets created
  */
-public class ClanCreateEvent extends ClanEvent implements Cancellable {
+public final class ClanCreateEvent extends ClanEvent implements Cancellable {
 
     private boolean cancelled;
 

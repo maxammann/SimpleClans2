@@ -26,7 +26,7 @@ import org.bukkit.event.HandlerList;
 /**
  * This even is used to store a clanplayer for the event
  */
-class ClanPlayerEvent extends Event {
+abstract class ClanPlayerEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
     private final ClanPlayer clanPlayer;
 

@@ -25,7 +25,7 @@ import com.p000ison.dev.simpleclans2.clan.Clan;
 /**
  * This event is fired, when ever a clan creates a relation
  */
-public class ClanRelationCreateEvent extends ClanRelationEvent {
+public final class ClanRelationCreateEvent extends ClanRelationEvent {
 
     public ClanRelationCreateEvent(Clan clan, Clan otherClan, RelationType type)
     {
