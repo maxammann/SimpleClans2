@@ -47,4 +47,31 @@ public class Conflicts {
     {
         return conflicts;
     }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Conflicts conflicts = (Conflicts) o;
+
+        if (attacker != conflicts.attacker) {
+            return false;
+        }
+
+        if (victim != conflicts.victim) {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int result = (int) (attacker ^ (attacker >>> 32));
+        result = 31 * result + (int) (victim ^ (victim >>> 32));
+        return result;
+    }
 }

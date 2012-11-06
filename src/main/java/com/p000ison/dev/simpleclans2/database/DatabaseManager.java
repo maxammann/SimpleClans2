@@ -87,7 +87,7 @@ public class DatabaseManager {
         if (!database.existsTable("sc2_kills")) {
             Logging.debug("Creating table: sc2_kills");
 
-            String clanTable = "CREATE TABLE IF NOT EXISTS `sc2_kills` ( `id` INT NOT NULL AUTO_INCREMENT, `attacker` INT NOT NULL, `attacker_tag` VARCHAR(26), `victim` INT NOT NULL, `victim_tag` VARCHAR(26), `war` TINYINT(1) default 0, `type` TINYINT(1) NOT NULL, `date` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY (`id`), INDEX (`attacker`), INDEX (`victim`) );";
+            String clanTable = "CREATE TABLE IF NOT EXISTS `sc2_kills` ( `id` INT NOT NULL AUTO_INCREMENT, `attacker` INT NOT NULL, `attacker_clan` INT NOT NULL, `victim` INT NOT NULL, `victim_clan` INT NOT NULL, `war` TINYINT(1) default 0, `type` TINYINT(1) NOT NULL, `date` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY (`id`), INDEX (`attacker`), INDEX (`victim`) );";
 
             database.execute(clanTable);
         }

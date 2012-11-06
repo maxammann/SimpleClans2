@@ -35,19 +35,19 @@ import java.sql.Timestamp;
 public class KillStatement implements Executable {
 
     private long attacker;
-    private String attackerTag;
+    private long attackerClan;
     private long victim;
-    private String victimTag;
+    private long victimClan;
     private boolean war;
     private long date;
     private byte killType;
 
-    public KillStatement(long attacker, String attackerTag, long victim, String victimTag, boolean war, KillType killType)
+    public KillStatement(long attacker, long attackerTag, long victim, long victimTag, boolean war, KillType killType)
     {
         this.attacker = attacker;
-        this.attackerTag = attackerTag;
+        this.attackerClan = attackerTag;
         this.victim = victim;
-        this.victimTag = victimTag;
+        this.victimClan = victimTag;
         this.war = war;
         this.date = System.currentTimeMillis();
         this.killType = killType.getType();
@@ -59,9 +59,9 @@ public class KillStatement implements Executable {
         try {
             PreparedStatement kill = dataManager.INSERT_KILL;
             kill.setLong(1, attacker);
-            kill.setString(2, attackerTag);
+            kill.setLong(2, attackerClan);
             kill.setLong(3, victim);
-            kill.setString(4, victimTag);
+            kill.setLong(4, victimClan);
             kill.setBoolean(5, war);
             kill.setByte(6, killType);
             kill.setTimestamp(7, new Timestamp(date));

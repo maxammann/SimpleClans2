@@ -51,7 +51,7 @@ public class DataManager {
 
     private PreparedStatement DELETE_CLAN, UPDATE_CLAN, INSERT_CLAN, RETRIEVE_CLAN_BY_TAG;
     private PreparedStatement DELETE_CLANPLAYER, UPDATE_CLANPLAYER, INSERT_CLANPLAYER, RETRIEVE_CLANPLAYER_BY_NAME, UNSET_CLANPLAYER;
-    private PreparedStatement RETRIEVE_TOTAL_DEATHS_PER_PLAYER, RETRIEVE_KILLS_PER_PLAYER, RETRIEVE_MOST_KILLS;
+    private PreparedStatement /*RETRIEVE_TOTAL_DEATHS_PER_PLAYER,*/ RETRIEVE_KILLS_PER_PLAYER, RETRIEVE_MOST_KILLS;
     public PreparedStatement INSERT_KILL;
     private PreparedStatement INSERT_RANK, UPDATE_RANK, RETRIEVE_RANK_BY_NAME;
     public PreparedStatement DELETE_RANK_BY_ID;
@@ -98,8 +98,8 @@ public class DataManager {
         RETRIEVE_CLANPLAYER_BY_NAME = database.prepareStatement("SELECT id FROM `sc2_players` WHERE name = ?;");
         UNSET_CLANPLAYER = database.prepareStatement("UPDATE `sc2_players` SET clan = -1, trusted = 0, rank = 0 WHERE clan = ?;");
 
-        INSERT_KILL = database.prepareStatement("INSERT INTO `sc2_kills` ( `attacker`, `attacker_tag`, `victim`, `victim_tag`, `war`, `type`, `date` ) VALUES ( ?, ?, ?, ?, ?, ?, ? );");
-        RETRIEVE_TOTAL_DEATHS_PER_PLAYER = database.prepareStatement("SELECT victim, count(victim) AS kills FROM `sc_kills` GROUP BY victim ORDER BY 2 DESC;");
+        INSERT_KILL = database.prepareStatement("INSERT INTO `sc2_kills` ( `attacker`, `attacker_clan`, `victim`, `victim_clan`, `war`, `type`, `date` ) VALUES ( ?, ?, ?, ?, ?, ?, ? );");
+//        RETRIEVE_TOTAL_DEATHS_PER_PLAYER = database.prepareStatement("SELECT victim, count(victim) AS kills FROM `sc2_kills` GROUP BY victim ORDER BY 2 DESC;");
         RETRIEVE_KILLS_PER_PLAYER = database.prepareStatement("SELECT victim, count(victim) AS kills FROM `sc2_kills` WHERE attacker = ? GROUP BY victim ORDER BY count(victim) DESC;");
         RETRIEVE_MOST_KILLS = database.prepareStatement("SELECT attacker, victim, count(victim) AS kills FROM `sc2_kills` GROUP BY attacker, victim ORDER BY 3 DESC;");
 
@@ -605,37 +605,37 @@ public class DataManager {
         return -1;
     }
 
-    public Map<String, Integer> getTotalDeathsPerPlayer()
-    {
-        Map<String, Integer> out = new HashMap<String, Integer>();
-
-        ResultSet res = null;
-
-        try {
-            res = RETRIEVE_TOTAL_DEATHS_PER_PLAYER.executeQuery();
-
-            if (res != null) {
-
-                while (res.next()) {
-                    String victim = res.getString("victim");
-
-                    out.put(victim, res.getInt("kills"));
-                }
-            }
-        } catch (SQLException e) {
-            Logging.debug(e, true, "Failed at retrieving deaths!");
-        }
-
-        try {
-            if (res != null) {
-                res.close();
-            }
-        } catch (SQLException e) {
-            Logging.debug(e, true, "Failed at closing result!");
-        }
-
-        return out;
-    }
+//    public Map<String, Integer> getTotalDeathsPerPlayer()
+//    {
+//        Map<String, Integer> out = new HashMap<String, Integer>();
+//
+//        ResultSet res = null;
+//
+//        try {
+//            res = RETRIEVE_TOTAL_DEATHS_PER_PLAYER.executeQuery();
+//
+//            if (res != null) {
+//
+//                while (res.next()) {
+//                    String victim = res.getString("victim");
+//
+//                    out.put(victim, res.getInt("kills"));
+//                }
+//            }
+//        } catch (SQLException e) {
+//            Logging.debug(e, true, "Failed at retrieving deaths!");
+//        }
+//
+//        try {
+//            if (res != null) {
+//                res.close();
+//            }
+//        } catch (SQLException e) {
+//            Logging.debug(e, true, "Failed at closing result!");
+//        }
+//
+//        return out;
+//    }
 
     public List<String> retrieveBB(Clan clan, int start, int end)
     {
@@ -729,7 +729,7 @@ public class DataManager {
      */
     public Set<Conflicts> getMostKilled()
     {
-        Set<Conflicts> out = new HashSet<Conflicts>();
+        Set<Conflicts> out = new TreeSet<Conflicts>();
         try {
             ResultSet res = RETRIEVE_MOST_KILLS.executeQuery();
 

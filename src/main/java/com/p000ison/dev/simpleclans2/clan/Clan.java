@@ -52,7 +52,7 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble {
 
     private SimpleClans plugin;
     private ClanFlags flags;
-    private BankAccount bank = new BankAccount(0.0D);
+    private BankAccount bank;
 
     private long id = -1;
     private String tag, name;
@@ -1281,29 +1281,32 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble {
     @Override
     public boolean withdraw(double amount)
     {
-        return bank.withdraw(amount);
+        return this.getBank().withdraw(amount);
     }
 
     @Override
     public void deposit(double amount)
     {
-        bank.deposit(amount);
+        this.getBank().deposit(amount);
     }
 
     @Override
     public boolean transfer(double amount, Balance account)
     {
-        return bank.transfer(amount, account);
+        return this.getBank().transfer(amount, account);
     }
 
     @Override
     public double getBalance()
     {
-        return bank.getBalance();
+        return this.getBank().getBalance();
     }
 
-    public void setBalance(double balance)
-    {
-        this.bank.setBalance(balance);
+    private BankAccount getBank() {
+        if (bank == null) {
+            bank = new BankAccount();
+        }
+
+        return bank;
     }
 }

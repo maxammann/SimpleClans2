@@ -32,6 +32,11 @@ public class BankAccount implements Balance {
         this.balance = balance;
     }
 
+    public BankAccount()
+    {
+        this(0.0D);
+    }
+
     @Override
     public double getBalance()
     {
