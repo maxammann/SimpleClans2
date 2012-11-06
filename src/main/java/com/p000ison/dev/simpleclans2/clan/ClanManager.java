@@ -21,6 +21,7 @@
 package com.p000ison.dev.simpleclans2.clan;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
+import com.p000ison.dev.simpleclans2.api.events.ClanCreateEvent;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.language.Language;
 import com.p000ison.dev.simpleclans2.util.GeneralHelper;
@@ -112,6 +113,7 @@ public class ClanManager {
             clan.setFoundedDate(System.currentTimeMillis());
             clan.update();
             clans.add(clan);
+            plugin.getServer().getPluginManager().callEvent(new ClanCreateEvent(clan));
             return clan;
         }
 
