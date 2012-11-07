@@ -36,7 +36,7 @@ import java.util.Set;
  * Represents a converter.Converter
  */
 @SuppressWarnings("unchecked")
-public class Converter {
+public class Converter implements Runnable {
 
     private Database from;
     private Database to;
@@ -50,7 +50,7 @@ public class Converter {
         this.from = from;
         this.to = to;
 
-        insertClan = to.prepareStatement("INSERT INTO `sc2_clans` (`name`, `tag`, `verified`, `founded`, `last_action`, `flags` ) VALUES ( ?, ?, ?, ?, ?, ? );");
+        insertClan = to.prepareStatement("INSERT INTO `sc2_clans` (`name`, `tag`, `verified`, `founded`, `last_action`, `flags`, `balance` ) VALUES ( ?, ?, ?, ?, ?, ?, ? );");
         insertBB = to.prepareStatement("INSERT INTO `sc2_bb` (`clan`, `text` ) VALUES ( ?, ? );");
         updateClan = to.prepareStatement("UPDATE `sc2_clans` SET allies = ?, rivals = ?, warring = ? WHERE id = ?;");
         insertClanPlayer = to.prepareStatement("INSERT INTO `sc2_players` ( `name`, `leader`, `trusted`, `join_date`, `last_seen`, `clan`, `neutral_kills`, `rival_Kills`, `civilian_Kills`, `deaths`, `flags` ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )");
@@ -71,28 +71,50 @@ public class Converter {
         players = null;
     }
 
+    @Override
+    public void run()
+    {
+        convertAll();
+    }
+
     public void convertPlayers() throws SQLException
     {
         ResultSet result = from.query("SELECT * FROM `sc_players`;");
 
         while (result.next()) {
-            boolean friendlyFire = result.getBoolean("friendly_fire");
-            String flags = null;
-            if (friendlyFire) {
-                JSONObject JSONflags = new JSONObject();
-                JSONflags.put("ff", friendlyFire);
-                flags = JSONflags.toJSONString();
+            JSONObject flags = new JSONObject();
+
+            try {
+                JSONParser parser = new JSONParser();
+
+                String flagsString = result.getString("flags");
+
+                JSONObject object = (JSONObject) parser.parse(flagsString);
+
+                boolean friendlyFire = result.getBoolean("friendly_fire");
+                boolean bb = (Boolean) object.get("bb-enabled");
+                boolean cape = (Boolean) object.get("cape-enabled");
+
+                if (friendlyFire) {
+                    flags.put("ff", friendlyFire);
+                }
+                if (bb) {
+                    flags.put("bb", bb);
+                }
+                if (cape) {
+                    flags.put("cape", cape);
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+                continue;
             }
 
             String name = result.getString("name");
-
-            insertPlayer(name, result.getBoolean("leader"), result.getBoolean("trusted"), result.getLong("join_date"), result.getLong("last_seen"), getIDByTag(result.getString("tag")), result.getBoolean("friendly_fire"), result.getInt("neutral_kills"), result.getInt("rival_kills"), result.getInt("civilian_kills"), result.getInt("deaths"), flags);
+            insertPlayer(name, result.getBoolean("leader"), result.getBoolean("trusted"), result.getLong("join_date"), result.getLong("last_seen"), getIDByTag(result.getString("tag")), result.getBoolean("friendly_fire"), result.getInt("neutral_kills"), result.getInt("rival_kills"), result.getInt("civilian_kills"), result.getInt("deaths"), flags.toJSONString());
 
 
             ResultSet idResult = to.query("SELECT id FROM `sc2_players` WHERE name = '" + name + "';");
-
             idResult.next();
-
             players.add(new ConvertedClanPlayer(idResult.getLong("id"), name));
         }
     }
@@ -135,9 +157,11 @@ public class Converter {
     public void convertClans() throws SQLException
     {
         ResultSet result = from.query("SELECT * FROM `sc_clans`;");
-        JSONObject flags = new JSONObject();
+
 
         while (result.next()) {
+            JSONObject flags = new JSONObject();
+
             String name = result.getString("name");
             String tag = result.getString("tag");
             boolean verified = result.getBoolean("verified");
@@ -156,7 +180,7 @@ public class Converter {
             }
 
             if (cape != null && !cape.isEmpty()) {
-                flags.put("cape", cape);
+                flags.put("cape-url", cape);
             }
 
             JSONParser parser = new JSONParser();
@@ -172,13 +196,12 @@ public class Converter {
                 }
 
                 clan.setRawWarring((JSONArray) object.get("warring"));
-
             } catch (ParseException e) {
                 e.printStackTrace();
                 continue;
             }
 
-            insertClan(name, tag, verified, founded, last_used, flags.isEmpty() ? null : flags.toJSONString());
+            insertClan(name, tag, verified, founded, last_used, flags.isEmpty() ? null : flags.toJSONString(), result.getDouble("balance"));
 
             String selectLastQuery = "SELECT `id` FROM `sc2_clans` ORDER BY ID DESC LIMIT 1;";
 
@@ -262,7 +285,7 @@ public class Converter {
         }
     }
 
-    public void insertClan(String name, String tag, boolean verified, long founded, long last_action, String flags) throws SQLException
+    public void insertClan(String name, String tag, boolean verified, long founded, long last_action, String flags, double balance) throws SQLException
     {
         insertClan.setString(1, name);
         insertClan.setString(2, tag);
@@ -274,6 +297,8 @@ public class Converter {
         } else {
             insertClan.setNull(6, Types.VARCHAR);
         }
+
+        insertClan.setDouble(7, balance);
 
         insertClan.executeUpdate();
     }
