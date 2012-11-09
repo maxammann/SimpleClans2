@@ -22,7 +22,6 @@ package com.p000ison.dev.simpleclans2.commands.admin;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.commands.GenericConsoleCommand;
 import com.p000ison.dev.simpleclans2.database.Database;
-import com.p000ison.dev.simpleclans2.database.MySQLDatabase;
 import com.p000ison.dev.simpleclans2.language.Language;
 import org.bukkit.command.CommandSender;
 
@@ -55,7 +54,7 @@ public class ConvertCommand extends GenericConsoleCommand {
         Database database = null;
 
         if (action.equalsIgnoreCase("mysql")) {
-            database = new MySQLDatabase();
+//            database = new MySQLDatabase();
         }
     }
 }

@@ -20,6 +20,8 @@
 package com.p000ison.dev.simpleclans2.database;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
+import com.p000ison.dev.simpleclans2.database.configuration.AbstractDatabaseConfiguration;
+import com.p000ison.dev.simpleclans2.database.configuration.MySQLConfiguration;
 import com.p000ison.dev.simpleclans2.util.Logging;
 
 import java.sql.SQLException;
@@ -43,7 +45,15 @@ public class DatabaseManager {
 
     private void init() throws SQLException
     {
-        database = new MySQLDatabase(plugin.getSettingsManager().getDatabaseConfiguration());
+        AbstractDatabaseConfiguration config = plugin.getSettingsManager().getDatabaseConfiguration();
+
+        switch (config.getDatabaseMode()) {
+            case MYSQL:
+                database = new MySQLDatabase((MySQLConfiguration) config);
+                break;
+            default:
+                throw new UnsupportedOperationException("The database mode was not found!");
+        }
 
         if (!database.checkConnection()) {
             Logging.debug(Level.SEVERE, "Failed to connect to database2!");

@@ -23,6 +23,8 @@ package com.p000ison.dev.simpleclans2.settings;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.database.configuration.AbstractDatabaseConfiguration;
+import com.p000ison.dev.simpleclans2.database.configuration.DatabaseMode;
+import com.p000ison.dev.simpleclans2.database.configuration.MySQLConfiguration;
 import com.p000ison.dev.simpleclans2.updater.UpdateType;
 import com.p000ison.dev.simpleclans2.util.ExceptionHelper;
 import com.p000ison.dev.simpleclans2.util.GeneralHelper;
@@ -34,6 +36,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import javax.naming.OperationNotSupportedException;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -153,13 +156,24 @@ public class SettingsManager {
 
             ConfigurationSection databaseSection = config.getConfigurationSection("database");
 
-            databaseConfiguration = new AbstractDatabaseConfiguration();
-            databaseConfiguration.setHost(databaseSection.getString("host"));
-            databaseConfiguration.setUsername(databaseSection.getString("username"));
-            databaseConfiguration.setPassword(databaseSection.getString("password"));
-            databaseConfiguration.setDatabase(databaseSection.getString("database"));
-            databaseConfiguration.setMode(databaseSection.getString("mode"));
-            databaseConfiguration.setPort(databaseSection.getInt("port"));
+            switch (DatabaseMode.getMode(databaseSection.getString("mode"))) {
+                case MYSQL:
+
+                    MySQLConfiguration databaseConfiguration = new MySQLConfiguration();
+
+                    databaseConfiguration.setHost(databaseSection.getString("host"));
+                    databaseConfiguration.setUsername(databaseSection.getString("username"));
+                    databaseConfiguration.setPassword(databaseSection.getString("password"));
+                    databaseConfiguration.setDatabase(databaseSection.getString("database"));
+                    databaseConfiguration.setPort(databaseSection.getInt("port"));
+
+                    this.databaseConfiguration = databaseConfiguration;
+
+                    break;
+                default:
+                    throw new UnsupportedOperationException("The database mode was not found!");
+            }
+
 
             ConfigurationSection teleportation = config.getConfigurationSection("teleportation");
 

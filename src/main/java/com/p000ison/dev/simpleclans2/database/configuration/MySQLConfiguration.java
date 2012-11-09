@@ -22,19 +22,17 @@ package com.p000ison.dev.simpleclans2.database.configuration;
 /**
  * Represents a AbstractDatabaseConfiguration
  */
-public class MySQLConfiguration extends AbstractDatabaseConfiguration {
+public class MySQLConfiguration implements AbstractDatabaseConfiguration {
 
     private String host, username, password, database;
     private int port;
 
     public MySQLConfiguration()
     {
-        super(null);
     }
 
     public MySQLConfiguration(String host, String username, String password, String database, String mode, int port)
     {
-        super(DatabaseMode.getMode(mode));
         this.host = host;
         this.username = username;
         this.password = password;
@@ -90,5 +88,11 @@ public class MySQLConfiguration extends AbstractDatabaseConfiguration {
     public void setPort(int port)
     {
         this.port = port;
+    }
+
+    @Override
+    public DatabaseMode getDatabaseMode()
+    {
+        return DatabaseMode.MYSQL;
     }
 }

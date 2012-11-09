@@ -24,18 +24,16 @@ import java.io.File;
 /**
  * Represents a AbstractDatabaseConfiguration
  */
-public class SQLiteConfiguration extends AbstractDatabaseConfiguration {
+public class SQLiteConfiguration implements AbstractDatabaseConfiguration {
 
     private File database;
 
     public SQLiteConfiguration()
     {
-        super(null);
     }
 
     public SQLiteConfiguration(File database, String mode)
     {
-        super(DatabaseMode.getMode(mode));
         this.database = database;
     }
 
@@ -47,5 +45,11 @@ public class SQLiteConfiguration extends AbstractDatabaseConfiguration {
     public void setDatabaseFile(File database)
     {
         this.database = database;
+    }
+
+    @Override
+    public DatabaseMode getDatabaseMode()
+    {
+        return DatabaseMode.UNKNOWN;
     }
 }

@@ -22,21 +22,7 @@ package com.p000ison.dev.simpleclans2.database.configuration;
 /**
  * Represents a AbstractDatabaseConfiguration
  */
-public abstract class AbstractDatabaseConfiguration {
-    private DatabaseMode mode;
+public interface AbstractDatabaseConfiguration {
 
-    protected AbstractDatabaseConfiguration(DatabaseMode mode)
-    {
-        this.mode = mode;
-    }
-
-    public DatabaseMode getMode()
-    {
-        return mode;
-    }
-
-    public void setMode(DatabaseMode mode)
-    {
-        this.mode = mode;
-    }
+    DatabaseMode getDatabaseMode();
 }
