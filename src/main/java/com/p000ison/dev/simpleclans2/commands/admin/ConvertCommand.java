@@ -21,33 +21,41 @@ package com.p000ison.dev.simpleclans2.commands.admin;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.commands.GenericConsoleCommand;
+import com.p000ison.dev.simpleclans2.database.Database;
+import com.p000ison.dev.simpleclans2.database.MySQLDatabase;
 import com.p000ison.dev.simpleclans2.language.Language;
 import org.bukkit.command.CommandSender;
 
 import java.text.MessageFormat;
 
 /**
- * Represents a UpdateCommand
+ * Represents a ConvertCommand
  */
-public class UpdateCommand extends GenericConsoleCommand {
+public class ConvertCommand extends GenericConsoleCommand {
 
-    public UpdateCommand(SimpleClans plugin)
+    public ConvertCommand(SimpleClans plugin)
     {
-        super("UpdateCommand", plugin);
+        super("ConvertCommand", plugin);
         setArgumentRange(0, 0);
-        setUsages(MessageFormat.format(Language.getTranslation("usage.update"), plugin.getSettingsManager().getClanCommand()));
-        setIdentifiers(Language.getTranslation("command.update"));
-        setPermission("simpleclans.admin.update");
+        setUsages(MessageFormat.format(Language.getTranslation("usage.convert"), plugin.getSettingsManager().getClanCommand()));
+        setIdentifiers(Language.getTranslation("command.convert"));
+        setPermission("simpleclans.admin.convert");
     }
 
     @Override
     public String getMenu()
     {
-        return MessageFormat.format(Language.getTranslation("menu.update"), plugin.getSettingsManager().getClanCommand());
+        return MessageFormat.format(Language.getTranslation("menu.convert"), plugin.getSettingsManager().getClanCommand());
     }
 
     @Override
     public void execute(CommandSender sender, String[] args)
     {
+        String action = args[0];
+        Database database = null;
+
+        if (action.equalsIgnoreCase("mysql")) {
+            database = new MySQLDatabase();
+        }
     }
 }

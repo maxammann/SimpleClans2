@@ -60,7 +60,6 @@ public interface Core {
      */
     RequestManager getRequestManager();
 
-
     /**
      * Gets the manager, which handles everything about ranks.
      *

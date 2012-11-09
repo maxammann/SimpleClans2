@@ -22,6 +22,7 @@ package com.p000ison.dev.simpleclans2.settings;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
+import com.p000ison.dev.simpleclans2.database.configuration.AbstractDatabaseConfiguration;
 import com.p000ison.dev.simpleclans2.updater.UpdateType;
 import com.p000ison.dev.simpleclans2.util.ExceptionHelper;
 import com.p000ison.dev.simpleclans2.util.GeneralHelper;
@@ -45,7 +46,7 @@ public class SettingsManager {
     private SimpleClans plugin;
     private FileConfiguration config;
 
-    private DatabaseConfiguration databaseConfiguration;
+    private AbstractDatabaseConfiguration databaseConfiguration;
 
     private boolean dropAll, drop;
     private Set<Integer> keepOnTeleport = new HashSet<Integer>();
@@ -152,7 +153,7 @@ public class SettingsManager {
 
             ConfigurationSection databaseSection = config.getConfigurationSection("database");
 
-            databaseConfiguration = new DatabaseConfiguration();
+            databaseConfiguration = new AbstractDatabaseConfiguration();
             databaseConfiguration.setHost(databaseSection.getString("host"));
             databaseConfiguration.setUsername(databaseSection.getString("username"));
             databaseConfiguration.setPassword(databaseSection.getString("password"));
@@ -364,7 +365,7 @@ public class SettingsManager {
         load();
     }
 
-    public DatabaseConfiguration getDatabaseConfiguration()
+    public AbstractDatabaseConfiguration getDatabaseConfiguration()
     {
         return databaseConfiguration;
     }

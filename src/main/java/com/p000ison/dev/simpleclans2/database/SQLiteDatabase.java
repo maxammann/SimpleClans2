@@ -14,12 +14,12 @@
  *     You should have received a copy of the GNU General Public License
  *     along with SimpleClans2.  If not, see <http://www.gnu.org/licenses/>.
  *
- *     Last modified: 10.10.12 21:57
+ *     Last modified: 09.11.12 17:36
  */
 
 package com.p000ison.dev.simpleclans2.database;
 
-import com.p000ison.dev.simpleclans2.database.configuration.MySQLConfiguration;
+import com.p000ison.dev.simpleclans2.database.configuration.SQLiteConfiguration;
 import com.p000ison.dev.simpleclans2.util.Logging;
 
 import java.sql.Connection;
@@ -27,11 +27,11 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 /**
- * Represents a MySQLDatabase
+ * Represents a SQLiteDatabase
  */
-public class MySQLDatabase extends AbstractDatabase {
+public class SQLiteDatabase extends AbstractDatabase {
 
-    public MySQLDatabase(MySQLConfiguration databaseConfiguration) throws SQLException
+    public SQLiteDatabase(SQLiteConfiguration databaseConfiguration) throws SQLException
     {
         super(databaseConfiguration);
     }
@@ -39,9 +39,8 @@ public class MySQLDatabase extends AbstractDatabase {
     protected Connection initialize() throws SQLException
     {
         try {
-            Class.forName("com.mysql.jdbc.Driver");
-            MySQLConfiguration configuration = (MySQLConfiguration) databaseConfiguration;
-            return DriverManager.getConnection("jdbc:mysql://" + configuration.getHost() + ":" + configuration.getPort() + "/" + configuration.getDatabase(), configuration.getUsername(), configuration.getPassword());
+            Class.forName("org.sqlite.JDBC");
+            return DriverManager.getConnection("jdbc:sqlite:" + ((SQLiteConfiguration) databaseConfiguration).getDatabaseFile());
         } catch (ClassNotFoundException e) {
             Logging.debug("Driver class not found! " + e.getMessage());
             return null;

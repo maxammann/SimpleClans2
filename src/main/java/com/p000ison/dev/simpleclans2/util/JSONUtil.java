@@ -175,4 +175,24 @@ public final class JSONUtil {
 
         return set;
     }
+
+
+    public static <T> List<T> JSONToList(String json, List<T> list)
+    {
+        if (json == null || json.isEmpty()) {
+            return null;
+        }
+
+        JSONArray parser = (JSONArray) JSONValue.parse(json);
+
+        if (parser == null) {
+            return null;
+        }
+
+        for (Object obj : parser) {
+            list.add((T) obj);
+        }
+
+        return list;
+    }
 }

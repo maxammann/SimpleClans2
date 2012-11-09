@@ -17,7 +17,7 @@
  *     Last modified: 10.10.12 21:57
  */
 
-package com.p000ison.dev.simpleclans2.database;
+package com.p000ison.dev.simpleclans2.database.configuration;
 
 /**
  *

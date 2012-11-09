@@ -29,7 +29,7 @@ import org.bukkit.command.CommandSender;
 import java.text.MessageFormat;
 
 /**
- * Represents a UpdateCommand
+ * Represents a ConvertCommand
  */
 public class UpgradeCommand extends GenericConsoleCommand {
 

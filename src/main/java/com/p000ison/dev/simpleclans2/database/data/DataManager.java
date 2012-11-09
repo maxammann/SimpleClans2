@@ -94,7 +94,7 @@ public class DataManager {
 
         DELETE_CLANPLAYER = database.prepareStatement("DELETE FROM `sc2_players` WHERE id = ?;");
         UPDATE_CLANPLAYER = database.prepareStatement("UPDATE `sc2_players` SET leader = ?, rank = ?, trusted = ?, banned = ?, last_seen = ?, clan = ?, neutral_kills = ?, rival_kills = ?, civilian_kills = ?, deaths = ?, flags = ? WHERE id = ?;");
-        INSERT_CLANPLAYER = database.prepareStatement("INSERT INTO `sc2_players` ( `name`, `leader`, `rank`, `trusted`, `last_seen`, `clan`, `flags` ) VALUES ( ?, ?, ?, ?, ?, ?, ? )");
+        INSERT_CLANPLAYER = database.prepareStatement("INSERT INTO `sc2_players` ( `name`, `leader`, `trusted`, `last_seen`, `clan`, `flags` ) VALUES ( ?, ?, ?, ?, ?, ? )");
         RETRIEVE_CLANPLAYER_BY_NAME = database.prepareStatement("SELECT id FROM `sc2_players` WHERE name = ?;");
         UNSET_CLANPLAYER = database.prepareStatement("UPDATE `sc2_players` SET clan = -1, trusted = 0, rank = 0 WHERE clan = ?;");
 
@@ -134,11 +134,19 @@ public class DataManager {
         importClanPlayers();
     }
 
-    public synchronized boolean updateClanPlayer(ClanPlayer clanPlayer)
+    public boolean updateClanPlayer(ClanPlayer clanPlayer)
     {
         try {
             UPDATE_CLANPLAYER.setBoolean(1, clanPlayer.isLeader());
-            UPDATE_CLANPLAYER.setLong(2, (clanPlayer.getRank() == null ? -1L : clanPlayer.getRank().getId()));
+
+            List<Long> ranks = null;
+
+            if (clanPlayer.getRank() != null) {
+                ranks = new ArrayList<Long>();
+                ranks.add(clanPlayer.getRank().getId());
+            }
+
+            UPDATE_CLANPLAYER.setString(2, JSONUtil.collectionToJSON(ranks));
             UPDATE_CLANPLAYER.setBoolean(3, clanPlayer.isTrusted());
             UPDATE_CLANPLAYER.setBoolean(4, clanPlayer.isBanned());
             UPDATE_CLANPLAYER.setTimestamp(5, new Timestamp(clanPlayer.getLastSeenDate()));
@@ -182,15 +190,14 @@ public class DataManager {
         try {
             INSERT_CLANPLAYER.setString(1, clanPlayer.getName());
             INSERT_CLANPLAYER.setBoolean(2, clanPlayer.isLeader());
-            INSERT_CLANPLAYER.setLong(3, clanPlayer.getRank() == null ? -1L : clanPlayer.getRank().getId());
-            INSERT_CLANPLAYER.setBoolean(4, clanPlayer.isTrusted());
-            INSERT_CLANPLAYER.setTimestamp(5, new Timestamp(System.currentTimeMillis()));
-            INSERT_CLANPLAYER.setLong(6, clanPlayer.getClanId());
+            INSERT_CLANPLAYER.setBoolean(3, clanPlayer.isTrusted());
+            INSERT_CLANPLAYER.setTimestamp(4, new Timestamp(System.currentTimeMillis()));
+            INSERT_CLANPLAYER.setLong(5, clanPlayer.getClanId());
 
             if (clanPlayer.getFlags().hasFlags()) {
-                INSERT_CLANPLAYER.setString(7, clanPlayer.getFlags().read());
+                INSERT_CLANPLAYER.setString(6, clanPlayer.getFlags().read());
             } else {
-                INSERT_CLANPLAYER.setNull(7, Types.VARCHAR);
+                INSERT_CLANPLAYER.setNull(6, Types.VARCHAR);
             }
 
             INSERT_CLANPLAYER.executeUpdate();
@@ -495,8 +502,6 @@ public class DataManager {
                 ClanPlayer clanPlayer = new ClanPlayer(plugin, id, result.getString("name"));
 
                 clanPlayer.setBanned(result.getBoolean("banned"));
-                clanPlayer.setLeader(result.getBoolean("leader"));
-                clanPlayer.setTrusted(result.getBoolean("trusted"));
                 clanPlayer.setLastSeenDate(lastSeen);
                 clanPlayer.setJoinDate(result.getTimestamp("join_date").getTime());
                 clanPlayer.setNeutralKills(result.getInt("neutral_kills"));
@@ -521,13 +526,15 @@ public class DataManager {
                         }
                         Logging.debug(Level.WARNING, "Failed to find clan for %s.", clanPlayer.getName());
                     } else {
+                        clanPlayer.setTrusted(result.getBoolean("trusted"));
+                        clanPlayer.setLeader(result.getBoolean("leader"));
+
                         clanPlayer.setClan(clan);
                         clan.addMember(clanPlayer);
 
-                        long rank = result.getLong("rank");
-
-                        if (rank != -1) {
-                            clanPlayer.setRank(clan.getRank(rank));
+                        List<Long> ranks = JSONUtil.JSONToList(result.getString("rank"), new ArrayList<Long>());
+                        if (ranks != null && !ranks.isEmpty()) {
+                            clanPlayer.setRank(clan.getRank(ranks.get(0)));
                         }
                     }
                 }
