@@ -71,7 +71,7 @@ clan:
    motd:
        bb: true
        lines: 5
-       format: '&4- -bb'
+       format: '&4- -%s'
    unrivalable-clans: [ ]
    modify-tag-completely: false
 paging:

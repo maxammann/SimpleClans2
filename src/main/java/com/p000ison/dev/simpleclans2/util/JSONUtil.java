@@ -38,6 +38,10 @@ public final class JSONUtil {
 
     public static String collectionToJSON(Collection collection)
     {
+        if (collection == null) {
+            return null;
+        }
+
         JSONArray array = new JSONArray();
 
         array.addAll(collection);

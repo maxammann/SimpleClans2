@@ -693,6 +693,8 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble {
         for (ClanPlayer clanPlayer : getAllMembers()) {
             Player player = clanPlayer.toPlayer();
 
+            System.out.println(player);
+
             if (player != null) {
                 ChatBlock.sendMessage(player, message);
             }

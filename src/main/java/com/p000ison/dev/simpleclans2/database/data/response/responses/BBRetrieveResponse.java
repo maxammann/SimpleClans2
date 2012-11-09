@@ -36,16 +36,14 @@ public class BBRetrieveResponse extends Response {
 
     private Clan clan;
     private int page, maxLines;
-    private String format;
     private boolean showError;
 
-    public BBRetrieveResponse(SimpleClans plugin, CommandSender sender, Clan clan, int page, int maxLines, String format, boolean showError)
+    public BBRetrieveResponse(SimpleClans plugin, CommandSender sender, Clan clan, int page, int maxLines, boolean showError)
     {
         super(plugin, sender);
         this.clan = clan;
         this.page = page;
         this.maxLines = maxLines;
-        this.format = format;
         this.showError = showError;
     }
 
@@ -74,7 +72,7 @@ public class BBRetrieveResponse extends Response {
         }
 
         for (String message : bb) {
-            ChatBlock.sendMessage(sender, format == null ? message : String.format(format, message));
+            ChatBlock.sendMessage(sender, message);
         }
 
         return true;

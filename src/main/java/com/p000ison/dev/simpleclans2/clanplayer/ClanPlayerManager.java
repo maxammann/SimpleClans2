@@ -203,4 +203,14 @@ public class ClanPlayerManager {
 
         return null;
     }
+
+    public void updateOnlinePlayers()
+    {
+        for (Player player : plugin.getServer().getOnlinePlayers()) {
+            ClanPlayer clanPlayer = getClanPlayer(player);
+            if (clanPlayer != null) {
+                clanPlayer.setupOnlineVersion();
+            }
+        }
+    }
 }

@@ -135,6 +135,8 @@ public class SimpleClans extends JavaPlugin implements Core {
                 exceptionReporterTask = null;
             }
 
+            getClanPlayerManager().updateOnlinePlayers();
+
         } catch (RuntimeException e) {
             Logging.debug(e, "Failed at loading SimpleClans! Disabling...", true);
             if (exceptionReporterTask != null) {

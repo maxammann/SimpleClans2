@@ -70,7 +70,7 @@ public class FFCommand extends GenericPlayerCommand {
                 cp.update();
                 ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("friendy.fire.is.now.managed.by.your.clan"));
             } else {
-                ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(Language.getTranslation("usage.0.ff.allow.auto"), plugin.getSettingsManager().getClanCommand()));
+                ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(Language.getTranslation("usage.ff"), plugin.getSettingsManager().getClanCommand()));
             }
         } else {
             ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));

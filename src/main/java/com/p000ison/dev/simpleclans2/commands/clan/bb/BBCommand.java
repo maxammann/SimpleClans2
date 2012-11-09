@@ -80,6 +80,6 @@ public class BBCommand extends GenericPlayerCommand {
             return;
         }
 
-        plugin.getDataManager().addResponse(new BBRetrieveResponse(plugin, player, clan, page, -1, null, true));
+        plugin.getDataManager().addResponse(new BBRetrieveResponse(plugin, player, clan, page, -1, true));
     }
 }

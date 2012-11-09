@@ -93,7 +93,7 @@ public class DataManager {
         RETRIEVE_CLAN_BY_TAG = database.prepareStatement("SELECT id FROM `sc2_clans` WHERE tag = ?;");
 
         DELETE_CLANPLAYER = database.prepareStatement("DELETE FROM `sc2_players` WHERE id = ?;");
-        UPDATE_CLANPLAYER = database.prepareStatement("UPDATE `sc2_players` SET leader = ?, rank = ?, trusted = ?, banned = ?, last_seen = ?, clan = ?, neutral_kills = ?, rival_kills = ?, civilian_kills = ?, deaths = ?, flags = ? WHERE id = ?;");
+        UPDATE_CLANPLAYER = database.prepareStatement("UPDATE `sc2_players` SET leader = ?, ranks = ?, trusted = ?, banned = ?, last_seen = ?, clan = ?, neutral_kills = ?, rival_kills = ?, civilian_kills = ?, deaths = ?, flags = ? WHERE id = ?;");
         INSERT_CLANPLAYER = database.prepareStatement("INSERT INTO `sc2_players` ( `name`, `leader`, `trusted`, `last_seen`, `clan`, `flags` ) VALUES ( ?, ?, ?, ?, ?, ? )");
         RETRIEVE_CLANPLAYER_BY_NAME = database.prepareStatement("SELECT id FROM `sc2_players` WHERE name = ?;");
         UNSET_CLANPLAYER = database.prepareStatement("UPDATE `sc2_players` SET clan = -1, trusted = 0, rank = 0 WHERE clan = ?;");
@@ -532,7 +532,7 @@ public class DataManager {
                         clanPlayer.setClan(clan);
                         clan.addMember(clanPlayer);
 
-                        List<Long> ranks = JSONUtil.JSONToList(result.getString("rank"), new ArrayList<Long>());
+                        List<Long> ranks = JSONUtil.JSONToList(result.getString("ranks"), new ArrayList<Long>());
                         if (ranks != null && !ranks.isEmpty()) {
                             clanPlayer.setRank(clan.getRank(ranks.get(0)));
                         }

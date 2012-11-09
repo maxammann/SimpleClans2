@@ -54,6 +54,7 @@ public class ReloadCommand extends GenericConsoleCommand {
         plugin.getSettingsManager().reload();
         plugin.getDataManager().getAutoSaver().run();
         plugin.getDataManager().importAll();
+        plugin.getClanPlayerManager().updateOnlinePlayers();
 
         long end = System.currentTimeMillis();
         ChatBlock.sendMessage(sender, ChatColor.AQUA + MessageFormat.format(Language.getTranslation("configuration.reloaded"), end - start));
