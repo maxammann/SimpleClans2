@@ -21,6 +21,7 @@ package com.p000ison.dev.simpleclans2.converter;
 
 import com.p000ison.dev.simpleclans2.database.Database;
 import com.p000ison.dev.simpleclans2.database.data.KillType;
+import com.p000ison.dev.simpleclans2.util.Logging;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -110,7 +111,7 @@ public class Converter implements Runnable {
             }
 
             String name = result.getString("name");
-            insertPlayer(name, result.getBoolean("leader"), result.getBoolean("trusted"), result.getLong("join_date"), result.getLong("last_seen"), getIDByTag(result.getString("tag")), result.getBoolean("friendly_fire"), result.getInt("neutral_kills"), result.getInt("rival_kills"), result.getInt("civilian_kills"), result.getInt("deaths"), flags.toJSONString());
+            insertPlayer(name, result.getBoolean("leader"), result.getBoolean("trusted"), result.getLong("join_date"), result.getLong("last_seen"), getIDByTag(result.getString("tag")), result.getInt("neutral_kills"), result.getInt("rival_kills"), result.getInt("civilian_kills"), result.getInt("deaths"), flags.toJSONString());
 
 
             ResultSet idResult = to.query("SELECT id FROM `sc2_players` WHERE name = '" + name + "';");
@@ -119,7 +120,7 @@ public class Converter implements Runnable {
         }
     }
 
-    public void insertPlayer(String name, boolean leader, boolean trusted, long joinDate, long lastSeen, long clan, boolean friendlyFire, int neutralKills, int rivalKills, int civilianKills, int deaths, String flags) throws SQLException
+    public void insertPlayer(String name, boolean leader, boolean trusted, long joinDate, long lastSeen, long clan, int neutralKills, int rivalKills, int civilianKills, int deaths, String flags) throws SQLException
     {
         insertClanPlayer.setString(1, name);
         insertClanPlayer.setBoolean(2, leader);
@@ -138,8 +139,13 @@ public class Converter implements Runnable {
             insertClanPlayer.setNull(11, Types.VARCHAR);
         }
 
-
-        insertClanPlayer.executeUpdate();
+        try {
+            insertClanPlayer.executeUpdate();
+        } catch (SQLException e) {
+            if (e.getMessage().startsWith("Duplicate entry")) {
+                Logging.debug("Found duplicate player %s! Skipping!", name);
+            }
+        }
     }
 
     public long getClanPlayerIDbyName(String tag)
@@ -299,8 +305,13 @@ public class Converter implements Runnable {
         }
 
         insertClan.setDouble(7, balance);
-
-        insertClan.executeUpdate();
+        try {
+            insertClan.executeUpdate();
+        } catch (SQLException e) {
+            if (e.getMessage().startsWith("Duplicate entry")) {
+                Logging.debug("Found duplicate clan %s! Skipping!", name);
+            }
+        }
     }
 
     public void convertKills() throws SQLException

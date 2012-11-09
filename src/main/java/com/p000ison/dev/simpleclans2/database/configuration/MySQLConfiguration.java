@@ -20,9 +20,9 @@
 package com.p000ison.dev.simpleclans2.database.configuration;
 
 /**
- * Represents a AbstractDatabaseConfiguration
+ * Represents a DatabaseConfiguration
  */
-public class MySQLConfiguration implements AbstractDatabaseConfiguration {
+public class MySQLConfiguration implements DatabaseConfiguration {
 
     private String host, username, password, database;
     private int port;
@@ -31,7 +31,7 @@ public class MySQLConfiguration implements AbstractDatabaseConfiguration {
     {
     }
 
-    public MySQLConfiguration(String host, String username, String password, String database, String mode, int port)
+    public MySQLConfiguration(String host, int port, String database, String username, String password, String mode)
     {
         this.host = host;
         this.username = username;

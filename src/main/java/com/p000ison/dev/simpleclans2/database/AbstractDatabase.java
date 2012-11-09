@@ -19,7 +19,9 @@
 
 package com.p000ison.dev.simpleclans2.database;
 
-import com.p000ison.dev.simpleclans2.database.configuration.AbstractDatabaseConfiguration;
+import com.p000ison.dev.simpleclans2.database.configuration.DatabaseConfiguration;
+import com.p000ison.dev.simpleclans2.database.configuration.MySQLConfiguration;
+import com.p000ison.dev.simpleclans2.database.configuration.SQLiteConfiguration;
 import com.p000ison.dev.simpleclans2.util.Logging;
 
 import java.sql.*;
@@ -29,9 +31,9 @@ import java.sql.*;
  */
 public abstract class AbstractDatabase implements Database {
     private Connection connection;
-    protected AbstractDatabaseConfiguration databaseConfiguration;
+    protected DatabaseConfiguration databaseConfiguration;
 
-    public AbstractDatabase(AbstractDatabaseConfiguration databaseConfiguration) throws SQLException
+    public AbstractDatabase(DatabaseConfiguration databaseConfiguration) throws SQLException
     {
         this.databaseConfiguration = databaseConfiguration;
         connection = initialize();
@@ -174,8 +176,19 @@ public abstract class AbstractDatabase implements Database {
         }
     }
 
-    public AbstractDatabaseConfiguration getDatabaseConfiguration()
+    public DatabaseConfiguration getDatabaseConfiguration()
     {
         return databaseConfiguration;
+    }
+
+    public static Database createDatabase(DatabaseConfiguration config) throws SQLException
+    {
+        if (config instanceof MySQLConfiguration) {
+            return new MySQLDatabase((MySQLConfiguration) config);
+        } else if (config instanceof SQLiteConfiguration) {
+            return new SQLiteDatabase((SQLiteConfiguration) config);
+        }
+
+        return null;
     }
 }

@@ -20,7 +20,7 @@
 package com.p000ison.dev.simpleclans2.database;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
-import com.p000ison.dev.simpleclans2.database.configuration.AbstractDatabaseConfiguration;
+import com.p000ison.dev.simpleclans2.database.configuration.DatabaseConfiguration;
 import com.p000ison.dev.simpleclans2.database.configuration.MySQLConfiguration;
 import com.p000ison.dev.simpleclans2.util.Logging;
 
@@ -45,7 +45,7 @@ public class DatabaseManager {
 
     private void init() throws SQLException
     {
-        AbstractDatabaseConfiguration config = plugin.getSettingsManager().getDatabaseConfiguration();
+        DatabaseConfiguration config = plugin.getSettingsManager().getDatabaseConfiguration();
 
         switch (config.getDatabaseMode()) {
             case MYSQL:

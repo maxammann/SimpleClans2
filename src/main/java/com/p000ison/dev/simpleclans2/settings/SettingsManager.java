@@ -22,7 +22,7 @@ package com.p000ison.dev.simpleclans2.settings;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
-import com.p000ison.dev.simpleclans2.database.configuration.AbstractDatabaseConfiguration;
+import com.p000ison.dev.simpleclans2.database.configuration.DatabaseConfiguration;
 import com.p000ison.dev.simpleclans2.database.configuration.DatabaseMode;
 import com.p000ison.dev.simpleclans2.database.configuration.MySQLConfiguration;
 import com.p000ison.dev.simpleclans2.updater.UpdateType;
@@ -36,7 +36,6 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import javax.naming.OperationNotSupportedException;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -49,7 +48,7 @@ public class SettingsManager {
     private SimpleClans plugin;
     private FileConfiguration config;
 
-    private AbstractDatabaseConfiguration databaseConfiguration;
+    private DatabaseConfiguration databaseConfiguration;
 
     private boolean dropAll, drop;
     private Set<Integer> keepOnTeleport = new HashSet<Integer>();
@@ -379,7 +378,7 @@ public class SettingsManager {
         load();
     }
 
-    public AbstractDatabaseConfiguration getDatabaseConfiguration()
+    public DatabaseConfiguration getDatabaseConfiguration()
     {
         return databaseConfiguration;
     }

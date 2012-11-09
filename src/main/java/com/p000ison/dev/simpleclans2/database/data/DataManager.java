@@ -96,7 +96,7 @@ public class DataManager {
         UPDATE_CLANPLAYER = database.prepareStatement("UPDATE `sc2_players` SET leader = ?, ranks = ?, trusted = ?, banned = ?, last_seen = ?, clan = ?, neutral_kills = ?, rival_kills = ?, civilian_kills = ?, deaths = ?, flags = ? WHERE id = ?;");
         INSERT_CLANPLAYER = database.prepareStatement("INSERT INTO `sc2_players` ( `name`, `leader`, `trusted`, `last_seen`, `clan`, `flags` ) VALUES ( ?, ?, ?, ?, ?, ? )");
         RETRIEVE_CLANPLAYER_BY_NAME = database.prepareStatement("SELECT id FROM `sc2_players` WHERE name = ?;");
-        UNSET_CLANPLAYER = database.prepareStatement("UPDATE `sc2_players` SET clan = -1, trusted = 0, rank = 0 WHERE clan = ?;");
+        UNSET_CLANPLAYER = database.prepareStatement("UPDATE `sc2_players` SET clan = -1, trusted = 0, ranks = null WHERE clan = ?;");
 
         INSERT_KILL = database.prepareStatement("INSERT INTO `sc2_kills` ( `attacker`, `attacker_clan`, `victim`, `victim_clan`, `war`, `type`, `date` ) VALUES ( ?, ?, ?, ?, ?, ?, ? );");
 //        RETRIEVE_TOTAL_DEATHS_PER_PLAYER = database.prepareStatement("SELECT victim, count(victim) AS kills FROM `sc2_kills` GROUP BY victim ORDER BY 2 DESC;");

@@ -20,9 +20,9 @@
 package com.p000ison.dev.simpleclans2.database.configuration;
 
 /**
- * Represents a AbstractDatabaseConfiguration
+ * Represents a DatabaseConfiguration
  */
-public interface AbstractDatabaseConfiguration {
+public interface DatabaseConfiguration {
 
     DatabaseMode getDatabaseMode();
 }

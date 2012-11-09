@@ -22,9 +22,9 @@ package com.p000ison.dev.simpleclans2.database.configuration;
 import java.io.File;
 
 /**
- * Represents a AbstractDatabaseConfiguration
+ * Represents a DatabaseConfiguration
  */
-public class SQLiteConfiguration implements AbstractDatabaseConfiguration {
+public class SQLiteConfiguration implements DatabaseConfiguration {
 
     private File database;
 

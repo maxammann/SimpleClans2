@@ -55,7 +55,6 @@ public interface Database {
      */
     ResultSet query(String query);
 
-
     /**
      * Execute an update statement
      *
