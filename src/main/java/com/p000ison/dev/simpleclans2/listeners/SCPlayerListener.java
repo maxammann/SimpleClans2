@@ -76,7 +76,7 @@ public class SCPlayerListener implements Listener {
             clanPlayer.updatePermissions();
             Clan clan = clanPlayer.getClan();
 
-            if (plugin.getSettingsManager().isMotdBBEnabled()) {
+            if (plugin.getSettingsManager().isMotdBBEnabled() && clanPlayer.isBBEnabled()) {
                 plugin.getDataManager().addResponse(new BBRetrieveResponse(plugin, player, clan, -1, plugin.getSettingsManager().getMotdBBLines(), false));
             }
 
