@@ -34,7 +34,7 @@ public abstract class AbstractDatabase implements Database {
     public AbstractDatabase(AbstractDatabaseConfiguration databaseConfiguration) throws SQLException
     {
         this.databaseConfiguration = databaseConfiguration;
-        initialize();
+        connection = initialize();
     }
 
     protected abstract Connection initialize() throws SQLException;
