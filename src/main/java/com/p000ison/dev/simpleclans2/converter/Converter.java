@@ -203,7 +203,7 @@ public class Converter implements Runnable {
 
                 clan.setRawWarring((JSONArray) object.get("warring"));
             } catch (ParseException e) {
-                e.printStackTrace();
+                Logging.debug(e, true);
                 continue;
             }
 

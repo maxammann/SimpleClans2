@@ -21,7 +21,7 @@
 package com.p000ison.dev.simpleclans2.clan;
 
 import com.p000ison.dev.simpleclans2.Flags;
-import com.p000ison.dev.simpleclans2.vectors.SerializablePlayerVector;
+import com.p000ison.dev.simpleclans2.vectors.PlayerPosition;
 import org.bukkit.Location;
 
 /**
@@ -37,7 +37,7 @@ public class ClanFlags extends Flags {
      */
     public void setHomeLocation(Location location)
     {
-        super.setString("home", new SerializablePlayerVector(location).serialize());
+        super.setString("home", new PlayerPosition(location).serialize());
     }
 
     /**
@@ -54,7 +54,7 @@ public class ClanFlags extends Flags {
             return null;
         }
 
-        return SerializablePlayerVector.deserialize(locationString).toLocation();
+        return new PlayerPosition().deserialize(locationString).toLocation();
     }
 
     /**

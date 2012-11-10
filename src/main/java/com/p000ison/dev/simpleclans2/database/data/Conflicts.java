@@ -56,15 +56,7 @@ public class Conflicts {
 
         Conflicts conflicts = (Conflicts) o;
 
-        if (attacker != conflicts.attacker) {
-            return false;
-        }
-
-        if (victim != conflicts.victim) {
-            return false;
-        }
-
-        return true;
+        return attacker == conflicts.attacker && victim == conflicts.victim;
     }
 
     @Override
