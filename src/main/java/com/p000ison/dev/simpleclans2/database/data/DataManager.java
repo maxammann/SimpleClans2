@@ -158,7 +158,7 @@ public class DataManager {
             UPDATE_CLANPLAYER.setInt(8, clanPlayer.getRivalKills());
             UPDATE_CLANPLAYER.setInt(9, clanPlayer.getCivilianKills());
             UPDATE_CLANPLAYER.setInt(10, clanPlayer.getDeaths());
-            UPDATE_CLANPLAYER.setString(11, clanPlayer.getFlags().read());
+            UPDATE_CLANPLAYER.setString(11, clanPlayer.getFlags().serialize());
             UPDATE_CLANPLAYER.setLong(12, clanPlayer.getId());
 
             UPDATE_CLANPLAYER.executeUpdate();
@@ -195,7 +195,7 @@ public class DataManager {
             INSERT_CLANPLAYER.setLong(5, clanPlayer.getClanId());
 
             if (clanPlayer.getFlags().hasFlags()) {
-                INSERT_CLANPLAYER.setString(6, clanPlayer.getFlags().read());
+                INSERT_CLANPLAYER.setString(6, clanPlayer.getFlags().serialize());
             } else {
                 INSERT_CLANPLAYER.setNull(6, Types.VARCHAR);
             }
@@ -274,7 +274,7 @@ public class DataManager {
             }
 
             if (clan.getFlags().hasFlags()) {
-                UPDATE_CLAN.setString(7, clan.getFlags().read());
+                UPDATE_CLAN.setString(7, clan.getFlags().serialize());
             } else {
                 UPDATE_CLAN.setNull(7, Types.VARCHAR);
             }
@@ -372,7 +372,7 @@ public class DataManager {
 
                 //flags
                 ClanFlags flags = new ClanFlags();
-                flags.write(result.getString("flags"));
+                flags.deserialize(result.getString("flags"));
 
                 clan.setFlags(flags);
 
@@ -510,7 +510,7 @@ public class DataManager {
                 clanPlayer.setDeaths(result.getInt("deaths"));
 
                 PlayerFlags flags = new PlayerFlags();
-                flags.write(result.getString("flags"));
+                flags.deserialize(result.getString("flags"));
                 clanPlayer.setFlags(flags);
 
                 long clanId = result.getLong("clan");

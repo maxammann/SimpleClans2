@@ -54,6 +54,7 @@ import java.util.*;
 public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble {
 
     private SimpleClans plugin;
+
     private ClanFlags flags;
     private BankAccount bank;
 
@@ -63,11 +64,11 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble {
     private long lastActionDate;
     private boolean verified;
 
-    private Set<Clan> allies = new HashSet<Clan>();
-    private Set<Clan> rivals = new HashSet<Clan>();
-    private Set<Clan> warring = new HashSet<Clan>();
-    private Set<ClanPlayer> allMembers = new HashSet<ClanPlayer>();
-    private Set<Rank> ranks = new HashSet<Rank>();
+    private Set<Clan> allies/* = new HashSet<Clan>()*/;
+    private Set<Clan> rivals /*= new HashSet<Clan>()*/;
+    private Set<Clan> warring /*= new HashSet<Clan>()*/;
+    private Set<ClanPlayer> allMembers/* = new HashSet<ClanPlayer>()*/;
+    private Set<Rank> ranks /*= new HashSet<Rank>()*/;
 
     private boolean update;
 
@@ -289,7 +290,7 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble {
      */
     public Set<Clan> getAllies()
     {
-        return Collections.unmodifiableSet(allies);
+        return allies == null ? new HashSet<Clan>() : Collections.unmodifiableSet(allies);
     }
 
     /**
@@ -299,7 +300,7 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble {
      */
     public Set<Clan> getRivals()
     {
-        return Collections.unmodifiableSet(rivals);
+        return rivals == null ? new HashSet<Clan>() : Collections.unmodifiableSet(rivals);
     }
 
     /**
@@ -309,7 +310,7 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble {
      */
     public Set<Clan> getWarringClans()
     {
-        return Collections.unmodifiableSet(warring);
+        return warring == null ? new HashSet<Clan>() : Collections.unmodifiableSet(warring);
     }
 
     /**
@@ -322,6 +323,10 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble {
     {
         if (this.getId() == id) {
             return true;
+        }
+
+        if (allies == null) {
+            return false;
         }
 
         for (Clan clan : allies) {
@@ -341,7 +346,7 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble {
      */
     public boolean isAlly(Clan clan)
     {
-        return clan != null && (this.equals(clan) || allies.contains(clan));
+        return clan != null && (this.equals(clan) || (allies != null && allies.contains(clan)));
     }
 
     /**
@@ -353,6 +358,10 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble {
     public boolean isRival(long id)
     {
         if (this.getId() == id) {
+            return false;
+        }
+
+        if (rivals == null) {
             return false;
         }
 
@@ -373,7 +382,7 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble {
      */
     public boolean isRival(Clan clan)
     {
-        return clan != null && !this.equals(clan) && rivals.contains(clan);
+        return clan != null && (this.equals(clan) || (rivals != null && rivals.contains(clan)));
     }
 
     /**
@@ -385,6 +394,10 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble {
     public boolean isWarring(long id)
     {
         if (this.getId() == id) {
+            return false;
+        }
+
+        if (warring == null) {
             return false;
         }
 
@@ -405,7 +418,7 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble {
      */
     public boolean isWarring(Clan clan)
     {
-        return clan != null && !this.equals(clan) && warring.contains(clan);
+        return clan != null && (this.equals(clan) || (warring != null && warring.contains(clan)));
     }
 
     /**
@@ -470,6 +483,10 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble {
      */
     public boolean isMember(ClanPlayer cp)
     {
+        if (allMembers == null) {
+            return false;
+        }
+
         for (ClanPlayer comparePlayer : allMembers) {
 
             if (!comparePlayer.equals(cp)) {
@@ -503,7 +520,7 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble {
      */
     public boolean isAnyMember(ClanPlayer cp)
     {
-        return allMembers.contains(cp);
+        return allMembers != null && allMembers.contains(cp);
     }
 
     /**
@@ -515,7 +532,7 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble {
     {
         Set<ClanPlayer> members = new HashSet<ClanPlayer>();
 
-        for (ClanPlayer cp : allMembers) {
+        for (ClanPlayer cp : getAllMembers()) {
             if (cp.getClanId() == id && !cp.isLeader()) {
                 members.add(cp);
             }
@@ -531,7 +548,7 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble {
      */
     public Set<ClanPlayer> getAllMembers()
     {
-        return allMembers;
+        return allMembers == null ? Collections.unmodifiableSet(new HashSet<ClanPlayer>()) : Collections.unmodifiableSet(allMembers);
     }
 
     /**
@@ -543,7 +560,7 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble {
     {
         Set<ClanPlayer> leaders = new HashSet<ClanPlayer>();
 
-        for (ClanPlayer cp : allMembers) {
+        for (ClanPlayer cp : getAllMembers()) {
             if (cp.isLeader()) {
                 leaders.add(cp);
             }
@@ -571,8 +588,14 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble {
             clanPlayer.addPastClan(pastClan);
         }
 
+        clanPlayer.unset();
+
         if (plugin.getSettingsManager().isTrustMembersByDefault()) {
             clanPlayer.setTrusted(true);
+        }
+
+        if (allMembers == null) {
+            allMembers = new HashSet<ClanPlayer>();
         }
 
         allMembers.add(clanPlayer);
@@ -611,7 +634,7 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble {
      */
     public int getSize()
     {
-        return getAllMembers().size();
+        return allMembers == null ? 0 : allMembers.size();
     }
 
     /**
@@ -622,10 +645,8 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble {
      */
     public void addBBMessage(ClanPlayer announcer, String msg)
     {
-        if (isVerified()) {
-            announce(announcer, msg);
-            addBBRawMessage(ChatBlock.parseColors(plugin.getSettingsManager().getClanPlayerBB().replace("+player", announcer.getName()).replace("+message", msg)));
-        }
+        announce(announcer, msg);
+        addBBRawMessage(ChatBlock.parseColors(plugin.getSettingsManager().getClanPlayerBB().replace("+player", announcer.getName()).replace("+message", msg)));
     }
 
 
@@ -637,11 +658,9 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble {
      */
     public void addBBMessage(Clan announcer, String msg)
     {
-        if (isVerified()) {
-            msg = ChatBlock.parseColors(plugin.getSettingsManager().getClanBB().replace("+clan", announcer.getTag()).replace("+message", msg));
-            announce(msg);
-            addBBRawMessage(msg);
-        }
+        msg = ChatBlock.parseColors(plugin.getSettingsManager().getClanBB().replace("+clan", announcer.getTag()).replace("+message", msg));
+        announce(msg);
+        addBBRawMessage(msg);
     }
 
 
@@ -693,8 +712,6 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble {
         for (ClanPlayer clanPlayer : getAllMembers()) {
             Player player = clanPlayer.toPlayer();
 
-            System.out.println(player);
-
             if (player != null) {
                 ChatBlock.sendMessage(player, message);
             }
@@ -718,12 +735,7 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble {
 
     private void addBBRawMessage(String message)
     {
-//        if (isVerified()) {
-//            if (bb.size() > plugin.getSettingsManager().getMaxBBLenght()) {
-//                bb.pollFirst();
-//            }
         plugin.getDataManager().addResponse(new BBAddResponse(plugin, message, this));
-//        }
     }
 
     public void clearBB()
@@ -732,20 +744,19 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble {
     }
 
     @Override
-    public boolean equals(Object o)
+    public boolean equals(Object otherClan)
     {
-        if (this == o) {
+        if (this == otherClan) {
             return true;
         }
 
-        if (o == null || !(o instanceof Clan)) {
+        if (otherClan == null || !(otherClan instanceof Clan)) {
             return false;
         }
 
-        Clan clan = (Clan) o;
+        Clan clan = (Clan) otherClan;
 
         return id == clan.id;
-
     }
 
     @Override
@@ -756,74 +767,58 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble {
 
     public void addRival(Clan rival)
     {
-        ClanRelationCreateEvent relationEvent = new ClanRelationCreateEvent(this, rival, RelationType.RIVAL);
-
-        plugin.getServer().getPluginManager().callEvent(relationEvent);
-
-        if (relationEvent.isCancelled()) {
-            return;
-        }
-        rivals.add(rival);
+        addRelation(RelationType.RIVAL, rivals, rival);
     }
 
     public void addAlly(Clan ally)
     {
-        ClanRelationCreateEvent relationEvent = new ClanRelationCreateEvent(this, ally, RelationType.ALLY);
-
-        plugin.getServer().getPluginManager().callEvent(relationEvent);
-
-        if (relationEvent.isCancelled()) {
-            return;
-        }
-        allies.add(ally);
+        addRelation(RelationType.ALLY, allies, ally);
     }
 
     public void addWarringClan(Clan warringClan)
     {
-        ClanRelationCreateEvent relationEvent = new ClanRelationCreateEvent(this, warringClan, RelationType.WAR);
+        addRelation(RelationType.WAR, warring, warringClan);
+    }
+
+    private void addRelation(RelationType relationType, Set<Clan> relationSet, Clan clanToAdd)
+    {
+        ClanRelationCreateEvent relationEvent = new ClanRelationCreateEvent(this, clanToAdd, relationType);
 
         plugin.getServer().getPluginManager().callEvent(relationEvent);
 
         if (relationEvent.isCancelled()) {
             return;
         }
-        warring.add(warringClan);
+
+        relationSet.add(clanToAdd);
     }
 
     public void removeRival(Clan rival)
     {
-        ClanRelationBreakEvent relationEvent = new ClanRelationBreakEvent(this, rival, RelationType.RIVAL);
-
-        plugin.getServer().getPluginManager().callEvent(relationEvent);
-
-        if (relationEvent.isCancelled()) {
-            return;
-        }
-        rivals.remove(rival);
+        removeRelation(RelationType.RIVAL, rivals, rival);
     }
 
     public void removeAlly(Clan ally)
     {
-        ClanRelationBreakEvent relationEvent = new ClanRelationBreakEvent(this, ally, RelationType.ALLY);
-
-        plugin.getServer().getPluginManager().callEvent(relationEvent);
-
-        if (relationEvent.isCancelled()) {
-            return;
-        }
-        allies.remove(ally);
+        removeRelation(RelationType.ALLY, allies, ally);
     }
 
     public void removeWarringClan(Clan warringClan)
     {
-        ClanRelationBreakEvent relationEvent = new ClanRelationBreakEvent(this, warringClan, RelationType.WAR);
+        removeRelation(RelationType.WAR, warring, warringClan);
+    }
+
+    private void removeRelation(RelationType relationType, Set<Clan> relationSet, Clan clanToRemove)
+    {
+        ClanRelationBreakEvent relationEvent = new ClanRelationBreakEvent(this, clanToRemove, relationType);
 
         plugin.getServer().getPluginManager().callEvent(relationEvent);
 
         if (relationEvent.isCancelled()) {
             return;
         }
-        warring.remove(warringClan);
+
+        relationSet.remove(clanToRemove);
     }
 
     /**
@@ -833,6 +828,10 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble {
      */
     public void removeMember(ClanPlayer clanPlayer)
     {
+        if (allMembers == null) {
+            return;
+        }
+
         if (allMembers.remove(clanPlayer)) {
             clanPlayer.unset();
             clanPlayer.update();
@@ -848,46 +847,40 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble {
      */
     public void disband()
     {
+        if (allMembers != null) {
+            for (ClanPlayer clanPlayer : allMembers) {
+                clanPlayer.unset();
 
-        for (ClanPlayer clanPlayer : allMembers) {
-            clanPlayer.unset();
+                String pastClan = getTag();
 
-            String pastClan = getTag();
+                if (clanPlayer.isLeader()) {
+                    pastClan += '*';
+                }
 
-            if (clanPlayer.isLeader()) {
-                pastClan += '*';
+                clanPlayer.addPastClan(pastClan);
+                clanPlayer.update();
             }
-
-            clanPlayer.addPastClan(pastClan);
-            clanPlayer.update();
         }
 
-        for (Clan warringClan : warring) {
-            warringClan.removeWarringClan(this);
+        if (warring != null) {
+            for (Clan warringClan : warring) {
+                warringClan.removeWarringClan(this);
+                warringClan.addBBMessage(this, Language.getTranslation("you.are.no.longer.at.war", this.getTag(), warringClan.getTag()));
+            }
         }
 
-        for (Clan allyClan : allies) {
-            allyClan.removeAlly(this);
+        if (allies != null) {
+            for (Clan allyClan : allies) {
+                allyClan.removeAlly(this);
+                allyClan.addBBMessage(this, Language.getTranslation("has.been.disbanded.alliance.ended", this.getTag()));
+            }
         }
 
-        for (Clan rivalClan : rivals) {
-            rivalClan.removeRival(this);
-        }
-
-
-        for (Clan rival : rivals) {
-            rival.removeRival(this);
-            rival.addBBMessage(this, Language.getTranslation("has.been.disbanded.rivalry.ended", this.getTag()));
-        }
-
-        for (Clan ally : allies) {
-            ally.removeAlly(this);
-            ally.addBBMessage(this, Language.getTranslation("has.been.disbanded.alliance.ended", this.getTag()));
-        }
-
-        for (Clan warringClan : warring) {
-            warringClan.removeWarringClan(this);
-            warringClan.addBBMessage(this, Language.getTranslation("you.are.no.longer.at.war", this.getTag(), warringClan.getTag()));
+        if (rivals != null) {
+            for (Clan rivalClan : rivals) {
+                rivalClan.removeRival(this);
+                rivalClan.addBBMessage(this, Language.getTranslation("has.been.disbanded.rivalry.ended", this.getTag()));
+            }
         }
 
         plugin.getRequestManager().clearRequests(this);
@@ -1040,7 +1033,7 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble {
      */
     public long deleteRank(Rank rank)
     {
-        if (rank == null) {
+        if (rank == null || ranks == null) {
             return -1;
         }
 
@@ -1067,6 +1060,10 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble {
      */
     public long deleteRank(String tag)
     {
+        if (ranks == null) {
+            return -1;
+        }
+
         Iterator<Rank> it = ranks.iterator();
 
         while (it.hasNext()) {
@@ -1093,7 +1090,7 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble {
      */
     public Set<Rank> getRanks()
     {
-        return Collections.unmodifiableSet(ranks);
+        return ranks == null ? Collections.unmodifiableSet(new HashSet<Rank>()) : Collections.unmodifiableSet(ranks);
     }
 
 
@@ -1115,6 +1112,10 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble {
      */
     public Rank getRank(long id)
     {
+        if (ranks == null) {
+            return null;
+        }
+
         for (Rank rank : ranks) {
             if (rank.getId() == id) {
                 return rank;
@@ -1132,6 +1133,10 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble {
      */
     public Rank getRank(String query)
     {
+        if (ranks == null) {
+            return null;
+        }
+
         String cleanQuery = query.toLowerCase(Locale.US);
         for (Rank rank : ranks) {
             if (rank.getTag().toLowerCase(Locale.US).startsWith(cleanQuery)) {
@@ -1337,9 +1342,9 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble {
     }
 
     @Override
-    public boolean transfer(double amount, Balance account)
+    public boolean transfer(Balance account, double amount)
     {
-        return this.getBank().transfer(amount, account);
+        return this.getBank().transfer(account, amount);
     }
 
     @Override

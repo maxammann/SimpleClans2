@@ -40,7 +40,7 @@ public class Flags {
         return data;
     }
 
-    public void write(String jsonString)
+    public void deserialize(String jsonString)
     {
         if (jsonString == null || jsonString.isEmpty()) {
             return;
@@ -61,15 +61,18 @@ public class Flags {
 
             try {
 
-                Set endValue = null;
+                Object endValue = null;
 
                 if (value instanceof JSONArray) {
                     endValue = new HashSet();
                     JSONArray list = (JSONArray) value;
+                    Set endValueSet = (Set) endValue;
 
                     for (Object element : list) {
-                        endValue.add(element.toString());
+                        endValueSet.add(element.toString());
                     }
+                } else if (value instanceof Flagable) {
+                    endValue = ((Flagable) value).serialize();
                 }
 
                 if (endValue != null) {
@@ -84,9 +87,8 @@ public class Flags {
         }
     }
 
-    public String read()
+    public String serialize()
     {
-
         JSONObject json = new JSONObject();
 
         for (Map.Entry<String, Object> entry : data.entrySet()) {
@@ -147,7 +149,6 @@ public class Flags {
         return data.remove(key) != null;
     }
 
-
     public Set getSet(String key)
     {
         Object set = data.get(key);
@@ -183,7 +184,6 @@ public class Flags {
         data.put(key, obj);
     }
 
-
     public void setBoolean(String key, boolean bool)
     {
         data.put(key, bool);
@@ -203,5 +203,22 @@ public class Flags {
     public void setString(String key, String value)
     {
         data.put(key, value);
+    }
+
+    public void setFlag(String key, Flagable flag)
+    {
+        data.put(key, flag);
+    }
+
+    public Flagable getFlag(String key)
+
+    {
+        Object value = data.get(key);
+
+        if (value instanceof Flagable) {
+            return (Flagable) value;
+        }
+
+        return null;
     }
 }

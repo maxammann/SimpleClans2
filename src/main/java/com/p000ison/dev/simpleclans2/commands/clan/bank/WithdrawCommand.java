@@ -100,7 +100,7 @@ public class WithdrawCommand extends GenericPlayerCommand {
             return;
         }
 
-        if (!clan.transfer(amount, cp)) {
+        if (!clan.transfer(cp, amount)) {
             ChatBlock.sendMessage(player, ChatColor.DARK_RED + Language.getTranslation("clan.bank.not.enough.money"));
             return;
         }

@@ -45,15 +45,16 @@ public class ClanPlayer implements KDR, Balance, UpdateAble {
 
     private SimpleClans plugin;
 
+    private PlayerFlags flags;
+    private Clan clan;
+    private Rank rank;
+    private OnlineClanPlayer onlineVersion = null;
+
     private long id = -1;
     private String name;
-    private Clan clan;
     private boolean banned, leader, trusted;
     private long lastSeen, joinDate;
     private int neutralKills, rivalKills, civilianKills, deaths;
-    private PlayerFlags flags;
-    private Rank rank;
-    private OnlineClanPlayer onlineVersion = null;
 
     private boolean update;
 
@@ -100,54 +101,102 @@ public class ClanPlayer implements KDR, Balance, UpdateAble {
         this.clan = clan;
     }
 
+    /**
+     * Gets the name of this clanPlayer.
+     *
+     * @return The name of this clanplayer
+     */
     public String getName()
     {
         return name;
     }
 
+    /**
+     * Checks if this player is banned
+     *
+     * @return Weather this player is banend
+     */
     public boolean isBanned()
     {
         return banned;
     }
 
+    /**
+     * Bans/unbans a player
+     *
+     * @param banned Weather to ban or unban
+     */
     public void setBanned(boolean banned)
     {
         this.banned = banned;
     }
 
+    /**
+     * Weather this player is a leader
+     *
+     * @return Weather this player is a leader
+     */
     public boolean isLeader()
     {
         return leader;
     }
 
+    /**
+     * Sets this player to a leader
+     *
+     * @param leader Weather the player should be a leader
+     */
     public void setLeader(boolean leader)
     {
         this.leader = leader;
     }
 
+    /**
+     * Weather the player is trusted
+     *
+     * @return Weather the player is trusted
+     */
     public boolean isTrusted()
     {
         return trusted;
     }
 
+    /**
+     * Sets weather the player is trusted
+     */
     public void setTrusted(boolean trusted)
     {
         this.trusted = trusted;
     }
 
+    /**
+     * Checks if the player has friendly fire on
+     *
+     * @return Weather the player has friendly fire on
+     */
     public boolean isFriendlyFireOn()
     {
         return getFlags().isFriendlyFireEnabled();
     }
 
+    /**
+     * Sets friendly fire on or off
+     *
+     * @param friendlyFire Weather friendly fire should be on or off
+     */
     public void setFriendlyFire(boolean friendlyFire)
     {
         getFlags().setFriendlyFire(friendlyFire);
     }
 
+    /**
+     * Gets the date the player was last seen
+     *
+     * @return The date this player was last seen
+     */
     public long getLastSeenDate()
     {
-        return toPlayer() == null ? lastSeen : System.currentTimeMillis();
+        return !this.isOnline() ? lastSeen : System.currentTimeMillis();
     }
 
     public void setLastSeenDate(long lastSeen)
@@ -288,6 +337,11 @@ public class ClanPlayer implements KDR, Balance, UpdateAble {
             return null;
         }
         return plugin.getServer().getPlayerExact(name);
+    }
+
+    public boolean isOnline()
+    {
+        return onlineVersion != null;
     }
 
     @Override
@@ -605,7 +659,7 @@ public class ClanPlayer implements KDR, Balance, UpdateAble {
     }
 
     @Override
-    public boolean transfer(double amount, Balance account)
+    public boolean transfer(Balance account, double amount)
     {
         if (amount > 0.0D) {
             amount = Math.abs(amount);

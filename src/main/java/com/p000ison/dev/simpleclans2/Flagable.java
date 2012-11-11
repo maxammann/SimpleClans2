@@ -24,7 +24,18 @@ package com.p000ison.dev.simpleclans2;
  */
 public interface Flagable {
 
+    /**
+     * Serializes a this object into a string
+     *
+     * @return The string
+     */
     String serialize();
 
+    /**
+     * Deserializes the object and returns itself
+     *
+     * @param deserialize The string to deserialize
+     * @return Itself
+     */
     Object deserialize(String deserialize);
 }

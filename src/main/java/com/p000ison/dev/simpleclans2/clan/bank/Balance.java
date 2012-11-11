@@ -24,11 +24,39 @@ package com.p000ison.dev.simpleclans2.clan.bank;
  */
 public interface Balance {
 
+    /**
+     * Withdraws money from a account for example. Please use only positive values!
+     * This withdraws only if it would be successfully.
+     *
+     * @param amount The amount to withdraw
+     * @return Weather it was successfully.
+     */
     boolean withdraw(double amount);
 
+    /**
+     * Deposits money to a account for example. Please use only positive values!
+     *
+     * @param amount The amount to deposit
+     */
     void deposit(double amount);
 
-    boolean transfer(double amount, Balance account);
+    /**
+     * Transferees money from this account for example to another one.
+     * <strong>If amount is positive:</strong>
+     * this -> the other account
+     * <p/>
+     * <strong>If amount is negative</strong>
+     * the other account -> this
+     *
+     * @param amount The amount to withdraw
+     * @return Weather it was successfully.
+     */
+    boolean transfer(Balance account, double amount);
 
+    /**
+     * Gets the balance of the account.
+     *
+     * @return The balance of the account.
+     */
     double getBalance();
 }

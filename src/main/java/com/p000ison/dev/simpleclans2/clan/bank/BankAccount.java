@@ -86,7 +86,7 @@ public class BankAccount implements Balance {
     }
 
     @Override
-    public boolean transfer(double amount, Balance account)
+    public boolean transfer(Balance account, double amount)
     {
         if (amount > 0.0D) {
             amount = Math.abs(amount);

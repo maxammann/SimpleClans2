@@ -95,7 +95,7 @@ public class DepositCommand extends GenericPlayerCommand {
             return;
         }
 
-        if (!cp.transfer(amount, clan)) {
+        if (!cp.transfer(clan, amount)) {
             ChatBlock.sendMessage(player, ChatColor.DARK_RED + Language.getTranslation("not.sufficient.money"));
             return;
         }
