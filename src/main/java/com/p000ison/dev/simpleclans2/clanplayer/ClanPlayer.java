@@ -341,7 +341,7 @@ public class ClanPlayer implements KDR, Balance, UpdateAble {
 
     public boolean isOnline()
     {
-        return onlineVersion != null;
+        return onlineVersion != null && GeneralHelper.isOnline(toPlayer());
     }
 
     @Override

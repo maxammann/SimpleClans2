@@ -26,7 +26,7 @@ import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 /**
  * Represents a AbstractRequest
  */
-interface Request extends Executable {
+public interface Request {
 
     /**
      * Gets the requester of this request. The person who started the request.
@@ -81,11 +81,6 @@ interface Request extends Executable {
     boolean hasEveryoneVoted();
 
     /**
-     * Executes this request and resets the acceptors
-     */
-    void processRequest();
-
-    /**
      * Checks if this request can be processed.
      *
      * @return Weather this can be processed.
@@ -111,5 +106,17 @@ interface Request extends Executable {
      * @param message The message to send
      */
     void announceMessage(String message);
+
+    /**
+     * Called whenever this request is finally accepted
+     *
+     * @return Weather it was successfully
+     */
+    boolean onAccepted();
+
+    /**
+     * Called whenever this request is finally denied
+     */
+    void onDenied();
 
 }

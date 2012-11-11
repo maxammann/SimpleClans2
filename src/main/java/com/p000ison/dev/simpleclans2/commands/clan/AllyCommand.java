@@ -99,7 +99,7 @@ public class AllyCommand extends GenericPlayerCommand {
             if (action.equals(Language.getTranslation("add"))) {
                 if (!clan.isAlly(ally)) {
 
-                    Set<ClanPlayer> leaders = clan.getLeaders();
+                    Set<ClanPlayer> leaders = ally.getLeaders();
                     GeneralHelper.stripOfflinePlayers(leaders);
 
                     if (!leaders.isEmpty()) {

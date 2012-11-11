@@ -113,7 +113,7 @@ public class RivalCommand extends GenericPlayerCommand {
 
                 } else if (action.equals(Language.getTranslation("remove"))) {
                     if (clan.isRival(rival)) {
-                        Set<ClanPlayer> leaders = GeneralHelper.stripOfflinePlayers(clan.getLeaders());
+                        Set<ClanPlayer> leaders = GeneralHelper.stripOfflinePlayers(rival.getLeaders());
 
                         plugin.getRequestManager().createRequest(new RivalryBreakRequest(plugin, leaders, cp, clan, rival));
                         ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("leaders.asked.to.end.rivalry", rival.getName()));

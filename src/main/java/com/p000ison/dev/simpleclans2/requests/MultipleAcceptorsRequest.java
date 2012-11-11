@@ -54,11 +54,6 @@ public abstract class MultipleAcceptorsRequest extends AbstractRequest {
         return requester.equals(clanPlayer) || acceptors.contains(clanPlayer);
     }
 
-    public void processRequest()
-    {
-        execute();
-    }
-
     @Override
     public boolean isClanInvolved(Clan clan)
     {

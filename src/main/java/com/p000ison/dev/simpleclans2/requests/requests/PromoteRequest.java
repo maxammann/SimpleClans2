@@ -42,7 +42,7 @@ public class PromoteRequest extends MultipleAcceptorsRequest {
     }
 
     @Override
-    public boolean execute()
+    public boolean onAccepted()
     {
         ClanPlayer cp = getRequester();
         Clan clan = requester.getClan();
@@ -55,5 +55,11 @@ public class PromoteRequest extends MultipleAcceptorsRequest {
             targetPlayer.update(true);
         }
         return true;
+    }
+
+    @Override
+    public void onDenied()
+    {
+
     }
 }

@@ -41,7 +41,7 @@ public class WarStartRequest extends MultipleAcceptorsRequest {
     }
 
     @Override
-    public boolean execute()
+    public boolean onAccepted()
     {
         ClanPlayer cp = getRequester();
         Clan clan = requester.getClan();
@@ -59,5 +59,11 @@ public class WarStartRequest extends MultipleAcceptorsRequest {
             warring.update(true);
         }
         return true;
+    }
+
+    @Override
+    public void onDenied()
+    {
+
     }
 }

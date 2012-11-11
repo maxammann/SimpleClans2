@@ -164,13 +164,16 @@ public class SimpleClans extends JavaPlugin implements Core {
 //        }
 //    }
 
-    public void disable() {
+    public void disable()
+    {
         if (dataManager != null) {
             AutoSaver saver = dataManager.getAutoSaver();
             if (saver != null) {
                 saver.run();
             }
         }
+
+        economy = null;
 
         getServer().getPluginManager().disablePlugin(this);
     }

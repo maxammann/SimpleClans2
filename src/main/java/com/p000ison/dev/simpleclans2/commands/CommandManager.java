@@ -118,14 +118,14 @@ public class CommandManager {
 
                 if (cmd.isIdentifier(identifier)) {
 
-                    if (realArgs.length < cmd.getMinArguments() || realArgs.length > cmd.getMaxArguments()) {
+                    if (!cmd.hasPermission(sender)) {
+                        ChatBlock.sendMessage(sender, ChatColor.DARK_RED + Language.getTranslation("insufficient.permissions"));
+                        return;
+                    } else if (realArgs.length < cmd.getMinArguments() || realArgs.length > cmd.getMaxArguments()) {
                         helpCommand = cmd;
                         continue;
                     } else if (realArgs.length > 0 && realArgs[0].equals("?")) {
                         displayCommandHelp(cmd, sender);
-                        return;
-                    } else if (!cmd.hasPermission(sender)) {
-                        ChatBlock.sendMessage(sender, ChatColor.DARK_RED + Language.getTranslation("insufficient.permissions"));
                         return;
                     }
 

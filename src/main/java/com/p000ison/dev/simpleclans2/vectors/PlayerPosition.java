@@ -81,7 +81,12 @@ public class PlayerPosition extends Position3 {
     @Override
     public String serialize()
     {
-        return getX() + ":" + getY() + ":" + getZ() + ":" + world.getName() + ":" + yaw + ":" + pitch;
+        return round2Decimals(getX()) + ":" + round2Decimals(getY()) + ":" + round2Decimals(getZ()) + ":" + world.getName() + ":" + round2Decimals(yaw) + ":" + round2Decimals(pitch);
+    }
+
+    private static double round2Decimals(double value)
+    {
+        return (double) Math.round(value * 100) / 100;
     }
 
     @Override

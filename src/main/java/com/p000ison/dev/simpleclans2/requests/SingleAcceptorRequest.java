@@ -43,13 +43,6 @@ public abstract class SingleAcceptorRequest extends AbstractRequest {
         return acceptor;
     }
 
-    public void processRequest()
-    {
-        accepted = false;
-
-        execute();
-    }
-
     @Override
     public boolean isClanPlayerInvolved(ClanPlayer clanPlayer)
     {

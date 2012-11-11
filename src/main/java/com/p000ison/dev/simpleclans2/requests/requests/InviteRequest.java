@@ -38,7 +38,7 @@ public class InviteRequest extends SingleAcceptorRequest {
     }
 
     @Override
-    public boolean execute()
+    public boolean onAccepted()
     {
         Clan clan = requester.getClan();
 
@@ -56,5 +56,11 @@ public class InviteRequest extends SingleAcceptorRequest {
 
         acceptor.update(true);
         return true;
+    }
+
+    @Override
+    public void onDenied()
+    {
+
     }
 }

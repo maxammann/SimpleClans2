@@ -42,7 +42,7 @@ public class RivalryBreakRequest extends MultipleAcceptorsRequest {
     }
 
     @Override
-    public boolean execute()
+    public boolean onAccepted()
     {
         ClanPlayer cp = getRequester();
         Clan clan = requester.getClan();
@@ -60,5 +60,11 @@ public class RivalryBreakRequest extends MultipleAcceptorsRequest {
             rival.update(true);
         }
         return true;
+    }
+
+    @Override
+    public void onDenied()
+    {
+
     }
 }

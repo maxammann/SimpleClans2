@@ -33,7 +33,7 @@ public class Rank implements Comparable<Rank> {
 
     private String name;
     private String tag;
-    private Map<Integer, Boolean> permissions = new HashMap<Integer, Boolean>();
+    private Map<Integer, Boolean> permissions;
     private int priority;
     private boolean update;
 
@@ -119,6 +119,8 @@ public class Rank implements Comparable<Rank> {
         } else {
             this.permissions = permissions;
         }
+
+        System.out.println(permissions);
         this.id = id;
     }
 
@@ -131,7 +133,8 @@ public class Rank implements Comparable<Rank> {
      */
     public boolean hasPermission(int id)
     {
-        return permissions.get(id);
+        Boolean perm = permissions.get(id);
+        return perm == null || !perm;
     }
 
     /**

@@ -42,7 +42,7 @@ public class AllyCreateRequest extends MultipleAcceptorsRequest {
     }
 
     @Override
-    public boolean execute()
+    public boolean onAccepted()
     {
         ClanPlayer cp = getRequester();
         Clan clan = requester.getClan();
@@ -53,12 +53,18 @@ public class AllyCreateRequest extends MultipleAcceptorsRequest {
             clan.addAlly(ally);
             ally.addAlly(clan);
 
-            ally.addBBMessage(cp, MessageFormat.format(Language.getTranslation("accepted.an.alliance"), getAcceptors().size(), clan.getName()));
-            clan.addBBMessage(cp, MessageFormat.format(Language.getTranslation("created.an.alliance"), cp.getName(), ally.getName()));
+            ally.addBBMessage(cp, MessageFormat.format(Language.getTranslation("accepted.an.alliance"), ally.getName(), clan.getName()));
+            clan.addBBMessage(cp, MessageFormat.format(Language.getTranslation("accepted.an.alliance"), cp.getName(), ally.getName()));
 
             clan.update(true);
             ally.update(true);
         }
         return true;
+    }
+
+    @Override
+    public void onDenied()
+    {
+
     }
 }

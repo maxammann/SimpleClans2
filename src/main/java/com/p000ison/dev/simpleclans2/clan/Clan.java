@@ -588,8 +588,6 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble {
             clanPlayer.addPastClan(pastClan);
         }
 
-        clanPlayer.unset();
-
         if (plugin.getSettingsManager().isTrustMembersByDefault()) {
             clanPlayer.setTrusted(true);
         }
@@ -788,6 +786,10 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble {
 
         if (relationEvent.isCancelled()) {
             return;
+        }
+
+        if (relationSet == null) {
+            relationSet = new HashSet<Clan>();
         }
 
         relationSet.add(clanToAdd);

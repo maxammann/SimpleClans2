@@ -64,10 +64,10 @@ public class DepositCommand extends GenericPlayerCommand {
             return;
         }
 
-         if (cp.isRankPermissionNegative("bank.deposit")) {
-             player.sendMessage(ChatColor.DARK_RED + Language.getTranslation("no.reank.permissions"));
-             return;
-         }
+        if (cp.isRankPermissionNegative("bank.deposit")) {
+            player.sendMessage(ChatColor.DARK_RED + Language.getTranslation("no.reank.permissions"));
+            return;
+        }
 
         Clan clan = cp.getClan();
 

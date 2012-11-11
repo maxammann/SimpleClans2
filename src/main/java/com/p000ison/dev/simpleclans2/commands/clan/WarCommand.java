@@ -113,7 +113,7 @@ public class WarCommand extends GenericPlayerCommand {
         } else if (action.equalsIgnoreCase(Language.getTranslation("end"))) {
             if (clan.isWarring(toWarring)) {
 
-                Set<ClanPlayer> onlineLeaders = GeneralHelper.stripOfflinePlayers(clan.getLeaders());
+                Set<ClanPlayer> onlineLeaders = GeneralHelper.stripOfflinePlayers(toWarring.getLeaders());
                 if (!onlineLeaders.isEmpty()) {
                     plugin.getRequestManager().createRequest(new WarStopRequest(plugin, onlineLeaders, cp, toWarring));
                     ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("leaders.asked.to.end.rivalry", toWarring.getName()));

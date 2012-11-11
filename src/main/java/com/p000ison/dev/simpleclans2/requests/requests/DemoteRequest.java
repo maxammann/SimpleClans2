@@ -43,7 +43,7 @@ public class DemoteRequest extends MultipleAcceptorsRequest {
     }
 
     @Override
-    public boolean execute()
+    public boolean onAccepted()
     {
         Clan clan = requester.getClan();
 
@@ -52,5 +52,11 @@ public class DemoteRequest extends MultipleAcceptorsRequest {
         targetPlayer.update(true);
 
         return true;
+    }
+
+    @Override
+    public void onDenied()
+    {
+
     }
 }

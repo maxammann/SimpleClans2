@@ -98,7 +98,7 @@ public class RequestManager {
                 //check if we were successfully
                 if (request.checkRequest()) {
                     //if everyone has voted
-                    request.processRequest();
+                    request.onAccepted();
                     it.remove();
                 } else {
                     //check if everyone has voted if yes and no success -> remove

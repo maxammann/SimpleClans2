@@ -30,7 +30,7 @@ import org.bukkit.scheduler.BukkitTask;
  * Represents a InfoCommand
  */
 public class InfoCommand extends GenericConsoleCommand {
-               //com.p000ison.dev.simpleclans2.clan
+    //com.p000ison.dev.simpleclans2.clan
     public InfoCommand(SimpleClans plugin)
     {
         super("Info", plugin);
