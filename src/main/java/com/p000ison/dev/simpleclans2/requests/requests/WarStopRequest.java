@@ -23,21 +23,27 @@ import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.language.Language;
-import com.p000ison.dev.simpleclans2.requests.MultipleAcceptorsRequest;
+import com.p000ison.dev.simpleclans2.requests.MultipleRequest;
 
 import java.util.Set;
 
 /**
  * Represents a WarStartRequest
  */
-public class WarStopRequest extends MultipleAcceptorsRequest {
+public class WarStopRequest extends MultipleRequest {
 
     private Clan warring;
 
     public WarStopRequest(SimpleClans plugin, Set<ClanPlayer> acceptors, ClanPlayer requester, Clan warring)
     {
-        super(plugin, acceptors, requester, Language.getTranslation("proposing.to.end.the.war", requester.getClan().getTag(), warring.getTag()));
+        super(plugin, acceptors, requester);
         this.warring = warring;
+    }
+
+    @Override
+    public void onRequesting()
+    {
+        sendAnnouncerMessage(Language.getTranslation("proposing.to.end.the.war", requester.getClan().getTag(), warring.getTag()));
     }
 
     @Override
@@ -63,6 +69,7 @@ public class WarStopRequest extends MultipleAcceptorsRequest {
     @Override
     public void onDenied()
     {
-
+        sendRequesterMessage(Language.getTranslation("peace.agreement.denied", warring.getTag()));
+        sendAnnouncerMessage(Language.getTranslation("peace.agreement.denied", requester.getClan().getTag()));
     }
 }

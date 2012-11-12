@@ -26,15 +26,15 @@ import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import org.bukkit.entity.Player;
 
 /**
- * Represents a MultipleAcceptorsRequest
+ * Represents a MultipleRequest
  */
-public abstract class SingleAcceptorRequest extends AbstractRequest {
+public abstract class SingleRequest extends AbstractRequest {
     private final ClanPlayer acceptor;
     private boolean accepted = false;
 
-    public SingleAcceptorRequest(SimpleClans plugin, ClanPlayer acceptor, ClanPlayer requester, String message)
+    public SingleRequest(SimpleClans plugin, ClanPlayer acceptor, ClanPlayer requester)
     {
-        super(plugin, requester, message);
+        super(plugin, requester);
         this.acceptor = acceptor;
     }
 
@@ -49,6 +49,7 @@ public abstract class SingleAcceptorRequest extends AbstractRequest {
         return acceptor.equals(clanPlayer) || requester.equals(clanPlayer);
     }
 
+    @Override
     public boolean checkRequest()
     {
         return accepted;
@@ -84,18 +85,7 @@ public abstract class SingleAcceptorRequest extends AbstractRequest {
     @Override
     public void abstain()
     {
-        throw new IllegalArgumentException("You can not abstain a SingleAcceptorRequest!");
-    }
-
-    public void sendRequest()
-    {
-        Player player = getAcceptor().toPlayer();
-
-        if (player == null) {
-            return;
-        }
-
-        getAcceptor().toPlayer().sendMessage(getMessage());
+        throw new IllegalArgumentException("You can not abstain a SingleRequest!");
     }
 
     @Override
@@ -107,12 +97,23 @@ public abstract class SingleAcceptorRequest extends AbstractRequest {
     @Override
     public void announceMessage(String message)
     {
+        sendAnnouncerMessage(message);
+        sendRequesterMessage(message);
+    }
+
+    @Override
+    public void sendAnnouncerMessage(String message)
+    {
         Player acceptorPlayer = acceptor.toPlayer();
 
         if (acceptorPlayer != null) {
             ChatBlock.sendMessage(acceptorPlayer, message);
         }
+    }
 
+    @Override
+    public void sendRequesterMessage(String message)
+    {
         Player requesterPlayer = requester.toPlayer();
 
         if (requesterPlayer != null) {

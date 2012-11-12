@@ -22,6 +22,7 @@ package com.p000ison.dev.simpleclans2.requests;
 
 import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
+import com.p000ison.dev.simpleclans2.language.Language;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -37,8 +38,8 @@ public class RequestManager {
     {
         //hmm damn you DAUs ....
 
-        if (created instanceof MultipleAcceptorsRequest) {
-            MultipleAcceptorsRequest multiCreated = (MultipleAcceptorsRequest) created;
+        if (created instanceof MultipleRequest) {
+            MultipleRequest multiCreated = (MultipleRequest) created;
 
             //go through all requests
             for (AbstractRequest request : requests) {
@@ -48,8 +49,8 @@ public class RequestManager {
                     }
                 }
             }
-        } else if (created instanceof SingleAcceptorRequest) {
-            SingleAcceptorRequest singleCreated = (SingleAcceptorRequest) created;
+        } else if (created instanceof SingleRequest) {
+            SingleRequest singleCreated = (SingleRequest) created;
 
             //go through all requests
             for (AbstractRequest request : requests) {
@@ -62,7 +63,7 @@ public class RequestManager {
 
 
         requests.add(created);
-        created.sendRequest();
+        created.onRequesting();
         return true;
     }
 
@@ -81,12 +82,15 @@ public class RequestManager {
                 switch (result) {
                     case ACCEPT:
                         request.accept();
+                        request.announceMessage(Language.getTranslation("voted.to.accept", acceptor.getName()));
                         break;
                     case DENY:
                         request.deny();
+                        request.announceMessage(Language.getTranslation("voted.to.deny", acceptor.getName()));
                         break;
                     case ABSTAIN:
-                        if (request instanceof SingleAcceptorRequest) {
+                        if (request instanceof SingleRequest) {
+                            request.announceMessage(Language.getTranslation("voted.to.abstain", acceptor.getName()));
                             return request;
                         }
                         request.abstain();

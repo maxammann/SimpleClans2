@@ -256,19 +256,19 @@ public class DataManager {
             UPDATE_CLAN.setBoolean(3, clan.isVerified());
 
             if (clan.hasAllies()) {
-                UPDATE_CLAN.setString(4, JSONUtil.collectionToJSON(clan.getAllies()));
+                UPDATE_CLAN.setString(4, JSONUtil.clansToJSON(clan.getAllies()));
             } else {
                 UPDATE_CLAN.setNull(4, Types.VARCHAR);
             }
 
             if (clan.hasRivals()) {
-                UPDATE_CLAN.setString(5, JSONUtil.collectionToJSON(clan.getRivals()));
+                UPDATE_CLAN.setString(5, JSONUtil.clansToJSON(clan.getRivals()));
             } else {
                 UPDATE_CLAN.setNull(5, Types.VARCHAR);
             }
 
             if (clan.hasWarringClans()) {
-                UPDATE_CLAN.setString(6, JSONUtil.collectionToJSON(clan.getWarringClans()));
+                UPDATE_CLAN.setString(6, JSONUtil.clansToJSON(clan.getWarringClans()));
             } else {
                 UPDATE_CLAN.setNull(6, Types.VARCHAR);
             }
@@ -283,6 +283,7 @@ public class DataManager {
             UPDATE_CLAN.setLong(9, clan.getId());
 
             UPDATE_CLAN.executeUpdate();
+            clan.update();
         } catch (SQLException e) {
             Logging.debug(e, true, "Failed to update clan %s.", clan);
             return false;

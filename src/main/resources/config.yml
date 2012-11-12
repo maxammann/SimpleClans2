@@ -55,9 +55,9 @@ clan:
        max-lines: 3000
        max-display-lines: 10
    announce:
-       clan: '+clan: +message'
-       clanplayer: '+player: +message'
-       default: '+message'
+       clan: '&8* +clan: &b+message'
+       clanplayer: '&8* +player: &b+message'
+       default: '&8* &b+message'
    economy:
        purchase-creation: 20
        purchase-teleport: -1

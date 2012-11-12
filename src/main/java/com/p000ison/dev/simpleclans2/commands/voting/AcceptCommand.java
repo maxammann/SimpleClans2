@@ -23,7 +23,6 @@ import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
 import com.p000ison.dev.simpleclans2.language.Language;
-import com.p000ison.dev.simpleclans2.requests.MultipleAcceptorsRequest;
 import com.p000ison.dev.simpleclans2.requests.Request;
 import com.p000ison.dev.simpleclans2.requests.RequestManager;
 import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
@@ -56,11 +55,11 @@ public class AcceptCommand extends GenericPlayerCommand {
         ClanPlayer clanPlayer = plugin.getClanPlayerManager().getCreateClanPlayerExact(player);
         Request request = plugin.getRequestManager().vote(clanPlayer, RequestManager.Result.ACCEPT);
 
-        if (request != null) {
-            if (request instanceof MultipleAcceptorsRequest) {
-                request.announceMessage(Language.getTranslation("voted.to.accept", player.getDisplayName()));
-            }
-        } else {
+        if (request == null) {
+//            if (request instanceof MultipleRequest) {
+//                request.announceMessage(Language.getTranslation("voted.to.accept", player.getDisplayName()));
+//            }
+//        } else {
             ChatBlock.sendMessage(player, Language.getTranslation("nothing.to.accept"));
         }
     }

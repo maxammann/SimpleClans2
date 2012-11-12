@@ -69,7 +69,7 @@ public interface Request {
     void deny();
 
     /**
-     * Performs a vote on this request. This will only work with a {@link MultipleAcceptorsRequest}. Not with a {@link SingleAcceptorRequest}.
+     * Performs a vote on this request. This will only work with a {@link MultipleRequest}. Not with a {@link SingleRequest}.
      */
     void abstain();
 
@@ -88,9 +88,9 @@ public interface Request {
     boolean checkRequest();
 
     /**
-     * Sends the initial message. This message is only sent once.
+     * This asks for the request. This message is only sent once.
      */
-    void sendRequest();
+    void onRequesting();
 
     /**
      * Checks if the clanplayer is an acceptor
@@ -106,6 +106,16 @@ public interface Request {
      * @param message The message to send
      */
     void announceMessage(String message);
+
+    /**
+     * Sends a message to the requester
+     */
+    void sendRequesterMessage(String message);
+
+    /**
+     * Sends a message to the announcer/s
+     */
+    void sendAnnouncerMessage(String message);
 
     /**
      * Called whenever this request is finally accepted

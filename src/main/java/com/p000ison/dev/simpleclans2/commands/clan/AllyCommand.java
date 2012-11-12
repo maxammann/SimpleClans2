@@ -114,8 +114,11 @@ public class AllyCommand extends GenericPlayerCommand {
             } else if (action.equals(Language.getTranslation("remove"))) {
                 if (clan.isAlly(ally)) {
                     clan.removeAlly(ally);
+                    ally.removeAlly(clan);
                     ally.addBBMessage(cp, MessageFormat.format(Language.getTranslation("has.broken.the.alliance"), clan.getName(), ally.getName()));
-                    clan.addBBMessage(cp, MessageFormat.format(Language.getTranslation("has.broken.the.alliance"), cp.getName(), ally.getName()));
+                    clan.addBBMessage(cp, MessageFormat.format(Language.getTranslation("has.broken.the.alliance"), clan.getName(), ally.getName()));
+                    clan.update();
+                    ally.update();
                 } else {
                     ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("your.clans.are.not.allies"));
                 }

@@ -147,6 +147,7 @@ abstract class GenericCommand implements Command {
                 '}';
     }
 
+    @Override
     public Type getType()
     {
         return type;

@@ -315,6 +315,7 @@ public class ClanPlayer implements KDR, Balance, UpdateAble {
      *
      * @return The KDR.
      */
+    @Override
     public float getKDR()
     {
         int totalDeaths = getDeaths();
@@ -413,6 +414,7 @@ public class ClanPlayer implements KDR, Balance, UpdateAble {
         this.rank = rank;
     }
 
+    @Override
     public void update()
     {
         this.update = true;
@@ -423,6 +425,7 @@ public class ClanPlayer implements KDR, Balance, UpdateAble {
         return this.update;
     }
 
+    @Override
     public void update(boolean update)
     {
         this.update = update;

@@ -19,6 +19,7 @@
 
 package com.p000ison.dev.simpleclans2.database;
 
+import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 import com.p000ison.dev.simpleclans2.database.configuration.MySQLConfiguration;
 import com.p000ison.dev.simpleclans2.util.Logging;
 
@@ -36,11 +37,14 @@ public class MySQLDatabase extends AbstractDatabase {
         super(databaseConfiguration);
     }
 
+    @Override
     protected Connection initialize() throws SQLException
     {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             MySQLConfiguration configuration = (MySQLConfiguration) databaseConfiguration;
+            MysqlDataSource source = new MysqlDataSource();
+
             return DriverManager.getConnection("jdbc:mysql://" + configuration.getHost() + ":" + configuration.getPort() + "/" + configuration.getDatabase(), configuration.getUsername(), configuration.getPassword());
         } catch (ClassNotFoundException e) {
             Logging.debug("Driver class not found! " + e.getMessage());

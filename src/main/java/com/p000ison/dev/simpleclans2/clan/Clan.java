@@ -53,7 +53,7 @@ import java.util.*;
  */
 public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble {
 
-    private SimpleClans plugin;
+    private final SimpleClans plugin;
 
     private ClanFlags flags;
     private BankAccount bank;
@@ -64,11 +64,11 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble {
     private long lastActionDate;
     private boolean verified;
 
-    private Set<Clan> allies/* = new HashSet<Clan>()*/;
-    private Set<Clan> rivals /*= new HashSet<Clan>()*/;
-    private Set<Clan> warring /*= new HashSet<Clan>()*/;
-    private Set<ClanPlayer> allMembers/* = new HashSet<ClanPlayer>()*/;
-    private Set<Rank> ranks /*= new HashSet<Rank>()*/;
+    private Set<Clan> allies;
+    private Set<Clan> rivals;
+    private Set<Clan> warring;
+    private Set<ClanPlayer> allMembers;
+    private Set<Rank> ranks;
 
     private boolean update;
 
@@ -608,6 +608,7 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble {
      *
      * @return The total KDR
      */
+    @Override
     public float getKDR()
     {
         double totalWeightedKills = 0;
@@ -765,16 +766,25 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble {
 
     public void addRival(Clan rival)
     {
+        if (rivals == null) {
+            rivals = new HashSet<Clan>();
+        }
         addRelation(RelationType.RIVAL, rivals, rival);
     }
 
     public void addAlly(Clan ally)
     {
+        if (allies == null) {
+            allies = new HashSet<Clan>();
+        }
         addRelation(RelationType.ALLY, allies, ally);
     }
 
     public void addWarringClan(Clan warringClan)
     {
+        if (warring == null) {
+            warring = new HashSet<Clan>();
+        }
         addRelation(RelationType.WAR, warring, warringClan);
     }
 
@@ -786,10 +796,6 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble {
 
         if (relationEvent.isCancelled()) {
             return;
-        }
-
-        if (relationSet == null) {
-            relationSet = new HashSet<Clan>();
         }
 
         relationSet.add(clanToAdd);
@@ -812,6 +818,10 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble {
 
     private void removeRelation(RelationType relationType, Set<Clan> relationSet, Clan clanToRemove)
     {
+        if (relationSet == null) {
+            return;
+        }
+
         ClanRelationBreakEvent relationEvent = new ClanRelationBreakEvent(this, clanToRemove, relationType);
 
         plugin.getServer().getPluginManager().callEvent(relationEvent);
@@ -964,6 +974,7 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble {
     /**
      * Marks this clan to update
      */
+    @Override
     public void update()
     {
         this.update = true;
@@ -974,6 +985,7 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble {
      *
      * @param update Weather to update
      */
+    @Override
     public void update(boolean update)
     {
         this.update = update;
@@ -1058,7 +1070,7 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble {
      * Searches for a rank and removes it.
      *
      * @param tag The search query
-     * @return Weather it was sucessfully
+     * @return Weather it was successfully
      */
     public long deleteRank(String tag)
     {

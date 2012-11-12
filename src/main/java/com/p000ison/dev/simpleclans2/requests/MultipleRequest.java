@@ -29,17 +29,17 @@ import java.util.Collections;
 import java.util.Set;
 
 /**
- * Represents a MultipleAcceptorsRequest
+ * Represents a MultipleRequest
  */
-public abstract class MultipleAcceptorsRequest extends AbstractRequest {
+public abstract class MultipleRequest extends AbstractRequest {
     private final Set<ClanPlayer> acceptors;
     private short accepts = 0;
     private short denies = 0;
     private short abstains = 0;
 
-    public MultipleAcceptorsRequest(SimpleClans plugin, Set<ClanPlayer> acceptors, ClanPlayer requester, String message)
+    public MultipleRequest(SimpleClans plugin, Set<ClanPlayer> acceptors, ClanPlayer requester)
     {
-        super(plugin, requester, message);
+        super(plugin, requester);
         this.acceptors = acceptors;
     }
 
@@ -67,7 +67,7 @@ public abstract class MultipleAcceptorsRequest extends AbstractRequest {
             if (clanPlayer == null) {
                 continue;
             }
-
+                              String query = "SELECT ";
             if (clan.equals(clanPlayer.getClan())) {
                 return true;
             }
@@ -94,6 +94,7 @@ public abstract class MultipleAcceptorsRequest extends AbstractRequest {
         abstains++;
     }
 
+    @Override
     public boolean checkRequest()
     {
         return accepts * 2 > acceptors.size();
@@ -123,6 +124,19 @@ public abstract class MultipleAcceptorsRequest extends AbstractRequest {
     @Override
     public void announceMessage(String message)
     {
+        sendAnnouncerMessage(message);
+        sendRequesterMessage(message);
+    }
+
+    @Override
+    public boolean isAcceptor(ClanPlayer clanPlayer)
+    {
+        return acceptors.contains(clanPlayer);
+    }
+
+    @Override
+    public void sendAnnouncerMessage(String message)
+    {
         for (ClanPlayer clanPlayer : acceptors) {
             Player player = clanPlayer.toPlayer();
 
@@ -132,22 +146,15 @@ public abstract class MultipleAcceptorsRequest extends AbstractRequest {
 
             ChatBlock.sendMessage(player, message);
         }
+    }
 
+    @Override
+    public void sendRequesterMessage(String message)
+    {
         Player player = requester.toPlayer();
 
         if (player != null) {
             ChatBlock.sendMessage(player, message);
         }
-    }
-
-    public void sendRequest()
-    {
-        announceMessage(getMessage());
-    }
-
-    @Override
-    public boolean isAcceptor(ClanPlayer clanPlayer)
-    {
-        return acceptors.contains(clanPlayer);
     }
 }

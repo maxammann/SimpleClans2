@@ -23,22 +23,27 @@ import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.language.Language;
-import com.p000ison.dev.simpleclans2.requests.MultipleAcceptorsRequest;
+import com.p000ison.dev.simpleclans2.requests.MultipleRequest;
 
-import java.text.MessageFormat;
 import java.util.Set;
 
 /**
  * Represents a AllyCreateRequest
  */
-public class RivalryBreakRequest extends MultipleAcceptorsRequest {
+public class RivalryBreakRequest extends MultipleRequest {
 
     private Clan rival;
 
-    public RivalryBreakRequest(SimpleClans plugin, Set<ClanPlayer> acceptors, ClanPlayer requester, Clan clan, Clan rival)
+    public RivalryBreakRequest(SimpleClans plugin, Set<ClanPlayer> acceptors, ClanPlayer requester, Clan rival)
     {
-        super(plugin, acceptors, requester, MessageFormat.format(Language.getTranslation("proposing.to.end.the.rivalry"), clan.getTag(), rival.getTag()));
+        super(plugin, acceptors, requester);
         this.rival = rival;
+    }
+
+    @Override
+    public void onRequesting()
+    {
+        sendAnnouncerMessage(Language.getTranslation("proposing.to.end.the.rivalry", requester.getClan().getTag(), rival.getTag()));
     }
 
     @Override
@@ -65,6 +70,7 @@ public class RivalryBreakRequest extends MultipleAcceptorsRequest {
     @Override
     public void onDenied()
     {
-
+        sendRequesterMessage(Language.getTranslation("rivalry.request.denied", rival.getTag()));
+        sendAnnouncerMessage(Language.getTranslation("rivalry.request.denied", requester.getClan().getTag()));
     }
 }

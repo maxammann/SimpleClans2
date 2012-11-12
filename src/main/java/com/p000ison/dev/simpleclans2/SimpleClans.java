@@ -368,6 +368,7 @@ public class SimpleClans extends JavaPlugin implements Core {
         return this;
     }
 
+    @Override
     public Database getSimpleClansDatabase()
     {
         if (databaseManager == null) {

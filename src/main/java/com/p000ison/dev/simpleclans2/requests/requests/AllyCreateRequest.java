@@ -23,7 +23,7 @@ import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.language.Language;
-import com.p000ison.dev.simpleclans2.requests.MultipleAcceptorsRequest;
+import com.p000ison.dev.simpleclans2.requests.MultipleRequest;
 
 import java.text.MessageFormat;
 import java.util.Set;
@@ -31,14 +31,20 @@ import java.util.Set;
 /**
  * Represents a AllyCreateRequest
  */
-public class AllyCreateRequest extends MultipleAcceptorsRequest {
+public class AllyCreateRequest extends MultipleRequest {
 
     private Clan ally;
 
     public AllyCreateRequest(SimpleClans plugin, Set<ClanPlayer> acceptors, ClanPlayer requester, Clan ally)
     {
-        super(plugin, acceptors, requester, MessageFormat.format(Language.getTranslation("proposing.an.alliance"), requester.getClan().getTag(), ally.getTag()));
+        super(plugin, acceptors, requester);
         this.ally = ally;
+    }
+
+    @Override
+    public void onRequesting()
+    {
+        sendAnnouncerMessage(Language.getTranslation("proposing.an.alliance", requester.getClan().getTag(), ally.getTag()));
     }
 
     @Override
@@ -49,7 +55,6 @@ public class AllyCreateRequest extends MultipleAcceptorsRequest {
 
 
         if (ally != null && clan != null) {
-
             clan.addAlly(ally);
             ally.addAlly(clan);
 
@@ -65,6 +70,7 @@ public class AllyCreateRequest extends MultipleAcceptorsRequest {
     @Override
     public void onDenied()
     {
-
+        sendRequesterMessage(Language.getTranslation("the.alliance.was.denied", ally.getTag()));
+        sendAnnouncerMessage(Language.getTranslation("the.alliance.was.denied", requester.getClan().getTag()));
     }
 }

@@ -29,21 +29,14 @@ import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 public abstract class AbstractRequest implements Request {
 
     protected ClanPlayer requester;
-    private String message;
     private long created;
     protected SimpleClans plugin;
 
-    protected AbstractRequest(SimpleClans plugin, ClanPlayer requester, String message)
+    protected AbstractRequest(SimpleClans plugin, ClanPlayer requester)
     {
         this.plugin = plugin;
         this.requester = requester;
-        this.message = message;
         this.created = System.currentTimeMillis();
-    }
-
-    public String getMessage()
-    {
-        return message;
     }
 
     @Override

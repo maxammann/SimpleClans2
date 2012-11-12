@@ -23,7 +23,7 @@ import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
 import com.p000ison.dev.simpleclans2.language.Language;
-import com.p000ison.dev.simpleclans2.requests.MultipleAcceptorsRequest;
+import com.p000ison.dev.simpleclans2.requests.MultipleRequest;
 import com.p000ison.dev.simpleclans2.requests.Request;
 import com.p000ison.dev.simpleclans2.requests.RequestManager;
 import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
@@ -57,9 +57,7 @@ public class AbstainCommand extends GenericPlayerCommand {
         Request request = plugin.getRequestManager().vote(clanPlayer, RequestManager.Result.ABSTAIN);
 
         if (request != null) {
-            if (request instanceof MultipleAcceptorsRequest) {
-                request.announceMessage(Language.getTranslation("voted.to.abstain", player.getDisplayName()));
-            } else {
+            if (!(request instanceof MultipleRequest)) {
                 ChatBlock.sendMessage(player, "You can only abstein if multi");
             }
         } else {

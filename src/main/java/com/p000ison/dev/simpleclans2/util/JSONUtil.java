@@ -20,6 +20,7 @@
 
 package com.p000ison.dev.simpleclans2.util;
 
+import com.p000ison.dev.simpleclans2.clan.Clan;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
@@ -34,6 +35,21 @@ public final class JSONUtil {
 
     private JSONUtil()
     {
+    }
+
+    public static String clansToJSON(Collection<Clan> clans)
+    {
+        if (clans == null) {
+            return null;
+        }
+
+        JSONArray array = new JSONArray();
+
+        for (Clan clan : clans) {
+            array.add(clan.getId());
+        }
+
+        return array.toJSONString();
     }
 
     public static String collectionToJSON(Collection collection)

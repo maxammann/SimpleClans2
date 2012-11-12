@@ -23,7 +23,7 @@ import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.language.Language;
-import com.p000ison.dev.simpleclans2.requests.MultipleAcceptorsRequest;
+import com.p000ison.dev.simpleclans2.requests.MultipleRequest;
 import org.bukkit.ChatColor;
 
 import java.text.MessageFormat;
@@ -32,14 +32,20 @@ import java.util.Set;
 /**
  * Represents a PromoteRequest
  */
-public class DemoteRequest extends MultipleAcceptorsRequest {
+public class DemoteRequest extends MultipleRequest {
 
     private ClanPlayer targetPlayer;
 
     public DemoteRequest(SimpleClans plugin, Set<ClanPlayer> acceptors, ClanPlayer requester, ClanPlayer targetPlayer)
     {
-        super(plugin, acceptors, requester, MessageFormat.format(Language.getTranslation("asking.for.the.demotion"), requester.getName(), targetPlayer.getName()));
+        super(plugin, acceptors, requester);
         this.targetPlayer = targetPlayer;
+    }
+
+    @Override
+    public void onRequesting()
+    {
+        sendAnnouncerMessage(Language.getTranslation("asking.for.the.demotion", requester.getName(), targetPlayer.getName()));
     }
 
     @Override
@@ -57,6 +63,6 @@ public class DemoteRequest extends MultipleAcceptorsRequest {
     @Override
     public void onDenied()
     {
-
+         sendAnnouncerMessage(Language.getTranslation("demotion.denied"));
     }
 }

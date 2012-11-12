@@ -99,7 +99,7 @@ public class InviteCommand extends GenericPlayerCommand {
                     return;
                 }
 
-                plugin.getRequestManager().createRequest(new InviteRequest(plugin, invitedClanPlayer, cp, cp.getClan()));
+                plugin.getRequestManager().createRequest(new InviteRequest(plugin, invitedClanPlayer, cp));
                 ChatBlock.sendMessage(player, ChatColor.AQUA + MessageFormat.format(Language.getTranslation("has.been.asked.to.join"), invited.getName(), clan.getName()));
 
             } else {

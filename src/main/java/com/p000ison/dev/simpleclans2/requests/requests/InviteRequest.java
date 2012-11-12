@@ -23,18 +23,24 @@ import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.language.Language;
-import com.p000ison.dev.simpleclans2.requests.SingleAcceptorRequest;
+import com.p000ison.dev.simpleclans2.requests.SingleRequest;
 
 import java.text.MessageFormat;
 
 /**
  * Represents a InviteRequest
  */
-public class InviteRequest extends SingleAcceptorRequest {
+public class InviteRequest extends SingleRequest {
 
-    public InviteRequest(SimpleClans plugin, ClanPlayer invited, ClanPlayer requester, Clan clan)
+    public InviteRequest(SimpleClans plugin, ClanPlayer invited, ClanPlayer requester)
     {
-        super(plugin, invited, requester, MessageFormat.format(Language.getTranslation("you.have.been.invited"), clan.getTag()));
+        super(plugin, invited, requester);
+    }
+
+    @Override
+    public void onRequesting()
+    {
+        sendAnnouncerMessage(Language.getTranslation("you.have.been.invited", getAcceptor().getName()));
     }
 
     @Override
@@ -61,6 +67,6 @@ public class InviteRequest extends SingleAcceptorRequest {
     @Override
     public void onDenied()
     {
-
+        sendRequesterMessage(Language.getTranslation("membership.invitation", getAcceptor().getName()));
     }
 }

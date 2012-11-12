@@ -36,6 +36,7 @@ public class SQLiteDatabase extends AbstractDatabase {
         super(databaseConfiguration);
     }
 
+    @Override
     protected Connection initialize() throws SQLException
     {
         try {
