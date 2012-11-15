@@ -22,7 +22,7 @@ package com.p000ison.dev.simpleclans2.database.data;
 /**
  * Represents a Conflicts
  */
-public class Conflicts {
+public class Conflicts implements Comparable<Conflicts> {
     private long attacker, victim;
     private int conflicts;
 
@@ -65,5 +65,13 @@ public class Conflicts {
         int result = (int) (attacker ^ (attacker >>> 32));
         result = 31 * result + (int) (victim ^ (victim >>> 32));
         return result;
+    }
+
+    @Override
+    public int compareTo(Conflicts o)
+    {
+        int thisVal = this.conflicts;
+        int anotherVal = o.conflicts;
+        return (thisVal < anotherVal ? 1 : (thisVal == anotherVal ? 0 : -1));
     }
 }

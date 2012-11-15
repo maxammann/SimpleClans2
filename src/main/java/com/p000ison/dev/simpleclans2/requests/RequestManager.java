@@ -61,7 +61,6 @@ public class RequestManager {
             }
         }
 
-
         requests.add(created);
         created.onRequesting();
         return true;
@@ -107,6 +106,7 @@ public class RequestManager {
                 } else {
                     //check if everyone has voted if yes and no success -> remove
                     if (request.hasEveryoneVoted()) {
+                        request.onDenied();
                         it.remove();
                     }
                 }
@@ -151,9 +151,11 @@ public class RequestManager {
         while (it.hasNext()) {
             AbstractRequest request = it.next();
 
-            if (request.isClanPlayerInvolved(clanPlayer)) {
+            if (request.isRequester(clanPlayer)) {
                 it.remove();
                 return;
+            } else if (request.isAcceptor(clanPlayer)) {
+                this.vote(clanPlayer, Result.ABSTAIN);
             }
         }
     }

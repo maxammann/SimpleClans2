@@ -67,7 +67,7 @@ public abstract class MultipleRequest extends AbstractRequest {
             if (clanPlayer == null) {
                 continue;
             }
-                              String query = "SELECT ";
+            String query = "SELECT ";
             if (clan.equals(clanPlayer.getClan())) {
                 return true;
             }
@@ -156,5 +156,17 @@ public abstract class MultipleRequest extends AbstractRequest {
         if (player != null) {
             ChatBlock.sendMessage(player, message);
         }
+    }
+
+    @Override
+    public int getTimesVoted()
+    {
+        return accepts + denies + abstains;
+    }
+
+    @Override
+    public int getAcceptorsSize()
+    {
+        return acceptors.size();
     }
 }

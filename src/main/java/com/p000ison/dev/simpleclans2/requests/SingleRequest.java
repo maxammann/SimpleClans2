@@ -120,4 +120,15 @@ public abstract class SingleRequest extends AbstractRequest {
             ChatBlock.sendMessage(requesterPlayer, message);
         }
     }
+
+    @Override
+    public int getTimesVoted()
+    {
+        return !accepted ? 0 : 1;
+    }
+    @Override
+    public int getAcceptorsSize()
+    {
+        return 1;
+    }
 }

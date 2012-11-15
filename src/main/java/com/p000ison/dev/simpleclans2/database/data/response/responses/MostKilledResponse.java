@@ -29,7 +29,7 @@ import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
-import java.util.Set;
+import java.util.List;
 
 /**
  * Represents a KillsResponse
@@ -54,7 +54,7 @@ public class MostKilledResponse extends Response {
 
         chatBlock.addRow("  " + headColor + Language.getTranslation("victim"), headColor + Language.getTranslation("killcount"), headColor + Language.getTranslation("attacker"));
 
-        Set<Conflicts> mostKilledSet = plugin.getDataManager().getMostKilled();
+        List<Conflicts> mostKilledSet = plugin.getDataManager().getMostKilled();
 
         if (mostKilledSet.isEmpty()) {
             ChatBlock.sendMessage(sender, ChatColor.RED + Language.getTranslation("nokillsfound"));
@@ -63,16 +63,15 @@ public class MostKilledResponse extends Response {
 
         int[] boundings = getBoundings(mostKilledSet.size(), page);
 
-        int i = 0;
-        for (Conflicts conflict : mostKilledSet) {
-            if (i < boundings[0]) {
-                continue;
-            } else if (i > boundings[1]) {
-                break;
-            }
+        for (int i = boundings[0]; i < boundings[1]; i++) {
+            Conflicts conflict = mostKilledSet.get(i);
 
             ClanPlayer attacker = plugin.getClanPlayerManager().getClanPlayer(conflict.getAttacker());
             ClanPlayer victim = plugin.getClanPlayerManager().getClanPlayer(conflict.getVictim());
+
+            if (attacker == null || victim == null) {
+                continue;
+            }
 
             chatBlock.addRow("  " + ChatColor.WHITE + victim.getName(), ChatColor.AQUA.toString() + conflict.getConflicts(), ChatColor.YELLOW + attacker.getName());
         }

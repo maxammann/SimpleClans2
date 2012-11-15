@@ -129,4 +129,9 @@ public interface Request {
      */
     void onDenied();
 
+    boolean isRequester(ClanPlayer clanPlayer);
+
+    int getTimesVoted();
+
+    int getAcceptorsSize();
 }

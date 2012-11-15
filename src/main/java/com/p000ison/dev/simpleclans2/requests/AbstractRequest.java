@@ -50,4 +50,10 @@ public abstract class AbstractRequest implements Request {
     {
         return created;
     }
+
+    @Override
+    public boolean isRequester(ClanPlayer clanPlayer)
+    {
+        return requester.equals(clanPlayer);
+    }
 }

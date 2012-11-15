@@ -102,6 +102,8 @@ public class RosterAnyCommand extends GenericPlayerCommand {
                 chatBlock.addRow(leaders.get(i).getRosterRow());
             }
 
+            i = 0;
+
             for (; i < end && i < members.size(); i++) {
                 chatBlock.addRow(members.get(i).getRosterRow());
             }

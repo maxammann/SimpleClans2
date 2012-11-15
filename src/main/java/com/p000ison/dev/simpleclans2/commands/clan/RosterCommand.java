@@ -98,7 +98,7 @@ public class RosterCommand extends GenericPlayerCommand {
             List<ClanPlayer> leaders = new ArrayList<ClanPlayer>(clan.getLeaders());
             Collections.sort(leaders, new LastSeenComparator());
 
-            List<ClanPlayer> members = new ArrayList<ClanPlayer>(clan.getLeaders());
+            List<ClanPlayer> members = new ArrayList<ClanPlayer>(clan.getMembers());
             Collections.sort(members, new LastSeenComparator());
 
             int[] boundings = getBoundings(leaders.size() + members.size(), page);
@@ -109,6 +109,8 @@ public class RosterCommand extends GenericPlayerCommand {
             for (; i < end && i < leaders.size(); i++) {
                 chatBlock.addRow(leaders.get(i).getRosterRow());
             }
+
+            i = 0;
 
             for (; i < end && i < members.size(); i++) {
                 chatBlock.addRow(members.get(i).getRosterRow());

@@ -735,9 +735,9 @@ public class DataManager {
      *
      * @return A map of tag->count of all kills
      */
-    public Set<Conflicts> getMostKilled()
+    public List<Conflicts> getMostKilled()
     {
-        Set<Conflicts> out = new TreeSet<Conflicts>();
+        List<Conflicts> out = new ArrayList<Conflicts>();
         try {
             ResultSet res = RETRIEVE_MOST_KILLS.executeQuery();
 

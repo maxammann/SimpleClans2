@@ -694,7 +694,7 @@ public class ClanPlayer implements KDR, Balance, UpdateAble {
     {
         String name = plugin.getSettingsManager().getLeaderColor() + this.getName();
         String lastSeen = (GeneralHelper.isOnline(toPlayer()) ? ChatColor.GREEN + Language.getTranslation("online") : ChatColor.WHITE + this.getLastSeen());
-        return new Row(name, ChatColor.YELLOW + this.getRank().getTag(), lastSeen);
+        return new Row(name, ChatColor.YELLOW + (getRank() == null ? Language.getTranslation("none") : getRank().getTag()), lastSeen);
     }
 
     @Override

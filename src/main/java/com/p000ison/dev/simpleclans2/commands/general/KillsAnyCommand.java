@@ -52,7 +52,7 @@ public class KillsAnyCommand extends GenericConsoleCommand {
     @Override
     public void execute(CommandSender sender, String[] args)
     {
-        ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(args[0]);
+        ClanPlayer cp = plugin.getClanPlayerManager().getAnyClanPlayer(args[0]);
 
         if (cp == null) {
             ChatBlock.sendMessage(sender, ChatColor.DARK_RED + Language.getTranslation("no.player.matched"));
