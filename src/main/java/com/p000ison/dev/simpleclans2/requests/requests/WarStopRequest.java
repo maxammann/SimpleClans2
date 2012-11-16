@@ -24,6 +24,7 @@ import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.language.Language;
 import com.p000ison.dev.simpleclans2.requests.MultipleRequest;
+import org.bukkit.ChatColor;
 
 import java.util.Set;
 
@@ -43,7 +44,7 @@ public class WarStopRequest extends MultipleRequest {
     @Override
     public void onRequesting()
     {
-        sendAnnouncerMessage(Language.getTranslation("proposing.to.end.the.war", requester.getClan().getTag(), warring.getTag()));
+        sendAnnouncerMessage(ChatColor.AQUA + Language.getTranslation("proposing.to.end.the.war", requester.getClan().getTag(), warring.getTag()));
     }
 
     @Override
@@ -69,7 +70,7 @@ public class WarStopRequest extends MultipleRequest {
     @Override
     public void onDenied()
     {
-        sendRequesterMessage(Language.getTranslation("peace.agreement.denied", warring.getTag()));
-        sendAnnouncerMessage(Language.getTranslation("peace.agreement.denied", requester.getClan().getTag()));
+        sendRequesterMessage(ChatColor.DARK_RED + Language.getTranslation("peace.agreement.denied", warring.getTag()));
+        sendAnnouncerMessage(ChatColor.DARK_RED + Language.getTranslation("peace.agreement.denied", requester.getClan().getTag()));
     }
 }

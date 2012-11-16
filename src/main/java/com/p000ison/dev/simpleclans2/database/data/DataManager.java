@@ -106,7 +106,7 @@ public class DataManager {
         INSERT_RANK = database.prepareStatement("INSERT INTO `sc2_ranks` ( `name`, `tag`, `priority`, `clan` ) VALUES ( ?, ?, ?, ? );");
         UPDATE_RANK = database.prepareStatement("UPDATE `sc2_ranks` SET name = ?, tag = ?, permissions = ?, priority = ? WHERE clan = ?;");
         RETRIEVE_RANK_BY_NAME = database.prepareStatement("SELECT id FROM `sc2_ranks` WHERE name = ? AND clan = ?;");
-
+        DELETE_RANK_BY_ID = database.prepareStatement("DELETE FROM `sc2_ranks` WHERE id = ?;");
         RETRIEVE_BB_LIMIT = database.prepareStatement("SELECT `text` FROM `sc2_bb` WHERE clan = ? ORDER BY `date` LIMIT ?, ?;");
         INSERT_BB = database.prepareStatement("INSERT INTO `sc2_bb` ( `clan`, `text` ) VALUES ( ?, ? );");
         PURGE_BB = database.prepareStatement("DELETE FROM `sc2_bb` WHERE clan = ?;");

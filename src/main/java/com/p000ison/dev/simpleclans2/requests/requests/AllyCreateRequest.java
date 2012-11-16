@@ -24,6 +24,7 @@ import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.language.Language;
 import com.p000ison.dev.simpleclans2.requests.MultipleRequest;
+import org.bukkit.ChatColor;
 
 import java.text.MessageFormat;
 import java.util.Set;
@@ -44,7 +45,7 @@ public class AllyCreateRequest extends MultipleRequest {
     @Override
     public void onRequesting()
     {
-        sendAnnouncerMessage(Language.getTranslation("proposing.an.alliance", requester.getClan().getTag(), ally.getTag()));
+        sendAnnouncerMessage(ChatColor.AQUA + Language.getTranslation("proposing.an.alliance", requester.getClan().getTag(), ally.getTag()));
     }
 
     @Override
@@ -70,7 +71,7 @@ public class AllyCreateRequest extends MultipleRequest {
     @Override
     public void onDenied()
     {
-        sendRequesterMessage(Language.getTranslation("the.alliance.was.denied", ally.getTag()));
-        sendAnnouncerMessage(Language.getTranslation("the.alliance.was.denied", requester.getClan().getTag()));
+        sendRequesterMessage(ChatColor.DARK_RED + Language.getTranslation("the.alliance.was.denied", ally.getTag()));
+        sendAnnouncerMessage(ChatColor.DARK_RED + Language.getTranslation("the.alliance.was.denied", requester.getClan().getTag()));
     }
 }

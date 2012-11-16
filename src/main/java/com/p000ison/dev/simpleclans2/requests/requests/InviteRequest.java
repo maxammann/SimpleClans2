@@ -24,6 +24,7 @@ import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.language.Language;
 import com.p000ison.dev.simpleclans2.requests.SingleRequest;
+import org.bukkit.ChatColor;
 
 import java.text.MessageFormat;
 
@@ -40,7 +41,7 @@ public class InviteRequest extends SingleRequest {
     @Override
     public void onRequesting()
     {
-        sendAnnouncerMessage(Language.getTranslation("you.have.been.invited", getAcceptor().getName()));
+        sendAnnouncerMessage(ChatColor.AQUA + Language.getTranslation("you.have.been.invited", getAcceptor().getName()));
     }
 
     @Override
@@ -67,6 +68,6 @@ public class InviteRequest extends SingleRequest {
     @Override
     public void onDenied()
     {
-        sendRequesterMessage(Language.getTranslation("membership.invitation", getAcceptor().getName()));
+        sendRequesterMessage(ChatColor.DARK_RED + Language.getTranslation("membership.invitation", getAcceptor().getName()));
     }
 }

@@ -24,6 +24,7 @@ import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.language.Language;
 import com.p000ison.dev.simpleclans2.requests.MultipleRequest;
+import org.bukkit.ChatColor;
 
 import java.util.Set;
 
@@ -43,7 +44,7 @@ public class RivalryBreakRequest extends MultipleRequest {
     @Override
     public void onRequesting()
     {
-        sendAnnouncerMessage(Language.getTranslation("proposing.to.end.the.rivalry", requester.getClan().getTag(), rival.getTag()));
+        sendAnnouncerMessage(ChatColor.AQUA + Language.getTranslation("proposing.to.end.the.rivalry", requester.getClan().getTag(), rival.getTag()));
     }
 
     @Override
@@ -70,7 +71,7 @@ public class RivalryBreakRequest extends MultipleRequest {
     @Override
     public void onDenied()
     {
-        sendRequesterMessage(Language.getTranslation("rivalry.request.denied", rival.getTag()));
-        sendAnnouncerMessage(Language.getTranslation("rivalry.request.denied", requester.getClan().getTag()));
+        sendRequesterMessage(ChatColor.DARK_RED + Language.getTranslation("rivalry.request.denied", rival.getTag()));
+        sendAnnouncerMessage(ChatColor.DARK_RED + Language.getTranslation("rivalry.request.denied", requester.getClan().getTag()));
     }
 }

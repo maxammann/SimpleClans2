@@ -53,27 +53,22 @@ import java.util.*;
  */
 public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble {
 
+    public static final SimpleDateFormat DATE_FORMAT = new java.text.SimpleDateFormat("MMM dd, yyyy h:mm a");
+    public static final NumberFormat DECIMAL_FORMAT = new DecimalFormat("#.#");
     private final SimpleClans plugin;
-
     private ClanFlags flags;
     private BankAccount bank;
-
     private long id = -1;
     private String tag, name;
     private long foundedDate;
     private long lastActionDate;
     private boolean verified;
-
     private Set<Clan> allies;
     private Set<Clan> rivals;
     private Set<Clan> warring;
     private Set<ClanPlayer> allMembers;
     private Set<Rank> ranks;
-
     private boolean update;
-
-    public static final SimpleDateFormat DATE_FORMAT = new java.text.SimpleDateFormat("MMM dd, yyyy h:mm a");
-    public static final NumberFormat DECIMAL_FORMAT = new DecimalFormat("#.#");
 
     /**
      * Creates a new clan
@@ -213,6 +208,16 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble {
     public long getLastActionDate()
     {
         return lastActionDate;
+    }
+
+    /**
+     * Sets the date when the last action happened.
+     *
+     * @param lastActionDate The date when the last action happened.
+     */
+    public void setLastActionDate(long lastActionDate)
+    {
+        this.lastActionDate = lastActionDate;
     }
 
     /**
@@ -431,17 +436,6 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble {
         return (int) Math.round(DateHelper.differenceInDays(lastActionDate, System.currentTimeMillis()));
     }
 
-
-    /**
-     * Sets the date when the last action happened.
-     *
-     * @param lastActionDate The date when the last action happened.
-     */
-    public void setLastActionDate(long lastActionDate)
-    {
-        this.lastActionDate = lastActionDate;
-    }
-
     /**
      * Sets the leader of this clan
      *
@@ -602,7 +596,6 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble {
         clanPlayer.update();
     }
 
-
     /**
      * Gets the total kdr of all members
      *
@@ -648,7 +641,6 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble {
         addBBRawMessage(ChatBlock.parseColors(plugin.getSettingsManager().getClanPlayerBB().replace("+player", announcer.getName()).replace("+message", msg)));
     }
 
-
     /**
      * Adds a message to the bb
      *
@@ -661,7 +653,6 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble {
         announce(msg);
         addBBRawMessage(msg);
     }
-
 
     /**
      * Announces a message to all clan members
@@ -1038,7 +1029,6 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble {
         ranks.add(rank);
     }
 
-
     /**
      * Removes a rank and removes them also from the players
      *
@@ -1085,9 +1075,12 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble {
             if (rank.getTag().startsWith(tag)) {
                 long id = rank.getId();
                 for (ClanPlayer member : allMembers) {
-                    if (member.getRank().equals(rank)) {
-                        member.setRank(null);
-                        member.update();
+                    Rank memberRank = member.getRank();
+                    if (memberRank != null) {
+                        if (memberRank.equals(rank)) {
+                            member.setRank(null);
+                            member.update();
+                        }
                     }
                 }
                 it.remove();
@@ -1106,7 +1099,6 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble {
     {
         return ranks == null ? Collections.unmodifiableSet(new HashSet<Rank>()) : Collections.unmodifiableSet(ranks);
     }
-
 
     /**
      * Loads the ranks for this clan
@@ -1160,7 +1152,6 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble {
 
         return null;
     }
-
 
     /**
      * Turns the most important information about this clan into a string

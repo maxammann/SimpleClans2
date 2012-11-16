@@ -96,11 +96,10 @@ public class AllyCommand extends GenericPlayerCommand {
                 return;
             }
 
-            if (action.equals(Language.getTranslation("add"))) {
+            if (action.equalsIgnoreCase(Language.getTranslation("add"))) {
                 if (!clan.isAlly(ally)) {
 
-                    Set<ClanPlayer> leaders = ally.getLeaders();
-                    GeneralHelper.stripOfflinePlayers(leaders);
+                    Set<ClanPlayer> leaders = GeneralHelper.stripOfflinePlayers(ally.getLeaders());
 
                     if (!leaders.isEmpty()) {
                         plugin.getRequestManager().createRequest(new AllyCreateRequest(plugin, leaders, cp, ally));
@@ -111,7 +110,7 @@ public class AllyCommand extends GenericPlayerCommand {
                 } else {
                     ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("your.clans.are.already.allies"));
                 }
-            } else if (action.equals(Language.getTranslation("remove"))) {
+            } else if (action.equalsIgnoreCase(Language.getTranslation("remove"))) {
                 if (clan.isAlly(ally)) {
                     clan.removeAlly(ally);
                     ally.removeAlly(clan);

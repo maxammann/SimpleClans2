@@ -29,14 +29,6 @@ import java.util.TreeMap;
  * Represents a Rank
  */
 public class Rank implements Comparable<Rank> {
-    private long id;
-
-    private String name;
-    private String tag;
-    private Map<Integer, Boolean> permissions;
-    private int priority;
-    private boolean update;
-
     private static final Map<java.lang.Integer, String> availablePermissions = new TreeMap<java.lang.Integer, String>();
 
     static {
@@ -53,26 +45,12 @@ public class Rank implements Comparable<Rank> {
         availablePermissions.put(6, "bank.withdraw");
     }
 
-    /**
-     * Adds a available permission.
-     *
-     * @param permission The permission.
-     * @param id         The assigned id.
-     */
-    public static void addAvailablePermission(String permission, int id)
-    {
-        availablePermissions.put(id, permission);
-    }
-
-    /**
-     * Gets all available permission
-     *
-     * @return The available permissions.
-     */
-    public static Map<Integer, String> getAvailablePermissions()
-    {
-        return availablePermissions;
-    }
+    private long id;
+    private String name;
+    private String tag;
+    private Map<Integer, Boolean> permissions;
+    private int priority;
+    private boolean update;
 
     /**
      * Creates a new rank
@@ -124,6 +102,41 @@ public class Rank implements Comparable<Rank> {
         this.id = id;
     }
 
+    /**
+     * Adds a available permission.
+     *
+     * @param permission The permission.
+     * @param id         The assigned id.
+     */
+    public static void addAvailablePermission(String permission, int id)
+    {
+        availablePermissions.put(id, permission);
+    }
+
+    /**
+     * Gets all available permission
+     *
+     * @return The available permissions.
+     */
+    public static Map<Integer, String> getAvailablePermissions()
+    {
+        return availablePermissions;
+    }
+
+    public static int getID(String permission)
+    {
+        for (Map.Entry<Integer, String> entry : availablePermissions.entrySet()) {
+            if (entry.getValue().equals(permission)) {
+                return entry.getKey();
+            }
+        }
+        return -1;
+    }
+
+    public boolean removePermission(String permission)
+    {
+        return permissions.remove(getID(permission));
+    }
 
     /**
      * Checks if this permission has the permission.
@@ -157,16 +170,6 @@ public class Rank implements Comparable<Rank> {
         return permission;
     }
 
-    public static int getID(String permission)
-    {
-        for (Map.Entry<Integer, String> entry : availablePermissions.entrySet()) {
-            if (entry.getValue().equals(permission)) {
-                return entry.getKey();
-            }
-        }
-        return -1;
-    }
-
     public boolean isNegative(String permission)
     {
         return isNegative(getID(permission));
@@ -181,7 +184,6 @@ public class Rank implements Comparable<Rank> {
     {
         return name;
     }
-
 
     /**
      * Adds a permission to this rank. This implements a low searching method.

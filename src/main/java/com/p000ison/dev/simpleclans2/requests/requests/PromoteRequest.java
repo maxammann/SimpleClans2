@@ -24,6 +24,7 @@ import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.language.Language;
 import com.p000ison.dev.simpleclans2.requests.MultipleRequest;
+import org.bukkit.ChatColor;
 
 import java.text.MessageFormat;
 import java.util.Set;
@@ -44,7 +45,7 @@ public class PromoteRequest extends MultipleRequest {
     @Override
     public void onRequesting()
     {
-        sendAnnouncerMessage(Language.getTranslation("asking.for.the.promotion", requester.getName(), targetPlayer.getName()));
+        sendAnnouncerMessage(ChatColor.AQUA + Language.getTranslation("asking.for.the.promotion", requester.getName(), targetPlayer.getName()));
     }
 
     @Override
@@ -66,6 +67,6 @@ public class PromoteRequest extends MultipleRequest {
     @Override
     public void onDenied()
     {
-        announceMessage(Language.getTranslation("promotion.denied", targetPlayer.getName()));
+        announceMessage(ChatColor.DARK_RED + Language.getTranslation("promotion.denied", targetPlayer.getName()));
     }
 }

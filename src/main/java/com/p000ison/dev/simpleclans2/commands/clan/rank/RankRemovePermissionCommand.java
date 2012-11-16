@@ -14,32 +14,33 @@
  *     You should have received a copy of the GNU General Public License
  *     along with SimpleClans2.  If not, see <http://www.gnu.org/licenses/>.
  *
- *     Last modified: 10/20/12 5:08 PM
+ *     Last modified: 16.11.12 19:57
  */
 
 package com.p000ison.dev.simpleclans2.commands.clan.rank;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
+import com.p000ison.dev.simpleclans2.clan.ranks.Rank;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
-import com.p000ison.dev.simpleclans2.database.data.statements.RemoveRankStatement;
 import com.p000ison.dev.simpleclans2.language.Language;
 import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 /**
- * Represents a RankCreateCommand
+ * Represents a RankSetCommand
  */
-public class RankDeleteCommand extends GenericPlayerCommand {
+public class RankRemovePermissionCommand extends GenericPlayerCommand {
 
-    public RankDeleteCommand(SimpleClans plugin)
+
+    public RankRemovePermissionCommand(SimpleClans plugin)
     {
-        super("RankDelete", plugin);
-        setArgumentRange(1, 1);
-        setUsages(Language.getTranslation("usage.rank.delete", plugin.getSettingsManager().getRankCommand()));
-        setIdentifiers(Language.getTranslation("rank.delete.command"));
+        super("RankRemovePermission", plugin);
+        setArgumentRange(2, 2);
+        setUsages(Language.getTranslation("usage.rank.remove.permission", plugin.getSettingsManager().getRankCommand()));
+        setIdentifiers(Language.getTranslation("rank.remove.permission.command"));
         setType(Type.RANK);
     }
 
@@ -47,7 +48,7 @@ public class RankDeleteCommand extends GenericPlayerCommand {
     public String getMenu(ClanPlayer clanPlayer)
     {
         if (clanPlayer != null && (clanPlayer.isLeader() || clanPlayer.hasRankPermission("manage.ranks"))) {
-            return Language.getTranslation("menu.rank.delete", plugin.getSettingsManager().getRankCommand());
+            return Language.getTranslation("menu.rank.remove.permission", plugin.getSettingsManager().getRankCommand());
         }
         return null;
     }
@@ -69,15 +70,23 @@ public class RankDeleteCommand extends GenericPlayerCommand {
             return;
         }
 
-        long response = clan.deleteRank(args[0]);
+        Rank rank = clan.getRank(args[0]);
 
-        if (response == -1) {
+        if (rank == null) {
             ChatBlock.sendMessage(player, ChatColor.DARK_RED + Language.getTranslation("rank.not.found"));
             return;
         }
 
-        plugin.getDataManager().addStatement(new RemoveRankStatement(response));
+        String permission = args[1];
 
-        ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("rank.deleted"));
+        boolean success = rank.removePermission(permission);
+
+        if (!success) {
+            ChatBlock.sendMessage(player, ChatColor.DARK_RED + Language.getTranslation("permission.not.found"));
+            return;
+        }
+
+        rank.update(true);
+        ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("rank.permission.removed", permission, rank.getName()));
     }
 }

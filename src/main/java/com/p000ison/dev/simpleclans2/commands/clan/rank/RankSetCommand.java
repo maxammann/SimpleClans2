@@ -72,14 +72,14 @@ public class RankSetCommand extends GenericPlayerCommand {
         ClanPlayer query = plugin.getClanPlayerManager().getClanPlayer(args[0]);
 
         if (query == null || !query.getClan().equals(clan)) {
-            ChatBlock.sendMessage(player, Language.getTranslation("the.player.is.not.a.member.of.your.clan"));
+            ChatBlock.sendMessage(player, ChatColor.DARK_RED + Language.getTranslation("the.player.is.not.a.member.of.your.clan"));
             return;
         }
 
         Rank rank = clan.getRank(args[1]);
 
         if (rank == null) {
-            ChatBlock.sendMessage(player, Language.getTranslation("rank.not.found"));
+            ChatBlock.sendMessage(player, ChatColor.DARK_RED + Language.getTranslation("rank.not.found"));
             return;
         }
 
