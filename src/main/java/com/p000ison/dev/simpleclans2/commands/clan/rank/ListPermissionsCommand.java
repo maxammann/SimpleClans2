@@ -31,17 +31,17 @@ import org.bukkit.command.CommandSender;
 import java.util.Map;
 
 /**
- * Represents a ViewPermissionsCommand
+ * Represents a ListPermissionsCommand
  */
-public class ViewPermissionsCommand extends GenericConsoleCommand {
+public class ListPermissionsCommand extends GenericConsoleCommand {
 
-    public ViewPermissionsCommand(SimpleClans plugin)
+    public ListPermissionsCommand(SimpleClans plugin)
     {
         super("ViewPermissions", plugin);
         setArgumentRange(0, 0);
         setUsages(Language.getTranslation("usage.view.permissions", plugin.getSettingsManager().getRankCommand()));
         setIdentifiers(Language.getTranslation("view.permissions.command"));
-        setPermission("simpleclans.rank.view.permissions");
+        setPermission("simpleclans.leader.rank.permissions.list");
         setType(Type.RANK);
     }
 

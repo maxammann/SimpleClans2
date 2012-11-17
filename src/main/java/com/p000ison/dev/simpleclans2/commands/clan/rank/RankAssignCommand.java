@@ -30,16 +30,17 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 /**
- * Represents a RankSetCommand
+ * Represents a RankAssignCommand
  */
-public class RankSetCommand extends GenericPlayerCommand {
+public class RankAssignCommand extends GenericPlayerCommand {
 
-    public RankSetCommand(SimpleClans plugin)
+    public RankAssignCommand(SimpleClans plugin)
     {
-        super("RankSet", plugin);
+        super("RankAssign", plugin);
         setArgumentRange(2, 2);
-        setUsages(Language.getTranslation("usage.rank.set", plugin.getSettingsManager().getRankCommand()));
-        setIdentifiers(Language.getTranslation("rank.set.command"));
+        setUsages(Language.getTranslation("usage.rank.assign", plugin.getSettingsManager().getRankCommand()));
+        setIdentifiers(Language.getTranslation("rank.assign.command"));
+        setPermission("simpleclans.leader.rank.assign");
         setType(Type.RANK);
     }
 
@@ -47,7 +48,7 @@ public class RankSetCommand extends GenericPlayerCommand {
     public String getMenu(ClanPlayer clanPlayer)
     {
         if (clanPlayer != null && (clanPlayer.isLeader() || clanPlayer.hasRankPermission("manage.ranks"))) {
-            return Language.getTranslation("menu.rank.set", plugin.getSettingsManager().getRankCommand());
+            return Language.getTranslation("menu.rank.assign", plugin.getSettingsManager().getRankCommand());
         }
         return null;
     }
@@ -83,8 +84,8 @@ public class RankSetCommand extends GenericPlayerCommand {
             return;
         }
 
-        query.setRank(rank);
+        query.assignRank(rank);
         query.update();
-        ChatBlock.sendMessage(player, Language.getTranslation("rank.set", query.getName(), rank.getName()));
+        ChatBlock.sendMessage(player, Language.getTranslation("rank.assigned", query.getName(), rank.getName()));
     }
 }

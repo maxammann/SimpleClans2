@@ -67,7 +67,7 @@ public class HomeCommand extends GenericPlayerCommand {
                 if (cp.isTrusted()) {
                     if (player.hasPermission("simpleclans.member.home")) {
 
-                        if (SimpleClans.hasEconomy() && plugin.getSettingsManager().isPurchaseTeleport() && !SimpleClans.withdrawBalance(player.getName(), plugin.getSettingsManager().getPurchaseTeleportPrice())) {
+                        if (SimpleClans.hasEconomy() && plugin.getSettingsManager().isPurchaseTeleport() && !cp.withdraw(plugin.getSettingsManager().getPurchaseTeleportPrice())) {
                             ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("not.sufficient.money"));
                             return;
                         }

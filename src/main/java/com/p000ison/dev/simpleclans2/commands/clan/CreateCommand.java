@@ -80,7 +80,7 @@ public class CreateCommand extends GenericPlayerCommand {
             return;
         }
 
-        if (SimpleClans.hasEconomy() && plugin.getSettingsManager().isPurchaseCreation() && !SimpleClans.withdrawBalance(player.getName(), plugin.getSettingsManager().getPurchaseCreationPrice())) {
+        if (SimpleClans.hasEconomy() && plugin.getSettingsManager().isPurchaseCreation() && !cp.withdraw(plugin.getSettingsManager().getPurchaseCreationPrice())) {
             ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("not.sufficient.money"));
             return;
         }

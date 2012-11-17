@@ -1046,7 +1046,7 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble {
         if (ranks.remove(rank)) {
             for (ClanPlayer member : allMembers) {
                 if (member.getRank().equals(rank)) {
-                    member.setRank(null);
+                    member.assignRank(null);
                     member.update();
                 }
             }
@@ -1078,7 +1078,7 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble {
                     Rank memberRank = member.getRank();
                     if (memberRank != null) {
                         if (memberRank.equals(rank)) {
-                            member.setRank(null);
+                            member.assignRank(null);
                             member.update();
                         }
                     }

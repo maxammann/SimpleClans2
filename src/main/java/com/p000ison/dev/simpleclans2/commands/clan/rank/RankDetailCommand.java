@@ -32,17 +32,17 @@ import org.bukkit.entity.Player;
 import java.util.Map;
 
 /**
- * Represents a ViewPermissionsCommand
+ * Represents a ListPermissionsCommand
  */
-public class ViewRankCommand extends GenericPlayerCommand {
+public class RankDetailCommand extends GenericPlayerCommand {
 
-    public ViewRankCommand(SimpleClans plugin)
+    public RankDetailCommand(SimpleClans plugin)
     {
         super("ViewRank", plugin);
         setArgumentRange(1, 1);
         setUsages(Language.getTranslation("usage.view.rank", plugin.getSettingsManager().getRankCommand()));
         setIdentifiers(Language.getTranslation("view.rank.command"));
-        setPermission("simpleclans.rank.view.rank");
+        setPermission("simpleclans.leader.rank.detail");
         setType(Type.RANK);
     }
 

@@ -36,17 +36,17 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Represents a ViewPermissionsCommand
+ * Represents a ListPermissionsCommand
  */
-public class ViewRanksCommand extends GenericPlayerCommand {
+public class ListRanksCommand extends GenericPlayerCommand {
 
-    public ViewRanksCommand(SimpleClans plugin)
+    public ListRanksCommand(SimpleClans plugin)
     {
-        super("ViewRanks", plugin);
+        super("ListRanks", plugin);
         setArgumentRange(0, 0);
         setUsages(Language.getTranslation("usage.view.ranks", plugin.getSettingsManager().getRankCommand()));
         setIdentifiers(Language.getTranslation("view.ranks.command"));
-        setPermission("simpleclans.rank.view.ranks");
+        setPermission("simpleclans.leader.rank.list");
         setType(Type.RANK);
     }
 

@@ -60,6 +60,8 @@ permissions:
     description: Can view his clan's bulletin board
   simpleclans.member.bb-add:
     description: Can add to his clan's bulletin board
+  simpleclans.member.bb-clear:
+    description: Can clear the bulletin board
   simpleclans.member.toggle.bb:
     description: Can toggle bb on/off
   simpleclans.member.ff:
@@ -114,14 +116,42 @@ permissions:
     description: Can start wars
   simpleclans.leader.setrank:
     description: Can set ranks
-  simpleclans.member.bank:
-    description: Can use banks
-  simpleclans.admin.*:
-    description: Permissions for admins
-    default: op
-    children:
-      simpleclans.admin.reload: true
-      simpleclans.admin.all-seeing-eye: true
+  simpleclans.admin.convert:
+    description: Can convert from old versions
+  simpleclans.admin.info:
+    description: Can view information about SC
+  simpleclans.admin.save:
+    description: Can force a save
+  simpleclans.admin.upgrade:
+    description: Can upgrade the plugin
+  simpleclans.member.bank.balance:
+    description: Can view the balance of the clan
+  simpleclans.member.bank.deposit:
+    description: Can deposit money in the clan bank
+  simpleclans.member.bank.withdraw:
+    description: Can withdraw money from the clan bank
+  simpleclans.leader.rank.permissions.add:
+    description: Can add permissions to a rank
+  simpleclans.leader.rank.permissions.remove:
+    description: Can remove permissions from a rank
+  simpleclans.leader.rank.permissions.list:
+    description: Can list all available permissions
+  simpleclans.leader.rank.create:
+    description: Can create a new rank
+  simpleclans.leader.rank.delete:
+    description: Can delete a new rank
+  simpleclans.leader.rank.detail:
+    description: Can view details about a rank
+  simpleclans.leader.rank.assign:
+    description: Can assign a rank to a user
+  simpleclans.leader.rank.list:
+    description: Can list all the ranks
+  simpleclans.member.accept:
+    description: Can accept
+  simpleclans.member.deny:
+    description: Can deny
+  simpleclans.member.abstain:
+    description: Can abstain
   simpleclans.mod.*:
     description: Permissions for moderators
     default: op
@@ -138,7 +168,7 @@ permissions:
       simpleclans.mod.unban: true
   simpleclans.anyone.*:
     description: Permissions for anyone
-    default: false
+    default: true
     children:
       simpleclans.anyone.list: true
       simpleclans.anyone.profile: true
@@ -147,10 +177,12 @@ permissions:
       simpleclans.anyone.leaderboard: true
       simpleclans.anyone.alliances: true
       simpleclans.anyone.rivalries: true
+      simpleclans.anyone.kills: true
   simpleclans.member.*:
     description: Permissions for those who can be clan members
     default: false
     children:
+      simpleclans.anyone.*: true
       simpleclans.member.can-join: true
       simpleclans.member.profile: true
       simpleclans.member.roster: true
@@ -168,10 +200,17 @@ permissions:
       simpleclans.member.home: true
       simpleclans.member.kills: true
       simpleclans.member.bank: true
+      simpleclans.member.accept: true
+      simpleclans.member.deny: true
+      simpleclans.member.abstain: true
+      simpleclans.member.bank.balance: true
+      simpleclans.member.bank.deposit: true
+      simpleclans.member.bank.withdraw: true
   simpleclans.leader.*:
     description: Permissions for those who can be clan leaders
     default: false
     children:
+      simpleclans.member.*: true
       simpleclans.leader.create: true
       simpleclans.leader.ally: true
       simpleclans.leader.rival: true
@@ -189,3 +228,22 @@ permissions:
       simpleclans.leader.home-set: true
       simpleclans.leader.home-regroup: true
       simpleclans.leader.setrank: true
+      simpleclans.leader.rank.permissions.add: true
+      simpleclans.leader.rank.permissions.remove: true
+      simpleclans.leader.rank.permissions.list: true
+      simpleclans.leader.rank.create: true
+      simpleclans.leader.rank.delete: true
+      simpleclans.leader.rank.detail: true
+      simpleclans.leader.rank.set: true
+      simpleclans.leader.rank.list: true
+  simpleclans.admin.*:
+    description: Permissions for admins
+    default: op
+    children:
+      simpleclans.leader.*: true
+      simpleclans.admin.reload: true
+      simpleclans.admin.all-seeing-eye: true
+      simpleclans.admin.convert: true
+      simpleclans.admin.info: true
+      simpleclans.admin.save: true
+      simpleclans.admin.upgrade: true

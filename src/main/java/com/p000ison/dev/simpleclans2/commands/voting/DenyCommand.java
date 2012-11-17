@@ -41,6 +41,7 @@ public class DenyCommand extends GenericPlayerCommand {
         setArgumentRange(0, 0);
         setUsages(MessageFormat.format(Language.getTranslation("usage.deny"), plugin.getSettingsManager().getClanCommand()));
         setIdentifiers(Language.getTranslation("deny.command"));
+        setPermission("simpleclans.member.deny");
     }
 
     @Override

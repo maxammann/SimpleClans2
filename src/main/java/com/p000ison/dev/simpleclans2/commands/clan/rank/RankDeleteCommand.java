@@ -40,6 +40,7 @@ public class RankDeleteCommand extends GenericPlayerCommand {
         setArgumentRange(1, 1);
         setUsages(Language.getTranslation("usage.rank.delete", plugin.getSettingsManager().getRankCommand()));
         setIdentifiers(Language.getTranslation("rank.delete.command"));
+        setPermission("simpleclans.leader.rank.delete");
         setType(Type.RANK);
     }
 

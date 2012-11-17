@@ -52,12 +52,17 @@ public class KillsCommand extends GenericPlayerCommand {
     @Override
     public void execute(Player player, String[] args)
     {
-        ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
-
         int page = CommandManager.getPage(args);
 
         if (page == -1) {
             ChatBlock.sendMessage(player, ChatColor.DARK_RED + Language.getTranslation("number.format"));
+            return;
+        }
+
+        ClanPlayer cp = plugin.getClanPlayerManager().getAnyClanPlayer(player);
+
+        if (cp == null) {
+            player.sendMessage("no.player.data.found");
             return;
         }
 

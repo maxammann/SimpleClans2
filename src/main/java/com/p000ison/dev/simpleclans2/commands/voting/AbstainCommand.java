@@ -42,6 +42,7 @@ public class AbstainCommand extends GenericPlayerCommand {
         setArgumentRange(0, 0);
         setUsages(MessageFormat.format(Language.getTranslation("usage.abstain"), plugin.getSettingsManager().getClanCommand()));
         setIdentifiers(Language.getTranslation("abstain.command"));
+        setPermission("simpleclans.member.abstain");
     }
 
     @Override

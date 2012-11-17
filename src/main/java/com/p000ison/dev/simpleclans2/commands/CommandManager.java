@@ -79,7 +79,6 @@ public class CommandManager {
     public void execute(CommandSender sender, String command, Command.Type cmdType, String[] args)
     {
         try {
-
             String identifier;
             String[] realArgs;
 
@@ -107,12 +106,13 @@ public class CommandManager {
             }
 
             Command helpCommand = null;
+            boolean noPermission = false;
 
             for (Command cmd : commands) {
 
                 Command.Type type = cmd.getType();
 
-                if (type != null && !cmdType.equals(cmd.getType())) {
+                if (type != null && cmdType != cmd.getType()) {
                     continue;
                 }
 
@@ -120,7 +120,8 @@ public class CommandManager {
 
                     if (!cmd.hasPermission(sender)) {
                         ChatBlock.sendMessage(sender, ChatColor.DARK_RED + Language.getTranslation("insufficient.permissions"));
-                        return;
+                        noPermission = true;
+                        continue;
                     } else if (realArgs.length < cmd.getMinArguments() || realArgs.length > cmd.getMaxArguments()) {
                         helpCommand = cmd;
                         continue;
@@ -149,12 +150,13 @@ public class CommandManager {
                 return;
             }
 
+
+            if (!noPermission) {
+                ChatBlock.sendMessage(sender, ChatColor.DARK_RED + "Command not found!");
+            }
         } catch (RuntimeException e) {
             Logging.debug(e, "Failed at running a SimpleClans command!", true);
-            return;
         }
-
-        ChatBlock.sendMessage(sender, ChatColor.DARK_RED + "Command not found!");
     }
 
     private void displayCommandHelp(Command cmd, CommandSender sender)

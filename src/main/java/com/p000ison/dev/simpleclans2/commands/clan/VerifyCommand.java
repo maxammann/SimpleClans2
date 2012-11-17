@@ -40,6 +40,7 @@ public class VerifyCommand extends GenericPlayerCommand {
         super("Verify", plugin);
         setArgumentRange(0, 0);
         setUsages(MessageFormat.format(Language.getTranslation("usage.verify"), plugin.getSettingsManager().getClanCommand()));
+        setPermission("simpleclans.member.verify");
         setIdentifiers(Language.getTranslation("verify.command"));
     }
 
@@ -68,7 +69,7 @@ public class VerifyCommand extends GenericPlayerCommand {
         if (plugin.getSettingsManager().requireVerification()) {
             if (!clan.isVerified()) {
 
-                if (SimpleClans.hasEconomy() && plugin.getSettingsManager().isPurchaseVerification() && !SimpleClans.withdrawBalance(player.getName(), plugin.getSettingsManager().getPurchaseVerificationPrice())) {
+                if (SimpleClans.hasEconomy() && plugin.getSettingsManager().isPurchaseVerification() && !cp.withdraw(plugin.getSettingsManager().getPurchaseVerificationPrice())) {
                     ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("not.sufficient.money"));
                     return;
                 }

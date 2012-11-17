@@ -39,6 +39,7 @@ public class RankCreateCommand extends GenericPlayerCommand {
         setArgumentRange(3, 50);
         setUsages(Language.getTranslation("usage.rank.create", plugin.getSettingsManager().getRankCommand()));
         setIdentifiers(Language.getTranslation("rank.create.command"));
+        setPermission("simpleclans.leader.rank.create");
         setType(Type.RANK);
     }
 

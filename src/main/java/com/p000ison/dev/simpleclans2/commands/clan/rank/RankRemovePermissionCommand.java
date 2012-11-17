@@ -30,7 +30,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 /**
- * Represents a RankSetCommand
+ * Represents a RankAssignCommand
  */
 public class RankRemovePermissionCommand extends GenericPlayerCommand {
 
@@ -41,6 +41,7 @@ public class RankRemovePermissionCommand extends GenericPlayerCommand {
         setArgumentRange(2, 2);
         setUsages(Language.getTranslation("usage.rank.remove.permission", plugin.getSettingsManager().getRankCommand()));
         setIdentifiers(Language.getTranslation("rank.remove.permission.command"));
+        setPermission("simpleclans.leader.rank.permissions.remove");
         setType(Type.RANK);
     }
 
@@ -79,14 +80,14 @@ public class RankRemovePermissionCommand extends GenericPlayerCommand {
 
         String permission = args[1];
 
-        boolean success = rank.removePermission(permission);
+        String removed = rank.removePermission(permission);
 
-        if (!success) {
+        if (removed == null) {
             ChatBlock.sendMessage(player, ChatColor.DARK_RED + Language.getTranslation("permission.not.found"));
             return;
         }
 
         rank.update(true);
-        ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("rank.permission.removed", permission, rank.getName()));
+        ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("rank.permission.removed", removed, rank.getName()));
     }
 }

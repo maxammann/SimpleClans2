@@ -41,6 +41,7 @@ public class AcceptCommand extends GenericPlayerCommand {
         setArgumentRange(0, 0);
         setUsages(MessageFormat.format(Language.getTranslation("usage.accept"), plugin.getSettingsManager().getClanCommand()));
         setIdentifiers(Language.getTranslation("accept.command"));
+        setPermission("simpleclans.member.accept");
     }
 
     @Override

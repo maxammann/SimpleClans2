@@ -74,6 +74,8 @@ public class KillsResponse extends Response {
             chatBlock.addRow(plugin.getClanPlayerManager().getClanPlayer(entry.getValue()).getName(), ChatColor.AQUA.toString() + entry.getKey());
         }
 
+        System.out.println("kills");
+
         ChatBlock.sendHead(sender, plugin.getSettingsManager().getClanColor() + otherPlayer.getName(), Language.getTranslation("kills"));
         ChatBlock.sendBlank(sender);
 

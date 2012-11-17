@@ -133,9 +133,17 @@ public class Rank implements Comparable<Rank> {
         return -1;
     }
 
-    public boolean removePermission(String permission)
+    public String removePermission(String permission)
     {
-        return permissions.remove(getID(permission));
+        PermissionFinder permissionFinder = new PermissionFinder(permission);
+
+        if (permissionFinder.getPermission() != null && id != -1) {
+            if (permissions.remove(permissionFinder.getId())) {
+                return permissionFinder.getPermission();
+            }
+        }
+
+        return removePermission(null);
     }
 
     /**
@@ -193,27 +201,52 @@ public class Rank implements Comparable<Rank> {
      */
     public String addPermission(String permission, boolean positive)
     {
-        String nearest = null;
-        int id = -1;
-        int smallest = Integer.MAX_VALUE;
+        PermissionFinder permissionFinder = new PermissionFinder(permission);
 
-        for (Map.Entry<Integer, String> perm : availablePermissions.entrySet()) {
-            String key = perm.getValue();
-
-            int distance = StringUtils.getLevenshteinDistance(key, permission);
-            if (distance < smallest) {
-                smallest = distance;
-                id = perm.getKey();
-                nearest = key;
-            }
-        }
-
-        if (nearest != null && id != -1) {
-            permissions.put(id, positive);
-            return nearest;
+        if (permissionFinder.getPermission() != null && id != -1) {
+            permissions.put(permissionFinder.getId(), positive);
+            return permissionFinder.getPermission();
         }
 
         return null;
+    }
+
+
+    private class PermissionFinder {
+        private String permission;
+        private int id;
+
+        private PermissionFinder(String permission)
+        {
+            String nearest = null;
+            int id = -1;
+            int smallest = Integer.MAX_VALUE;
+
+            for (Map.Entry<Integer, String> perm : availablePermissions.entrySet()) {
+                String key = perm.getValue();
+
+                int distance = StringUtils.getLevenshteinDistance(key, permission);
+                if (distance < smallest) {
+                    smallest = distance;
+                    id = perm.getKey();
+                    nearest = key;
+                }
+            }
+
+            this.id = id;
+            this.permission = nearest;
+        }
+
+        public String getPermission()
+        {
+            return permission;
+        }
+
+
+        public int getId()
+        {
+            return id;
+        }
     }
 
     /**

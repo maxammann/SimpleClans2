@@ -30,7 +30,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 /**
- * Represents a RankSetCommand
+ * Represents a RankAssignCommand
  */
 public class RankAddPermissionCommand extends GenericPlayerCommand {
 
@@ -41,6 +41,7 @@ public class RankAddPermissionCommand extends GenericPlayerCommand {
         setArgumentRange(2, 2);
         setUsages(Language.getTranslation("usage.rank.add.permission", plugin.getSettingsManager().getRankCommand()));
         setIdentifiers(Language.getTranslation("rank.add.permission.command"));
+        setPermission("simpleclans.leader.rank.permissions.add");
         setType(Type.RANK);
     }
 

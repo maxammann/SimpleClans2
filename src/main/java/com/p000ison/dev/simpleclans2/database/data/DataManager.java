@@ -535,7 +535,7 @@ public class DataManager {
 
                         List<Long> ranks = JSONUtil.JSONToList(result.getString("ranks"), new ArrayList<Long>());
                         if (ranks != null && !ranks.isEmpty()) {
-                            clanPlayer.setRank(clan.getRank(ranks.get(0)));
+                            clanPlayer.assignRank(clan.getRank(ranks.get(0)));
                         }
                     }
                 }
