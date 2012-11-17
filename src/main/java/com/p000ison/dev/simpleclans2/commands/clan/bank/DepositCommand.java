@@ -29,6 +29,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.text.MessageFormat;
+import java.text.NumberFormat;
+import java.text.ParseException;
 
 /**
  * Represents a DepositCommand
@@ -84,8 +86,8 @@ public class DepositCommand extends GenericPlayerCommand {
         double amount;
 
         try {
-            amount = Double.parseDouble(args[1]);
-        } catch (NumberFormatException e) {
+            amount = NumberFormat.getNumberInstance().parse(args[0]).doubleValue();
+        } catch (ParseException e) {
             ChatBlock.sendMessage(player, ChatColor.DARK_RED + Language.getTranslation("number.format"));
             return;
         }

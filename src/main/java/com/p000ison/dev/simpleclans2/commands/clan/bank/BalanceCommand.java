@@ -29,6 +29,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.text.MessageFormat;
+import java.text.NumberFormat;
 
 /**
  * Represents a DepositCommand
@@ -76,7 +77,6 @@ public class BalanceCommand extends GenericPlayerCommand {
             return;
         }
 
-
-        ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("current.clan.balance", clan.getBalance()));
+        ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("current.clan.balance", NumberFormat.getNumberInstance().format(clan.getBalance())));
     }
 }
