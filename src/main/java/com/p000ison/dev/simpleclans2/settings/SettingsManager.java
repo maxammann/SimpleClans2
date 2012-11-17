@@ -112,7 +112,7 @@ public class SettingsManager {
     {
         config = plugin.getConfig();
         config.options().copyDefaults(true);
-        config.options().header("Available options for the 'build-channel' settings are rb and dev. Use 'rb' to update only recommended builds or dev to update also to dev versions!");
+        config.options().header("Available options for the 'build-channel' settings are rb and dev. Use 'rb' to update only recommended builds, dev to update to dev versions or beta to update only to beta builds!");
         save();
         load();
     }
@@ -133,7 +133,7 @@ public class SettingsManager {
 
             if (updateType == null) {
                 Logging.debug("Invalid build-channel! Switching to recommended!");
-                updateType = UpdateType.LATEST_RECOMMENDED;
+                updateType = UpdateType.STABLE;
             }
 
             this.buildChannel = updateType;

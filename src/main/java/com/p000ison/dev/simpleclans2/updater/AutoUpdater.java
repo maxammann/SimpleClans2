@@ -36,11 +36,9 @@ import java.util.Set;
 public class AutoUpdater {
     private static final String JOB = "SimpleClans2";
     private Build toUpdate = null;
-    private Plugin plugin;
 
     public AutoUpdater(Plugin plugin, UpdateType type)
     {
-        this.plugin = plugin;
         String version = plugin.getDescription().getVersion();
 
         if (version.equals("unknown-version")) {
@@ -59,48 +57,60 @@ public class AutoUpdater {
         }
 
         try {
-            Build fetched = getBuild(type);
+            toUpdate = getBuild(type);
 
-            fetched.fetchInformation();
+            toUpdate.fetchInformation();
 
-            if (versionValue < fetched.getBuildNumber()) {
-                toUpdate = fetched;
-                Logging.debug("------------------------------------------------------------------------------------------------------");
-                Logging.debug("There is a update for your SimpleClans version!");
-                Logging.debug("Build:  " + fetched.getBuildNumber());
-                Logging.debug("Type:  " + (fetched.getUpdateType() == UpdateType.LATEST ? "Unofficial" : "Official"));
-                Logging.debug("Release date:  " + new Date(fetched.getStarted()));
-                Logging.debug("Compiling duration:  " + DurationFormatUtils.formatDuration(fetched.getDuration(), "HH:mm:ss"));
-                Logging.debug("Author:  " + fetched.getAuthor());
-                Logging.debug("Comment:  " + fetched.getComment() + "(" + fetched.getCommitURL() + ")");
-
-                Set<String> modified = fetched.getModifiedFiles();
-                Set<String> created = fetched.getCreatedFiles();
-                Set<String> deleted = fetched.getDeletedFiles();
-
-                if (!modified.isEmpty()) {
-                    Logging.debug("Modified files(%s):", modified.size());
-                    for (String file : modified) {
-                        Logging.debug("  * " + file);
-                    }
-                }
-                if (!created.isEmpty()) {
-                    Logging.debug("Created files(%s):", created.size());
-                    for (String file : created) {
-                        Logging.debug("  * " + file);
-                    }
-                }
-                if (!deleted.isEmpty()) {
-                    Logging.debug("Deleted files(%s):", deleted.size());
-                    for (String file : deleted) {
-                        Logging.debug("  * " + file);
-                    }
-                }
-                Logging.debug("------------------------------------------------------------------------------------------------------");
+            if (versionValue < toUpdate.getBuildNumber()) {
+                Logging.debug(getBuildInfo(toUpdate));
             }
         } catch (IOException e) {
             Logging.debug(e, true, "Failed at fetching the Update information!");
         }
+    }
+
+
+    public static String getBuildInfo(Build build)
+    {
+        if (build == null) {
+            return null;
+        }
+
+        StringBuilder updateInfo = new StringBuilder();
+
+        updateInfo.append("------------------------------------------------------------------------------------------------------\n");
+        updateInfo.append("There is a update for your SimpleClans version!\n");
+        updateInfo.append("Build:  ").append(build.getBuildNumber()).append('\n');
+        updateInfo.append("Type:  ").append(build.getUpdateType() == UpdateType.LATEST ? "Unofficial" : "Official\n");
+        updateInfo.append("Release date:  ").append(new Date(build.getStarted())).append('\n');
+        updateInfo.append("Compiling duration:  ").append(DurationFormatUtils.formatDuration(build.getDuration(), "HH:mm:ss\n"));
+        updateInfo.append("Author:  ").append(build.getAuthor()).append('\n');
+        updateInfo.append("Comment:  ").append(build.getComment()).append(" (").append(build.getCommitURL()).append(")\n");
+
+        Set<String> modified = build.getModifiedFiles();
+        Set<String> created = build.getCreatedFiles();
+        Set<String> deleted = build.getDeletedFiles();
+
+        if (!modified.isEmpty()) {
+            updateInfo.append("Modified files(").append(modified.size()).append("):\n");
+            for (String file : modified) {
+                updateInfo.append("  * ").append(file).append('\n');
+            }
+        }
+        if (!created.isEmpty()) {
+            updateInfo.append("Created files(").append(created.size()).append("):\n");
+            for (String file : created) {
+                updateInfo.append("  * ").append(file).append('\n');
+            }
+        }
+        if (!deleted.isEmpty()) {
+            updateInfo.append("Deleted files(").append(deleted.size()).append("):\n");
+            for (String file : deleted) {
+                updateInfo.append("  * ").append(file).append('\n');
+            }
+        }
+        updateInfo.append("------------------------------------------------------------------------------------------------------\n");
+        return updateInfo.toString();
     }
 
     public boolean isUpdate()
