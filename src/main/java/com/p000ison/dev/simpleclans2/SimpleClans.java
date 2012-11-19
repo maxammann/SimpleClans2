@@ -20,7 +20,7 @@
 
 package com.p000ison.dev.simpleclans2;
 
-import com.p000ison.dev.simpleclans2.api.Core;
+import com.p000ison.dev.simpleclans2.api.SCCore;
 import com.p000ison.dev.simpleclans2.clan.ClanManager;
 import com.p000ison.dev.simpleclans2.clan.ranks.RankManager;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayerManager;
@@ -78,7 +78,7 @@ import java.util.logging.Level;
 /**
  * Represents a SimpleClans
  */
-public class SimpleClans extends JavaPlugin implements Core {
+public class SimpleClans extends JavaPlugin implements SCCore {
 
     private ClanManager clanManager;
     private DatabaseManager databaseManager;
@@ -365,7 +365,7 @@ public class SimpleClans extends JavaPlugin implements Core {
         return true;
     }
 
-    public Core getCore()
+    public SCCore getCore()
     {
         return this;
     }

@@ -28,9 +28,9 @@ import com.p000ison.dev.simpleclans2.settings.SettingsManager;
 import com.p000ison.dev.simpleclans2.teleportation.TeleportManager;
 
 /**
- * Represents a Core
+ * Represents a SCCore
  */
-public interface Core {
+public interface SCCore {
 
     /**
      * Gets the manager, which handles everything about clans.

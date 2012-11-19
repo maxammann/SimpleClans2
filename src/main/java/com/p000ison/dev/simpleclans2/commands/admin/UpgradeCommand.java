@@ -61,6 +61,9 @@ public class UpgradeCommand extends GenericConsoleCommand {
             return;
         }
 
+
         ChatBlock.sendMessage(sender, ChatColor.GREEN + Language.getTranslation("upgrade.successfully"));
+
+        plugin.getServer().shutdown();
     }
 }
