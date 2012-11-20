@@ -44,7 +44,7 @@ public class RivalryBreakRequest extends MultipleRequest {
     @Override
     public void onRequesting()
     {
-        sendAnnouncerMessage(ChatColor.AQUA + Language.getTranslation("proposing.to.end.the.rivalry", requester.getClan().getTag(), rival.getTag()));
+        sendAcceptorMessage(ChatColor.AQUA + Language.getTranslation("proposing.to.end.the.rivalry", requester.getClan().getTag(), rival.getTag()));
     }
 
     @Override
@@ -72,6 +72,6 @@ public class RivalryBreakRequest extends MultipleRequest {
     public void onDenied()
     {
         sendRequesterMessage(ChatColor.DARK_RED + Language.getTranslation("rivalry.request.denied", rival.getTag()));
-        sendAnnouncerMessage(ChatColor.DARK_RED + Language.getTranslation("rivalry.request.denied", requester.getClan().getTag()));
+        sendAcceptorMessage(ChatColor.DARK_RED + Language.getTranslation("rivalry.request.denied", requester.getClan().getTag()));
     }
 }

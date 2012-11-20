@@ -334,10 +334,13 @@ public class ClanPlayer implements KDR, Balance, UpdateAble {
      */
     public Player toPlayer()
     {
-        if (onlineVersion == null) {
-            return null;
+        Player player = null;
+
+        if (onlineVersion == null && (player = plugin.getServer().getPlayerExact(name)) == null) {
+             return null;
         }
-        return plugin.getServer().getPlayerExact(name);
+
+        return player;
     }
 
     public boolean isOnline()

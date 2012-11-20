@@ -115,7 +115,7 @@ public interface Request {
     /**
      * Sends a message to the announcer/s
      */
-    void sendAnnouncerMessage(String message);
+    void sendAcceptorMessage(String message);
 
     /**
      * Called whenever this request is finally accepted

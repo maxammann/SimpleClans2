@@ -45,7 +45,7 @@ public class AllyCreateRequest extends MultipleRequest {
     @Override
     public void onRequesting()
     {
-        sendAnnouncerMessage(ChatColor.AQUA + Language.getTranslation("proposing.an.alliance", requester.getClan().getTag(), ally.getTag()));
+        sendAcceptorMessage(ChatColor.AQUA + Language.getTranslation("proposing.an.alliance", requester.getClan().getTag(), ally.getTag()));
     }
 
     @Override
@@ -72,6 +72,6 @@ public class AllyCreateRequest extends MultipleRequest {
     public void onDenied()
     {
         sendRequesterMessage(ChatColor.DARK_RED + Language.getTranslation("the.alliance.was.denied", ally.getTag()));
-        sendAnnouncerMessage(ChatColor.DARK_RED + Language.getTranslation("the.alliance.was.denied", requester.getClan().getTag()));
+        sendAcceptorMessage(ChatColor.DARK_RED + Language.getTranslation("the.alliance.was.denied", requester.getClan().getTag()));
     }
 }

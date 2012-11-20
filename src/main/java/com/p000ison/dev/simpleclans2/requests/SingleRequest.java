@@ -97,15 +97,17 @@ public abstract class SingleRequest extends AbstractRequest {
     @Override
     public void announceMessage(String message)
     {
-        sendAnnouncerMessage(message);
+        sendAcceptorMessage(message);
         sendRequesterMessage(message);
     }
 
     @Override
-    public void sendAnnouncerMessage(String message)
+    public void sendAcceptorMessage(String message)
     {
         Player acceptorPlayer = acceptor.toPlayer();
 
+        System.out.println(acceptor);
+        System.out.println(acceptorPlayer);
         if (acceptorPlayer != null) {
             ChatBlock.sendMessage(acceptorPlayer, message);
         }

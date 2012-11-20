@@ -38,6 +38,7 @@ public class RequestManager {
     {
         //hmm damn you DAUs ....
 
+        //todo add messages if the player is already involved in a request
         if (created instanceof MultipleRequest) {
             MultipleRequest multiCreated = (MultipleRequest) created;
 

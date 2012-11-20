@@ -44,7 +44,7 @@ public class WarStopRequest extends MultipleRequest {
     @Override
     public void onRequesting()
     {
-        sendAnnouncerMessage(ChatColor.AQUA + Language.getTranslation("proposing.to.end.the.war", requester.getClan().getTag(), warring.getTag()));
+        sendAcceptorMessage(ChatColor.AQUA + Language.getTranslation("proposing.to.end.the.war", requester.getClan().getTag(), warring.getTag()));
     }
 
     @Override
@@ -71,6 +71,6 @@ public class WarStopRequest extends MultipleRequest {
     public void onDenied()
     {
         sendRequesterMessage(ChatColor.DARK_RED + Language.getTranslation("peace.agreement.denied", warring.getTag()));
-        sendAnnouncerMessage(ChatColor.DARK_RED + Language.getTranslation("peace.agreement.denied", requester.getClan().getTag()));
+        sendAcceptorMessage(ChatColor.DARK_RED + Language.getTranslation("peace.agreement.denied", requester.getClan().getTag()));
     }
 }

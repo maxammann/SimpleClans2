@@ -45,7 +45,7 @@ public class DemoteRequest extends MultipleRequest {
     @Override
     public void onRequesting()
     {
-        sendAnnouncerMessage(ChatColor.AQUA + Language.getTranslation("asking.for.the.demotion", requester.getName(), targetPlayer.getName()));
+        sendAcceptorMessage(ChatColor.AQUA + Language.getTranslation("asking.for.the.demotion", requester.getName(), targetPlayer.getName()));
     }
 
     @Override
@@ -63,6 +63,6 @@ public class DemoteRequest extends MultipleRequest {
     @Override
     public void onDenied()
     {
-         sendAnnouncerMessage(ChatColor.DARK_RED + Language.getTranslation("demotion.denied"));
+         sendAcceptorMessage(ChatColor.DARK_RED + Language.getTranslation("demotion.denied"));
     }
 }

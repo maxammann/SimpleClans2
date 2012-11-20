@@ -45,7 +45,7 @@ public class PromoteRequest extends MultipleRequest {
     @Override
     public void onRequesting()
     {
-        sendAnnouncerMessage(ChatColor.AQUA + Language.getTranslation("asking.for.the.promotion", requester.getName(), targetPlayer.getName()));
+        sendAcceptorMessage(ChatColor.AQUA + Language.getTranslation("asking.for.the.promotion", requester.getName(), targetPlayer.getName()));
     }
 
     @Override

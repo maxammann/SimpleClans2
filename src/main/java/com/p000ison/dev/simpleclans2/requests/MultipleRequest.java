@@ -124,7 +124,7 @@ public abstract class MultipleRequest extends AbstractRequest {
     @Override
     public void announceMessage(String message)
     {
-        sendAnnouncerMessage(message);
+        sendAcceptorMessage(message);
         sendRequesterMessage(message);
     }
 
@@ -135,7 +135,7 @@ public abstract class MultipleRequest extends AbstractRequest {
     }
 
     @Override
-    public void sendAnnouncerMessage(String message)
+    public void sendAcceptorMessage(String message)
     {
         for (ClanPlayer clanPlayer : acceptors) {
             Player player = clanPlayer.toPlayer();

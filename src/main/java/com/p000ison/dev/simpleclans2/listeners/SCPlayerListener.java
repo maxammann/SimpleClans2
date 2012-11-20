@@ -53,7 +53,7 @@ public class SCPlayerListener implements Listener {
     {
         Player player = event.getPlayer();
 
-        ClanPlayer clanPlayer = plugin.getClanPlayerManager().getClanPlayer(player);
+        ClanPlayer clanPlayer = plugin.getClanPlayerManager().getAnyClanPlayer(player);
 
         plugin.getRequestManager().clearRequests(clanPlayer);
 
