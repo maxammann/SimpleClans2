@@ -80,6 +80,11 @@ public class CreateCommand extends GenericPlayerCommand {
             return;
         }
 
+        if (plugin.getClanManager().existsClan(tag, name)) {
+            player.sendMessage(ChatColor.RED + Language.getTranslation("clan.already.exists"));
+            return;
+        }
+
         if (SimpleClans.hasEconomy() && plugin.getSettingsManager().isPurchaseCreation() && !cp.withdraw(plugin.getSettingsManager().getPurchaseCreationPrice())) {
             ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("not.sufficient.money"));
             return;

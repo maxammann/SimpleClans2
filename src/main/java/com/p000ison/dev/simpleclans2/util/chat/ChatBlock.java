@@ -25,6 +25,7 @@ import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * A ChatBlock is used to send tables with rows and columns to a  {@link org.bukkit.command.CommandSender}.
@@ -571,8 +572,8 @@ public class ChatBlock {
     /**
      * Gets the last color in this string, starting at a specific index
      *
-     * @param input     The input string
-     * @param from      Where to start or -1 if you want to start at the end of the string
+     * @param input      The input string
+     * @param from       Where to start or -1 if you want to start at the end of the string
      * @param colorChars The color characters, in most cases § or &
      * @return The color in a {@link ChatColor} instance
      */
@@ -616,6 +617,11 @@ public class ChatBlock {
         }
 
         return result;
+    }
+
+    public static String cleanString(String input)
+    {
+        return ChatColor.stripColor(input).toLowerCase(Locale.US);
     }
 }
 

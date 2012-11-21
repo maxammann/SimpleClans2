@@ -25,6 +25,7 @@ import com.p000ison.dev.simpleclans2.api.events.ClanCreateEvent;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.language.Language;
 import com.p000ison.dev.simpleclans2.util.GeneralHelper;
+import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
@@ -145,8 +146,11 @@ public class ClanManager {
 
     public boolean existsClanByTag(String tag)
     {
+        String cleanInputTag = ChatBlock.cleanString(tag);
+
         for (Clan clan : getClans()) {
-            if (clan.getTag().equalsIgnoreCase(tag)) {
+            String clanTag = ChatBlock.cleanString(clan.getTag());
+            if (clanTag.equalsIgnoreCase(cleanInputTag)) {
                 return true;
             }
         }
@@ -156,8 +160,10 @@ public class ClanManager {
 
     public boolean existsClanByName(String name)
     {
+        String cleanInputTag = ChatBlock.cleanString(name);
         for (Clan clan : getClans()) {
-            if (clan.getName().equalsIgnoreCase(name)) {
+            String clanName = ChatBlock.cleanString(clan.getName());
+            if (clanName.equalsIgnoreCase(cleanInputTag)) {
                 return true;
             }
         }
@@ -167,8 +173,13 @@ public class ClanManager {
 
     public boolean existsClan(String tag, String name)
     {
+        String cleanInputTag = ChatBlock.cleanString(tag);
+        String cleanInputName = ChatBlock.cleanString(name);
+
         for (Clan clan : getClans()) {
-            if (clan.getName().equalsIgnoreCase(name) || clan.getTag().equalsIgnoreCase(tag)) {
+            String clanTag = ChatBlock.cleanString(clan.getTag());
+            String clanName = ChatBlock.cleanString(name);
+            if (clanName.equalsIgnoreCase(cleanInputName) || clanTag.equalsIgnoreCase(cleanInputTag)) {
                 return true;
             }
         }
@@ -265,11 +276,6 @@ public class ClanManager {
                     return false;
                 }
             }
-        }
-
-        if (existsClanByTag(tag)) {
-            reportTo.sendMessage(ChatColor.RED + Language.getTranslation("clan.with.this.tag.already.exists"));
-            return false;
         }
 
         if (!cleanTag.matches("[0-9a-zA-Z]*")) {

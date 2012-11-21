@@ -73,6 +73,13 @@ public class ModifyTagCommand extends GenericPlayerCommand {
                         return;
                     }
 
+                    if (plugin.getSettingsManager().isModifyTagCompletely()) {
+                        if (plugin.getClanManager().existsClanByTag(newTag)) {
+                            player.sendMessage(ChatColor.RED + Language.getTranslation("clan.with.this.tag.already.exists"));
+                            return;
+                        }
+                    }
+
                     clan.addBBMessage(cp, MessageFormat.format(Language.getTranslation("tag.changed.to.0"), newTag));
                     clan.setTag(newTag);
                     clan.update();
