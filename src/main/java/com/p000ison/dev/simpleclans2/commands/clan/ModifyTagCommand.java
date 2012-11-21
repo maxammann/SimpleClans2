@@ -65,7 +65,7 @@ public class ModifyTagCommand extends GenericPlayerCommand {
             if (clan.isVerified()) {
                 if (clan.isLeader(cp)) {
 
-                    String newTag = args[0];
+                    String newTag = ChatBlock.parseColors(args[0]);
                     String tagBefore = clan.getTag();
                     boolean bypass = player.hasPermission("simpleclans.mod.bypass");
 

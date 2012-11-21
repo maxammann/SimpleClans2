@@ -68,8 +68,8 @@ public class CreateCommand extends GenericPlayerCommand {
             return;
         }
 
-        String tag = args[0];
-        String name = GeneralHelper.arrayBoundsToString(1, args);
+        String tag = ChatBlock.parseColors(args[0]);
+        String name = ChatBlock.parseColors(GeneralHelper.arrayBoundsToString(1, args));
         boolean bypass = player.hasPermission("simpleclans.mod.bypass");
 
         if (!plugin.getClanManager().verifyClanTag(player, tag, null, bypass)) {

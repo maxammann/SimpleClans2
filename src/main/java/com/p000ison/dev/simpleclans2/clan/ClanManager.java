@@ -143,10 +143,32 @@ public class ClanManager {
         this.clans = clans;
     }
 
-    public boolean existsClan(String tag)
+    public boolean existsClanByTag(String tag)
     {
         for (Clan clan : getClans()) {
-            if (clan.getTag().equals(tag)) {
+            if (clan.getTag().equalsIgnoreCase(tag)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public boolean existsClanByName(String name)
+    {
+        for (Clan clan : getClans()) {
+            if (clan.getName().equalsIgnoreCase(name)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public boolean existsClan(String tag, String name)
+    {
+        for (Clan clan : getClans()) {
+            if (clan.getName().equalsIgnoreCase(name) || clan.getTag().equalsIgnoreCase(tag)) {
                 return true;
             }
         }
@@ -226,7 +248,7 @@ public class ClanManager {
                 return false;
             }
 
-            if (GeneralHelper.containsColor(tag, '&', plugin.getSettingsManager().getDisallowedColors())) {
+            if (GeneralHelper.containsColor(tag, '§', plugin.getSettingsManager().getDisallowedColors())) {
                 reportTo.sendMessage(ChatColor.RED + MessageFormat.format(Language.getTranslation("your.tag.cannot.contain.the.following.colors"), GeneralHelper.arrayToString(plugin.getSettingsManager().getDisallowedColors())));
                 return false;
             }
@@ -238,14 +260,14 @@ public class ClanManager {
 
         if (tagBefore != null) {
             if (!plugin.getSettingsManager().isModifyTagCompletely()) {
-                if (!tag.equalsIgnoreCase(tagBefore)) {
+                if (!cleanTag.equalsIgnoreCase(ChatColor.stripColor(tagBefore))) {
                     reportTo.sendMessage(ChatColor.RED + Language.getTranslation("you.can.only.modify.the.color.and.case.of.the.tag"));
                     return false;
                 }
             }
         }
 
-        if (existsClan(tag)) {
+        if (existsClanByTag(tag)) {
             reportTo.sendMessage(ChatColor.RED + Language.getTranslation("clan.with.this.tag.already.exists"));
             return false;
         }
@@ -272,7 +294,7 @@ public class ClanManager {
             }
         }
 
-        if (name.contains("&")) {
+        if (name.contains("§")) {
             reportTo.sendMessage(ChatColor.RED + Language.getTranslation("your.clan.name.cannot.contain.color.codes"));
             return false;
         }

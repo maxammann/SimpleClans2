@@ -25,6 +25,7 @@ import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.database.configuration.DatabaseConfiguration;
 import com.p000ison.dev.simpleclans2.database.configuration.DatabaseMode;
 import com.p000ison.dev.simpleclans2.database.configuration.MySQLConfiguration;
+import com.p000ison.dev.simpleclans2.database.configuration.SQLiteConfiguration;
 import com.p000ison.dev.simpleclans2.updater.UpdateType;
 import com.p000ison.dev.simpleclans2.util.ExceptionHelper;
 import com.p000ison.dev.simpleclans2.util.GeneralHelper;
@@ -157,16 +158,25 @@ public class SettingsManager {
 
             switch (DatabaseMode.getMode(databaseSection.getString("mode"))) {
                 case MYSQL:
+                    ConfigurationSection mysqlDatabaseSection = databaseSection.getConfigurationSection("mysql");
+                    MySQLConfiguration mysqlConfig = new MySQLConfiguration();
 
-                    MySQLConfiguration databaseConfiguration = new MySQLConfiguration();
+                    mysqlConfig.setHost(mysqlDatabaseSection.getString("host"));
+                    mysqlConfig.setUsername(mysqlDatabaseSection.getString("username"));
+                    mysqlConfig.setPassword(mysqlDatabaseSection.getString("password"));
+                    mysqlConfig.setDatabase(mysqlDatabaseSection.getString("database"));
+                    mysqlConfig.setPort(mysqlDatabaseSection.getInt("port"));
 
-                    databaseConfiguration.setHost(databaseSection.getString("host"));
-                    databaseConfiguration.setUsername(databaseSection.getString("username"));
-                    databaseConfiguration.setPassword(databaseSection.getString("password"));
-                    databaseConfiguration.setDatabase(databaseSection.getString("database"));
-                    databaseConfiguration.setPort(databaseSection.getInt("port"));
+                    this.databaseConfiguration = mysqlConfig;
 
-                    this.databaseConfiguration = databaseConfiguration;
+                    break;
+                case SQLITE:
+                    ConfigurationSection sqliteDatabaseSection = databaseSection.getConfigurationSection("sqlite");
+                    SQLiteConfiguration sqliteConfig = new SQLiteConfiguration();
+
+                    sqliteConfig.setDatabaseFile(new File(sqliteDatabaseSection.getString("location")));
+
+                    this.databaseConfiguration = sqliteConfig;
 
                     break;
                 default:

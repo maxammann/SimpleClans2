@@ -24,6 +24,7 @@ package com.p000ison.dev.simpleclans2.database.configuration;
  */
 public enum DatabaseMode {
     MYSQL,
+    SQLITE,
     UNKNOWN;
 
     public static DatabaseMode getMode(String mode)
@@ -34,6 +35,8 @@ public enum DatabaseMode {
 
         if (mode.equalsIgnoreCase("mysql")) {
             return MYSQL;
+        } else if (mode.equalsIgnoreCase("sqlite")) {
+            return SQLITE;
         } else {
             return UNKNOWN;
         }

@@ -19,6 +19,7 @@
 
 package com.p000ison.dev.simpleclans2.util.chat;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
@@ -565,6 +566,56 @@ public class ChatBlock {
     public static ChatColor getSubPageColor()
     {
         return subColor;
+    }
+
+    /**
+     * Gets the last color in this string, starting at a specific index
+     *
+     * @param input     The input string
+     * @param from      Where to start or -1 if you want to start at the end of the string
+     * @param colorChars The color characters, in most cases § or &
+     * @return The color in a {@link ChatColor} instance
+     */
+    public static ChatColor getLastColors(String input, int from, char... colorChars)
+    {
+        Validate.notNull(input, "The input must not be null!");
+        Validate.notEmpty(input, "The input must not be empty!");
+
+        ChatColor result = null;
+        int maxIndex;
+
+        if (from == -1) {
+            maxIndex = input.length() - 1;
+        } else {
+            maxIndex = from;
+        }
+
+        boolean finished = false;
+
+        // Iterate backwards to find the last
+        for (int i = maxIndex; i >= 0 && !finished; i--) {
+            char current = input.charAt(i);
+            for (char colorChar : colorChars) {
+                if (current == colorChar) {
+                    if (i + 1 > maxIndex) {
+                        continue;
+                    }
+
+                    char color = input.charAt(i + 1);
+                    ChatColor found = ChatColor.getByChar(color);
+
+                    if (found != null) {
+                        result = found;
+
+                        if (found.isColor() || found == ChatColor.RESET) {
+                            finished = true;
+                        }
+                    }
+                }
+            }
+        }
+
+        return result;
     }
 }
 

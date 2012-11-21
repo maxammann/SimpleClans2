@@ -32,8 +32,9 @@ public class SQLiteConfiguration implements DatabaseConfiguration {
     {
     }
 
-    public SQLiteConfiguration(File database, String mode)
+    public SQLiteConfiguration(File database)
     {
+        checkFile(database);
         this.database = database;
     }
 
@@ -44,12 +45,24 @@ public class SQLiteConfiguration implements DatabaseConfiguration {
 
     public void setDatabaseFile(File database)
     {
+        checkFile(database);
         this.database = database;
+    }
+
+    private void checkFile(File file)
+    {
+        if (file == null) {
+            throw new IllegalArgumentException("File can not be null!");
+        }
+
+        if (file.isDirectory()) {
+            throw new IllegalArgumentException("File is a directory!");
+        }
     }
 
     @Override
     public DatabaseMode getDatabaseMode()
     {
-        return DatabaseMode.UNKNOWN;
+        return DatabaseMode.SQLITE;
     }
 }

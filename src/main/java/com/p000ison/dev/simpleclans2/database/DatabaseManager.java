@@ -22,6 +22,7 @@ package com.p000ison.dev.simpleclans2.database;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.database.configuration.DatabaseConfiguration;
 import com.p000ison.dev.simpleclans2.database.configuration.MySQLConfiguration;
+import com.p000ison.dev.simpleclans2.database.configuration.SQLiteConfiguration;
 import com.p000ison.dev.simpleclans2.util.Logging;
 
 import java.sql.SQLException;
@@ -50,6 +51,9 @@ public class DatabaseManager {
         switch (config.getDatabaseMode()) {
             case MYSQL:
                 database = new MySQLDatabase((MySQLConfiguration) config);
+                break;
+            case SQLITE:
+                database = new SQLiteDatabase((SQLiteConfiguration) config);
                 break;
             default:
                 throw new UnsupportedOperationException("The database mode was not found!");

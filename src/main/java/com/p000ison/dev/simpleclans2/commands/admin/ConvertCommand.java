@@ -74,7 +74,7 @@ public class ConvertCommand extends GenericConsoleCommand {
             }
             config = new MySQLConfiguration(address[0], port, args[2], args[3], args[4], null);
         } else if (action.equalsIgnoreCase("sqlite")) {
-            config = new SQLiteConfiguration(new File(args[1]), null);
+            config = new SQLiteConfiguration(new File(args[1]));
         }
 
         if (config == null) {
