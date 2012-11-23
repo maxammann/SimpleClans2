@@ -56,6 +56,7 @@ public class InviteRequest extends SingleRequest {
         ClanPlayer acceptor = getAcceptor();
 
         clan.addMember(acceptor);
+        acceptor.setLeader(false);
         acceptor.setClan(clan);
 
         clan.addBBMessage(MessageFormat.format(Language.getTranslation("joined.the.clan"), acceptor.getName()));

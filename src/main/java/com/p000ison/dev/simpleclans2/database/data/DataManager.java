@@ -55,7 +55,7 @@ public class DataManager {
     public PreparedStatement INSERT_KILL;
     private PreparedStatement INSERT_RANK, UPDATE_RANK, RETRIEVE_RANK_BY_NAME;
     public PreparedStatement DELETE_RANK_BY_ID;
-    private PreparedStatement RETRIEVE_BB_LIMIT, INSERT_BB, PURGE_BB, RETRIEVE_BB;
+    private PreparedStatement RETRIEVE_BB_LIMIT, INSERT_BB, PURGE_BB;
 
     public DataManager(SimpleClans plugin)
     {
@@ -107,10 +107,9 @@ public class DataManager {
         UPDATE_RANK = database.prepareStatement("UPDATE `sc2_ranks` SET name = ?, tag = ?, permissions = ?, priority = ? WHERE clan = ?;");
         RETRIEVE_RANK_BY_NAME = database.prepareStatement("SELECT id FROM `sc2_ranks` WHERE name = ? AND clan = ?;");
         DELETE_RANK_BY_ID = database.prepareStatement("DELETE FROM `sc2_ranks` WHERE id = ?;");
-        RETRIEVE_BB_LIMIT = database.prepareStatement("SELECT `text` FROM `sc2_bb` WHERE clan = ? ORDER BY `date` LIMIT ?, ?;");
+        RETRIEVE_BB_LIMIT = database.prepareStatement("SELECT `text` FROM `sc2_bb` WHERE clan = ? ORDER BY `date` DESC LIMIT ?, ?;");
         INSERT_BB = database.prepareStatement("INSERT INTO `sc2_bb` ( `clan`, `text` ) VALUES ( ?, ? );");
         PURGE_BB = database.prepareStatement("DELETE FROM `sc2_bb` WHERE clan = ?;");
-        RETRIEVE_BB = database.prepareStatement("SELECT `text` FROM `sc2_bb` WHERE clan = ? ORDER BY `date`;");
     }
 
     public void addResponse(Response response)
@@ -658,10 +657,9 @@ public class DataManager {
             RETRIEVE_BB_LIMIT.setInt(3, end);
             res = RETRIEVE_BB_LIMIT.executeQuery();
 
-
             if (res != null) {
-
                 while (res.next()) {
+                    System.out.println(res.getString("text"));
                     bb.add(res.getString("text"));
                 }
             }

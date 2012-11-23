@@ -28,6 +28,7 @@ import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
+import java.util.ListIterator;
 
 /**
  * Represents a BBRetrieveResponse
@@ -71,8 +72,10 @@ public class BBRetrieveResponse extends Response {
             return true;
         }
 
-        for (String message : bb) {
-            ChatBlock.sendMessage(sender, message);
+        ListIterator<String> it = bb.listIterator(bb.size());
+
+        while (it.hasPrevious()) {
+            ChatBlock.sendMessage(sender, it.previous());
         }
 
         return true;
