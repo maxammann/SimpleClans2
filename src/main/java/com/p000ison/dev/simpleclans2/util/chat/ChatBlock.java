@@ -488,9 +488,27 @@ public class ChatBlock {
     {
         if (text == null) {
             return null;
+        } else if (text.isEmpty()) {
+            return text;
         }
 
-        return text.replace("&", "\u00a7");
+        StringBuilder tempTextBuilder = new StringBuilder(text);
+
+        for (int i = 0; i < text.length(); i++) {
+            char character = text.charAt(i);
+            if (character == '&') {
+                int nextChar = i + 1;
+                if (nextChar < text.length()) {
+                    char colorChar = text.charAt(nextChar);
+
+                    if (colorChar >= 48 && colorChar <= 57 || colorChar >= 97 && colorChar <= 102) {
+                        tempTextBuilder.setCharAt(i, '\u00a7');
+                    }
+                }
+            }
+        }
+
+        return tempTextBuilder.toString();
     }
 
     /**
