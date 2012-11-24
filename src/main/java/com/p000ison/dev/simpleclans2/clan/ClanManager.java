@@ -108,13 +108,19 @@ public class ClanManager {
 
     public Clan createClan(Clan clan)
     {
+        ClanCreateEvent event = new ClanCreateEvent(clan);
+        plugin.getServer().getPluginManager().callEvent(event);
+
+        if (event.isCancelled()) {
+            return null;
+        }
+
         if (plugin.getDataManager().insertClan(clan)) {
             clan.setId(plugin.getDataManager().retrieveClanId(clan.getTag()));
             clan.updateLastAction();
             clan.setFoundedDate(System.currentTimeMillis());
             clan.update();
             clans.add(clan);
-            plugin.getServer().getPluginManager().callEvent(new ClanCreateEvent(clan));
             return clan;
         }
 

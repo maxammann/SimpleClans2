@@ -103,6 +103,8 @@ public class CreateCommand extends GenericPlayerCommand {
 
         player.sendMessage(ChatColor.GREEN + Language.getTranslation("clan.created", clan.getName()));
         clan.addBBMessage(cp, MessageFormat.format(Language.getTranslation("clan.created"), name));
+        plugin.broadcast(ChatColor.AQUA + Language.getTranslation("broadcast.clan.created", name, tag));
+
         cp.update();
 
         if (plugin.getSettingsManager().requireVerification()) {

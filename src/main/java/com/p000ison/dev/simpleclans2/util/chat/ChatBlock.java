@@ -547,6 +547,7 @@ public class ChatBlock {
         ChatBlock.sendMessage(sender, header.toString());
     }
 
+
     /**
      * Sets the color of the header
      *
@@ -637,6 +638,12 @@ public class ChatBlock {
         return result;
     }
 
+    /**
+     * Cleans a string, removes colors and lower-cases it
+     *
+     * @param input The input to clean
+     * @return The cleaned string
+     */
     public static String cleanString(String input)
     {
         return ChatColor.stripColor(input).toLowerCase(Locale.US);

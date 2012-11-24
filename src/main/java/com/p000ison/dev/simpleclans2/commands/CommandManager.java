@@ -76,7 +76,7 @@ public class CommandManager {
     }
 
 
-    public void execute(CommandSender sender, String command, Command.Type cmdType, String[] args)
+    public synchronized void execute(CommandSender sender, String command, Command.Type cmdType, String[] args)
     {
         try {
             String identifier;

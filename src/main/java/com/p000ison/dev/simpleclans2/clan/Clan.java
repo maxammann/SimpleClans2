@@ -42,6 +42,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
+import java.io.*;
 import java.text.DecimalFormat;
 import java.text.MessageFormat;
 import java.text.NumberFormat;
@@ -51,23 +52,29 @@ import java.util.*;
 /**
  * Represents a Clan
  */
-public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble {
+public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble, Serializable {
 
-    public static final SimpleDateFormat DATE_FORMAT = new java.text.SimpleDateFormat("MMM dd, yyyy h:mm a");
-    public static final NumberFormat DECIMAL_FORMAT = new DecimalFormat("#.#");
-    private final SimpleClans plugin;
+    public transient static final SimpleDateFormat DATE_FORMAT = new java.text.SimpleDateFormat("MMM dd, yyyy h:mm a");
+    public transient static final NumberFormat DECIMAL_FORMAT = new DecimalFormat("#.#");
+
+    private transient final SimpleClans plugin;
     private ClanFlags flags;
     private BankAccount bank;
+
     private long id = -1;
+
     private String tag, name;
+
     private long foundedDate;
     private long lastActionDate;
     private boolean verified;
+
     private Set<Clan> allies;
     private Set<Clan> rivals;
     private Set<Clan> warring;
     private Set<ClanPlayer> allMembers;
     private Set<Rank> ranks;
+
     private boolean update;
 
     /**

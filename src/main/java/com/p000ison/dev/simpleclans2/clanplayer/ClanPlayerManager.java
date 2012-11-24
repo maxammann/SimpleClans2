@@ -60,6 +60,13 @@ public class ClanPlayerManager {
 
     public ClanPlayer createClanPlayer(ClanPlayer clanPlayer)
     {
+        ClanPlayerCreateEvent event = new ClanPlayerCreateEvent(clanPlayer);
+        plugin.getServer().getPluginManager().callEvent(event);
+
+        if (event.isCancelled()) {
+            return null;
+        }
+
         for (ClanPlayer cp : players) {
             if (cp.equals(clanPlayer)) {
                 return cp;

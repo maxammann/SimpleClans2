@@ -65,6 +65,7 @@ import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -151,7 +152,7 @@ public class SimpleClans extends JavaPlugin implements SCCore {
         Logging.debug(String.format("Enabling took %s ms", finish - startup));
     }
 
-//    private void enableDebuggingConsole()
+    //    private void enableDebuggingConsole()
 //    {
 //        Interpreter beanshell = new Interpreter();
 //        try {
@@ -163,6 +164,10 @@ public class SimpleClans extends JavaPlugin implements SCCore {
 //            Logging.debug(e, true);
 //        }
 //    }
+    public void broadcast(String msg)
+    {
+        getServer().broadcastMessage(ChatColor.AQUA.toString() + '[' + getSettingsManager().getServerName() + ']' + ChatColor.AQUA + msg);
+    }
 
     public void disable()
     {

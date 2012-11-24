@@ -25,13 +25,14 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
  * Represents a ClanFlags
  */
 @SuppressWarnings("unchecked")
-public class Flags {
+public class Flags implements Serializable {
 
     private Map<String, Object> data = new HashMap<String, Object>();
 

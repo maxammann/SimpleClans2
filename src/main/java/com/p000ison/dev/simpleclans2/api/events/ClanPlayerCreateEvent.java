@@ -20,14 +20,29 @@
 package com.p000ison.dev.simpleclans2.api.events;
 
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
+import org.bukkit.event.Cancellable;
 
 /**
  * This event is fired, when ever a clanplayer gets created
  */
-public final class ClanPlayerCreateEvent extends ClanPlayerEvent {
+public final class ClanPlayerCreateEvent extends ClanPlayerEvent implements Cancellable {
+
+    private boolean cancelled;
 
     public ClanPlayerCreateEvent(ClanPlayer clanPlayer)
     {
         super(clanPlayer);
+    }
+
+    @Override
+    public boolean isCancelled()
+    {
+        return cancelled;
+    }
+
+    @Override
+    public void setCancelled(boolean cancelled)
+    {
+        this.cancelled = cancelled;
     }
 }
