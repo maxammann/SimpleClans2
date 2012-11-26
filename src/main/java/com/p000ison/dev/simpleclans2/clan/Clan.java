@@ -36,6 +36,7 @@ import com.p000ison.dev.simpleclans2.language.Language;
 import com.p000ison.dev.simpleclans2.util.DateHelper;
 import com.p000ison.dev.simpleclans2.util.GeneralHelper;
 import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
+import org.apache.commons.lang.Validate;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -143,6 +144,7 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble, Seriali
      */
     public void setTag(String tag)
     {
+        Validate.notNull(tag, "The clan tag must not be null!");
         this.tag = tag;
     }
 
@@ -204,6 +206,7 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble, Seriali
      */
     public void setName(String name)
     {
+        Validate.notNull(tag, "The clan name must not be null!");
         this.name = name;
     }
 

@@ -184,7 +184,7 @@ public class ClanManager {
 
         for (Clan clan : getClans()) {
             String clanTag = ChatBlock.cleanString(clan.getTag());
-            String clanName = ChatBlock.cleanString(name);
+            String clanName = ChatBlock.cleanString(clan.getName());
             if (clanName.equalsIgnoreCase(cleanInputName) || clanTag.equalsIgnoreCase(cleanInputTag)) {
                 return true;
             }
