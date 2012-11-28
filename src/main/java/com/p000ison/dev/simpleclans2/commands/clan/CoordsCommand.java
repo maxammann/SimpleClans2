@@ -109,7 +109,7 @@ public class CoordsCommand extends GenericPlayerCommand {
                         }
 
 
-                        String name = (clanPlayer.isLeader() ? plugin.getSettingsManager().getLeaderColor() : ((clanPlayer.isTrusted() ? plugin.getSettingsManager().getTrustedColor() : plugin.getSettingsManager().getUntrustedColor()))) + clanPlayer.getName();
+                        String name = clanPlayer.getColor() + clanPlayer.getName();
                         Location loc = iPlayer.getLocation();
                         int distance = (int) Math.ceil(loc.toVector().distance(player.getLocation().toVector()));
                         String coords = loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ();

@@ -93,7 +93,7 @@ public class VitalsCommand extends GenericPlayerCommand {
                         PlayerState state = new PlayerState(iPlayer);
 
                         if (iPlayer != null) {
-                            String name = (cp.isLeader() ? plugin.getSettingsManager().getLeaderColor() : ((cp.isTrusted() ? plugin.getSettingsManager().getTrustedColor() : plugin.getSettingsManager().getUntrustedColor()))) + cp.getName();
+                            String name = cp.getColor() + cp.getName();
                             String health = state.getHealth();
                             String hunger = state.getHunger();
                             String armor = state.getArmor(Language.getTranslation("armor.h"), Language.getTranslation("armor.c"), Language.getTranslation("armor.l"), Language.getTranslation("armor.b"));
