@@ -68,7 +68,7 @@ public class RivalCommand extends GenericPlayerCommand {
                 return;
             }
 
-            if (!plugin.getSettingsManager().isUnRivalAble(clan)) {
+            if (plugin.getSettingsManager().isUnRivalAble(clan)) {
                 ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("your.clan.cannot.create.rivals"));
                 return;
             }

@@ -25,6 +25,7 @@ import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.commands.CommandManager;
 import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
 import com.p000ison.dev.simpleclans2.language.Language;
+import com.p000ison.dev.simpleclans2.util.chat.Align;
 import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.util.comparators.LastSeenComparator;
 import org.bukkit.ChatColor;
@@ -43,7 +44,7 @@ public class RosterAnyCommand extends GenericPlayerCommand {
     public RosterAnyCommand(SimpleClans plugin)
     {
         super("Roster", plugin);
-        setArgumentRange(1, 1);
+        setArgumentRange(1, 2);
         setUsages(MessageFormat.format(Language.getTranslation("usage.roster"), plugin.getSettingsManager().getClanCommand()));
         setIdentifiers(Language.getTranslation("roster.command"));
         setPermission("simpleclans.member.roster");
@@ -79,6 +80,8 @@ public class RosterAnyCommand extends GenericPlayerCommand {
         if (clan.isVerified()) {
             ChatBlock chatBlock = new ChatBlock();
 
+            chatBlock.setAlignment(Align.LEFT, Align.LEFT, Align.LEFT);
+
             ChatBlock.sendBlank(player);
             ChatBlock.sendHead(player, plugin.getSettingsManager().getClanColor() + clan.getName(), Language.getTranslation("roster"));
             ChatBlock.sendBlank(player);
@@ -87,10 +90,12 @@ public class RosterAnyCommand extends GenericPlayerCommand {
 
             chatBlock.addRow("  " + headColor + Language.getTranslation("player"), Language.getTranslation("rank"), Language.getTranslation("seen"));
 
+
+
             List<ClanPlayer> leaders = new ArrayList<ClanPlayer>(clan.getLeaders());
             Collections.sort(leaders, new LastSeenComparator());
 
-            List<ClanPlayer> members = new ArrayList<ClanPlayer>(clan.getLeaders());
+            List<ClanPlayer> members = new ArrayList<ClanPlayer>(clan.getMembers());
             Collections.sort(members, new LastSeenComparator());
 
             int[] boundings = getBoundings(leaders.size() + members.size(), page);

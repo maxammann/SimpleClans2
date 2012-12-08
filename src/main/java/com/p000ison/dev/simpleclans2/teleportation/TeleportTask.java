@@ -47,6 +47,10 @@ public class TeleportTask implements Runnable {
     @Override
     public void run()
     {
+        if (waitingPlayers.isEmpty()) {
+            return;
+        }
+
         Iterator players = waitingPlayers.iterator();
 
         while (players.hasNext()) {
