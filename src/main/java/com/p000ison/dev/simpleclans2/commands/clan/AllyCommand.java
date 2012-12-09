@@ -78,7 +78,7 @@ public class AllyCommand extends GenericPlayerCommand {
                 return;
             }
 
-            if (clan.getSize() <= plugin.getSettingsManager().getMinimalSizeToAlly()) {
+            if (clan.getSize() < plugin.getSettingsManager().getMinimalSizeToAlly()) {
                 ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(Language.getTranslation("minimum.to.make.alliance"), plugin.getSettingsManager().getMinimalSizeToAlly()));
                 return;
             }

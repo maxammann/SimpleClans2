@@ -51,7 +51,6 @@ public class AllyCreateRequest extends MultipleRequest {
     @Override
     public boolean onAccepted()
     {
-        ClanPlayer cp = getRequester();
         Clan clan = requester.getClan();
 
 
@@ -59,8 +58,8 @@ public class AllyCreateRequest extends MultipleRequest {
             clan.addAlly(ally);
             ally.addAlly(clan);
 
-            ally.addBBMessage(cp, MessageFormat.format(Language.getTranslation("accepted.an.alliance"), ally.getName(), clan.getName()));
-            clan.addBBMessage(cp, MessageFormat.format(Language.getTranslation("accepted.an.alliance"), cp.getName(), ally.getName()));
+            ally.addBBMessage(ally, MessageFormat.format(Language.getTranslation("accepted.an.alliance"), ally.getName(), clan.getName()));
+            clan.addBBMessage(clan, MessageFormat.format(Language.getTranslation("alliances.created.own.clan"), ally.getName()));
 
             clan.update(true);
             ally.update(true);

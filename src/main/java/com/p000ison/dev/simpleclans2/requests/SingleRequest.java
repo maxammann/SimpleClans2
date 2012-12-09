@@ -106,8 +106,6 @@ public abstract class SingleRequest extends AbstractRequest {
     {
         Player acceptorPlayer = acceptor.toPlayer();
 
-        System.out.println(acceptor);
-        System.out.println(acceptorPlayer);
         if (acceptorPlayer != null) {
             ChatBlock.sendMessage(acceptorPlayer, message);
         }
