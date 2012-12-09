@@ -73,7 +73,7 @@ public class RivalCommand extends GenericPlayerCommand {
                 return;
             }
 
-            if (clan.isLeader(cp)) {
+            if (!clan.isLeader(cp)) {
                 ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("no.leader.permissions"));
                 return;
             }

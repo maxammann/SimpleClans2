@@ -102,7 +102,7 @@ public class RivalriesCommand extends GenericConsoleCommand {
 
                 Set<Clan> rivals = clan.getRivals();
 
-                chatBlock.addRow(ChatColor.AQUA + clan.getName(), rivals == null || rivals.isEmpty() ? Language.getTranslation("none") : GeneralHelper.clansToString(rivals, ","));
+                chatBlock.addRow(ChatColor.AQUA + clan.getTag(), rivals == null || rivals.isEmpty() ? Language.getTranslation("none") : GeneralHelper.clansToString(rivals, ","));
             }
 
             chatBlock.sendBlock(sender);
