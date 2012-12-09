@@ -67,7 +67,7 @@ public final class GeneralHelper {
 
     public static String arrayToString(String seperator, Collection collection)
     {
-        if (collection == null || collection.size() == 0) {
+        if (collection == null || collection.isEmpty()) {
             return null;
         }
 
