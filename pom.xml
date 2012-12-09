@@ -55,7 +55,7 @@
     <build>
         <!--The final output name-->
         <finalName>
-            ${project.artifactId}-${project.version}
+            ${project.artifactId}-${project.version}-SNAPSHOT
         </finalName>
 
         <defaultGoal>clean install</defaultGoal>
