@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.p000ison.dev.simpleclans2</groupId>
     <artifactId>SimpleClans2</artifactId>
-    <version>1.0</version>
+    <version>1.0-SNAPSHOT</version>
 
     <name>SimpleClans2</name>
     <url>http://dev.bukkit.org/server-mods/simpleclans/</url>
@@ -55,7 +55,7 @@
     <build>
         <!--The final output name-->
         <finalName>
-            ${project.artifactId}-${project.version}-SNAPSHOT
+            ${project.artifactId}-${project.version}
         </finalName>
 
         <defaultGoal>clean install</defaultGoal>
