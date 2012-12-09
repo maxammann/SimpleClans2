@@ -59,8 +59,8 @@ public class RivalryBreakRequest extends MultipleRequest {
             clan.removeRival(rival);
             rival.removeRival(clan);
 
-            rival.addBBMessage(cp, Language.getTranslation("broken.the.rivalry", getAcceptors().size(), clan.getName()));
-            clan.addBBMessage(cp, Language.getTranslation("broken.the.rivalry.with", cp.getName(), rival.getName()));
+            rival.addBBMessage(cp, Language.getTranslation("broken.the.rivalry", clan.getName()));
+            clan.addBBMessage(cp, Language.getTranslation("broken.the.rivalry", rival.getName()));
 
             clan.update(true);
             rival.update(true);
