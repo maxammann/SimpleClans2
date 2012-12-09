@@ -103,7 +103,6 @@ public class RosterCommand extends GenericPlayerCommand {
 
             int[] boundings = getBoundings(leaders.size() + members.size(), page);
 
-
             int i = boundings[0];
             int end = boundings[1];
 
