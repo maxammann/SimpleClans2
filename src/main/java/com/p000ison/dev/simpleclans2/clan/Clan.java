@@ -1219,7 +1219,7 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble, Seriali
      */
     public boolean reachedRivalLimit()
     {
-        int rivalCount = rivals.size();
+        int rivalCount = rivals == null ? 0 :rivals.size();
         //minus 1 because this clan is rivable
         double clanCount = plugin.getClanManager().getRivalAbleClanCount() - 1;
         double rivalPercent = plugin.getSettingsManager().getRivalLimitPercent();
