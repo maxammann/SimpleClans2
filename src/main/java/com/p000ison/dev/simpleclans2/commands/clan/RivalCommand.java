@@ -105,6 +105,7 @@ public class RivalCommand extends GenericPlayerCommand {
 
                     if (!clan.isRival(rival)) {
                         clan.addRival(rival);
+                        rival.addRival(clan);
                         rival.addBBMessage(cp, ChatColor.AQUA + Language.getTranslation("has.initiated.a.rivalry", clan.getName(), rival.getName()));
                         clan.addBBMessage(cp, ChatColor.AQUA + Language.getTranslation("has.initiated.a.rivalry", player.getName(), rival.getName()));
                     } else {
@@ -118,7 +119,7 @@ public class RivalCommand extends GenericPlayerCommand {
                         plugin.getRequestManager().createRequest(new RivalryBreakRequest(plugin, leaders, cp, rival));
                         ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("leaders.asked.to.end.rivalry", rival.getName()));
                     } else {
-                        ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("your.clans.are.not.rivals"));
+                        ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("your.clans.are.no.rivals"));
                     }
                 } else {
                     ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("usage.ally", plugin.getSettingsManager().getClanCommand()));
