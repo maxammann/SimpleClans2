@@ -277,7 +277,7 @@ public class SimpleClans extends JavaPlugin implements SCCore {
         clanPlayerManager = new ClanPlayerManager(this);
         settingsManager.loadPermissions();
         dataManager = new DataManager(this);
-        requestManager = new RequestManager();
+        requestManager = new RequestManager(this);
         teleportManager = new TeleportManager(this);
         rankManager = new RankManager(this);
         spoutSupport = new SpoutSupport(this);

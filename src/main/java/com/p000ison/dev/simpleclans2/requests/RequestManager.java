@@ -20,9 +20,11 @@
 
 package com.p000ison.dev.simpleclans2.requests;
 
+import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.language.Language;
+import org.bukkit.entity.Player;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -33,6 +35,12 @@ import java.util.Set;
  */
 public class RequestManager {
     public Set<AbstractRequest> requests = new HashSet<AbstractRequest>();
+    private SimpleClans plugin;
+
+    public RequestManager(SimpleClans plugin)
+    {
+        this.plugin = plugin;
+    }
 
     public boolean createRequest(AbstractRequest created)
     {
@@ -141,6 +149,7 @@ public class RequestManager {
         return requests.size();
     }
 
+
     public void clearRequests(ClanPlayer clanPlayer)
     {
         if (requests.isEmpty()) {
@@ -156,7 +165,36 @@ public class RequestManager {
                 it.remove();
                 return;
             } else if (request.isAcceptor(clanPlayer)) {
-                this.vote(clanPlayer, Result.ABSTAIN);
+                if (request instanceof SingleRequest) {
+                    this.vote(clanPlayer, Result.DENY);
+                } else if (request instanceof MultipleRequest) {
+                    this.vote(clanPlayer, Result.ABSTAIN);
+                }
+            }
+        }
+    }
+
+    public void clearRequests(Player player)
+    {
+        if (requests.isEmpty()) {
+            return;
+        }
+
+        Iterator<AbstractRequest> it = requests.iterator();
+
+        while (it.hasNext()) {
+            AbstractRequest request = it.next();
+
+            if (request.isRequester(player)) {
+                it.remove();
+                return;
+            } else if (request.isAcceptor(player)) {
+                ClanPlayer clanPlayer = plugin.getClanPlayerManager().getClanPlayer(player);
+                if (request instanceof SingleRequest) {
+                    this.vote(clanPlayer, Result.DENY);
+                } else if (request instanceof MultipleRequest) {
+                    this.vote(clanPlayer, Result.ABSTAIN);
+                }
             }
         }
     }

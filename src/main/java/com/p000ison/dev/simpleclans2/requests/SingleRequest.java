@@ -126,9 +126,22 @@ public abstract class SingleRequest extends AbstractRequest {
     {
         return !accepted ? 0 : 1;
     }
+
     @Override
     public int getAcceptorsSize()
     {
         return 1;
+    }
+
+    @Override
+    public boolean isClanPlayerInvolved(Player player)
+    {
+        return isAcceptor(player) || isRequester(player);
+    }
+
+    @Override
+    public boolean isAcceptor(Player player)
+    {
+        return player.getName().equals(acceptor.getName());
     }
 }

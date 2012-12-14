@@ -169,4 +169,23 @@ public abstract class MultipleRequest extends AbstractRequest {
     {
         return acceptors.size();
     }
+
+    @Override
+    public boolean isClanPlayerInvolved(Player player)
+    {
+        return isAcceptor(player) || isRequester(player);
+    }
+
+    @Override
+    public boolean isAcceptor(Player player)
+    {
+        String playerName = player.getName();
+        for (ClanPlayer clanPlayer : acceptors) {
+            String name = clanPlayer.getName();
+            if (name.hashCode() == playerName.hashCode() && name.equals(playerName)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

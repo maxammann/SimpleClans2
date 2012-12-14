@@ -22,6 +22,7 @@ package com.p000ison.dev.simpleclans2.requests;
 
 import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
+import org.bukkit.entity.Player;
 
 /**
  * Represents a AbstractRequest
@@ -57,6 +58,8 @@ public interface Request {
      * @return Checks if a player is involved in this request.
      */
     boolean isClanPlayerInvolved(ClanPlayer clanPlayer);
+
+    boolean isClanPlayerInvolved(Player player);
 
     /**
      * Performs a vote on this request
@@ -100,6 +103,8 @@ public interface Request {
      */
     boolean isAcceptor(ClanPlayer clanPlayer);
 
+    boolean isAcceptor(Player player);
+
     /**
      * Announces a message to all players, who are involved.
      *
@@ -130,6 +135,8 @@ public interface Request {
     void onDenied();
 
     boolean isRequester(ClanPlayer clanPlayer);
+
+    boolean isRequester(Player player);
 
     int getTimesVoted();
 

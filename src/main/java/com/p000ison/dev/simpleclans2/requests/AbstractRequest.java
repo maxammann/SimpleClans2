@@ -22,6 +22,7 @@ package com.p000ison.dev.simpleclans2.requests;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
+import org.bukkit.entity.Player;
 
 /**
  * Represents a AbstractRequest
@@ -55,5 +56,11 @@ public abstract class AbstractRequest implements Request {
     public boolean isRequester(ClanPlayer clanPlayer)
     {
         return requester.equals(clanPlayer);
+    }
+
+    @Override
+    public boolean isRequester(Player player)
+    {
+        return player.getName().equals(requester.getName());
     }
 }
