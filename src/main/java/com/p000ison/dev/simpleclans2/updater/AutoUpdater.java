@@ -21,14 +21,12 @@ package com.p000ison.dev.simpleclans2.updater;
 
 import com.p000ison.dev.simpleclans2.util.DateHelper;
 import com.p000ison.dev.simpleclans2.util.Logging;
-import org.apache.commons.lang.time.DurationFormatUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
-import java.util.Set;
 
 /**
  * Represents a AutoUpdater
@@ -37,7 +35,7 @@ public class AutoUpdater {
     private static final String JOB = "SimpleClans2";
     private Build toUpdate = null;
 
-    public AutoUpdater(Plugin plugin, UpdateType type)
+    public AutoUpdater(Plugin plugin, UpdateType type, boolean longReport)
     {
         String version = plugin.getDescription().getVersion();
 
@@ -62,7 +60,7 @@ public class AutoUpdater {
             toUpdate.fetchInformation();
 
             if (versionValue < toUpdate.getBuildNumber()) {
-                Logging.debug(getBuildInfo(toUpdate));
+                Logging.debug(getBuildInfo(toUpdate, longReport));
             }
         } catch (IOException e) {
             Logging.debug(e, true, "Failed at fetching the Update information!");
@@ -70,7 +68,7 @@ public class AutoUpdater {
     }
 
 
-    public static String getBuildInfo(Build build)
+    public static String getBuildInfo(Build build, boolean longReport)
     {
         if (build == null) {
             return null;
@@ -80,34 +78,11 @@ public class AutoUpdater {
 
         updateInfo.append("------------------------------------------------------------------------------------------------------\n");
         updateInfo.append("There is a update for your SimpleClans version!\n");
-        updateInfo.append("Build:  ").append(build.getBuildNumber()).append('\n');
-        updateInfo.append("Type:  ").append(build.getUpdateType() == UpdateType.LATEST ? "Unofficial" : "Official\n");
-        updateInfo.append("Release date:  ").append(new Date(build.getStarted())).append('\n');
-        updateInfo.append("Compiling duration:  ").append(DurationFormatUtils.formatDuration(build.getDuration(), "HH:mm:ss\n"));
-        updateInfo.append("Author:  ").append(build.getAuthor()).append('\n');
-        updateInfo.append("Comment:  ").append(build.getComment()).append(" (").append(build.getCommitURL()).append(")\n");
-
-        Set<String> modified = build.getModifiedFiles();
-        Set<String> created = build.getCreatedFiles();
-        Set<String> deleted = build.getDeletedFiles();
-
-        if (!modified.isEmpty()) {
-            updateInfo.append("Modified files(").append(modified.size()).append("):\n");
-            for (String file : modified) {
-                updateInfo.append("  * ").append(file).append('\n');
-            }
-        }
-        if (!created.isEmpty()) {
-            updateInfo.append("Created files(").append(created.size()).append("):\n");
-            for (String file : created) {
-                updateInfo.append("  * ").append(file).append('\n');
-            }
-        }
-        if (!deleted.isEmpty()) {
-            updateInfo.append("Deleted files(").append(deleted.size()).append("):\n");
-            for (String file : deleted) {
-                updateInfo.append("  * ").append(file).append('\n');
-            }
+        if (longReport) {
+            updateInfo.append("Build:  ").append(build.getBuildNumber()).append('\n');
+            updateInfo.append("Type:  ").append(build.getUpdateType() == UpdateType.LATEST ? "Unofficial" : "Official\n");
+            updateInfo.append("Release date:  ").append(new Date(build.getStarted())).append('\n');
+            updateInfo.append("Comment:  ").append(build.getComment()).append(" (").append(build.getCommitURL()).append(")\n");
         }
         updateInfo.append("------------------------------------------------------------------------------------------------------\n");
         return updateInfo.toString();

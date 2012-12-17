@@ -218,7 +218,7 @@
         <dependency>
             <groupId>net.sacredlabyrinth.Phaed</groupId>
             <artifactId>PreciousStones</artifactId>
-            <version>9.4.0</version>
+            <version>9.5.2</version>
             <type>jar</type>
             <scope>compile</scope>
         </dependency>

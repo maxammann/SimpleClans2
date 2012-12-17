@@ -62,9 +62,9 @@ public class PreciousStonesSupport {
 
         if (fields != null && !fields.isEmpty()) {
             for (Field field : fields) {
-                boolean allowed = preciousStones.getForceFieldManager().isApplyToAllowed(field, player.getName());
+                boolean allowed = preciousStones.getForceFieldManager().isAllowed(field, player.getName());
 
-                if (!allowed || field.hasFlag(FieldFlag.APPLY_TO_ALL)) {
+                if (!allowed || field.hasFlag(FieldFlag.ALL)) {
                     return false;
                 }
             }

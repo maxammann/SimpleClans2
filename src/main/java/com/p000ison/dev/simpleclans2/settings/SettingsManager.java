@@ -68,6 +68,7 @@ public class SettingsManager {
     private int autoSave;
     private String helpFormat;
     private UpdateType buildChannel;
+    private boolean longBuildReport;
 
     private boolean reportErrors;
     private String email;
@@ -131,6 +132,7 @@ public class SettingsManager {
             autoSave = general.getInt("auto-save");
             helpFormat = ChatBlock.parseColors(general.getString("help-format"));
             UpdateType updateType = UpdateType.getUpdateType(general.getString("build-channel"));
+            this.longBuildReport = general.getBoolean("long-build-report");
 
             if (updateType == null) {
                 Logging.debug("Invalid build-channel! Switching to recommended!");
@@ -748,5 +750,10 @@ public class SettingsManager {
     public UpdateType getBuildChannel()
     {
         return buildChannel;
+    }
+
+    public boolean isLongBuildReport()
+    {
+        return longBuildReport;
     }
 }
