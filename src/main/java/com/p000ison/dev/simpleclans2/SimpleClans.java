@@ -126,7 +126,9 @@ public class SimpleClans extends JavaPlugin implements SCCore {
             ChatBlock.setHeadColor(getSettingsManager().getHeaderPageColor());
             ChatBlock.setSubColor(getSettingsManager().getSubPageColor());
 
-            this.updater = new AutoUpdater(this, getSettingsManager().getBuildChannel(), getSettingsManager().isLongBuildReport());
+            if (getSettingsManager().isUpdaterEnabled()) {
+                this.updater = new AutoUpdater(this, getSettingsManager().getBuildChannel(), getSettingsManager().isLongBuildReport());
+            }
 
             registerEvents();
 
@@ -152,7 +154,7 @@ public class SimpleClans extends JavaPlugin implements SCCore {
         Logging.debug(String.format("Enabling took %s ms", finish - startup));
     }
 
-//    private void enableDebuggingConsole()
+    //    private void enableDebuggingConsole()
 //    {
 //        Interpreter beanshell = new Interpreter();
 //        try {
@@ -190,7 +192,7 @@ public class SimpleClans extends JavaPlugin implements SCCore {
      */
     public boolean isUpdate()
     {
-        return updater.isUpdate();
+        return updater != null && updater.isUpdate();
     }
 
     /**
@@ -200,7 +202,7 @@ public class SimpleClans extends JavaPlugin implements SCCore {
      */
     public boolean update()
     {
-        return updater.update();
+        return updater != null && updater.update();
     }
 
     public void setupMetrics()

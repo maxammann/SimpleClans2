@@ -1,6 +1,4 @@
 general:
-  build-channel: 'dev'
-  long-build-report: true
   elements-per-page: 10
   help-format: '&b    {0}'
   server-name: '&8SimpleClans'
@@ -9,6 +7,10 @@ general:
   reporting:
     errors: true
     email: ''
+updater:
+  enabled: true
+  build-channel: 'dev'
+  long-build-report: true
 commands:
   clan: 'clan'
   rank: 'rank'
