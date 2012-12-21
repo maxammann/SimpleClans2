@@ -168,7 +168,7 @@ public class SimpleClans extends JavaPlugin implements SCCore {
 //    }
     public void broadcast(String msg)
     {
-        getServer().broadcastMessage(ChatColor.AQUA.toString() + '[' + getSettingsManager().getServerName() + ']' + ChatColor.AQUA + msg);
+        getServer().broadcastMessage(ChatColor.AQUA.toString() + '[' + getSettingsManager().getServerName() + ChatColor.AQUA + ']' + msg);
     }
 
     public void disable()
@@ -357,6 +357,7 @@ public class SimpleClans extends JavaPlugin implements SCCore {
         commandManager.addCommand(new RankAddPermissionCommand(this));
         commandManager.addCommand(new RankRemovePermissionCommand(this));
         commandManager.addCommand(new RankAssignCommand(this));
+        commandManager.addCommand(new RankUnAssignCommand(this));
         commandManager.addCommand(new ListPermissionsCommand(this));
 
 //        commandManager.addCommand(new StrifesCommand(this));

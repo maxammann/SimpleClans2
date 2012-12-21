@@ -411,6 +411,11 @@ public class ClanPlayer implements KDR, Balance, UpdateAble {
         this.rank = rank;
     }
 
+    public void unassignRank()
+    {
+        this.rank = null;
+    }
+
     @Override
     public void update()
     {

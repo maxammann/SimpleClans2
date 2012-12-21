@@ -112,7 +112,8 @@ public class RankDetailCommand extends GenericPlayerCommand {
                 if (!entry.getValue()) {
                     output += '-';
                 }
-                ChatBlock.sendMessage(player, output + ChatColor.WHITE + Rank.getAvailablePermissions().get(entry.getKey()));
+
+                ChatBlock.sendMessage(player, output + ChatColor.WHITE + Rank.getByID(entry.getKey()));
             }
         }
     }

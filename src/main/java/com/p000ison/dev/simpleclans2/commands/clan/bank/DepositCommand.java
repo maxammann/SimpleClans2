@@ -67,7 +67,7 @@ public class DepositCommand extends GenericPlayerCommand {
         }
 
         if (cp.isRankPermissionNegative("bank.deposit")) {
-            player.sendMessage(ChatColor.DARK_RED + Language.getTranslation("no.reank.permissions"));
+            player.sendMessage(ChatColor.DARK_RED + Language.getTranslation("no.rank.permissions"));
             return;
         }
 

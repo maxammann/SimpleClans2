@@ -108,8 +108,20 @@ public final class JSONUtil {
         }
 
         Map<Integer, Boolean> map = new HashMap<Integer, Boolean>();
+        for (Object obj : parser.entrySet()) {
+            Map.Entry entry = (Map.Entry) obj;
+            Integer integer;
+            //
+            //Keys in json maps are always strings!
+            //
+            if (entry.getKey() instanceof String) {
+                integer = Integer.parseInt((String) entry.getKey());
+            } else {
+                integer = (Integer)entry.getKey();
+            }
+            map.put(integer, (Boolean) entry.getValue());
+        }
 
-        map.putAll(parser);
 
         return map;
     }

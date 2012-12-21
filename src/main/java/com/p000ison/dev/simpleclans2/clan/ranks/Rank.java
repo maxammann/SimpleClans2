@@ -21,6 +21,7 @@ package com.p000ison.dev.simpleclans2.clan.ranks;
 
 import org.apache.commons.lang.StringUtils;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
@@ -29,7 +30,13 @@ import java.util.TreeMap;
  * Represents a Rank
  */
 public class Rank implements Comparable<Rank> {
-    private static final Map<java.lang.Integer, String> availablePermissions = new TreeMap<java.lang.Integer, String>();
+    private static final Map<java.lang.Integer, String> availablePermissions = new TreeMap<java.lang.Integer, String>(new Comparator<Integer>() {
+        @Override
+        public int compare(Integer o1, Integer o2)
+        {
+            return o1.compareTo(o2);
+        }
+    });
 
     static {
         availablePermissions.put(0, "leader.demote");
@@ -98,7 +105,6 @@ public class Rank implements Comparable<Rank> {
             this.permissions = permissions;
         }
 
-        System.out.println(permissions);
         this.id = id;
     }
 
@@ -133,17 +139,31 @@ public class Rank implements Comparable<Rank> {
         return -1;
     }
 
+    public static String getByID(int id)
+    {
+        for (Map.Entry<Integer, String> entry : availablePermissions.entrySet()) {
+            if (entry.getKey().equals(id)) {
+                return entry.getValue();
+            }
+        }
+        return null;
+    }
+
     public String removePermission(String permission)
     {
-        PermissionFinder permissionFinder = new PermissionFinder(permission);
+        if (permissions.isEmpty()) {
+            return null;
+        }
 
+        PermissionFinder permissionFinder = new PermissionFinder(permission);
         if (permissionFinder.getPermission() != null && id != -1) {
-            if (permissions.remove(permissionFinder.getId())) {
+            int id = permissionFinder.getId();
+            if (permissions.remove(id)) {
                 return permissionFinder.getPermission();
             }
         }
 
-        return removePermission(null);
+        return null;
     }
 
     /**
@@ -172,10 +192,12 @@ public class Rank implements Comparable<Rank> {
     public boolean isNegative(int id)
     {
         Boolean permission = permissions.get(id);
+
         if (permission == null) {
             return false;
         }
-        return permission;
+
+        return !permission;
     }
 
     public boolean isNegative(String permission)
@@ -210,7 +232,6 @@ public class Rank implements Comparable<Rank> {
 
         return null;
     }
-
 
     private class PermissionFinder {
         private String permission;

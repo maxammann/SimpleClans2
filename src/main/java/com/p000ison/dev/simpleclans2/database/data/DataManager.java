@@ -423,7 +423,7 @@ public class DataManager {
                 String name = result.getString("name");
                 String tag = result.getString("tag");
                 int priority = result.getInt("priority");
-                Map<Integer, Boolean> permissions = JSONUtil.JSONToPermissionMap("permissions");
+                Map<Integer, Boolean> permissions = JSONUtil.JSONToPermissionMap(result.getString("permissions"));
 
                 ranks.add(new Rank(id, name, tag, priority, permissions));
             }
@@ -659,7 +659,6 @@ public class DataManager {
 
             if (res != null) {
                 while (res.next()) {
-                    System.out.println(res.getString("text"));
                     bb.add(res.getString("text"));
                 }
             }
