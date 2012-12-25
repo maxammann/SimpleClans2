@@ -63,6 +63,6 @@ public class DemoteRequest extends MultipleRequest {
     @Override
     public void onDenied()
     {
-         sendAcceptorMessage(ChatColor.DARK_RED + Language.getTranslation("demotion.denied"));
+        sendAcceptorMessage(ChatColor.DARK_RED + Language.getTranslation("demotion.denied"));
     }
 }

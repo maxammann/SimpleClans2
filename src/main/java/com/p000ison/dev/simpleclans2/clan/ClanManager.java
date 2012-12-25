@@ -20,7 +20,6 @@
 
 package com.p000ison.dev.simpleclans2.clan;
 
-import com.avaje.ebean.validation.NotNull;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.api.events.ClanCreateEvent;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;

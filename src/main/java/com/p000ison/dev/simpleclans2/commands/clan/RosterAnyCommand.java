@@ -91,7 +91,6 @@ public class RosterAnyCommand extends GenericPlayerCommand {
             chatBlock.addRow("  " + headColor + Language.getTranslation("player"), Language.getTranslation("rank"), Language.getTranslation("seen"));
 
 
-
             List<ClanPlayer> leaders = new ArrayList<ClanPlayer>(clan.getLeaders());
             Collections.sort(leaders, new LastSeenComparator());
 

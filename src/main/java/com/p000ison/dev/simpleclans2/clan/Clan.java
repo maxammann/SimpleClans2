@@ -36,14 +36,24 @@ import com.p000ison.dev.simpleclans2.language.Language;
 import com.p000ison.dev.simpleclans2.util.DateHelper;
 import com.p000ison.dev.simpleclans2.util.GeneralHelper;
 import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
+import com.p000ison.dev.sqlapi.Database;
+import com.p000ison.dev.sqlapi.TableObject;
+import com.p000ison.dev.sqlapi.annotation.DatabaseColumn;
+import com.p000ison.dev.sqlapi.annotation.DatabaseColumnGetter;
+import com.p000ison.dev.sqlapi.annotation.DatabaseColumnSetter;
+import com.p000ison.dev.sqlapi.annotation.DatabaseTable;
+import com.p000ison.dev.sqlapi.exception.DatabaseConnectionException;
+import com.p000ison.dev.sqlapi.mysql.MySQLConfiguration;
+import com.p000ison.dev.sqlapi.mysql.MySQLDatabase;
 import org.apache.commons.lang.Validate;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
+import org.bukkit.plugin.Plugin;
 
-import java.io.*;
+import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.text.MessageFormat;
 import java.text.NumberFormat;
@@ -53,18 +63,23 @@ import java.util.*;
 /**
  * Represents a Clan
  */
-public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble, Serializable {
+@DatabaseTable(name = "sc2_clans")
+public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble, Serializable, TableObject {
 
     public transient static final SimpleDateFormat DATE_FORMAT = new java.text.SimpleDateFormat("MMM dd, yyyy h:mm a");
     public transient static final NumberFormat DECIMAL_FORMAT = new DecimalFormat("#.#");
 
-    private transient final SimpleClans plugin;
+    private transient SimpleClans plugin;
     private ClanFlags flags;
     private BankAccount bank;
 
-    private long id = -1;
+    @DatabaseColumn(position = 0, databaseName = "id", id = true)
+    private int id = -1;
 
-    private String tag, name;
+    @DatabaseColumn(position = 1, databaseName = "tag", notNull = true, lenght = 26, unique = true)
+    private String tag;
+    @DatabaseColumn(position = 2, databaseName = "name", notNull = true, lenght = 100, unique = true)
+    private String name;
 
     private long foundedDate;
     private long lastActionDate;
@@ -77,6 +92,19 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble, Seriali
     private Set<Rank> ranks;
 
     private boolean update;
+
+    String test = "sdf";
+
+    public Clan(String sdf)
+    {
+        System.out.println(2);
+        test = sdf;
+    }
+
+    public String gettest() {
+        return test;
+    }
+
 
     /**
      * Creates a new clan
@@ -111,7 +139,7 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble, Seriali
      * @param tag    The tag of this clan
      * @param name   The full name of this clan
      */
-    public Clan(SimpleClans plugin, long id, String tag, String name)
+    public Clan(SimpleClans plugin, int id, String tag, String name)
     {
         this(plugin, tag, name);
         this.id = id;
@@ -153,7 +181,7 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble, Seriali
      *
      * @return The id.
      */
-    public long getId()
+    public int getId()
     {
         return id;
     }
@@ -163,7 +191,7 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble, Seriali
      *
      * @param id The id.
      */
-    public void setId(long id)
+    public void setId(int id)
     {
         this.id = id;
     }
@@ -215,9 +243,10 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble, Seriali
      *
      * @return The time
      */
-    public long getLastActionDate()
+    @DatabaseColumnGetter(databaseName = "last_action")
+    public Date getLastActionDate()
     {
-        return lastActionDate;
+        return new Date(lastActionDate);
     }
 
     /**
@@ -225,6 +254,12 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble, Seriali
      *
      * @param lastActionDate The date when the last action happened.
      */
+    @DatabaseColumnSetter(position = 5, databaseName = "last_action")
+    public void setLastActionDate(Date lastActionDate)
+    {
+        this.lastActionDate = lastActionDate.getTime();
+    }
+
     public void setLastActionDate(long lastActionDate)
     {
         this.lastActionDate = lastActionDate;
@@ -235,7 +270,7 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble, Seriali
      */
     public void updateLastAction()
     {
-        this.setLastActionDate(System.currentTimeMillis());
+        this.lastActionDate = System.currentTimeMillis();
     }
 
     /**
@@ -243,9 +278,10 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble, Seriali
      *
      * @return The found date,
      */
-    public long getFoundedDate()
+    @DatabaseColumnGetter(databaseName = "founded")
+    public Date getFoundedDate()
     {
-        return foundedDate;
+        return new Date(foundedDate);
     }
 
     /**
@@ -253,6 +289,12 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble, Seriali
      *
      * @param foundedDate The time when it was founded.
      */
+    @DatabaseColumnSetter(position = 4, databaseName = "founded")
+    public void setFoundedDate(Date foundedDate)
+    {
+        this.foundedDate = foundedDate.getTime();
+    }
+
     public void setFoundedDate(long foundedDate)
     {
         this.foundedDate = foundedDate;
@@ -263,6 +305,7 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble, Seriali
      *
      * @return Weather this clan is verified.
      */
+    @DatabaseColumnGetter(databaseName = "verified")
     public boolean isVerified()
     {
         return verified;
@@ -273,6 +316,7 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble, Seriali
      *
      * @param verified Weather this clan should be verified
      */
+    @DatabaseColumnSetter(position = 3, databaseName = "verified", defaultValue = "0")
     public void setVerified(boolean verified)
     {
         this.verified = verified;
@@ -995,7 +1039,7 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble, Seriali
     @Override
     public long getLastUpdated()
     {
-        return getLastActionDate();
+        return lastActionDate;
     }
 
     /**
@@ -1219,7 +1263,7 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble, Seriali
      */
     public boolean reachedRivalLimit()
     {
-        int rivalCount = rivals == null ? 0 :rivals.size();
+        int rivalCount = rivals == null ? 0 : rivals.size();
         //minus 1 because this clan is rivable
         double clanCount = plugin.getClanManager().getRivalAbleClanCount() - 1;
         double rivalPercent = plugin.getSettingsManager().getRivalLimitPercent();
@@ -1362,10 +1406,17 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble, Seriali
         return this.getBank().transfer(account, amount);
     }
 
+    @DatabaseColumnGetter(databaseName = "balance")
     @Override
     public double getBalance()
     {
         return this.getBank().getBalance();
+    }
+
+    @DatabaseColumnSetter(position = 10, databaseName = "balance", defaultValue = "0.0", lenght = {20, 2})
+    private void setBalance(double balance)
+    {
+        this.getBank().setBalance(balance);
     }
 
     private BankAccount getBank()
@@ -1375,5 +1426,28 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble, Seriali
         }
 
         return bank;
+    }
+
+    public static void main(String[] args)
+    {
+        try {
+            Database db = new MySQLDatabase(new MySQLConfiguration("root", "m1nt", "localhost", 3306, "test"));
+
+            String test = "123";
+
+            db.registerTable(Clan.class).registerConstructor(test);
+
+            Clan clan = new Clan(null, "d", "d");
+            db.save(clan);
+            System.out.println(clan.getId());
+            System.out.println( db.<Clan>select().from(Clan.class).prepare().getResults().get(1).gettest());
+
+        } catch (DatabaseConnectionException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Plugin getP() {
+        return plugin;
     }
 }

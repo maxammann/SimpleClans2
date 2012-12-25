@@ -51,7 +51,7 @@ public class DataManager {
 
     private PreparedStatement DELETE_CLAN, UPDATE_CLAN, INSERT_CLAN, RETRIEVE_CLAN_BY_TAG;
     private PreparedStatement DELETE_CLANPLAYER, UPDATE_CLANPLAYER, INSERT_CLANPLAYER, RETRIEVE_CLANPLAYER_BY_NAME, UNSET_CLANPLAYER;
-    private PreparedStatement  RETRIEVE_KILLS_PER_PLAYER, RETRIEVE_MOST_KILLS;
+    private PreparedStatement RETRIEVE_KILLS_PER_PLAYER, RETRIEVE_MOST_KILLS;
     public PreparedStatement INSERT_KILL;
     private PreparedStatement INSERT_RANK, UPDATE_RANK, RETRIEVE_RANK_BY_NAME;
     public PreparedStatement DELETE_RANK_BY_ID;
@@ -292,7 +292,7 @@ public class DataManager {
     }
 
 
-    public long retrieveClanId(String tag)
+    public int retrieveClanId(String tag)
     {
 
         try {
@@ -304,7 +304,7 @@ public class DataManager {
                 return -1;
             }
 
-            return result.getLong("id");
+            return result.getInt("id");
         } catch (SQLException e) {
             Logging.debug(e, true, "Failed at retrieving clan id!");
         }
@@ -347,7 +347,7 @@ public class DataManager {
 
                 long lastAction = result.getTimestamp("last_action").getTime();
                 boolean verified = result.getBoolean("verified");
-                long id = result.getLong("id");
+                int id = result.getInt("id");
                 String tag = result.getString("tag");
 
                 if (verified) {
