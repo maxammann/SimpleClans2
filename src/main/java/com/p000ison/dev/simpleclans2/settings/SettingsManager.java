@@ -22,15 +22,13 @@ package com.p000ison.dev.simpleclans2.settings;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
-import com.p000ison.dev.simpleclans2.database.configuration.DatabaseConfiguration;
-import com.p000ison.dev.simpleclans2.database.configuration.DatabaseMode;
-import com.p000ison.dev.simpleclans2.database.configuration.MySQLConfiguration;
-import com.p000ison.dev.simpleclans2.database.configuration.SQLiteConfiguration;
 import com.p000ison.dev.simpleclans2.updater.UpdateType;
 import com.p000ison.dev.simpleclans2.util.ExceptionHelper;
 import com.p000ison.dev.simpleclans2.util.GeneralHelper;
 import com.p000ison.dev.simpleclans2.util.Logging;
 import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
+import com.p000ison.dev.sqlapi.DatabaseConfiguration;
+import com.p000ison.dev.sqlapi.mysql.MySQLConfiguration;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -164,31 +162,18 @@ public class SettingsManager {
 
             ConfigurationSection databaseSection = config.getConfigurationSection("database");
 
-            switch (DatabaseMode.getMode(databaseSection.getString("mode"))) {
-                case MYSQL:
-                    ConfigurationSection mysqlDatabaseSection = databaseSection.getConfigurationSection("mysql");
-                    MySQLConfiguration mysqlConfig = new MySQLConfiguration();
+            String mode = databaseSection.getString("mode");
+            if (mode.equalsIgnoreCase("mysql")) {
+                ConfigurationSection mysqlDatabaseSection = databaseSection.getConfigurationSection("mysql");
 
-                    mysqlConfig.setHost(mysqlDatabaseSection.getString("host"));
-                    mysqlConfig.setUsername(mysqlDatabaseSection.getString("username"));
-                    mysqlConfig.setPassword(mysqlDatabaseSection.getString("password"));
-                    mysqlConfig.setDatabase(mysqlDatabaseSection.getString("database"));
-                    mysqlConfig.setPort(mysqlDatabaseSection.getInt("port"));
+                this.databaseConfiguration = new MySQLConfiguration(mysqlDatabaseSection.getString("username"),
+                        mysqlDatabaseSection.getString("password"),
+                        mysqlDatabaseSection.getString("host"),
+                        mysqlDatabaseSection.getInt("port"), mysqlDatabaseSection.getString("database"));
+            } else if (mode.equalsIgnoreCase("sqlite")) {
 
-                    this.databaseConfiguration = mysqlConfig;
-
-                    break;
-                case SQLITE:
-                    ConfigurationSection sqliteDatabaseSection = databaseSection.getConfigurationSection("sqlite");
-                    SQLiteConfiguration sqliteConfig = new SQLiteConfiguration();
-
-                    sqliteConfig.setDatabaseFile(new File(sqliteDatabaseSection.getString("location")));
-
-                    this.databaseConfiguration = sqliteConfig;
-
-                    break;
-                default:
-                    throw new UnsupportedOperationException("The database mode was not found!");
+            } else {
+                throw new UnsupportedOperationException("The database mode was not found!");
             }
 
 

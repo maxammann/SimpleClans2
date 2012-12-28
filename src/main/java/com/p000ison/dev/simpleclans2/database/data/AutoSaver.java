@@ -23,19 +23,19 @@ import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clan.ranks.Rank;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
-import com.p000ison.dev.simpleclans2.util.Logging;
 
-import java.util.LinkedList;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * Represents a AutoSaver
  */
-public class AutoSaver extends LinkedList<Executable> implements Runnable {
+public class AutoSaver implements Runnable {
 
-    private static final long serialVersionUID = 1L;
+    private Queue<Executable> queue = new ConcurrentLinkedQueue<Executable>();
 
-    private transient DataManager dataManager;
-    private transient SimpleClans plugin;
+    private SimpleClans plugin;
+    private DataManager dataManager;
 
     public AutoSaver(SimpleClans simpleClans, DataManager dataManager)
     {
@@ -44,38 +44,44 @@ public class AutoSaver extends LinkedList<Executable> implements Runnable {
     }
 
     @Override
-    public void run()
+    public synchronized void run()
     {
         for (Clan clan : plugin.getClanManager().getClans()) {
             if (clan.needsUpdate()) {
-                if (dataManager.updateClan(clan)) {
-                    clan.update(false);
-                }
+                dataManager.getDatabase().save(clan);
+                clan.update(false);
             }
 
             for (Rank rank : clan.getRanks()) {
                 if (rank.needsUpdate()) {
-                    if (dataManager.updateRank(clan, rank)) {
-                        rank.update(false);
-                    }
+                    dataManager.getDatabase().save(rank);
+                    rank.update(false);
                 }
             }
         }
 
         for (ClanPlayer clanPlayer : plugin.getClanPlayerManager().getClanPlayers()) {
             if (clanPlayer.needsUpdate()) {
-                if (dataManager.updateClanPlayer(clanPlayer)) {
-                    clanPlayer.update(false);
-                }
+                dataManager.getDatabase().save(clanPlayer);
+                clanPlayer.update(false);
             }
         }
 
-        Executable statement;
+        Executable executable;
 
-        while ((statement = this.poll()) != null) {
-            if (!statement.execute(dataManager)) {
-                Logging.debug("Failed to onAccepted saving statement!");
-            }
+        while ((executable = queue.poll()) != null) {
+            System.out.println(executable);
+            executable.execute(dataManager);
         }
+    }
+
+    public synchronized void addExecutable(Executable executable)
+    {
+        queue.add(executable);
+    }
+
+    public int size()
+    {
+        return queue.size();
     }
 }

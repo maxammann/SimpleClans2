@@ -30,6 +30,11 @@ import com.p000ison.dev.simpleclans2.util.DateHelper;
 import com.p000ison.dev.simpleclans2.util.GeneralHelper;
 import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.util.chat.Row;
+import com.p000ison.dev.sqlapi.TableObject;
+import com.p000ison.dev.sqlapi.annotation.DatabaseColumn;
+import com.p000ison.dev.sqlapi.annotation.DatabaseColumnGetter;
+import com.p000ison.dev.sqlapi.annotation.DatabaseColumnSetter;
+import com.p000ison.dev.sqlapi.annotation.DatabaseTable;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -41,7 +46,8 @@ import java.util.Set;
 /**
  * Represents a ClanPlayer
  */
-public class ClanPlayer implements KDR, Balance, UpdateAble {
+@DatabaseTable(name = "sc2_players")
+public class ClanPlayer implements KDR, Balance, UpdateAble, TableObject {
 
     private SimpleClans plugin;
 
@@ -50,13 +56,33 @@ public class ClanPlayer implements KDR, Balance, UpdateAble {
     private Rank rank;
     private OnlineClanPlayer onlineVersion = null;
 
-    private long id = -1;
+    @DatabaseColumn(position = 0, databaseName = "id", id = true)
+    private int id = -1;
+    @DatabaseColumn(position = 1, databaseName = "name", lenght = 16, unique = true)
     private String name;
-    private boolean banned, leader, trusted;
+    @DatabaseColumn(position = 6, databaseName = "banned", defaultValue = "0")
+    private boolean banned;
+    @DatabaseColumn(position = 5, databaseName = "trusted", defaultValue = "0")
+    private boolean trusted;
+    @DatabaseColumn(position = 2, databaseName = "leader", defaultValue = "0")
+    private boolean leader;
     private long lastSeen, joinDate;
-    private int neutralKills, rivalKills, civilianKills, deaths;
+    @DatabaseColumn(position = 8, databaseName = "neutral_kills", defaultValue = "0")
+    private int neutralKills;
+    @DatabaseColumn(position = 9, databaseName = "rival_kills", defaultValue = "0")
+    private int rivalKills;
+    @DatabaseColumn(position = 10, databaseName = "civilian_kills", defaultValue = "0")
+    private int civilianKills;
+    @DatabaseColumn(position = 11, databaseName = "deaths", defaultValue = "0")
+    private int deaths;
 
     private boolean update;
+
+    public ClanPlayer(SimpleClans plugin)
+    {
+        flags = new PlayerFlags();
+        this.plugin = plugin;
+    }
 
     public ClanPlayer(SimpleClans plugin, String name)
     {
@@ -65,7 +91,7 @@ public class ClanPlayer implements KDR, Balance, UpdateAble {
         this.name = name;
     }
 
-    public ClanPlayer(SimpleClans plugin, long id, String name)
+    public ClanPlayer(SimpleClans plugin, int id, String name)
     {
         this(plugin, name);
         this.id = id;
@@ -76,9 +102,16 @@ public class ClanPlayer implements KDR, Balance, UpdateAble {
      *
      * @return The id
      */
-    public long getClanId()
+    @DatabaseColumnGetter(databaseName = "clan")
+    public int getClanId()
     {
-        return clan == null ? -1L : clan.getId();
+        return clan == null ? -1 : clan.getId();
+    }
+
+    @DatabaseColumnSetter(position = 3, databaseName = "clan", defaultValue = "-1", saveValueAfterLoading = true)
+    private void setClanId(int id)
+    {
+        this.clan = plugin.getClanManager().getClan(id);
     }
 
     /**
@@ -264,7 +297,7 @@ public class ClanPlayer implements KDR, Balance, UpdateAble {
         return id;
     }
 
-    public void setId(long id)
+    public void setId(int id)
     {
         this.id = id;
     }
@@ -734,5 +767,55 @@ public class ClanPlayer implements KDR, Balance, UpdateAble {
             return;
         }
         getFlags().setBBEnabled(enabled);
+    }
+
+    @DatabaseColumnSetter(position = 4, databaseName = "ranks")
+    private void setDatabaseRank(String json)
+    {
+//        Long.valueOf(json.substring(0, json.length() - 1));
+//          this.rank = new Rank();
+    }
+
+    @DatabaseColumnGetter(databaseName = "ranks")
+    private String getDatabaseRank()
+    {
+        return getRank() == null ? null : ('[' + String.valueOf(getRank().getId()) + ']');
+    }
+
+    @DatabaseColumnGetter(databaseName = "join_date")
+    private Date getDatabaseJoinDate()
+    {
+        return new Date(joinDate);
+    }
+
+    @DatabaseColumnSetter(position = 7, databaseName = "join_date")
+    private void setDatabaseJoinDate(Date date)
+    {
+        this.joinDate = date.getTime();
+    }
+
+    @DatabaseColumnGetter(databaseName = "last_seen")
+    private Date getDatabaseLastSeen()
+    {
+        return new Date(lastSeen);
+    }
+
+    @DatabaseColumnSetter(position = 7, databaseName = "last_seen")
+    private void setDatabaseLastSeen(Date date)
+    {
+        this.lastSeen = date.getTime();
+    }
+
+    @DatabaseColumnGetter(databaseName = "flags")
+    private String getDatabaseFlags()
+    {
+        return flags.serialize();
+    }
+
+    @DatabaseColumnSetter(position = 12, databaseName = "flags")
+    private void setDatabaseFlags(String json)
+    {
+        this.flags = new PlayerFlags();
+        flags.deserialize(json);
     }
 }

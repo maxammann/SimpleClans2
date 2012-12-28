@@ -21,19 +21,15 @@ package com.p000ison.dev.simpleclans2.database.data.statements;
 
 import com.p000ison.dev.simpleclans2.database.data.DataManager;
 import com.p000ison.dev.simpleclans2.database.data.Executable;
-import com.p000ison.dev.simpleclans2.util.Logging;
-
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 
 /**
  * Represents a RemoveRankStatement
  */
 public class RemoveRankStatement implements Executable {
 
-    private long id;
+    private int id;
 
-    public RemoveRankStatement(long id)
+    public RemoveRankStatement(int id)
     {
         this.id = id;
     }
@@ -41,13 +37,6 @@ public class RemoveRankStatement implements Executable {
     @Override
     public boolean execute(DataManager dataManager)
     {
-        try {
-            PreparedStatement delete = dataManager.DELETE_RANK_BY_ID;
-            delete.setLong(1, id);
-            return delete.executeUpdate() != 0;
-        } catch (SQLException e) {
-            Logging.debug(e, true, "Failed to remove rank %s.", id);
-            return false;
-        }
+        return dataManager.deleteRankById(id);
     }
 }

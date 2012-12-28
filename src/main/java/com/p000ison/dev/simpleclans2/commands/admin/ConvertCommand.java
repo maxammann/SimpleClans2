@@ -22,17 +22,16 @@ package com.p000ison.dev.simpleclans2.commands.admin;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.commands.GenericConsoleCommand;
 import com.p000ison.dev.simpleclans2.converter.Converter;
-import com.p000ison.dev.simpleclans2.database.AbstractDatabase;
-import com.p000ison.dev.simpleclans2.database.Database;
-import com.p000ison.dev.simpleclans2.database.configuration.DatabaseConfiguration;
-import com.p000ison.dev.simpleclans2.database.configuration.MySQLConfiguration;
-import com.p000ison.dev.simpleclans2.database.configuration.SQLiteConfiguration;
 import com.p000ison.dev.simpleclans2.language.Language;
 import com.p000ison.dev.simpleclans2.util.Logging;
+import com.p000ison.dev.sqlapi.DatabaseConfiguration;
+import com.p000ison.dev.sqlapi.DatabaseManager;
+import com.p000ison.dev.sqlapi.exception.DatabaseConnectionException;
+import com.p000ison.dev.sqlapi.jbdc.JBDCDatabase;
+import com.p000ison.dev.sqlapi.mysql.MySQLConfiguration;
+import com.p000ison.dev.sqlapi.mysql.MySQLDatabase;
 import org.bukkit.command.CommandSender;
 
-import java.io.File;
-import java.sql.SQLException;
 import java.text.MessageFormat;
 
 /**
@@ -59,36 +58,42 @@ public class ConvertCommand extends GenericConsoleCommand {
     public void execute(CommandSender sender, String[] args)
     {
         String action = args[0];
+        JBDCDatabase database = null;
         DatabaseConfiguration config = null;
 
-        if (action.equalsIgnoreCase("mysql")) {
-            String[] address = args[1].split(":");
-            int port = 3306;
-            if (address.length == 2) {
-                try {
-                    port = Integer.parseInt(address[1]);
-                } catch (NumberFormatException e) {
-                    sender.sendMessage(Language.getTranslation("number.format"));
-                    return;
-                }
-            }
-            config = new MySQLConfiguration(address[0], port, args[2], args[3], args[4], null);
-        } else if (action.equalsIgnoreCase("sqlite")) {
-            config = new SQLiteConfiguration(new File(args[1]));
-        }
-
-        if (config == null) {
-            sender.sendMessage("Database type not supported!");
-            return;
-        }
-
         try {
-            Database database = AbstractDatabase.createDatabase(config);
-            Converter converter = new Converter(plugin.getDatabaseManager().getDatabase(), database);
+            if (action.equalsIgnoreCase("mysql")) {
+                String[] address = args[1].split(":");
+                int port = 3306;
+                if (address.length == 2) {
+                    try {
+                        port = Integer.parseInt(address[1]);
+                    } catch (NumberFormatException e) {
+                        sender.sendMessage(Language.getTranslation("number.format"));
+                        return;
+                    }
+                }
+                config = new MySQLConfiguration(args[3], args[4], address[0], port, args[2]);
+
+                database = (JBDCDatabase) DatabaseManager.getConnection(config);
+                if (database == null) {
+                    database = new MySQLDatabase(config);
+                }
+            } else if (action.equalsIgnoreCase("sqlite")) {
+//            config = new SQLiteConfiguration(new File(args[1]));
+//            database = (JBDCDatabase) DatabaseManager.getConnection(config);
+            }
+
+            if (config == null) {
+                sender.sendMessage("Database type not supported!");
+                return;
+            }
+
+            Converter converter = new Converter(database, (JBDCDatabase) plugin.getSimpleClansDatabase());
             sender.sendMessage("Starting converting!");
             converter.convertAll();
             sender.sendMessage("Successfully converted!");
-        } catch (SQLException e) {
+        } catch (DatabaseConnectionException e) {
             Logging.debug(e, true);
             sender.sendMessage("Converting failed!");
         }

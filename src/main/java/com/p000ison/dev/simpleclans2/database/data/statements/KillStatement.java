@@ -23,10 +23,7 @@ package com.p000ison.dev.simpleclans2.database.data.statements;
 import com.p000ison.dev.simpleclans2.database.data.DataManager;
 import com.p000ison.dev.simpleclans2.database.data.Executable;
 import com.p000ison.dev.simpleclans2.database.data.KillType;
-import com.p000ison.dev.simpleclans2.util.Logging;
 
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.sql.Timestamp;
 
 /**
@@ -56,20 +53,6 @@ public class KillStatement implements Executable {
     @Override
     public boolean execute(DataManager dataManager)
     {
-        try {
-            PreparedStatement kill = dataManager.INSERT_KILL;
-            kill.setLong(1, attacker);
-            kill.setLong(2, attackerClan);
-            kill.setLong(3, victim);
-            kill.setLong(4, victimClan);
-            kill.setBoolean(5, war);
-            kill.setByte(6, killType);
-            kill.setTimestamp(7, new Timestamp(date));
-
-            return kill.executeUpdate() != 0;
-        } catch (SQLException e) {
-            Logging.debug(e, true, "Failed to insert kill for victim attacker %s and victim %s.", attacker, victim);
-            return false;
-        }
+        return dataManager.insertKill(attacker, attackerClan, victim, victimClan, war, killType, new Timestamp(date));
     }
 }
