@@ -20,7 +20,6 @@
 
 package com.p000ison.dev.simpleclans2.clan;
 
-import com.avaje.ebean.validation.NotNull;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.api.events.ClanCreateEvent;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
@@ -116,16 +115,12 @@ public class ClanManager {
             return null;
         }
 
-        if (plugin.getDataManager().insertClan(clan)) {
-            clan.setId(plugin.getDataManager().retrieveClanId(clan.getTag()));
-            clan.updateLastAction();
-            clan.setFoundedDate(System.currentTimeMillis());
-            clan.update();
-            clans.add(clan);
-            return clan;
-        }
-
-        return null;
+        plugin.getDataManager().getDatabase().save(clan);
+        clan.updateLastAction();
+        clan.setFoundedDate(System.currentTimeMillis());
+        clan.update();
+        clans.add(clan);
+        return clan;
     }
 
     public Clan createClan(String tag, String name)

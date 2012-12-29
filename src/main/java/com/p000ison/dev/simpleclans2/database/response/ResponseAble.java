@@ -17,12 +17,12 @@
  *     Last modified: 10.10.12 21:57
  */
 
-package com.p000ison.dev.simpleclans2.database.configuration;
+package com.p000ison.dev.simpleclans2.database.response;
 
 /**
- * Represents a DatabaseConfiguration
+ * Represents a ResponseAble
  */
-public interface DatabaseConfiguration {
+public interface ResponseAble {
 
-    DatabaseMode getDatabaseMode();
+    boolean response();
 }

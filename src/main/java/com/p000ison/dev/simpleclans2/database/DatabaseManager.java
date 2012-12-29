@@ -17,16 +17,32 @@
  *     Last modified: 10.10.12 21:57
  */
 
+
 package com.p000ison.dev.simpleclans2.database;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
-import com.p000ison.dev.simpleclans2.database.configuration.DatabaseConfiguration;
-import com.p000ison.dev.simpleclans2.database.configuration.MySQLConfiguration;
-import com.p000ison.dev.simpleclans2.database.configuration.SQLiteConfiguration;
+import com.p000ison.dev.simpleclans2.clan.Clan;
+import com.p000ison.dev.simpleclans2.clan.ranks.Rank;
+import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
+import com.p000ison.dev.simpleclans2.database.response.Response;
+import com.p000ison.dev.simpleclans2.database.response.ResponseTask;
+import com.p000ison.dev.simpleclans2.database.statements.KillStatement;
+import com.p000ison.dev.simpleclans2.util.DateHelper;
 import com.p000ison.dev.simpleclans2.util.Logging;
+import com.p000ison.dev.simpleclans2.util.comparators.ReverseIntegerComparator;
+import com.p000ison.dev.sqlapi.Database;
+import com.p000ison.dev.sqlapi.DatabaseConfiguration;
+import com.p000ison.dev.sqlapi.exception.DatabaseConnectionException;
+import com.p000ison.dev.sqlapi.jbdc.JBDCDatabase;
+import com.p000ison.dev.sqlapi.jbdc.JBDCPreparedQuery;
+import com.p000ison.dev.sqlapi.mysql.MySQLConfiguration;
+import com.p000ison.dev.sqlapi.mysql.MySQLDatabase;
+import com.p000ison.dev.sqlapi.sqlite.SQLiteConfiguration;
+import com.p000ison.dev.sqlapi.sqlite.SQLiteDatabase;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.logging.Level;
+import java.util.*;
 
 /**
  * Represents a DatabaseManager
@@ -35,80 +51,240 @@ public class DatabaseManager {
 
     private SimpleClans plugin;
 
-    private Database database;
 
-    public DatabaseManager(SimpleClans plugin) throws SQLException
+    private JBDCDatabase database;
+    private AutoSaver autoSaver;
+    private ResponseTask responseTask;
+
+    private JBDCPreparedQuery retrieveKillsPerPlayer, retrieveMostKills;
+    private JBDCPreparedQuery deleteRankById;
+    private JBDCPreparedQuery retrieveBBLimit, insertBB, purgeBB;
+
+    public DatabaseManager(SimpleClans plugin) throws DatabaseConnectionException
     {
         this.plugin = plugin;
 
-        init();
-    }
-
-    private void init() throws SQLException
-    {
         DatabaseConfiguration config = plugin.getSettingsManager().getDatabaseConfiguration();
-
-        switch (config.getDatabaseMode()) {
-            case MYSQL:
-                database = new MySQLDatabase((MySQLConfiguration) config);
-                break;
-            case SQLITE:
-                database = new SQLiteDatabase((SQLiteConfiguration) config);
-                break;
-            default:
-                throw new UnsupportedOperationException("The database mode was not found!");
+        if (config instanceof MySQLConfiguration) {
+            database = (JBDCDatabase) com.p000ison.dev.sqlapi.DatabaseManager.registerConnection(new MySQLDatabase(config));
+        } else if (config instanceof SQLiteConfiguration) {
+            database = (JBDCDatabase) com.p000ison.dev.sqlapi.DatabaseManager.registerConnection(new SQLiteDatabase(config));
         }
 
-        if (!database.checkConnection()) {
-            Logging.debug(Level.SEVERE, "Failed to connect to database2!");
+        if (database == null) {
+            Logging.debug("No database found! Skipping...");
             return;
         }
 
-        if (!database.existsTable("sc2_clans")) {
-            Logging.debug("Creating table: sc2_clans");
+        database.registerTable(KillStatement.class);
+        database.registerTable(BBTable.class);
+        database.registerTable(Clan.class).registerConstructor(plugin);
+        database.registerTable(ClanPlayer.class).registerConstructor(plugin);
+        database.registerTable(Rank.class);
 
-            String clanTable = "CREATE TABLE IF NOT EXISTS `sc2_clans` ( `id` INT NOT NULL AUTO_INCREMENT, `tag` VARCHAR(26) NOT NULL, `name` VARCHAR(100) NOT NULL, `verified` TINYINT(1) default 0, `founded` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, `last_action` TIMESTAMP NOT NULL, `allies` TEXT, `rivals` TEXT, `warring` TEXT, `flags` MEDIUMTEXT, `balance` DOUBLE( 20, 2 ) default 0.00, PRIMARY KEY (`id`), UNIQUE KEY (`tag`));";
+        autoSaver = new AutoSaver(plugin, this);
+        responseTask = new ResponseTask();
+
+        plugin.getServer().getScheduler().scheduleAsyncRepeatingTask(plugin, responseTask, 0L, 5L);
 
 
-            database.execute(clanTable);
+        //convert to minutes
+        long autoSave = plugin.getSettingsManager().getAutoSave() * 1200L;
+
+        if (autoSave > 0) {
+            plugin.getServer().getScheduler().scheduleAsyncRepeatingTask(plugin, autoSaver, autoSave, autoSave);
         }
 
-        if (!database.existsTable("sc2_players")) {
-            Logging.debug("Creating table: sc2_players");
+        retrieveKillsPerPlayer = database.createPreparedStatement("SELECT victim, count(victim) AS kills FROM `sc2_kills` WHERE attacker = ? GROUP BY victim ORDER BY count(victim) DESC;");
+        retrieveMostKills = database.createPreparedStatement("SELECT attacker, victim, count(victim) AS kills FROM `sc2_kills` GROUP BY attacker, victim ORDER BY 3 DESC;");
 
-            String clanTable = "CREATE TABLE IF NOT EXISTS `sc2_players` ( `id` INT NOT NULL AUTO_INCREMENT, `name` VARCHAR(16) NOT NULL, `leader` TINYINT(1) default 0, `clan` INT default -1, `ranks` TEXT, `trusted` TINYINT(1) default 0, `banned` TINYINT(1) default 0, `join_date` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, `last_seen` TIMESTAMP NOT NULL, `neutral_kills` INT default 0, `rival_kills` INT default 0, `civilian_kills` INT default 0, `deaths` INT default 0, `flags` MEDIUMTEXT, PRIMARY KEY (`id`), UNIQUE KEY (`name`) );";
+        deleteRankById = database.createPreparedStatement("DELETE FROM `sc2_ranks` WHERE id = ?;");
 
-            database.execute(clanTable);
+        retrieveBBLimit = database.createPreparedStatement("SELECT `text` FROM `sc2_bb` WHERE clan = ? ORDER BY `date` DESC LIMIT ?, ?;");
+        insertBB = database.createPreparedStatement("INSERT INTO `sc2_bb` ( `clan`, `text` ) VALUES ( ?, ? );");
+        purgeBB = database.createPreparedStatement("DELETE FROM `sc2_bb` WHERE clan = ?;");
+
+        importAll();
+    }
+
+    public final void importAll()
+    {
+        Set<Clan> clans = database.<Clan>select().from(Clan.class).prepare().getResults(new HashSet<Clan>());
+        long currentTime = System.currentTimeMillis();
+
+        Iterator<Clan> clanIterator = clans.iterator();
+        while (clanIterator.hasNext()) {
+            Clan clan = clanIterator.next();
+            int maxInactiveDays = clan.isVerified() ? plugin.getSettingsManager().getPurgeInactiveClansDays() : plugin.getSettingsManager().getPurgeUnverifiedClansDays();
+
+            if (DateHelper.differenceInDays(clan.getLastUpdated(), currentTime) > maxInactiveDays) {
+                Logging.debug("Purging clan %s! (id=%s)", clan.getTag(), clan.getId());
+                getDatabase().delete(clan);
+                clanIterator.remove();
+            }
         }
 
-        if (!database.existsTable("sc2_ranks")) {
-            Logging.debug("Creating table: sc2_ranks");
+        Set<ClanPlayer> clanPlayers = database.<ClanPlayer>select().from(ClanPlayer.class).prepare().getResults(new HashSet<ClanPlayer>());
 
-            String clanTable = "CREATE TABLE IF NOT EXISTS `sc2_ranks` ( `id` INT NOT NULL AUTO_INCREMENT, `clan` INT NOT NULL, `name` VARCHAR(16) NOT NULL UNIQUE KEY, `tag` VARCHAR(16) NOT NULL UNIQUE KEY,`permissions` MEDIUMTEXT, `priority` INT(3) default -1, PRIMARY KEY (`id`), INDEX (`clan`) );";
+        Iterator<ClanPlayer> clanPlayerIterator = clanPlayers.iterator();
+        while (clanPlayerIterator.hasNext()) {
+            ClanPlayer cp = clanPlayerIterator.next();
+            if (DateHelper.differenceInDays(cp.getLastSeenDate(), currentTime) > plugin.getSettingsManager().getPurgeInactivePlayersDays()) {
+                getDatabase().delete(cp);
+                clanPlayerIterator.remove();
+            }
 
-            database.execute(clanTable);
+            //validate some stuff
+            if (cp.getClan() == null) {
+                if (cp.unset()) {
+                    cp.update();
+                }
+            }
         }
 
+        plugin.getClanManager().importClans(clans);
+        plugin.getClanPlayerManager().importClanPlayers(clanPlayers);
 
-        if (!database.existsTable("sc2_bb")) {
-            Logging.debug("Creating table: sc2_bb");
+        database.saveStoredValues(Clan.class);
+        database.saveStoredValues(ClanPlayer.class);
+    }
 
-            String clanTable = "CREATE TABLE IF NOT EXISTS `sc2_bb` ( `id` INT NOT NULL AUTO_INCREMENT, `clan` INT NOT NULL, `text` TEXT, `date` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY (`id`), INDEX (`clan`) );";
+    public List<String> retrieveBB(Clan clan, int start, int end)
+    {
 
-            database.execute(clanTable);
+        List<String> bb = new ArrayList<String>();
+
+        ResultSet res = null;
+
+        try {
+            retrieveBBLimit.set(0, clan.getId());
+            retrieveBBLimit.set(1, start);
+            retrieveBBLimit.set(2, end);
+            res = retrieveBBLimit.query();
+
+            if (res != null) {
+                while (res.next()) {
+                    bb.add(res.getString("text"));
+                }
+            }
+        } catch (SQLException e) {
+            Logging.debug(e, true, "Failed at retrieving bb for %s!", clan.getTag());
+        } finally {
+            try {
+                if (res != null) {
+                    res.close();
+                }
+            } catch (SQLException e) {
+                Logging.debug(e, true, "Failed at closing result!");
+            }
         }
 
-        if (!database.existsTable("sc2_kills")) {
-            Logging.debug("Creating table: sc2_kills");
+        return bb;
+    }
 
-            String clanTable = "CREATE TABLE IF NOT EXISTS `sc2_kills` ( `id` INT NOT NULL AUTO_INCREMENT, `attacker` INT NOT NULL, `attacker_clan` INT NOT NULL, `victim` INT NOT NULL, `victim_clan` INT NOT NULL, `war` TINYINT(1) default 0, `type` TINYINT(1) NOT NULL, `date` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY (`id`), INDEX (`attacker`), INDEX (`victim`) );";
+    public void purgeBB(Clan clan)
+    {
+        purgeBB.set(0, clan.getId());
+        purgeBB.update();
+    }
 
-            database.execute(clanTable);
+    public void insertBBMessage(Clan clan, String message)
+    {
+        insertBB.set(1, clan.getId());
+        insertBB.set(2, message);
+        insertBB.update();
+    }
+
+    /**
+     * Returns a map of victim->count of all kills that specific player did
+     *
+     * @param playerId The player to look for
+     * @return A map of victims and a count
+     */
+    public SortedMap<Integer, Long> getKillsPerPlayer(long playerId)
+    {
+        TreeMap<Integer, Long> out = new TreeMap<Integer, Long>(new ReverseIntegerComparator());
+        ResultSet res = null;
+        try {
+            retrieveKillsPerPlayer.set(0, playerId);
+            res = retrieveKillsPerPlayer.query();
+
+            while (res.next()) {
+                Long victim = res.getLong("victim");
+                int kills = res.getInt("kills");
+                out.put(kills, victim);
+            }
+        } catch (SQLException e) {
+            Logging.debug(e, true, "Failed at querying the kills of %s!", playerId);
+        } finally {
+            try {
+                if (res != null) {
+                    res.close();
+                }
+            } catch (SQLException e) {
+                Logging.debug(e, true, "Failed at closing result!");
+            }
         }
+
+        return out;
+    }
+
+    /**
+     * Returns a map of tag->count of all kills
+     *
+     * @return A map of tag->count of all kills
+     */
+    public List<Conflicts> getMostKilled()
+    {
+        List<Conflicts> out = new ArrayList<Conflicts>();
+        ResultSet res = null;
+        try {
+            res = retrieveMostKills.query();
+
+            while (res.next()) {
+                long attacker = res.getLong("attacker");
+                long victim = res.getLong("victim");
+                int kills = res.getInt("kills");
+                out.add(new Conflicts(attacker, victim, kills));
+            }
+        } catch (SQLException e) {
+            Logging.debug(e, true, "Failed at collecting the most killed useres!");
+        } finally {
+            try {
+                if (res != null) {
+                    res.close();
+                }
+            } catch (SQLException e) {
+                Logging.debug(e, true, "Failed at closing result!");
+            }
+        }
+
+        return out;
     }
 
     public Database getDatabase()
     {
         return database;
+    }
+
+    public void addResponse(Response response)
+    {
+        responseTask.add(response);
+    }
+
+    public void addStatement(Executable executable)
+    {
+        getAutoSaver().addExecutable(executable);
+    }
+
+    public AutoSaver getAutoSaver()
+    {
+        return autoSaver;
+    }
+
+    public boolean deleteRankById(int id)
+    {
+        deleteRankById.set(0, id);
+        return deleteRankById.update();
     }
 }

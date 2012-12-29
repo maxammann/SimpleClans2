@@ -19,7 +19,12 @@
 
 package com.p000ison.dev.simpleclans2.clan.ranks;
 
+import com.p000ison.dev.simpleclans2.util.JSONUtil;
+import com.p000ison.dev.sqlapi.TableObject;
+import com.p000ison.dev.sqlapi.annotation.DatabaseColumn;
+import com.p000ison.dev.sqlapi.annotation.DatabaseTable;
 import org.apache.commons.lang.StringUtils;
+import org.json.simple.JSONObject;
 
 import java.util.Comparator;
 import java.util.HashMap;
@@ -29,7 +34,8 @@ import java.util.TreeMap;
 /**
  * Represents a Rank
  */
-public class Rank implements Comparable<Rank> {
+@DatabaseTable(name = "sc2_ranks")
+public class Rank implements Comparable<Rank>, TableObject {
     private static final Map<java.lang.Integer, String> availablePermissions = new TreeMap<java.lang.Integer, String>(new Comparator<Integer>() {
         @Override
         public int compare(Integer o1, Integer o2)
@@ -52,12 +58,22 @@ public class Rank implements Comparable<Rank> {
         availablePermissions.put(6, "bank.withdraw");
     }
 
-    private long id;
+    @DatabaseColumn(position = 0, databaseName = "id", id = true)
+    private int id;
+    @DatabaseColumn(position = 2, databaseName = "name", lenght = 16, unique = true)
     private String name;
+    @DatabaseColumn(position = 1, databaseName = "tag", lenght = 16, unique = true)
     private String tag;
     private Map<Integer, Boolean> permissions;
+    @DatabaseColumn(position = 4, databaseName = "priority", lenght = 3)
     private int priority;
+    @DatabaseColumn(position = 3, databaseName = "clan")
+    private int clanId;
     private boolean update;
+
+    public Rank()
+    {
+    }
 
     /**
      * Creates a new rank
@@ -66,7 +82,7 @@ public class Rank implements Comparable<Rank> {
      * @param name The name of the rank.
      * @param tag  The tag
      */
-    public Rank(long id, String name, String tag)
+    public Rank(int id, String name, String tag)
     {
         this.tag = tag;
         this.setId(id);
@@ -80,11 +96,12 @@ public class Rank implements Comparable<Rank> {
      * @param tag      The tag
      * @param priority The priority
      */
-    public Rank(String name, String tag, int priority)
+    public Rank(String name, String tag, int priority, int clanId)
     {
         this.name = name;
         this.priority = priority;
         this.tag = tag;
+        this.clanId = clanId;
     }
 
     /**
@@ -96,9 +113,9 @@ public class Rank implements Comparable<Rank> {
      * @param priority    The priority
      * @param permissions The permissions of this rank
      */
-    public Rank(long id, String name, String tag, int priority, Map<Integer, Boolean> permissions)
+    public Rank(int id, String name, String tag, int priority, Map<Integer, Boolean> permissions, int clanId)
     {
-        this(name, tag, priority);
+        this(name, tag, priority, clanId);
         if (permissions == null) {
             this.permissions = new HashMap<Integer, Boolean>();
         } else {
@@ -233,6 +250,11 @@ public class Rank implements Comparable<Rank> {
         return null;
     }
 
+    public int getClanId()
+    {
+        return clanId;
+    }
+
     private class PermissionFinder {
         private String permission;
         private int id;
@@ -316,7 +338,7 @@ public class Rank implements Comparable<Rank> {
      *
      * @return The ID
      */
-    public long getId()
+    public int getId()
     {
         return id;
     }
@@ -326,7 +348,7 @@ public class Rank implements Comparable<Rank> {
      *
      * @param id The id to set
      */
-    public void setId(long id)
+    public void setId(int id)
     {
         this.id = id;
     }
@@ -415,5 +437,18 @@ public class Rank implements Comparable<Rank> {
         int thisPriority = this.getPriority();
         int anotherPriority = anotherRank.getPriority();
         return (thisPriority < anotherPriority ? -1 : (thisPriority == anotherPriority ? 0 : 1));
+    }
+
+    private String getDatabasePermissions()
+    {
+        return JSONObject.toJSONString(permissions);
+    }
+
+    private void setDatabasePermissions(String json)
+    {
+        if (json == null) {
+            permissions = new HashMap<Integer, Boolean>();
+        }
+        this.permissions = JSONUtil.JSONToPermissionMap(json);
     }
 }

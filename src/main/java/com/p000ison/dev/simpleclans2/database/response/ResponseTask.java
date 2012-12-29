@@ -17,38 +17,32 @@
  *     Last modified: 10.10.12 21:57
  */
 
+package com.p000ison.dev.simpleclans2.database.response;
 
-package com.p000ison.dev.simpleclans2.database.data;
+import com.p000ison.dev.simpleclans2.util.Logging;
 
-import java.util.Locale;
+import java.util.LinkedList;
 
 /**
- * Represents a KillType
+ * Represents a ResponseTask
  */
-public enum KillType {
+public class ResponseTask extends LinkedList<Response> implements Runnable {
 
-    CIVILIAN((byte) 0),
-    NEUTRAL((byte) 1),
-    RIVAL((byte) 2);
-
-    private byte type;
-
-
-    private KillType(byte type)
-    {
-        this.type = type;
-    }
-
-    public byte getType()
-    {
-        return type;
-    }
+    private static final long serialVersionUID = 1L;
 
     @Override
-    public String toString()
+    public void run()
     {
-        return "KillType{" +
-                "type=" + this.name().toLowerCase(Locale.US) +
-                '}';
+        Response response;
+
+
+        while ((response = this.poll()) != null) {
+            if (response.needsRetriever() && response.getRetriever() == null) {
+                continue;
+            }
+            if (!response.response()) {
+                Logging.debug("Failed to response response-able!");
+            }
+        }
     }
 }
