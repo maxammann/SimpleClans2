@@ -44,10 +44,8 @@ import com.p000ison.dev.simpleclans2.commands.members.StatsCommand;
 import com.p000ison.dev.simpleclans2.commands.voting.AbstainCommand;
 import com.p000ison.dev.simpleclans2.commands.voting.AcceptCommand;
 import com.p000ison.dev.simpleclans2.commands.voting.DenyCommand;
-import com.p000ison.dev.simpleclans2.database.Database;
+import com.p000ison.dev.simpleclans2.database.AutoSaver;
 import com.p000ison.dev.simpleclans2.database.DatabaseManager;
-import com.p000ison.dev.simpleclans2.database.data.AutoSaver;
-import com.p000ison.dev.simpleclans2.database.data.DataManager;
 import com.p000ison.dev.simpleclans2.exceptions.handling.ExceptionReporterTask;
 import com.p000ison.dev.simpleclans2.language.Language;
 import com.p000ison.dev.simpleclans2.listeners.SCEntityListener;
@@ -62,6 +60,8 @@ import com.p000ison.dev.simpleclans2.teleportation.TeleportManager;
 import com.p000ison.dev.simpleclans2.updater.AutoUpdater;
 import com.p000ison.dev.simpleclans2.util.Logging;
 import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
+import com.p000ison.dev.sqlapi.Database;
+import com.p000ison.dev.sqlapi.exception.DatabaseConnectionException;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
@@ -73,7 +73,6 @@ import org.mcstats.Metrics;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.logging.Level;
 
 /**
@@ -82,12 +81,11 @@ import java.util.logging.Level;
 public class SimpleClans extends JavaPlugin implements SCCore {
 
     private ClanManager clanManager;
-    private DatabaseManager databaseManager;
     private ClanPlayerManager clanPlayerManager;
     private SettingsManager settingsManager;
     private RequestManager requestManager;
     private CommandManager commandManager;
-    private DataManager dataManager;
+    private DatabaseManager dataManager;
     private RankManager rankManager;
     private TeleportManager teleportManager;
     private PreciousStonesSupport preciousStonesSupport;
@@ -226,12 +224,10 @@ public class SimpleClans extends JavaPlugin implements SCCore {
     public void onDisable()
     {
         //save data
+        //close the connection to the database
         if (dataManager != null) {
             dataManager.getAutoSaver().run();
-        }
-        //close the connection to the database
-        if (databaseManager != null) {
-            databaseManager.getDatabase().close();
+            dataManager.getDatabase().close();
         }
 
         Language.clear();
@@ -265,20 +261,19 @@ public class SimpleClans extends JavaPlugin implements SCCore {
 
     private void loadManagers()
     {
-        try {
-            databaseManager = new DatabaseManager(this);
-        } catch (SQLException e) {
-            Logging.debug("------------------------------------------------------------");
-            Logging.debug("The connection to the database failed: %s!", e.getMessage());
-            Logging.debug("------------------------------------------------------------");
-            getServer().getPluginManager().disablePlugin(this);
-            return;
-        }
-
         clanManager = new ClanManager(this);
         clanPlayerManager = new ClanPlayerManager(this);
         settingsManager.loadPermissions();
-        dataManager = new DataManager(this);
+
+        try {
+            dataManager = new DatabaseManager(this);
+        } catch (DatabaseConnectionException e) {
+            Logging.debug("------------------------------------------------------------");
+            Logging.debug("The connection to the database failed: %s!", e.getMessage());
+            Logging.debug("------------------------------------------------------------");
+            disable();
+        }
+
         requestManager = new RequestManager(this);
         teleportManager = new TeleportManager(this);
         rankManager = new RankManager(this);
@@ -381,15 +376,10 @@ public class SimpleClans extends JavaPlugin implements SCCore {
     @Override
     public Database getSimpleClansDatabase()
     {
-        if (databaseManager == null) {
+        if (dataManager == null) {
             return null;
         }
-        return databaseManager.getDatabase();
-    }
-
-    public DatabaseManager getDatabaseManager()
-    {
-        return databaseManager;
+        return dataManager.getDatabase();
     }
 
     @Override
@@ -421,7 +411,7 @@ public class SimpleClans extends JavaPlugin implements SCCore {
         return commandManager;
     }
 
-    public DataManager getDataManager()
+    public DatabaseManager getDataManager()
     {
         return dataManager;
     }

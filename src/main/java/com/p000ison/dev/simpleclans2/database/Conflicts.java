@@ -17,7 +17,7 @@
  *     Last modified: 04.11.12 01:01
  */
 
-package com.p000ison.dev.simpleclans2.database.data;
+package com.p000ison.dev.simpleclans2.database;
 
 /**
  * Represents a Conflicts

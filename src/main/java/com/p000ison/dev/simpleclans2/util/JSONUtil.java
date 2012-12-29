@@ -117,7 +117,7 @@ public final class JSONUtil {
             if (entry.getKey() instanceof String) {
                 integer = Integer.parseInt((String) entry.getKey());
             } else {
-                integer = (Integer)entry.getKey();
+                integer = (Integer) entry.getKey();
             }
             map.put(integer, (Boolean) entry.getValue());
         }

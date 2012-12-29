@@ -19,9 +19,9 @@
 
 package com.p000ison.dev.simpleclans2.converter;
 
-import com.p000ison.dev.simpleclans2.database.Database;
-import com.p000ison.dev.simpleclans2.database.data.KillType;
+import com.p000ison.dev.simpleclans2.database.KillType;
 import com.p000ison.dev.simpleclans2.util.Logging;
+import com.p000ison.dev.sqlapi.jbdc.JBDCDatabase;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -39,23 +39,23 @@ import java.util.Set;
 @SuppressWarnings("unchecked")
 public class Converter implements Runnable {
 
-    private Database from;
-    private Database to;
+    private JBDCDatabase from;
+    private JBDCDatabase to;
     private PreparedStatement insertClan, insertBB, updateClan, insertKill;
     private PreparedStatement insertClanPlayer;
     private Set<ConvertedClan> clans = new HashSet<ConvertedClan>();
     private Set<ConvertedClanPlayer> players = new HashSet<ConvertedClanPlayer>();
 
-    public Converter(Database from, Database to)
+    public Converter(JBDCDatabase from, JBDCDatabase to)
     {
         this.from = from;
         this.to = to;
 
-        insertClan = to.prepareStatement("INSERT INTO `sc2_clans` (`name`, `tag`, `verified`, `founded`, `last_action`, `flags`, `balance` ) VALUES ( ?, ?, ?, ?, ?, ?, ? );");
-        insertBB = to.prepareStatement("INSERT INTO `sc2_bb` (`clan`, `text` ) VALUES ( ?, ? );");
-        updateClan = to.prepareStatement("UPDATE `sc2_clans` SET allies = ?, rivals = ?, warring = ? WHERE id = ?;");
-        insertClanPlayer = to.prepareStatement("INSERT INTO `sc2_players` ( `name`, `leader`, `trusted`, `join_date`, `last_seen`, `clan`, `neutral_kills`, `rival_Kills`, `civilian_Kills`, `deaths`, `flags` ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )");
-        insertKill = to.prepareStatement("INSERT INTO `sc2_kills` ( `attacker`, `attacker_clan`, `victim`, `victim_clan`, `war`, `type`, `date` ) VALUES ( ?, ?, ?, ?, ?, ?, ? );");
+        insertClan = to.prepare("INSERT INTO `sc2_clans` (`name`, `tag`, `verified`, `founded`, `last_action`, `flags`, `balance` ) VALUES ( ?, ?, ?, ?, ?, ?, ? );");
+        insertBB = to.prepare("INSERT INTO `sc2_bb` (`clan`, `text` ) VALUES ( ?, ? );");
+        updateClan = to.prepare("UPDATE `sc2_clans` SET allies = ?, rivals = ?, warring = ? WHERE id = ?;");
+        insertClanPlayer = to.prepare("INSERT INTO `sc2_players` ( `name`, `leader`, `trusted`, `join_date`, `last_seen`, `clan`, `neutral_kills`, `rival_Kills`, `civilian_Kills`, `deaths`, `flags` ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )");
+        insertKill = to.prepare("INSERT INTO `sc2_kills` ( `attacker`, `attacker_clan`, `victim`, `victim_clan`, `war`, `type`, `date` ) VALUES ( ?, ?, ?, ?, ?, ?, ? );");
     }
 
     public void convertAll()

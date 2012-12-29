@@ -18,7 +18,7 @@
  */
 
 
-package com.p000ison.dev.simpleclans2.database.data;
+package com.p000ison.dev.simpleclans2.database;
 
 import java.sql.Timestamp;
 

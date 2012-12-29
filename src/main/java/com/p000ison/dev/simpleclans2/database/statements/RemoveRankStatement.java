@@ -17,12 +17,26 @@
  *     Last modified: 10.10.12 21:57
  */
 
-package com.p000ison.dev.simpleclans2.database.data;
+package com.p000ison.dev.simpleclans2.database.statements;
+
+import com.p000ison.dev.simpleclans2.database.DatabaseManager;
+import com.p000ison.dev.simpleclans2.database.Executable;
 
 /**
- *
+ * Represents a RemoveRankStatement
  */
-public interface Executable {
+public class RemoveRankStatement implements Executable {
 
-    boolean execute(DataManager dataManager);
+    private int id;
+
+    public RemoveRankStatement(int id)
+    {
+        this.id = id;
+    }
+
+    @Override
+    public boolean execute(DatabaseManager dataManager)
+    {
+        return dataManager.deleteRankById(id);
+    }
 }
