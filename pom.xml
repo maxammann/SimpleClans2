@@ -104,14 +104,10 @@
                         </goals>
                         <configuration>
                             <artifactSet>
-                                <excludes>
-                                    <exclude>org.bukkit:bukkit</exclude>
-                                    <exclude>net.milkbowl.vault:Vault</exclude>
-                                    <exclude>org.getspout:spoutplugin</exclude>
-                                    <exclude>org.hamcrest:hamcrest-core</exclude>
-                                    <exclude>net.sacredlabyrinth.Phaed:PreciousStones</exclude>
-                                    <exclude>commons-lang:commons-lang</exclude>
-                                </excludes>
+                                <includes>
+                                    <include>org.mcstats:metrics</include>
+                                    <include>com.p000ison.dev.sqlapi:SQLDatabaseAPI</include>
+                                </includes>
                             </artifactSet>
                         </configuration>
                     </execution>
@@ -219,6 +215,13 @@
             <groupId>net.sacredlabyrinth.Phaed</groupId>
             <artifactId>PreciousStones</artifactId>
             <version>9.5.2</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.p000ison.dev.sqlapi</groupId>
+            <artifactId>SQLDatabaseAPI</artifactId>
+            <version>1.0-SNAPSHOT</version>
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
