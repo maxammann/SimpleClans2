@@ -26,6 +26,8 @@ import com.p000ison.dev.simpleclans2.clan.ranks.Rank;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.database.data.response.Response;
 import com.p000ison.dev.simpleclans2.database.data.response.ResponseTask;
+import com.p000ison.dev.simpleclans2.database.data.statements.KillStatement;
+import com.p000ison.dev.simpleclans2.util.DateHelper;
 import com.p000ison.dev.simpleclans2.util.Logging;
 import com.p000ison.dev.simpleclans2.util.comparators.ReverseIntegerComparator;
 import com.p000ison.dev.sqlapi.Database;
@@ -33,9 +35,11 @@ import com.p000ison.dev.sqlapi.DatabaseConfiguration;
 import com.p000ison.dev.sqlapi.DatabaseManager;
 import com.p000ison.dev.sqlapi.exception.DatabaseConnectionException;
 import com.p000ison.dev.sqlapi.jbdc.JBDCDatabase;
+import com.p000ison.dev.sqlapi.jbdc.JBDCPreparedQuery;
 import com.p000ison.dev.sqlapi.mysql.MySQLConfiguration;
 import com.p000ison.dev.sqlapi.mysql.MySQLDatabase;
-import com.p000ison.dev.sqlapi.query.PreparedQuery;
+import com.p000ison.dev.sqlapi.sqlite.SQLiteConfiguration;
+import com.p000ison.dev.sqlapi.sqlite.SQLiteDatabase;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -54,18 +58,20 @@ public class DataManager {
     private AutoSaver autoSaver;
     private ResponseTask responseTask;
 
-    private PreparedQuery unsetClanPlayer;
-    private PreparedQuery retriveKillsPerPlayer, retriveMostKills, insertKill;
-    private PreparedQuery deleteRankById;
-    private PreparedQuery retrieveBBLimit, insertBB, purgeBB;
+    private JBDCPreparedQuery unsetClanPlayer;
+    private JBDCPreparedQuery retriveKillsPerPlayer, retriveMostKills, insertKill;
+    private JBDCPreparedQuery deleteRankById;
+    private JBDCPreparedQuery retrieveBBLimit, insertBB, purgeBB;
 
     public DataManager(SimpleClans plugin) throws DatabaseConnectionException
     {
         this.plugin = plugin;
 
         DatabaseConfiguration config = plugin.getSettingsManager().getDatabaseConfiguration();
-        if (plugin.getSettingsManager().getDatabaseConfiguration() instanceof MySQLConfiguration) {
+        if (config instanceof MySQLConfiguration) {
             database = (JBDCDatabase) DatabaseManager.registerConnection(new MySQLDatabase(config));
+        } else if (config instanceof SQLiteConfiguration) {
+            database = (JBDCDatabase) DatabaseManager.registerConnection(new SQLiteDatabase(config));
         }
 
         if (database == null) {
@@ -73,6 +79,8 @@ public class DataManager {
             return;
         }
 
+        database.registerTable(KillStatement.class);
+        database.registerTable(BBTable.class);
         database.registerTable(Clan.class).registerConstructor(plugin);
         database.registerTable(ClanPlayer.class).registerConstructor(plugin);
         database.registerTable(Rank.class);
@@ -108,8 +116,37 @@ public class DataManager {
     public final void importAll()
     {
         Set<Clan> clans = database.<Clan>select().from(Clan.class).prepare().getResults(new HashSet<Clan>());
+        long currentTime = System.currentTimeMillis();
+
+        Iterator<Clan> clanIterator = clans.iterator();
+        while (clanIterator.hasNext()) {
+            Clan clan = clanIterator.next();
+            int maxInactiveDays = clan.isVerified() ? plugin.getSettingsManager().getPurgeInactiveClansDays() : plugin.getSettingsManager().getPurgeUnverifiedClansDays();
+
+            if (DateHelper.differenceInDays(clan.getLastUpdated(), currentTime) > maxInactiveDays) {
+                Logging.debug("Purging clan %s! (id=%s)", clan.getTag(), clan.getId());
+                getDatabase().delete(clan);
+                clanIterator.remove();
+            }
+        }
 
         Set<ClanPlayer> clanPlayers = database.<ClanPlayer>select().from(ClanPlayer.class).prepare().getResults(new HashSet<ClanPlayer>());
+
+        Iterator<ClanPlayer> clanPlayerIterator = clanPlayers.iterator();
+        while (clanPlayerIterator.hasNext()) {
+            ClanPlayer cp = clanPlayerIterator.next();
+            if (DateHelper.differenceInDays(cp.getLastSeenDate(), currentTime) > plugin.getSettingsManager().getPurgeInactivePlayersDays()) {
+                getDatabase().delete(cp);
+                clanPlayerIterator.remove();
+            }
+
+            //validate some stuff
+            if (cp.getClan() == null) {
+                if (cp.unset()) {
+                    cp.update();
+                }
+            }
+        }
 
         plugin.getClanManager().importClans(clans);
         plugin.getClanPlayerManager().importClanPlayers(clanPlayers);
@@ -119,9 +156,9 @@ public class DataManager {
     }
 
     //
-    // if clan == null setTrusted(false);
-    // purge clan if it is too old
-    // unset clanplayer if the clan gets purged
+    // if clan == null setTrusted(false);  X
+    // purge clan if it is too old         X
+    // unset clanplayer if the clan gets purged X
     // statements, converter, create methods   X
     //
 
@@ -133,10 +170,10 @@ public class DataManager {
         ResultSet res = null;
 
         try {
-//            retrieveBBLimit.setLong(1, clan.getId());
-//            retrieveBBLimit.setInt(2, start);
-//            retrieveBBLimit.setInt(3, end);
-//            res = RETRIEVE_BB_LIMIT.executeQuery();
+            retrieveBBLimit.set(0, clan.getId());
+            retrieveBBLimit.set(1, start);
+            retrieveBBLimit.set(2, end);
+            res = retrieveBBLimit.query();
 
             if (res != null) {
                 while (res.next()) {
@@ -145,15 +182,14 @@ public class DataManager {
             }
         } catch (SQLException e) {
             Logging.debug(e, true, "Failed at retrieving bb for %s!", clan.getTag());
-        }
-
-        try {
-            if (res != null) {
-                res.close();
-
+        } finally {
+            try {
+                if (res != null) {
+                    res.close();
+                }
+            } catch (SQLException e) {
+                Logging.debug(e, true, "Failed at closing result!");
             }
-        } catch (SQLException e) {
-            Logging.debug(e, true, "Failed at closing result!");
         }
 
         return bb;
@@ -195,21 +231,27 @@ public class DataManager {
     public SortedMap<Integer, Long> getKillsPerPlayer(long playerId)
     {
         TreeMap<Integer, Long> out = new TreeMap<Integer, Long>(new ReverseIntegerComparator());
+        ResultSet res = null;
+        try {
+            retriveKillsPerPlayer.set(0, playerId);
+            res = retriveKillsPerPlayer.query();
 
-//        try {
-//            RETRIEVE_KILLS_PER_PLAYER.setLong(1, playerId);
-//            ResultSet res = RETRIEVE_KILLS_PER_PLAYER.executeQuery();
-//
-//            if (res != null) {
-//                while (res.next()) {
-//                    Long victim = res.getLong("victim");
-//                    int kills = res.getInt("kills");
-//                    out.put(kills, victim);
-//                }
-//            }
-//        } catch (SQLException e) {
-//            Logging.debug(e, true, "Failed at querying the kills of %s!", playerId);
-//        }
+            while (res.next()) {
+                Long victim = res.getLong("victim");
+                int kills = res.getInt("kills");
+                out.put(kills, victim);
+            }
+        } catch (SQLException e) {
+            Logging.debug(e, true, "Failed at querying the kills of %s!", playerId);
+        } finally {
+            try {
+                if (res != null) {
+                    res.close();
+                }
+            } catch (SQLException e) {
+                Logging.debug(e, true, "Failed at closing result!");
+            }
+        }
 
         return out;
     }
@@ -222,21 +264,27 @@ public class DataManager {
     public List<Conflicts> getMostKilled()
     {
         List<Conflicts> out = new ArrayList<Conflicts>();
-//        try {
-//            ResultSet res = RETRIEVE_MOST_KILLS.executeQuery();
-//
-//            if (res != null) {
-//
-//                while (res.next()) {
-//                    long attacker = res.getLong("attacker");
-//                    long victim = res.getLong("victim");
-//                    int kills = res.getInt("kills");
-//                    out.add(new Conflicts(attacker, victim, kills));
-//                }
-//            }
-//        } catch (SQLException e) {
-//            Logging.debug(e, true, "Failed at collecting the most killed useres!");
-//        }
+        ResultSet res = null;
+        try {
+            res = retriveMostKills.query();
+
+            while (res.next()) {
+                long attacker = res.getLong("attacker");
+                long victim = res.getLong("victim");
+                int kills = res.getInt("kills");
+                out.add(new Conflicts(attacker, victim, kills));
+            }
+        } catch (SQLException e) {
+            Logging.debug(e, true, "Failed at collecting the most killed useres!");
+        } finally {
+            try {
+                if (res != null) {
+                    res.close();
+                }
+            } catch (SQLException e) {
+                Logging.debug(e, true, "Failed at closing result!");
+            }
+        }
 
         return out;
     }
@@ -266,6 +314,4 @@ public class DataManager {
         deleteRankById.set(0, id);
         return deleteRankById.update();
     }
-
-
 }

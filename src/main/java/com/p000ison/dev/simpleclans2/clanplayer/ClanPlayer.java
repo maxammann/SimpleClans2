@@ -111,6 +111,9 @@ public class ClanPlayer implements KDR, Balance, UpdateAble, TableObject {
     @DatabaseColumnSetter(position = 3, databaseName = "clan", defaultValue = "-1", saveValueAfterLoading = true)
     private void setClanId(int id)
     {
+        if (id <= 0) {
+            this.clan = null;
+        }
         this.clan = plugin.getClanManager().getClan(id);
     }
 
@@ -292,7 +295,7 @@ public class ClanPlayer implements KDR, Balance, UpdateAble, TableObject {
         this.setDeaths(this.getDeaths() + 1);
     }
 
-    public long getId()
+    public int getId()
     {
         return id;
     }
@@ -495,11 +498,23 @@ public class ClanPlayer implements KDR, Balance, UpdateAble, TableObject {
         }
     }
 
-    public void unset()
+    public boolean unset()
     {
-        setClan(null);
-        this.setLeader(false);
-        this.setTrusted(false);
+        boolean change = false;
+        if (getClan() != null) {
+            setClan(null);
+            change = true;
+        }
+        if (isLeader()) {
+            this.setLeader(false);
+            change = true;
+        }
+        if (isTrusted()) {
+            this.setTrusted(false);
+            change = true;
+        }
+
+        return change;
     }
 
     @Override

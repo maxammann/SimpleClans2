@@ -29,6 +29,7 @@ import com.p000ison.dev.simpleclans2.util.Logging;
 import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import com.p000ison.dev.sqlapi.DatabaseConfiguration;
 import com.p000ison.dev.sqlapi.mysql.MySQLConfiguration;
+import com.p000ison.dev.sqlapi.sqlite.SQLiteConfiguration;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -171,7 +172,9 @@ public class SettingsManager {
                         mysqlDatabaseSection.getString("host"),
                         mysqlDatabaseSection.getInt("port"), mysqlDatabaseSection.getString("database"));
             } else if (mode.equalsIgnoreCase("sqlite")) {
+                ConfigurationSection sqliteDatabaseSection = databaseSection.getConfigurationSection("sqlite");
 
+                this.databaseConfiguration = new SQLiteConfiguration(new File(sqliteDatabaseSection.getString("location")));
             } else {
                 throw new UnsupportedOperationException("The database mode was not found!");
             }

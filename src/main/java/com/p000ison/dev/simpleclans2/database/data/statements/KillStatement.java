@@ -23,36 +23,49 @@ package com.p000ison.dev.simpleclans2.database.data.statements;
 import com.p000ison.dev.simpleclans2.database.data.DataManager;
 import com.p000ison.dev.simpleclans2.database.data.Executable;
 import com.p000ison.dev.simpleclans2.database.data.KillType;
+import com.p000ison.dev.sqlapi.TableObject;
+import com.p000ison.dev.sqlapi.annotation.DatabaseColumn;
+import com.p000ison.dev.sqlapi.annotation.DatabaseTable;
 
 import java.sql.Timestamp;
 
 /**
  * Represents a KillStatement
  */
-public class KillStatement implements Executable {
+@DatabaseTable(name = "sc2_kills")
+public class KillStatement implements Executable, TableObject {
 
-    private long attacker;
-    private long attackerClan;
-    private long victim;
-    private long victimClan;
+    @DatabaseColumn(position = 0, databaseName = "id", id = true)
+    private int id;
+    @DatabaseColumn(position = 1, databaseName = "attacker")
+    private int attacker;
+    @DatabaseColumn(position = 2, databaseName = "attacker_clan")
+    private int attackerClan;
+    @DatabaseColumn(position = 3, databaseName = "victim")
+    private int victim;
+    @DatabaseColumn(position = 4, databaseName = "victim_clan")
+    private int victimClan;
+    @DatabaseColumn(position = 5, databaseName = "war")
     private boolean war;
-    private long date;
+    @DatabaseColumn(position = 6, databaseName = "date")
+    private Timestamp date;
+    @DatabaseColumn(position = 7, databaseName = "type")
     private byte killType;
 
-    public KillStatement(long attacker, long attackerTag, long victim, long victimTag, boolean war, KillType killType)
+    public KillStatement(int attacker, int attackerTag, int victim, int victimTag, boolean war, KillType killType)
     {
         this.attacker = attacker;
         this.attackerClan = attackerTag;
         this.victim = victim;
         this.victimClan = victimTag;
         this.war = war;
-        this.date = System.currentTimeMillis();
+        this.date = new Timestamp(System.currentTimeMillis());
         this.killType = killType.getType();
     }
 
     @Override
     public boolean execute(DataManager dataManager)
     {
-        return dataManager.insertKill(attacker, attackerClan, victim, victimClan, war, killType, new Timestamp(date));
+        return dataManager.insertKill(attacker, attackerClan, victim, victimClan, war, killType, date);
     }
 }
