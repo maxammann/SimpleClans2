@@ -17,12 +17,12 @@
  *     Last modified: 10.10.12 21:57
  */
 
-package com.p000ison.dev.simpleclans2.database.data.statements;
+package com.p000ison.dev.simpleclans2.database.statements;
 
 
-import com.p000ison.dev.simpleclans2.database.data.DataManager;
-import com.p000ison.dev.simpleclans2.database.data.Executable;
-import com.p000ison.dev.simpleclans2.database.data.KillType;
+import com.p000ison.dev.simpleclans2.database.DatabaseManager;
+import com.p000ison.dev.simpleclans2.database.Executable;
+import com.p000ison.dev.simpleclans2.database.KillType;
 import com.p000ison.dev.sqlapi.TableObject;
 import com.p000ison.dev.sqlapi.annotation.DatabaseColumn;
 import com.p000ison.dev.sqlapi.annotation.DatabaseTable;
@@ -35,6 +35,7 @@ import java.sql.Timestamp;
 @DatabaseTable(name = "sc2_kills")
 public class KillStatement implements Executable, TableObject {
 
+    @SuppressWarnings("unused")
     @DatabaseColumn(position = 0, databaseName = "id", id = true)
     private int id;
     @DatabaseColumn(position = 1, databaseName = "attacker")
@@ -64,8 +65,9 @@ public class KillStatement implements Executable, TableObject {
     }
 
     @Override
-    public boolean execute(DataManager dataManager)
+    public boolean execute(DatabaseManager dataManager)
     {
-        return dataManager.insertKill(attacker, attackerClan, victim, victimClan, war, killType, date);
+        dataManager.getDatabase().save(this);
+        return true;
     }
 }

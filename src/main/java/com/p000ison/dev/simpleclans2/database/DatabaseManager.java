@@ -18,21 +18,20 @@
  */
 
 
-package com.p000ison.dev.simpleclans2.database.data;
+package com.p000ison.dev.simpleclans2.database;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clan.ranks.Rank;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
-import com.p000ison.dev.simpleclans2.database.data.response.Response;
-import com.p000ison.dev.simpleclans2.database.data.response.ResponseTask;
-import com.p000ison.dev.simpleclans2.database.data.statements.KillStatement;
+import com.p000ison.dev.simpleclans2.database.response.Response;
+import com.p000ison.dev.simpleclans2.database.response.ResponseTask;
+import com.p000ison.dev.simpleclans2.database.statements.KillStatement;
 import com.p000ison.dev.simpleclans2.util.DateHelper;
 import com.p000ison.dev.simpleclans2.util.Logging;
 import com.p000ison.dev.simpleclans2.util.comparators.ReverseIntegerComparator;
 import com.p000ison.dev.sqlapi.Database;
 import com.p000ison.dev.sqlapi.DatabaseConfiguration;
-import com.p000ison.dev.sqlapi.DatabaseManager;
 import com.p000ison.dev.sqlapi.exception.DatabaseConnectionException;
 import com.p000ison.dev.sqlapi.jbdc.JBDCDatabase;
 import com.p000ison.dev.sqlapi.jbdc.JBDCPreparedQuery;
@@ -43,13 +42,12 @@ import com.p000ison.dev.sqlapi.sqlite.SQLiteDatabase;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.*;
 
 /**
- * Represents a DataManager
+ * Represents a DatabaseManager
  */
-public class DataManager {
+public class DatabaseManager {
 
     private SimpleClans plugin;
 
@@ -58,20 +56,19 @@ public class DataManager {
     private AutoSaver autoSaver;
     private ResponseTask responseTask;
 
-    private JBDCPreparedQuery unsetClanPlayer;
-    private JBDCPreparedQuery retriveKillsPerPlayer, retriveMostKills, insertKill;
+    private JBDCPreparedQuery retrieveKillsPerPlayer, retrieveMostKills;
     private JBDCPreparedQuery deleteRankById;
     private JBDCPreparedQuery retrieveBBLimit, insertBB, purgeBB;
 
-    public DataManager(SimpleClans plugin) throws DatabaseConnectionException
+    public DatabaseManager(SimpleClans plugin) throws DatabaseConnectionException
     {
         this.plugin = plugin;
 
         DatabaseConfiguration config = plugin.getSettingsManager().getDatabaseConfiguration();
         if (config instanceof MySQLConfiguration) {
-            database = (JBDCDatabase) DatabaseManager.registerConnection(new MySQLDatabase(config));
+            database = (JBDCDatabase) com.p000ison.dev.sqlapi.DatabaseManager.registerConnection(new MySQLDatabase(config));
         } else if (config instanceof SQLiteConfiguration) {
-            database = (JBDCDatabase) DatabaseManager.registerConnection(new SQLiteDatabase(config));
+            database = (JBDCDatabase) com.p000ison.dev.sqlapi.DatabaseManager.registerConnection(new SQLiteDatabase(config));
         }
 
         if (database == null) {
@@ -98,11 +95,8 @@ public class DataManager {
             plugin.getServer().getScheduler().scheduleAsyncRepeatingTask(plugin, autoSaver, autoSave, autoSave);
         }
 
-        unsetClanPlayer = database.createPreparedStatement("UPDATE `sc2_players` SET clan = -1, trusted = 0, ranks = null WHERE clan = ?;");
-
-        retriveKillsPerPlayer = database.createPreparedStatement("SELECT victim, count(victim) AS kills FROM `sc2_kills` WHERE attacker = ? GROUP BY victim ORDER BY count(victim) DESC;");
-        retriveMostKills = database.createPreparedStatement("SELECT attacker, victim, count(victim) AS kills FROM `sc2_kills` GROUP BY attacker, victim ORDER BY 3 DESC;");
-        insertKill = database.createPreparedStatement("INSERT INTO `sc2_kills` ( `attacker`, `attacker_clan`, `victim`, `victim_clan`, `war`, `type`, `date` ) VALUES ( ?, ?, ?, ?, ?, ?, ? );");
+        retrieveKillsPerPlayer = database.createPreparedStatement("SELECT victim, count(victim) AS kills FROM `sc2_kills` WHERE attacker = ? GROUP BY victim ORDER BY count(victim) DESC;");
+        retrieveMostKills = database.createPreparedStatement("SELECT attacker, victim, count(victim) AS kills FROM `sc2_kills` GROUP BY attacker, victim ORDER BY 3 DESC;");
 
         deleteRankById = database.createPreparedStatement("DELETE FROM `sc2_ranks` WHERE id = ?;");
 
@@ -155,13 +149,6 @@ public class DataManager {
         database.saveStoredValues(ClanPlayer.class);
     }
 
-    //
-    // if clan == null setTrusted(false);  X
-    // purge clan if it is too old         X
-    // unset clanplayer if the clan gets purged X
-    // statements, converter, create methods   X
-    //
-
     public List<String> retrieveBB(Clan clan, int start, int end)
     {
 
@@ -208,20 +195,6 @@ public class DataManager {
         insertBB.update();
     }
 
-    public boolean insertKill(long attacker, long attackerClan, long victim, long victimClan, boolean war, byte killType, Timestamp timestamp)
-    {
-        insertKill.set(0, attacker);
-        insertKill.set(1, attackerClan);
-        insertKill.set(2, victim);
-        insertKill.set(3, victimClan);
-        insertKill.set(4, war);
-        insertKill.set(5, killType);
-        insertKill.set(6, timestamp);
-
-        return insertKill.update();
-    }
-
-
     /**
      * Returns a map of victim->count of all kills that specific player did
      *
@@ -233,8 +206,8 @@ public class DataManager {
         TreeMap<Integer, Long> out = new TreeMap<Integer, Long>(new ReverseIntegerComparator());
         ResultSet res = null;
         try {
-            retriveKillsPerPlayer.set(0, playerId);
-            res = retriveKillsPerPlayer.query();
+            retrieveKillsPerPlayer.set(0, playerId);
+            res = retrieveKillsPerPlayer.query();
 
             while (res.next()) {
                 Long victim = res.getLong("victim");
@@ -266,7 +239,7 @@ public class DataManager {
         List<Conflicts> out = new ArrayList<Conflicts>();
         ResultSet res = null;
         try {
-            res = retriveMostKills.query();
+            res = retrieveMostKills.query();
 
             while (res.next()) {
                 long attacker = res.getLong("attacker");

@@ -44,8 +44,8 @@ import com.p000ison.dev.simpleclans2.commands.members.StatsCommand;
 import com.p000ison.dev.simpleclans2.commands.voting.AbstainCommand;
 import com.p000ison.dev.simpleclans2.commands.voting.AcceptCommand;
 import com.p000ison.dev.simpleclans2.commands.voting.DenyCommand;
-import com.p000ison.dev.simpleclans2.database.data.AutoSaver;
-import com.p000ison.dev.simpleclans2.database.data.DataManager;
+import com.p000ison.dev.simpleclans2.database.AutoSaver;
+import com.p000ison.dev.simpleclans2.database.DatabaseManager;
 import com.p000ison.dev.simpleclans2.exceptions.handling.ExceptionReporterTask;
 import com.p000ison.dev.simpleclans2.language.Language;
 import com.p000ison.dev.simpleclans2.listeners.SCEntityListener;
@@ -85,7 +85,7 @@ public class SimpleClans extends JavaPlugin implements SCCore {
     private SettingsManager settingsManager;
     private RequestManager requestManager;
     private CommandManager commandManager;
-    private DataManager dataManager;
+    private DatabaseManager dataManager;
     private RankManager rankManager;
     private TeleportManager teleportManager;
     private PreciousStonesSupport preciousStonesSupport;
@@ -266,7 +266,7 @@ public class SimpleClans extends JavaPlugin implements SCCore {
         settingsManager.loadPermissions();
 
         try {
-            dataManager = new DataManager(this);
+            dataManager = new DatabaseManager(this);
         } catch (DatabaseConnectionException e) {
             Logging.debug("------------------------------------------------------------");
             Logging.debug("The connection to the database failed: %s!", e.getMessage());
@@ -411,7 +411,7 @@ public class SimpleClans extends JavaPlugin implements SCCore {
         return commandManager;
     }
 
-    public DataManager getDataManager()
+    public DatabaseManager getDataManager()
     {
         return dataManager;
     }

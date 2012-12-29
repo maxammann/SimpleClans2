@@ -17,7 +17,7 @@
  *     Last modified: 10.10.12 21:57
  */
 
-package com.p000ison.dev.simpleclans2.database.data;
+package com.p000ison.dev.simpleclans2.database;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
@@ -35,9 +35,9 @@ public class AutoSaver implements Runnable {
     private Queue<Executable> queue = new ConcurrentLinkedQueue<Executable>();
 
     private SimpleClans plugin;
-    private DataManager dataManager;
+    private DatabaseManager dataManager;
 
-    public AutoSaver(SimpleClans simpleClans, DataManager dataManager)
+    public AutoSaver(SimpleClans simpleClans, DatabaseManager dataManager)
     {
         this.plugin = simpleClans;
         this.dataManager = dataManager;

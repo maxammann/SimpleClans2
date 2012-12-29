@@ -17,37 +17,41 @@
  *     Last modified: 10.10.12 21:57
  */
 
-package com.p000ison.dev.simpleclans2.database.data.response.responses;
+package com.p000ison.dev.simpleclans2.database.response;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
-import com.p000ison.dev.simpleclans2.clan.Clan;
-import com.p000ison.dev.simpleclans2.database.data.response.Response;
+import org.bukkit.command.CommandSender;
 
 /**
- * Represents a BBRetrieveResponse
+ * Represents a Response
  */
-public class BBAddResponse extends Response {
+public abstract class Response implements ResponseAble {
+    protected final SimpleClans plugin;
+    protected final CommandSender sender;
 
-    private String message;
-    private Clan clan;
-
-    public BBAddResponse(SimpleClans plugin, String message, Clan clan)
+    protected Response(SimpleClans plugin, CommandSender sender)
     {
-        super(plugin, null);
-        this.message = message;
-        this.clan = clan;
+        this.plugin = plugin;
+        this.sender = sender;
     }
 
-    @Override
-    public boolean response()
+    protected CommandSender getRetriever()
     {
-        plugin.getDataManager().insertBBMessage(clan, message);
-        return true;
+        return sender;
     }
 
-    @Override
-    public boolean needsRetriever()
+    public int[] getBoundings(int completeSize, int page)
     {
-        return false;
+        return plugin.getCommandManager().getBoundings(completeSize, page);
     }
+
+    public int[] getBoundings(int page)
+    {
+        int start = page * plugin.getSettingsManager().getElementsPerPage();
+        int end = start + plugin.getSettingsManager().getElementsPerPage();
+
+        return new int[]{start, end};
+    }
+
+    public abstract boolean needsRetriever();
 }

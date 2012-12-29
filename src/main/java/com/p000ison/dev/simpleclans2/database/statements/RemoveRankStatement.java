@@ -17,10 +17,10 @@
  *     Last modified: 10.10.12 21:57
  */
 
-package com.p000ison.dev.simpleclans2.database.data.statements;
+package com.p000ison.dev.simpleclans2.database.statements;
 
-import com.p000ison.dev.simpleclans2.database.data.DataManager;
-import com.p000ison.dev.simpleclans2.database.data.Executable;
+import com.p000ison.dev.simpleclans2.database.DatabaseManager;
+import com.p000ison.dev.simpleclans2.database.Executable;
 
 /**
  * Represents a RemoveRankStatement
@@ -35,7 +35,7 @@ public class RemoveRankStatement implements Executable {
     }
 
     @Override
-    public boolean execute(DataManager dataManager)
+    public boolean execute(DatabaseManager dataManager)
     {
         return dataManager.deleteRankById(id);
     }

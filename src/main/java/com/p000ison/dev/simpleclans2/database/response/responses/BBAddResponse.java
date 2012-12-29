@@ -17,12 +17,37 @@
  *     Last modified: 10.10.12 21:57
  */
 
-package com.p000ison.dev.simpleclans2.database.data;
+package com.p000ison.dev.simpleclans2.database.response.responses;
+
+import com.p000ison.dev.simpleclans2.SimpleClans;
+import com.p000ison.dev.simpleclans2.clan.Clan;
+import com.p000ison.dev.simpleclans2.database.response.Response;
 
 /**
- *
+ * Represents a BBRetrieveResponse
  */
-public interface Executable {
+public class BBAddResponse extends Response {
 
-    boolean execute(DataManager dataManager);
+    private String message;
+    private Clan clan;
+
+    public BBAddResponse(SimpleClans plugin, String message, Clan clan)
+    {
+        super(plugin, null);
+        this.message = message;
+        this.clan = clan;
+    }
+
+    @Override
+    public boolean response()
+    {
+        plugin.getDataManager().insertBBMessage(clan, message);
+        return true;
+    }
+
+    @Override
+    public boolean needsRetriever()
+    {
+        return false;
+    }
 }

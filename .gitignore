@@ -1,7 +1,8 @@
 #IntelliJ
 .idea/
-SimpleClans2.iml
+*.iml
 out/
+dependency-reduced-pom.xml
 
 #Maven
 target/

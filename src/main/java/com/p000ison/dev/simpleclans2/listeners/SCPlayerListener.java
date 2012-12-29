@@ -24,7 +24,7 @@ import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.commands.Command;
-import com.p000ison.dev.simpleclans2.database.data.response.responses.BBRetrieveResponse;
+import com.p000ison.dev.simpleclans2.database.response.responses.BBRetrieveResponse;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;

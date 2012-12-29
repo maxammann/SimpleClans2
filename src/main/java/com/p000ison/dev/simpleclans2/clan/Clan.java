@@ -31,7 +31,7 @@ import com.p000ison.dev.simpleclans2.clan.bank.BankAccount;
 import com.p000ison.dev.simpleclans2.clan.ranks.Rank;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.clanplayer.OnlineClanPlayer;
-import com.p000ison.dev.simpleclans2.database.data.response.responses.BBAddResponse;
+import com.p000ison.dev.simpleclans2.database.response.responses.BBAddResponse;
 import com.p000ison.dev.simpleclans2.language.Language;
 import com.p000ison.dev.simpleclans2.util.DateHelper;
 import com.p000ison.dev.simpleclans2.util.GeneralHelper;

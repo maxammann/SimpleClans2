@@ -68,7 +68,7 @@ public interface SCCore {
     RankManager getRankManager();
 
     /**
-     * Gets the manager, which handles everything about teleports.
+     * Gets the manager, which handles everything about teleporting.
      *
      * @return The teleport manager or SimpleClans.
      */

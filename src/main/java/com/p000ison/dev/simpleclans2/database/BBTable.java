@@ -1,4 +1,4 @@
-package com.p000ison.dev.simpleclans2.database.data;
+package com.p000ison.dev.simpleclans2.database;
 
 import com.p000ison.dev.sqlapi.TableObject;
 import com.p000ison.dev.sqlapi.annotation.DatabaseColumn;
