@@ -308,8 +308,10 @@ public class Converter implements Runnable {
         try {
             insertClan.executeUpdate();
         } catch (SQLException e) {
-            if (e.getMessage().startsWith("Duplicate entry")) {
+            if (e.getMessage().startsWith("Duplicate entry") || e.getMessage().contains("Abort due to constraint violation")) {
                 Logging.debug("Found duplicate clan %s! Skipping!", name);
+            } else {
+                Logging.debug(e, "Error", false);
             }
         }
     }

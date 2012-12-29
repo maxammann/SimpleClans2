@@ -108,7 +108,7 @@ public class ClanPlayer implements KDR, Balance, UpdateAble, TableObject {
         return clan == null ? -1 : clan.getId();
     }
 
-    @DatabaseColumnSetter(position = 3, databaseName = "clan", defaultValue = "-1", saveValueAfterLoading = true)
+    @DatabaseColumnSetter(position = 3, databaseName = "clan", defaultValue = "-1")
     private void setClanId(int id)
     {
         if (id <= 0) {

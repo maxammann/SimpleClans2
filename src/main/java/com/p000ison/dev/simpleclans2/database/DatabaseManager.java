@@ -64,6 +64,8 @@ public class DatabaseManager {
     {
         this.plugin = plugin;
 
+        Database.setLogger(Logging.getInstance());
+
         DatabaseConfiguration config = plugin.getSettingsManager().getDatabaseConfiguration();
         if (config instanceof MySQLConfiguration) {
             database = (JBDCDatabase) com.p000ison.dev.sqlapi.DatabaseManager.registerConnection(new MySQLDatabase(config));
@@ -81,6 +83,11 @@ public class DatabaseManager {
         database.registerTable(Clan.class).registerConstructor(plugin);
         database.registerTable(ClanPlayer.class).registerConstructor(plugin);
         database.registerTable(Rank.class);
+
+
+        JBDCPreparedQuery query = database.createPreparedStatement("UPDATE sc2_players SET banned = ?;");
+        query.set(database.getRegisteredTable(ClanPlayer.class).getColumn("banned"), 0, true);
+        query.update();
 
         autoSaver = new AutoSaver(plugin, this);
         responseTask = new ResponseTask();
@@ -124,6 +131,9 @@ public class DatabaseManager {
             }
         }
 
+        plugin.getClanManager().importClans(clans);
+        database.saveStoredValues(Clan.class);
+
         Set<ClanPlayer> clanPlayers = database.<ClanPlayer>select().from(ClanPlayer.class).prepare().getResults(new HashSet<ClanPlayer>());
 
         Iterator<ClanPlayer> clanPlayerIterator = clanPlayers.iterator();
@@ -142,10 +152,7 @@ public class DatabaseManager {
             }
         }
 
-        plugin.getClanManager().importClans(clans);
         plugin.getClanPlayerManager().importClanPlayers(clanPlayers);
-
-        database.saveStoredValues(Clan.class);
         database.saveStoredValues(ClanPlayer.class);
     }
 
@@ -190,8 +197,8 @@ public class DatabaseManager {
 
     public void insertBBMessage(Clan clan, String message)
     {
-        insertBB.set(1, clan.getId());
-        insertBB.set(2, message);
+        insertBB.set(0, clan.getId());
+        insertBB.set(1, message);
         insertBB.update();
     }
 

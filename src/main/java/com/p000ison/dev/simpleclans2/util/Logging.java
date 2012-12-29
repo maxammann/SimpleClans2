@@ -33,6 +33,11 @@ public final class Logging {
     private static Logger instance;
     private static SimpleClans plugin;
 
+    public static Logger getInstance()
+    {
+        return instance;
+    }
+
     public static void setInstance(Logger instance, SimpleClans plugin)
     {
         Logging.instance = instance;

@@ -48,13 +48,13 @@ public class AutoSaver implements Runnable {
     {
         for (Clan clan : plugin.getClanManager().getClans()) {
             if (clan.needsUpdate()) {
-                dataManager.getDatabase().save(clan);
+                dataManager.getDatabase().update(clan);
                 clan.update(false);
             }
 
             for (Rank rank : clan.getRanks()) {
                 if (rank.needsUpdate()) {
-                    dataManager.getDatabase().save(rank);
+                    dataManager.getDatabase().update(rank);
                     rank.update(false);
                 }
             }
@@ -62,15 +62,16 @@ public class AutoSaver implements Runnable {
 
         for (ClanPlayer clanPlayer : plugin.getClanPlayerManager().getClanPlayers()) {
             if (clanPlayer.needsUpdate()) {
-                dataManager.getDatabase().save(clanPlayer);
+                dataManager.getDatabase().update(clanPlayer);
                 clanPlayer.update(false);
             }
         }
 
+
+
         Executable executable;
 
         while ((executable = queue.poll()) != null) {
-            System.out.println(executable);
             executable.execute(dataManager);
         }
     }
