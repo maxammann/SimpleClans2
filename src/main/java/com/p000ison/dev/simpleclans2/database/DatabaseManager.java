@@ -110,6 +110,18 @@ public class DatabaseManager {
         importAll();
     }
 
+    public void close()
+    {
+        retrieveKillsPerPlayer.close();
+        retrieveMostKills.close();
+        deleteRankById.close();
+        retrieveBBLimit.close();
+        insertBB.close();
+        purgeBB.close();
+
+        getDatabase().close();
+    }
+
     public final void importAll()
     {
         Set<Clan> clans = database.<Clan>select().from(Clan.class).prepare().getResults(new HashSet<Clan>());
@@ -130,6 +142,8 @@ public class DatabaseManager {
                 clan.loadRanks(rankQuery.getResults(new HashSet<Rank>()));
             }
         }
+
+        rankQuery.close();
 
         plugin.getClanManager().importClans(clans);
         database.saveStoredValues(Clan.class);

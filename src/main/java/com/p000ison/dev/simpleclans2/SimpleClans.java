@@ -227,7 +227,7 @@ public class SimpleClans extends JavaPlugin implements SCCore {
         //close the connection to the database
         if (dataManager != null) {
             dataManager.getAutoSaver().run();
-            dataManager.getDatabase().close();
+            dataManager.close();
         }
 
         Language.clear();
