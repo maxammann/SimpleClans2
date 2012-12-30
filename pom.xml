@@ -249,5 +249,9 @@
             <id>metrics</id>
             <url>http://repo.mcstats.org/content/repositories/releases/</url>
         </repository>
+        <repository>
+            <id>greatman</id>
+            <url>http://repo.greatmancode.com/content/repositories/snapshots/</url>
+        </repository>
     </repositories>
 </project>

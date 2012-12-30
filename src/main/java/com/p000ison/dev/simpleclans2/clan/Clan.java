@@ -37,15 +37,11 @@ import com.p000ison.dev.simpleclans2.util.DateHelper;
 import com.p000ison.dev.simpleclans2.util.GeneralHelper;
 import com.p000ison.dev.simpleclans2.util.JSONUtil;
 import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
-import com.p000ison.dev.sqlapi.Database;
 import com.p000ison.dev.sqlapi.TableObject;
 import com.p000ison.dev.sqlapi.annotation.DatabaseColumn;
 import com.p000ison.dev.sqlapi.annotation.DatabaseColumnGetter;
 import com.p000ison.dev.sqlapi.annotation.DatabaseColumnSetter;
 import com.p000ison.dev.sqlapi.annotation.DatabaseTable;
-import com.p000ison.dev.sqlapi.exception.DatabaseConnectionException;
-import com.p000ison.dev.sqlapi.mysql.MySQLConfiguration;
-import com.p000ison.dev.sqlapi.mysql.MySQLDatabase;
 import org.apache.commons.lang.Validate;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -174,16 +170,6 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble, Seriali
     }
 
     /**
-     * Sets the id of this clan.
-     *
-     * @param id The id.
-     */
-    public void setId(int id)
-    {
-        this.id = id;
-    }
-
-    /**
      * Returns the Flags of this clan. {@link ClanFlags} contains the flags of this clan.
      *
      * @return The flags of this clan.
@@ -244,10 +230,14 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble, Seriali
     @DatabaseColumnSetter(position = 5, databaseName = "last_action")
     public void setLastActionDate(Date lastActionDate)
     {
+        if (lastActionDate == null) {
+            this.lastActionDate = System.currentTimeMillis();
+            return;
+        }
         this.lastActionDate = lastActionDate.getTime();
     }
 
-    public void setLastActionDate(long lastActionDate)
+    public void setLastAction(long lastActionDate)
     {
         this.lastActionDate = lastActionDate;
     }
@@ -279,6 +269,10 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble, Seriali
     @DatabaseColumnSetter(position = 4, databaseName = "founded")
     public void setFoundedDate(Date foundedDate)
     {
+        if (foundedDate == null) {
+            this.foundedDate = System.currentTimeMillis();
+            return;
+        }
         this.foundedDate = foundedDate.getTime();
     }
 
@@ -793,7 +787,7 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble, Seriali
     @Override
     public int hashCode()
     {
-        return (int) (id ^ (id >>> 32));
+        return id ^ (id >>> 32);
     }
 
     public void addRival(Clan rival)
@@ -824,11 +818,11 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble, Seriali
     {
         ClanRelationCreateEvent relationEvent = new ClanRelationCreateEvent(this, clanToAdd, relationType);
 
-//        plugin.getServer().getPluginManager().callEvent(relationEvent);
-//
-//        if (relationEvent.isCancelled()) {
-//            return;
-//        }
+        plugin.getServer().getPluginManager().callEvent(relationEvent);
+
+        if (relationEvent.isCancelled()) {
+            return;
+        }
 
         relationSet.add(clanToAdd);
     }
@@ -1065,6 +1059,9 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble, Seriali
     {
         if (rank == null) {
             return;
+        }
+        if (ranks == null) {
+            ranks = new HashSet<Rank>();
         }
 
         ranks.add(rank);
@@ -1453,6 +1450,10 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble, Seriali
 
     private void addDatabaseRelative(String json, Set<Clan> clans)
     {
+        if (json == null) {
+            return;
+        }
+
         Set<Long> ids = JSONUtil.JSONToLongSet(json);
 
         if (ids == null) {
@@ -1478,26 +1479,5 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble, Seriali
     public String getDatabaseFlags()
     {
         return getFlags().serialize();
-    }
-
-    public static void main(String[] args)
-    {
-        try {
-            Database db = new MySQLDatabase(new MySQLConfiguration("root", "m1nt", "localhost", 3306, "test"));
-
-            db.registerTable(Clan.class).registerConstructor(SimpleClans.class).setArguments(new SimpleClans());
-            db.registerTable(ClanPlayer.class).registerConstructor(SimpleClans.class).setArguments(new SimpleClans());
-            Clan clan = new Clan(null, "1", "2");
-            clan.addAlly(clan);
-            db.save(clan);
-            System.out.println(clan.getId());
-            System.out.println(db.<Clan>select().from(Clan.class).prepare().getResults().get(1).getAllies());
-
-            System.out.println("---------------------------------");
-            db.saveStoredValues(Clan.class);
-
-        } catch (DatabaseConnectionException e) {
-            e.printStackTrace();
-        }
     }
 }

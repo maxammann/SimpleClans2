@@ -115,9 +115,9 @@ public class ClanManager {
             return null;
         }
 
-        plugin.getDataManager().getDatabase().save(clan);
         clan.updateLastAction();
         clan.setFoundedDate(System.currentTimeMillis());
+        plugin.getDataManager().getDatabase().save(clan);
         clan.update();
         clans.add(clan);
         return clan;
@@ -217,7 +217,7 @@ public class ClanManager {
             if (clan.isLeader(clanPlayer) && clan.getLeaders().size() == 1) {
                 clan.disband();
             } else {
-                clanPlayer.setJoinDate(0);
+                clanPlayer.setJoinTime(0);
                 clan.removeMember(clanPlayer);
                 clanPlayer.setBanned(true);
 

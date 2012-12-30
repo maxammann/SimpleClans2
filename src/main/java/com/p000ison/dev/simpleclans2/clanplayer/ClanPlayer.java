@@ -109,6 +109,7 @@ public class ClanPlayer implements KDR, Balance, UpdateAble, TableObject {
     }
 
     @DatabaseColumnSetter(position = 3, databaseName = "clan", defaultValue = "-1")
+    @SuppressWarnings("unused")
     private void setClanId(int id)
     {
         if (id <= 0) {
@@ -235,7 +236,7 @@ public class ClanPlayer implements KDR, Balance, UpdateAble, TableObject {
         return !this.isOnline() ? lastSeen : System.currentTimeMillis();
     }
 
-    public void setLastSeenDate(long lastSeen)
+    public void setLastSeen(long lastSeen)
     {
         this.lastSeen = lastSeen;
     }
@@ -245,12 +246,12 @@ public class ClanPlayer implements KDR, Balance, UpdateAble, TableObject {
         this.lastSeen = System.currentTimeMillis();
     }
 
-    public long getJoinDate()
+    public long getJoinTime()
     {
         return joinDate;
     }
 
-    public void setJoinDate(long joinDate)
+    public void setJoinTime(long joinDate)
     {
         this.joinDate = joinDate;
     }
@@ -784,11 +785,14 @@ public class ClanPlayer implements KDR, Balance, UpdateAble, TableObject {
         getFlags().setBBEnabled(enabled);
     }
 
-    @DatabaseColumnSetter(position = 4, databaseName = "ranks")
+    @DatabaseColumnSetter(position = 4, databaseName = "ranks", saveValueAfterLoading = true)
     private void setDatabaseRank(String json)
     {
-//        Long.valueOf(json.substring(0, json.length() - 1));
-//          this.rank = new Rank();
+        if (json == null || getClan() == null) {
+            return;
+        }
+        int rankId = Integer.valueOf(json.substring(1, json.length() - 1));
+        this.rank = getClan().getRank(rankId);
     }
 
     @DatabaseColumnGetter(databaseName = "ranks")
@@ -806,6 +810,10 @@ public class ClanPlayer implements KDR, Balance, UpdateAble, TableObject {
     @DatabaseColumnSetter(position = 7, databaseName = "join_date")
     private void setDatabaseJoinDate(Date date)
     {
+        if (date == null) {
+            this.joinDate = System.currentTimeMillis();
+            return;
+        }
         this.joinDate = date.getTime();
     }
 
@@ -818,6 +826,10 @@ public class ClanPlayer implements KDR, Balance, UpdateAble, TableObject {
     @DatabaseColumnSetter(position = 7, databaseName = "last_seen")
     private void setDatabaseLastSeen(Date date)
     {
+        if (date == null) {
+            this.lastSeen = System.currentTimeMillis();
+            return;
+        }
         this.lastSeen = date.getTime();
     }
 

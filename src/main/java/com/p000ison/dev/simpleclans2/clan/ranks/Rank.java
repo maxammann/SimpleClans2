@@ -60,9 +60,9 @@ public class Rank implements Comparable<Rank>, TableObject {
 
     @DatabaseColumn(position = 0, databaseName = "id", id = true)
     private int id;
-    @DatabaseColumn(position = 2, databaseName = "name", lenght = 16, unique = true)
+    @DatabaseColumn(position = 2, databaseName = "name", lenght = 16)
     private String name;
-    @DatabaseColumn(position = 1, databaseName = "tag", lenght = 16, unique = true)
+    @DatabaseColumn(position = 1, databaseName = "tag", lenght = 16)
     private String tag;
     private Map<Integer, Boolean> permissions;
     @DatabaseColumn(position = 4, databaseName = "priority", lenght = 3)

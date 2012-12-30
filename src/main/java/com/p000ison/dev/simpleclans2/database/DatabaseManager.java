@@ -37,6 +37,7 @@ import com.p000ison.dev.sqlapi.jbdc.JBDCDatabase;
 import com.p000ison.dev.sqlapi.jbdc.JBDCPreparedQuery;
 import com.p000ison.dev.sqlapi.mysql.MySQLConfiguration;
 import com.p000ison.dev.sqlapi.mysql.MySQLDatabase;
+import com.p000ison.dev.sqlapi.query.PreparedSelectQuery;
 import com.p000ison.dev.sqlapi.sqlite.SQLiteConfiguration;
 import com.p000ison.dev.sqlapi.sqlite.SQLiteDatabase;
 
@@ -84,11 +85,6 @@ public class DatabaseManager {
         database.registerTable(ClanPlayer.class).registerConstructor(plugin);
         database.registerTable(Rank.class);
 
-
-        JBDCPreparedQuery query = database.createPreparedStatement("UPDATE sc2_players SET banned = ?;");
-        query.set(database.getRegisteredTable(ClanPlayer.class).getColumn("banned"), 0, true);
-        query.update();
-
         autoSaver = new AutoSaver(plugin, this);
         responseTask = new ResponseTask();
 
@@ -118,6 +114,7 @@ public class DatabaseManager {
     {
         Set<Clan> clans = database.<Clan>select().from(Clan.class).prepare().getResults(new HashSet<Clan>());
         long currentTime = System.currentTimeMillis();
+        PreparedSelectQuery<Rank> rankQuery = database.<Rank>select().from(Rank.class).where().preparedEquals("clan").select().prepare();
 
         Iterator<Clan> clanIterator = clans.iterator();
         while (clanIterator.hasNext()) {
@@ -128,6 +125,9 @@ public class DatabaseManager {
                 Logging.debug("Purging clan %s! (id=%s)", clan.getTag(), clan.getId());
                 getDatabase().delete(clan);
                 clanIterator.remove();
+            } else {
+                rankQuery.set(0, clan.getId());
+                clan.loadRanks(rankQuery.getResults(new HashSet<Rank>()));
             }
         }
 

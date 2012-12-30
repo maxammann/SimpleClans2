@@ -72,19 +72,13 @@ public class ClanPlayerManager {
             }
         }
 
-        players.add(clanPlayer);
+
+        clanPlayer.updateLastSeen();
+        clanPlayer.setJoinTime(System.currentTimeMillis());
 
         plugin.getDataManager().getDatabase().save(clanPlayer);
+        players.add(clanPlayer);
 
-//        int id = plugin.getDataManager().retrieveClanPlayerId(clanPlayer.getName());
-//
-//        if (id < 0) {
-//            throw new ClanPlayerCreateException(clanPlayer, id);
-//        }
-//
-//        clanPlayer.setId(id);
-        clanPlayer.updateLastSeen();
-        clanPlayer.setJoinDate(System.currentTimeMillis());
         clanPlayer.update();
 
         plugin.getServer().getPluginManager().callEvent(new ClanPlayerCreateEvent(clanPlayer));
