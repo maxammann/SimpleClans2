@@ -195,7 +195,7 @@ public class ChatBlock {
                         throw new IllegalArgumentException("Align not found!");
                 }
 
-                finalRow.append(section);
+                finalRow.append(section).append(ChatColor.RESET);
             }
 
             cropRight(finalRow, MAX_LINE_LENGTH);

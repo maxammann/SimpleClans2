@@ -94,9 +94,9 @@ public class ListCommand extends GenericConsoleCommand {
         ChatBlock.sendMessage(sender, headColor + Language.getTranslation("total.clans") + " " + subColor + clans.size());
         ChatBlock.sendBlank(sender);
 
-        chatBlock.setAlignment(Align.CENTER, Align.LEFT, Align.CENTER, Align.CENTER);
+        chatBlock.setAlignment(Align.CENTER, Align.LEFT, Align.LEFT, Align.CENTER, Align.CENTER);
 
-        chatBlock.addRow(Language.getTranslation("rank"), Language.getTranslation("name"), Language.getTranslation("kdr"), Language.getTranslation("members"));
+        chatBlock.addRow(Language.getTranslation("rank"), Language.getTranslation("tag"), Language.getTranslation("name"), Language.getTranslation("kdr"), Language.getTranslation("members"));
 
         int rank = 1;
 
@@ -111,11 +111,10 @@ public class ListCommand extends GenericConsoleCommand {
 
             String tag = clan.getTag();
             String name = clan.getName();
-            String fullName = tag + " " + name;
             String size = ChatColor.WHITE.toString() + clan.getSize();
             String kdr = clan.isVerified() ? ChatColor.YELLOW + "" + formatter.format(clan.getKDR()) : "";
 
-            chatBlock.addRow(String.valueOf(rank), fullName, kdr, size);
+            chatBlock.addRow(String.valueOf(rank), tag, name, kdr, size);
 
             rank++;
         }
