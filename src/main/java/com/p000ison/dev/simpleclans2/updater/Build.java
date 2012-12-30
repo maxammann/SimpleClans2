@@ -35,7 +35,7 @@ import java.util.Set;
  */
 public class Build {
 
-    private static final String DEFAULT_ARTIFACT = "SimpleClans2-1.0.jar";
+    private static final String DEFAULT_ARTIFACT = "SimpleClans2-1.0-SNAPSHOT.jar";
     private static final String PROJECT_GITHUB_URL = "https://github.com/p000ison/SimpleClans2/commit/";
     private static final String JENKINS_HOST = "jenkins.greatmancode.com";
     private static final String API_FILE = "api/json";
