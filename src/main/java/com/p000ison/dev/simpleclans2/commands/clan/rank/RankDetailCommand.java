@@ -104,17 +104,19 @@ public class RankDetailCommand extends GenericPlayerCommand {
 
         Map<Integer, Boolean> permissions = queried.getPermissions();
 
-        if (!permissions.isEmpty()) {
-            ChatBlock.sendMessage(player, subColor + Language.getTranslation("permissions") + ":");
-            for (Map.Entry<Integer, Boolean> entry : permissions.entrySet()) {
-                String output = subColor + "  - ";
+        if (permissions == null || permissions.isEmpty()) {
+            return;
+        }
 
-                if (!entry.getValue()) {
-                    output += '-';
-                }
+        ChatBlock.sendMessage(player, subColor + Language.getTranslation("permissions") + ":");
+        for (Map.Entry<Integer, Boolean> entry : permissions.entrySet()) {
+            String output = subColor + "  - ";
 
-                ChatBlock.sendMessage(player, output + ChatColor.WHITE + Rank.getByID(entry.getKey()));
+            if (!entry.getValue()) {
+                output += '-';
             }
+
+            ChatBlock.sendMessage(player, output + ChatColor.WHITE + Rank.getByID(entry.getKey()));
         }
     }
 }

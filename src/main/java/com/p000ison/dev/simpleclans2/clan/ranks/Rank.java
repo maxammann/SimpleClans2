@@ -22,6 +22,8 @@ package com.p000ison.dev.simpleclans2.clan.ranks;
 import com.p000ison.dev.simpleclans2.util.JSONUtil;
 import com.p000ison.dev.sqlapi.TableObject;
 import com.p000ison.dev.sqlapi.annotation.DatabaseColumn;
+import com.p000ison.dev.sqlapi.annotation.DatabaseColumnGetter;
+import com.p000ison.dev.sqlapi.annotation.DatabaseColumnSetter;
 import com.p000ison.dev.sqlapi.annotation.DatabaseTable;
 import org.apache.commons.lang.StringUtils;
 import org.json.simple.JSONObject;
@@ -168,7 +170,7 @@ public class Rank implements Comparable<Rank>, TableObject {
 
     public String removePermission(String permission)
     {
-        if (permissions.isEmpty()) {
+        if (permissions == null || permissions.isEmpty()) {
             return null;
         }
 
@@ -191,6 +193,9 @@ public class Rank implements Comparable<Rank>, TableObject {
      */
     public boolean hasPermission(int id)
     {
+        if (permissions == null) {
+            return false;
+        }
         Boolean perm = permissions.get(id);
         return perm == null || !perm;
     }
@@ -208,13 +213,14 @@ public class Rank implements Comparable<Rank>, TableObject {
 
     public boolean isNegative(int id)
     {
-        Boolean permission = permissions.get(id);
-
-        if (permission == null) {
+        if (permissions == null) {
             return false;
         }
 
-        return !permission;
+        Boolean permission = permissions.get(id);
+
+        return permission != null && !permission;
+
     }
 
     public boolean isNegative(String permission)
@@ -240,6 +246,10 @@ public class Rank implements Comparable<Rank>, TableObject {
      */
     public String addPermission(String permission, boolean positive)
     {
+        if (permissions == null) {
+            permissions = new HashMap<Integer, Boolean>();
+        }
+
         PermissionFinder permissionFinder = new PermissionFinder(permission);
 
         if (permissionFinder.getPermission() != null && id != -1) {
@@ -439,15 +449,21 @@ public class Rank implements Comparable<Rank>, TableObject {
         return (thisPriority < anotherPriority ? -1 : (thisPriority == anotherPriority ? 0 : 1));
     }
 
+    @DatabaseColumnGetter(databaseName = "permissions")
     private String getDatabasePermissions()
     {
+        if (permissions == null) {
+            return null;
+        }
         return JSONObject.toJSONString(permissions);
     }
 
+    @DatabaseColumnSetter(position = 4, databaseName = "permissions")
     private void setDatabasePermissions(String json)
     {
         if (json == null) {
-            permissions = new HashMap<Integer, Boolean>();
+            permissions = null;
+            return;
         }
         this.permissions = JSONUtil.JSONToPermissionMap(json);
     }
