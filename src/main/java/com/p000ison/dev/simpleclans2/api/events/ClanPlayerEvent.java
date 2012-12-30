@@ -27,6 +27,7 @@ import org.bukkit.event.HandlerList;
  * This even is used to store a clanplayer for the event
  */
 abstract class ClanPlayerEvent extends Event {
+
     private static final HandlerList handlers = new HandlerList();
     private final ClanPlayer clanPlayer;
 
@@ -38,6 +39,10 @@ abstract class ClanPlayerEvent extends Event {
     @Override
     public HandlerList getHandlers()
     {
+        return handlers;
+    }
+
+    public static HandlerList getHandlerList() {
         return handlers;
     }
 

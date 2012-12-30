@@ -22,6 +22,7 @@ package com.p000ison.dev.simpleclans2.api.events;
 import com.p000ison.dev.simpleclans2.api.RelationType;
 import com.p000ison.dev.simpleclans2.clan.Clan;
 import org.bukkit.event.Cancellable;
+import org.bukkit.event.HandlerList;
 
 /**
  * This event is fired, when ever something happens with the relations of a clan
@@ -31,6 +32,7 @@ abstract class ClanRelationEvent extends ClanEvent implements Cancellable {
     protected Clan otherClan;
     protected RelationType type;
     private boolean cancelled;
+    private static final HandlerList handlers = new HandlerList();
 
     public ClanRelationEvent(Clan clan, Clan otherClan, RelationType type)
     {
@@ -49,5 +51,14 @@ abstract class ClanRelationEvent extends ClanEvent implements Cancellable {
     public void setCancelled(boolean cancelled)
     {
         this.cancelled = cancelled;
+    }
+
+    @Override
+    public HandlerList getHandlers() {
+        return handlers;
+    }
+
+    public static HandlerList getHandlerList() {
+        return handlers;
     }
 }

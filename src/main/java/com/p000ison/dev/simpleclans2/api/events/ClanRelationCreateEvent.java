@@ -21,14 +21,26 @@ package com.p000ison.dev.simpleclans2.api.events;
 
 import com.p000ison.dev.simpleclans2.api.RelationType;
 import com.p000ison.dev.simpleclans2.clan.Clan;
+import org.bukkit.event.HandlerList;
 
 /**
  * This event is fired, when ever a clan creates a relation
  */
 public final class ClanRelationCreateEvent extends ClanRelationEvent {
 
+    private static final HandlerList handlers = new HandlerList();
+
     public ClanRelationCreateEvent(Clan clan, Clan otherClan, RelationType type)
     {
         super(clan, otherClan, type);
+    }
+
+    @Override
+    public HandlerList getHandlers() {
+        return handlers;
+    }
+
+    public static HandlerList getHandlerList() {
+        return handlers;
     }
 }
