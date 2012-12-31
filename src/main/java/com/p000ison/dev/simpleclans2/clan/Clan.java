@@ -719,7 +719,7 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble, Seriali
 
         for (ClanPlayer clanPlayer : getAllMembers()) {
             Player player = clanPlayer.toPlayer();
-
+            System.out.println(player.getName());
             if (player != null) {
                 ChatBlock.sendMessage(player, message);
             }
@@ -1398,7 +1398,7 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble, Seriali
     @DatabaseColumnGetter(databaseName = "allies")
     private String getDatabaseAllies()
     {
-        return allies == null ? null : JSONUtil.clansToJSON(allies);
+        return allies == null || allies.isEmpty() ? null : JSONUtil.clansToJSON(allies);
     }
 
     @DatabaseColumnSetter(position = 6, databaseName = "allies", saveValueAfterLoading = true)
@@ -1410,7 +1410,7 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble, Seriali
     @DatabaseColumnGetter(databaseName = "rivals")
     private String getDatabaseRivals()
     {
-        return rivals == null ? null : JSONUtil.clansToJSON(rivals);
+        return rivals == null || rivals.isEmpty() ? null : JSONUtil.clansToJSON(rivals);
     }
 
     @DatabaseColumnSetter(position = 7, databaseName = "rivals", saveValueAfterLoading = true)
@@ -1422,7 +1422,7 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble, Seriali
     @DatabaseColumnGetter(databaseName = "warring")
     private String getDatabaseWarring()
     {
-        return warring == null ? null : JSONUtil.clansToJSON(warring);
+        return warring == null || warring.isEmpty() ? null : JSONUtil.clansToJSON(warring);
     }
 
     @DatabaseColumnSetter(position = 8, databaseName = "warring", saveValueAfterLoading = true)
@@ -1467,5 +1467,18 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble, Seriali
             return null;
         }
         return getFlags().serialize();
+    }
+
+    /**
+     * This is only used INTERNALLY! Do not call this method if you do not know exactly what this does!
+     *
+     * @param cp The ClanPlayer to add
+     */
+    public void addMemberInternally(ClanPlayer cp)
+    {
+        if (allMembers == null) {
+            this.allMembers = new HashSet<ClanPlayer>();
+        }
+        this.allMembers.add(cp);
     }
 }
