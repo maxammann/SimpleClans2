@@ -82,12 +82,12 @@ public class ConvertCommand extends GenericConsoleCommand {
                     database = new MySQLDatabase(config);
                 }
             } else if (action.equalsIgnoreCase("sqlite")) {
-                File file = new File(args[0]);
+                File file = new File(args[1]);
                 if (!file.exists()) {
                     sender.sendMessage("The file does not exist!");
                     return;
                 } else if (file.isDirectory()) {
-                    System.out.println("The file is a directory!");
+                    sender.sendMessage("The file is a directory!");
                     return;
                 }
                 config = new SQLiteConfiguration(file);
