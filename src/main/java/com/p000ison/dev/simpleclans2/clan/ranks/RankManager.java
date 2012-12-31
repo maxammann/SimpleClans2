@@ -45,10 +45,9 @@ public class RankManager {
      */
     public Rank createRank(Clan clan, String name, String tag, int priority)
     {
-        Rank rank = new Rank(name, tag, priority, clan.getId());
+        Rank rank = new Rank(name, tag, priority, clan.getID());
 
         plugin.getDataManager().getDatabase().save(rank);
         return rank;
     }
-
 }

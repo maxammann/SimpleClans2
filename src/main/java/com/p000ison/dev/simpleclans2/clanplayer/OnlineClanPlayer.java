@@ -60,8 +60,8 @@ public class OnlineClanPlayer {
         }
 
         attachment = toPlayer().addAttachment(plugin);
-        attachment.setPermission(String.valueOf(clan.getId()), true);
-        attachment.setPermission("^" + clan.getId(), true);
+        attachment.setPermission(String.valueOf(clan.getID()), true);
+        attachment.setPermission("^" + clan.getID(), true);
     }
 
     /**

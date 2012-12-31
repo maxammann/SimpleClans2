@@ -62,6 +62,7 @@ import com.p000ison.dev.simpleclans2.util.Logging;
 import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import com.p000ison.dev.sqlapi.exception.DatabaseConnectionException;
 import com.p000ison.dev.sqlapi.jbdc.JBDCDatabase;
+import com.p000ison.dev.sqlapi.mysql.MySQLConfiguration;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
@@ -268,9 +269,12 @@ public class SimpleClans extends JavaPlugin implements SCCore {
         try {
             dataManager = new DatabaseManager(this);
         } catch (DatabaseConnectionException e) {
-            Logging.debug("------------------------------------------------------------");
-            Logging.debug("The connection to the database failed: %s!", e.getMessage());
-            Logging.debug("------------------------------------------------------------");
+            Logging.debug("----------------------------------------------");
+            Logging.debug(Level.SEVERE, "The connection to the database failed: %s!", e.getMessage());
+            if (e.getConfig() instanceof MySQLConfiguration) {
+                Logging.debug(Level.SEVERE, "If you do not have a MySQL database you can use a SQLite database!");
+            }
+            Logging.debug("----------------------------------------------");
             disable();
         }
 

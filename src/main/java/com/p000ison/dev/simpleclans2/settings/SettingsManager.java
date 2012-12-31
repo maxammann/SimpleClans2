@@ -693,7 +693,7 @@ public class SettingsManager {
 
     public boolean isUnRivalAble(Clan clan)
     {
-        return unRivalAbleClans.contains(clan.getId());
+        return unRivalAbleClans.contains(clan.getID());
     }
 
     public int getMinimalSizeToRival()

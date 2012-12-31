@@ -134,11 +134,11 @@ public class DatabaseManager {
             int maxInactiveDays = clan.isVerified() ? plugin.getSettingsManager().getPurgeInactiveClansDays() : plugin.getSettingsManager().getPurgeUnverifiedClansDays();
 
             if (DateHelper.differenceInDays(clan.getLastUpdated(), currentTime) > maxInactiveDays) {
-                Logging.debug("Purging clan %s! (id=%s)", clan.getTag(), clan.getId());
+                Logging.debug("Purging clan %s! (id=%s)", clan.getTag(), clan.getID());
                 getDatabase().delete(clan);
                 clanIterator.remove();
             } else {
-                rankQuery.set(0, clan.getId());
+                rankQuery.set(0, clan.getID());
                 clan.loadRanks(rankQuery.getResults(new HashSet<Rank>()));
             }
         }
@@ -178,7 +178,7 @@ public class DatabaseManager {
         ResultSet res = null;
 
         try {
-            retrieveBBLimit.set(0, clan.getId());
+            retrieveBBLimit.set(0, clan.getID());
             retrieveBBLimit.set(1, start);
             retrieveBBLimit.set(2, end);
             res = retrieveBBLimit.query();
@@ -205,13 +205,13 @@ public class DatabaseManager {
 
     public void purgeBB(Clan clan)
     {
-        purgeBB.set(0, clan.getId());
+        purgeBB.set(0, clan.getID());
         purgeBB.update();
     }
 
     public void insertBBMessage(Clan clan, String message)
     {
-        insertBB.set(0, clan.getId());
+        insertBB.set(0, clan.getID());
         insertBB.set(1, message);
         insertBB.update();
     }

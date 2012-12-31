@@ -46,7 +46,7 @@ public final class JSONUtil {
         JSONArray array = new JSONArray();
 
         for (Clan clan : clans) {
-            array.add(clan.getId());
+            array.add(clan.getID());
         }
 
         return array.toJSONString();

@@ -98,7 +98,7 @@ public class ClanManager {
     public Clan getClan(long id)
     {
         for (Clan clan : clans) {
-            if (clan.getId() == id) {
+            if (clan.getID() == id) {
                 return clan;
             }
         }
@@ -116,7 +116,7 @@ public class ClanManager {
         }
 
         clan.updateLastAction();
-        clan.setFoundedDate(System.currentTimeMillis());
+        clan.setFoundedTime(System.currentTimeMillis());
         plugin.getDataManager().getDatabase().save(clan);
         clan.update();
         clans.add(clan);

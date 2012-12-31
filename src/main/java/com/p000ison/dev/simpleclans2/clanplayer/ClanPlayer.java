@@ -91,12 +91,6 @@ public class ClanPlayer implements KDR, Balance, UpdateAble, TableObject {
         this.name = name;
     }
 
-    public ClanPlayer(SimpleClans plugin, int id, String name)
-    {
-        this(plugin, name);
-        this.id = id;
-    }
-
     /**
      * Returns the id of the clan the player is in
      *
@@ -105,7 +99,7 @@ public class ClanPlayer implements KDR, Balance, UpdateAble, TableObject {
     @DatabaseColumnGetter(databaseName = "clan")
     public int getClanId()
     {
-        return clan == null ? -1 : clan.getId();
+        return clan == null ? -1 : clan.getID();
     }
 
     @DatabaseColumnSetter(position = 3, databaseName = "clan", defaultValue = "-1")

@@ -90,13 +90,12 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble, Seriali
     private boolean update;
 
     /**
-     * Creates a new clan
+     * This is called by the SQLDatabaseAPI to build a clan
      *
      * @param plugin The plugin
      */
     public Clan(SimpleClans plugin)
     {
-        flags = new ClanFlags();
         this.plugin = plugin;
     }
 
@@ -114,26 +113,13 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble, Seriali
         this.name = name;
     }
 
-    /**
-     * Creates a new clan
-     *
-     * @param plugin The plugin
-     * @param id     The id
-     * @param tag    The tag of this clan
-     * @param name   The full name of this clan
-     */
-    public Clan(SimpleClans plugin, int id, String tag, String name)
-    {
-        this(plugin, tag, name);
-        this.id = id;
-    }
 
     /**
      * Returns a formated string of the date this clan was founded
      *
      * @return Returns a formatted date
      */
-    public String getFounded()
+    public String getFoundedDateFormatted()
     {
         return DATE_FORMAT.format(new Date(this.foundedDate));
     }
@@ -164,7 +150,7 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble, Seriali
      *
      * @return The id.
      */
-    public int getId()
+    public int getID()
     {
         return id;
     }
@@ -178,16 +164,6 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble, Seriali
     public ClanFlags getFlags()
     {
         return flags;
-    }
-
-    /**
-     * Sets the flags of this clan to a new object.
-     *
-     * @param flags The flag to set
-     */
-    public void setFlags(ClanFlags flags)
-    {
-        this.flags = flags;
     }
 
     /**
@@ -276,9 +252,14 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble, Seriali
         this.foundedDate = foundedDate.getTime();
     }
 
-    public void setFoundedDate(long foundedDate)
+    public void setFoundedTime(long foundedDate)
     {
         this.foundedDate = foundedDate;
+    }
+
+    public long getFoundedTime()
+    {
+        return this.foundedDate;
     }
 
     /**
@@ -361,7 +342,7 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble, Seriali
      */
     public boolean isAlly(long id)
     {
-        if (this.getId() == id) {
+        if (this.getID() == id) {
             return true;
         }
 
@@ -370,7 +351,7 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble, Seriali
         }
 
         for (Clan clan : allies) {
-            if (clan.getId() == id) {
+            if (clan.getID() == id) {
                 return true;
             }
         }
@@ -397,7 +378,7 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble, Seriali
      */
     public boolean isRival(long id)
     {
-        if (this.getId() == id) {
+        if (this.getID() == id) {
             return false;
         }
 
@@ -406,7 +387,7 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble, Seriali
         }
 
         for (Clan clan : rivals) {
-            if (clan.getId() == id) {
+            if (clan.getID() == id) {
                 return true;
             }
         }
@@ -433,7 +414,7 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble, Seriali
      */
     public boolean isWarring(long id)
     {
-        if (this.getId() == id) {
+        if (this.getID() == id) {
             return false;
         }
 
@@ -442,7 +423,7 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble, Seriali
         }
 
         for (Clan clan : warring) {
-            if (clan.getId() == id) {
+            if (clan.getID() == id) {
                 return true;
             }
         }
@@ -1338,7 +1319,7 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble, Seriali
         String onlineCount = ChatColor.WHITE.toString() + GeneralHelper.stripOfflinePlayers(this.getAllMembers()).size();
         String membersOnline = onlineCount + subColor + "/" + ChatColor.WHITE + this.getSize();
         String inactive = ChatColor.WHITE.toString() + this.getInactiveDays() + subColor + "/" + ChatColor.WHITE.toString() + (this.isVerified() ? plugin.getSettingsManager().getPurgeInactiveClansDays() : plugin.getSettingsManager().getPurgeUnverifiedClansDays()) + " " + Language.getTranslation("days");
-        String founded = ChatColor.WHITE + this.getFounded();
+        String founded = ChatColor.WHITE + this.getFoundedDateFormatted();
 
         String rawAllies = GeneralHelper.clansToString(this.getAllies(), ",");
         String allies = ChatColor.WHITE + (rawAllies == null ? Language.getTranslation("none") : rawAllies);
@@ -1356,7 +1337,7 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble, Seriali
 
         String status = ChatColor.WHITE + (this.isVerified() ? plugin.getSettingsManager().getTrustedColor() + Language.getTranslation("verified") : plugin.getSettingsManager().getUntrustedColor() + Language.getTranslation("unverified"));
 
-        ChatBlock.sendMessage(sender, "  " + subColor + MessageFormat.format(Language.getTranslation("id"), this.getId()));
+        ChatBlock.sendMessage(sender, "  " + subColor + MessageFormat.format(Language.getTranslation("id"), this.getID()));
         ChatBlock.sendMessage(sender, "  " + subColor + MessageFormat.format(Language.getTranslation("name.0"), name));
         ChatBlock.sendMessage(sender, "  " + subColor + MessageFormat.format(Language.getTranslation("status.0"), status));
         ChatBlock.sendMessage(sender, "  " + subColor + MessageFormat.format(Language.getTranslation("leaders.0"), leaders));
