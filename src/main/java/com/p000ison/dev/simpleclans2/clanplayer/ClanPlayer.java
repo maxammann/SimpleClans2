@@ -80,7 +80,6 @@ public class ClanPlayer implements KDR, Balance, UpdateAble, TableObject {
 
     public ClanPlayer(SimpleClans plugin)
     {
-        flags = new PlayerFlags();
         this.plugin = plugin;
     }
 
@@ -830,6 +829,9 @@ public class ClanPlayer implements KDR, Balance, UpdateAble, TableObject {
     @DatabaseColumnGetter(databaseName = "flags")
     private String getDatabaseFlags()
     {
+        if (getFlags() == null) {
+            return null;
+        }
         return flags.serialize();
     }
 

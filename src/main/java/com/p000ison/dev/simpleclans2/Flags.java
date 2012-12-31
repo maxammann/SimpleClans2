@@ -90,6 +90,9 @@ public class Flags implements Serializable {
 
     public String serialize()
     {
+        if (data.isEmpty()) {
+            return null;
+        }
         JSONObject json = new JSONObject();
 
         for (Map.Entry<String, Object> entry : data.entrySet()) {

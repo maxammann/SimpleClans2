@@ -1459,6 +1459,9 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble, Seriali
     @DatabaseColumnGetter(databaseName = "flags")
     public String getDatabaseFlags()
     {
+        if (getFlags() == null) {
+            return null;
+        }
         return getFlags().serialize();
     }
 }
