@@ -134,7 +134,7 @@ public class DatabaseManager {
             int maxInactiveDays = clan.isVerified() ? plugin.getSettingsManager().getPurgeInactiveClansDays() : plugin.getSettingsManager().getPurgeUnverifiedClansDays();
 
             if (DateHelper.differenceInDays(clan.getLastUpdated(), currentTime) > maxInactiveDays) {
-                Logging.debug("Purging clan %s! (id=%s)", clan.getTag(), clan.getID());
+                Logging.debug("Purging clan %s because it was too long inactive! (id=%s)", clan.getTag(), clan.getID());
                 getDatabase().delete(clan);
                 clanIterator.remove();
             } else {
@@ -154,10 +154,10 @@ public class DatabaseManager {
         while (clanPlayerIterator.hasNext()) {
             ClanPlayer cp = clanPlayerIterator.next();
             if (DateHelper.differenceInDays(cp.getLastSeenDate(), currentTime) > plugin.getSettingsManager().getPurgeInactivePlayersDays()) {
+                Logging.debug("Purging player %s because it was too long inactive! (id=%s)", cp.getName(), cp.getId());
                 getDatabase().delete(cp);
                 clanPlayerIterator.remove();
             }
-
 
 
             //validate some stuff
@@ -165,8 +165,20 @@ public class DatabaseManager {
                 if (cp.unset()) {
                     cp.update();
                 }
-            }   else {
+            } else {
                 cp.getClan().addMemberInternally(cp);
+            }
+        }
+
+        //purge all empty clan
+        clanIterator = clans.iterator();
+        while (clanIterator.hasNext()) {
+            Clan clan = clanIterator.next();
+
+            if (clan.getSize() == 0) {
+                Logging.debug("Purging clan %s because it has 0 members! (id=%s)", clan.getTag(), clan.getID());
+                getDatabase().delete(clan);
+                clanIterator.remove();
             }
         }
 
