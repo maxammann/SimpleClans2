@@ -96,6 +96,7 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble, Seriali
      */
     public Clan(SimpleClans plugin)
     {
+        flags = new ClanFlags();
         this.plugin = plugin;
     }
 
@@ -109,6 +110,7 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble, Seriali
     public Clan(SimpleClans plugin, String tag, String name)
     {
         this(plugin);
+        flags = new ClanFlags();
         this.tag = tag;
         this.name = name;
     }
@@ -1452,7 +1454,9 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble, Seriali
     @DatabaseColumnSetter(position = 9, databaseName = "flags")
     public void setDatabaseFlags(String flags)
     {
-        this.flags = new ClanFlags();
+        if (flags == null) {
+            this.flags = new ClanFlags();
+        }
         this.flags.deserialize(flags);
     }
 
