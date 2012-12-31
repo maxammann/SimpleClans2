@@ -283,7 +283,7 @@ public class DatabaseManager {
         return out;
     }
 
-    public Database getDatabase()
+    public JBDCDatabase getDatabase()
     {
         return database;
     }

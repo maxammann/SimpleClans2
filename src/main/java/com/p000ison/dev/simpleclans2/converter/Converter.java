@@ -51,11 +51,35 @@ public class Converter implements Runnable {
         this.from = from;
         this.to = to;
 
-        insertClan = to.prepare("INSERT INTO `sc2_clans` (`name`, `tag`, `verified`, `founded`, `last_action`, `flags`, `balance` ) VALUES ( ?, ?, ?, ?, ?, ?, ? );");
         insertBB = to.prepare("INSERT INTO `sc2_bb` (`clan`, `text` ) VALUES ( ?, ? );");
         updateClan = to.prepare("UPDATE `sc2_clans` SET allies = ?, rivals = ?, warring = ? WHERE id = ?;");
-        insertClanPlayer = to.prepare("INSERT INTO `sc2_players` ( `name`, `leader`, `trusted`, `join_date`, `last_seen`, `clan`, `neutral_kills`, `rival_Kills`, `civilian_Kills`, `deaths`, `flags` ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )");
         insertKill = to.prepare("INSERT INTO `sc2_kills` ( `attacker`, `attacker_clan`, `victim`, `victim_clan`, `war`, `type`, `date` ) VALUES ( ?, ?, ?, ?, ?, ?, ? );");
+        prepareClan();
+        prepareClanPlayer();
+    }
+
+    private void prepareClan()
+    {
+        if (insertClan != null) {
+            try {
+                insertClan.close();
+            } catch (SQLException e) {
+                Logging.debug(e, false);
+            }
+        }
+        insertClan = to.prepare("INSERT INTO `sc2_clans` (`name`, `tag`, `verified`, `founded`, `last_action`, `flags`, `balance` ) VALUES ( ?, ?, ?, ?, ?, ?, ? );");
+    }
+
+    private void prepareClanPlayer()
+    {
+        if (insertClanPlayer != null) {
+            try {
+                insertClanPlayer.close();
+            } catch (SQLException e) {
+                Logging.debug(e, false);
+            }
+        }
+        insertClanPlayer = to.prepare("INSERT INTO `sc2_players` ( `name`, `leader`, `trusted`, `join_date`, `last_seen`, `clan`, `neutral_kills`, `rival_Kills`, `civilian_Kills`, `deaths`, `flags` ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )");
     }
 
     public void convertAll()
@@ -142,9 +166,12 @@ public class Converter implements Runnable {
         try {
             insertClanPlayer.executeUpdate();
         } catch (SQLException e) {
-            if (e.getMessage().startsWith("Duplicate entry")) {
-                Logging.debug("Found duplicate player %s! Skipping!", name);
+            if (e.getMessage().startsWith("Duplicate entry") || e.getMessage().contains("Abort due to constraint violation")) {
+                Logging.debug("Found duplicate clanPlayer %s! Skipping!", name);
+            } else {
+                Logging.debug(e, "Error", false);
             }
+            prepareClanPlayer();
         }
     }
 
@@ -313,6 +340,7 @@ public class Converter implements Runnable {
             } else {
                 Logging.debug(e, "Error", false);
             }
+            prepareClan();
         }
     }
 

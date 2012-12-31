@@ -30,8 +30,10 @@ import com.p000ison.dev.sqlapi.exception.DatabaseConnectionException;
 import com.p000ison.dev.sqlapi.jbdc.JBDCDatabase;
 import com.p000ison.dev.sqlapi.mysql.MySQLConfiguration;
 import com.p000ison.dev.sqlapi.mysql.MySQLDatabase;
+import com.p000ison.dev.sqlapi.sqlite.SQLiteConfiguration;
 import org.bukkit.command.CommandSender;
 
+import java.io.File;
 import java.text.MessageFormat;
 
 /**
@@ -80,8 +82,16 @@ public class ConvertCommand extends GenericConsoleCommand {
                     database = new MySQLDatabase(config);
                 }
             } else if (action.equalsIgnoreCase("sqlite")) {
-//            config = new SQLiteConfiguration(new File(args[1]));
-//            database = (JBDCDatabase) DatabaseManager.getConnection(config);
+                File file = new File(args[0]);
+                if (!file.exists()) {
+                    sender.sendMessage("The file does not exist!");
+                    return;
+                } else if (file.isDirectory()) {
+                    System.out.println("The file is a directory!");
+                    return;
+                }
+                config = new SQLiteConfiguration(file);
+                database = (JBDCDatabase) DatabaseManager.getConnection(config);
             }
 
             if (config == null) {
@@ -89,7 +99,7 @@ public class ConvertCommand extends GenericConsoleCommand {
                 return;
             }
 
-            Converter converter = new Converter(database, (JBDCDatabase) plugin.getSimpleClansDatabase());
+            Converter converter = new Converter(database, plugin.getSimpleClansDatabase());
             sender.sendMessage("Starting converting!");
             converter.convertAll();
             sender.sendMessage("Successfully converted!");

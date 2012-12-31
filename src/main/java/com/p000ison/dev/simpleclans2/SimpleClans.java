@@ -60,8 +60,8 @@ import com.p000ison.dev.simpleclans2.teleportation.TeleportManager;
 import com.p000ison.dev.simpleclans2.updater.AutoUpdater;
 import com.p000ison.dev.simpleclans2.util.Logging;
 import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
-import com.p000ison.dev.sqlapi.Database;
 import com.p000ison.dev.sqlapi.exception.DatabaseConnectionException;
+import com.p000ison.dev.sqlapi.jbdc.JBDCDatabase;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
@@ -374,7 +374,7 @@ public class SimpleClans extends JavaPlugin implements SCCore {
     }
 
     @Override
-    public Database getSimpleClansDatabase()
+    public JBDCDatabase getSimpleClansDatabase()
     {
         if (dataManager == null) {
             return null;
