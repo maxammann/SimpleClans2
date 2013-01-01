@@ -31,6 +31,7 @@ import com.p000ison.dev.sqlapi.jbdc.JBDCDatabase;
 import com.p000ison.dev.sqlapi.mysql.MySQLConfiguration;
 import com.p000ison.dev.sqlapi.mysql.MySQLDatabase;
 import com.p000ison.dev.sqlapi.sqlite.SQLiteConfiguration;
+import com.p000ison.dev.sqlapi.sqlite.SQLiteDatabase;
 import org.bukkit.command.CommandSender;
 
 import java.io.File;
@@ -92,6 +93,9 @@ public class ConvertCommand extends GenericConsoleCommand {
                 }
                 config = new SQLiteConfiguration(file);
                 database = (JBDCDatabase) DatabaseManager.getConnection(config);
+                if (database == null) {
+                    database = new SQLiteDatabase(config);
+                }
             }
 
             if (config == null) {

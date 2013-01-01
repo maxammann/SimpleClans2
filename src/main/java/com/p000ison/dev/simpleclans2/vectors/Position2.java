@@ -19,12 +19,10 @@
 
 package com.p000ison.dev.simpleclans2.vectors;
 
-import com.p000ison.dev.simpleclans2.Flagable;
-
 /**
  * Represents a Position2
  */
-public class Position2 implements Flagable {
+public class Position2  {
     protected double x, y;
 
     public Position2()
@@ -116,14 +114,12 @@ public class Position2 implements Flagable {
         return y;
     }
 
-    @Override
     public String serialize()
     {
         return getX() + ":" + getY();
     }
 
-    @Override
-    public Position2 deserialize(String deserialize)
+    public static Position2 deserialize(String deserialize)
     {
         String[] coords = deserialize.split(":");
 

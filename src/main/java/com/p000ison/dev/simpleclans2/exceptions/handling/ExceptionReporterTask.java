@@ -87,28 +87,4 @@ public class ExceptionReporterTask implements Runnable {
             Logging.debug(e, true);
         }
     }
-
-    public static void main(String[] args)
-    {
-        ExceptionReporterTask test = new ExceptionReporterTask();
-        for (int i = 0; i < 20; i++) {
-            try {
-                try {
-                    throw new Exception();
-                } catch (Exception e) {
-                    try {
-                        throw new Exception(e);
-                    } catch (Exception ex) {
-                        throw new Exception(ex);
-                    }
-                }
-            } catch (Exception e) {
-
-                ExceptionReport report = new ExceptionReport("SimpleClans", "2.0", e, "test");
-                test.addReport(report);
-
-            }
-        }
-        test.run();
-    }
 }

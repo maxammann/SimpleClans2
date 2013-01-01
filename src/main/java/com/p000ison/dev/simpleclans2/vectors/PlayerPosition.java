@@ -89,19 +89,18 @@ public class PlayerPosition extends Position3 {
         return (double) Math.round(value * 100) / 100;
     }
 
-    @Override
-    public PlayerPosition deserialize(String deserialize)
+    public static PlayerPosition deserialize(String deserialize)
     {
         String[] coords = deserialize.split(":");
+        PlayerPosition playerPosition = new PlayerPosition();
+        playerPosition.x = Double.parseDouble(coords[0]);
+        playerPosition.y = Double.parseDouble(coords[1]);
+        playerPosition.z = Double.parseDouble(coords[2]);
+        playerPosition.world = Bukkit.getWorld(coords[3]);
+        playerPosition.yaw = Float.parseFloat(coords[4]);
+        playerPosition.pitch = Float.parseFloat(coords[5]);
 
-        this.x = Double.parseDouble(coords[0]);
-        this.y = Double.parseDouble(coords[1]);
-        this.z = Double.parseDouble(coords[2]);
-        this.world = Bukkit.getWorld(coords[3]);
-        this.yaw = Float.parseFloat(coords[4]);
-        this.pitch = Float.parseFloat(coords[5]);
-
-        return this;
+        return playerPosition;
     }
 
     public Location toLocation()

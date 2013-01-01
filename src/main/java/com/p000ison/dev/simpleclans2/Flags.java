@@ -72,8 +72,6 @@ public class Flags implements Serializable {
                     for (Object element : list) {
                         endValueSet.add(element.toString());
                     }
-                } else if (value instanceof Flagable) {
-                    endValue = ((Flagable) value).serialize();
                 }
 
                 if (endValue != null) {
@@ -111,7 +109,6 @@ public class Flags implements Serializable {
                 JSONArray list = new JSONArray();
                 list.addAll(collection);
                 value = list;
-
             }
 
             json.put(key, value);
@@ -148,20 +145,86 @@ public class Flags implements Serializable {
         return -1;
     }
 
+    public byte getByte(String key)
+    {
+        Object bytee = data.get(key);
+
+        if (bytee instanceof Byte) {
+            return (Byte) bytee;
+        }
+
+        return -1;
+    }
+
+    public short getShort(String key)
+    {
+        Object shorty = data.get(key);
+
+        if (shorty instanceof Short) {
+            return (Short) shorty;
+        }
+
+        return -1;
+    }
+
+    public long getLong(String key)
+    {
+        Object longy = data.get(key);
+
+        if (longy instanceof Long) {
+            return (Long) longy;
+        }
+
+        return -1;
+    }
+
+    public int getInteger(String key)
+    {
+        Object integer = data.get(key);
+
+        if (integer instanceof Integer) {
+            return (Integer) integer;
+        }
+
+        return -1;
+    }
+
+    public float getFloat(String key)
+    {
+        Object floaty = data.get(key);
+
+        if (floaty instanceof Float) {
+            return (Float) floaty;
+        }
+
+        return -1;
+    }
+
+    public char getChar(String key)
+    {
+        Object character = data.get(key);
+
+        if (character instanceof Character) {
+            return (Character) character;
+        }
+
+        return (char) -1;
+    }
+
     public boolean removeEntry(String key)
     {
         return data.remove(key) != null;
     }
 
-    public Set getSet(String key)
+    public <T> Set<T> getSet(String key)
     {
         Object set = data.get(key);
 
         if (set instanceof Set) {
-            return (Set) set;
+            return (Set<T>) set;
         }
 
-        Set empty = new HashSet();
+        Set<T> empty = new HashSet<T>();
 
         set(key, empty);
 
@@ -209,20 +272,8 @@ public class Flags implements Serializable {
         data.put(key, value);
     }
 
-    public void setFlag(String key, Flagable flag)
+    public Object get(String key)
     {
-        data.put(key, flag);
-    }
-
-    public Flagable getFlag(String key)
-
-    {
-        Object value = data.get(key);
-
-        if (value instanceof Flagable) {
-            return (Flagable) value;
-        }
-
-        return null;
+        return data.get(key);
     }
 }

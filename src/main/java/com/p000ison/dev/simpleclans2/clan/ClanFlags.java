@@ -54,7 +54,7 @@ public class ClanFlags extends Flags {
             return null;
         }
 
-        return new PlayerPosition().deserialize(locationString).toLocation();
+        return PlayerPosition.deserialize(locationString).toLocation();
     }
 
     /**

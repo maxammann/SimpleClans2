@@ -19,6 +19,8 @@
 
 package com.p000ison.dev.simpleclans2.exceptions.handling;
 
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -52,8 +54,13 @@ public class ExceptionReport {
         report.put("date", date);
         report.put("message", thrown.getMessage());
         report.put("exception", buildThrowableJSON(thrown));
-        report.put("plugins", /*Arrays.asList(Bukkit.getPluginManager().getPlugins()).toString()*/"b");
-        report.put("bukkit_version", /*Bukkit.getBukkitVersion()*/"a");
+        StringBuilder plugins = new StringBuilder().append('[');
+        for (Plugin plugin : Bukkit.getPluginManager().getPlugins()) {
+            plugins.append(plugin).append(',');
+        }
+        plugins.deleteCharAt(plugins.length() - 1).append(']');
+        report.put("plugins", plugins.toString());
+        report.put("bukkit_version", Bukkit.getBukkitVersion());
         report.put("java_version", getProperty("java.version"));
         report.put("os_arch", getProperty("os.arch"));
         report.put("os_name", getProperty("os.name"));
