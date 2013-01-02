@@ -42,7 +42,8 @@ abstract class ClanPlayerEvent extends Event {
         return handlers;
     }
 
-    public static HandlerList getHandlerList() {
+    public static HandlerList getHandlerList()
+    {
         return handlers;
     }
 

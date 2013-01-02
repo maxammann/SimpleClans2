@@ -68,7 +68,6 @@ public class AutoSaver implements Runnable {
         }
 
 
-
         Executable executable;
 
         while ((executable = queue.poll()) != null) {

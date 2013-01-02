@@ -63,6 +63,8 @@ import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import com.p000ison.dev.sqlapi.exception.DatabaseConnectionException;
 import com.p000ison.dev.sqlapi.jbdc.JBDCDatabase;
 import com.p000ison.dev.sqlapi.mysql.MySQLConfiguration;
+import com.p000ison.dev.sqlapi.mysql.MySQLDatabase;
+import com.p000ison.dev.sqlapi.sqlite.SQLiteDatabase;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
@@ -107,7 +109,6 @@ public class SimpleClans extends JavaPlugin implements SCCore {
             //we need to load the settingsManager already here, because we need the data!
             settingsManager = new SettingsManager(this);
 
-            setupMetrics();
 
             Logging.debug("Loading the language file..");
             long startLanguage = System.currentTimeMillis();
@@ -138,6 +139,8 @@ public class SimpleClans extends JavaPlugin implements SCCore {
             }
 
             getClanPlayerManager().updateOnlinePlayers();
+
+            setupMetrics();
 
         } catch (RuntimeException e) {
             Logging.debug(e, "Failed at loading SimpleClans! Disabling...", true);
@@ -215,6 +218,26 @@ public class SimpleClans extends JavaPlugin implements SCCore {
             } else {
                 authGraph.addPlotter(new OfflinePlotter());
             }
+            Metrics.Graph databaseEngines = metrics.createGraph("Database engines");
+
+            if (getDataManager().getDatabase() instanceof MySQLDatabase) {
+                databaseEngines.addPlotter(new Metrics.Plotter("MySQL") {
+                    @Override
+                    public int getValue()
+                    {
+                        return 1;
+                    }
+                });
+            } else if (getDataManager().getDatabase() instanceof SQLiteDatabase) {
+                databaseEngines.addPlotter(new Metrics.Plotter("SQLite") {
+                    @Override
+                    public int getValue()
+                    {
+                        return 1;
+                    }
+                });
+            }
+
             metrics.start();
         } catch (IOException e) {
             Logging.debug(e, true);

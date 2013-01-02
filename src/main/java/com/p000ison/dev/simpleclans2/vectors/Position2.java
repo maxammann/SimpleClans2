@@ -22,7 +22,7 @@ package com.p000ison.dev.simpleclans2.vectors;
 /**
  * Represents a Position2
  */
-public class Position2  {
+public class Position2 {
     protected double x, y;
 
     public Position2()
