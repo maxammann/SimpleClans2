@@ -53,7 +53,7 @@ public class BanCommand extends GenericConsoleCommand {
     @Override
     public void execute(CommandSender sender, String[] args)
     {
-        ClanPlayer clanPlayer = plugin.getClanPlayerManager().getClanPlayer(args[0]);
+        ClanPlayer clanPlayer = plugin.getClanPlayerManager().getCreateClanPlayerExact(args[0]);
 
         if (!clanPlayer.isBanned()) {
             Player player = plugin.getServer().getPlayerExact(clanPlayer.getName());
