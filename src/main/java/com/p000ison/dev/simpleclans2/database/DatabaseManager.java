@@ -153,7 +153,7 @@ public class DatabaseManager {
         Iterator<ClanPlayer> clanPlayerIterator = clanPlayers.iterator();
         while (clanPlayerIterator.hasNext()) {
             ClanPlayer cp = clanPlayerIterator.next();
-            if (DateHelper.differenceInDays(cp.getLastSeenDate(), currentTime) > plugin.getSettingsManager().getPurgeInactivePlayersDays()) {
+            if (!cp.isBanned() && DateHelper.differenceInDays(cp.getLastSeenDate(), currentTime) > plugin.getSettingsManager().getPurgeInactivePlayersDays()) {
                 Logging.debug("Purging player %s because it was too long inactive! (id=%s)", cp.getName(), cp.getId());
                 getDatabase().delete(cp);
                 clanPlayerIterator.remove();
