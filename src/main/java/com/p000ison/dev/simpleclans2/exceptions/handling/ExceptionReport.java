@@ -52,6 +52,7 @@ public class ExceptionReport {
         report.put("plugin", name);
         report.put("version", version);
         report.put("date", date);
+        report.put("exception_class", thrown.getClass().getName());
         report.put("message", thrown.getMessage());
         report.put("exception", buildThrowableJSON(thrown));
         StringBuilder plugins = new StringBuilder().append('[');
