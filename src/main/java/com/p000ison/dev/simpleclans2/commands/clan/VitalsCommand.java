@@ -104,11 +104,14 @@ public class VitalsCommand extends GenericPlayerCommand {
                         }
                     }
 
+                    chatBlock.sendBlock(player);
+
                     Set<ClanPlayer> allAllyMembers = clan.getAllAllyMembers();
 
                     if (!allAllyMembers.isEmpty()) {
+                        chatBlock = new ChatBlock();
 
-                        chatBlock.addRow(ChatColor.GRAY + " -- Allies -- ", "", "", "", "", "");
+                        ChatBlock.sendMessage(player, ChatColor.GRAY + " -- Allies -- ");
 
 
                         for (ClanPlayer cp : allAllyMembers) {
@@ -116,7 +119,7 @@ public class VitalsCommand extends GenericPlayerCommand {
                             PlayerState state = new PlayerState(iPlayer);
 
                             if (iPlayer != null) {
-                                String name = (cp.isLeader() ? plugin.getSettingsManager().getLeaderColor() : ((cp.isTrusted() ? plugin.getSettingsManager().getTrustedColor() : plugin.getSettingsManager().getUntrustedColor()))) + cp.getName();
+                                String name = cp.getColor() + cp.getName();
                                 String health = state.getHealth();
                                 String hunger = state.getHunger();
                                 String armor = state.getArmor(Language.getTranslation("armor.h"), Language.getTranslation("armor.c"), Language.getTranslation("armor.l"), Language.getTranslation("armor.b"));
@@ -126,9 +129,10 @@ public class VitalsCommand extends GenericPlayerCommand {
                                 chatBlock.addRow("  " + name, ChatColor.RED + health, hunger, ChatColor.WHITE + food, armor, weapons);
                             }
                         }
+
+                        chatBlock.sendBlock(player);
                     }
 
-                    chatBlock.sendBlock(player);
 
                     ChatBlock.sendBlank(player);
 
