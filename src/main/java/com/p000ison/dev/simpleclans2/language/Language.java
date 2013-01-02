@@ -4,6 +4,7 @@ import com.p000ison.dev.simpleclans2.util.Logging;
 import org.bukkit.ChatColor;
 
 import java.io.File;
+import java.nio.charset.Charset;
 import java.text.MessageFormat;
 import java.util.logging.Level;
 
@@ -12,11 +13,11 @@ public class Language {
     private static LanguageMap bundle;
     private static final String DEFAULT_FILE_NAME = "lang.properties";
 
-    public static void setInstance(File folder)
+    public static void setInstance(File folder, Charset charset)
     {
-        defaultBundle = new LanguageMap("/languages/" + DEFAULT_FILE_NAME, true);
+        defaultBundle = new LanguageMap("/languages/" + DEFAULT_FILE_NAME, true, charset);
         defaultBundle.load();
-        bundle = new LanguageMap(new File(folder, DEFAULT_FILE_NAME).getAbsolutePath(), false);
+        bundle = new LanguageMap(new File(folder, DEFAULT_FILE_NAME).getAbsolutePath(), false, charset);
         bundle.setDefault(defaultBundle);
         bundle.load();
         bundle.save();

@@ -38,6 +38,9 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.IllegalCharsetNameException;
+import java.nio.charset.UnsupportedCharsetException;
 import java.util.*;
 import java.util.logging.Level;
 
@@ -66,6 +69,7 @@ public class SettingsManager {
     private boolean globalFF;
     private int autoSave;
     private String helpFormat;
+    private Charset charset;
 
     private UpdateType buildChannel;
     private boolean longBuildReport;
@@ -132,6 +136,16 @@ public class SettingsManager {
             globalFF = general.getBoolean("global-ff");
             autoSave = general.getInt("auto-save");
             helpFormat = ChatBlock.parseColors(general.getString("help-format"));
+
+            try {
+                charset = Charset.forName(general.getString("language-charset"));
+            } catch (IllegalCharsetNameException e) {
+                Logging.debug(Level.WARNING, "The charset was not found! Using default!");
+                charset = Charset.defaultCharset();
+            } catch (UnsupportedCharsetException e) {
+                Logging.debug(Level.WARNING, "The charset is not supported! Using default!");
+                charset = Charset.defaultCharset();
+            }
 
             ConfigurationSection updater = config.getConfigurationSection("updater");
 
@@ -754,5 +768,10 @@ public class SettingsManager {
     public boolean isUpdaterEnabled()
     {
         return updaterEnabled;
+    }
+
+    public Charset getCharset()
+    {
+        return charset;
     }
 }

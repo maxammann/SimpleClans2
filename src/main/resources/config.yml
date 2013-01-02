@@ -4,6 +4,7 @@ general:
   server-name: '&8SimpleClans'
   global-ff: false
   auto-save: 5
+  language-charset: UTF-8
   reporting:
     errors: true
     email: ''

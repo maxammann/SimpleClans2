@@ -25,6 +25,7 @@ import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.charset.Charset;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -38,18 +39,21 @@ public class LanguageMap {
     private final String location;
     private final boolean inJar;
     private ColorizedMap map;
+    private Charset charset;
 
-    public LanguageMap(String location, boolean inJar)
+    public LanguageMap(String location, boolean inJar, Charset charset)
     {
         this.location = location;
         this.inJar = inJar;
+        this.charset = charset;
     }
 
-    private Reader getReader() throws IOException
+    private Reader getReader(Charset charset) throws IOException
     {
         File file = new File(location);
+        InputStream stream;
         if (inJar) {
-            return new InputStreamReader(getResource(location));
+            stream = getResource(location);
         } else {
             if (!file.exists()) {
                 String DEFAULT_LOCATION = "/languages/lang.properties";
@@ -57,8 +61,10 @@ public class LanguageMap {
                 copy(fromJar, file);
                 fromJar.close();
             }
-            return new FileReader(file);
+            stream = new FileInputStream(file);
         }
+
+        return new InputStreamReader(stream, charset);
     }
 
     public static InputStream getResource(String filename) throws IOException
@@ -78,9 +84,9 @@ public class LanguageMap {
         return connection.getInputStream();
     }
 
-    private Writer getWriter() throws IOException
+    private Writer getWriter(Charset charset) throws IOException
     {
-        return new FileWriter(new File(location), true);
+        return new OutputStreamWriter(new FileOutputStream(new File(location), true), charset);
     }
 
     public static void copy(InputStream input, File target) throws IOException
@@ -122,7 +128,7 @@ public class LanguageMap {
         Reader reader = null;
 
         try {
-            reader = getReader();
+            reader = getReader(charset);
 
             Properties properties = new Properties();
             properties.load(reader);
@@ -146,7 +152,7 @@ public class LanguageMap {
     {
         Writer writer = null;
         try {
-            writer = getWriter();
+            writer = getWriter(charset);
 
             if (!inJar && defaultMap != null) {
                 for (Map.Entry<String, String> entry : defaultMap.getEntries()) {

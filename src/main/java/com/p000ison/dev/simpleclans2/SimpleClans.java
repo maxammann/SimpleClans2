@@ -111,7 +111,7 @@ public class SimpleClans extends JavaPlugin implements SCCore {
 
             Logging.debug("Loading the language file..");
             long startLanguage = System.currentTimeMillis();
-            Language.setInstance(new File(getDataFolder(), "languages"));
+            Language.setInstance(new File(getDataFolder(), "languages"), settingsManager.getCharset());
             Logging.debug("Loading the language file finished! Took %s ms!", System.currentTimeMillis() - startLanguage);
 
             if (!setupEconomy()) {
