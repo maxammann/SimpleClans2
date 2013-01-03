@@ -57,7 +57,7 @@ public class ClanPlayer implements KDR, Balance, UpdateAble, TableObject {
     private OnlineClanPlayer onlineVersion = null;
 
     @DatabaseColumn(position = 0, databaseName = "id", id = true)
-    private int id = -1;
+    private long id = -1;
     @DatabaseColumn(position = 1, databaseName = "name", lenght = 16, unique = true)
     private String name;
     @DatabaseColumn(position = 6, databaseName = "banned", defaultValue = "0")
@@ -97,14 +97,14 @@ public class ClanPlayer implements KDR, Balance, UpdateAble, TableObject {
      * @return The id
      */
     @DatabaseColumnGetter(databaseName = "clan")
-    public int getClanId()
+    public long getClanId()
     {
-        return clan == null ? -1 : clan.getID();
+        return clan == null ? -1L : clan.getID();
     }
 
     @DatabaseColumnSetter(position = 3, databaseName = "clan", defaultValue = "-1")
     @SuppressWarnings("unused")
-    private void setClanId(int id)
+    private void setClanId(long id)
     {
         if (id <= 0) {
             this.clan = null;
@@ -290,14 +290,9 @@ public class ClanPlayer implements KDR, Balance, UpdateAble, TableObject {
         this.setDeaths(this.getDeaths() + 1);
     }
 
-    public int getId()
+    public long getId()
     {
         return id;
-    }
-
-    public void setId(int id)
-    {
-        this.id = id;
     }
 
     public PlayerFlags getFlags()

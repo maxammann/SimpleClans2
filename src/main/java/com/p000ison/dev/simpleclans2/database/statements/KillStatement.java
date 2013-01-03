@@ -37,15 +37,15 @@ public class KillStatement implements Executable, TableObject {
 
     @SuppressWarnings("unused")
     @DatabaseColumn(position = 0, databaseName = "id", id = true)
-    private int id;
+    private long id;
     @DatabaseColumn(position = 1, databaseName = "attacker")
-    private int attacker;
+    private long attacker;
     @DatabaseColumn(position = 2, databaseName = "attacker_clan")
-    private int attackerClan;
+    private long attackerClan;
     @DatabaseColumn(position = 3, databaseName = "victim")
-    private int victim;
+    private long victim;
     @DatabaseColumn(position = 4, databaseName = "victim_clan")
-    private int victimClan;
+    private long victimClan;
     @DatabaseColumn(position = 5, databaseName = "war")
     private boolean war;
     @DatabaseColumn(position = 6, databaseName = "date")
@@ -53,7 +53,7 @@ public class KillStatement implements Executable, TableObject {
     @DatabaseColumn(position = 7, databaseName = "type")
     private byte killType;
 
-    public KillStatement(int attacker, int attackerTag, int victim, int victimTag, boolean war, KillType killType)
+    public KillStatement(long attacker, long attackerTag, long victim, long victimTag, boolean war, KillType killType)
     {
         this.attacker = attacker;
         this.attackerClan = attackerTag;

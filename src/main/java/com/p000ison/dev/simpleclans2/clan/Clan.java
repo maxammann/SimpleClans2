@@ -70,7 +70,7 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble, Seriali
     private BankAccount bank;
 
     @DatabaseColumn(position = 0, databaseName = "id", id = true)
-    private int id = -1;
+    private long id = -1;
 
     @DatabaseColumn(position = 1, databaseName = "tag", notNull = true, lenght = 26, unique = true)
     private String tag;
@@ -152,7 +152,7 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble, Seriali
      *
      * @return The id.
      */
-    public int getID()
+    public long getID()
     {
         return id;
     }
@@ -769,7 +769,7 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble, Seriali
     @Override
     public int hashCode()
     {
-        return id ^ (id >>> 32);
+        return (int) (id ^ (id >>> 32));
     }
 
     public void addRival(Clan rival)
@@ -1082,7 +1082,7 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble, Seriali
      * @param tag The search query
      * @return Weather it was successfully
      */
-    public int deleteRank(String tag)
+    public long deleteRank(String tag)
     {
         if (ranks == null) {
             return -1;
@@ -1093,7 +1093,7 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble, Seriali
         while (it.hasNext()) {
             Rank rank = it.next();
             if (rank.getTag().startsWith(tag)) {
-                int id = rank.getId();
+                long id = rank.getId();
                 for (ClanPlayer member : allMembers) {
                     Rank memberRank = member.getRank();
                     if (memberRank != null) {

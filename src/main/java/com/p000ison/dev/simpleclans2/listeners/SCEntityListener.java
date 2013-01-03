@@ -196,8 +196,8 @@ public class SCEntityListener implements Listener {
                     type = KillType.NEUTRAL;
                 }
 
-                plugin.getDataManager().addStatement(new KillStatement(attacker.getId(), attackerClan == null ? -1 : attackerClan.getID(),
-                        victim.getId(), victimClan == null ? -1 : victimClan.getID(), war, type));
+                plugin.getDataManager().addStatement(new KillStatement(attacker.getId(), attackerClan == null ? -1L : attackerClan.getID(),
+                        victim.getId(), victimClan == null ? -1L : victimClan.getID(), war, type));
             }
         }
     }

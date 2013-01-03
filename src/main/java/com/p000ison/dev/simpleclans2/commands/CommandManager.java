@@ -54,6 +54,11 @@ public class CommandManager {
         commands.add(command);
     }
 
+    public void insertCommand(int position, Command command)
+    {
+        commands.add(position, command);
+    }
+
     public void removeCommand(Command command)
     {
         commands.remove(command);
@@ -74,7 +79,6 @@ public class CommandManager {
     {
         return commands;
     }
-
 
     public synchronized void execute(CommandSender sender, String command, Command.Type cmdType, String[] args)
     {

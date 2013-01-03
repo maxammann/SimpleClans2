@@ -319,7 +319,7 @@ public class DatabaseManager {
         return autoSaver;
     }
 
-    public boolean deleteRankById(int id)
+    public boolean deleteRankById(long id)
     {
         deleteRankById.set(0, id);
         return deleteRankById.update();

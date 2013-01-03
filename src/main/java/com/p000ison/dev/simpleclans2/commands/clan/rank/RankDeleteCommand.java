@@ -70,7 +70,7 @@ public class RankDeleteCommand extends GenericPlayerCommand {
             return;
         }
 
-        int response = clan.deleteRank(args[0]);
+        long response = clan.deleteRank(args[0]);
 
         if (response == -1) {
             ChatBlock.sendMessage(player, ChatColor.DARK_RED + Language.getTranslation("rank.not.found"));

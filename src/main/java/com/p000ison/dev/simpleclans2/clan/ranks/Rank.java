@@ -61,7 +61,7 @@ public class Rank implements Comparable<Rank>, TableObject {
     }
 
     @DatabaseColumn(position = 0, databaseName = "id", id = true)
-    private int id;
+    private long id;
     @DatabaseColumn(position = 2, databaseName = "name", lenght = 16)
     private String name;
     @DatabaseColumn(position = 1, databaseName = "tag", lenght = 16)
@@ -70,7 +70,7 @@ public class Rank implements Comparable<Rank>, TableObject {
     @DatabaseColumn(position = 4, databaseName = "priority", lenght = 3)
     private int priority;
     @DatabaseColumn(position = 3, databaseName = "clan")
-    private int clanId;
+    private long clanId;
     private boolean update;
 
     public Rank()
@@ -84,7 +84,7 @@ public class Rank implements Comparable<Rank>, TableObject {
      * @param name The name of the rank.
      * @param tag  The tag
      */
-    public Rank(int id, String name, String tag)
+    public Rank(long id, String name, String tag)
     {
         this.tag = tag;
         this.setId(id);
@@ -98,7 +98,7 @@ public class Rank implements Comparable<Rank>, TableObject {
      * @param tag      The tag
      * @param priority The priority
      */
-    public Rank(String name, String tag, int priority, int clanId)
+    public Rank(String name, String tag, int priority, long clanId)
     {
         this.name = name;
         this.priority = priority;
@@ -260,7 +260,7 @@ public class Rank implements Comparable<Rank>, TableObject {
         return null;
     }
 
-    public int getClanId()
+    public long getClanId()
     {
         return clanId;
     }
@@ -348,7 +348,7 @@ public class Rank implements Comparable<Rank>, TableObject {
      *
      * @return The ID
      */
-    public int getId()
+    public long getId()
     {
         return id;
     }
@@ -358,7 +358,7 @@ public class Rank implements Comparable<Rank>, TableObject {
      *
      * @param id The id to set
      */
-    public void setId(int id)
+    public void setId(long id)
     {
         this.id = id;
     }

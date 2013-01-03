@@ -27,9 +27,9 @@ import com.p000ison.dev.simpleclans2.database.Executable;
  */
 public class RemoveRankStatement implements Executable {
 
-    private int id;
+    private long id;
 
-    public RemoveRankStatement(int id)
+    public RemoveRankStatement(long id)
     {
         this.id = id;
     }
