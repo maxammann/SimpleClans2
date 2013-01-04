@@ -107,6 +107,7 @@ public class ConvertCommand extends GenericConsoleCommand {
             sender.sendMessage("Starting converting!");
             converter.convertAll();
             sender.sendMessage("Successfully converted!");
+            database.close();
         } catch (DatabaseConnectionException e) {
             Logging.debug(e, true);
             sender.sendMessage("Converting failed!");

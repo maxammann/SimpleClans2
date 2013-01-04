@@ -80,7 +80,7 @@ public class DemoteCommand extends GenericPlayerCommand {
                 }
 
                 if (!plugin.getSettingsManager().isVoteForDemote()) {
-                    clan.addBBMessage(cp, MessageFormat.format(Language.getTranslation("demoted.back.to.member"), demoted));
+                    clan.addBBMessage(cp, MessageFormat.format(Language.getTranslation("demoted.back.to.member"), demoted.getName()));
                     clan.demote(demoted);
                 } else {
                     Set<ClanPlayer> acceptors = GeneralHelper.stripOfflinePlayers(clan.getLeaders());

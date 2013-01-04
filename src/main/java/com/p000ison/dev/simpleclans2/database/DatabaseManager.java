@@ -159,7 +159,6 @@ public class DatabaseManager {
                 clanPlayerIterator.remove();
             }
 
-
             //validate some stuff
             if (cp.getClan() == null) {
                 if (cp.unset()) {

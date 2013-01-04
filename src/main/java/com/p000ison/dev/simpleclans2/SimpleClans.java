@@ -359,6 +359,7 @@ public class SimpleClans extends JavaPlugin implements SCCore {
         commandManager.addCommand(new InfoCommand(this));
         commandManager.addCommand(new UpgradeCommand(this));
         commandManager.addCommand(new ConvertCommand(this));
+        commandManager.addCommand(new CopyCommand(this));
 
         commandManager.addCommand(new AcceptCommand(this));
         commandManager.addCommand(new DenyCommand(this));

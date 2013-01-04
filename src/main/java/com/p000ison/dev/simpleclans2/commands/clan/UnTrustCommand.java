@@ -87,7 +87,7 @@ public class UnTrustCommand extends GenericPlayerCommand {
             }
 
             if (trusted.isTrusted()) {
-                clan.addBBMessage(cp, Language.getTranslation("has.been.given.untrusted.status.by", trusted, player.getName()));
+                clan.addBBMessage(cp, Language.getTranslation("has.been.given.untrusted.status.by", trusted.getName(), player.getName()));
 
                 trusted.setTrusted(false);
                 trusted.update();
