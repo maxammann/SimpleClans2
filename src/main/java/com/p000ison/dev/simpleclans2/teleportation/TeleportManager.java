@@ -28,15 +28,16 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.text.MessageFormat;
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Handles teleporting with cooldown
  */
 public class TeleportManager {
     private SimpleClans plugin;
-    private Set<TeleportState> waitingPlayers = new HashSet<TeleportState>();
+    private Set<TeleportState> waitingPlayers = Collections.newSetFromMap(new ConcurrentHashMap<TeleportState, Boolean>());
 
     /**
      *
@@ -55,15 +56,15 @@ public class TeleportManager {
     /**
      * Add player to teleport waiting queue
      *
-     * @param player      The player.
-     * @param destination The destionation.
-     * @param msg         The message.
+     * @param player      The player
+     * @param destination The destination
+     * @param msg         The message
      */
     public void addPlayer(Player player, Location destination, String msg)
     {
         int secs = plugin.getSettingsManager().getTimeUntilTeleport();
 
-        waitingPlayers.add(new TeleportState(plugin, player, destination, msg, secs));
+        waitingPlayers.add(new TeleportState(player, destination, msg, secs));
 
         if (secs > 0) {
             ChatBlock.sendMessage(player, ChatColor.AQUA + MessageFormat.format(Language.getTranslation("waiting.for.teleport.stand.still.for.0.seconds"), secs));

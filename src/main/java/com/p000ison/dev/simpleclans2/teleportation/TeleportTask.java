@@ -89,7 +89,14 @@ public class TeleportTask implements Runnable {
                 ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("you.moved.teleport.cancelled"));
                 players.remove();
             } else {
-                ChatBlock.sendMessage(player, ChatColor.AQUA.toString() + state.getCounter());
+                String left;
+                if (state.getCounter() == 1) {
+                    left = Language.getTranslation("second.left", 1);
+                } else {
+                    left = Language.getTranslation("seconds.left", state.getCounter());
+                }
+
+                ChatBlock.sendMessage(player, ChatColor.AQUA.toString() + left);
             }
 
             state.setProcessing(false);

@@ -62,8 +62,8 @@ import java.util.*;
 @DatabaseTable(name = "sc2_clans")
 public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble, Serializable, TableObject {
 
-    public transient static final SimpleDateFormat DATE_FORMAT = new java.text.SimpleDateFormat("MMM dd, yyyy h:mm a");
-    public transient static final NumberFormat DECIMAL_FORMAT = new DecimalFormat("#.#");
+    public static final SimpleDateFormat DATE_FORMAT = new java.text.SimpleDateFormat("MMM dd, yyyy h:mm a");
+    public static final NumberFormat DECIMAL_FORMAT = new DecimalFormat("#.#");
 
     private transient SimpleClans plugin;
     private ClanFlags flags;

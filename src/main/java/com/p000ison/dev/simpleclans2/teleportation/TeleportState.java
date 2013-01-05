@@ -20,7 +20,6 @@
 
 package com.p000ison.dev.simpleclans2.teleportation;
 
-import com.p000ison.dev.simpleclans2.SimpleClans;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -37,7 +36,7 @@ public class TeleportState {
     private String msg;
     private boolean processing;
 
-    public TeleportState(SimpleClans plugin, Player player, Location destination, String msg, int waiting)
+    public TeleportState(Player player, Location destination, String msg, int waiting)
     {
         this.destination = destination;
         this.playerLocation = player.getLocation();

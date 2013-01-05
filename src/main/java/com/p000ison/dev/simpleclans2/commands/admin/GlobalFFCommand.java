@@ -54,17 +54,17 @@ public class GlobalFFCommand extends GenericConsoleCommand {
         String action = args[0];
 
         if (action.equalsIgnoreCase(Language.getTranslation("allow"))) {
-            if (plugin.getSettingsManager().isGlobalFF()) {
+            if (plugin.getSettingsManager().isGlobalFFForced()) {
                 ChatBlock.sendMessage(sender, Language.getTranslation("global.friendly.fire.is.already.being.allowed"));
             } else {
-                plugin.getSettingsManager().setGlobalFF(true);
+                plugin.getSettingsManager().setGlobalFFForced(true);
                 ChatBlock.sendMessage(sender, Language.getTranslation("global.friendly.fire.is.set.to.allowed"));
             }
         } else if (action.equalsIgnoreCase(Language.getTranslation("auto"))) {
-            if (!plugin.getSettingsManager().isGlobalFF()) {
+            if (!plugin.getSettingsManager().isGlobalFFForced()) {
                 ChatBlock.sendMessage(sender, Language.getTranslation("global.friendy.fire.is.already.being.managed.by.each.clan"));
             } else {
-                plugin.getSettingsManager().setGlobalFF(false);
+                plugin.getSettingsManager().setGlobalFFForced(false);
                 ChatBlock.sendMessage(sender, Language.getTranslation("global.friendy.fire.is.now.managed.by.each.clan"));
             }
         } else {

@@ -1,16 +1,29 @@
 general:
+  # Elements to show per page. Used for the help command for the list command.
   elements-per-page: 10
+  # The format for the help command. The default will produce for example: "    /clan lookup&f - Lookup your info" (in blue)
   help-format: '&b    {0}'
+  # The name of your server for the header
   server-name: '&8SimpleClans'
-  global-ff: false
+  # Interval for auto-saving in minutes
   auto-save: 5
+  # The default charset for the lang.properties file
   language-charset: UTF-8
   reporting:
+    # Whether error should be reported. Only important information will be sent like time, the version of the plugin,
+    # the bukkit version, your installed plugins, your java version and ofc the exception it self.
+    # For identification your server's ip will be sent. This feature helps me a lot to fix problems and get with you in contact.
+    # If you are only testing something please turn this off.
     errors: true
+    # If you set here an e-mail it will be sent with a error report so I can get with you in contact if there is a critical
+    # problem.
     email: ''
 updater:
+  # Whether the updater is enabled or not. The command to update is /sc update
   enabled: true
+  # The channel of the updates. Use dev for development builds, rb for stable builds or beta for beta builds.
   build-channel: 'dev'
+  # Whether you want to view additional info about an update
   long-build-report: true
 commands:
   clan: 'clan'
@@ -18,7 +31,9 @@ commands:
   bb: 'bb'
   bank: 'bank'
 database:
+  # Your database engine. At the moment mysql or sqlite
   mode: 'mysql'
+  # Settings for your mysql server
   mysql:
     host: 'localhost'
     port: 3306
@@ -26,66 +41,112 @@ database:
     password: ''
     database: 'sc'
   sqlite:
+    # The path to your database. Relative to your bukkit installation
     location: 'plugins/SimpleClans2/SimpleClans2.db'
 teleportation:
+  # Whether you want to drop items on teleport
   drop-items-on-teleport: false
+   # Whether you want to drop ALL items on teleport
   drop-all-items-on-teleport: false
+   # Put the ids or the names of the items in this list to keep them on teleport.
   keep-items-on-teleport: [ ]
+  # The distance of blocks you are allowed to walk if a teleport is pending.
   teleport-fuzzyness: 1.5
+  # How long you have to stand still for a teleport
   teleport-waiting-time: 10
 pvp:
+  # Whether pvp is only allowed during war
   only-pvp-in-war: false
+  # Whether civilians shouldn't be able to get attacked
   save-civilians: true
+  # Whether friendly fire is globally on
   global-ff-forced: false
   weights:
+    # How much a rival will weights
     rival: 2
+    # How much a neutral will weights
     neutral: 1
+    # How much a civilian will weights
     civilian: 1
 clan:
+  # The max length of a tag
   max-tag-lenght: 3
+  # The min length of a tag
   min-tag-lenght: 3
+  # The max length of a name
   max-name-lenght: 15
+  # The min length of a name
   min-name-lenght: 5
+  # Whether a clan is not allowed to change the home after it setted it once before.
   set-home-only-once: false
+  # The minimal clan size to create an alliance
   minimal-size-to-ally: 1
+  # The minimal clan size to create a rivalry
   minimal-size-to-rival: 1
   rival-limit-percent: 20
+  # Whether a clan needs a verification from a mod for example.
   require-verification: true
   purge:
+    # How long the data of a inactive player is kept
     inactive-player-data-days: 30
+     # How long the data of a inactive clan is kept
     inactive-clan-days: 7
+     # How long the data of a inactive and unverified clan is kept
     unverified-clan-days: 2
   bb:
+    # The format of a clan who posts a message on the bb
     clan: '&8* +clan: &b+message'
+     # The format of a player who posts a message on the bb
     clanplayer: '&8* +player: &b+message'
+     # The default format for the bb
     default: '&8* &b+message'
+     # The maximal lines of a bb
     max-lines: 3000
+     # How many messages are displayed on one page
     max-display-lines: 10
   announce:
+    # The format of a clan who announces something
     clan: '&8* +clan: &b+message'
+    # The format of a player who announces something
     clanplayer: '&8* +player: &b+message'
+    # The default format for the announcements
     default: '&8* &b+message'
   economy:
+    # The price for a clan creation or -1
     purchase-creation: 20
+    # The price for teleporting or -1
     purchase-teleport: -1
   voting:
     demote: true
     promote: true
   spout:
     capes:
+      # The url to the default cape
       default: 'http://dl.dropbox.com/u/20831395/simpleclans/cape.png'
+      # Whether capes are allowed
       enabled: true
   motd:
+    # Whether the bb is displayed on join
     bb: true
+    # The maximal lines for the motd
     lines: 5
+    # The format for the bb
     format: '&4- -%s'
+  # Clans which can not rivaled like admin clans.
   unrivalable-clans: [ ]
+  # Whether clan leaders are allowed to change their tag completly
   modify-tag-completely: false
 paging:
   colors:
+    # The color for the header
     heading-color: '8'
+    # The color for sub-titles
     sub-color: '7'
+    # The color for clans
     clan-color: 'b'
+    # The color for leaders
     leader-color: '4'
+    # The color for trusted members
     trusted-color: 'f'
+    # The color for untrusted members
     untrusted-color: '8'

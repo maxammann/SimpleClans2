@@ -69,7 +69,6 @@ public class SettingsManager {
     private int elementsPerPage;
     private String clanCommand, bbCommand, rankCommand, bankCommand;
     private String serverName;
-    private boolean globalFF;
     private int autoSave;
     private String helpFormat;
     private Charset charset;
@@ -155,7 +154,6 @@ public class SettingsManager {
 
             elementsPerPage = general.getInt("elements-per-page");
             serverName = ChatBlock.parseColors(general.getString("server-name"));
-            globalFF = general.getBoolean("global-ff");
             autoSave = general.getInt("auto-save");
             helpFormat = ChatBlock.parseColors(general.getString("help-format"));
 
@@ -629,16 +627,11 @@ public class SettingsManager {
         return setHomeOnlyOnce;
     }
 
-    public boolean isGlobalFF()
+    public void setGlobalFFForced(boolean globalFF)
     {
-        return globalFF;
-    }
-
-    public void setGlobalFF(boolean globalFF)
-    {
-        this.globalFF = globalFF;
-        config.getConfigurationSection("general").set("global-ff", globalFF);
-        plugin.saveConfig();
+        this.globalFFForced = globalFF;
+        config.getConfigurationSection("clan").set("global-ff-forced", globalFF);
+        save();
     }
 
     public double getPurchaseCreationPrice()
