@@ -108,7 +108,10 @@ public class SimpleClans extends JavaPlugin implements SCCore {
 
             //we need to load the settingsManager already here, because we need the data!
             settingsManager = new SettingsManager(this);
-
+            if (!settingsManager.init()) {
+                disable();
+                return;
+            }
 
             Logging.debug("Loading the language file..");
             long startLanguage = System.currentTimeMillis();

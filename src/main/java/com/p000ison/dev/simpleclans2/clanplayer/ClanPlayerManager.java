@@ -72,7 +72,6 @@ public class ClanPlayerManager {
             }
         }
 
-
         clanPlayer.updateLastSeen();
         clanPlayer.setJoinTime(System.currentTimeMillis());
 

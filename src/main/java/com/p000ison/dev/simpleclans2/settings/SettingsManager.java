@@ -33,11 +33,13 @@ import com.p000ison.dev.sqlapi.sqlite.SQLiteConfiguration;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.IllegalCharsetNameException;
 import java.nio.charset.UnsupportedCharsetException;
@@ -50,6 +52,7 @@ import java.util.logging.Level;
 public class SettingsManager {
     private SimpleClans plugin;
     private FileConfiguration config;
+    private File configFile;
 
     private DatabaseConfiguration databaseConfiguration;
 
@@ -112,16 +115,35 @@ public class SettingsManager {
     public SettingsManager(SimpleClans plugin)
     {
         this.plugin = plugin;
-        init();
     }
 
-    private void init()
+    public boolean init()
     {
-        config = plugin.getConfig();
+
+        this.config = new YamlConfiguration();
+        this.configFile = new File(plugin.getDataFolder(), "config.yml");
+        try {
+            this.config.load(configFile);
+        } catch (IOException e) {
+            Logging.debug(e, false);
+            return false;
+        } catch (InvalidConfigurationException e) {
+            Logging.debug(Level.SEVERE, "Failed at loading config! Maybe the formatting is invalid! Check your config.yml: \n%s", e.getMessage());
+            return false;
+        }
+
+        InputStream defConfigStream = plugin.getResource("config.yml");
+
+        if (defConfigStream != null) {
+            YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
+            config.setDefaults(defConfig);
+        }
+
         config.options().copyDefaults(true);
         config.options().header("Available options for the 'build-channel' settings are rb and dev. Use 'rb' to update only recommended builds, dev to update to dev versions or beta to update only to beta builds!");
         save();
         load();
+        return true;
     }
 
     private void load()
@@ -388,7 +410,11 @@ public class SettingsManager {
 
     public void save()
     {
-        plugin.saveConfig();
+        try {
+            config.save(configFile);
+        } catch (IOException e) {
+            Logging.debug(e, false);
+        }
     }
 
     public void reload()
