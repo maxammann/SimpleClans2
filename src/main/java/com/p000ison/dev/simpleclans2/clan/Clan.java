@@ -1338,7 +1338,7 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble, Seriali
 
         String status = ChatColor.WHITE + (this.isVerified() ? plugin.getSettingsManager().getTrustedColor() + Language.getTranslation("verified") : plugin.getSettingsManager().getUntrustedColor() + Language.getTranslation("unverified"));
 
-        ChatBlock.sendMessage(sender, "  " + subColor + MessageFormat.format(Language.getTranslation("id"), this.getID()));
+        ChatBlock.sendMessage(sender, "  " + subColor + MessageFormat.format(Language.getTranslation("tag.0"), this.getTag()));
         ChatBlock.sendMessage(sender, "  " + subColor + MessageFormat.format(Language.getTranslation("name.0"), name));
         ChatBlock.sendMessage(sender, "  " + subColor + MessageFormat.format(Language.getTranslation("status.0"), status));
         ChatBlock.sendMessage(sender, "  " + subColor + MessageFormat.format(Language.getTranslation("leaders.0"), leaders));

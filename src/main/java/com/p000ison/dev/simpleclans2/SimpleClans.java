@@ -14,7 +14,7 @@
  *     You should have received a copy of the GNU General Public License
  *     along with SimpleClans2.  If not, see <http://www.gnu.org/licenses/>.
  *
- *     Last modified: 11.10.12 16:12
+ *     Last modified: 05.01.13 15:18
  */
 
 
@@ -235,8 +235,8 @@ public class SimpleClans extends JavaPlugin implements SCCore {
                 databaseEngines.addPlotter(new Metrics.Plotter("SQLite") {
                     @Override
                     public int getValue()
-                    {
-                        return 1;
+                       {
+                            return 1;
                     }
                 });
             }

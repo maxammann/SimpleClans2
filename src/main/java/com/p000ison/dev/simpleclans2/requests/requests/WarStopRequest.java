@@ -55,8 +55,8 @@ public class WarStopRequest extends MultipleRequest {
 
         if (warring != null && clan != null) {
 
-            clan.addWarringClan(warring);
-            warring.addWarringClan(clan);
+            clan.removeWarringClan(warring);
+            warring.removeWarringClan(clan);
 
             warring.addBBMessage(cp, Language.getTranslation("you.are.no.longer.at.war", warring.getName(), clan.getTag()));
             clan.addBBMessage(cp, Language.getTranslation("you.are.no.longer.at.war", clan.getName(), warring.getTag()));

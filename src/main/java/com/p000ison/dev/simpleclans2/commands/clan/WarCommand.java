@@ -98,7 +98,7 @@ public class WarCommand extends GenericPlayerCommand {
 
         if (action.equalsIgnoreCase(Language.getTranslation("start"))) {
             if (!clan.isWarring(toWarring)) {
-                Set<ClanPlayer> onlineLeaders = GeneralHelper.stripOfflinePlayers(clan.getLeaders());
+                Set<ClanPlayer> onlineLeaders = GeneralHelper.stripOfflinePlayers(toWarring.getLeaders());
 
                 if (!onlineLeaders.isEmpty()) {
                     plugin.getRequestManager().createRequest(new WarStartRequest(plugin, onlineLeaders, cp, toWarring));
