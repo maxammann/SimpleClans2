@@ -26,6 +26,7 @@ import org.bukkit.plugin.Plugin;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.UnknownHostException;
 import java.util.Date;
 
 /**
@@ -62,8 +63,10 @@ public class AutoUpdater {
             if (versionValue < toUpdate.getBuildNumber()) {
                 Logging.debug(getBuildInfo(toUpdate, longReport));
             }
+        } catch (UnknownHostException e) {
+            Logging.debug(e, true, "The jenkins is down! Please contact the developers!");
         } catch (IOException e) {
-            Logging.debug(e, true, "Failed at fetching the Update information!");
+            Logging.debug(e, true, "Failed at fetching the Update information! Maybe something is down. Please contact the developers");
         }
     }
 

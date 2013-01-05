@@ -84,7 +84,7 @@ public class ExceptionReporterTask implements Runnable {
                 throw new IOException("Failed at pushing error reports: " + response);
             }
         } catch (IOException e) {
-            Logging.debug(e, true);
+            Logging.debug(e, false);
         }
     }
 }
