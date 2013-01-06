@@ -83,6 +83,8 @@ clan:
   minimal-size-to-ally: 1
   # The minimal clan size to create a rivalry
   minimal-size-to-rival: 1
+  # If this is set for example to 20, this means you can rival 20% of all rival-able clans. If there are 10 rival-able
+  # clans you can rival max 2 clans.
   rival-limit-percent: 20
   # Whether a clan needs a verification from a mod for example.
   require-verification: true

@@ -75,8 +75,7 @@ public class DatabaseManager {
         }
 
         if (database == null) {
-            Logging.debug("No database found! Skipping...");
-            return;
+            throw new RuntimeException("Database not found!");
         }
 
         database.registerTable(KillStatement.class);
@@ -122,7 +121,7 @@ public class DatabaseManager {
         getDatabase().close();
     }
 
-    public final void importAll()
+    private void importAll()
     {
         Set<Clan> clans = database.<Clan>select().from(Clan.class).prepare().getResults(new HashSet<Clan>());
         long currentTime = System.currentTimeMillis();
