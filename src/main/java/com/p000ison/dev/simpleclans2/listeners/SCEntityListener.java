@@ -73,8 +73,6 @@ public class SCEntityListener implements Listener {
                 return;
             }
 
-            System.out.println("Default test: " + attackerPlayer.getName());
-
             ClanPlayer attacker = plugin.getClanPlayerManager().getClanPlayer(attackerPlayer);
             ClanPlayer victim = plugin.getClanPlayerManager().getClanPlayer(victimPlayer);
 
@@ -82,7 +80,6 @@ public class SCEntityListener implements Listener {
             Clan victimClan = victim == null ? null : victim.getClan();
 
             if (plugin.getSettingsManager().isOnlyPvPinWar()) {
-                System.out.println("only pvp in war");
 
                 // if one doesn't have clan then they cant be at war
                 if (attackerClan == null || victimClan == null) {
@@ -104,7 +101,6 @@ public class SCEntityListener implements Listener {
             }
 
             if (victimClan != null && attackerClan != null) {
-                System.out.println("both are in clans");
                 // personal ff enabled, allow damage
                 //skip if globalff is on
                 if (plugin.getSettingsManager().isGlobalFFForced() || victim.isFriendlyFireOn()) {
@@ -142,7 +138,6 @@ public class SCEntityListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerDeath(PlayerDeathEvent event)
     {
-        System.out.println("dath");
         Player victimPlayer = event.getEntity();
 
         if (victimPlayer != null) {
