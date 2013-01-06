@@ -121,7 +121,7 @@ public class DatabaseManager {
         getDatabase().close();
     }
 
-    private void importAll()
+    public void importAll()
     {
         Set<Clan> clans = database.<Clan>select().from(Clan.class).prepare().getResults(new HashSet<Clan>());
         long currentTime = System.currentTimeMillis();
