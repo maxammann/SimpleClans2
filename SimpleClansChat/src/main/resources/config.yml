@@ -1,0 +1,15 @@
+settings:
+   compatibility-mode: false
+   complete-mode: true
+   depreciation-mode: false
+format:
+   complete-mode: '-clan-group-prefix-player: -message'
+   variables:
+       clan: '[%s]'
+       group: '[%s]'
+       prefix: '[%s]'
+       player: '[%s]'
+       rank: '[%s]'
+channels:
+   clan: '-rank-player -message'
+   ally: 'ally-player -message'
