@@ -144,8 +144,6 @@ public class SCEntityListener implements Listener {
 
             ClanPlayer victim = plugin.getClanPlayerManager().getCreateClanPlayerExact(victimPlayer);
 
-            victim.addDeath();
-
             EntityDamageEvent lastDamageCause = victimPlayer.getLastDamageCause();
 
             if (!(lastDamageCause instanceof EntityDamageByEntityEvent)) {
@@ -167,6 +165,9 @@ public class SCEntityListener implements Listener {
             }
 
             if (attackerPlayer != null) {
+                victim.addDeath();
+                victim.update();
+
                 ClanPlayer attacker = plugin.getClanPlayerManager().getCreateClanPlayerExact(attackerPlayer);
                 Clan attackerClan = attacker.getClan();
                 Clan victimClan = victim.getClan();
@@ -190,6 +191,8 @@ public class SCEntityListener implements Listener {
                     attacker.addNeutralKill();
                     type = KillType.NEUTRAL;
                 }
+
+                attacker.update();
 
                 plugin.getDataManager().addStatement(new KillStatement(attacker.getId(), attackerClan == null ? -1L : attackerClan.getID(),
                         victim.getId(), victimClan == null ? -1L : victimClan.getID(), war, type));
