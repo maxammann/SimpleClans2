@@ -24,7 +24,7 @@ package com.p000ison.dev.simpleclans2.updater;
  */
 public enum UpdateType {
     LATEST("lastSuccessfulBuild", "dev"),
-    STABLE("Recommended", "rb"),
+    STABLE("Stable", "rb"),
     BETA("Beta", "beta");
 
     private String type;
