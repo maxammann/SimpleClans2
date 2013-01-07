@@ -43,8 +43,6 @@ public class SCCPlayerListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public AsyncPlayerChatEvent onPlayerChat(AsyncPlayerChatEvent event)
     {
-        System.out.println("--------------");
-        System.out.println(event.getFormat());
         Player player = event.getPlayer();
 
         ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);

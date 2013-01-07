@@ -18,8 +18,15 @@ Yep, and I took this over and delveloping now the second version of SimpleClans.
 ###### Max
 ---
 
-## Compilation
+### Compilation
 Currently Maven 3 is being used to compile SimpleClans.
 
 * Install [Maven 3](http://maven.apache.org/download.html)
 * Clone this repo and execute: `mvn clean install`
+
+### Links
+Project page: http://dev.bukkit.org/server-mods/simpleclans/
+Jenkins: http://jenkins.greatmancode.com/job/SimpleClans2/
+Javadocs: http://jenkins.greatmancode.com/job/SimpleClans2/com.p000ison.dev.simpleclans2$SimpleClans2/javadoc/?
+Bug tracker: http://bug.greatmancode.com/browse/SC
+IRC channel: #SimpleClans on esper.net

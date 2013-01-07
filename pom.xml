@@ -73,6 +73,31 @@
                 <directory>${basedir}/src/main/resources</directory>
             </resource>
         </resources>
+
+        <plugins>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.2.2</version>
+                <configuration>
+                    <finalName>SimpleClans</finalName>
+                    <appendAssemblyId>false</appendAssemblyId>
+                    <descriptors>
+                        <descriptor>${basedir}/assembly.xml</descriptor>
+                        <descriptor>${basedir}/assembly-dir.xml</descriptor>
+                    </descriptors>
+                    <descriptor>${basedir}/assembly.xml</descriptor>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>release</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
     </build>
 
     <!-- Default dependencies for bukkit plugins -->
