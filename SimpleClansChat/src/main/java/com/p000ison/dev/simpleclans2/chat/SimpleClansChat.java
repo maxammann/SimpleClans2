@@ -17,16 +17,16 @@
  *     Last modified: 07.01.13 14:39
  */
 
-package com.p000ison.dev.simpleclans2.chat.chat;
+package com.p000ison.dev.simpleclans2.chat;
 
 import com.dthielke.herochat.Herochat;
 import com.p000ison.dev.simpleclans2.Flags;
 import com.p000ison.dev.simpleclans2.api.SCCore;
-import com.p000ison.dev.simpleclans2.chat.chat.channels.Channel;
-import com.p000ison.dev.simpleclans2.chat.chat.listeners.SCCDepreciatedChatEvent;
-import com.p000ison.dev.simpleclans2.chat.chat.listeners.SCCHeroChatListener;
-import com.p000ison.dev.simpleclans2.chat.chat.listeners.SCCPlayerListener;
-import com.p000ison.dev.simpleclans2.chat.chat.util.Logging;
+import com.p000ison.dev.simpleclans2.chat.channels.Channel;
+import com.p000ison.dev.simpleclans2.chat.listeners.SCCDepreciatedChatEvent;
+import com.p000ison.dev.simpleclans2.chat.listeners.SCCHeroChatListener;
+import com.p000ison.dev.simpleclans2.chat.listeners.SCCPlayerListener;
+import com.p000ison.dev.simpleclans2.chat.util.Logging;
 import com.p000ison.dev.simpleclans2.clan.Clan;
 import com.p000ison.dev.simpleclans2.clan.ranks.Rank;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;

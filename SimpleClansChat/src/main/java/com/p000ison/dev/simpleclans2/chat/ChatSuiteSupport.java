@@ -17,7 +17,7 @@
  *     Last modified: 07.01.13 14:39
  */
 
-package com.p000ison.dev.simpleclans2.chat.chat;
+package com.p000ison.dev.simpleclans2.chat;
 
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import net.krinsoft.chat.api.Target;

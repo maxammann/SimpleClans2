@@ -17,38 +17,33 @@
  *     Last modified: 07.01.13 14:39
  */
 
-package com.p000ison.dev.simpleclans2.chat.chat.listeners;
+package com.p000ison.dev.simpleclans2.chat.listeners;
 
-import com.dthielke.herochat.ChannelChatEvent;
-import com.dthielke.herochat.Herochat;
-import com.p000ison.dev.simpleclans2.chat.chat.SimpleClansChat;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerChatEvent;
 
 /**
- * Represents a SCCHeroChatListener
+ * Represents a SCCDepreciatedChatEvent
  */
-@SuppressWarnings("unused")
-public class SCCHeroChatListener implements Listener {
-    private SimpleClansChat plugin;
 
-    public SCCHeroChatListener(SimpleClansChat plugin)
+public class SCCDepreciatedChatEvent implements Listener {
+
+    private SCCPlayerListener listener;
+
+    public SCCDepreciatedChatEvent(SCCPlayerListener listener)
     {
-        this.plugin = plugin;
+        this.listener = listener;
     }
 
+    @SuppressWarnings("deprecation")
     @EventHandler(priority = EventPriority.HIGHEST)
-    private void onHeroChatMessage(ChannelChatEvent event)
+    public void onPlayerChat(PlayerChatEvent event)
     {
-        if (this.plugin.getSettingsManager().isCompatibilityMode()) {
-            String format = event.getFormat();
-
-            if (format.equals("{default}")) {
-                format = Herochat.getChannelManager().getStandardFormat();
-            }
-
-            event.setFormat(plugin.formatCompatibility(format, event.getSender().getName()));
-        }
+        AsyncPlayerChatEvent async = listener.onPlayerChat(new AsyncPlayerChatEvent(false, event.getPlayer(), event.getFormat(), event.getRecipients()));
+        event.setFormat(async.getFormat());
+        event.setCancelled(async.isCancelled());
     }
 }

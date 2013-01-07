@@ -17,11 +17,11 @@
  *     Last modified: 07.01.13 14:39
  */
 
-package com.p000ison.dev.simpleclans2.chat.chat.listeners;
+package com.p000ison.dev.simpleclans2.chat.listeners;
 
 
-import com.p000ison.dev.simpleclans2.chat.chat.SimpleClansChat;
-import com.p000ison.dev.simpleclans2.chat.chat.channels.Channel;
+import com.p000ison.dev.simpleclans2.chat.SimpleClansChat;
+import com.p000ison.dev.simpleclans2.chat.channels.Channel;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
