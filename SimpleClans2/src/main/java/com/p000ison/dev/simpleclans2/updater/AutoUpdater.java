@@ -25,6 +25,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.Date;
@@ -65,6 +66,8 @@ public class AutoUpdater {
             }
         } catch (UnknownHostException e) {
             Logging.debug(e, true, "The jenkins is down! Please contact the developers!");
+        } catch (FileNotFoundException e) {
+            Logging.debug("The file was not found on the jenkins server! Please contact the developers");
         } catch (IOException e) {
             Logging.debug(e, true, "Failed at fetching the Update information! Maybe something is down. Please contact the developers");
         }

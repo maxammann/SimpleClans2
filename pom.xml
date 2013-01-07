@@ -27,7 +27,7 @@
         <url>https://github.com/p000ison/${project.name}</url>
     </scm>
 
-	<!-- SimpleClans's repository -->
+    <!-- SimpleClans's repository -->
     <distributionManagement>
         <snapshotRepository>
             <id>repo-snap</id>
@@ -63,10 +63,10 @@
             ${project.artifactId}-${project.version}
         </finalName>
 
-		<!-- Clean and install by default -->
+        <!-- Clean and install by default -->
         <defaultGoal>clean install</defaultGoal>
 
-		<!-- Default resources settings -->
+        <!-- Default resources settings -->
         <resources>
             <resource>
                 <filtering>true</filtering>
@@ -81,10 +81,6 @@
                 <configuration>
                     <finalName>SimpleClans</finalName>
                     <appendAssemblyId>false</appendAssemblyId>
-                    <descriptors>
-                        <descriptor>${basedir}/assembly.xml</descriptor>
-                        <descriptor>${basedir}/assembly-dir.xml</descriptor>
-                    </descriptors>
                     <descriptor>${basedir}/assembly.xml</descriptor>
                 </configuration>
                 <executions>
