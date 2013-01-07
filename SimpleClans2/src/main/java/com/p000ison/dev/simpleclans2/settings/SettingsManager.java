@@ -121,7 +121,7 @@ public class SettingsManager {
 
         this.config = new YamlConfiguration();
         this.configFile = new File(plugin.getDataFolder(), "config.yml");
-        if (!plugin.getDataFolder().mkdir()) {
+        if (!configFile.exists() && !plugin.getDataFolder().mkdir()) {
             Logging.debug(Level.SEVERE, "Failed at creating SimpleClans folder!");
         }
 

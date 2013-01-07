@@ -57,12 +57,13 @@ public class AutoUpdater {
         }
 
         try {
-            toUpdate = getBuild(type);
+            Build update = getBuild(type);
 
-            toUpdate.fetchInformation();
+            update.fetchInformation();
 
-            if (versionValue < toUpdate.getBuildNumber()) {
-                Logging.debug(getBuildInfo(toUpdate, longReport));
+            if (versionValue < update.getBuildNumber()) {
+                Logging.debug(getBuildInfo(update, longReport));
+                toUpdate = update;
             }
         } catch (UnknownHostException e) {
             Logging.debug(e, true, "The jenkins is down! Please contact the developers!");
