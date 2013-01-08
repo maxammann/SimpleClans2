@@ -27,8 +27,8 @@
     <fileSets>
         <fileSet>
             <includes>
-                <include>LICENCE.txt</include>
-                <include>README.txt</include>
+                <include>${main.basedir}/LICENCE.txt</include>
+                <include>${main.basedir}/README.txt</include>
             </includes>
         </fileSet>
     </fileSets>
