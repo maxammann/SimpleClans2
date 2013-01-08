@@ -87,7 +87,7 @@ public class AutoUpdater {
         updateInfo.append("There is a update for your SimpleClans version!\n");
         if (longReport) {
             updateInfo.append("Build:  ").append(build.getBuildNumber()).append('\n');
-            updateInfo.append("Type:  ").append(build.getUpdateType() == UpdateType.LATEST ? "Unofficial" : "Official\n");
+            updateInfo.append("Type:  ").append(build.getUpdateType() == UpdateType.LATEST ? "Unofficial\n" : "Official\n");
             updateInfo.append("Release date:  ").append(new Date(build.getStarted())).append('\n');
             updateInfo.append("Comment:  ").append(build.getComment()).append(" (").append(build.getCommitURL()).append(")\n");
         }
