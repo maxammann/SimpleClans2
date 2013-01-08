@@ -10,6 +10,8 @@
     <modules>
         <module>SimpleClans2</module>
         <module>SimpleClansChat</module>
+        <module>SimpleClansTest</module>
+        <module>Distribution</module>
     </modules>
 
     <name>SimpleClans</name>
@@ -18,6 +20,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.build.number>UNKNOWN</project.build.number>
+        <main.basedir>${project.basedir}</main.basedir>
     </properties>
 
     <!-- Source code -->
@@ -76,22 +79,26 @@
 
         <plugins>
             <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.2.2</version>
-                <configuration>
-                    <finalName>SimpleClans</finalName>
-                    <appendAssemblyId>false</appendAssemblyId>
-                    <descriptor>${basedir}/assembly.xml</descriptor>
-                </configuration>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.8.1</version>
                 <executions>
                     <execution>
-                        <id>release</id>
-                        <phase>package</phase>
+                        <id>javadoc-jar</id>
+                        <phase>verify</phase>
                         <goals>
-                            <goal>single</goal>
+                            <goal>javadoc</goal>
+                            <goal>jar</goal>
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <aggregate>true</aggregate>
+                    <quiet>true</quiet>
+                    <excludePackageNames>
+                        com.p000ison.dev.simpleclans2.chat:com.p000ison.dev.simpleclans2.test:com.p000ison.dev.simpleclans2.support:com.p000ison.dev.simpleclans2.commands:com.p000ison.dev.simpleclans2.listeners:com.p000ison.dev.simpleclans2.settings:com.p000ison.dev.simpleclans2.test:com.p000ison.dev.simpleclans2.language:com.p000ison.dev.simpleclans2.database
+                    </excludePackageNames>
+                </configuration>
             </plugin>
         </plugins>
     </build>

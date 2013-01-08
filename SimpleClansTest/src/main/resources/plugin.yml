@@ -1,0 +1,5 @@
+name: SimpleClansTest
+main: com.p000ison.dev.simpleclans2.test.SimpleClansTest
+version: unknown-version
+commands:
+  sctest:

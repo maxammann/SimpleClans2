@@ -87,7 +87,7 @@ public class ClanPlayerManager {
 
     public ClanPlayer getCreateClanPlayerExact(String name)
     {
-        ClanPlayer clanPlayer = getClanPlayerExact(name);
+        ClanPlayer clanPlayer = getAnyClanPlayerExact(name);
 
         if (clanPlayer != null) {
             return clanPlayer;

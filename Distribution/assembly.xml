@@ -11,6 +11,11 @@
 
     <moduleSets>
         <moduleSet>
+            <useAllReactorProjects>true</useAllReactorProjects>
+            <excludes>
+                <exclude>com.p000ison.dev.simpleclans2:SimpleClansTest</exclude>
+                <exclude>com.p000ison.dev.simpleclans2:Distribution</exclude>
+            </excludes>
             <binaries>
                 <includeDependencies>false</includeDependencies>
                 <outputDirectory>/</outputDirectory>
