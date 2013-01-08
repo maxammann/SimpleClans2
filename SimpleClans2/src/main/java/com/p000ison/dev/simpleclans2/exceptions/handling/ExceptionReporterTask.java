@@ -32,7 +32,8 @@ import java.util.Queue;
 public class ExceptionReporterTask implements Runnable {
 
     private Queue<ExceptionReport> queue;
-    private static final int MAX_REPORTS = 15;
+    private static final int MAX_REPORTS = 10;
+    private static final int MAX_REPORTS_PER_PUSH = 4;
 
     private static final String PROTOCOL = "http", HOST = "dreamz.bplaced.com", FILE = "/exceptions/index.php";
     private static final int PORT = 80;
@@ -71,8 +72,9 @@ public class ExceptionReporterTask implements Runnable {
         JSONArray reports = new JSONArray();
 
         ExceptionReport report;
-
-        while ((report = queue.poll()) != null) {
+        int i = 0;
+        while ((report = queue.poll()) != null && i <= MAX_REPORTS_PER_PUSH) {
+            i++;
             reports.add(report.getJSONObject());
         }
 
