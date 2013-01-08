@@ -75,9 +75,25 @@ public class Build {
         this.buildNumber = content.get("number").hashCode();
         this.started = (Long) content.get("timestamp");
         this.duration = (Long) content.get("duration");
-        this.fetchFile = content.get("url").toString().substring(httpLength + JENKINS_HOST.length()) + "artifact/target/" + DEFAULT_ARTIFACT;
 
         try {
+            JSONArray artifacts = (JSONArray) content.get("artifacts");
+            if (artifacts == null || artifacts.isEmpty()) {
+                return;
+            }
+
+            String finalPath = null;
+            for (Object rawArtifact : artifacts) {
+                JSONObject artifact = (JSONObject) rawArtifact;
+                String path = (String) artifact.get("relativePath");
+
+                if (path.contains(job)) {
+                    finalPath = path;
+                }
+            }
+
+            this.fetchFile = content.get("url").toString().substring(httpLength + JENKINS_HOST.length()) + "artifact/" + finalPath;
+
             JSONObject changes = (JSONObject) content.get("changeSet");
             JSONArray items = (JSONArray) changes.get("items");
             if (!items.isEmpty()) {
