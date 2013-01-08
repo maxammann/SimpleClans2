@@ -69,6 +69,8 @@ import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -76,6 +78,7 @@ import org.mcstats.Metrics;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 import java.util.logging.Level;
 
 /**
@@ -235,8 +238,8 @@ public class SimpleClans extends JavaPlugin implements SCCore {
                 databaseEngines.addPlotter(new Metrics.Plotter("SQLite") {
                     @Override
                     public int getValue()
-                       {
-                            return 1;
+                    {
+                        return 1;
                     }
                 });
             }
@@ -533,6 +536,11 @@ public class SimpleClans extends JavaPlugin implements SCCore {
         }
 
         Bukkit.broadcastMessage(message);
+    }
+
+    public void registerSimpleClansPermission(String name, Map<String, Boolean> permSet)
+    {
+        getServer().getPluginManager().addPermission(new Permission(name, PermissionDefault.FALSE, permSet));
     }
 
     public ExceptionReporterTask getExceptionReporter()

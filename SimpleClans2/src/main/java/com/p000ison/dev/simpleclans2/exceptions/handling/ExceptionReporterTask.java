@@ -23,8 +23,8 @@ import com.p000ison.dev.simpleclans2.util.Logging;
 import org.json.simple.JSONArray;
 
 import java.io.IOException;
-import java.util.LinkedList;
 import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * Represents a ExceptionReporterTask
@@ -40,7 +40,7 @@ public class ExceptionReporterTask implements Runnable {
 
     public ExceptionReporterTask()
     {
-        this.queue = new LinkedList<ExceptionReport>();
+        this.queue = new ConcurrentLinkedQueue<ExceptionReport>();
     }
 
     public boolean addReport(ExceptionReport exceptionReport)

@@ -54,14 +54,31 @@ public class OnlineClanPlayer {
      */
     public void setupPermissions()
     {
-        Clan clan = clanPlayer.getClan();
-        if (clan == null) {
-            return;
+        if (clanPlayer.isTrusted()) {
+            registerPermission("SCTrusted");
+        } else {
+            registerPermission("SCUntrusted");
         }
 
-        attachment = toPlayer().addAttachment(plugin);
-        attachment.setPermission(String.valueOf(clan.getID()), true);
-        attachment.setPermission("^" + clan.getID(), true);
+        if (clanPlayer.isLeader()) {
+            registerPermission("SCLeader");
+        }
+
+        Clan clan = clanPlayer.getClan();
+        if (clan != null) {
+            registerPermission("SC" + clan.getID());
+        }
+    }
+
+    private void registerPermission(String perm)
+    {
+        if (plugin.getServer().getPluginManager().getPermission(perm) != null) {
+            if (attachment == null) {
+                attachment = toPlayer().addAttachment(plugin);
+            }
+
+            attachment.setPermission(perm, true);
+        }
     }
 
     /**

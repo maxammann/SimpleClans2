@@ -46,8 +46,6 @@ import org.apache.commons.lang.Validate;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.permissions.Permission;
-import org.bukkit.permissions.PermissionDefault;
 
 import java.io.Serializable;
 import java.text.DecimalFormat;
@@ -1244,8 +1242,7 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble, Seriali
      */
     public void removePermissions()
     {
-        plugin.getServer().getPluginManager().removePermission(String.valueOf(id));
-        plugin.getServer().getPluginManager().removePermission("^" + id);
+        plugin.getServer().getPluginManager().removePermission("SC" + String.valueOf(id));
     }
 
     /**
@@ -1257,22 +1254,7 @@ public class Clan implements KDR, Comparable<Clan>, Balance, UpdateAble, Seriali
     {
         removePermissions();
 
-        Map<String, Boolean> positiveSet = new HashMap<String, Boolean>();
-        Map<String, Boolean> negativeSet = new HashMap<String, Boolean>();
-
-        for (Map.Entry<String, Boolean> entry : permissions.entrySet()) {
-            if (entry.getValue()) {
-                positiveSet.put(entry.getKey(), true);
-            } else {
-                negativeSet.put(entry.getKey(), false);
-            }
-        }
-
-        Permission positive = new Permission(String.valueOf(id), PermissionDefault.FALSE, positiveSet);
-        Permission negative = new Permission("^" + id, PermissionDefault.FALSE, negativeSet);
-
-        plugin.getServer().getPluginManager().addPermission(positive);
-        plugin.getServer().getPluginManager().addPermission(negative);
+        plugin.registerSimpleClansPermission("SC" + String.valueOf(id), permissions);
     }
 
     /**

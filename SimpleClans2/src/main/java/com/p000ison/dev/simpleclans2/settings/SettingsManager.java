@@ -116,41 +116,48 @@ public class SettingsManager {
         this.plugin = plugin;
     }
 
-    public boolean init()
+    private FileConfiguration loadConfig(File configFile, String defaultConfig)
     {
-
-        this.config = new YamlConfiguration();
-        this.configFile = new File(plugin.getDataFolder(), "config.yml");
-        if (!configFile.exists() && !plugin.getDataFolder().mkdir()) {
+        YamlConfiguration config = new YamlConfiguration();
+        if (!configFile.exists() && !configFile.getParentFile().mkdir()) {
             Logging.debug(Level.SEVERE, "Failed at creating SimpleClans folder!");
         }
 
-        if (!this.configFile.exists()) {
+        if (!configFile.exists()) {
             try {
-                if (!this.configFile.createNewFile()) {
+                if (!configFile.createNewFile()) {
                     Logging.debug(Level.SEVERE, "Failed at creating SimpleClans config!");
                 }
             } catch (IOException e) {
                 Logging.debug(e, false);
-                return false;
+                return null;
             }
         }
 
         try {
-            this.config.load(configFile);
+            config.load(configFile);
         } catch (IOException e) {
             Logging.debug(e, false);
-            return false;
+            return null;
         } catch (InvalidConfigurationException e) {
             Logging.debug(Level.SEVERE, "Failed at loading config! Maybe the formatting is invalid! Check your config.yml: \n%s", e.getMessage());
-            return false;
+            return null;
         }
 
-        InputStream defConfigStream = plugin.getResource("config.yml");
+        InputStream defConfigStream = plugin.getResource(defaultConfig);
 
         if (defConfigStream != null) {
             YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
             config.setDefaults(defConfig);
+        }
+        return config;
+    }
+
+    public boolean init()
+    {
+        this.config = loadConfig(this.configFile = new File(plugin.getDataFolder(), "config.yml"), "config.yml");
+        if (config == null) {
+            return false;
         }
 
         config.options().copyDefaults(true);
@@ -369,17 +376,30 @@ public class SettingsManager {
 
     public void loadPermissions()
     {
-        File file = new File(plugin.getDataFolder(), "permissions.yml");
-        FileConfiguration permissionsConfig = YamlConfiguration.loadConfiguration(file);
-        permissionsConfig.options().copyDefaults(true);
-
-        List<String> defaultPermissions = new ArrayList<String>();
-        defaultPermissions.add("test.test");
-        permissionsConfig.addDefault("permissions.123", defaultPermissions);
+        File permissionsFile = new File(plugin.getDataFolder(), "permissions.yml");
+        FileConfiguration permissionsConfig = loadConfig(permissionsFile, "permissions.yml");
 
         ConfigurationSection permissions = permissionsConfig.getConfigurationSection("permissions");
 
-        for (String clanId : permissions.getKeys(false)) {
+        Map<String, Boolean> untrustedPermissions = parsePermissions(permissions.getStringList("untrusted"));
+        Map<String, Boolean> trustedPermissions = parsePermissions(permissions.getStringList("trusted"));
+        Map<String, Boolean> leaderPermissions = parsePermissions(permissions.getStringList("leaders"));
+
+        if (untrustedPermissions != null) {
+            plugin.registerSimpleClansPermission("SCUntrusted", untrustedPermissions);
+        }
+
+        if (trustedPermissions != null) {
+            plugin.registerSimpleClansPermission("SCTrusted", trustedPermissions);
+        }
+
+        if (leaderPermissions != null) {
+            plugin.registerSimpleClansPermission("SCLeader", leaderPermissions);
+        }
+
+        ConfigurationSection clans = permissions.getConfigurationSection("clans");
+
+        for (String clanId : clans.getKeys(false)) {
             long id;
             try {
                 id = Long.parseLong(clanId);
@@ -395,30 +415,40 @@ public class SettingsManager {
                 continue;
             }
 
-            List<String> clanPermissions = permissions.getStringList(clanId);
-
-            if (clanPermissions.isEmpty()) {
+            Map<String, Boolean> permMap = parsePermissions(clans.getStringList(clanId));
+            if (permMap == null) {
                 continue;
             }
-
-            Map<String, Boolean> permSet = new HashMap<String, Boolean>();
-
-            for (String permission : clanPermissions) {
-                if (permission.charAt(0) == '^') {
-                    permSet.put(permission.substring(1), false);
-                } else {
-                    permSet.put(permission, true);
-                }
-            }
-            clan.setupPermissions(permSet);
+            clan.setupPermissions(permMap);
             clan.updatePermissions();
         }
 
         try {
-            permissionsConfig.save(file);
+            permissionsConfig.save(permissionsFile);
         } catch (IOException e) {
             Logging.debug(e, false);
         }
+    }
+
+    private Map<String, Boolean> parsePermissions(List<String> permissions)
+    {
+        if (permissions == null || permissions.isEmpty()) {
+            return null;
+        }
+        Map<String, Boolean> permSet = new HashMap<String, Boolean>();
+
+        for (String permission : permissions) {
+            if (permission.isEmpty()) {
+                continue;
+            }
+            if (permission.charAt(0) == '^') {
+                permSet.put(permission.substring(1), false);
+            } else {
+                permSet.put(permission, true);
+            }
+        }
+
+        return permSet;
     }
 
     public void save()
