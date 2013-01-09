@@ -96,7 +96,6 @@
                 </executions>
 
                 <configuration>
-                    <aggregate>true</aggregate>
                     <quiet>true</quiet>
                     <docfilessubdirs>true</docfilessubdirs>
                     <sourcepath>${basedir}/SimpleClansAPI/src/main/java/com/p000ison/dev/simpleclans2/api</sourcepath>
