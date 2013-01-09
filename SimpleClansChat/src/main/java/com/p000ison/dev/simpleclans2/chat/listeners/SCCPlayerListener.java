@@ -21,7 +21,7 @@ package com.p000ison.dev.simpleclans2.chat.listeners;
 
 
 import com.p000ison.dev.simpleclans2.chat.SimpleClansChat;
-import com.p000ison.dev.simpleclans2.chat.channels.Channel;
+import com.p000ison.dev.simpleclans2.chat.Channel;
 import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

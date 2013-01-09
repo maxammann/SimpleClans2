@@ -109,7 +109,7 @@ public class VitalsCommand extends GenericPlayerCommand {
                     Set<ClanPlayer> allAllyMembers = clan.getAllAllyMembers();
 
                     if (!allAllyMembers.isEmpty()) {
-                        chatBlock = new ChatBlock();
+                        chatBlock.clear();
 
                         ChatBlock.sendMessage(player, ChatColor.GRAY + " -- Allies -- ");
 

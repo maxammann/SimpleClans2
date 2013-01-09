@@ -22,7 +22,6 @@ package com.p000ison.dev.simpleclans2.chat;
 import com.dthielke.herochat.Herochat;
 import com.p000ison.dev.simpleclans2.Flags;
 import com.p000ison.dev.simpleclans2.api.SCCore;
-import com.p000ison.dev.simpleclans2.chat.channels.Channel;
 import com.p000ison.dev.simpleclans2.chat.listeners.SCCDepreciatedChatEvent;
 import com.p000ison.dev.simpleclans2.chat.listeners.SCCHeroChatListener;
 import com.p000ison.dev.simpleclans2.chat.listeners.SCCPlayerListener;

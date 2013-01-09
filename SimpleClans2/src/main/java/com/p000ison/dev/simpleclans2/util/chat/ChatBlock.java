@@ -224,6 +224,11 @@ public class ChatBlock {
         this.alignment = alignment;
     }
 
+    public void clear()
+    {
+        this.rows.clear();
+    }
+
     /**
      * Crops the string right in the {@link java.lang.StringBuilder}.
      *
