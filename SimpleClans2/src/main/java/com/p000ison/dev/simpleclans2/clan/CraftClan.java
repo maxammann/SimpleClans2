@@ -14,7 +14,7 @@
  *     You should have received a copy of the GNU General Public License
  *     along with SimpleClans2.  If not, see <http://www.gnu.org/licenses/>.
  *
- *     Last modified: 10.10.12 21:57
+ *     Last modified: 1/9/13 9:44 PM
  */
 
 
@@ -27,13 +27,13 @@ import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.api.clan.Clan;
 import com.p000ison.dev.simpleclans2.api.clan.ClanFlags;
 import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayer;
+import com.p000ison.dev.simpleclans2.api.clanplayer.OnlineClanPlayer;
 import com.p000ison.dev.simpleclans2.api.events.ClanRelationBreakEvent;
 import com.p000ison.dev.simpleclans2.api.events.ClanRelationCreateEvent;
 import com.p000ison.dev.simpleclans2.api.rank.Rank;
 import com.p000ison.dev.simpleclans2.clan.bank.BankAccount;
 import com.p000ison.dev.simpleclans2.clan.ranks.CraftRank;
 import com.p000ison.dev.simpleclans2.clanplayer.CraftClanPlayer;
-import com.p000ison.dev.simpleclans2.api.clanplayer.OnlineClanPlayer;
 import com.p000ison.dev.simpleclans2.database.response.responses.BBAddResponse;
 import com.p000ison.dev.simpleclans2.language.Language;
 import com.p000ison.dev.simpleclans2.util.DateHelper;

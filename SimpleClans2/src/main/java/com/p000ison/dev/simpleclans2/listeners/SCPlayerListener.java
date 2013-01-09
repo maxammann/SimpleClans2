@@ -21,9 +21,9 @@
 package com.p000ison.dev.simpleclans2.listeners;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
-import com.p000ison.dev.simpleclans2.api.command.Command;
 import com.p000ison.dev.simpleclans2.api.clan.Clan;
 import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayer;
+import com.p000ison.dev.simpleclans2.api.command.Command;
 import com.p000ison.dev.simpleclans2.clan.CraftClan;
 import com.p000ison.dev.simpleclans2.clanplayer.CraftClanPlayer;
 import com.p000ison.dev.simpleclans2.database.response.responses.BBRetrieveResponse;

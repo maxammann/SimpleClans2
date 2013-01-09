@@ -20,9 +20,9 @@
 
 package com.p000ison.dev.simpleclans2;
 
-import com.p000ison.dev.simpleclans2.api.command.Command;
 import com.p000ison.dev.simpleclans2.api.SCCore;
 import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
+import com.p000ison.dev.simpleclans2.api.command.Command;
 import com.p000ison.dev.simpleclans2.api.rank.RankManager;
 import com.p000ison.dev.simpleclans2.clan.CraftClanManager;
 import com.p000ison.dev.simpleclans2.clan.ranks.CraftRankManager;

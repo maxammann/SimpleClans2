@@ -14,17 +14,17 @@
  *     You should have received a copy of the GNU General Public License
  *     along with SimpleClans2.  If not, see <http://www.gnu.org/licenses/>.
  *
- *     Last modified: 10.10.12 21:57
+ *     Last modified: 1/9/13 9:44 PM
  */
 
 
 package com.p000ison.dev.simpleclans2.requests;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
-import com.p000ison.dev.simpleclans2.api.request.Request;
-import com.p000ison.dev.simpleclans2.api.request.RequestManager;
 import com.p000ison.dev.simpleclans2.api.clan.Clan;
 import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayer;
+import com.p000ison.dev.simpleclans2.api.request.Request;
+import com.p000ison.dev.simpleclans2.api.request.RequestManager;
 import com.p000ison.dev.simpleclans2.language.Language;
 import org.bukkit.entity.Player;
 

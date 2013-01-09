@@ -14,17 +14,17 @@
  *     You should have received a copy of the GNU General Public License
  *     along with SimpleClans2.  If not, see <http://www.gnu.org/licenses/>.
  *
- *     Last modified: 10.10.12 21:57
+ *     Last modified: 1/9/13 9:44 PM
  */
 
 
 package com.p000ison.dev.simpleclans2.commands;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
-import com.p000ison.dev.simpleclans2.api.command.Command;
-import com.p000ison.dev.simpleclans2.api.command.CommandManager;
 import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayer;
+import com.p000ison.dev.simpleclans2.api.command.Command;
+import com.p000ison.dev.simpleclans2.api.command.CommandManager;
 import com.p000ison.dev.simpleclans2.language.Language;
 import com.p000ison.dev.simpleclans2.util.Logging;
 import org.bukkit.ChatColor;
