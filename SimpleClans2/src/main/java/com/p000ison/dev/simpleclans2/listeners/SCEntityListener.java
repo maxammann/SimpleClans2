@@ -21,8 +21,8 @@
 package com.p000ison.dev.simpleclans2.listeners;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
-import com.p000ison.dev.simpleclans2.clan.Clan;
-import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
+import com.p000ison.dev.simpleclans2.api.clan.Clan;
+import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.database.KillType;
 import com.p000ison.dev.simpleclans2.database.statements.KillStatement;
 import org.bukkit.entity.Entity;
@@ -194,8 +194,8 @@ public class SCEntityListener implements Listener {
 
                 attacker.update();
 
-                plugin.getDataManager().addStatement(new KillStatement(attacker.getId(), attackerClan == null ? -1L : attackerClan.getID(),
-                        victim.getId(), victimClan == null ? -1L : victimClan.getID(), war, type));
+                plugin.getDataManager().addStatement(new KillStatement(attacker.getID(), attackerClan == null ? -1L : attackerClan.getID(),
+                        victim.getID(), victimClan == null ? -1L : victimClan.getID(), war, type));
             }
         }
     }

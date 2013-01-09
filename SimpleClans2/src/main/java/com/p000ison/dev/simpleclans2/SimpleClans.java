@@ -21,11 +21,13 @@
 package com.p000ison.dev.simpleclans2;
 
 import com.p000ison.dev.simpleclans2.api.SCCore;
-import com.p000ison.dev.simpleclans2.clan.ClanManager;
-import com.p000ison.dev.simpleclans2.clan.ranks.RankManager;
-import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayerManager;
-import com.p000ison.dev.simpleclans2.commands.Command;
-import com.p000ison.dev.simpleclans2.commands.CommandManager;
+import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
+import com.p000ison.dev.simpleclans2.api.command.Command;
+import com.p000ison.dev.simpleclans2.api.rank.RankManager;
+import com.p000ison.dev.simpleclans2.clan.CraftClanManager;
+import com.p000ison.dev.simpleclans2.clan.ranks.CraftRankManager;
+import com.p000ison.dev.simpleclans2.clanplayer.CraftClanPlayerManager;
+import com.p000ison.dev.simpleclans2.commands.CraftCommandManager;
 import com.p000ison.dev.simpleclans2.commands.admin.*;
 import com.p000ison.dev.simpleclans2.commands.clan.*;
 import com.p000ison.dev.simpleclans2.commands.clan.bank.BalanceCommand;
@@ -52,14 +54,13 @@ import com.p000ison.dev.simpleclans2.listeners.SCEntityListener;
 import com.p000ison.dev.simpleclans2.listeners.SCPlayerListener;
 import com.p000ison.dev.simpleclans2.metrics.OfflinePlotter;
 import com.p000ison.dev.simpleclans2.metrics.OnlinePlotter;
-import com.p000ison.dev.simpleclans2.requests.RequestManager;
+import com.p000ison.dev.simpleclans2.requests.CraftRequestManager;
 import com.p000ison.dev.simpleclans2.settings.SettingsManager;
 import com.p000ison.dev.simpleclans2.support.PreciousStonesSupport;
 import com.p000ison.dev.simpleclans2.support.SpoutSupport;
 import com.p000ison.dev.simpleclans2.teleportation.TeleportManager;
 import com.p000ison.dev.simpleclans2.updater.AutoUpdater;
 import com.p000ison.dev.simpleclans2.util.Logging;
-import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import com.p000ison.dev.sqlapi.exception.DatabaseConnectionException;
 import com.p000ison.dev.sqlapi.jbdc.JBDCDatabase;
 import com.p000ison.dev.sqlapi.mysql.MySQLConfiguration;
@@ -86,11 +87,11 @@ import java.util.logging.Level;
  */
 public class SimpleClans extends JavaPlugin implements SCCore {
 
-    private ClanManager clanManager;
-    private ClanPlayerManager clanPlayerManager;
+    private CraftClanManager clanManager;
+    private CraftClanPlayerManager clanPlayerManager;
     private SettingsManager settingsManager;
-    private RequestManager requestManager;
-    private CommandManager commandManager;
+    private CraftRequestManager requestManager;
+    private CraftCommandManager commandManager;
     private DatabaseManager dataManager;
     private RankManager rankManager;
     private TeleportManager teleportManager;
@@ -291,8 +292,8 @@ public class SimpleClans extends JavaPlugin implements SCCore {
 
     private void loadManagers()
     {
-        clanManager = new ClanManager(this);
-        clanPlayerManager = new ClanPlayerManager(this);
+        clanManager = new CraftClanManager(this);
+        clanPlayerManager = new CraftClanPlayerManager(this);
         settingsManager.loadPermissions();
 
         try {
@@ -307,12 +308,12 @@ public class SimpleClans extends JavaPlugin implements SCCore {
             disable();
         }
 
-        requestManager = new RequestManager(this);
+        requestManager = new CraftRequestManager(this);
         teleportManager = new TeleportManager(this);
-        rankManager = new RankManager(this);
+        rankManager = new CraftRankManager(this);
         spoutSupport = new SpoutSupport(this);
         preciousStonesSupport = new PreciousStonesSupport();
-        commandManager = new CommandManager(this);
+        commandManager = new CraftCommandManager(this);
         setupCommands();
     }
 
@@ -407,8 +408,7 @@ public class SimpleClans extends JavaPlugin implements SCCore {
         return this;
     }
 
-    @Override
-    public JBDCDatabase getSimpleClansDatabase()
+    public JBDCDatabase getClanDatabase()
     {
         if (dataManager == null) {
             return null;
@@ -417,30 +417,29 @@ public class SimpleClans extends JavaPlugin implements SCCore {
     }
 
     @Override
-    public ClanManager getClanManager()
+    public CraftClanManager getClanManager()
     {
         return clanManager;
     }
 
     @Override
-    public ClanPlayerManager getClanPlayerManager()
+    public CraftClanPlayerManager getClanPlayerManager()
     {
         return clanPlayerManager;
     }
 
-    @Override
     public SettingsManager getSettingsManager()
     {
         return settingsManager;
     }
 
     @Override
-    public RequestManager getRequestManager()
+    public CraftRequestManager getRequestManager()
     {
         return requestManager;
     }
 
-    public CommandManager getCommandManager()
+    public CraftCommandManager getCommandManager()
     {
         return commandManager;
     }
@@ -513,7 +512,6 @@ public class SimpleClans extends JavaPlugin implements SCCore {
         return preciousStonesSupport;
     }
 
-    @Override
     public TeleportManager getTeleportManager()
     {
         return teleportManager;

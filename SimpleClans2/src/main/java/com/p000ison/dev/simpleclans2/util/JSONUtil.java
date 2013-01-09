@@ -20,7 +20,7 @@
 
 package com.p000ison.dev.simpleclans2.util;
 
-import com.p000ison.dev.simpleclans2.clan.Clan;
+import com.p000ison.dev.simpleclans2.api.clan.Clan;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;

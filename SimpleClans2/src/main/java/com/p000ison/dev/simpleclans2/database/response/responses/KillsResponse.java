@@ -20,11 +20,11 @@
 package com.p000ison.dev.simpleclans2.database.response.responses;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
-import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
+import com.p000ison.dev.simpleclans2.api.chat.Align;
+import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
+import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.database.response.Response;
 import com.p000ison.dev.simpleclans2.language.Language;
-import com.p000ison.dev.simpleclans2.util.chat.Align;
-import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
@@ -49,7 +49,7 @@ public class KillsResponse extends Response {
     @Override
     public boolean response()
     {
-        SortedMap<Integer, Long> killsPerPlayer = plugin.getDataManager().getKillsPerPlayer(otherPlayer.getId());
+        SortedMap<Integer, Long> killsPerPlayer = plugin.getDataManager().getKillsPerPlayer(otherPlayer.getID());
 
         if (killsPerPlayer.isEmpty()) {
             ChatBlock.sendMessage(sender, ChatColor.RED + Language.getTranslation("nokillsfound"));

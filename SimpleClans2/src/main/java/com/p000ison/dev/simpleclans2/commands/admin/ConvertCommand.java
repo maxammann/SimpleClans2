@@ -103,7 +103,7 @@ public class ConvertCommand extends GenericConsoleCommand {
                 return;
             }
 
-            Converter converter = new Converter(database, plugin.getSimpleClansDatabase());
+            Converter converter = new Converter(database, plugin.getClanDatabase());
             sender.sendMessage("Starting converting!");
             converter.convertAll();
             sender.sendMessage("Successfully converted!");

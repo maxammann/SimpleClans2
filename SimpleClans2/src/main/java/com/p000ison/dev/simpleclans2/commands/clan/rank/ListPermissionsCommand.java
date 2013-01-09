@@ -20,11 +20,11 @@
 package com.p000ison.dev.simpleclans2.commands.clan.rank;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
-import com.p000ison.dev.simpleclans2.clan.ranks.Rank;
+import com.p000ison.dev.simpleclans2.api.chat.Align;
+import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
+import com.p000ison.dev.simpleclans2.clan.ranks.CraftRank;
 import com.p000ison.dev.simpleclans2.commands.GenericConsoleCommand;
 import com.p000ison.dev.simpleclans2.language.Language;
-import com.p000ison.dev.simpleclans2.util.chat.Align;
-import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
@@ -63,7 +63,7 @@ public class ListPermissionsCommand extends GenericConsoleCommand {
         chatBlock.setAlignment(Align.CENTER, Align.LEFT);
         chatBlock.addRow(ChatBlock.getHeadingColor() + "ID", ChatBlock.getHeadingColor() + Language.getTranslation("permission"));
 
-        for (Map.Entry<Integer, String> entry : Rank.getAvailablePermissions().entrySet()) {
+        for (Map.Entry<Integer, String> entry : CraftRank.getAvailablePermissions().entrySet()) {
             chatBlock.addRow(ChatColor.GRAY.toString() + entry.getKey(), ChatColor.GRAY + entry.getValue());
         }
 

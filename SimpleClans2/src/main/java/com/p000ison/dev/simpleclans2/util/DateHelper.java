@@ -24,6 +24,7 @@ package com.p000ison.dev.simpleclans2.util;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.util.Date;
 
 /**
@@ -204,7 +205,7 @@ public final class DateHelper {
         System.out.print("Wann? ");
 
         try {
-            BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));
+            BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in, Charset.forName("UTF-8")));
             input = bufferRead.readLine();
         } catch (IOException e) {
             e.printStackTrace();

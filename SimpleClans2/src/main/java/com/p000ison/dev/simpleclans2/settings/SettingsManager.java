@@ -21,12 +21,13 @@
 package com.p000ison.dev.simpleclans2.settings;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
-import com.p000ison.dev.simpleclans2.clan.Clan;
+import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
+import com.p000ison.dev.simpleclans2.api.clan.Clan;
+import com.p000ison.dev.simpleclans2.clan.CraftClan;
 import com.p000ison.dev.simpleclans2.updater.UpdateType;
 import com.p000ison.dev.simpleclans2.util.ExceptionHelper;
 import com.p000ison.dev.simpleclans2.util.GeneralHelper;
 import com.p000ison.dev.simpleclans2.util.Logging;
-import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import com.p000ison.dev.sqlapi.DatabaseConfiguration;
 import com.p000ison.dev.sqlapi.mysql.MySQLConfiguration;
 import com.p000ison.dev.sqlapi.sqlite.SQLiteConfiguration;
@@ -419,8 +420,8 @@ public class SettingsManager {
             if (permMap == null) {
                 continue;
             }
-            clan.setupPermissions(permMap);
-            clan.updatePermissions();
+            ((CraftClan) clan).setupPermissions(permMap);
+            ((CraftClan) clan).updatePermissions();
         }
 
         try {

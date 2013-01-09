@@ -20,13 +20,13 @@
 package com.p000ison.dev.simpleclans2.commands.clan.rank;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
-import com.p000ison.dev.simpleclans2.clan.Clan;
-import com.p000ison.dev.simpleclans2.clan.ranks.Rank;
-import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
+import com.p000ison.dev.simpleclans2.api.chat.Align;
+import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
+import com.p000ison.dev.simpleclans2.api.clan.Clan;
+import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayer;
+import com.p000ison.dev.simpleclans2.api.rank.Rank;
 import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
 import com.p000ison.dev.simpleclans2.language.Language;
-import com.p000ison.dev.simpleclans2.util.chat.Align;
-import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -108,7 +108,7 @@ public class ListRanksCommand extends GenericPlayerCommand {
         for (int i = boundings[0]; i < boundings[1]; i++) {
             Rank rank = sorted.get(i);
 
-            chatBlock.addRow(ChatColor.GRAY.toString() + rank.getId(), ChatColor.GRAY + rank.getTag(), ChatColor.GRAY + rank.getName(), ChatColor.GRAY.toString() + rank.getPriority());
+            chatBlock.addRow(ChatColor.GRAY.toString() + rank.getID(), ChatColor.GRAY + rank.getTag(), ChatColor.GRAY + rank.getName(), ChatColor.GRAY.toString() + rank.getPriority());
         }
 
 
