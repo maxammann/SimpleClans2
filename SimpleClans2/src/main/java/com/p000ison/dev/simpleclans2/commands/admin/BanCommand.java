@@ -20,10 +20,10 @@
 package com.p000ison.dev.simpleclans2.commands.admin;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
-import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
+import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
+import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.commands.GenericConsoleCommand;
 import com.p000ison.dev.simpleclans2.language.Language;
-import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -62,7 +62,7 @@ public class BanCommand extends GenericConsoleCommand {
                 ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("you.banned"));
             }
 
-            plugin.getClanManager().ban(clanPlayer);
+            plugin.getClanPlayerManager().ban(clanPlayer);
             ChatBlock.sendMessage(sender, ChatColor.AQUA + Language.getTranslation("player.added.to.banned.list"));
         } else {
             ChatBlock.sendMessage(sender, ChatColor.RED + Language.getTranslation("this.player.is.already.banned"));

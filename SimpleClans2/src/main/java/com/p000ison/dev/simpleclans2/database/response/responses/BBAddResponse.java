@@ -20,7 +20,7 @@
 package com.p000ison.dev.simpleclans2.database.response.responses;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
-import com.p000ison.dev.simpleclans2.clan.Clan;
+import com.p000ison.dev.simpleclans2.clan.CraftClan;
 import com.p000ison.dev.simpleclans2.database.response.Response;
 
 /**
@@ -29,9 +29,9 @@ import com.p000ison.dev.simpleclans2.database.response.Response;
 public class BBAddResponse extends Response {
 
     private String message;
-    private Clan clan;
+    private CraftClan clan;
 
-    public BBAddResponse(SimpleClans plugin, String message, Clan clan)
+    public BBAddResponse(SimpleClans plugin, String message, CraftClan clan)
     {
         super(plugin, null);
         this.message = message;

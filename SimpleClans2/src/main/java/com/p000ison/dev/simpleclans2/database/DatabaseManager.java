@@ -21,9 +21,10 @@
 package com.p000ison.dev.simpleclans2.database;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
-import com.p000ison.dev.simpleclans2.clan.Clan;
-import com.p000ison.dev.simpleclans2.clan.ranks.Rank;
-import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
+import com.p000ison.dev.simpleclans2.api.clan.Clan;
+import com.p000ison.dev.simpleclans2.clan.CraftClan;
+import com.p000ison.dev.simpleclans2.clan.ranks.CraftRank;
+import com.p000ison.dev.simpleclans2.clanplayer.CraftClanPlayer;
 import com.p000ison.dev.simpleclans2.database.response.Response;
 import com.p000ison.dev.simpleclans2.database.response.ResponseTask;
 import com.p000ison.dev.simpleclans2.database.statements.KillStatement;
@@ -80,9 +81,9 @@ public class DatabaseManager {
 
         database.registerTable(KillStatement.class);
         database.registerTable(BBTable.class);
-        database.registerTable(Clan.class).registerConstructor(plugin);
-        database.registerTable(ClanPlayer.class).registerConstructor(plugin);
-        database.registerTable(Rank.class);
+        database.registerTable(CraftClan.class).registerConstructor(plugin);
+        database.registerTable(CraftClanPlayer.class).registerConstructor(plugin);
+        database.registerTable(CraftRank.class);
 
         autoSaver = new AutoSaver(plugin, this);
         responseTask = new ResponseTask();
@@ -123,13 +124,13 @@ public class DatabaseManager {
 
     public void importAll()
     {
-        Set<Clan> clans = database.<Clan>select().from(Clan.class).prepare().getResults(new HashSet<Clan>());
+        Set<CraftClan> clans = database.<CraftClan>select().from(CraftClan.class).prepare().getResults(new HashSet<CraftClan>());
         long currentTime = System.currentTimeMillis();
-        PreparedSelectQuery<Rank> rankQuery = database.<Rank>select().from(Rank.class).where().preparedEquals("clan").select().prepare();
+        PreparedSelectQuery<CraftRank> rankQuery = database.<CraftRank>select().from(CraftRank.class).where().preparedEquals("clan").select().prepare();
 
-        Iterator<Clan> clanIterator = clans.iterator();
+        Iterator<CraftClan> clanIterator = clans.iterator();
         while (clanIterator.hasNext()) {
-            Clan clan = clanIterator.next();
+            CraftClan clan = clanIterator.next();
             int maxInactiveDays = clan.isVerified() ? plugin.getSettingsManager().getPurgeInactiveClansDays() : plugin.getSettingsManager().getPurgeUnverifiedClansDays();
 
             if (DateHelper.differenceInDays(clan.getLastUpdated(), currentTime) > maxInactiveDays) {
@@ -138,22 +139,22 @@ public class DatabaseManager {
                 clanIterator.remove();
             } else {
                 rankQuery.set(0, clan.getID());
-                clan.loadRanks(rankQuery.getResults(new HashSet<Rank>()));
+                ((CraftClan) clan).loadRanks(rankQuery.getResults(new HashSet<CraftRank>()));
             }
         }
 
         rankQuery.close();
 
         plugin.getClanManager().importClans(clans);
-        database.saveStoredValues(Clan.class);
+        database.saveStoredValues(CraftClan.class);
 
-        Set<ClanPlayer> clanPlayers = database.<ClanPlayer>select().from(ClanPlayer.class).prepare().getResults(new HashSet<ClanPlayer>());
+        Set<CraftClanPlayer> clanPlayers = database.<CraftClanPlayer>select().from(CraftClanPlayer.class).prepare().getResults(new HashSet<CraftClanPlayer>());
 
-        Iterator<ClanPlayer> clanPlayerIterator = clanPlayers.iterator();
+        Iterator<CraftClanPlayer> clanPlayerIterator = clanPlayers.iterator();
         while (clanPlayerIterator.hasNext()) {
-            ClanPlayer cp = clanPlayerIterator.next();
-            if (!cp.isBanned() && DateHelper.differenceInDays(cp.getLastSeenDate(), currentTime) > plugin.getSettingsManager().getPurgeInactivePlayersDays()) {
-                Logging.debug("Purging player %s because it was too long inactive! (id=%s)", cp.getName(), cp.getId());
+            CraftClanPlayer cp = clanPlayerIterator.next();
+            if (!cp.isBanned() && DateHelper.differenceInDays(cp.getLastSeenTime(), currentTime) > plugin.getSettingsManager().getPurgeInactivePlayersDays()) {
+                Logging.debug("Purging player %s because it was too long inactive! (id=%s)", cp.getName(), cp.getID());
                 getDatabase().delete(cp);
                 clanPlayerIterator.remove();
             }
@@ -164,14 +165,14 @@ public class DatabaseManager {
                     cp.update();
                 }
             } else {
-                cp.getClan().addMemberInternally(cp);
+                ((CraftClan) cp.getClan()).addMemberInternally(cp);
             }
         }
 
         //purge all empty clan
         clanIterator = clans.iterator();
         while (clanIterator.hasNext()) {
-            Clan clan = clanIterator.next();
+            CraftClan clan = clanIterator.next();
 
             if (clan.getSize() == 0) {
                 Logging.debug("Purging clan %s because it has 0 members! (id=%s)", clan.getTag(), clan.getID());
@@ -181,7 +182,7 @@ public class DatabaseManager {
         }
 
         plugin.getClanPlayerManager().importClanPlayers(clanPlayers);
-        database.saveStoredValues(ClanPlayer.class);
+        database.saveStoredValues(CraftClanPlayer.class);
     }
 
     public List<String> retrieveBB(Clan clan, int start, int end)

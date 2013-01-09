@@ -20,12 +20,12 @@
 package com.p000ison.dev.simpleclans2.commands.general;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
-import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
-import com.p000ison.dev.simpleclans2.commands.CommandManager;
+import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
+import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayer;
+import com.p000ison.dev.simpleclans2.commands.CraftCommandManager;
 import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
 import com.p000ison.dev.simpleclans2.database.response.responses.KillsResponse;
 import com.p000ison.dev.simpleclans2.language.Language;
-import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -52,7 +52,7 @@ public class KillsCommand extends GenericPlayerCommand {
     @Override
     public void execute(Player player, String[] args)
     {
-        int page = CommandManager.getPage(args);
+        int page = CraftCommandManager.getPage(args);
 
         if (page == -1) {
             ChatBlock.sendMessage(player, ChatColor.DARK_RED + Language.getTranslation("number.format"));

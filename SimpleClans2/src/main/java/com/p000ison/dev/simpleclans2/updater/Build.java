@@ -27,6 +27,7 @@ import org.json.simple.JSONValue;
 import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.charset.Charset;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -68,7 +69,7 @@ public class Build {
         URL buildAPIURL = new URL("http", JENKINS_HOST, 80, "/job/" + job + "/" + updateType + "/" + API_FILE);
 
         URLConnection connection = buildAPIURL.openConnection();
-        Reader reader = new InputStreamReader(connection.getInputStream());
+        Reader reader = new InputStreamReader(connection.getInputStream(), Charset.forName("UTF-8"));
 
         JSONObject content = parseJSON(reader);
 

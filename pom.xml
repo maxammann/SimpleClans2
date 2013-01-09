@@ -8,9 +8,10 @@
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
+        <module>SimpleClansAPI</module>
         <module>SimpleClans2</module>
         <module>SimpleClansChat</module>
-        <module>SimpleClansTest</module>
+        <module>Test</module>
         <module>Distribution</module>
     </modules>
 
@@ -93,12 +94,12 @@
                         </goals>
                     </execution>
                 </executions>
+
                 <configuration>
                     <aggregate>true</aggregate>
                     <quiet>true</quiet>
-                    <excludePackageNames>
-                        com.p000ison.dev.simpleclans2.chat:com.p000ison.dev.simpleclans2.test:com.p000ison.dev.simpleclans2.support:com.p000ison.dev.simpleclans2.commands:com.p000ison.dev.simpleclans2.listeners:com.p000ison.dev.simpleclans2.settings:com.p000ison.dev.simpleclans2.test:com.p000ison.dev.simpleclans2.language:com.p000ison.dev.simpleclans2.database
-                    </excludePackageNames>
+                    <docfilessubdirs>true</docfilessubdirs>
+                    <sourcepath>${basedir}/SimpleClansAPI/src/main/java/com/p000ison/dev/simpleclans2/api</sourcepath>
                 </configuration>
             </plugin>
         </plugins>

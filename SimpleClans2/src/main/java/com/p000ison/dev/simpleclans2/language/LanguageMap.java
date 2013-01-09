@@ -19,8 +19,8 @@
 
 package com.p000ison.dev.simpleclans2.language;
 
+import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.util.Logging;
-import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 
 import java.io.*;
 import java.net.URL;

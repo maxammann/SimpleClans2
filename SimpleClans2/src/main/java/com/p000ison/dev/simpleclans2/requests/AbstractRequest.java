@@ -21,7 +21,8 @@
 package com.p000ison.dev.simpleclans2.requests;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
-import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
+import com.p000ison.dev.simpleclans2.api.request.Request;
+import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayer;
 import org.bukkit.entity.Player;
 
 /**

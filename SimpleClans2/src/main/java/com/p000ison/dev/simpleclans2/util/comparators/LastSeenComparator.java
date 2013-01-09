@@ -20,7 +20,7 @@
 
 package com.p000ison.dev.simpleclans2.util.comparators;
 
-import com.p000ison.dev.simpleclans2.UpdateAble;
+import com.p000ison.dev.simpleclans2.api.UpdateAble;
 
 import java.io.Serializable;
 import java.util.Comparator;
