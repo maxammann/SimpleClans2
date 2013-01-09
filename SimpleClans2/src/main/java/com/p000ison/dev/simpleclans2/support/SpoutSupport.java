@@ -20,11 +20,11 @@
 package com.p000ison.dev.simpleclans2.support;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
-import com.p000ison.dev.simpleclans2.clan.Clan;
-import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
+import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
+import com.p000ison.dev.simpleclans2.api.clan.Clan;
+import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.listeners.SCPlayerListener;
 import com.p000ison.dev.simpleclans2.util.Logging;
-import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;

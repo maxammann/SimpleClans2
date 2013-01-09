@@ -19,7 +19,7 @@
 
 package com.p000ison.dev.simpleclans2.language;
 
-import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
+import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -19,7 +19,7 @@
 
 package com.p000ison.dev.simpleclans2.chat;
 
-import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
+import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayer;
 import net.krinsoft.chat.api.Target;
 import net.krinsoft.chat.targets.Channel;
 import net.krinsoft.chat.targets.ChatPlayer;

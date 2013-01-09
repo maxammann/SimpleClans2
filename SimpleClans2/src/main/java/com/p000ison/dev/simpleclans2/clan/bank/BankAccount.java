@@ -19,6 +19,8 @@
 
 package com.p000ison.dev.simpleclans2.clan.bank;
 
+import com.p000ison.dev.simpleclans2.api.Balance;
+
 /**
  * Represents a DepositCommand
  */

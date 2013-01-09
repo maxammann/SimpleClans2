@@ -20,17 +20,17 @@
 package com.p000ison.dev.simpleclans2.chat;
 
 import com.dthielke.herochat.Herochat;
-import com.p000ison.dev.simpleclans2.Flags;
 import com.p000ison.dev.simpleclans2.api.SCCore;
+import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
+import com.p000ison.dev.simpleclans2.api.clan.Clan;
+import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayer;
+import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayerManager;
+import com.p000ison.dev.simpleclans2.api.clanplayer.PlayerFlags;
+import com.p000ison.dev.simpleclans2.api.rank.Rank;
 import com.p000ison.dev.simpleclans2.chat.listeners.SCCDepreciatedChatEvent;
 import com.p000ison.dev.simpleclans2.chat.listeners.SCCHeroChatListener;
 import com.p000ison.dev.simpleclans2.chat.listeners.SCCPlayerListener;
 import com.p000ison.dev.simpleclans2.chat.util.Logging;
-import com.p000ison.dev.simpleclans2.clan.Clan;
-import com.p000ison.dev.simpleclans2.clan.ranks.Rank;
-import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
-import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayerManager;
-import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import net.krinsoft.chat.ChatCore;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.permission.Permission;
@@ -131,7 +131,7 @@ public class SimpleClansChat extends JavaPlugin {
             Player player = (Player) sender;
 
             ClanPlayer cp = this.getClanPlayerManager().getClanPlayer(player);
-            Flags flags = this.getClanPlayerManager().getClanPlayer(player).getFlags();
+            PlayerFlags flags = this.getClanPlayerManager().getClanPlayer(player).getFlags();
             String cmd = command.getName();
             if (cmd.equalsIgnoreCase(".")) {
                 handleChannelCommand(Channel.CLAN, flags, args, player);
@@ -168,7 +168,7 @@ public class SimpleClansChat extends JavaPlugin {
     }
 
     @SuppressWarnings("unchecked")
-    private void handleChannelCommand(Channel channel, Flags flags, String[] args, CommandSender player)
+    private void handleChannelCommand(Channel channel, PlayerFlags flags, String[] args, CommandSender player)
     {
         if (args[0].equalsIgnoreCase("join")) {
             flags.set("channel", channel.getId());

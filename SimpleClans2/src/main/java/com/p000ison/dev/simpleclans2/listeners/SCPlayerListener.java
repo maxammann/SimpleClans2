@@ -21,9 +21,11 @@
 package com.p000ison.dev.simpleclans2.listeners;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
-import com.p000ison.dev.simpleclans2.clan.Clan;
-import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
-import com.p000ison.dev.simpleclans2.commands.Command;
+import com.p000ison.dev.simpleclans2.api.clan.Clan;
+import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayer;
+import com.p000ison.dev.simpleclans2.api.command.Command;
+import com.p000ison.dev.simpleclans2.clan.CraftClan;
+import com.p000ison.dev.simpleclans2.clanplayer.CraftClanPlayer;
 import com.p000ison.dev.simpleclans2.database.response.responses.BBRetrieveResponse;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -59,8 +61,8 @@ public class SCPlayerListener implements Listener {
 
         if (clanPlayer != null) {
             clanPlayer.updateLastSeen();
-            clanPlayer.removePermissions();
-            clanPlayer.removeOnlineVersion();
+            ((CraftClanPlayer) clanPlayer).removePermissions();
+            ((CraftClanPlayer) clanPlayer).removeOnlineVersion();
         }
     }
 
@@ -72,16 +74,16 @@ public class SCPlayerListener implements Listener {
         ClanPlayer clanPlayer = plugin.getClanPlayerManager().getClanPlayer(player);
 
         if (clanPlayer != null) {
-            clanPlayer.setupOnlineVersion();
-            clanPlayer.updatePermissions();
+            ((CraftClanPlayer) clanPlayer).setupOnlineVersion();
+            ((CraftClanPlayer) clanPlayer).updatePermissions();
             Clan clan = clanPlayer.getClan();
 
             if (plugin.getSettingsManager().isMotdBBEnabled() && clanPlayer.isBBEnabled()) {
                 plugin.getDataManager().addResponse(new BBRetrieveResponse(plugin, player, clan, -1, plugin.getSettingsManager().getMotdBBLines(), false));
             }
 
-            clan.updateLastAction();
-            clan.update();
+            ((CraftClan) clanPlayer).updateLastAction();
+            ((CraftClan) clanPlayer).update();
         }
     }
 

@@ -20,9 +20,12 @@
 package com.p000ison.dev.simpleclans2.database;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
-import com.p000ison.dev.simpleclans2.clan.Clan;
-import com.p000ison.dev.simpleclans2.clan.ranks.Rank;
-import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
+import com.p000ison.dev.simpleclans2.api.clan.Clan;
+import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayer;
+import com.p000ison.dev.simpleclans2.api.rank.Rank;
+import com.p000ison.dev.simpleclans2.clan.CraftClan;
+import com.p000ison.dev.simpleclans2.clan.ranks.CraftRank;
+import com.p000ison.dev.simpleclans2.clanplayer.CraftClanPlayer;
 
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -46,23 +49,26 @@ public class AutoSaver implements Runnable {
     @Override
     public synchronized void run()
     {
-        for (Clan clan : plugin.getClanManager().getClans()) {
-            if (clan.needsUpdate()) {
-                dataManager.getDatabase().update(clan);
+        for (Clan clan : plugin.getClanManager().getModifyAbleClans()) {
+            CraftClan craftClan = (CraftClan) clan;
+            if (craftClan.needsUpdate()) {
+                dataManager.getDatabase().update(craftClan);
                 clan.update(false);
             }
 
             for (Rank rank : clan.getRanks()) {
-                if (rank.needsUpdate()) {
-                    dataManager.getDatabase().update(rank);
+                CraftRank craftRank = (CraftRank) rank;
+                if (craftRank.needsUpdate()) {
+                    dataManager.getDatabase().update(craftRank);
                     rank.update(false);
                 }
             }
         }
 
         for (ClanPlayer clanPlayer : plugin.getClanPlayerManager().getClanPlayers()) {
-            if (clanPlayer.needsUpdate()) {
-                dataManager.getDatabase().update(clanPlayer);
+            CraftClanPlayer craftRank = (CraftClanPlayer) clanPlayer;
+            if (craftRank.needsUpdate()) {
+                dataManager.getDatabase().update(craftRank);
                 clanPlayer.update(false);
             }
         }

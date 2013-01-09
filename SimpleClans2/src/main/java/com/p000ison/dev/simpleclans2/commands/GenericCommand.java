@@ -20,6 +20,7 @@
 package com.p000ison.dev.simpleclans2.commands;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
+import com.p000ison.dev.simpleclans2.api.command.Command;
 import org.bukkit.permissions.Permissible;
 
 import java.util.Arrays;

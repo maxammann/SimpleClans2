@@ -20,13 +20,13 @@
 package com.p000ison.dev.simpleclans2.commands.clan;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
-import com.p000ison.dev.simpleclans2.clan.Clan;
-import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
-import com.p000ison.dev.simpleclans2.commands.CommandManager;
+import com.p000ison.dev.simpleclans2.api.chat.Align;
+import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
+import com.p000ison.dev.simpleclans2.api.clan.Clan;
+import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayer;
+import com.p000ison.dev.simpleclans2.commands.CraftCommandManager;
 import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
 import com.p000ison.dev.simpleclans2.language.Language;
-import com.p000ison.dev.simpleclans2.util.chat.Align;
-import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.util.comparators.LastSeenComparator;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -59,7 +59,7 @@ public class RosterAnyCommand extends GenericPlayerCommand {
     @Override
     public void execute(Player player, String[] args)
     {
-        int page = CommandManager.getPage(args);
+        int page = CraftCommandManager.getPage(args);
 
         if (page == -1) {
             ChatBlock.sendMessage(player, Language.getTranslation("number.format"));

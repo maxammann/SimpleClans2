@@ -19,12 +19,10 @@
 
 package com.p000ison.dev.simpleclans2.exceptions.handling;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.charset.Charset;
 
 /**
  * Represents a PHPConnection
@@ -60,9 +58,10 @@ public class PHPConnection {
     public void write(String data) throws IOException
     {
         final OutputStream out = connection.getOutputStream();
-        out.write(data.getBytes());
-        out.flush();
-        out.close();
+        Writer writer = new BufferedWriter(new OutputStreamWriter(out, Charset.forName("UTF-8")));
+        writer.write(data);
+        writer.flush();
+        writer.close();
         if (!read) {
             connection.getInputStream().close();
         }
@@ -70,7 +69,7 @@ public class PHPConnection {
 
     public String getResponse() throws IOException
     {
-        final BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        final BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), Charset.forName("UTF-8")));
         String response = reader.readLine();
         reader.close();
         return response;
@@ -84,7 +83,7 @@ public class PHPConnection {
      */
     public String read() throws IOException
     {
-        final BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        final BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), Charset.forName("UTF-8")));
         final StringBuilder incoming = new StringBuilder();
 
         String response;

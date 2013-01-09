@@ -20,13 +20,13 @@
 package com.p000ison.dev.simpleclans2.commands.clan.bb;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
-import com.p000ison.dev.simpleclans2.clan.Clan;
-import com.p000ison.dev.simpleclans2.clanplayer.ClanPlayer;
-import com.p000ison.dev.simpleclans2.commands.CommandManager;
+import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
+import com.p000ison.dev.simpleclans2.api.clan.Clan;
+import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayer;
+import com.p000ison.dev.simpleclans2.commands.CraftCommandManager;
 import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
 import com.p000ison.dev.simpleclans2.database.response.responses.BBRetrieveResponse;
 import com.p000ison.dev.simpleclans2.language.Language;
-import com.p000ison.dev.simpleclans2.util.chat.ChatBlock;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -73,7 +73,7 @@ public class BBCommand extends GenericPlayerCommand {
             return;
         }
 
-        int page = CommandManager.getPage(args);
+        int page = CraftCommandManager.getPage(args);
 
         if (page == -1) {
             ChatBlock.sendMessage(player, Language.getTranslation("number.format"));
