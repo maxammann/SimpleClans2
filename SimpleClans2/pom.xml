@@ -61,6 +61,7 @@
                             <artifactSet>
                                 <includes>
                                     <include>org.mcstats:metrics</include>
+                                    <include>com.p000ison.dev.simpleclans2:SimpleClansAPI</include>
                                     <include>com.p000ison.dev.sqlapi:SQLDatabaseAPI</include>
                                 </includes>
                             </artifactSet>
