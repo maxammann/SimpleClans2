@@ -28,7 +28,7 @@ import org.bukkit.event.player.PlayerChatEvent;
 /**
  * Represents a SCCDepreciatedChatEvent
  */
-
+@SuppressWarnings("deprecation")
 public class SCCDepreciatedChatEvent implements Listener {
 
     private SCCPlayerListener listener;
@@ -38,7 +38,6 @@ public class SCCDepreciatedChatEvent implements Listener {
         this.listener = listener;
     }
 
-    @SuppressWarnings("deprecation")
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerChat(PlayerChatEvent event)
     {

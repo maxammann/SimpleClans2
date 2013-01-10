@@ -67,7 +67,7 @@ public abstract class MultipleRequest extends AbstractRequest {
             if (clanPlayer == null) {
                 continue;
             }
-            String query = "SELECT ";
+
             if (clan.equals(clanPlayer.getClan())) {
                 return true;
             }

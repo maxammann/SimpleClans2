@@ -614,13 +614,13 @@ public class CraftClanPlayer implements ClanPlayer, TableObject {
     @Override
     public String getFormattedJoinDate()
     {
-        return CraftClan.DATE_FORMAT.format(new Date(this.joinDate));
+        return new java.text.SimpleDateFormat("MMM dd, yyyy h:mm a").format(new Date(this.joinDate));
     }
 
     @Override
     public String getFormattedLastSeenDate()
     {
-        return CraftClan.DATE_FORMAT.format(new Date(this.lastSeen));
+        return new java.text.SimpleDateFormat("MMM dd, yyyy h:mm a").format(new Date(this.lastSeen));
     }
 
     @Override
@@ -632,11 +632,7 @@ public class CraftClanPlayer implements ClanPlayer, TableObject {
 
         double balance = SimpleClans.getBalance(name);
 
-        if (balance < amount) {
-            return false;
-        }
-
-        return SimpleClans.withdrawBalance(name, amount);
+        return balance >= amount && SimpleClans.withdrawBalance(name, amount);
     }
 
     @Override

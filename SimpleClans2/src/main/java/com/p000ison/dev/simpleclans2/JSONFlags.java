@@ -18,8 +18,9 @@
  */
 
 
-package com.p000ison.dev.simpleclans2.api;
+package com.p000ison.dev.simpleclans2;
 
+import com.p000ison.dev.simpleclans2.api.Flags;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
@@ -32,6 +33,7 @@ import java.util.*;
 @SuppressWarnings("unchecked")
 public class JSONFlags implements Flags {
 
+    private static final long serialVersionUID = -6017717945327866795L;
     private Map<String, Object> data = new HashMap<String, Object>();
 
     @Override

@@ -28,6 +28,7 @@ import java.util.Map;
  */
 public class IntegerValueComparator implements Comparator<String>, Serializable {
 
+    private static final long serialVersionUID = 7694354557639217836L;
     private Map<?, Integer> base;
 
     public IntegerValueComparator(Map<?, Integer> base)

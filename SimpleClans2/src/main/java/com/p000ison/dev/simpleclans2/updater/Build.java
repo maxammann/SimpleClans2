@@ -142,18 +142,26 @@ public class Build {
     public void saveToFile(File file) throws IOException
     {
         InputStream input = getDownloadStream();
-        OutputStream output = new FileOutputStream(file);
+        OutputStream output = null;
+        try {
+            output = new FileOutputStream(file);
 
-        byte[] buffer = new byte[1024];
+            byte[] buffer = new byte[1024];
 
-        int realLength;
+            int realLength;
 
-        while ((realLength = input.read(buffer)) > 0) {
-            output.write(buffer, 0, realLength);
+            while ((realLength = input.read(buffer)) > 0) {
+                output.write(buffer, 0, realLength);
+            }
+        } catch (IOException e) {
+            throw e;
+        } finally {
+            if (output != null) {
+                output.flush();
+                output.close();
+            }
+
         }
-
-        output.flush();
-        output.close();
     }
 
     public boolean saveToDirectory(File directory, String name) throws IOException

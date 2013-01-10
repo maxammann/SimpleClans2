@@ -29,6 +29,8 @@ import java.util.Map;
  */
 public class ColorizedMap extends HashMap<String, String> {
 
+    private static final long serialVersionUID = 2539590894611232409L;
+
     public void importMap(Map<Object, Object> otherMap)
     {
         for (Map.Entry<Object, Object> current : otherMap.entrySet()) {

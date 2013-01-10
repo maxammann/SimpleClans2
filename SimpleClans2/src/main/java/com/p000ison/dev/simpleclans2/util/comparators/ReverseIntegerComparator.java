@@ -19,12 +19,15 @@
 
 package com.p000ison.dev.simpleclans2.util.comparators;
 
+import java.io.Serializable;
 import java.util.Comparator;
 
 /**
  * Represents a ReverseIntegerComparator
  */
-public class ReverseIntegerComparator implements Comparator<Integer> {
+public class ReverseIntegerComparator implements Comparator<Integer>, Serializable {
+
+    private static final long serialVersionUID = 1142321453403266083L;
 
     @Override
     public int compare(Integer a, Integer b)

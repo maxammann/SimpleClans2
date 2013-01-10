@@ -53,7 +53,6 @@ public class DatabaseManager {
 
     private SimpleClans plugin;
 
-
     private JBDCDatabase database;
     private AutoSaver autoSaver;
     private ResponseTask responseTask;
@@ -139,7 +138,7 @@ public class DatabaseManager {
                 clanIterator.remove();
             } else {
                 rankQuery.set(0, clan.getID());
-                ((CraftClan) clan).loadRanks(rankQuery.getResults(new HashSet<CraftRank>()));
+                clan.loadRanks(rankQuery.getResults(new HashSet<CraftRank>()));
             }
         }
 

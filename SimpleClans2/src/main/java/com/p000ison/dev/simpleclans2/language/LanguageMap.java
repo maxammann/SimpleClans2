@@ -110,17 +110,23 @@ public class LanguageMap {
         }
 
         byte[] buffer = new byte[1024];
+        OutputStream output = null;
+        try {
+            output = new FileOutputStream(target);
 
-        OutputStream output = new FileOutputStream(target);
+            int realLength;
 
-        int realLength;
-
-        while ((realLength = input.read(buffer)) > 0) {
-            output.write(buffer, 0, realLength);
+            while ((realLength = input.read(buffer)) > 0) {
+                output.write(buffer, 0, realLength);
+            }
+        } catch (IOException e) {
+            throw e;
+        } finally {
+            if (output != null) {
+                output.flush();
+                output.close();
+            }
         }
-
-        output.flush();
-        output.close();
     }
 
     public void load()

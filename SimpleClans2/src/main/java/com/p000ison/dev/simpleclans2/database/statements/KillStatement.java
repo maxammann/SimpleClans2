@@ -32,6 +32,7 @@ import java.sql.Timestamp;
 /**
  * Represents a KillStatement
  */
+@SuppressWarnings({"FieldCanBeLocal", "unused"})
 @DatabaseTable(name = "sc2_kills")
 public class KillStatement implements Executable, TableObject {
 

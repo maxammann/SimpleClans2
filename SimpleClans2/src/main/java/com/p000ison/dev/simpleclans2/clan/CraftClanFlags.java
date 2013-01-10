@@ -20,7 +20,7 @@
 
 package com.p000ison.dev.simpleclans2.clan;
 
-import com.p000ison.dev.simpleclans2.api.JSONFlags;
+import com.p000ison.dev.simpleclans2.JSONFlags;
 import com.p000ison.dev.simpleclans2.api.clan.ClanFlags;
 import com.p000ison.dev.simpleclans2.vectors.PlayerPosition;
 import org.bukkit.Location;
@@ -29,6 +29,8 @@ import org.bukkit.Location;
  * Represents a the JSONFlags of a clan
  */
 public class CraftClanFlags extends JSONFlags implements ClanFlags {
+
+    private static final long serialVersionUID = 3492895041242487486L;
 
     @Override
     public void setHomeLocation(Location location)

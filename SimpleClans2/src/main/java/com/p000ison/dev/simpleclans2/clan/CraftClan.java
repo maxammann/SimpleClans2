@@ -52,7 +52,6 @@ import org.bukkit.entity.Player;
 import java.text.DecimalFormat;
 import java.text.MessageFormat;
 import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -61,7 +60,6 @@ import java.util.*;
 @DatabaseTable(name = "sc2_clans")
 public class CraftClan implements Clan, TableObject {
 
-    public static final SimpleDateFormat DATE_FORMAT = new java.text.SimpleDateFormat("MMM dd, yyyy h:mm a");
     public static final NumberFormat DECIMAL_FORMAT = new DecimalFormat("#.#");
     private static final long serialVersionUID = 2276260953605541164L;
 
@@ -127,7 +125,7 @@ public class CraftClan implements Clan, TableObject {
     @Override
     public String getFoundedDateFormatted()
     {
-        return DATE_FORMAT.format(new Date(this.foundedDate));
+        return new java.text.SimpleDateFormat("MMM dd, yyyy h:mm a").format(new Date(this.foundedDate));
     }
 
     /**
@@ -388,6 +386,7 @@ public class CraftClan implements Clan, TableObject {
      * @param clan The other clan
      * @return Weather they are allies or not.
      */
+    @Override
     public boolean isAlly(Clan clan)
     {
         return clan != null && (this.equals(clan) || (allies != null && allies.contains(clan)));
@@ -425,6 +424,7 @@ public class CraftClan implements Clan, TableObject {
      * @param clan The other clan.
      * @return Weather they are rivals or not.
      */
+    @Override
     public boolean isRival(Clan clan)
     {
         return clan != null && (this.equals(clan) || (rivals != null && rivals.contains(clan)));
@@ -462,6 +462,7 @@ public class CraftClan implements Clan, TableObject {
      * @param clan The other clan.
      * @return Weather they are warring or not.
      */
+    @Override
     public boolean isWarring(Clan clan)
     {
         return clan != null && (this.equals(clan) || (warring != null && warring.contains(clan)));

@@ -20,7 +20,7 @@
 
 package com.p000ison.dev.simpleclans2.clanplayer;
 
-import com.p000ison.dev.simpleclans2.api.JSONFlags;
+import com.p000ison.dev.simpleclans2.JSONFlags;
 import com.p000ison.dev.simpleclans2.api.clanplayer.PlayerFlags;
 
 import java.util.Set;
@@ -30,6 +30,8 @@ import java.util.Set;
  */
 @SuppressWarnings("unchecked")
 public class CraftPlayerFlags extends JSONFlags implements PlayerFlags {
+
+    private static final long serialVersionUID = 3232671374494730728L;
 
     @Override
     public void addPastClan(String clan)

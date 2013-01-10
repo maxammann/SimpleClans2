@@ -28,13 +28,13 @@ import java.sql.Timestamp;
 
 public class KillEntry {
 
-    private String attacker;
-    private String attackerTag;
-    private String victim;
-    private String victimTag;
-    private boolean war;
-    private Timestamp date;
-    private byte killType;
+    private final String attacker;
+    private final String attackerTag;
+    private final String victim;
+    private final String victimTag;
+    private final boolean war;
+    private final Timestamp date;
+    private final byte killType;
 
     public KillEntry(String attacker, String attackerTag, String victim, String victimTag, boolean war, Timestamp date, byte killType)
     {
@@ -52,11 +52,6 @@ public class KillEntry {
         return attacker;
     }
 
-    public void setAttacker(String attacker)
-    {
-        this.attacker = attacker;
-    }
-
     public String getAttackerTag()
     {
         return attackerTag;
@@ -71,11 +66,6 @@ public class KillEntry {
     public boolean isWar()
     {
         return war;
-    }
-
-    public void setWar(boolean war)
-    {
-        this.war = war;
     }
 
     public Timestamp getDate()

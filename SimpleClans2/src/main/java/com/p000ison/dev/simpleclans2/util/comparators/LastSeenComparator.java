@@ -30,6 +30,8 @@ import java.util.Comparator;
  */
 public class LastSeenComparator implements Comparator<UpdateAble>, Serializable {
 
+    private static final long serialVersionUID = -8970594210472188200L;
+
     @Override
     public int compare(UpdateAble updateAble1, UpdateAble updateAble2)
     {
