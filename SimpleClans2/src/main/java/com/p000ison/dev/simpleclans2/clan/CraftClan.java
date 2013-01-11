@@ -1188,6 +1188,9 @@ public class CraftClan implements Clan, TableObject {
      */
     public void loadRanks(Set<CraftRank> ranks)
     {
+        if (this.ranks == null) {
+            this.ranks = new HashSet<Rank>();
+        }
         this.ranks.addAll(ranks);
     }
 

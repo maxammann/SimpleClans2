@@ -77,8 +77,13 @@ public class SCPlayerListener implements Listener {
             ((CraftClanPlayer) clanPlayer).updatePermissions();
             Clan clan = clanPlayer.getClan();
 
-            if (plugin.getSettingsManager().isMotdBBEnabled() && clanPlayer.isBBEnabled()) {
-                plugin.getDataManager().addResponse(new BBRetrieveResponse(plugin, player, clan, -1, plugin.getSettingsManager().getMotdBBLines(), false));
+            if (clan != null) {
+                if (plugin.getSettingsManager().isMotdBBEnabled() && clanPlayer.isBBEnabled()) {
+                    plugin.getDataManager().addResponse(new BBRetrieveResponse(plugin, player, clan, -1, plugin.getSettingsManager().getMotdBBLines(), false));
+                }
+
+                clan.updateLastAction();
+                clan.update();
             }
 
             clanPlayer.updateLastSeen();
