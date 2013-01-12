@@ -38,6 +38,11 @@ public class SimpleClansTest extends JavaPlugin implements Listener {
         getServer().getPluginManager().registerEvents(this, this);
     }
 
+    private void claims()
+    {
+
+    }
+
     @EventHandler
     private void onClanCreate(ClanCreateEvent event)
     {

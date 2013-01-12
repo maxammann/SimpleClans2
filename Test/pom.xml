@@ -46,6 +46,15 @@
                 </configuration>
             </plugin>
 
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+
             <!--Replace the build number in the plugin.yml-->
             <plugin>
                 <groupId>com.google.code.maven-replacer-plugin</groupId>
