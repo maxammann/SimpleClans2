@@ -21,6 +21,7 @@
 package com.p000ison.dev.simpleclans2.settings;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
+import com.p000ison.dev.simpleclans2.api.Configuration;
 import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.api.clan.Clan;
 import com.p000ison.dev.simpleclans2.clan.CraftClan;
@@ -35,12 +36,9 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.IllegalCharsetNameException;
 import java.nio.charset.UnsupportedCharsetException;
@@ -52,7 +50,7 @@ import java.util.logging.Level;
  */
 public class SettingsManager {
     private SimpleClans plugin;
-    private FileConfiguration config;
+    private Configuration config;
     private File configFile;
 
     private DatabaseConfiguration databaseConfiguration;
@@ -117,52 +115,23 @@ public class SettingsManager {
         this.plugin = plugin;
     }
 
-    private FileConfiguration loadConfig(File configFile, String defaultConfig)
-    {
-        YamlConfiguration config = new YamlConfiguration();
-        if (!configFile.exists() && !configFile.getParentFile().mkdir()) {
-            Logging.debug(Level.SEVERE, "Failed at creating SimpleClans folder!");
-        }
-
-        if (!configFile.exists()) {
-            try {
-                if (!configFile.createNewFile()) {
-                    Logging.debug(Level.SEVERE, "Failed at creating SimpleClans config!");
-                }
-            } catch (IOException e) {
-                Logging.debug(e, false);
-                return null;
-            }
-        }
-
-        try {
-            config.load(configFile);
-        } catch (IOException e) {
-            Logging.debug(e, false);
-            return null;
-        } catch (InvalidConfigurationException e) {
-            Logging.debug(Level.SEVERE, "Failed at loading config! Maybe the formatting is invalid! Check your config.yml: \n%s", e.getMessage());
-            return null;
-        }
-
-        InputStream defConfigStream = plugin.getResource(defaultConfig);
-
-        if (defConfigStream != null) {
-            YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
-            config.setDefaults(defConfig);
-        }
-        return config;
-    }
 
     public boolean init()
     {
-        this.config = loadConfig(this.configFile = new File(plugin.getDataFolder(), "config.yml"), "config.yml");
+        try {
+            this.config = new Configuration(this.configFile = new File(plugin.getDataFolder(), "config.yml"));
+            config.options().header("Available options for the 'build-channel' settings are rb and dev. Use 'rb' to update only recommended builds, dev to update to dev versions or beta to update only to beta builds!");
+            this.config.setDefault("config.yml", plugin);
+        } catch (IOException e) {
+            Logging.debug(e, false);
+        } catch (InvalidConfigurationException e) {
+            Logging.debug(Level.SEVERE, "Failed at loading config! Maybe the formatting is invalid! Check your config.yml: \n%s", e.getMessage());
+        }
+
         if (config == null) {
             return false;
         }
 
-        config.options().copyDefaults(true);
-        config.options().header("Available options for the 'build-channel' settings are rb and dev. Use 'rb' to update only recommended builds, dev to update to dev versions or beta to update only to beta builds!");
         save();
         load();
         return true;
@@ -378,7 +347,19 @@ public class SettingsManager {
     public void loadPermissions()
     {
         File permissionsFile = new File(plugin.getDataFolder(), "permissions.yml");
-        FileConfiguration permissionsConfig = loadConfig(permissionsFile, "permissions.yml");
+        Configuration permissionsConfig;
+        try {
+            permissionsConfig = new Configuration(permissionsFile);
+            permissionsConfig.setDefault("permissions.yml", plugin);
+
+            permissionsConfig.save();
+        } catch (IOException e) {
+            Logging.debug(e, false);
+            return;
+        } catch (InvalidConfigurationException e) {
+            Logging.debug(Level.SEVERE, "Failed at loading config! Maybe the formatting is invalid! Check your permissions.yml: \n%s", e.getMessage());
+            return;
+        }
 
         ConfigurationSection permissions = permissionsConfig.getConfigurationSection("permissions");
 
@@ -423,12 +404,6 @@ public class SettingsManager {
             ((CraftClan) clan).setupPermissions(permMap);
             ((CraftClan) clan).updatePermissions();
         }
-
-        try {
-            permissionsConfig.save(permissionsFile);
-        } catch (IOException e) {
-            Logging.debug(e, false);
-        }
     }
 
     private Map<String, Boolean> parsePermissions(List<String> permissions)
@@ -455,7 +430,7 @@ public class SettingsManager {
     public void save()
     {
         try {
-            config.save(configFile);
+            this.config.save();
         } catch (IOException e) {
             Logging.debug(e, false);
         }
@@ -463,8 +438,15 @@ public class SettingsManager {
 
     public void reload()
     {
-        plugin.reloadConfig();
-        config = plugin.getConfig();
+        try {
+            config.reload();
+        } catch (IOException e) {
+            Logging.debug(e, false);
+            return;
+        } catch (InvalidConfigurationException e) {
+            Logging.debug(Level.SEVERE, "Failed at loading config! Maybe the formatting is invalid! Check your config.yml: \n%s", e.getMessage());
+            return;
+        }
         load();
     }
 

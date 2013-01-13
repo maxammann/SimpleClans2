@@ -140,7 +140,7 @@
         </repository>
         <repository>
             <id>greatman-repo</id>
-            <url>http://repo.greatmancode.com/content/repositories/snapshots/</url>
+            <url>http://repo.greatmancode.com/content/repositories/releases/</url>
         </repository>
     </repositories>
 </project>

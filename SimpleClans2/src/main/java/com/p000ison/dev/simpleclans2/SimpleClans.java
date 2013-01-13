@@ -261,6 +261,13 @@ public class SimpleClans extends JavaPlugin implements SCCore {
             dataManager.close();
         }
 
+        for (Permission perm : getServer().getPluginManager().getPermissions()) {
+            if (perm.getName().startsWith("SC")) {
+                System.out.println(perm.getName());
+                getServer().getPluginManager().removePermission(perm.getName());
+            }
+        }
+
         Language.clear();
         Logging.close();
     }
@@ -439,6 +446,7 @@ public class SimpleClans extends JavaPlugin implements SCCore {
         return requestManager;
     }
 
+    @Override
     public CraftCommandManager getCommandManager()
     {
         return commandManager;
@@ -538,6 +546,10 @@ public class SimpleClans extends JavaPlugin implements SCCore {
 
     public void registerSimpleClansPermission(String name, Map<String, Boolean> permSet)
     {
+        if (getServer().getPluginManager().getPermission(name) != null) {
+            getServer().getPluginManager().removePermission(name.toLowerCase());
+        }
+
         getServer().getPluginManager().addPermission(new Permission(name, PermissionDefault.FALSE, permSet));
     }
 

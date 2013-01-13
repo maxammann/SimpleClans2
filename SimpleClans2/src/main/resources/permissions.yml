@@ -1,7 +1,7 @@
 permissions:
-  untrusted: [ ]
-  trusted: [ ]
-  leaders: [ ]
+  untrusted: []
+  trusted: []
+  leaders: []
   clans:
     clanId:
     - test.perm

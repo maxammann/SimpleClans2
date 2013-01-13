@@ -52,6 +52,7 @@ public class ReloadCommand extends GenericConsoleCommand {
         long start = System.currentTimeMillis();
 
         plugin.getSettingsManager().reload();
+        plugin.getSettingsManager().loadPermissions();
         plugin.getDataManager().getAutoSaver().run();
         plugin.getDataManager().importAll();
         plugin.getClanPlayerManager().updateOnlinePlayers();

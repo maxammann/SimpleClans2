@@ -127,15 +127,15 @@ public class DatabaseManager {
         long currentTime = System.currentTimeMillis();
         PreparedSelectQuery<CraftRank> rankQuery = database.<CraftRank>select().from(CraftRank.class).where().preparedEquals("clan").select().prepare();
 
-        Iterator<CraftClan> clanIterator = clans.iterator();
-        while (clanIterator.hasNext()) {
-            CraftClan clan = clanIterator.next();
+        Iterator<CraftClan> craftClanIterator = clans.iterator();
+        while (craftClanIterator.hasNext()) {
+            CraftClan clan = craftClanIterator.next();
             int maxInactiveDays = clan.isVerified() ? plugin.getSettingsManager().getPurgeInactiveClansDays() : plugin.getSettingsManager().getPurgeUnverifiedClansDays();
 
             if (DateHelper.differenceInDays(clan.getLastUpdated(), currentTime) > maxInactiveDays) {
                 Logging.debug("Purging clan %s because it was too long inactive! (id=%s)", clan.getTag(), clan.getID());
                 getDatabase().delete(clan);
-                clanIterator.remove();
+                craftClanIterator.remove();
             } else {
                 rankQuery.set(0, clan.getID());
                 clan.loadRanks(rankQuery.getResults(new HashSet<CraftRank>()));
@@ -165,17 +165,18 @@ public class DatabaseManager {
                 }
             } else {
                 ((CraftClan) cp.getClan()).addMemberInternally(cp);
+                cp.getClan().getSize();
             }
         }
 
         //purge all empty clan
-        clanIterator = clans.iterator();
+        Iterator<Clan> clanIterator = plugin.getClanManager().getModifyAbleClans().iterator();
         while (clanIterator.hasNext()) {
-            CraftClan clan = clanIterator.next();
+            Clan clan = clanIterator.next();
 
             if (clan.getSize() == 0) {
                 Logging.debug("Purging clan %s because it has 0 members! (id=%s)", clan.getTag(), clan.getID());
-                getDatabase().delete(clan);
+                getDatabase().delete((CraftClan) clan);
                 clanIterator.remove();
             }
         }
