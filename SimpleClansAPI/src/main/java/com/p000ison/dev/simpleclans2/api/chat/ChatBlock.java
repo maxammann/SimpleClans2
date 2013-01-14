@@ -51,8 +51,7 @@ public class ChatBlock {
      * @param column The column.
      * @return The align of this column.
      */
-    private Align getAlign(int column)
-    {
+    private Align getAlign(int column) {
         if (alignment == null) {
             return null;
         }
@@ -66,8 +65,7 @@ public class ChatBlock {
      * @param col The index of the column.
      * @return The width
      */
-    public double getMaxWidth(int col)
-    {
+    public double getMaxWidth(int col) {
         double maxWidth = 0;
 
         for (Row row : rows) {
@@ -83,8 +81,7 @@ public class ChatBlock {
     /**
      * Generates the sizes of each column.
      */
-    private void generateColumnSizes()
-    {
+    private void generateColumnSizes() {
         if (columnSizes == null) {
             // generate columns sizes
 
@@ -105,8 +102,7 @@ public class ChatBlock {
      *
      * @param sections An array of the sections of this row.
      */
-    public void addRow(Object... sections)
-    {
+    public void addRow(Object... sections) {
         StringBuilder[] builderSections = new StringBuilder[sections.length];
 
         for (int i = 0; i < sections.length; i++) {
@@ -122,8 +118,7 @@ public class ChatBlock {
         rows.add(new Row(builderSections));
     }
 
-    public void addRow(Row row)
-    {
+    public void addRow(Row row) {
         rows.add(row);
     }
 
@@ -134,8 +129,7 @@ public class ChatBlock {
      * @return Weather is was successfully.
      * @throws IllegalArgumentException If there are no rows added, or the alignment is miss-setted.
      */
-    public boolean sendBlock(CommandSender sender)
-    {
+    public boolean sendBlock(CommandSender sender) {
         if (rows.isEmpty()) {
             throw new IllegalArgumentException("No rows added!");
         } else if (alignment == null) {
@@ -205,6 +199,14 @@ public class ChatBlock {
         return true;
     }
 
+    public int getSize() {
+        return rows.size();
+    }
+
+    public boolean isEmpty() {
+        return getSize() == 0;
+    }
+
     /**
      * Sets the alignment of each row.
      * <p/>
@@ -219,13 +221,11 @@ public class ChatBlock {
      * @param alignment An array of alignments
      * @see com.p000ison.dev.simpleclans2.api.chat.Align
      */
-    public void setAlignment(Align... alignment)
-    {
+    public void setAlignment(Align... alignment) {
         this.alignment = alignment;
     }
 
-    public void clear()
-    {
+    public void clear() {
         this.rows.clear();
     }
 
@@ -235,8 +235,7 @@ public class ChatBlock {
      * @param text   The message to crop right.
      * @param length The lenght it of the section it should be crop right.
      */
-    public static void cropRight(StringBuilder text, double length)
-    {
+    public static void cropRight(StringBuilder text, double length) {
         if (text == null || text.length() == 0) {
             throw new IllegalArgumentException("The text can not be null or empty!");
         }
@@ -253,8 +252,7 @@ public class ChatBlock {
      * @param text   The message to crop left.
      * @param length The lenght it of the section it should be crop left.
      */
-    public static void cropLeft(StringBuilder text, double length)
-    {
+    public static void cropLeft(StringBuilder text, double length) {
         if (text == null || text.length() == 0) {
             throw new IllegalArgumentException("The text can not be null or empty!");
         }
@@ -270,8 +268,7 @@ public class ChatBlock {
      * @param text   The message to pad right.
      * @param length The lenght it of the section it should be pad right.
      */
-    public static void padRight(StringBuilder text, double length)
-    {
+    public static void padRight(StringBuilder text, double length) {
         if (text == null || text.length() == 0) {
             throw new IllegalArgumentException("The text can not be null or empty!");
         }
@@ -294,8 +291,7 @@ public class ChatBlock {
      * @param text   The message to pad left.
      * @param length The lenght it of the section it should be pad left.
      */
-    public static void padLeft(StringBuilder text, double length)
-    {
+    public static void padLeft(StringBuilder text, double length) {
         if (text == null || text.length() == 0) {
             throw new IllegalArgumentException("The text can not be null or empty!");
         }
@@ -322,8 +318,7 @@ public class ChatBlock {
      * @param text       The message to center.
      * @param lineLength The lenght it of the section it should be centered in.
      */
-    public static void center(StringBuilder text, double lineLength)
-    {
+    public static void center(StringBuilder text, double lineLength) {
         double length = msgLength(text);
         double diff = lineLength - length;
 
@@ -350,8 +345,7 @@ public class ChatBlock {
      * @param text The text to check.
      * @return The length of the string.
      */
-    public static int msgLength(StringBuilder text)
-    {
+    public static int msgLength(StringBuilder text) {
         int length = 0;
 
         // Loop through all the characters, skipping any color characters and their following color codes
@@ -385,8 +379,7 @@ public class ChatBlock {
      * @param character The character to check
      * @return The lenght of the char
      */
-    public static int charLength(char character)
-    {
+    public static int charLength(char character) {
         if ("i.:,;|!".indexOf(character) != -1) {
             return 2;
         } else if ("l'".indexOf(character) != -1) {
@@ -412,8 +405,7 @@ public class ChatBlock {
      * @param sender  The retriever
      * @param message The message
      */
-    public static void sendMessage(CommandSender sender, String message)
-    {
+    public static void sendMessage(CommandSender sender, String message) {
         if (prefix != null) {
             message = prefix + message;
         }
@@ -427,8 +419,7 @@ public class ChatBlock {
      * @param sender   The retriever
      * @param messages The message
      */
-    public static void sendMessage(CommandSender sender, String... messages)
-    {
+    public static void sendMessage(CommandSender sender, String... messages) {
         for (int i = 0; i < messages.length; i++) {
             String message = messages[i];
             if (prefix != null) {
@@ -444,8 +435,7 @@ public class ChatBlock {
      *
      * @param receiver The retriever.
      */
-    public static void sendBlank(CommandSender receiver)
-    {
+    public static void sendBlank(CommandSender receiver) {
         receiver.sendMessage("");
     }
 
@@ -455,8 +445,7 @@ public class ChatBlock {
      * @param receiver The retriever.
      * @param amount   How oftern this should be sent
      */
-    public static void sendBlank(CommandSender receiver, int amount)
-    {
+    public static void sendBlank(CommandSender receiver, int amount) {
         for (int i = 0; i < amount; i++) {
             sendBlank(receiver);
         }
@@ -468,8 +457,7 @@ public class ChatBlock {
      * @param receiver The retriever
      * @param message  The message.
      */
-    public static void sendSingle(CommandSender receiver, String message)
-    {
+    public static void sendSingle(CommandSender receiver, String message) {
         receiver.sendMessage("");
     }
 
@@ -478,8 +466,7 @@ public class ChatBlock {
      *
      * @param prefix The prefix to set or <strong>null</strong> if you do not like one
      */
-    public static void setPrefix(String prefix)
-    {
+    public static void setPrefix(String prefix) {
         ChatBlock.prefix = prefix;
     }
 
@@ -489,8 +476,7 @@ public class ChatBlock {
      * @param text The message to colorize
      * @return The colored string
      */
-    public static String parseColors(String text)
-    {
+    public static String parseColors(String text) {
         if (text == null) {
             return null;
         } else if (text.isEmpty()) {
@@ -523,8 +509,7 @@ public class ChatBlock {
      * @param head     The head
      * @param subtitle The sub-title
      */
-    public static void sendHead(CommandSender sender, String head, String subtitle)
-    {
+    public static void sendHead(CommandSender sender, String head, String subtitle) {
         StringBuilder header = new StringBuilder(head).append(' ');
 
         if (subtitle != null) {
@@ -558,8 +543,7 @@ public class ChatBlock {
      *
      * @param headColor The color to set
      */
-    public static void setHeadColor(ChatColor headColor)
-    {
+    public static void setHeadColor(ChatColor headColor) {
         ChatBlock.headColor = headColor;
     }
 
@@ -568,8 +552,7 @@ public class ChatBlock {
      *
      * @param subColor The color to set
      */
-    public static void setSubColor(ChatColor subColor)
-    {
+    public static void setSubColor(ChatColor subColor) {
         ChatBlock.subColor = subColor;
     }
 
@@ -578,8 +561,7 @@ public class ChatBlock {
      *
      * @return The heading color
      */
-    public static ChatColor getHeadingColor()
-    {
+    public static ChatColor getHeadingColor() {
         return headColor;
     }
 
@@ -588,8 +570,7 @@ public class ChatBlock {
      *
      * @return The sub color
      */
-    public static ChatColor getSubPageColor()
-    {
+    public static ChatColor getSubPageColor() {
         return subColor;
     }
 
@@ -601,8 +582,7 @@ public class ChatBlock {
      * @param colorChars The color characters, in most cases § or &
      * @return The color in a {@link org.bukkit.ChatColor} instance
      */
-    public static ChatColor getLastColors(String input, int from, char... colorChars)
-    {
+    public static ChatColor getLastColors(String input, int from, char... colorChars) {
         Validate.notNull(input, "The input must not be null!");
         Validate.notEmpty(input, "The input must not be empty!");
 
@@ -649,8 +629,7 @@ public class ChatBlock {
      * @param input The input to clean
      * @return The cleaned string
      */
-    public static String cleanString(String input)
-    {
+    public static String cleanString(String input) {
         return ChatColor.stripColor(input).toLowerCase(Locale.US);
     }
 }

@@ -40,8 +40,7 @@ import java.util.Set;
  */
 public class VitalsCommand extends GenericPlayerCommand {
 
-    public VitalsCommand(SimpleClans plugin)
-    {
+    public VitalsCommand(SimpleClans plugin) {
         super("Vitals", plugin);
         setArgumentRange(0, 0);
         setUsages(MessageFormat.format(Language.getTranslation("usage.vitals"), plugin.getSettingsManager().getClanCommand()));
@@ -50,8 +49,7 @@ public class VitalsCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public String getMenu(ClanPlayer cp)
-    {
+    public String getMenu(ClanPlayer cp) {
         if (cp != null && cp.isTrusted() && cp.getClan().isVerified()) {
             return MessageFormat.format(Language.getTranslation("menu.vitals"), plugin.getSettingsManager().getClanCommand());
         }
@@ -59,8 +57,7 @@ public class VitalsCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public void execute(Player player, String[] args)
-    {
+    public void execute(Player player, String[] args) {
         ChatColor headColor = plugin.getSettingsManager().getHeaderPageColor();
 
 
@@ -130,9 +127,10 @@ public class VitalsCommand extends GenericPlayerCommand {
                             }
                         }
 
-                        chatBlock.sendBlock(player);
+                        if (!chatBlock.isEmpty()) {
+                            chatBlock.sendBlock(player);
+                        }
                     }
-
 
                     ChatBlock.sendBlank(player);
 
