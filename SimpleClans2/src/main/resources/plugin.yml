@@ -227,14 +227,14 @@ permissions:
       simpleclans.leader.war: true
       simpleclans.leader.home-set: true
       simpleclans.leader.home-regroup: true
-      simpleclans.leader.setrank: true
+      simpleclans.leader.rank.assign: true
+      simpleclans.leader.rank.unassign: true
       simpleclans.leader.rank.permissions.add: true
       simpleclans.leader.rank.permissions.remove: true
       simpleclans.leader.rank.permissions.list: true
       simpleclans.leader.rank.create: true
       simpleclans.leader.rank.delete: true
       simpleclans.leader.rank.detail: true
-      simpleclans.leader.rank.set: true
       simpleclans.leader.rank.list: true
   simpleclans.admin.*:
     description: Permissions for admins

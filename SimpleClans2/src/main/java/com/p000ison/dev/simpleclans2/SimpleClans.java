@@ -401,10 +401,6 @@ public class SimpleClans extends JavaPlugin implements SCCore {
         return true;
     }
 
-    public SCCore getCore() {
-        return this;
-    }
-
     public JBDCDatabase getClanDatabase() {
         if (dataManager == null) {
             return null;
