@@ -102,8 +102,7 @@ public class SimpleClans extends JavaPlugin implements SCCore {
     private static Economy economy;
 
     @Override
-    public void onEnable()
-    {
+    public void onEnable() {
         long startup = System.currentTimeMillis();
 
         try {
@@ -175,13 +174,11 @@ public class SimpleClans extends JavaPlugin implements SCCore {
 //            Logging.debug(e, true);
 //        }
 //    }
-    public void broadcast(String msg)
-    {
+    public void broadcast(String msg) {
         getServer().broadcastMessage(ChatColor.AQUA.toString() + '[' + getSettingsManager().getServerName() + ChatColor.AQUA + ']' + msg);
     }
 
-    public void disable()
-    {
+    public void disable() {
         if (dataManager != null) {
             AutoSaver saver = dataManager.getAutoSaver();
             if (saver != null) {
@@ -199,8 +196,7 @@ public class SimpleClans extends JavaPlugin implements SCCore {
      *
      * @return Weather there is a update for this plugin.
      */
-    public boolean isUpdate()
-    {
+    public boolean isUpdate() {
         return updater != null && updater.isUpdate();
     }
 
@@ -209,13 +205,11 @@ public class SimpleClans extends JavaPlugin implements SCCore {
      *
      * @return Weather a update was performed or not.
      */
-    public boolean update()
-    {
+    public boolean update() {
         return updater != null && updater.update();
     }
 
-    public void setupMetrics()
-    {
+    public void setupMetrics() {
         try {
             Metrics metrics = new Metrics(this);
             Metrics.Graph authGraph = metrics.createGraph("How many servers run in offline mode?");
@@ -230,16 +224,14 @@ public class SimpleClans extends JavaPlugin implements SCCore {
             if (getDataManager().getDatabase() instanceof MySQLDatabase) {
                 databaseEngines.addPlotter(new Metrics.Plotter("MySQL") {
                     @Override
-                    public int getValue()
-                    {
+                    public int getValue() {
                         return 1;
                     }
                 });
             } else if (getDataManager().getDatabase() instanceof SQLiteDatabase) {
                 databaseEngines.addPlotter(new Metrics.Plotter("SQLite") {
                     @Override
-                    public int getValue()
-                    {
+                    public int getValue() {
                         return 1;
                     }
                 });
@@ -252,8 +244,7 @@ public class SimpleClans extends JavaPlugin implements SCCore {
     }
 
     @Override
-    public void onDisable()
-    {
+    public void onDisable() {
         //save data
         //close the connection to the database
         if (dataManager != null) {
@@ -272,16 +263,14 @@ public class SimpleClans extends JavaPlugin implements SCCore {
         Logging.close();
     }
 
-    private void registerEvents()
-    {
+    private void registerEvents() {
         PluginManager pm = getServer().getPluginManager();
 
         pm.registerEvents(new SCPlayerListener(this), this);
         pm.registerEvents(new SCEntityListener(this), this);
     }
 
-    private boolean setupEconomy()
-    {
+    private boolean setupEconomy() {
 
         if (getServer().getPluginManager().getPlugin("Vault") == null) {
             return false;
@@ -297,8 +286,7 @@ public class SimpleClans extends JavaPlugin implements SCCore {
     }
 
 
-    private void loadManagers()
-    {
+    private void loadManagers() {
         clanManager = new CraftClanManager(this);
         clanPlayerManager = new CraftClanPlayerManager(this);
         settingsManager.loadPermissions();
@@ -313,6 +301,7 @@ public class SimpleClans extends JavaPlugin implements SCCore {
             }
             Logging.debug("----------------------------------------------");
             disable();
+            return;
         }
 
         requestManager = new CraftRequestManager(this);
@@ -324,8 +313,7 @@ public class SimpleClans extends JavaPlugin implements SCCore {
         setupCommands();
     }
 
-    private void setupCommands()
-    {
+    private void setupCommands() {
         commandManager.addCommand(new ListCommand(this));
         commandManager.addCommand(new CreateCommand(this));
         commandManager.addCommand(new ProfileCommand(this));
@@ -401,8 +389,11 @@ public class SimpleClans extends JavaPlugin implements SCCore {
     }
 
     @Override
-    public boolean onCommand(org.bukkit.command.CommandSender sender, org.bukkit.command.Command command, java.lang.String label, java.lang.String[] args)
-    {
+    public boolean onCommand(org.bukkit.command.CommandSender sender, org.bukkit.command.Command command, java.lang.String label, java.lang.String[] args) {
+        if (commandManager == null) {
+            sender.sendMessage("SimpleClans did not load correctly! Please check log!");
+            return true;
+        }
         Command.Type type = Command.Type.getByCommand(command.getName());
         if (type != null) {
             commandManager.execute(sender, command.getName(), type, args);
@@ -410,13 +401,11 @@ public class SimpleClans extends JavaPlugin implements SCCore {
         return true;
     }
 
-    public SCCore getCore()
-    {
+    public SCCore getCore() {
         return this;
     }
 
-    public JBDCDatabase getClanDatabase()
-    {
+    public JBDCDatabase getClanDatabase() {
         if (dataManager == null) {
             return null;
         }
@@ -424,36 +413,30 @@ public class SimpleClans extends JavaPlugin implements SCCore {
     }
 
     @Override
-    public CraftClanManager getClanManager()
-    {
+    public CraftClanManager getClanManager() {
         return clanManager;
     }
 
     @Override
-    public CraftClanPlayerManager getClanPlayerManager()
-    {
+    public CraftClanPlayerManager getClanPlayerManager() {
         return clanPlayerManager;
     }
 
-    public SettingsManager getSettingsManager()
-    {
+    public SettingsManager getSettingsManager() {
         return settingsManager;
     }
 
     @Override
-    public CraftRequestManager getRequestManager()
-    {
+    public CraftRequestManager getRequestManager() {
         return requestManager;
     }
 
     @Override
-    public CraftCommandManager getCommandManager()
-    {
+    public CraftCommandManager getCommandManager() {
         return commandManager;
     }
 
-    public DatabaseManager getDataManager()
-    {
+    public DatabaseManager getDataManager() {
         return dataManager;
     }
 
@@ -465,8 +448,7 @@ public class SimpleClans extends JavaPlugin implements SCCore {
      * @return Weather it was successfully.
      * @throws RuntimeException If something was wrong
      */
-    public static boolean withdrawBalance(String player, double balance)
-    {
+    public static boolean withdrawBalance(String player, double balance) {
         EconomyResponse response = economy.withdrawPlayer(player, balance);
 
         if (!response.transactionSuccess()) {
@@ -483,8 +465,7 @@ public class SimpleClans extends JavaPlugin implements SCCore {
      * @return Weather it was successfully.
      * @throws RuntimeException If something was wrong
      */
-    public static boolean depositBalance(String player, double balance)
-    {
+    public static boolean depositBalance(String player, double balance) {
         EconomyResponse response = economy.depositPlayer(player, balance);
 
         if (!response.transactionSuccess()) {
@@ -494,49 +475,40 @@ public class SimpleClans extends JavaPlugin implements SCCore {
         return true;
     }
 
-    public static double getBalance(String player)
-    {
+    public static double getBalance(String player) {
         return economy.getBalance(player);
     }
 
-    public static boolean hasEconomy()
-    {
+    public static boolean hasEconomy() {
         return economy != null;
     }
 
-    public static Economy getEconomy()
-    {
+    public static Economy getEconomy() {
         return economy;
     }
 
     @Override
-    public RankManager getRankManager()
-    {
+    public RankManager getRankManager() {
         return rankManager;
     }
 
-    public PreciousStonesSupport getPreciousStonesSupport()
-    {
+    public PreciousStonesSupport getPreciousStonesSupport() {
         return preciousStonesSupport;
     }
 
-    public TeleportManager getTeleportManager()
-    {
+    public TeleportManager getTeleportManager() {
         return teleportManager;
     }
 
-    public SpoutSupport getSpoutSupport()
-    {
+    public SpoutSupport getSpoutSupport() {
         return spoutSupport;
     }
 
-    public void serverAnnounce(String message)
-    {
+    public void serverAnnounce(String message) {
         serverAnnounceRaw(ChatBlock.parseColors(this.getSettingsManager().getDefaultAnnounce().replace("+message", message)));
     }
 
-    public static void serverAnnounceRaw(String message)
-    {
+    public static void serverAnnounceRaw(String message) {
         if (message == null) {
             return;
         }
@@ -544,8 +516,7 @@ public class SimpleClans extends JavaPlugin implements SCCore {
         Bukkit.broadcastMessage(message);
     }
 
-    public void registerSimpleClansPermission(String name, Map<String, Boolean> permSet)
-    {
+    public void registerSimpleClansPermission(String name, Map<String, Boolean> permSet) {
         if (getServer().getPluginManager().getPermission(name) != null) {
             getServer().getPluginManager().removePermission(name.toLowerCase());
         }
@@ -553,8 +524,7 @@ public class SimpleClans extends JavaPlugin implements SCCore {
         getServer().getPluginManager().addPermission(new Permission(name, PermissionDefault.FALSE, permSet));
     }
 
-    public ExceptionReporterTask getExceptionReporter()
-    {
+    public ExceptionReporterTask getExceptionReporter() {
         return exceptionReporterTask;
     }
 }
