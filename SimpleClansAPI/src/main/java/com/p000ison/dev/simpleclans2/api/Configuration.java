@@ -23,7 +23,7 @@ public class Configuration extends YamlConfiguration {
 
     private void load() throws IOException, InvalidConfigurationException
     {
-        if (!file.exists() && !file.getParentFile().mkdir()) {
+        if (!file.getParentFile().exists() && !file.getParentFile().mkdir()) {
             throw new IOException("Failed at creating SimpleClans folder!");
         }
 
