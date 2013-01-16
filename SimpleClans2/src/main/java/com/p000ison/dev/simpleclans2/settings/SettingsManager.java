@@ -51,7 +51,6 @@ import java.util.logging.Level;
 public class SettingsManager {
     private SimpleClans plugin;
     private Configuration config;
-    private File configFile;
 
     private DatabaseConfiguration databaseConfiguration;
 
@@ -119,7 +118,7 @@ public class SettingsManager {
     public boolean init()
     {
         try {
-            this.config = new Configuration(this.configFile = new File(plugin.getDataFolder(), "config.yml"));
+            this.config = new Configuration(new File(plugin.getDataFolder(), "config.yml"));
             config.options().header("Available options for the 'build-channel' settings are rb and dev. Use 'rb' to update only recommended builds, dev to update to dev versions or beta to update only to beta builds!");
             this.config.setDefault("config.yml", plugin);
         } catch (IOException e) {

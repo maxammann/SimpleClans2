@@ -42,37 +42,31 @@ import java.util.Map;
 public class SimpleClansTest extends JavaPlugin implements Listener {
 
     @Override
-    public void onEnable()
-    {
+    public void onEnable() {
         getServer().getPluginManager().registerEvents(this, this);
     }
 
-    private void claims()
-    {
+    private void claims() {
 
     }
 
     @EventHandler
-    private void onClanCreate(ClanCreateEvent event)
-    {
+    private void onClanCreate(ClanCreateEvent event) {
         System.out.println(event.getEventName());
     }
 
     @EventHandler
-    private void onClanPlayerCreate(ClanPlayerCreateEvent event)
-    {
+    private void onClanPlayerCreate(ClanPlayerCreateEvent event) {
         System.out.println(event.getEventName());
     }
 
     @EventHandler
-    private void onClanRelationBreak(ClanRelationBreakEvent event)
-    {
+    private void onClanRelationBreak(ClanRelationBreakEvent event) {
         System.out.println(event.getEventName());
     }
 
     @EventHandler
-    private void onClanRelationBreak(ClanRelationCreateEvent event)
-    {
+    private void onClanRelationBreak(ClanRelationCreateEvent event) {
         System.out.println(event.getEventName());
     }
 

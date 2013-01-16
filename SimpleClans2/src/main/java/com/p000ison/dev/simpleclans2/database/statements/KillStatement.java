@@ -36,7 +36,6 @@ import java.sql.Timestamp;
 @DatabaseTable(name = "sc2_kills")
 public class KillStatement implements Executable, TableObject {
 
-    @SuppressWarnings("unused")
     @DatabaseColumn(position = 0, databaseName = "id", id = true)
     private long id;
     @DatabaseColumn(position = 1, databaseName = "attacker")

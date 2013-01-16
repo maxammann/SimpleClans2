@@ -119,6 +119,9 @@ public class LanguageMap {
             while ((realLength = input.read(buffer)) > 0) {
                 output.write(buffer, 0, realLength);
             }
+
+            output.flush();
+            output.close();
         } catch (IOException e) {
             throw e;
         } finally {

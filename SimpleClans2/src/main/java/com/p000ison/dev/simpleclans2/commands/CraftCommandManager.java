@@ -45,33 +45,28 @@ public class CraftCommandManager implements CommandManager {
     private List<Command> commands;
     private final SimpleClans plugin;
 
-    public CraftCommandManager(SimpleClans plugin)
-    {
+    public CraftCommandManager(SimpleClans plugin) {
         this.plugin = plugin;
         commands = new ArrayList<Command>();
     }
 
     @Override
-    public void addCommand(Command command)
-    {
+    public void addCommand(Command command) {
         commands.add(command);
     }
 
     @Override
-    public void insertCommand(int position, Command command)
-    {
+    public void insertCommand(int position, Command command) {
         commands.add(position, command);
     }
 
     @Override
-    public void removeCommand(Command command)
-    {
+    public void removeCommand(Command command) {
         commands.remove(command);
     }
 
     @Override
-    public Command getCommand(String name)
-    {
+    public Command getCommand(String name) {
         for (Command cmd : commands) {
             if (cmd.getName().equalsIgnoreCase(name)) {
                 return cmd;
@@ -82,13 +77,11 @@ public class CraftCommandManager implements CommandManager {
     }
 
     @Override
-    public List<Command> getCommands()
-    {
+    public List<Command> getCommands() {
         return commands;
     }
 
-    public synchronized void execute(CommandSender sender, String command, Command.Type cmdType, String[] args)
-    {
+    public synchronized void execute(CommandSender sender, String command, Command.Type cmdType, String[] args) {
         try {
             String identifier;
             String[] realArgs;
@@ -106,13 +99,22 @@ public class CraftCommandManager implements CommandManager {
             if (args.length == 0) {
                 displayHelp(sender, cmdType, 0);
                 return;
-            } else if (args.length > 0 && args[0].equals("help")) {
-                if (args.length == 2) {
-                    displayHelp(sender, cmdType, getPage(args[1]));
-                    return;
-                } else {
-                    displayHelp(sender, cmdType, 0);
-                    return;
+            } else if (args.length > 0) {
+                if (args[0].equals("help")) {
+                    if (args.length == 2) {
+                        displayHelp(sender, cmdType, getPage(args[1]));
+                        return;
+                    } else {
+                        displayHelp(sender, cmdType, 0);
+                        return;
+                    }
+                } else if (args.length == 1) {
+                    try {
+                        int page = Integer.parseInt(args[0]);
+                        displayHelp(sender, cmdType, page - 1);
+                        return;
+                    } catch (NumberFormatException ignored) {
+                    }
                 }
             }
 
@@ -170,8 +172,7 @@ public class CraftCommandManager implements CommandManager {
         }
     }
 
-    private void displayCommandHelp(Command cmd, CommandSender sender)
-    {
+    private void displayCommandHelp(Command cmd, CommandSender sender) {
         ChatBlock.sendMessage(sender, "§cCommand:§e " + cmd.getName());
         String[] usages = cmd.getUsages();
         StringBuilder sb = new StringBuilder("§cUsage:§e ").append(usages[0]).append("\n");
@@ -183,8 +184,7 @@ public class CraftCommandManager implements CommandManager {
         ChatBlock.sendMessage(sender, sb.toString());
     }
 
-    private void displayHelp(CommandSender sender, Command.Type commandType, int page)
-    {
+    private void displayHelp(CommandSender sender, Command.Type commandType, int page) {
         List<Command> sortCommands = plugin.getCommandManager().getCommands();
         List<String> commands = new ArrayList<String>();
 
@@ -247,8 +247,7 @@ public class CraftCommandManager implements CommandManager {
         ChatBlock.sendBlank(sender, 2);
     }
 
-    public int[] getBoundings(int completeSize, int page)
-    {
+    public int[] getBoundings(int completeSize, int page) {
         int numPages = completeSize / plugin.getSettingsManager().getElementsPerPage();
 
         if (completeSize % plugin.getSettingsManager().getElementsPerPage() != 0) {
@@ -271,16 +270,14 @@ public class CraftCommandManager implements CommandManager {
         return new int[]{start, end, numPages, page};
     }
 
-    public static int getPage(String[] args)
-    {
+    public static int getPage(String[] args) {
         if (args.length == 1) {
             return getPage(args[0]);
         }
         return 0;
     }
 
-    public static int getPage(String pageString)
-    {
+    public static int getPage(String pageString) {
         try {
             int page = Integer.parseInt(pageString) - 1;
             if (page < 0) {

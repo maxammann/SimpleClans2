@@ -51,10 +51,10 @@ public class TeleportTask implements Runnable {
             return;
         }
 
-        Iterator players = waitingPlayers.iterator();
+        Iterator<TeleportState> players = waitingPlayers.iterator();
 
         while (players.hasNext()) {
-            TeleportState state = (TeleportState) players.next();
+            TeleportState state = players.next();
 
             if (state.isProcessing()) {
                 continue;

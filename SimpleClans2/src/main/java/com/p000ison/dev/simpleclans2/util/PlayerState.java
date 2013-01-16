@@ -61,13 +61,11 @@ public class PlayerState {
     }
 
 
-    public PlayerState(Player player)
-    {
+    public PlayerState(Player player) {
         this.player = player;
     }
 
-    public String getArmor(String helmetSign, String chestplateSign, String leggingsSign, String bootsSign)
-    {
+    public String getArmor(String helmetSign, String chestplateSign, String leggingsSign, String bootsSign) {
         StringBuilder armorString = new StringBuilder();
         ChatColor color = ChatColor.BLACK;
         PlayerInventory inventory = player.getInventory();
@@ -179,8 +177,7 @@ public class PlayerState {
         return armorString.length() == 0 ? ChatColor.BLACK + "Empty" : armorString.toString();
     }
 
-    public String getWeapons(String sword, String bow, String arrow)
-    {
+    public String getWeapons(String sword, String bow, String arrow) {
         ItemStack[] contents = player.getInventory().getContents();
         StringBuilder weapons = new StringBuilder();
 
@@ -217,6 +214,8 @@ public class PlayerState {
                     type = arrow;
                     color = ChatColor.GOLD;
                     break;
+                default:
+                    return "Empty";
             }
 
             if (type != null && color != null) {
@@ -231,8 +230,7 @@ public class PlayerState {
         return weapons.length() == 0 ? ChatColor.BLACK + "Empty" : weapons.toString();
     }
 
-    public String getFood(String format)
-    {
+    public String getFood(String format) {
         ItemStack[] contents = player.getInventory().getContents();
 
         double food = 0;
@@ -256,20 +254,17 @@ public class PlayerState {
         return String.format(format, DECIMAL_FORMAT.format(food));
     }
 
-    public String getHealth()
-    {
+    public String getHealth() {
         int health = player.getHealth();
         return getBar(health);
     }
 
-    public String getHunger()
-    {
+    public String getHunger() {
         int hunger = player.getFoodLevel();
         return getBar(hunger);
     }
 
-    private static String getBar(int amount)
-    {
+    private static String getBar(int amount) {
         StringBuilder bar = new StringBuilder();
 
         if (amount > 0.80 * amount) {

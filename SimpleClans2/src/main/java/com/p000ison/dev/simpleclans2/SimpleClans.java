@@ -186,8 +186,6 @@ public class SimpleClans extends JavaPlugin implements SCCore {
             }
         }
 
-        economy = null;
-
         getServer().getPluginManager().disablePlugin(this);
     }
 
