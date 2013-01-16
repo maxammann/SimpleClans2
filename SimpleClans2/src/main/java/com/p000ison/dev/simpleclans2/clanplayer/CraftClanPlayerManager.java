@@ -81,8 +81,6 @@ public class CraftClanPlayerManager implements ClanPlayerManager {
 
         clanPlayer.update();
 
-        plugin.getServer().getPluginManager().callEvent(new ClanPlayerCreateEvent(clanPlayer));
-
         return clanPlayer;
     }
 
