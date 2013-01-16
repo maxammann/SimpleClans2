@@ -36,14 +36,12 @@ public class SettingsManager {
     private boolean depreciationMode;
     private Set<Variable> variables = new HashSet<Variable>();
 
-    public SettingsManager(SimpleClansChat plugin)
-    {
+    public SettingsManager(SimpleClansChat plugin) {
         this.plugin = plugin;
         init();
     }
 
-    private void init()
-    {
+    private void init() {
         this.config = this.plugin.getConfig();
 
         this.config.options().copyDefaults(true);
@@ -51,15 +49,13 @@ public class SettingsManager {
         load();
     }
 
-    public void reload()
-    {
+    public void reload() {
         this.plugin.reloadConfig();
         this.config = this.plugin.getConfig();
         load();
     }
 
-    public void load()
-    {
+    public void load() {
         ConfigurationSection settings = this.config.getConfigurationSection("settings");
 
         this.compatibilityMode = settings.getBoolean("compatibility-mode");
@@ -82,8 +78,7 @@ public class SettingsManager {
         }
     }
 
-    public Variable getVariable(String query)
-    {
+    public Variable getVariable(String query) {
         for (Variable variable : variables) {
             if (variable.getVariable().equals(query)) {
                 return variable;
@@ -92,38 +87,31 @@ public class SettingsManager {
         return null;
     }
 
-    public void save()
-    {
+    public void save() {
         this.plugin.saveConfig();
     }
 
-    public boolean isCompatibilityMode()
-    {
+    public boolean isCompatibilityMode() {
         return this.compatibilityMode;
     }
 
-    public boolean isCompleteMode()
-    {
+    public boolean isCompleteMode() {
         return this.completeMode;
     }
 
-    public String getCompleteModeFormat()
-    {
+    public String getCompleteModeFormat() {
         return this.completeModeFormat;
     }
 
-    public String getClanChannelFormat()
-    {
+    public String getClanChannelFormat() {
         return clanChannelFormat;
     }
 
-    public String getAllyChannelFormat()
-    {
+    public String getAllyChannelFormat() {
         return allyChannelFormat;
     }
 
-    public boolean isDepreciationMode()
-    {
+    public boolean isDepreciationMode() {
         return depreciationMode;
     }
 }

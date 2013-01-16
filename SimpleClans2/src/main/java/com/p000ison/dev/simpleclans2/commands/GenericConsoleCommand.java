@@ -25,8 +25,7 @@ import org.bukkit.command.CommandSender;
 
 public abstract class GenericConsoleCommand extends GenericCommand {
 
-    public GenericConsoleCommand(String name, SimpleClans plugin)
-    {
+    public GenericConsoleCommand(String name, SimpleClans plugin) {
         super(name, plugin);
     }
 

@@ -37,26 +37,22 @@ public abstract class MultipleRequest extends AbstractRequest {
     private short denies = 0;
     private short abstains = 0;
 
-    public MultipleRequest(SimpleClans plugin, Set<ClanPlayer> acceptors, ClanPlayer requester)
-    {
+    public MultipleRequest(SimpleClans plugin, Set<ClanPlayer> acceptors, ClanPlayer requester) {
         super(plugin, requester);
         this.acceptors = acceptors;
     }
 
-    public Set<ClanPlayer> getAcceptors()
-    {
+    public Set<ClanPlayer> getAcceptors() {
         return Collections.unmodifiableSet(acceptors);
     }
 
     @Override
-    public boolean isClanPlayerInvolved(ClanPlayer clanPlayer)
-    {
+    public boolean isClanPlayerInvolved(ClanPlayer clanPlayer) {
         return requester.equals(clanPlayer) || acceptors.contains(clanPlayer);
     }
 
     @Override
-    public boolean isClanInvolved(Clan clan)
-    {
+    public boolean isClanInvolved(Clan clan) {
         Clan requesterClan = requester.getClan();
 
         if (clan.equals(requesterClan)) {
@@ -77,66 +73,55 @@ public abstract class MultipleRequest extends AbstractRequest {
     }
 
     @Override
-    public void accept()
-    {
+    public void accept() {
         accepts++;
     }
 
     @Override
-    public void deny()
-    {
+    public void deny() {
         denies++;
     }
 
     @Override
-    public void abstain()
-    {
+    public void abstain() {
         abstains++;
     }
 
     @Override
-    public boolean checkRequest()
-    {
+    public boolean checkRequest() {
         return accepts * 2 > acceptors.size();
     }
 
     @Override
-    public boolean hasEveryoneVoted()
-    {
+    public boolean hasEveryoneVoted() {
         return accepts + denies + abstains >= acceptors.size();
     }
 
-    public int getAccepts()
-    {
+    public int getAccepts() {
         return accepts;
     }
 
-    public int getAbstains()
-    {
+    public int getAbstains() {
         return abstains;
     }
 
-    public int getDenies()
-    {
+    public int getDenies() {
         return denies;
     }
 
     @Override
-    public void announceMessage(String message)
-    {
+    public void announceMessage(String message) {
         sendAcceptorMessage(message);
         sendRequesterMessage(message);
     }
 
     @Override
-    public boolean isAcceptor(ClanPlayer clanPlayer)
-    {
+    public boolean isAcceptor(ClanPlayer clanPlayer) {
         return acceptors.contains(clanPlayer);
     }
 
     @Override
-    public void sendAcceptorMessage(String message)
-    {
+    public void sendAcceptorMessage(String message) {
         for (ClanPlayer clanPlayer : acceptors) {
             Player player = clanPlayer.toPlayer();
 
@@ -149,8 +134,7 @@ public abstract class MultipleRequest extends AbstractRequest {
     }
 
     @Override
-    public void sendRequesterMessage(String message)
-    {
+    public void sendRequesterMessage(String message) {
         Player player = requester.toPlayer();
 
         if (player != null) {
@@ -159,26 +143,22 @@ public abstract class MultipleRequest extends AbstractRequest {
     }
 
     @Override
-    public int getTimesVoted()
-    {
+    public int getTimesVoted() {
         return accepts + denies + abstains;
     }
 
     @Override
-    public int getAcceptorsSize()
-    {
+    public int getAcceptorsSize() {
         return acceptors.size();
     }
 
     @Override
-    public boolean isClanPlayerInvolved(Player player)
-    {
+    public boolean isClanPlayerInvolved(Player player) {
         return isAcceptor(player) || isRequester(player);
     }
 
     @Override
-    public boolean isAcceptor(Player player)
-    {
+    public boolean isAcceptor(Player player) {
         String playerName = player.getName();
         for (ClanPlayer clanPlayer : acceptors) {
             String name = clanPlayer.getName();

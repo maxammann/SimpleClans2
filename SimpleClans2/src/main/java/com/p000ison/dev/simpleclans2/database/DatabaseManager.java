@@ -61,8 +61,7 @@ public class DatabaseManager {
     private JBDCPreparedQuery deleteRankById;
     private JBDCPreparedQuery retrieveBBLimit, insertBB, purgeBB;
 
-    public DatabaseManager(SimpleClans plugin) throws DatabaseConnectionException
-    {
+    public DatabaseManager(SimpleClans plugin) throws DatabaseConnectionException {
         this.plugin = plugin;
 
         Database.setLogger(Logging.getInstance());
@@ -109,8 +108,7 @@ public class DatabaseManager {
         importAll();
     }
 
-    public void close()
-    {
+    public void close() {
         retrieveKillsPerPlayer.close();
         retrieveMostKills.close();
         deleteRankById.close();
@@ -121,8 +119,7 @@ public class DatabaseManager {
         getDatabase().close();
     }
 
-    public void importAll()
-    {
+    public void importAll() {
         Set<CraftClan> clans = database.<CraftClan>select().from(CraftClan.class).prepare().getResults(new HashSet<CraftClan>());
         long currentTime = System.currentTimeMillis();
         PreparedSelectQuery<CraftRank> rankQuery = database.<CraftRank>select().from(CraftRank.class).where().preparedEquals("clan").select().prepare();
@@ -185,8 +182,7 @@ public class DatabaseManager {
         database.saveStoredValues(CraftClanPlayer.class);
     }
 
-    public List<String> retrieveBB(Clan clan, int start, int end)
-    {
+    public List<String> retrieveBB(Clan clan, int start, int end) {
 
         List<String> bb = new ArrayList<String>();
 
@@ -218,14 +214,12 @@ public class DatabaseManager {
         return bb;
     }
 
-    public void purgeBB(Clan clan)
-    {
+    public void purgeBB(Clan clan) {
         purgeBB.set(0, clan.getID());
         purgeBB.update();
     }
 
-    public void insertBBMessage(Clan clan, String message)
-    {
+    public void insertBBMessage(Clan clan, String message) {
         insertBB.set(0, clan.getID());
         insertBB.set(1, message);
         insertBB.update();
@@ -237,8 +231,7 @@ public class DatabaseManager {
      * @param playerId The player to look for
      * @return A map of victims and a count
      */
-    public SortedMap<Integer, Long> getKillsPerPlayer(long playerId)
-    {
+    public SortedMap<Integer, Long> getKillsPerPlayer(long playerId) {
         TreeMap<Integer, Long> out = new TreeMap<Integer, Long>(new ReverseIntegerComparator());
         ResultSet res = null;
         try {
@@ -270,8 +263,7 @@ public class DatabaseManager {
      *
      * @return A map of tag->count of all kills
      */
-    public List<Conflicts> getMostKilled()
-    {
+    public List<Conflicts> getMostKilled() {
         List<Conflicts> out = new ArrayList<Conflicts>();
         ResultSet res = null;
         try {
@@ -298,28 +290,23 @@ public class DatabaseManager {
         return out;
     }
 
-    public JBDCDatabase getDatabase()
-    {
+    public JBDCDatabase getDatabase() {
         return database;
     }
 
-    public void addResponse(Response response)
-    {
+    public void addResponse(Response response) {
         responseTask.add(response);
     }
 
-    public void addStatement(Executable executable)
-    {
+    public void addStatement(Executable executable) {
         getAutoSaver().addExecutable(executable);
     }
 
-    public AutoSaver getAutoSaver()
-    {
+    public AutoSaver getAutoSaver() {
         return autoSaver;
     }
 
-    public boolean deleteRankById(long id)
-    {
+    public boolean deleteRankById(long id) {
         deleteRankById.set(0, id);
         return deleteRankById.update();
     }

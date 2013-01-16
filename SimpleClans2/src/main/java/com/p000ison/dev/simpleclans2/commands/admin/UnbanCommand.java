@@ -33,8 +33,7 @@ import java.text.MessageFormat;
 
 public class UnbanCommand extends GenericConsoleCommand {
 
-    public UnbanCommand(SimpleClans plugin)
-    {
+    public UnbanCommand(SimpleClans plugin) {
         super("Unban", plugin);
         setArgumentRange(1, 1);
         setUsages(MessageFormat.format(Language.getTranslation("usage.unban"), plugin.getSettingsManager().getClanCommand()));
@@ -43,14 +42,12 @@ public class UnbanCommand extends GenericConsoleCommand {
     }
 
     @Override
-    public String getMenu()
-    {
+    public String getMenu() {
         return MessageFormat.format(Language.getTranslation("menu.unban"), plugin.getSettingsManager().getClanCommand());
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args)
-    {
+    public void execute(CommandSender sender, String[] args) {
 
         ClanPlayer banned = plugin.getClanPlayerManager().getAnyClanPlayerExact(args[0]);
 

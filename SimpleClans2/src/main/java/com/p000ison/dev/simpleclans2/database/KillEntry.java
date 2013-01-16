@@ -36,8 +36,7 @@ public class KillEntry {
     private final Timestamp date;
     private final byte killType;
 
-    public KillEntry(String attacker, String attackerTag, String victim, String victimTag, boolean war, Timestamp date, byte killType)
-    {
+    public KillEntry(String attacker, String attackerTag, String victim, String victimTag, boolean war, Timestamp date, byte killType) {
         this.attacker = attacker;
         this.attackerTag = attackerTag;
         this.victim = victim;
@@ -47,34 +46,28 @@ public class KillEntry {
         this.killType = killType;
     }
 
-    public String getAttacker()
-    {
+    public String getAttacker() {
         return attacker;
     }
 
-    public String getAttackerTag()
-    {
+    public String getAttackerTag() {
         return attackerTag;
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "KillEntry {" + attacker + ',' + attackerTag + ',' + victim + ',' + victimTag + ',' + killType + ',' + war + ',' + date.toString() + '}';
     }
 
-    public boolean isWar()
-    {
+    public boolean isWar() {
         return war;
     }
 
-    public Timestamp getDate()
-    {
+    public Timestamp getDate() {
         return date;
     }
 
-    public byte getKillType()
-    {
+    public byte getKillType() {
         return killType;
     }
 

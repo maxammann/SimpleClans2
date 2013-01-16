@@ -39,8 +39,7 @@ public class BBRetrieveResponse extends Response {
     private int page, maxLines;
     private boolean showError;
 
-    public BBRetrieveResponse(SimpleClans plugin, CommandSender sender, Clan clan, int page, int maxLines, boolean showError)
-    {
+    public BBRetrieveResponse(SimpleClans plugin, CommandSender sender, Clan clan, int page, int maxLines, boolean showError) {
         super(plugin, sender);
         this.clan = clan;
         this.page = page;
@@ -49,8 +48,7 @@ public class BBRetrieveResponse extends Response {
     }
 
     @Override
-    public boolean response()
-    {
+    public boolean response() {
         DatabaseManager dataManager = plugin.getDataManager();
 
 
@@ -80,8 +78,7 @@ public class BBRetrieveResponse extends Response {
     }
 
     @Override
-    public boolean needsRetriever()
-    {
+    public boolean needsRetriever() {
         return true;
     }
 }

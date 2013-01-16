@@ -34,8 +34,7 @@ import java.text.MessageFormat;
  */
 public class VerifyModCommand extends GenericConsoleCommand {
 
-    public VerifyModCommand(SimpleClans plugin)
-    {
+    public VerifyModCommand(SimpleClans plugin) {
         super("VerifyMod", plugin);
         setArgumentRange(1, 1);
         setUsages(Language.getTranslation("usage.verifyclan", plugin.getSettingsManager().getClanCommand()));
@@ -44,8 +43,7 @@ public class VerifyModCommand extends GenericConsoleCommand {
     }
 
     @Override
-    public String getMenu()
-    {
+    public String getMenu() {
         if (plugin.getSettingsManager().requireVerification()) {
             return ChatColor.DARK_RED + MessageFormat.format(Language.getTranslation("menu.verifyclan"), plugin.getSettingsManager().getClanCommand());
         }
@@ -53,8 +51,7 @@ public class VerifyModCommand extends GenericConsoleCommand {
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args)
-    {
+    public void execute(CommandSender sender, String[] args) {
         Clan clan = plugin.getClanManager().getClan(args[0]);
 
         if (clan != null) {

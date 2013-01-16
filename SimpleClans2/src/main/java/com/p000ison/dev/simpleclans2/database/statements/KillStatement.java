@@ -53,8 +53,7 @@ public class KillStatement implements Executable, TableObject {
     @DatabaseColumn(position = 7, databaseName = "type")
     private byte killType;
 
-    public KillStatement(long attacker, long attackerTag, long victim, long victimTag, boolean war, KillType killType)
-    {
+    public KillStatement(long attacker, long attackerTag, long victim, long victimTag, boolean war, KillType killType) {
         this.attacker = attacker;
         this.attackerClan = attackerTag;
         this.victim = victim;
@@ -65,8 +64,7 @@ public class KillStatement implements Executable, TableObject {
     }
 
     @Override
-    public boolean execute(DatabaseManager dataManager)
-    {
+    public boolean execute(DatabaseManager dataManager) {
         dataManager.getDatabase().save(this);
         return true;
     }

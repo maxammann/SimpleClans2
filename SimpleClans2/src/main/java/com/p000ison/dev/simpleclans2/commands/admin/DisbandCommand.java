@@ -34,8 +34,7 @@ import java.text.MessageFormat;
  */
 public class DisbandCommand extends GenericConsoleCommand {
 
-    public DisbandCommand(SimpleClans plugin)
-    {
+    public DisbandCommand(SimpleClans plugin) {
         super("Disband", plugin);
         setArgumentRange(1, 1);
         setUsages(MessageFormat.format(Language.getTranslation("usage.disband"), plugin.getSettingsManager().getClanCommand()));
@@ -44,14 +43,12 @@ public class DisbandCommand extends GenericConsoleCommand {
     }
 
     @Override
-    public String getMenu()
-    {
+    public String getMenu() {
         return MessageFormat.format(Language.getTranslation("menu.disband"), plugin.getSettingsManager().getClanCommand());
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args)
-    {
+    public void execute(CommandSender sender, String[] args) {
         Clan clan = plugin.getClanManager().getClan(args[0]);
 
         if (clan != null) {

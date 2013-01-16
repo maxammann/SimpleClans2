@@ -33,8 +33,7 @@ import org.bukkit.command.CommandSender;
  */
 public class MostKilledCommand extends GenericConsoleCommand {
 
-    public MostKilledCommand(SimpleClans plugin)
-    {
+    public MostKilledCommand(SimpleClans plugin) {
         super("MostKilled", plugin);
         setArgumentRange(0, 0);
         setUsages(Language.getTranslation("usage.mostkilled", plugin.getSettingsManager().getClanCommand()));
@@ -43,14 +42,12 @@ public class MostKilledCommand extends GenericConsoleCommand {
     }
 
     @Override
-    public String getMenu()
-    {
+    public String getMenu() {
         return Language.getTranslation("menu.mostkilled", plugin.getSettingsManager().getClanCommand());
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args)
-    {
+    public void execute(CommandSender sender, String[] args) {
         int page = CraftCommandManager.getPage(args);
 
         if (page == -1) {

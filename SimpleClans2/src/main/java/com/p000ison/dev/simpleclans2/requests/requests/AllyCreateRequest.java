@@ -36,21 +36,18 @@ public class AllyCreateRequest extends MultipleRequest {
 
     private Clan ally;
 
-    public AllyCreateRequest(SimpleClans plugin, Set<ClanPlayer> acceptors, ClanPlayer requester, Clan ally)
-    {
+    public AllyCreateRequest(SimpleClans plugin, Set<ClanPlayer> acceptors, ClanPlayer requester, Clan ally) {
         super(plugin, acceptors, requester);
         this.ally = ally;
     }
 
     @Override
-    public void onRequesting()
-    {
+    public void onRequesting() {
         sendAcceptorMessage(ChatColor.AQUA + Language.getTranslation("proposing.an.alliance", requester.getClan().getTag(), ally.getTag()));
     }
 
     @Override
-    public boolean onAccepted()
-    {
+    public boolean onAccepted() {
         Clan clan = requester.getClan();
 
         if (ally != null && clan != null) {
@@ -67,8 +64,7 @@ public class AllyCreateRequest extends MultipleRequest {
     }
 
     @Override
-    public void onDenied()
-    {
+    public void onDenied() {
         sendRequesterMessage(ChatColor.DARK_RED + Language.getTranslation("the.alliance.was.denied", ally.getTag()));
         sendAcceptorMessage(ChatColor.DARK_RED + Language.getTranslation("the.alliance.was.denied", requester.getClan().getTag()));
     }

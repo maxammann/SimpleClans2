@@ -37,8 +37,7 @@ public class ExceptionReport {
     private String email;
     private long date;
 
-    public ExceptionReport(String name, String version, Throwable thrown, String email)
-    {
+    public ExceptionReport(String name, String version, Throwable thrown, String email) {
         this.name = name;
         this.version = version;
         this.thrown = thrown;
@@ -46,8 +45,7 @@ public class ExceptionReport {
         date = System.currentTimeMillis();
     }
 
-    public JSONObject getJSONObject()
-    {
+    public JSONObject getJSONObject() {
         JSONObject report = new JSONObject();
         report.put("plugin", name);
         report.put("version", version);
@@ -83,8 +81,7 @@ public class ExceptionReport {
         return report;
     }
 
-    private static Object buildThrowableJSON(Throwable thrown)
-    {
+    private static Object buildThrowableJSON(Throwable thrown) {
         JSONArray stackTrace = new JSONArray();
 
         for (StackTraceElement element : thrown.getStackTrace()) {

@@ -34,8 +34,7 @@ import java.text.MessageFormat;
  */
 public class FFCommand extends GenericPlayerCommand {
 
-    public FFCommand(SimpleClans plugin)
-    {
+    public FFCommand(SimpleClans plugin) {
         super("FFCommand", plugin);
         setArgumentRange(1, 1);
         setUsages(MessageFormat.format(Language.getTranslation("usage.ff"), plugin.getSettingsManager().getClanCommand()));
@@ -44,8 +43,7 @@ public class FFCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public String getMenu(ClanPlayer cp)
-    {
+    public String getMenu(ClanPlayer cp) {
         if (cp != null) {
             return MessageFormat.format(Language.getTranslation("menu.ff"), plugin.getSettingsManager().getClanCommand());
         }
@@ -53,8 +51,7 @@ public class FFCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public void execute(Player player, String[] args)
-    {
+    public void execute(Player player, String[] args) {
 
         ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
 

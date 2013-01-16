@@ -34,8 +34,7 @@ import org.bukkit.entity.Player;
  */
 public class ToggleCommand extends GenericPlayerCommand {
 
-    public ToggleCommand(SimpleClans plugin)
-    {
+    public ToggleCommand(SimpleClans plugin) {
         super("Command", plugin);
         setArgumentRange(1, 1);
         setUsages(Language.getTranslation("usage.toggle", plugin.getSettingsManager().getClanCommand()));
@@ -44,8 +43,7 @@ public class ToggleCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public String getMenu(ClanPlayer cp)
-    {
+    public String getMenu(ClanPlayer cp) {
         if (cp != null) {
             return Language.getTranslation("menu.toggle", plugin.getSettingsManager().getClanCommand());
         }
@@ -54,8 +52,7 @@ public class ToggleCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public void execute(Player player, String[] args)
-    {
+    public void execute(Player player, String[] args) {
         String action = args[0];
 
         if (action.equalsIgnoreCase("cape")) {

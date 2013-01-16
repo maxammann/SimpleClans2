@@ -38,15 +38,13 @@ public class TeleportTask implements Runnable {
     private SimpleClans plugin;
     private Set<TeleportState> waitingPlayers;
 
-    public TeleportTask(SimpleClans plugin, Set<TeleportState> waitingPlayers)
-    {
+    public TeleportTask(SimpleClans plugin, Set<TeleportState> waitingPlayers) {
         this.plugin = plugin;
         this.waitingPlayers = waitingPlayers;
     }
 
     @Override
-    public void run()
-    {
+    public void run() {
         if (waitingPlayers.isEmpty()) {
             return;
         }
@@ -103,8 +101,7 @@ public class TeleportTask implements Runnable {
         }
     }
 
-    private void dropItems(Player player)
-    {
+    private void dropItems(Player player) {
 
         Inventory inv = player.getInventory();
         ItemStack[] contents = inv.getContents();

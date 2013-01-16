@@ -252,7 +252,6 @@ public class SimpleClans extends JavaPlugin implements SCCore {
 
         for (Permission perm : getServer().getPluginManager().getPermissions()) {
             if (perm.getName().startsWith("SC")) {
-                System.out.println(perm.getName());
                 getServer().getPluginManager().removePermission(perm.getName());
             }
         }

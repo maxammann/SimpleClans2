@@ -44,14 +44,12 @@ public class SCEntityListener implements Listener {
 
     private SimpleClans plugin;
 
-    public SCEntityListener(SimpleClans plugin)
-    {
+    public SCEntityListener(SimpleClans plugin) {
         this.plugin = plugin;
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
-    public void onEntityDamage(EntityDamageByEntityEvent event)
-    {
+    public void onEntityDamage(EntityDamageByEntityEvent event) {
         Entity victimEntity = event.getEntity();
 
         if (victimEntity instanceof Player) {
@@ -136,8 +134,7 @@ public class SCEntityListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onPlayerDeath(PlayerDeathEvent event)
-    {
+    public void onPlayerDeath(PlayerDeathEvent event) {
         Player victimPlayer = event.getEntity();
 
         if (victimPlayer != null) {

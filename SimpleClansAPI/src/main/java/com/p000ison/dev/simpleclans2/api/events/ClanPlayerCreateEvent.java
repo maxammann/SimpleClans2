@@ -32,31 +32,26 @@ public final class ClanPlayerCreateEvent extends ClanPlayerEvent implements Canc
 
     private boolean cancelled;
 
-    public ClanPlayerCreateEvent(ClanPlayer clanPlayer)
-    {
+    public ClanPlayerCreateEvent(ClanPlayer clanPlayer) {
         super(clanPlayer);
     }
 
     @Override
-    public boolean isCancelled()
-    {
+    public boolean isCancelled() {
         return cancelled;
     }
 
     @Override
-    public HandlerList getHandlers()
-    {
+    public HandlerList getHandlers() {
         return handlers;
     }
 
-    public static HandlerList getHandlerList()
-    {
+    public static HandlerList getHandlerList() {
         return handlers;
     }
 
     @Override
-    public void setCancelled(boolean cancelled)
-    {
+    public void setCancelled(boolean cancelled) {
         this.cancelled = cancelled;
     }
 }

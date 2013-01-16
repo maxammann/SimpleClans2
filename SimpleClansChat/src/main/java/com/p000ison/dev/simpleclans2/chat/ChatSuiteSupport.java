@@ -32,13 +32,11 @@ public class ChatSuiteSupport {
 
     private SimpleClansChat plugin;
 
-    public ChatSuiteSupport(SimpleClansChat plugin)
-    {
+    public ChatSuiteSupport(SimpleClansChat plugin) {
         this.plugin = plugin;
     }
 
-    public void inviteClanMembers(Player player)
-    {
+    public void inviteClanMembers(Player player) {
         ClanPlayer clanPlayer = plugin.getClanPlayerManager().getClanPlayer(player);
         ChatPlayer chatPlayer = plugin.getChatSuite().getPlayerManager().getPlayer(player.getName());
 

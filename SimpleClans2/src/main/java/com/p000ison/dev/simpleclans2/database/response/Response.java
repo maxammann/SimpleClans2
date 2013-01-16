@@ -29,24 +29,20 @@ public abstract class Response implements ResponseAble {
     protected final SimpleClans plugin;
     protected final CommandSender sender;
 
-    protected Response(SimpleClans plugin, CommandSender sender)
-    {
+    protected Response(SimpleClans plugin, CommandSender sender) {
         this.plugin = plugin;
         this.sender = sender;
     }
 
-    protected CommandSender getRetriever()
-    {
+    protected CommandSender getRetriever() {
         return sender;
     }
 
-    public int[] getBoundings(int completeSize, int page)
-    {
+    public int[] getBoundings(int completeSize, int page) {
         return plugin.getCommandManager().getBoundings(completeSize, page);
     }
 
-    public int[] getBoundings(int page)
-    {
+    public int[] getBoundings(int page) {
         int start = page * plugin.getSettingsManager().getElementsPerPage();
         int end = start + plugin.getSettingsManager().getElementsPerPage();
 

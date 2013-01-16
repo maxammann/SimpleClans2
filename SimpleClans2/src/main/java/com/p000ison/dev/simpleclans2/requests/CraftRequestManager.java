@@ -39,14 +39,12 @@ public class CraftRequestManager implements RequestManager {
     public Set<Request> requests = new HashSet<Request>();
     private SimpleClans plugin;
 
-    public CraftRequestManager(SimpleClans plugin)
-    {
+    public CraftRequestManager(SimpleClans plugin) {
         this.plugin = plugin;
     }
 
     @Override
-    public boolean createRequest(Request created)
-    {
+    public boolean createRequest(Request created) {
         //hmm damn you DAUs ....
 
         //todo add messages if the player is already involved in a request
@@ -78,8 +76,7 @@ public class CraftRequestManager implements RequestManager {
         return true;
     }
 
-    public Request vote(ClanPlayer acceptor, Result result)
-    {
+    public Request vote(ClanPlayer acceptor, Result result) {
         if (requests.isEmpty()) {
             return null;
         }
@@ -131,8 +128,7 @@ public class CraftRequestManager implements RequestManager {
     }
 
     @Override
-    public void clearRequests(Clan clan)
-    {
+    public void clearRequests(Clan clan) {
         if (requests.isEmpty()) {
             return;
         }
@@ -149,14 +145,12 @@ public class CraftRequestManager implements RequestManager {
     }
 
     @Override
-    public int getRequests()
-    {
+    public int getRequests() {
         return requests.size();
     }
 
     @Override
-    public void clearRequests(ClanPlayer clanPlayer)
-    {
+    public void clearRequests(ClanPlayer clanPlayer) {
         if (requests.isEmpty()) {
             return;
         }
@@ -180,8 +174,7 @@ public class CraftRequestManager implements RequestManager {
     }
 
     @Override
-    public void clearRequests(Player player)
-    {
+    public void clearRequests(Player player) {
         if (requests.isEmpty()) {
             return;
         }

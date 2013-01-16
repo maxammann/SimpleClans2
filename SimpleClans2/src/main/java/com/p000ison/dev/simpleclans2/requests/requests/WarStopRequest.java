@@ -35,21 +35,18 @@ public class WarStopRequest extends MultipleRequest {
 
     private Clan warring;
 
-    public WarStopRequest(SimpleClans plugin, Set<ClanPlayer> acceptors, ClanPlayer requester, Clan warring)
-    {
+    public WarStopRequest(SimpleClans plugin, Set<ClanPlayer> acceptors, ClanPlayer requester, Clan warring) {
         super(plugin, acceptors, requester);
         this.warring = warring;
     }
 
     @Override
-    public void onRequesting()
-    {
+    public void onRequesting() {
         sendAcceptorMessage(ChatColor.AQUA + Language.getTranslation("proposing.to.end.the.war", requester.getClan().getTag(), warring.getTag()));
     }
 
     @Override
-    public boolean onAccepted()
-    {
+    public boolean onAccepted() {
         ClanPlayer cp = getRequester();
         Clan clan = requester.getClan();
 
@@ -68,8 +65,7 @@ public class WarStopRequest extends MultipleRequest {
     }
 
     @Override
-    public void onDenied()
-    {
+    public void onDenied() {
         sendRequesterMessage(ChatColor.DARK_RED + Language.getTranslation("peace.agreement.denied", warring.getTag()));
         sendAcceptorMessage(ChatColor.DARK_RED + Language.getTranslation("peace.agreement.denied", requester.getClan().getTag()));
     }

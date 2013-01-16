@@ -10,8 +10,7 @@ public class PrettyJSONWriter extends StringWriter {
     private int indent = 0;
 
     @Override
-    public void write(int c)
-    {
+    public void write(int c) {
         if (((char) c) == '[' || ((char) c) == '{') {
             super.write(c);
             super.write('\n');
@@ -31,8 +30,7 @@ public class PrettyJSONWriter extends StringWriter {
         }
     }
 
-    private void writeIndentation()
-    {
+    private void writeIndentation() {
         for (int i = 0; i < indent; i++) {
             super.write("   ");
         }

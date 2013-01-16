@@ -31,24 +31,20 @@ abstract class ClanEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
     private final Clan clan;
 
-    protected ClanEvent(Clan clan)
-    {
+    protected ClanEvent(Clan clan) {
         this.clan = clan;
     }
 
     @Override
-    public HandlerList getHandlers()
-    {
+    public HandlerList getHandlers() {
         return handlers;
     }
 
-    public static HandlerList getHandlerList()
-    {
+    public static HandlerList getHandlerList() {
         return handlers;
     }
 
-    public Clan getClan()
-    {
+    public Clan getClan() {
         return clan;
     }
 }

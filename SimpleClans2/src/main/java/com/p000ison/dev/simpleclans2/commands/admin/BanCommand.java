@@ -35,8 +35,7 @@ import java.text.MessageFormat;
  */
 public class BanCommand extends GenericConsoleCommand {
 
-    public BanCommand(SimpleClans plugin)
-    {
+    public BanCommand(SimpleClans plugin) {
         super("Ban", plugin);
         setArgumentRange(1, 1);
         setUsages(MessageFormat.format(Language.getTranslation("usage.ban"), plugin.getSettingsManager().getClanCommand()));
@@ -45,14 +44,12 @@ public class BanCommand extends GenericConsoleCommand {
     }
 
     @Override
-    public String getMenu()
-    {
+    public String getMenu() {
         return MessageFormat.format(Language.getTranslation("menu.ban"), plugin.getSettingsManager().getClanCommand());
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args)
-    {
+    public void execute(CommandSender sender, String[] args) {
         ClanPlayer clanPlayer = plugin.getClanPlayerManager().getCreateClanPlayerExact(args[0]);
 
         if (!clanPlayer.isBanned()) {

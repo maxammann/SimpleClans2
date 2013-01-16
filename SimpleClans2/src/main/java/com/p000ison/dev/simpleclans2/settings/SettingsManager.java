@@ -109,14 +109,12 @@ public class SettingsManager {
     private ChatColor headingPageColor, subPageColor, clanColor, leaderColor, trustedColor, untrustedColor;
     private boolean trustMembersByDefault;
 
-    public SettingsManager(SimpleClans plugin)
-    {
+    public SettingsManager(SimpleClans plugin) {
         this.plugin = plugin;
     }
 
 
-    public boolean init()
-    {
+    public boolean init() {
         try {
             this.config = new Configuration(new File(plugin.getDataFolder(), "config.yml"));
             config.options().header("Available options for the 'build-channel' settings are rb and dev. Use 'rb' to update only recommended builds, dev to update to dev versions or beta to update only to beta builds!");
@@ -136,8 +134,7 @@ public class SettingsManager {
         return true;
     }
 
-    private void load()
-    {
+    private void load() {
         Logging.debug("Loading Settings...");
         long start = System.currentTimeMillis();
         try {
@@ -343,8 +340,7 @@ public class SettingsManager {
         Logging.debug("Loading the settings finished! Took %s ms!", finish - start);
     }
 
-    public void loadPermissions()
-    {
+    public void loadPermissions() {
         File permissionsFile = new File(plugin.getDataFolder(), "permissions.yml");
         Configuration permissionsConfig;
         try {
@@ -405,8 +401,7 @@ public class SettingsManager {
         }
     }
 
-    private Map<String, Boolean> parsePermissions(List<String> permissions)
-    {
+    private Map<String, Boolean> parsePermissions(List<String> permissions) {
         if (permissions == null || permissions.isEmpty()) {
             return null;
         }
@@ -426,8 +421,7 @@ public class SettingsManager {
         return permSet;
     }
 
-    public void save()
-    {
+    public void save() {
         try {
             this.config.save();
         } catch (IOException e) {
@@ -435,8 +429,7 @@ public class SettingsManager {
         }
     }
 
-    public void reload()
-    {
+    public void reload() {
         try {
             config.reload();
         } catch (IOException e) {
@@ -449,375 +442,301 @@ public class SettingsManager {
         load();
     }
 
-    public DatabaseConfiguration getDatabaseConfiguration()
-    {
+    public DatabaseConfiguration getDatabaseConfiguration() {
         return databaseConfiguration;
     }
 
-    public boolean dropItemOnTeleport(Material mat)
-    {
+    public boolean dropItemOnTeleport(Material mat) {
         return (dropAll || !keepOnTeleport.contains(mat.getId()));
     }
 
-    public boolean dropItems()
-    {
+    public boolean dropItems() {
         return drop;
     }
 
-    public double getTeleportFuzzyness()
-    {
+    public double getTeleportFuzzyness() {
         return teleportFuzzyness;
     }
 
-    public int getTimeUntilTeleport()
-    {
+    public int getTimeUntilTeleport() {
         return timeUntilTeleport;
     }
 
-    public boolean isSaveCivilians()
-    {
+    public boolean isSaveCivilians() {
         return saveCivilians;
     }
 
-    public boolean isOnlyPvPinWar()
-    {
+    public boolean isOnlyPvPinWar() {
         return onlyPvPinWar;
     }
 
-    public boolean isGlobalFFForced()
-    {
+    public boolean isGlobalFFForced() {
         return globalFFForced;
     }
 
-    public double getKillWeightRival()
-    {
+    public double getKillWeightRival() {
         return killWeightRival;
     }
 
-    public double getKillWeightNeutral()
-    {
+    public double getKillWeightNeutral() {
         return killWeightNeutral;
     }
 
-    public double getKillWeightCivilian()
-    {
+    public double getKillWeightCivilian() {
         return killWeightCivilian;
     }
 
-    public int getElementsPerPage()
-    {
+    public int getElementsPerPage() {
         return elementsPerPage;
     }
 
-    public int getMaxTagLenght()
-    {
+    public int getMaxTagLenght() {
         return maxTagLenght;
     }
 
-    public int getMinTagLenght()
-    {
+    public int getMinTagLenght() {
         return minTagLenght;
     }
 
-    public char[] getDisallowedColors()
-    {
+    public char[] getDisallowedColors() {
         return disallowedColors.clone();
     }
 
-    public boolean isTagDisallowed(String tag)
-    {
+    public boolean isTagDisallowed(String tag) {
         return disallowedTags.contains(tag);
     }
 
-    public int getMaxBBLenght()
-    {
+    public int getMaxBBLenght() {
         return maxBBLenght;
     }
 
-    public boolean requireVerification()
-    {
+    public boolean requireVerification() {
         return requireVerification;
     }
 
-    public String getClanCommand()
-    {
+    public String getClanCommand() {
         return clanCommand;
     }
 
-    public int getPurgeInactivePlayersDays()
-    {
+    public int getPurgeInactivePlayersDays() {
         return purgeInactivePlayersDays;
     }
 
-    public int getPurgeInactiveClansDays()
-    {
+    public int getPurgeInactiveClansDays() {
         return purgeInactiveClansDays;
     }
 
-    public int getPurgeUnverifiedClansDays()
-    {
+    public int getPurgeUnverifiedClansDays() {
         return purgeUnverifiedClansDays;
     }
 
-    public ChatColor getHeaderPageColor()
-    {
+    public ChatColor getHeaderPageColor() {
         return headingPageColor;
     }
 
-    public ChatColor getSubPageColor()
-    {
+    public ChatColor getSubPageColor() {
         return subPageColor;
     }
 
-    public String getServerName()
-    {
+    public String getServerName() {
         return serverName;
     }
 
-    public void setServerName(String serverName)
-    {
+    public void setServerName(String serverName) {
         this.serverName = serverName;
     }
 
-    public boolean isShowUnverifiedClansOnList()
-    {
+    public boolean isShowUnverifiedClansOnList() {
         return showUnverifiedClansOnList;
     }
 
-    public int getMinimalSizeToAlly()
-    {
+    public int getMinimalSizeToAlly() {
         return minimalSizeToAlly;
     }
 
-    public String getClanBB()
-    {
+    public String getClanBB() {
         return clanBB;
     }
 
-    public String getClanPlayerBB()
-    {
+    public String getClanPlayerBB() {
         return clanPlayerBB;
     }
 
-    public String getDefaultBB()
-    {
+    public String getDefaultBB() {
         return defaultBB;
     }
 
-    public int getMaxBBDisplayLines()
-    {
+    public int getMaxBBDisplayLines() {
         return maxBBDisplayLines;
     }
 
-    public ChatColor getClanColor()
-    {
+    public ChatColor getClanColor() {
         return clanColor;
     }
 
-    public ChatColor getLeaderColor()
-    {
+    public ChatColor getLeaderColor() {
         return leaderColor;
     }
 
-    public ChatColor getTrustedColor()
-    {
+    public ChatColor getTrustedColor() {
         return trustedColor;
     }
 
-    public ChatColor getUntrustedColor()
-    {
+    public ChatColor getUntrustedColor() {
         return untrustedColor;
     }
 
-    public boolean isVoteForDemote()
-    {
+    public boolean isVoteForDemote() {
         return voteForDemote;
     }
 
-    public String getClanAnnounce()
-    {
+    public String getClanAnnounce() {
         return clanAnnounce;
     }
 
-    public String getClanPlayerAnnounce()
-    {
+    public String getClanPlayerAnnounce() {
         return clanPlayerAnnounce;
     }
 
-    public String getDefaultAnnounce()
-    {
+    public String getDefaultAnnounce() {
         return defaultAnnounce;
     }
 
-    public boolean isSetHomeOnlyOnce()
-    {
+    public boolean isSetHomeOnlyOnce() {
         return setHomeOnlyOnce;
     }
 
-    public void setGlobalFFForced(boolean globalFF)
-    {
+    public void setGlobalFFForced(boolean globalFF) {
         this.globalFFForced = globalFF;
         config.getConfigurationSection("clan").set("global-ff-forced", globalFF);
         save();
     }
 
-    public double getPurchaseCreationPrice()
-    {
+    public double getPurchaseCreationPrice() {
         return purchaseCreationPrice;
     }
 
-    public double getPurchaseVerificationPrice()
-    {
+    public double getPurchaseVerificationPrice() {
         return purchaseVerificationPrice;
     }
 
-    public double getPurchaseTeleportPrice()
-    {
+    public double getPurchaseTeleportPrice() {
         return purchaseTeleportPrice;
     }
 
-    public boolean isPurchaseCreation()
-    {
+    public boolean isPurchaseCreation() {
         return purchaseCreationPrice > 0D;
     }
 
-    public boolean isPurchaseInvite()
-    {
+    public boolean isPurchaseInvite() {
         return purchaseInvite > 0D;
     }
 
-    public boolean isPurchaseVerification()
-    {
+    public boolean isPurchaseVerification() {
         return purchaseVerificationPrice > 0D;
     }
 
-    public boolean isPurchaseTeleport()
-    {
+    public boolean isPurchaseTeleport() {
         return purchaseTeleportPrice > 0D;
     }
 
-    public boolean isCapesEnabled()
-    {
+    public boolean isCapesEnabled() {
         return capesEnabled;
     }
 
-    public String getDefaultCape()
-    {
+    public String getDefaultCape() {
         return defaultCape;
     }
 
-    public int getAutoSave()
-    {
+    public int getAutoSave() {
         return autoSave;
     }
 
-    public int getMaxNameLenght()
-    {
+    public int getMaxNameLenght() {
         return maxNameLenght;
     }
 
-    public int getMinNameLenght()
-    {
+    public int getMinNameLenght() {
         return minNameLenght;
     }
 
-    public boolean isMotdBBEnabled()
-    {
+    public boolean isMotdBBEnabled() {
         return motdBBEnabled;
     }
 
-    public int getMotdBBLines()
-    {
+    public int getMotdBBLines() {
         return motdBBLines;
     }
 
-    public String getMotdBBFormat()
-    {
+    public String getMotdBBFormat() {
         return motdBBFormat;
     }
 
-    public double getInvitationPrice()
-    {
+    public double getInvitationPrice() {
         return purchaseInvite;
     }
 
-    public String getHelpFormat()
-    {
+    public String getHelpFormat() {
         return helpFormat;
     }
 
-    public boolean isVoteForPromote()
-    {
+    public boolean isVoteForPromote() {
         return voteForPromote;
     }
 
-    public boolean isUnRivalAble(Clan clan)
-    {
+    public boolean isUnRivalAble(Clan clan) {
         return unRivalAbleClans.contains(clan.getID());
     }
 
-    public int getMinimalSizeToRival()
-    {
+    public int getMinimalSizeToRival() {
         return minimalSizeToRival;
     }
 
-    public double getRivalLimitPercent()
-    {
+    public double getRivalLimitPercent() {
         return rivalLimitPercent;
     }
 
-    public boolean isReportErrors()
-    {
+    public boolean isReportErrors() {
         return reportErrors;
     }
 
-    public boolean isModifyTagCompletely()
-    {
+    public boolean isModifyTagCompletely() {
         return modifyTagCompletely;
     }
 
-    public boolean isTrustMembersByDefault()
-    {
+    public boolean isTrustMembersByDefault() {
         return trustMembersByDefault;
     }
 
-    public String getEmail()
-    {
+    public String getEmail() {
         return email;
     }
 
-    public String getBBCommand()
-    {
+    public String getBBCommand() {
         return bbCommand;
     }
 
-    public String getRankCommand()
-    {
+    public String getRankCommand() {
         return rankCommand;
     }
 
-    public String getBankCommand()
-    {
+    public String getBankCommand() {
         return bankCommand;
     }
 
-    public UpdateType getBuildChannel()
-    {
+    public UpdateType getBuildChannel() {
         return buildChannel;
     }
 
-    public boolean isLongBuildReport()
-    {
+    public boolean isLongBuildReport() {
         return longBuildReport;
     }
 
-    public boolean isUpdaterEnabled()
-    {
+    public boolean isUpdaterEnabled() {
         return updaterEnabled;
     }
 
-    public Charset getCharset()
-    {
+    public Charset getCharset() {
         return charset;
     }
 }

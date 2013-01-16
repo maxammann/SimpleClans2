@@ -44,8 +44,7 @@ public class ListCommand extends GenericConsoleCommand {
 
     NumberFormat formatter = new DecimalFormat("#.#");
 
-    public ListCommand(SimpleClans plugin)
-    {
+    public ListCommand(SimpleClans plugin) {
         super("List", plugin);
         setArgumentRange(0, 1);
         setUsages(MessageFormat.format(Language.getTranslation("usage.list"), "clan"));
@@ -54,14 +53,12 @@ public class ListCommand extends GenericConsoleCommand {
     }
 
     @Override
-    public String getMenu()
-    {
+    public String getMenu() {
         return MessageFormat.format(Language.getTranslation("menu.list"), "clan");
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args)
-    {
+    public void execute(CommandSender sender, String[] args) {
         ChatColor headColor = plugin.getSettingsManager().getHeaderPageColor();
         ChatColor subColor = plugin.getSettingsManager().getSubPageColor();
 

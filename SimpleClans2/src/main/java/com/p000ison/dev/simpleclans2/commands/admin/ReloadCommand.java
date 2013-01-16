@@ -31,8 +31,7 @@ import java.text.MessageFormat;
 
 public class ReloadCommand extends GenericConsoleCommand {
 
-    public ReloadCommand(SimpleClans plugin)
-    {
+    public ReloadCommand(SimpleClans plugin) {
         super("Reload", plugin);
         setArgumentRange(0, 0);
         setUsages(MessageFormat.format(Language.getTranslation("usage.reload"), plugin.getSettingsManager().getClanCommand()));
@@ -41,14 +40,12 @@ public class ReloadCommand extends GenericConsoleCommand {
     }
 
     @Override
-    public String getMenu()
-    {
+    public String getMenu() {
         return MessageFormat.format(Language.getTranslation("menu.reload"), plugin.getSettingsManager().getClanCommand());
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args)
-    {
+    public void execute(CommandSender sender, String[] args) {
         long start = System.currentTimeMillis();
 
         plugin.getSettingsManager().reload();

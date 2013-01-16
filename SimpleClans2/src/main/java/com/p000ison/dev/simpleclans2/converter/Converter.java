@@ -46,8 +46,7 @@ public class Converter implements Runnable {
     private Set<ConvertedClan> clans = new HashSet<ConvertedClan>();
     private Set<ConvertedClanPlayer> players = new HashSet<ConvertedClanPlayer>();
 
-    public Converter(JBDCDatabase from, JBDCDatabase to)
-    {
+    public Converter(JBDCDatabase from, JBDCDatabase to) {
         this.from = from;
         this.to = to;
 
@@ -58,8 +57,7 @@ public class Converter implements Runnable {
         prepareClanPlayer();
     }
 
-    private void prepareClan()
-    {
+    private void prepareClan() {
         if (insertClan != null) {
             try {
                 insertClan.close();
@@ -70,8 +68,7 @@ public class Converter implements Runnable {
         insertClan = to.prepare("INSERT INTO `sc2_clans` (`name`, `tag`, `verified`, `founded`, `last_action`, `flags`, `balance` ) VALUES ( ?, ?, ?, ?, ?, ?, ? );");
     }
 
-    private void prepareClanPlayer()
-    {
+    private void prepareClanPlayer() {
         if (insertClanPlayer != null) {
             try {
                 insertClanPlayer.close();
@@ -82,8 +79,7 @@ public class Converter implements Runnable {
         insertClanPlayer = to.prepare("INSERT INTO `sc2_players` ( `name`, `leader`, `trusted`, `join_date`, `last_seen`, `clan`, `neutral_kills`, `rival_Kills`, `civilian_Kills`, `deaths`, `flags` ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )");
     }
 
-    public void convertAll()
-    {
+    public void convertAll() {
         try {
             convertClans();
             convertPlayers();
@@ -97,13 +93,11 @@ public class Converter implements Runnable {
     }
 
     @Override
-    public void run()
-    {
+    public void run() {
         convertAll();
     }
 
-    public void convertPlayers() throws SQLException
-    {
+    public void convertPlayers() throws SQLException {
         ResultSet result = from.query("SELECT * FROM `sc_players`;");
 
         while (result.next()) {
@@ -144,8 +138,7 @@ public class Converter implements Runnable {
         }
     }
 
-    public void insertPlayer(String name, boolean leader, boolean trusted, long joinDate, long lastSeen, long clan, int neutralKills, int rivalKills, int civilianKills, int deaths, String flags) throws SQLException
-    {
+    public void insertPlayer(String name, boolean leader, boolean trusted, long joinDate, long lastSeen, long clan, int neutralKills, int rivalKills, int civilianKills, int deaths, String flags) throws SQLException {
         insertClanPlayer.setString(1, name);
         insertClanPlayer.setBoolean(2, leader);
         insertClanPlayer.setBoolean(3, trusted);
@@ -175,8 +168,7 @@ public class Converter implements Runnable {
         }
     }
 
-    public long getClanPlayerIDbyName(String tag)
-    {
+    public long getClanPlayerIDbyName(String tag) {
         for (ConvertedClanPlayer cp : players) {
             if (cp.getName().equals(tag)) {
                 return cp.getId();
@@ -187,8 +179,7 @@ public class Converter implements Runnable {
     }
 
     @SuppressWarnings("unchecked")
-    public void convertClans() throws SQLException
-    {
+    public void convertClans() throws SQLException {
         ResultSet result = from.query("SELECT * FROM `sc_clans`;");
 
 
@@ -298,8 +289,7 @@ public class Converter implements Runnable {
     }
 
 
-    public long getIDByTag(String tag)
-    {
+    public long getIDByTag(String tag) {
         for (ConvertedClan clan : clans) {
             if (clan.getTag().equals(tag)) {
                 return clan.getId();
@@ -309,8 +299,7 @@ public class Converter implements Runnable {
         return -1;
     }
 
-    public void insertBB(List<String> bb, long clan) throws SQLException
-    {
+    public void insertBB(List<String> bb, long clan) throws SQLException {
         for (String text : bb) {
             insertBB.setLong(1, clan);
             insertBB.setString(2, text);
@@ -318,8 +307,7 @@ public class Converter implements Runnable {
         }
     }
 
-    public void insertClan(String name, String tag, boolean verified, long founded, long last_action, String flags, double balance) throws SQLException
-    {
+    public void insertClan(String name, String tag, boolean verified, long founded, long last_action, String flags, double balance) throws SQLException {
         insertClan.setString(1, name);
         insertClan.setString(2, tag);
         insertClan.setBoolean(3, verified);
@@ -344,8 +332,7 @@ public class Converter implements Runnable {
         }
     }
 
-    public void convertKills() throws SQLException
-    {
+    public void convertKills() throws SQLException {
         ResultSet result = from.query("SELECT * FROM `sc_kills`;");
 
         while (result.next()) {
@@ -359,8 +346,7 @@ public class Converter implements Runnable {
         }
     }
 
-    public void insertKill(String attacker, String attacker_clan, String victim, String victim_clan, String type, boolean war, Timestamp date) throws SQLException
-    {
+    public void insertKill(String attacker, String attacker_clan, String victim, String victim_clan, String type, boolean war, Timestamp date) throws SQLException {
         long attackerID = getClanPlayerIDbyName(attacker);
 
         if (attackerID == -1) {

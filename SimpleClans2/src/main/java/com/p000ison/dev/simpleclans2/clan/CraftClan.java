@@ -92,8 +92,7 @@ public class CraftClan implements Clan, TableObject {
      *
      * @param plugin The plugin
      */
-    public CraftClan(SimpleClans plugin)
-    {
+    public CraftClan(SimpleClans plugin) {
         flags = new CraftClanFlags();
         this.plugin = plugin;
     }
@@ -105,16 +104,14 @@ public class CraftClan implements Clan, TableObject {
      * @param tag    The tag of this clan
      * @param name   The full name of this clan
      */
-    public CraftClan(SimpleClans plugin, String tag, String name)
-    {
+    public CraftClan(SimpleClans plugin, String tag, String name) {
         this(plugin);
         flags = new CraftClanFlags();
         this.tag = tag;
         this.name = name;
     }
 
-    public CraftClan()
-    {
+    public CraftClan() {
     }
 
     /**
@@ -123,8 +120,7 @@ public class CraftClan implements Clan, TableObject {
      * @return Returns a formatted date
      */
     @Override
-    public String getFoundedDateFormatted()
-    {
+    public String getFoundedDateFormatted() {
         return new java.text.SimpleDateFormat("MMM dd, yyyy h:mm a").format(new Date(this.foundedDate));
     }
 
@@ -134,8 +130,7 @@ public class CraftClan implements Clan, TableObject {
      * @return The tag.
      */
     @Override
-    public String getTag()
-    {
+    public String getTag() {
         return tag;
     }
 
@@ -145,8 +140,7 @@ public class CraftClan implements Clan, TableObject {
      * @param tag The tag
      */
     @Override
-    public void setTag(String tag)
-    {
+    public void setTag(String tag) {
         Validate.notNull(tag, "The clan tag must not be null!");
         this.tag = tag;
     }
@@ -157,8 +151,7 @@ public class CraftClan implements Clan, TableObject {
      * @return The id.
      */
     @Override
-    public long getID()
-    {
+    public long getID() {
         return id;
     }
 
@@ -169,8 +162,7 @@ public class CraftClan implements Clan, TableObject {
      * @see com.p000ison.dev.simpleclans2.api.clan.ClanFlags
      */
     @Override
-    public ClanFlags getFlags()
-    {
+    public ClanFlags getFlags() {
         return flags;
     }
 
@@ -180,8 +172,7 @@ public class CraftClan implements Clan, TableObject {
      * @return The name of this clan.
      */
     @Override
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
@@ -191,8 +182,7 @@ public class CraftClan implements Clan, TableObject {
      * @param name The name of this clan
      */
     @Override
-    public void setName(String name)
-    {
+    public void setName(String name) {
         Validate.notNull(tag, "The clan name must not be null!");
         this.name = name;
     }
@@ -204,8 +194,7 @@ public class CraftClan implements Clan, TableObject {
      */
     @Override
     @DatabaseColumnGetter(databaseName = "last_action")
-    public Date getLastActionDate()
-    {
+    public Date getLastActionDate() {
         return new Date(lastActionDate);
     }
 
@@ -215,8 +204,7 @@ public class CraftClan implements Clan, TableObject {
      * @param lastActionDate The date when the last action happened.
      */
     @DatabaseColumnSetter(position = 5, databaseName = "last_action")
-    public void setLastActionDate(Date lastActionDate)
-    {
+    public void setLastActionDate(Date lastActionDate) {
         if (lastActionDate == null) {
             this.lastActionDate = System.currentTimeMillis();
             return;
@@ -224,8 +212,7 @@ public class CraftClan implements Clan, TableObject {
         this.lastActionDate = lastActionDate.getTime();
     }
 
-    public void setLastAction(long lastActionDate)
-    {
+    public void setLastAction(long lastActionDate) {
         this.lastActionDate = lastActionDate;
     }
 
@@ -233,8 +220,7 @@ public class CraftClan implements Clan, TableObject {
      * Updates the last action to NOW!
      */
     @Override
-    public void updateLastAction()
-    {
+    public void updateLastAction() {
         this.lastActionDate = System.currentTimeMillis();
     }
 
@@ -245,8 +231,7 @@ public class CraftClan implements Clan, TableObject {
      */
     @Override
     @DatabaseColumnGetter(databaseName = "founded")
-    public Date getFoundedDate()
-    {
+    public Date getFoundedDate() {
         return new Date(foundedDate);
     }
 
@@ -256,8 +241,7 @@ public class CraftClan implements Clan, TableObject {
      * @param foundedDate The time when it was founded.
      */
     @DatabaseColumnSetter(position = 4, databaseName = "founded")
-    public void setFoundedDate(Date foundedDate)
-    {
+    public void setFoundedDate(Date foundedDate) {
         if (foundedDate == null) {
             this.foundedDate = System.currentTimeMillis();
             return;
@@ -265,13 +249,11 @@ public class CraftClan implements Clan, TableObject {
         this.foundedDate = foundedDate.getTime();
     }
 
-    public void setFoundedTime(long foundedDate)
-    {
+    public void setFoundedTime(long foundedDate) {
         this.foundedDate = foundedDate;
     }
 
-    public long getFoundedTime()
-    {
+    public long getFoundedTime() {
         return this.foundedDate;
     }
 
@@ -282,8 +264,7 @@ public class CraftClan implements Clan, TableObject {
      */
     @Override
     @DatabaseColumnGetter(databaseName = "verified")
-    public boolean isVerified()
-    {
+    public boolean isVerified() {
         return verified;
     }
 
@@ -294,8 +275,7 @@ public class CraftClan implements Clan, TableObject {
      */
     @Override
     @DatabaseColumnSetter(position = 3, databaseName = "verified", defaultValue = "0")
-    public void setVerified(boolean verified)
-    {
+    public void setVerified(boolean verified) {
         this.verified = verified;
     }
 
@@ -305,8 +285,7 @@ public class CraftClan implements Clan, TableObject {
      * @return Weather friendly fire is on of of.
      */
     @Override
-    public boolean isFriendlyFireOn()
-    {
+    public boolean isFriendlyFireOn() {
         return getFlags().isFriendlyFireEnabled();
     }
 
@@ -316,8 +295,7 @@ public class CraftClan implements Clan, TableObject {
      * @param friendlyFire Weather friendly fire is on or off.
      */
     @Override
-    public void setFriendlyFire(boolean friendlyFire)
-    {
+    public void setFriendlyFire(boolean friendlyFire) {
         getFlags().setFriendlyFire(friendlyFire);
     }
 
@@ -327,8 +305,7 @@ public class CraftClan implements Clan, TableObject {
      * @return The allies.
      */
     @Override
-    public Set<Clan> getAllies()
-    {
+    public Set<Clan> getAllies() {
         return allies == null ? new HashSet<Clan>() : Collections.unmodifiableSet(allies);
     }
 
@@ -338,8 +315,7 @@ public class CraftClan implements Clan, TableObject {
      * @return The rival clans.
      */
     @Override
-    public Set<Clan> getRivals()
-    {
+    public Set<Clan> getRivals() {
         return rivals == null ? new HashSet<Clan>() : Collections.unmodifiableSet(rivals);
     }
 
@@ -349,8 +325,7 @@ public class CraftClan implements Clan, TableObject {
      * @return The warring clans.
      */
     @Override
-    public Set<Clan> getWarringClans()
-    {
+    public Set<Clan> getWarringClans() {
         return warring == null ? new HashSet<Clan>() : Collections.unmodifiableSet(warring);
     }
 
@@ -361,8 +336,7 @@ public class CraftClan implements Clan, TableObject {
      * @return Weather they are allies or not.
      */
     @Override
-    public boolean isAlly(long id)
-    {
+    public boolean isAlly(long id) {
         if (this.getID() == id) {
             return true;
         }
@@ -387,8 +361,7 @@ public class CraftClan implements Clan, TableObject {
      * @return Weather they are allies or not.
      */
     @Override
-    public boolean isAlly(Clan clan)
-    {
+    public boolean isAlly(Clan clan) {
         return clan != null && (this.equals(clan) || (allies != null && allies.contains(clan)));
     }
 
@@ -399,8 +372,7 @@ public class CraftClan implements Clan, TableObject {
      * @return Weather they are rivals or not.
      */
     @Override
-    public boolean isRival(long id)
-    {
+    public boolean isRival(long id) {
         if (this.getID() == id) {
             return false;
         }
@@ -425,8 +397,7 @@ public class CraftClan implements Clan, TableObject {
      * @return Weather they are rivals or not.
      */
     @Override
-    public boolean isRival(Clan clan)
-    {
+    public boolean isRival(Clan clan) {
         return clan != null && (this.equals(clan) || (rivals != null && rivals.contains(clan)));
     }
 
@@ -437,8 +408,7 @@ public class CraftClan implements Clan, TableObject {
      * @return Weather they are warring or not.
      */
     @Override
-    public boolean isWarring(long id)
-    {
+    public boolean isWarring(long id) {
         if (this.getID() == id) {
             return false;
         }
@@ -463,8 +433,7 @@ public class CraftClan implements Clan, TableObject {
      * @return Weather they are warring or not.
      */
     @Override
-    public boolean isWarring(Clan clan)
-    {
+    public boolean isWarring(Clan clan) {
         return clan != null && (this.equals(clan) || (warring != null && warring.contains(clan)));
     }
 
@@ -474,8 +443,7 @@ public class CraftClan implements Clan, TableObject {
      * @return The days this clan is inactive
      */
     @Override
-    public int getInactiveDays()
-    {
+    public int getInactiveDays() {
         return (int) Math.round(DateHelper.differenceInDays(lastActionDate, System.currentTimeMillis()));
     }
 
@@ -486,8 +454,7 @@ public class CraftClan implements Clan, TableObject {
      * @return Weather it was successfully
      */
     @Override
-    public boolean setLeader(ClanPlayer clanPlayer)
-    {
+    public boolean setLeader(ClanPlayer clanPlayer) {
         if (clanPlayer.getClanID() != id) {
             return false;
         }
@@ -503,8 +470,7 @@ public class CraftClan implements Clan, TableObject {
      * @return Weather it was successfully
      */
     @Override
-    public boolean demote(ClanPlayer clanPlayer)
-    {
+    public boolean demote(ClanPlayer clanPlayer) {
 
         if (clanPlayer.getClanID() != id) {
             return false;
@@ -521,8 +487,7 @@ public class CraftClan implements Clan, TableObject {
      * @return Checks if the player is a member
      */
     @Override
-    public boolean isMember(ClanPlayer cp)
-    {
+    public boolean isMember(ClanPlayer cp) {
         if (allMembers == null) {
             return false;
         }
@@ -548,8 +513,7 @@ public class CraftClan implements Clan, TableObject {
      * @return Checks if the player is the leader
      */
     @Override
-    public boolean isLeader(ClanPlayer cp)
-    {
+    public boolean isLeader(ClanPlayer cp) {
         return cp.getClanID() == id && cp.isLeader();
     }
 
@@ -560,8 +524,7 @@ public class CraftClan implements Clan, TableObject {
      * @return Checks if the player is any member
      */
     @Override
-    public boolean isAnyMember(ClanPlayer cp)
-    {
+    public boolean isAnyMember(ClanPlayer cp) {
         return allMembers != null && allMembers.contains(cp);
     }
 
@@ -571,8 +534,7 @@ public class CraftClan implements Clan, TableObject {
      * @return A Set of the members
      */
     @Override
-    public Set<ClanPlayer> getMembers()
-    {
+    public Set<ClanPlayer> getMembers() {
         Set<ClanPlayer> members = new HashSet<ClanPlayer>();
 
         for (ClanPlayer cp : getAllMembers()) {
@@ -590,8 +552,7 @@ public class CraftClan implements Clan, TableObject {
      * @return A set of all members of this clan
      */
     @Override
-    public Set<ClanPlayer> getAllMembers()
-    {
+    public Set<ClanPlayer> getAllMembers() {
         return allMembers == null ? Collections.unmodifiableSet(new HashSet<ClanPlayer>()) : Collections.unmodifiableSet(allMembers);
     }
 
@@ -601,8 +562,7 @@ public class CraftClan implements Clan, TableObject {
      * @return A Set of all leaders
      */
     @Override
-    public Set<ClanPlayer> getLeaders()
-    {
+    public Set<ClanPlayer> getLeaders() {
         Set<ClanPlayer> leaders = new HashSet<ClanPlayer>();
 
         for (ClanPlayer cp : getAllMembers()) {
@@ -620,8 +580,7 @@ public class CraftClan implements Clan, TableObject {
      * @param clanPlayer The player
      */
     @Override
-    public void addMember(ClanPlayer clanPlayer)
-    {
+    public void addMember(ClanPlayer clanPlayer) {
         Clan previous = clanPlayer.getClan();
 
         if (previous != null && isVerified()) {
@@ -654,8 +613,7 @@ public class CraftClan implements Clan, TableObject {
      * @return The total KDR
      */
     @Override
-    public float getKDR()
-    {
+    public float getKDR() {
         double totalWeightedKills = 0;
         int totalDeaths = 0;
 
@@ -677,8 +635,7 @@ public class CraftClan implements Clan, TableObject {
      * @return The total size of this clan
      */
     @Override
-    public int getSize()
-    {
+    public int getSize() {
         return allMembers == null ? 0 : allMembers.size();
     }
 
@@ -689,8 +646,7 @@ public class CraftClan implements Clan, TableObject {
      * @param msg       The message which should be posted
      */
     @Override
-    public void addBBMessage(ClanPlayer announcer, String msg)
-    {
+    public void addBBMessage(ClanPlayer announcer, String msg) {
         announce(announcer, msg);
         addBBRawMessage(ChatBlock.parseColors(plugin.getSettingsManager().getClanPlayerBB().replace("+player", announcer.getName()).replace("+message", msg)));
     }
@@ -702,8 +658,7 @@ public class CraftClan implements Clan, TableObject {
      * @param msg       The message which should be posted
      */
     @Override
-    public void addBBMessage(Clan announcer, String msg)
-    {
+    public void addBBMessage(Clan announcer, String msg) {
         msg = ChatBlock.parseColors(plugin.getSettingsManager().getClanBB().replace("+clan", announcer.getTag()).replace("+message", msg));
         announce(msg);
         addBBRawMessage(msg);
@@ -716,8 +671,7 @@ public class CraftClan implements Clan, TableObject {
      * @param msg       The message which should be announced
      */
     @Override
-    public void announce(ClanPlayer announcer, String msg)
-    {
+    public void announce(ClanPlayer announcer, String msg) {
         announceRaw(ChatBlock.parseColors(plugin.getSettingsManager().getClanPlayerAnnounce().replace("+player", announcer.getName()).replace("+message", msg)));
     }
 
@@ -728,8 +682,7 @@ public class CraftClan implements Clan, TableObject {
      * @param msg       The message which should be announced
      */
     @Override
-    public void announce(Clan announcer, String msg)
-    {
+    public void announce(Clan announcer, String msg) {
         announceRaw(ChatBlock.parseColors(plugin.getSettingsManager().getClanAnnounce().replace("+clan", announcer.getTag()).replace("+message", msg)));
     }
 
@@ -739,8 +692,7 @@ public class CraftClan implements Clan, TableObject {
      * @param msg The message which should be announced
      */
     @Override
-    public void announce(String msg)
-    {
+    public void announce(String msg) {
         announceRaw(ChatBlock.parseColors(plugin.getSettingsManager().getDefaultAnnounce().replace("+message", msg)));
     }
 
@@ -751,8 +703,7 @@ public class CraftClan implements Clan, TableObject {
      *
      * @param message The message
      */
-    private void announceRaw(String message)
-    {
+    private void announceRaw(String message) {
         if (message == null) {
             return;
         }
@@ -771,31 +722,26 @@ public class CraftClan implements Clan, TableObject {
      * @return The clean tag
      */
     @Override
-    public String getCleanTag()
-    {
+    public String getCleanTag() {
         return ChatColor.stripColor(tag.toLowerCase(Locale.US));
     }
 
     @Override
-    public void addBBMessage(String msg)
-    {
+    public void addBBMessage(String msg) {
         addBBRawMessage(ChatBlock.parseColors(plugin.getSettingsManager().getDefaultBB().replace("+message", msg)));
     }
 
-    private void addBBRawMessage(String message)
-    {
+    private void addBBRawMessage(String message) {
         plugin.getDataManager().addResponse(new BBAddResponse(plugin, message, this));
     }
 
     @Override
-    public void clearBB()
-    {
+    public void clearBB() {
         plugin.getDataManager().purgeBB(this);
     }
 
     @Override
-    public boolean equals(Object otherClan)
-    {
+    public boolean equals(Object otherClan) {
         if (this == otherClan) {
             return true;
         }
@@ -810,14 +756,12 @@ public class CraftClan implements Clan, TableObject {
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return (int) (id ^ (id >>> 32));
     }
 
     @Override
-    public void addRival(Clan rival)
-    {
+    public void addRival(Clan rival) {
         if (rivals == null) {
             rivals = new HashSet<Clan>();
         }
@@ -825,8 +769,7 @@ public class CraftClan implements Clan, TableObject {
     }
 
     @Override
-    public void addAlly(Clan ally)
-    {
+    public void addAlly(Clan ally) {
         if (allies == null) {
             allies = new HashSet<Clan>();
         }
@@ -834,16 +777,14 @@ public class CraftClan implements Clan, TableObject {
     }
 
     @Override
-    public void addWarringClan(Clan warringClan)
-    {
+    public void addWarringClan(Clan warringClan) {
         if (warring == null) {
             warring = new HashSet<Clan>();
         }
         addRelation(RelationType.WAR, warring, warringClan);
     }
 
-    private void addRelation(RelationType relationType, Set<Clan> relationSet, Clan clanToAdd)
-    {
+    private void addRelation(RelationType relationType, Set<Clan> relationSet, Clan clanToAdd) {
         ClanRelationCreateEvent relationEvent = new ClanRelationCreateEvent(this, clanToAdd, relationType);
 
         plugin.getServer().getPluginManager().callEvent(relationEvent);
@@ -856,25 +797,21 @@ public class CraftClan implements Clan, TableObject {
     }
 
     @Override
-    public void removeRival(Clan rival)
-    {
+    public void removeRival(Clan rival) {
         removeRelation(RelationType.RIVAL, rivals, rival);
     }
 
     @Override
-    public void removeAlly(Clan ally)
-    {
+    public void removeAlly(Clan ally) {
         removeRelation(RelationType.ALLY, allies, ally);
     }
 
     @Override
-    public void removeWarringClan(Clan warringClan)
-    {
+    public void removeWarringClan(Clan warringClan) {
         removeRelation(RelationType.WAR, warring, warringClan);
     }
 
-    private void removeRelation(RelationType relationType, Set<Clan> relationSet, Clan clanToRemove)
-    {
+    private void removeRelation(RelationType relationType, Set<Clan> relationSet, Clan clanToRemove) {
         if (relationSet == null) {
             return;
         }
@@ -896,8 +833,7 @@ public class CraftClan implements Clan, TableObject {
      * @param clanPlayer The member to remove
      */
     @Override
-    public void removeMember(ClanPlayer clanPlayer)
-    {
+    public void removeMember(ClanPlayer clanPlayer) {
         if (allMembers == null) {
             return;
         }
@@ -916,8 +852,7 @@ public class CraftClan implements Clan, TableObject {
      * Disbands this (performs all necessary steps)
      */
     @Override
-    public void disband()
-    {
+    public void disband() {
         if (allMembers != null) {
             for (ClanPlayer clanPlayer : allMembers) {
                 clanPlayer.unset();
@@ -965,8 +900,7 @@ public class CraftClan implements Clan, TableObject {
      * @return Weather this clan has allies
      */
     @Override
-    public boolean hasAllies()
-    {
+    public boolean hasAllies() {
         return allies != null && !allies.isEmpty();
     }
 
@@ -976,8 +910,7 @@ public class CraftClan implements Clan, TableObject {
      * @return Weather this clan has rivals
      */
     @Override
-    public boolean hasRivals()
-    {
+    public boolean hasRivals() {
         return rivals != null && !rivals.isEmpty();
     }
 
@@ -987,8 +920,7 @@ public class CraftClan implements Clan, TableObject {
      * @return Weather this clan has warring clans
      */
     @Override
-    public boolean hasWarringClans()
-    {
+    public boolean hasWarringClans() {
         return warring != null && !warring.isEmpty();
     }
 
@@ -998,8 +930,7 @@ public class CraftClan implements Clan, TableObject {
      * @return Weather all players are online
      */
     @Override
-    public boolean allLeadersOnline()
-    {
+    public boolean allLeadersOnline() {
         return allLeadersOnline(null);
     }
 
@@ -1010,8 +941,7 @@ public class CraftClan implements Clan, TableObject {
      * @return Weather all players are online
      */
     @Override
-    public boolean allLeadersOnline(ClanPlayer ignore)
-    {
+    public boolean allLeadersOnline(ClanPlayer ignore) {
         for (ClanPlayer clanPlayer : getLeaders()) {
             if (ignore != null && clanPlayer.equals(ignore)) {
                 continue;
@@ -1030,8 +960,7 @@ public class CraftClan implements Clan, TableObject {
      *
      * @return Weather this clan needs a update
      */
-    public boolean needsUpdate()
-    {
+    public boolean needsUpdate() {
         return update;
     }
 
@@ -1039,8 +968,7 @@ public class CraftClan implements Clan, TableObject {
      * Marks this clan to update
      */
     @Override
-    public void update()
-    {
+    public void update() {
         this.update = true;
     }
 
@@ -1050,14 +978,12 @@ public class CraftClan implements Clan, TableObject {
      * @param update Weather to update
      */
     @Override
-    public void update(boolean update)
-    {
+    public void update(boolean update) {
         this.update = update;
     }
 
     @Override
-    public long getLastUpdated()
-    {
+    public long getLastUpdated() {
         return lastActionDate;
     }
 
@@ -1072,8 +998,7 @@ public class CraftClan implements Clan, TableObject {
      * @return A array of the kills of this clan from index 0 - 3
      */
     @Override
-    public int[] getTotalKills()
-    {
+    public int[] getTotalKills() {
         int totalDeaths = 0;
         int totalRivalKills = 0;
         int totalCivilianKills = 0;
@@ -1095,8 +1020,7 @@ public class CraftClan implements Clan, TableObject {
      * @param rank The rank to add
      */
     @Override
-    public void addRank(Rank rank)
-    {
+    public void addRank(Rank rank) {
         if (rank == null) {
             return;
         }
@@ -1114,8 +1038,7 @@ public class CraftClan implements Clan, TableObject {
      * @return Weather is was successfully
      */
     @Override
-    public long deleteRank(Rank rank)
-    {
+    public long deleteRank(Rank rank) {
         if (rank == null || ranks == null) {
             return -1;
         }
@@ -1142,8 +1065,7 @@ public class CraftClan implements Clan, TableObject {
      * @return Weather it was successfully
      */
     @Override
-    public long deleteRank(String tag)
-    {
+    public long deleteRank(String tag) {
         if (ranks == null) {
             return -1;
         }
@@ -1176,8 +1098,7 @@ public class CraftClan implements Clan, TableObject {
      * @return All ranks of this clan
      */
     @Override
-    public Set<Rank> getRanks()
-    {
+    public Set<Rank> getRanks() {
         return ranks == null ? Collections.unmodifiableSet(new HashSet<Rank>()) : Collections.unmodifiableSet(ranks);
     }
 
@@ -1186,8 +1107,7 @@ public class CraftClan implements Clan, TableObject {
      *
      * @param ranks The ranks to load
      */
-    public void loadRanks(Set<CraftRank> ranks)
-    {
+    public void loadRanks(Set<CraftRank> ranks) {
         if (this.ranks == null) {
             this.ranks = new HashSet<Rank>();
         }
@@ -1201,8 +1121,7 @@ public class CraftClan implements Clan, TableObject {
      * @return The rank
      */
     @Override
-    public Rank getRank(long id)
-    {
+    public Rank getRank(long id) {
         if (ranks == null) {
             return null;
         }
@@ -1223,8 +1142,7 @@ public class CraftClan implements Clan, TableObject {
      * @return The rank
      */
     @Override
-    public Rank getRank(String query)
-    {
+    public Rank getRank(String query) {
         if (ranks == null) {
             return null;
         }
@@ -1245,8 +1163,7 @@ public class CraftClan implements Clan, TableObject {
      * @return A string with information about this clan
      */
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "Clan{" +
                 "id=" + id +
                 ", tag='" + tag + '\'' +
@@ -1263,8 +1180,7 @@ public class CraftClan implements Clan, TableObject {
      * @param anotherClan Another clan
      */
     @Override
-    public int compareTo(Clan anotherClan)
-    {
+    public int compareTo(Clan anotherClan) {
         int thisInactiveDate = this.getInactiveDays();
         int anotherInactiveDate = anotherClan.getInactiveDays();
         return (thisInactiveDate < anotherInactiveDate ? -1 : (thisInactiveDate == anotherInactiveDate ? 0 : 1));
@@ -1276,8 +1192,7 @@ public class CraftClan implements Clan, TableObject {
      * @return All members of this clan
      */
     @Override
-    public Set<ClanPlayer> getAllAllyMembers()
-    {
+    public Set<ClanPlayer> getAllAllyMembers() {
         Set<ClanPlayer> allyMembers = new HashSet<ClanPlayer>();
 
         for (Clan ally : getAllies()) {
@@ -1295,8 +1210,7 @@ public class CraftClan implements Clan, TableObject {
      * @return Weather the clan has reached the maximum rivalries
      */
     @Override
-    public boolean reachedRivalLimit()
-    {
+    public boolean reachedRivalLimit() {
         int rivalCount = rivals == null ? 0 : rivals.size();
         //minus 1 because this clan is rivable
         double clanCount = plugin.getClanManager().getRivalAbleClanCount() - 1;
@@ -1310,8 +1224,7 @@ public class CraftClan implements Clan, TableObject {
     /**
      * Deletes the permission sets
      */
-    public void removePermissions()
-    {
+    public void removePermissions() {
         plugin.getServer().getPluginManager().removePermission("SC" + String.valueOf(id));
     }
 
@@ -1320,8 +1233,7 @@ public class CraftClan implements Clan, TableObject {
      *
      * @param permissions The set of permissions
      */
-    public void setupPermissions(Map<String, Boolean> permissions)
-    {
+    public void setupPermissions(Map<String, Boolean> permissions) {
         removePermissions();
 
         plugin.registerSimpleClansPermission("SC" + String.valueOf(id), permissions);
@@ -1330,8 +1242,7 @@ public class CraftClan implements Clan, TableObject {
     /**
      * Updates the permissions for every clanplayer of this clan
      */
-    public void updatePermissions()
-    {
+    public void updatePermissions() {
         for (ClanPlayer clanPlayer : getAllMembers()) {
             OnlineClanPlayer online = clanPlayer.getOnlineVersion();
             if (online == null) {
@@ -1349,8 +1260,7 @@ public class CraftClan implements Clan, TableObject {
      * @param message The message
      */
     @Override
-    public void serverAnnounce(String message)
-    {
+    public void serverAnnounce(String message) {
         SimpleClans.serverAnnounceRaw(ChatBlock.parseColors(plugin.getSettingsManager().getClanAnnounce().replace("+clan", this.getTag()).replace("+message", message)));
     }
 
@@ -1360,8 +1270,7 @@ public class CraftClan implements Clan, TableObject {
      * @param sender The retriever
      */
     @Override
-    public void showClanProfile(CommandSender sender)
-    {
+    public void showClanProfile(CommandSender sender) {
         ChatColor subColor = plugin.getSettingsManager().getSubPageColor();
         ChatColor headColor = plugin.getSettingsManager().getHeaderPageColor();
 
@@ -1409,38 +1318,32 @@ public class CraftClan implements Clan, TableObject {
     }
 
     @Override
-    public boolean withdraw(double amount)
-    {
+    public boolean withdraw(double amount) {
         return this.getBank().withdraw(amount);
     }
 
     @Override
-    public void deposit(double amount)
-    {
+    public void deposit(double amount) {
         this.getBank().deposit(amount);
     }
 
     @Override
-    public boolean transfer(Balance account, double amount)
-    {
+    public boolean transfer(Balance account, double amount) {
         return this.getBank().transfer(account, amount);
     }
 
     @DatabaseColumnGetter(databaseName = "balance")
     @Override
-    public double getBalance()
-    {
+    public double getBalance() {
         return this.getBank().getBalance();
     }
 
     @DatabaseColumnSetter(position = 10, databaseName = "balance", defaultValue = "0.0", lenght = {20, 2})
-    private void setBalance(double balance)
-    {
+    private void setBalance(double balance) {
         this.getBank().setBalance(balance);
     }
 
-    private BankAccount getBank()
-    {
+    private BankAccount getBank() {
         if (bank == null) {
             bank = new BankAccount();
         }
@@ -1449,43 +1352,36 @@ public class CraftClan implements Clan, TableObject {
     }
 
     @DatabaseColumnGetter(databaseName = "allies")
-    private String getDatabaseAllies()
-    {
+    private String getDatabaseAllies() {
         return allies == null || allies.isEmpty() ? null : JSONUtil.clansToJSON(allies);
     }
 
     @DatabaseColumnSetter(position = 6, databaseName = "allies", saveValueAfterLoading = true)
-    private void setDatabaseAllies(String allies)
-    {
+    private void setDatabaseAllies(String allies) {
         addDatabaseRelative(allies, this.allies = new HashSet<Clan>());
     }
 
     @DatabaseColumnGetter(databaseName = "rivals")
-    private String getDatabaseRivals()
-    {
+    private String getDatabaseRivals() {
         return rivals == null || rivals.isEmpty() ? null : JSONUtil.clansToJSON(rivals);
     }
 
     @DatabaseColumnSetter(position = 7, databaseName = "rivals", saveValueAfterLoading = true)
-    private void setDatabaseRivals(String rivals)
-    {
+    private void setDatabaseRivals(String rivals) {
         addDatabaseRelative(rivals, this.rivals = new HashSet<Clan>());
     }
 
     @DatabaseColumnGetter(databaseName = "warring")
-    private String getDatabaseWarring()
-    {
+    private String getDatabaseWarring() {
         return warring == null || warring.isEmpty() ? null : JSONUtil.clansToJSON(warring);
     }
 
     @DatabaseColumnSetter(position = 8, databaseName = "warring", saveValueAfterLoading = true)
-    private void setDatabaseWarring(String warring)
-    {
+    private void setDatabaseWarring(String warring) {
         addDatabaseRelative(warring, this.warring = new HashSet<Clan>());
     }
 
-    private void addDatabaseRelative(String json, Set<Clan> clans)
-    {
+    private void addDatabaseRelative(String json, Set<Clan> clans) {
         if (json == null) {
             return;
         }
@@ -1505,8 +1401,7 @@ public class CraftClan implements Clan, TableObject {
     }
 
     @DatabaseColumnSetter(position = 9, databaseName = "flags")
-    public void setDatabaseFlags(String flags)
-    {
+    public void setDatabaseFlags(String flags) {
         if (flags == null) {
             this.flags = new CraftClanFlags();
         }
@@ -1514,8 +1409,7 @@ public class CraftClan implements Clan, TableObject {
     }
 
     @DatabaseColumnGetter(databaseName = "flags")
-    public String getDatabaseFlags()
-    {
+    public String getDatabaseFlags() {
         if (getFlags() == null) {
             return null;
         }
@@ -1527,8 +1421,7 @@ public class CraftClan implements Clan, TableObject {
      *
      * @param cp The ClanPlayer to add
      */
-    public void addMemberInternally(ClanPlayer cp)
-    {
+    public void addMemberInternally(ClanPlayer cp) {
         if (allMembers == null) {
             this.allMembers = new HashSet<ClanPlayer>();
         }

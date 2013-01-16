@@ -42,14 +42,12 @@ public class TeleportManager {
     /**
      *
      */
-    public TeleportManager(SimpleClans plugin)
-    {
+    public TeleportManager(SimpleClans plugin) {
         this.plugin = plugin;
         plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new TeleportTask(plugin, waitingPlayers), 0, 20L);
     }
 
-    public int getWaitingPlayers()
-    {
+    public int getWaitingPlayers() {
         return waitingPlayers.size();
     }
 
@@ -60,8 +58,7 @@ public class TeleportManager {
      * @param destination The destination
      * @param msg         The message
      */
-    public void addPlayer(Player player, Location destination, String msg)
-    {
+    public void addPlayer(Player player, Location destination, String msg) {
         int secs = plugin.getSettingsManager().getTimeUntilTeleport();
 
         waitingPlayers.add(new TeleportState(player, destination, msg, secs));
@@ -72,8 +69,7 @@ public class TeleportManager {
     }
 
 
-    public static boolean isLocationEqual(Location location1, Location location2, double fuzzy)
-    {
+    public static boolean isLocationEqual(Location location1, Location location2, double fuzzy) {
         if (Math.abs(location1.getX() - location2.getX()) > fuzzy) {
             return false;
         }

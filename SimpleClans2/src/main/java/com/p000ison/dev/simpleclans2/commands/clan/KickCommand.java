@@ -33,8 +33,7 @@ import java.text.MessageFormat;
 
 public class KickCommand extends GenericPlayerCommand {
 
-    public KickCommand(SimpleClans plugin)
-    {
+    public KickCommand(SimpleClans plugin) {
         super("Kick", plugin);
         setArgumentRange(1, 1);
         setUsages(MessageFormat.format(Language.getTranslation("usage.kick"), plugin.getSettingsManager().getClanCommand()));
@@ -43,8 +42,7 @@ public class KickCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public String getMenu(ClanPlayer cp)
-    {
+    public String getMenu(ClanPlayer cp) {
         if (cp != null && cp.isLeader()) {
             return MessageFormat.format(Language.getTranslation("menu.kick"), plugin.getSettingsManager().getClanCommand());
         }
@@ -52,8 +50,7 @@ public class KickCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public void execute(Player player, String[] args)
-    {
+    public void execute(Player player, String[] args) {
         ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
 
         if (cp != null) {

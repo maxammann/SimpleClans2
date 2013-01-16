@@ -35,21 +35,18 @@ public class WarStartRequest extends MultipleRequest {
 
     private Clan warring;
 
-    public WarStartRequest(SimpleClans plugin, Set<ClanPlayer> acceptors, ClanPlayer requester, Clan warring)
-    {
+    public WarStartRequest(SimpleClans plugin, Set<ClanPlayer> acceptors, ClanPlayer requester, Clan warring) {
         super(plugin, acceptors, requester);
         this.warring = warring;
     }
 
     @Override
-    public void onRequesting()
-    {
+    public void onRequesting() {
         sendAcceptorMessage(ChatColor.AQUA + Language.getTranslation("proposing.war", requester.getClan().getTag(), warring.getTag()));
     }
 
     @Override
-    public boolean onAccepted()
-    {
+    public boolean onAccepted() {
         ClanPlayer cp = getRequester();
         Clan clan = requester.getClan();
 
@@ -69,8 +66,7 @@ public class WarStartRequest extends MultipleRequest {
     }
 
     @Override
-    public void onDenied()
-    {
+    public void onDenied() {
         sendRequesterMessage(ChatColor.DARK_RED + Language.getTranslation("war.start.denied", warring.getTag()));
         sendAcceptorMessage(ChatColor.DARK_RED + Language.getTranslation("war.start.denied", requester.getClan().getTag()));
     }

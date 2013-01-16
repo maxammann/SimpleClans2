@@ -37,8 +37,7 @@ import java.util.Set;
  */
 public class RivalCommand extends GenericPlayerCommand {
 
-    public RivalCommand(SimpleClans plugin)
-    {
+    public RivalCommand(SimpleClans plugin) {
         super("Rival", plugin);
         setArgumentRange(2, 2);
         setUsages(Language.getTranslation("usage.rival", plugin.getSettingsManager().getClanCommand()));
@@ -47,8 +46,7 @@ public class RivalCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public String getMenu(ClanPlayer cp)
-    {
+    public String getMenu(ClanPlayer cp) {
         if (cp != null && cp.isLeader() && cp.getClan().isVerified()) {
             return Language.getTranslation("menu.rival", plugin.getSettingsManager().getClanCommand());
         }
@@ -56,8 +54,7 @@ public class RivalCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public void execute(Player player, String[] args)
-    {
+    public void execute(Player player, String[] args) {
         ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
 
         if (cp != null) {

@@ -35,8 +35,7 @@ import java.text.MessageFormat;
  */
 public class DenyCommand extends GenericPlayerCommand {
 
-    public DenyCommand(SimpleClans plugin)
-    {
+    public DenyCommand(SimpleClans plugin) {
         super("Deny", plugin);
         setArgumentRange(0, 0);
         setUsages(MessageFormat.format(Language.getTranslation("usage.deny"), plugin.getSettingsManager().getClanCommand()));
@@ -45,14 +44,12 @@ public class DenyCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public String getMenu(ClanPlayer clanPlayer)
-    {
+    public String getMenu(ClanPlayer clanPlayer) {
         return null;
     }
 
     @Override
-    public void execute(Player player, String[] args)
-    {
+    public void execute(Player player, String[] args) {
         ClanPlayer clanPlayer = plugin.getClanPlayerManager().getCreateClanPlayerExact(player);
         Request request = plugin.getRequestManager().vote(clanPlayer, RequestManager.Result.DENY);
 

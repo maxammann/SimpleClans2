@@ -38,8 +38,7 @@ import java.util.Set;
  */
 public class DemoteCommand extends GenericPlayerCommand {
 
-    public DemoteCommand(SimpleClans plugin)
-    {
+    public DemoteCommand(SimpleClans plugin) {
         super("Demote", plugin);
         this.plugin = plugin;
         setArgumentRange(1, 1);
@@ -49,8 +48,7 @@ public class DemoteCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public String getMenu(ClanPlayer cp)
-    {
+    public String getMenu(ClanPlayer cp) {
         if (cp != null) {
             return MessageFormat.format(Language.getTranslation("menu.demote"), plugin.getSettingsManager().getClanCommand());
         }
@@ -58,8 +56,7 @@ public class DemoteCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public void execute(Player player, String[] args)
-    {
+    public void execute(Player player, String[] args) {
 
         ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
 

@@ -33,14 +33,12 @@ public class CraftClanFlags extends JSONFlags implements ClanFlags {
     private static final long serialVersionUID = 3492895041242487486L;
 
     @Override
-    public void setHomeLocation(Location location)
-    {
+    public void setHomeLocation(Location location) {
         super.setString("home", new PlayerPosition(location).serialize());
     }
 
     @Override
-    public Location getHomeLocation()
-    {
+    public Location getHomeLocation() {
         String locationString = super.getString("home");
 
         if (locationString == null) {
@@ -51,26 +49,22 @@ public class CraftClanFlags extends JSONFlags implements ClanFlags {
     }
 
     @Override
-    public void setClanCapeURL(String url)
-    {
+    public void setClanCapeURL(String url) {
         super.setString("cape-url", url);
     }
 
     @Override
-    public String getClanCapeURL()
-    {
+    public String getClanCapeURL() {
         return super.getString("cape-url");
     }
 
     @Override
-    public void setFriendlyFire(boolean bool)
-    {
+    public void setFriendlyFire(boolean bool) {
         super.setBoolean("ff", bool);
     }
 
     @Override
-    public boolean isFriendlyFireEnabled()
-    {
+    public boolean isFriendlyFireEnabled() {
         return super.getBoolean("ff");
     }
 }

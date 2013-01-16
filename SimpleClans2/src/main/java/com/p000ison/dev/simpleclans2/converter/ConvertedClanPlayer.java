@@ -26,19 +26,16 @@ public class ConvertedClanPlayer {
     private long id;
     private String name;
 
-    public ConvertedClanPlayer(long id, String name)
-    {
+    public ConvertedClanPlayer(long id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public long getId()
-    {
+    public long getId() {
         return id;
     }
 
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 }

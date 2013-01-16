@@ -39,8 +39,7 @@ import java.util.Set;
  */
 public class PromoteCommand extends GenericPlayerCommand {
 
-    public PromoteCommand(SimpleClans plugin)
-    {
+    public PromoteCommand(SimpleClans plugin) {
         super("Promote", plugin);
         setArgumentRange(1, 1);
         setUsages(Language.getTranslation("usage.promote", plugin.getSettingsManager().getClanCommand()));
@@ -50,8 +49,7 @@ public class PromoteCommand extends GenericPlayerCommand {
 
 
     @Override
-    public String getMenu(ClanPlayer cp)
-    {
+    public String getMenu(ClanPlayer cp) {
         if (cp != null && cp.isLeader()) {
             return MessageFormat.format(Language.getTranslation("menu.promote"), plugin.getSettingsManager().getClanCommand());
         }
@@ -59,8 +57,7 @@ public class PromoteCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public void execute(Player player, String[] args)
-    {
+    public void execute(Player player, String[] args) {
         ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
 
         if (cp == null) {

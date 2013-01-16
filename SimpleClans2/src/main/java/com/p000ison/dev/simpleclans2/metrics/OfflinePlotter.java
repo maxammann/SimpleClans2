@@ -26,14 +26,12 @@ import org.mcstats.Metrics;
  */
 public class OfflinePlotter extends Metrics.Plotter {
 
-    public OfflinePlotter()
-    {
+    public OfflinePlotter() {
         super("Offline");
     }
 
     @Override
-    public int getValue()
-    {
+    public int getValue() {
         return 1;
     }
 }

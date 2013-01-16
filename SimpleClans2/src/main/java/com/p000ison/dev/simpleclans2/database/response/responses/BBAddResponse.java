@@ -31,23 +31,20 @@ public class BBAddResponse extends Response {
     private String message;
     private CraftClan clan;
 
-    public BBAddResponse(SimpleClans plugin, String message, CraftClan clan)
-    {
+    public BBAddResponse(SimpleClans plugin, String message, CraftClan clan) {
         super(plugin, null);
         this.message = message;
         this.clan = clan;
     }
 
     @Override
-    public boolean response()
-    {
+    public boolean response() {
         plugin.getDataManager().insertBBMessage(clan, message);
         return true;
     }
 
     @Override
-    public boolean needsRetriever()
-    {
+    public boolean needsRetriever() {
         return false;
     }
 }

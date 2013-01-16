@@ -33,8 +33,7 @@ import java.text.MessageFormat;
 public class GlobalFFCommand extends GenericConsoleCommand {
 
 
-    public GlobalFFCommand(SimpleClans plugin)
-    {
+    public GlobalFFCommand(SimpleClans plugin) {
         super("GlobalFF", plugin);
         setArgumentRange(1, 1);
         setUsages(MessageFormat.format(Language.getTranslation("usage.globalff"), plugin.getSettingsManager().getClanCommand()));
@@ -43,14 +42,12 @@ public class GlobalFFCommand extends GenericConsoleCommand {
     }
 
     @Override
-    public String getMenu()
-    {
+    public String getMenu() {
         return MessageFormat.format(Language.getTranslation("menu.globalff"), plugin.getSettingsManager().getClanCommand());
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args)
-    {
+    public void execute(CommandSender sender, String[] args) {
         String action = args[0];
 
         if (action.equalsIgnoreCase(Language.getTranslation("allow"))) {

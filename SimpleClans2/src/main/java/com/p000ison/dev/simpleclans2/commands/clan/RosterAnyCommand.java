@@ -41,8 +41,7 @@ import java.util.List;
  */
 public class RosterAnyCommand extends GenericPlayerCommand {
 
-    public RosterAnyCommand(SimpleClans plugin)
-    {
+    public RosterAnyCommand(SimpleClans plugin) {
         super("Roster", plugin);
         setArgumentRange(1, 2);
         setUsages(MessageFormat.format(Language.getTranslation("usage.roster"), plugin.getSettingsManager().getClanCommand()));
@@ -51,14 +50,12 @@ public class RosterAnyCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public String getMenu(ClanPlayer cp)
-    {
+    public String getMenu(ClanPlayer cp) {
         return MessageFormat.format(Language.getTranslation("menu.roster.any"), plugin.getSettingsManager().getClanCommand());
     }
 
     @Override
-    public void execute(Player player, String[] args)
-    {
+    public void execute(Player player, String[] args) {
         int page = CraftCommandManager.getPage(args);
 
         if (page == -1) {

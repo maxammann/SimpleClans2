@@ -35,8 +35,7 @@ import java.util.Map;
  */
 public class ListPermissionsCommand extends GenericConsoleCommand {
 
-    public ListPermissionsCommand(SimpleClans plugin)
-    {
+    public ListPermissionsCommand(SimpleClans plugin) {
         super("ViewPermissions", plugin);
         setArgumentRange(0, 0);
         setUsages(Language.getTranslation("usage.view.permissions", plugin.getSettingsManager().getRankCommand()));
@@ -46,14 +45,12 @@ public class ListPermissionsCommand extends GenericConsoleCommand {
     }
 
     @Override
-    public String getMenu()
-    {
+    public String getMenu() {
         return Language.getTranslation("menu.rank.permissions", plugin.getSettingsManager().getRankCommand());
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args)
-    {
+    public void execute(CommandSender sender, String[] args) {
         ChatBlock chatBlock = new ChatBlock();
 
         ChatBlock.sendHead(sender, Language.getTranslation("global"), Language.getTranslation("permissions"));

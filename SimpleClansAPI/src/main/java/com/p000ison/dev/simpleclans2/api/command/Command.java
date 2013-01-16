@@ -53,19 +53,16 @@ public interface Command {
 
         private String[] command;
 
-        private Type(String... command)
-        {
+        private Type(String... command) {
 
             this.command = command;
         }
 
-        public String[] getCommands()
-        {
+        public String[] getCommands() {
             return command.clone();
         }
 
-        public static Type getByCommand(String command)
-        {
+        public static Type getByCommand(String command) {
 
             if (command == null) {
                 return null;

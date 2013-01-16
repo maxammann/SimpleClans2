@@ -36,21 +36,18 @@ public class PromoteRequest extends MultipleRequest {
 
     private ClanPlayer targetPlayer;
 
-    public PromoteRequest(SimpleClans plugin, Set<ClanPlayer> acceptors, ClanPlayer requester, ClanPlayer targetPlayer)
-    {
+    public PromoteRequest(SimpleClans plugin, Set<ClanPlayer> acceptors, ClanPlayer requester, ClanPlayer targetPlayer) {
         super(plugin, acceptors, requester);
         this.targetPlayer = targetPlayer;
     }
 
     @Override
-    public void onRequesting()
-    {
+    public void onRequesting() {
         sendAcceptorMessage(ChatColor.AQUA + Language.getTranslation("asking.for.the.promotion", requester.getName(), targetPlayer.getName()));
     }
 
     @Override
-    public boolean onAccepted()
-    {
+    public boolean onAccepted() {
         ClanPlayer cp = getRequester();
         Clan clan = requester.getClan();
 
@@ -65,8 +62,7 @@ public class PromoteRequest extends MultipleRequest {
     }
 
     @Override
-    public void onDenied()
-    {
+    public void onDenied() {
         announceMessage(ChatColor.DARK_RED + Language.getTranslation("promotion.denied", targetPlayer.getName()));
     }
 }

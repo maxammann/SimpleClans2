@@ -33,8 +33,7 @@ public class LastSeenComparator implements Comparator<UpdateAble>, Serializable 
     private static final long serialVersionUID = -8970594210472188200L;
 
     @Override
-    public int compare(UpdateAble updateAble1, UpdateAble updateAble2)
-    {
+    public int compare(UpdateAble updateAble1, UpdateAble updateAble2) {
         long updated1 = updateAble1.getLastUpdated();
         long updated2 = updateAble2.getLastUpdated();
         return (updated1 < updated2 ? -1 : (updated1 == updated2 ? 0 : 1));

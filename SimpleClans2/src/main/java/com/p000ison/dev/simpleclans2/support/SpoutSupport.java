@@ -45,8 +45,7 @@ public class SpoutSupport {
     private boolean enabled = false;
     private SimpleClans plugin;
 
-    public SpoutSupport(SimpleClans plugin)
-    {
+    public SpoutSupport(SimpleClans plugin) {
         this.plugin = plugin;
         Plugin spout = Bukkit.getPluginManager().getPlugin("Spout");
 
@@ -59,13 +58,11 @@ public class SpoutSupport {
         plugin.getServer().getPluginManager().registerEvents(new SCPlayerListener(plugin), plugin);
     }
 
-    public boolean isEnabled()
-    {
+    public boolean isEnabled() {
         return enabled;
     }
 
-    public void showNotification(Player player, String title, String message, Material material)
-    {
+    public void showNotification(Player player, String title, String message, Material material) {
         if (!isEnabled()) {
             getSpoutPlayerExact(player).sendNotification(title, message, material);
         } else {
@@ -73,8 +70,7 @@ public class SpoutSupport {
         }
     }
 
-    public void setTitle(Player player, String title)
-    {
+    public void setTitle(Player player, String title) {
         if (!isEnabled()) {
             return;
         }
@@ -82,8 +78,7 @@ public class SpoutSupport {
         getSpoutPlayerExact(player).setTitle(title);
     }
 
-    public void updateCape(SpoutPlayer spoutPlayer, Clan clan)
-    {
+    public void updateCape(SpoutPlayer spoutPlayer, Clan clan) {
         if (clan == null || spoutPlayer == null) {
             return;
         }
@@ -101,18 +96,15 @@ public class SpoutSupport {
         spoutPlayer.setCape(url);
     }
 
-    public static SpoutPlayer getSpoutPlayerExact(ClanPlayer clanplayer)
-    {
+    public static SpoutPlayer getSpoutPlayerExact(ClanPlayer clanplayer) {
         return getSpoutPlayer(clanplayer.getName());
     }
 
-    public static SpoutPlayer getSpoutPlayerExact(Player player)
-    {
+    public static SpoutPlayer getSpoutPlayerExact(Player player) {
         return getPlayer(player);
     }
 
-    public static SpoutPlayer getSpoutPlayerExact(String player)
-    {
+    public static SpoutPlayer getSpoutPlayerExact(String player) {
         for (SpoutPlayer spoutPlayer : getOnlinePlayers()) {
             if (player.equals(spoutPlayer.getName())) {
                 return spoutPlayer;
@@ -122,8 +114,7 @@ public class SpoutSupport {
         return null;
     }
 
-    public void clearCape(ClanPlayer clanPlayer)
-    {
+    public void clearCape(ClanPlayer clanPlayer) {
         SpoutPlayer spoutPlayer = getSpoutPlayerExact(clanPlayer);
 
         if (spoutPlayer == null) {
@@ -132,8 +123,7 @@ public class SpoutSupport {
         spoutPlayer.setCape(null);
     }
 
-    public static SpoutPlayer getSpoutPlayer(String player)
-    {
+    public static SpoutPlayer getSpoutPlayer(String player) {
         String clean = player.toLowerCase(Locale.US);
         for (SpoutPlayer spoutPlayer : getOnlinePlayers()) {
             String iClean = spoutPlayer.getName().toLowerCase(Locale.US);

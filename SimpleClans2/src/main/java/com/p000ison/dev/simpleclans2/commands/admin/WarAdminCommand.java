@@ -32,8 +32,7 @@ import org.bukkit.command.CommandSender;
  */
 public class WarAdminCommand extends GenericConsoleCommand {
 
-    public WarAdminCommand(SimpleClans plugin)
-    {
+    public WarAdminCommand(SimpleClans plugin) {
         super("WarAdmin", plugin);
         setArgumentRange(3, 3);
         setUsages(Language.getTranslation("usage.war.admin", plugin.getSettingsManager().getClanCommand()));
@@ -42,8 +41,7 @@ public class WarAdminCommand extends GenericConsoleCommand {
     }
 
     @Override
-    public String getMenu()
-    {
+    public String getMenu() {
         if (plugin.isUpdate()) {
             return Language.getTranslation("menu.war.admin", plugin.getSettingsManager().getClanCommand());
         }
@@ -52,8 +50,7 @@ public class WarAdminCommand extends GenericConsoleCommand {
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args)
-    {
+    public void execute(CommandSender sender, String[] args) {
         Clan clan1 = plugin.getClanManager().getClan(args[1]);
         Clan clan2 = plugin.getClanManager().getClan(args[2]);
 

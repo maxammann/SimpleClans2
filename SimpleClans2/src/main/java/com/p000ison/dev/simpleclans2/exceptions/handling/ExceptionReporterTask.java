@@ -38,13 +38,11 @@ public class ExceptionReporterTask implements Runnable {
     private static final String PROTOCOL = "http", HOST = "dreamz.bplaced.com", FILE = "/exceptions/index.php";
     private static final int PORT = 80;
 
-    public ExceptionReporterTask()
-    {
+    public ExceptionReporterTask() {
         this.queue = new ConcurrentLinkedQueue<ExceptionReport>();
     }
 
-    public boolean addReport(ExceptionReport exceptionReport)
-    {
+    public boolean addReport(ExceptionReport exceptionReport) {
         if (queue == null) {
             return false;
         }
@@ -56,15 +54,13 @@ public class ExceptionReporterTask implements Runnable {
         return false;
     }
 
-    public boolean addReport(Throwable thrown, String plugin, String version, String email)
-    {
+    public boolean addReport(Throwable thrown, String plugin, String version, String email) {
         return addReport(new ExceptionReport(plugin, version, thrown, email));
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public void run()
-    {
+    public void run() {
         if (queue.isEmpty()) {
             return;
         }

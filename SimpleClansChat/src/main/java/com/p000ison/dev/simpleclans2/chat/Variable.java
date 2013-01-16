@@ -26,25 +26,21 @@ public class Variable {
     private String variable;
     private String format;
 
-    public Variable(String variable, String format)
-    {
+    public Variable(String variable, String format) {
         this.variable = variable;
         this.format = format;
     }
 
-    public String format(String input)
-    {
+    public String format(String input) {
         return String.format(format, input);
     }
 
-    public String getVariable()
-    {
+    public String getVariable() {
         return variable;
     }
 
     @Override
-    public boolean equals(Object o)
-    {
+    public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
@@ -54,14 +50,12 @@ public class Variable {
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return variable != null ? variable.hashCode() : 0;
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "Variable{" +
                 "variable='" + variable + '\'' +
                 '}';

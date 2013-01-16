@@ -40,8 +40,7 @@ import java.util.Set;
  */
 public class ListRanksCommand extends GenericPlayerCommand {
 
-    public ListRanksCommand(SimpleClans plugin)
-    {
+    public ListRanksCommand(SimpleClans plugin) {
         super("ListRanks", plugin);
         setArgumentRange(0, 0);
         setUsages(Language.getTranslation("usage.view.ranks", plugin.getSettingsManager().getRankCommand()));
@@ -51,8 +50,7 @@ public class ListRanksCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public String getMenu(ClanPlayer clanPlayer)
-    {
+    public String getMenu(ClanPlayer clanPlayer) {
         if (clanPlayer != null) {
             return Language.getTranslation("menu.ranks.view", plugin.getSettingsManager().getRankCommand());
         }
@@ -60,8 +58,7 @@ public class ListRanksCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public void execute(Player player, String[] args)
-    {
+    public void execute(Player player, String[] args) {
         ClanPlayer clanPlayer = plugin.getClanPlayerManager().getClanPlayer(player);
 
         if (clanPlayer == null) {

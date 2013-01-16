@@ -39,16 +39,14 @@ public class KillsResponse extends Response {
     private ClanPlayer otherPlayer;
     private int page;
 
-    public KillsResponse(SimpleClans plugin, CommandSender sender, ClanPlayer polledPlayer, int page)
-    {
+    public KillsResponse(SimpleClans plugin, CommandSender sender, ClanPlayer polledPlayer, int page) {
         super(plugin, sender);
         this.otherPlayer = polledPlayer;
         this.page = page;
     }
 
     @Override
-    public boolean response()
-    {
+    public boolean response() {
         SortedMap<Integer, Long> killsPerPlayer = plugin.getDataManager().getKillsPerPlayer(otherPlayer.getID());
 
         if (killsPerPlayer.isEmpty()) {
@@ -84,8 +82,7 @@ public class KillsResponse extends Response {
     }
 
     @Override
-    public boolean needsRetriever()
-    {
+    public boolean needsRetriever() {
         return true;
     }
 }

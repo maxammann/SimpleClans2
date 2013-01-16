@@ -36,8 +36,7 @@ import java.text.MessageFormat;
  */
 public class CreateCommand extends GenericPlayerCommand {
 
-    public CreateCommand(SimpleClans plugin)
-    {
+    public CreateCommand(SimpleClans plugin) {
         super("CreateCommand", plugin);
         setArgumentRange(2, 20);
         setUsages(MessageFormat.format(Language.getTranslation("usage.create"), plugin.getSettingsManager().getClanCommand()), Language.getTranslation("example.clan.create"));
@@ -46,8 +45,7 @@ public class CreateCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public String getMenu(ClanPlayer cp)
-    {
+    public String getMenu(ClanPlayer cp) {
         if (cp == null) {
             if (plugin.getSettingsManager().isPurchaseCreation()) {
                 return MessageFormat.format(Language.getTranslation("menu.create.purchase"), plugin.getSettingsManager().getClanCommand());
@@ -59,8 +57,7 @@ public class CreateCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public void execute(Player player, String[] args)
-    {
+    public void execute(Player player, String[] args) {
         ClanPlayer cp = plugin.getClanPlayerManager().getCreateClanPlayerExact(player);
 
         if (cp.getClan() != null) {

@@ -57,14 +57,12 @@ public class Build {
     private Set<String> deletedFiles = new HashSet<String>();
 
 
-    public Build(String job, UpdateType updateType)
-    {
+    public Build(String job, UpdateType updateType) {
         this.job = job;
         this.updateType = updateType;
     }
 
-    public void fetchInformation() throws IOException
-    {
+    public void fetchInformation() throws IOException {
         URL buildAPIURL = new URL("http", JENKINS_HOST, 80, "/job/" + job + "/" + updateType + "/" + API_FILE);
 
         URLConnection connection = buildAPIURL.openConnection();
@@ -120,8 +118,7 @@ public class Build {
         }
     }
 
-    public static JSONObject parseJSON(Reader reader)
-    {
+    public static JSONObject parseJSON(Reader reader) {
         Object parse = JSONValue.parse(reader);
 
         if (!(parse instanceof JSONObject)) {
@@ -131,15 +128,13 @@ public class Build {
         return (JSONObject) parse;
     }
 
-    public InputStream getDownloadStream() throws IOException
-    {
+    public InputStream getDownloadStream() throws IOException {
         URL downloadURL = new URL("http", JENKINS_HOST, 80, fetchFile);
 
         return downloadURL.openConnection().getInputStream();
     }
 
-    public void saveToFile(File file) throws IOException
-    {
+    public void saveToFile(File file) throws IOException {
         InputStream input = getDownloadStream();
         OutputStream output = null;
         try {
@@ -165,8 +160,7 @@ public class Build {
         }
     }
 
-    public boolean saveToDirectory(File directory, String name) throws IOException
-    {
+    public boolean saveToDirectory(File directory, String name) throws IOException {
         if (!directory.exists()) {
             if (!directory.mkdirs()) {
                 return false;
@@ -184,53 +178,43 @@ public class Build {
         return true;
     }
 
-    public UpdateType getUpdateType()
-    {
+    public UpdateType getUpdateType() {
         return updateType;
     }
 
-    public long getDuration()
-    {
+    public long getDuration() {
         return duration;
     }
 
-    public long getStarted()
-    {
+    public long getStarted() {
         return started;
     }
 
-    public int getBuildNumber()
-    {
+    public int getBuildNumber() {
         return buildNumber;
     }
 
-    public Set<String> getDeletedFiles()
-    {
+    public Set<String> getDeletedFiles() {
         return deletedFiles;
     }
 
-    public String getCommitURL()
-    {
+    public String getCommitURL() {
         return commitId == null ? "None" : PROJECT_GITHUB_URL + commitId;
     }
 
-    public String getComment()
-    {
+    public String getComment() {
         return comment == null ? "None" : comment;
     }
 
-    public Set<String> getModifiedFiles()
-    {
+    public Set<String> getModifiedFiles() {
         return modifiedFiles;
     }
 
-    public Set<String> getCreatedFiles()
-    {
+    public Set<String> getCreatedFiles() {
         return createdFiles;
     }
 
-    public String getAuthor()
-    {
+    public String getAuthor() {
         return pusher == null ? "None" : pusher;
     }
 }

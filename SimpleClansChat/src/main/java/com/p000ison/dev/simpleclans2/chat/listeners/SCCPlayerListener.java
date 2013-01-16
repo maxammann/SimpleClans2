@@ -34,15 +34,13 @@ public class SCCPlayerListener implements Listener {
 
     private SimpleClansChat plugin;
 
-    public SCCPlayerListener(SimpleClansChat plugin)
-    {
+    public SCCPlayerListener(SimpleClansChat plugin) {
         this.plugin = plugin;
     }
 
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public AsyncPlayerChatEvent onPlayerChat(AsyncPlayerChatEvent event)
-    {
+    public AsyncPlayerChatEvent onPlayerChat(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
 
         ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
@@ -114,13 +112,11 @@ public class SCCPlayerListener implements Listener {
         return event;
     }
 
-    private boolean isChannelDisabled(Player player, Channel channel)
-    {
+    private boolean isChannelDisabled(Player player, Channel channel) {
         return isChannelDisabled(plugin.getClanPlayerManager().getClanPlayer(player), channel);
     }
 
-    private boolean isChannelDisabled(ClanPlayer player, Channel channel)
-    {
+    private boolean isChannelDisabled(ClanPlayer player, Channel channel) {
         return player != null && player.getFlags() != null && player.getFlags().<Byte>getSet("disabledChannels").contains(channel.getId());
     }
 }

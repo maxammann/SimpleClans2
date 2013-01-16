@@ -38,15 +38,13 @@ public class MostKilledResponse extends Response {
 
     private int page;
 
-    public MostKilledResponse(SimpleClans plugin, CommandSender sender, int page)
-    {
+    public MostKilledResponse(SimpleClans plugin, CommandSender sender, int page) {
         super(plugin, sender);
         this.page = page;
     }
 
     @Override
-    public boolean response()
-    {
+    public boolean response() {
         ChatBlock chatBlock = new ChatBlock();
         ChatColor headColor = plugin.getSettingsManager().getHeaderPageColor();
 
@@ -86,8 +84,7 @@ public class MostKilledResponse extends Response {
     }
 
     @Override
-    public boolean needsRetriever()
-    {
+    public boolean needsRetriever() {
         return true;
     }
 }

@@ -40,8 +40,7 @@ import java.util.List;
  */
 public class CoordsCommand extends GenericPlayerCommand {
 
-    public CoordsCommand(SimpleClans plugin)
-    {
+    public CoordsCommand(SimpleClans plugin) {
         super("Coords", plugin);
         setArgumentRange(0, 0);
         setUsages(MessageFormat.format(Language.getTranslation("usage.coords"), plugin.getSettingsManager().getClanCommand()));
@@ -50,8 +49,7 @@ public class CoordsCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public String getMenu(ClanPlayer cp)
-    {
+    public String getMenu(ClanPlayer cp) {
         if (cp != null && cp.getClan().isVerified() && cp.isTrusted()) {
             return MessageFormat.format(Language.getTranslation("menu.coords"), plugin.getSettingsManager().getClanCommand());
         }
@@ -59,8 +57,7 @@ public class CoordsCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public void execute(Player player, String[] args)
-    {
+    public void execute(Player player, String[] args) {
         ChatColor headColor = plugin.getSettingsManager().getHeaderPageColor();
         ChatColor subColor = plugin.getSettingsManager().getSubPageColor();
 

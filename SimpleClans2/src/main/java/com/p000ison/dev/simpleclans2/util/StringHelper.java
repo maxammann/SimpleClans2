@@ -24,8 +24,7 @@ package com.p000ison.dev.simpleclans2.util;
  */
 public class StringHelper {
 
-    public static void capitalize(StringBuilder text)
-    {
+    public static void capitalize(StringBuilder text) {
         if (text.length() == 0) {
             return;
         }
@@ -33,8 +32,7 @@ public class StringHelper {
         text.setCharAt(0, Character.toUpperCase(text.charAt(0)));
     }
 
-    public static String capitalize(String text)
-    {
+    public static String capitalize(String text) {
         StringBuilder builder = new StringBuilder(text);
         capitalize(builder);
         return builder.toString();

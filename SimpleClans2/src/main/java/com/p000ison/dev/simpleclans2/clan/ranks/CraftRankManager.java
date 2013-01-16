@@ -29,14 +29,12 @@ import com.p000ison.dev.simpleclans2.api.rank.RankManager;
 public class CraftRankManager implements RankManager {
     private SimpleClans plugin;
 
-    public CraftRankManager(SimpleClans plugin)
-    {
+    public CraftRankManager(SimpleClans plugin) {
         this.plugin = plugin;
     }
 
     @Override
-    public CraftRank createRank(Clan clan, String name, String tag, int priority)
-    {
+    public CraftRank createRank(Clan clan, String name, String tag, int priority) {
         CraftRank rank = new CraftRank(name, tag, priority, clan.getID());
 
         plugin.getDataManager().getDatabase().save(rank);

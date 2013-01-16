@@ -34,8 +34,7 @@ import org.bukkit.entity.Player;
  */
 public class KillsCommand extends GenericPlayerCommand {
 
-    public KillsCommand(SimpleClans plugin)
-    {
+    public KillsCommand(SimpleClans plugin) {
         super("Kills", plugin);
         setArgumentRange(0, 1);
         setUsages(Language.getTranslation("usage.kills", plugin.getSettingsManager().getClanCommand()));
@@ -44,14 +43,12 @@ public class KillsCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public String getMenu(ClanPlayer cp)
-    {
+    public String getMenu(ClanPlayer cp) {
         return Language.getTranslation("menu.kills", plugin.getSettingsManager().getClanCommand());
     }
 
     @Override
-    public void execute(Player player, String[] args)
-    {
+    public void execute(Player player, String[] args) {
         int page = CraftCommandManager.getPage(args);
 
         if (page == -1) {

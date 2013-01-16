@@ -31,14 +31,12 @@ public class IntegerValueComparator implements Comparator<String>, Serializable 
     private static final long serialVersionUID = 7694354557639217836L;
     private Map<?, Integer> base;
 
-    public IntegerValueComparator(Map<?, Integer> base)
-    {
+    public IntegerValueComparator(Map<?, Integer> base) {
         this.base = base;
     }
 
     @Override
-    public int compare(String a, String b)
-    {
+    public int compare(String a, String b) {
         return base.get(a).compareTo(base.get(b));
     }
 }

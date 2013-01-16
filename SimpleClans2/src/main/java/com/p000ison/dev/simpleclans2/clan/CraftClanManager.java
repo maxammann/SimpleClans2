@@ -44,31 +44,26 @@ public class CraftClanManager implements ClanManager {
     private Set<Clan> clans = new HashSet<Clan>();
 
 
-    public CraftClanManager(SimpleClans plugin)
-    {
+    public CraftClanManager(SimpleClans plugin) {
         this.plugin = plugin;
     }
 
     @Override
-    public Set<Clan> getClans()
-    {
+    public Set<Clan> getClans() {
         return Collections.unmodifiableSet(clans);
     }
 
-    public Set<Clan> getModifyAbleClans()
-    {
+    public Set<Clan> getModifyAbleClans() {
         return clans;
     }
 
     @Override
-    public boolean removeClan(Clan clan)
-    {
+    public boolean removeClan(Clan clan) {
         return clans.remove(clan);
     }
 
     @Override
-    public Clan getClan(String tag)
-    {
+    public Clan getClan(String tag) {
         String lowerTag = ChatColor.stripColor(tag.toLowerCase(Locale.US));
 
         for (Clan clan : clans) {
@@ -80,8 +75,7 @@ public class CraftClanManager implements ClanManager {
     }
 
     @Override
-    public Clan getClan(long id)
-    {
+    public Clan getClan(long id) {
         for (Clan clan : clans) {
             if (clan.getID() == id) {
                 return clan;
@@ -92,8 +86,7 @@ public class CraftClanManager implements ClanManager {
     }
 
     @Override
-    public Clan createClan(Clan clan)
-    {
+    public Clan createClan(Clan clan) {
         ClanCreateEvent event = new ClanCreateEvent(clan);
         plugin.getServer().getPluginManager().callEvent(event);
 
@@ -110,15 +103,13 @@ public class CraftClanManager implements ClanManager {
     }
 
     @Override
-    public Clan createClan(String tag, String name)
-    {
+    public Clan createClan(String tag, String name) {
         Clan clan = new CraftClan(plugin, tag, name);
         return createClan(clan);
     }
 
     @Override
-    public Set<Clan> convertIdSetToClanSet(Set<Long> ids)
-    {
+    public Set<Clan> convertIdSetToClanSet(Set<Long> ids) {
         HashSet<Clan> allies = new HashSet<Clan>();
 
         for (long clanId : ids) {
@@ -129,14 +120,12 @@ public class CraftClanManager implements ClanManager {
         return allies;
     }
 
-    public void importClans(Set<CraftClan> clans)
-    {
+    public void importClans(Set<CraftClan> clans) {
         this.clans.addAll(clans);
     }
 
     @Override
-    public boolean existsClanByTag(String tag)
-    {
+    public boolean existsClanByTag(String tag) {
         String cleanInputTag = ChatBlock.cleanString(tag);
 
         for (Clan clan : getClans()) {
@@ -150,8 +139,7 @@ public class CraftClanManager implements ClanManager {
     }
 
     @Override
-    public boolean existsClanByName(String name)
-    {
+    public boolean existsClanByName(String name) {
         String cleanInputTag = ChatBlock.cleanString(name);
         for (Clan clan : getClans()) {
             String clanName = ChatBlock.cleanString(clan.getName());
@@ -164,8 +152,7 @@ public class CraftClanManager implements ClanManager {
     }
 
     @Override
-    public boolean existsClan(String tag, String name)
-    {
+    public boolean existsClan(String tag, String name) {
         String cleanInputTag = ChatBlock.cleanString(tag);
         String cleanInputName = ChatBlock.cleanString(name);
 
@@ -181,8 +168,7 @@ public class CraftClanManager implements ClanManager {
     }
 
     @Override
-    public Clan getClanExact(String tag)
-    {
+    public Clan getClanExact(String tag) {
         for (Clan clan : clans) {
             if (clan.getTag().equals(tag)) {
                 return clan;
@@ -192,8 +178,7 @@ public class CraftClanManager implements ClanManager {
     }
 
     @Override
-    public int getRivalAbleClanCount()
-    {
+    public int getRivalAbleClanCount() {
         int i = 0;
         for (Clan clan : clans) {
             if (!plugin.getSettingsManager().isUnRivalAble(clan)) {
@@ -205,8 +190,7 @@ public class CraftClanManager implements ClanManager {
     }
 
     @Override
-    public boolean verifyClanTag(CommandSender reportTo, String tag, String tagBefore, boolean mod)
-    {
+    public boolean verifyClanTag(CommandSender reportTo, String tag, String tagBefore, boolean mod) {
         String cleanTag = ChatColor.stripColor(tag).toLowerCase(Locale.US);
 
         if (!mod) {
@@ -248,8 +232,7 @@ public class CraftClanManager implements ClanManager {
     }
 
     @Override
-    public boolean verifyClanName(CommandSender reportTo, String name, boolean mod)
-    {
+    public boolean verifyClanName(CommandSender reportTo, String name, boolean mod) {
         if (!mod) {
             if (ChatColor.stripColor(name).length() > plugin.getSettingsManager().getMaxNameLenght()) {
                 reportTo.sendMessage(ChatColor.RED + MessageFormat.format(Language.getTranslation("your.clan.name.cannot.be.longer.than.characters"), plugin.getSettingsManager().getMaxTagLenght()));

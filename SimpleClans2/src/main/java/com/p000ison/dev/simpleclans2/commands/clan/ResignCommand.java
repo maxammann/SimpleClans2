@@ -33,8 +33,7 @@ import java.text.MessageFormat;
 
 public class ResignCommand extends GenericPlayerCommand {
 
-    public ResignCommand(SimpleClans plugin)
-    {
+    public ResignCommand(SimpleClans plugin) {
         super("Resign", plugin);
         setArgumentRange(0, 0);
         setUsages(MessageFormat.format(Language.getTranslation("usage.resign"), plugin.getSettingsManager().getClanCommand()));
@@ -43,8 +42,7 @@ public class ResignCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public String getMenu(ClanPlayer cp)
-    {
+    public String getMenu(ClanPlayer cp) {
         if (cp != null) {
             return MessageFormat.format(Language.getTranslation("menu.resign"), plugin.getSettingsManager().getClanCommand());
         }
@@ -52,8 +50,7 @@ public class ResignCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public void execute(Player player, String[] args)
-    {
+    public void execute(Player player, String[] args) {
         ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
 
         if (cp != null) {

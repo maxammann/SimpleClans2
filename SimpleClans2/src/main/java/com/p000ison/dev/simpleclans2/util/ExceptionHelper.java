@@ -28,12 +28,10 @@ import java.util.logging.Level;
  */
 public final class ExceptionHelper {
 
-    private ExceptionHelper()
-    {
+    private ExceptionHelper() {
     }
 
-    public static void handleException(Throwable e, Class<?> happened)
-    {
+    public static void handleException(Throwable e, Class<?> happened) {
         String msg = e.getMessage();
 
         if (msg != null) {
@@ -58,8 +56,7 @@ public final class ExceptionHelper {
         Logging.debug(e, true, "Failed to print the cause of this exception!");
     }
 
-    public static void handleException(Throwable e)
-    {
+    public static void handleException(Throwable e) {
         Logging.debug(Level.SEVERE, "Failed because of: '%s'", e.getLocalizedMessage().replaceAll("\n", ""));
 
         for (StackTraceElement element : e.getStackTrace()) {
@@ -75,8 +72,7 @@ public final class ExceptionHelper {
         }
     }
 
-    public static void handleCause(Throwable cause)
-    {
+    public static void handleCause(Throwable cause) {
         if (cause == null) {
             return;
         }

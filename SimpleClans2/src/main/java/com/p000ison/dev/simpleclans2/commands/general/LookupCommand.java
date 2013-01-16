@@ -33,8 +33,7 @@ import org.bukkit.entity.Player;
  */
 public class LookupCommand extends GenericPlayerCommand {
 
-    public LookupCommand(SimpleClans plugin)
-    {
+    public LookupCommand(SimpleClans plugin) {
         super("LookupCommand", plugin);
         setArgumentRange(0, 0);
         setUsages(Language.getTranslation("usage.lookup", plugin.getSettingsManager().getClanCommand()));
@@ -43,8 +42,7 @@ public class LookupCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public String getMenu(ClanPlayer clanplayer)
-    {
+    public String getMenu(ClanPlayer clanplayer) {
         if (clanplayer != null) {
             return Language.getTranslation("menu.lookup", plugin.getSettingsManager().getClanCommand());
         }
@@ -52,8 +50,7 @@ public class LookupCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public void execute(Player player, String[] args)
-    {
+    public void execute(Player player, String[] args) {
         ClanPlayer clanPlayer = plugin.getClanPlayerManager().getAnyClanPlayer(player);
 
         if (clanPlayer != null) {

@@ -34,14 +34,12 @@ public class CraftPlayerFlags extends JSONFlags implements PlayerFlags {
     private static final long serialVersionUID = 3232671374494730728L;
 
     @Override
-    public void addPastClan(String clan)
-    {
+    public void addPastClan(String clan) {
         super.getSet("pastClans").add(clan);
     }
 
     @Override
-    public void removePastClan(String clan)
-    {
+    public void removePastClan(String clan) {
         Set warring = super.getSet("pastClans");
 
         if (warring.contains(clan)) {
@@ -50,44 +48,37 @@ public class CraftPlayerFlags extends JSONFlags implements PlayerFlags {
     }
 
     @Override
-    public Set<String> getPastClans()
-    {
+    public Set<String> getPastClans() {
         return super.getSet("pastClans");
     }
 
     @Override
-    public void setFriendlyFire(boolean bool)
-    {
+    public void setFriendlyFire(boolean bool) {
         super.setBoolean("ff", bool);
     }
 
     @Override
-    public boolean isFriendlyFireEnabled()
-    {
+    public boolean isFriendlyFireEnabled() {
         return super.getBoolean("ff");
     }
 
     @Override
-    public boolean isCapeEnabled()
-    {
+    public boolean isCapeEnabled() {
         return super.getBoolean("cape");
     }
 
     @Override
-    public void setCapeEnabled(boolean enabled)
-    {
+    public void setCapeEnabled(boolean enabled) {
         super.setBoolean("cape", enabled);
     }
 
     @Override
-    public boolean isBBEnabled()
-    {
+    public boolean isBBEnabled() {
         return super.getBoolean("bb");
     }
 
     @Override
-    public void setBBEnabled(boolean enabled)
-    {
+    public void setBBEnabled(boolean enabled) {
         super.setBoolean("bb", enabled);
     }
 }

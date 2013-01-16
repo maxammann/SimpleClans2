@@ -33,8 +33,7 @@ public class KDRComparator implements Comparator<KDR>, Serializable {
     private static final long serialVersionUID = 8508168068374314864L;
 
     @Override
-    public int compare(KDR kdr1, KDR kdr2)
-    {
+    public int compare(KDR kdr1, KDR kdr2) {
         Float o1 = kdr1.getKDR();
         Float o2 = kdr2.getKDR();
 

@@ -33,14 +33,12 @@ public class SCCDepreciatedChatEvent implements Listener {
 
     private SCCPlayerListener listener;
 
-    public SCCDepreciatedChatEvent(SCCPlayerListener listener)
-    {
+    public SCCDepreciatedChatEvent(SCCPlayerListener listener) {
         this.listener = listener;
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onPlayerChat(PlayerChatEvent event)
-    {
+    public void onPlayerChat(PlayerChatEvent event) {
         AsyncPlayerChatEvent async = listener.onPlayerChat(new AsyncPlayerChatEvent(false, event.getPlayer(), event.getFormat(), event.getRecipients()));
         event.setFormat(async.getFormat());
         event.setCancelled(async.isCancelled());

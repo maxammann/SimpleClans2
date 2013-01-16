@@ -30,8 +30,7 @@ import org.bukkit.entity.Player;
 public abstract class GenericPlayerCommand extends GenericCommand {
 
 
-    public GenericPlayerCommand(String name, SimpleClans plugin)
-    {
+    public GenericPlayerCommand(String name, SimpleClans plugin) {
         super(name, plugin);
     }
 

@@ -33,59 +33,48 @@ public final class Logging {
     private static Logger instance;
     private static SimpleClans plugin;
 
-    public static Logger getInstance()
-    {
+    public static Logger getInstance() {
         return instance;
     }
 
-    public static void setInstance(Logger instance, SimpleClans plugin)
-    {
+    public static void setInstance(Logger instance, SimpleClans plugin) {
         Logging.instance = instance;
         Logging.plugin = plugin;
     }
 
-    public static void close()
-    {
+    public static void close() {
         setInstance(null, null);
     }
 
-    public static void debug(String msg, Object... args)
-    {
+    public static void debug(String msg, Object... args) {
         debugRaw(Level.INFO, String.format(msg, args), null, false);
     }
 
-    public static void debug(Level level, String msg, Object... args)
-    {
+    public static void debug(Level level, String msg, Object... args) {
         debugRaw(level, String.format(msg, args), null, false);
     }
 
-    public static void debug(String msg)
-    {
+    public static void debug(String msg) {
         debugRaw(Level.INFO, msg, null, false);
     }
 
-    public static void debug(Level level, String msg)
-    {
+    public static void debug(Level level, String msg) {
         debugRaw(level, msg, null, false);
     }
 
-    public static void debug(Throwable ex, boolean reportException)
-    {
+    public static void debug(Throwable ex, boolean reportException) {
         debugRaw(Level.SEVERE, null, ex, reportException);
     }
 
-    public static void debug(Throwable ex, String msg, boolean reportException)
-    {
+    public static void debug(Throwable ex, String msg, boolean reportException) {
         debugRaw(Level.SEVERE, msg, ex, reportException);
     }
 
-    public static void debug(Throwable ex, boolean reportException, String msg, Object... args)
-    {
+    public static void debug(Throwable ex, boolean reportException, String msg, Object... args) {
         debugRaw(Level.SEVERE, String.format(msg, args), ex, reportException);
     }
 
-    private static void debugRaw(Level level, String msg, Throwable ex, boolean reportException)
-    {
+    private static void debugRaw(Level level, String msg, Throwable ex, boolean reportException) {
 
         if (instance == null) {
             return;

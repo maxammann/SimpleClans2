@@ -30,8 +30,7 @@ public class ReverseIntegerComparator implements Comparator<Integer>, Serializab
     private static final long serialVersionUID = 1142321453403266083L;
 
     @Override
-    public int compare(Integer a, Integer b)
-    {
+    public int compare(Integer a, Integer b) {
         return b.compareTo(a);
     }
 }

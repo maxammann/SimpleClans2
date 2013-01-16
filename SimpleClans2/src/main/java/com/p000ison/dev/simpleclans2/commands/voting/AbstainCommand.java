@@ -36,8 +36,7 @@ import java.text.MessageFormat;
  */
 public class AbstainCommand extends GenericPlayerCommand {
 
-    public AbstainCommand(SimpleClans plugin)
-    {
+    public AbstainCommand(SimpleClans plugin) {
         super("Abstain", plugin);
         setArgumentRange(0, 0);
         setUsages(MessageFormat.format(Language.getTranslation("usage.abstain"), plugin.getSettingsManager().getClanCommand()));
@@ -46,14 +45,12 @@ public class AbstainCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public String getMenu(ClanPlayer clanPlayer)
-    {
+    public String getMenu(ClanPlayer clanPlayer) {
         return null;
     }
 
     @Override
-    public void execute(Player player, String[] args)
-    {
+    public void execute(Player player, String[] args) {
         ClanPlayer clanPlayer = plugin.getClanPlayerManager().getCreateClanPlayerExact(player);
         Request request = plugin.getRequestManager().vote(clanPlayer, RequestManager.Result.ABSTAIN);
 

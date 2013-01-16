@@ -35,8 +35,7 @@ import java.text.MessageFormat;
  */
 public class VerifyCommand extends GenericPlayerCommand {
 
-    public VerifyCommand(SimpleClans plugin)
-    {
+    public VerifyCommand(SimpleClans plugin) {
         super("Verify", plugin);
         setArgumentRange(0, 0);
         setUsages(MessageFormat.format(Language.getTranslation("usage.verify"), plugin.getSettingsManager().getClanCommand()));
@@ -45,8 +44,7 @@ public class VerifyCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public String getMenu(ClanPlayer cp)
-    {
+    public String getMenu(ClanPlayer cp) {
         if (cp != null && !cp.getClan().isVerified() && plugin.getSettingsManager().requireVerification() && plugin.getSettingsManager().isPurchaseVerification()) {
             return MessageFormat.format(Language.getTranslation("menu.verify"), plugin.getSettingsManager().getClanCommand());
         }
@@ -54,8 +52,7 @@ public class VerifyCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public void execute(Player player, String[] args)
-    {
+    public void execute(Player player, String[] args) {
 
         ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
 

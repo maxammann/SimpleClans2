@@ -35,8 +35,7 @@ import java.text.MessageFormat;
  */
 public class AcceptCommand extends GenericPlayerCommand {
 
-    public AcceptCommand(SimpleClans plugin)
-    {
+    public AcceptCommand(SimpleClans plugin) {
         super("Accept", plugin);
         setArgumentRange(0, 0);
         setUsages(MessageFormat.format(Language.getTranslation("usage.accept"), plugin.getSettingsManager().getClanCommand()));
@@ -45,14 +44,12 @@ public class AcceptCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public String getMenu(ClanPlayer clanPlayer)
-    {
+    public String getMenu(ClanPlayer clanPlayer) {
         return null;
     }
 
     @Override
-    public void execute(Player player, String[] args)
-    {
+    public void execute(Player player, String[] args) {
         ClanPlayer clanPlayer = plugin.getClanPlayerManager().getCreateClanPlayerExact(player);
         Request request = plugin.getRequestManager().vote(clanPlayer, RequestManager.Result.ACCEPT);
 

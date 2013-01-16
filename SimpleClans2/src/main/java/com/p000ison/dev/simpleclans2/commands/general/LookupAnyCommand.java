@@ -33,8 +33,7 @@ import org.bukkit.command.CommandSender;
  */
 public class LookupAnyCommand extends GenericConsoleCommand {
 
-    public LookupAnyCommand(SimpleClans plugin)
-    {
+    public LookupAnyCommand(SimpleClans plugin) {
         super("LookupAnyCommand", plugin);
         setArgumentRange(1, 1);
         setUsages(Language.getTranslation("usage.lookup.any", plugin.getSettingsManager().getClanCommand()));
@@ -43,14 +42,12 @@ public class LookupAnyCommand extends GenericConsoleCommand {
     }
 
     @Override
-    public String getMenu()
-    {
+    public String getMenu() {
         return Language.getTranslation("menu.lookup.any", plugin.getSettingsManager().getClanCommand());
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args)
-    {
+    public void execute(CommandSender sender, String[] args) {
         ClanPlayer clanPlayer = plugin.getClanPlayerManager().getAnyClanPlayer(args[0]);
 
         if (clanPlayer != null) {

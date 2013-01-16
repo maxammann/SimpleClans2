@@ -40,8 +40,7 @@ public class WarCommand extends GenericPlayerCommand {
 
     private SimpleClans plugin;
 
-    public WarCommand(SimpleClans plugin)
-    {
+    public WarCommand(SimpleClans plugin) {
         super("War", plugin);
         this.plugin = plugin;
         setArgumentRange(2, 2);
@@ -51,8 +50,7 @@ public class WarCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public String getMenu(ClanPlayer cp)
-    {
+    public String getMenu(ClanPlayer cp) {
         if (cp != null) {
             if (cp.isLeader() && cp.getClan().isVerified()) {
                 return Language.getTranslation("menu.war", plugin.getSettingsManager().getClanCommand());
@@ -62,8 +60,7 @@ public class WarCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public void execute(Player player, String[] args)
-    {
+    public void execute(Player player, String[] args) {
         ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
 
         if (cp == null) {

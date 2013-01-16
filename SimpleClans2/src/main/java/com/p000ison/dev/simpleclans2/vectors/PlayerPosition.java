@@ -31,66 +31,56 @@ public class PlayerPosition extends Position3 {
     private float yaw;
     private World world;
 
-    public PlayerPosition()
-    {
+    public PlayerPosition() {
 
     }
 
-    public PlayerPosition(World world, double x, double y, double z, float pitch, float yaw)
-    {
+    public PlayerPosition(World world, double x, double y, double z, float pitch, float yaw) {
         super(x, y, z);
         this.pitch = pitch;
         this.yaw = yaw;
         this.world = world;
     }
 
-    public PlayerPosition(Location location)
-    {
+    public PlayerPosition(Location location) {
         super(location.getX(), location.getY(), location.getZ());
         this.pitch = location.getPitch();
         this.yaw = location.getYaw();
         this.world = location.getWorld();
     }
 
-    public PlayerPosition(Position3 other, World world, float pitch, float yaw)
-    {
+    public PlayerPosition(Position3 other, World world, float pitch, float yaw) {
         super(other);
         this.pitch = pitch;
         this.yaw = yaw;
         this.world = world;
     }
 
-    public PlayerPosition(PlayerPosition pos)
-    {
+    public PlayerPosition(PlayerPosition pos) {
         super(pos);
         this.pitch = pos.pitch;
         this.yaw = pos.yaw;
         this.world = pos.world;
     }
 
-    public float getPitch()
-    {
+    public float getPitch() {
         return pitch;
     }
 
-    public float getYaw()
-    {
+    public float getYaw() {
         return yaw;
     }
 
     @Override
-    public String serialize()
-    {
+    public String serialize() {
         return round2Decimals(getX()) + ":" + round2Decimals(getY()) + ":" + round2Decimals(getZ()) + ":" + world.getName() + ":" + round2Decimals(yaw) + ":" + round2Decimals(pitch);
     }
 
-    private static double round2Decimals(double value)
-    {
+    private static double round2Decimals(double value) {
         return (double) Math.round(value * 100) / 100;
     }
 
-    public static PlayerPosition deserialize(String deserialize)
-    {
+    public static PlayerPosition deserialize(String deserialize) {
         String[] coords = deserialize.split(":");
         PlayerPosition playerPosition = new PlayerPosition();
         playerPosition.x = Double.parseDouble(coords[0]);
@@ -103,8 +93,7 @@ public class PlayerPosition extends Position3 {
         return playerPosition;
     }
 
-    public Location toLocation()
-    {
+    public Location toLocation() {
         return new Location(world, x, y, z, yaw, pitch);
     }
 }

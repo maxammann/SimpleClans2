@@ -37,8 +37,7 @@ import java.text.ParseException;
  */
 public class DepositCommand extends GenericPlayerCommand {
 
-    public DepositCommand(SimpleClans plugin)
-    {
+    public DepositCommand(SimpleClans plugin) {
         super("DepositCommand", plugin);
         setArgumentRange(1, 1);
         setUsages(MessageFormat.format(Language.getTranslation("usage.bank.deposit"), plugin.getSettingsManager().getBankCommand()));
@@ -48,8 +47,7 @@ public class DepositCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public String getMenu(ClanPlayer cp)
-    {
+    public String getMenu(ClanPlayer cp) {
         if (cp != null && cp.getClan().isVerified() && cp.isTrusted()) {
             return MessageFormat.format(Language.getTranslation("menu.bank.deposit"), plugin.getSettingsManager().getBankCommand());
         }
@@ -57,8 +55,7 @@ public class DepositCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public void execute(Player player, String[] args)
-    {
+    public void execute(Player player, String[] args) {
         ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
 
         if (cp == null) {

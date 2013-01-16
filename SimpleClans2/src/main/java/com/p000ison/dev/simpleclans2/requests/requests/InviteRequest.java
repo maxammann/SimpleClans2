@@ -33,20 +33,17 @@ import java.text.MessageFormat;
  */
 public class InviteRequest extends SingleRequest {
 
-    public InviteRequest(SimpleClans plugin, ClanPlayer invited, ClanPlayer requester)
-    {
+    public InviteRequest(SimpleClans plugin, ClanPlayer invited, ClanPlayer requester) {
         super(plugin, invited, requester);
     }
 
     @Override
-    public void onRequesting()
-    {
+    public void onRequesting() {
         sendAcceptorMessage(ChatColor.AQUA + Language.getTranslation("you.have.been.invited", getAcceptor().getName()));
     }
 
     @Override
-    public boolean onAccepted()
-    {
+    public boolean onAccepted() {
         Clan clan = requester.getClan();
 
         if (clan == null || getAcceptor() == null) {
@@ -67,8 +64,7 @@ public class InviteRequest extends SingleRequest {
     }
 
     @Override
-    public void onDenied()
-    {
+    public void onDenied() {
         sendRequesterMessage(ChatColor.DARK_RED + Language.getTranslation("membership.invitation", getAcceptor().getName()));
     }
 }

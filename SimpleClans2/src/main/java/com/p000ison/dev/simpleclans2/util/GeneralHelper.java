@@ -40,17 +40,14 @@ import java.util.regex.Pattern;
  */
 public final class GeneralHelper {
 
-    private GeneralHelper()
-    {
+    private GeneralHelper() {
     }
 
-    public static String arrayToString(String... args)
-    {
+    public static String arrayToString(String... args) {
         return arrayToString(" ", args);
     }
 
-    public static String arrayToString(String seperator, String... args)
-    {
+    public static String arrayToString(String seperator, String... args) {
         if (args == null || args.length == 0) {
             return null;
         }
@@ -65,8 +62,7 @@ public final class GeneralHelper {
         return out.substring(0, out.length() - seperator.length());
     }
 
-    public static String arrayToString(String seperator, Collection collection)
-    {
+    public static String arrayToString(String seperator, Collection collection) {
         if (collection == null || collection.isEmpty()) {
             return null;
         }
@@ -81,8 +77,7 @@ public final class GeneralHelper {
         return out.substring(0, out.length() - seperator.length());
     }
 
-    public static boolean isValidEmailAddress(String emailAddress)
-    {
+    public static boolean isValidEmailAddress(String emailAddress) {
         if (emailAddress == null) {
             return false;
         }
@@ -92,8 +87,7 @@ public final class GeneralHelper {
         return matcher.matches();
     }
 
-    public static boolean isOnline(Player player)
-    {
+    public static boolean isOnline(Player player) {
         if (player == null) {
             return false;
         }
@@ -107,13 +101,11 @@ public final class GeneralHelper {
         return true;
     }
 
-    public static String arrayToString(char... args)
-    {
+    public static String arrayToString(char... args) {
         return arrayToString(" ", args);
     }
 
-    public static String arrayToString(String seperator, char... args)
-    {
+    public static String arrayToString(String seperator, char... args) {
         StringBuilder string = new StringBuilder();
 
         for (char color : args) {
@@ -123,8 +115,7 @@ public final class GeneralHelper {
         return string.substring(0, string.length() - seperator.length());
     }
 
-    public static Set<ClanPlayer> stripOfflinePlayers(Set<ClanPlayer> players)
-    {
+    public static Set<ClanPlayer> stripOfflinePlayers(Set<ClanPlayer> players) {
         Set<ClanPlayer> out = new HashSet<ClanPlayer>();
         for (ClanPlayer clanPlayer : players) {
 
@@ -137,8 +128,7 @@ public final class GeneralHelper {
         return out;
     }
 
-    public static String clansToString(Collection<Clan> collection, String separator)
-    {
+    public static String clansToString(Collection<Clan> collection, String separator) {
         if (collection == null || collection.isEmpty()) {
             return null;
         }
@@ -153,8 +143,7 @@ public final class GeneralHelper {
         return string.substring(0, string.length() - separator.length());
     }
 
-    public static String clansPlayersToString(Collection<ClanPlayer> collection, String separator)
-    {
+    public static String clansPlayersToString(Collection<ClanPlayer> collection, String separator) {
         if (collection == null || collection.isEmpty()) {
             return null;
         }
@@ -170,23 +159,19 @@ public final class GeneralHelper {
     }
 
 
-    public static String arrayBoundsToString(int start, int end, String... args)
-    {
+    public static String arrayBoundsToString(int start, int end, String... args) {
         return arrayToString(Arrays.copyOfRange(args, start, end));
     }
 
-    public static String arrayBoundsToString(int start, String... args)
-    {
+    public static String arrayBoundsToString(int start, String... args) {
         return arrayToString(Arrays.copyOfRange(args, start, args.length));
     }
 
-    public static boolean containsColor(String test, char alternateChar, Character color)
-    {
+    public static boolean containsColor(String test, char alternateChar, Character color) {
         return test.contains(alternateChar + String.valueOf(color));
     }
 
-    public static boolean containsColor(String test, char alternateChar, char... colors)
-    {
+    public static boolean containsColor(String test, char alternateChar, char... colors) {
         for (char color : colors) {
             if (containsColor(test, alternateChar, color)) {
                 return true;
@@ -196,8 +181,7 @@ public final class GeneralHelper {
         return false;
     }
 
-    public static boolean containsColor(String test, char alternateChar, ChatColor... colors)
-    {
+    public static boolean containsColor(String test, char alternateChar, ChatColor... colors) {
         for (ChatColor color : colors) {
             if (!containsColor(test, alternateChar, color.getChar())) {
                 return false;
@@ -207,13 +191,11 @@ public final class GeneralHelper {
         return true;
     }
 
-    public static String locationToString(Location loc)
-    {
+    public static String locationToString(Location loc) {
         return loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ() + " " + loc.getWorld().getName();
     }
 
-    public static boolean checkConnection(String url)
-    {
+    public static boolean checkConnection(String url) {
         try {
             URL Url = new URL(url);
             HttpURLConnection urlConn = (HttpURLConnection) Url.openConnection();
@@ -229,13 +211,11 @@ public final class GeneralHelper {
         return true;
     }
 
-    public static boolean deleteWorld(World world)
-    {
+    public static boolean deleteWorld(World world) {
         return Bukkit.unloadWorld(world, false) && deleteDir(world.getWorldFolder());
     }
 
-    public static boolean deleteDir(File path)
-    {
+    public static boolean deleteDir(File path) {
 
         if (path == null || !path.isDirectory()) {
             return false;

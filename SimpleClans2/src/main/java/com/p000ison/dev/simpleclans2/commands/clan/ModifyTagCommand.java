@@ -35,8 +35,7 @@ import java.text.MessageFormat;
  */
 public class ModifyTagCommand extends GenericPlayerCommand {
 
-    public ModifyTagCommand(SimpleClans plugin)
-    {
+    public ModifyTagCommand(SimpleClans plugin) {
         super("Modtag", plugin);
         setArgumentRange(1, 1);
         setUsages(MessageFormat.format(Language.getTranslation("usage.modtag"), plugin.getSettingsManager().getClanCommand()), ChatColor.RED + Language.getTranslation("example.clan.modtag"));
@@ -45,8 +44,7 @@ public class ModifyTagCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public String getMenu(ClanPlayer cp)
-    {
+    public String getMenu(ClanPlayer cp) {
         if (cp != null && cp.isLeader() && cp.getClan().isVerified()) {
             return MessageFormat.format(Language.getTranslation("menu.modtag"), plugin.getSettingsManager().getClanCommand());
         }
@@ -55,8 +53,7 @@ public class ModifyTagCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public void execute(Player player, String[] args)
-    {
+    public void execute(Player player, String[] args) {
         ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
 
         if (cp != null) {

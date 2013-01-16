@@ -31,8 +31,7 @@ public class ResponseTask extends LinkedList<Response> implements Runnable {
     private static final long serialVersionUID = 1L;
 
     @Override
-    public void run()
-    {
+    public void run() {
         Response response;
 
 

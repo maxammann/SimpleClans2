@@ -43,8 +43,7 @@ import java.util.List;
 public class LeaderboardCommand extends GenericConsoleCommand {
 
 
-    public LeaderboardCommand(SimpleClans plugin)
-    {
+    public LeaderboardCommand(SimpleClans plugin) {
         super("Leaderboard", plugin);
         this.plugin = plugin;
         setArgumentRange(0, 1);
@@ -54,14 +53,12 @@ public class LeaderboardCommand extends GenericConsoleCommand {
     }
 
     @Override
-    public String getMenu()
-    {
+    public String getMenu() {
         return MessageFormat.format(Language.getTranslation("menu.leaderboard"), plugin.getSettingsManager().getClanCommand());
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args)
-    {
+    public void execute(CommandSender sender, String[] args) {
 
         ChatColor headColor = plugin.getSettingsManager().getHeaderPageColor();
         ChatColor subColor = plugin.getSettingsManager().getSubPageColor();

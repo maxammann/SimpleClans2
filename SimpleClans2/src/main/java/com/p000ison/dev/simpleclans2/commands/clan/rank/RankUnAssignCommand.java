@@ -34,8 +34,7 @@ import org.bukkit.entity.Player;
  */
 public class RankUnAssignCommand extends GenericPlayerCommand {
 
-    public RankUnAssignCommand(SimpleClans plugin)
-    {
+    public RankUnAssignCommand(SimpleClans plugin) {
         super("RankUnAssign", plugin);
         setArgumentRange(1, 1);
         setUsages(Language.getTranslation("usage.rank.unassign", plugin.getSettingsManager().getRankCommand()));
@@ -45,8 +44,7 @@ public class RankUnAssignCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public String getMenu(ClanPlayer clanPlayer)
-    {
+    public String getMenu(ClanPlayer clanPlayer) {
         if (clanPlayer != null && (clanPlayer.isLeader() || clanPlayer.hasRankPermission("manage.ranks"))) {
             return Language.getTranslation("menu.rank.unassign", plugin.getSettingsManager().getRankCommand());
         }
@@ -54,8 +52,7 @@ public class RankUnAssignCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public void execute(Player player, String[] args)
-    {
+    public void execute(Player player, String[] args) {
         ClanPlayer clanPlayer = plugin.getClanPlayerManager().getClanPlayer(player);
 
         if (clanPlayer == null) {

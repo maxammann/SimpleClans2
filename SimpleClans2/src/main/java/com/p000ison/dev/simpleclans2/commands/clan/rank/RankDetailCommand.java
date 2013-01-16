@@ -37,8 +37,7 @@ import java.util.Map;
  */
 public class RankDetailCommand extends GenericPlayerCommand {
 
-    public RankDetailCommand(SimpleClans plugin)
-    {
+    public RankDetailCommand(SimpleClans plugin) {
         super("ViewRank", plugin);
         setArgumentRange(1, 1);
         setUsages(Language.getTranslation("usage.view.rank", plugin.getSettingsManager().getRankCommand()));
@@ -48,8 +47,7 @@ public class RankDetailCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public String getMenu(ClanPlayer clanPlayer)
-    {
+    public String getMenu(ClanPlayer clanPlayer) {
         if (clanPlayer != null) {
             return Language.getTranslation("menu.rank.view", plugin.getSettingsManager().getRankCommand());
         }
@@ -57,8 +55,7 @@ public class RankDetailCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public void execute(Player player, String[] args)
-    {
+    public void execute(Player player, String[] args) {
         ClanPlayer clanPlayer = plugin.getClanPlayerManager().getClanPlayer(player);
 
         if (clanPlayer == null) {

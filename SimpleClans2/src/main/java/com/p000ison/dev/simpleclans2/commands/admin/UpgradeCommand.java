@@ -33,8 +33,7 @@ import java.text.MessageFormat;
  */
 public class UpgradeCommand extends GenericConsoleCommand {
 
-    public UpgradeCommand(SimpleClans plugin)
-    {
+    public UpgradeCommand(SimpleClans plugin) {
         super("UpgradeCommand", plugin);
         setArgumentRange(0, 0);
         setUsages(MessageFormat.format(Language.getTranslation("usage.upgrade"), plugin.getSettingsManager().getClanCommand()));
@@ -43,14 +42,12 @@ public class UpgradeCommand extends GenericConsoleCommand {
     }
 
     @Override
-    public String getMenu()
-    {
+    public String getMenu() {
         return Language.getTranslation("menu.upgrade", plugin.getSettingsManager().getClanCommand());
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args)
-    {
+    public void execute(CommandSender sender, String[] args) {
         if (!plugin.isUpdate()) {
             ChatBlock.sendMessage(sender, ChatColor.DARK_RED + Language.getTranslation("no.upgrade"));
             return;

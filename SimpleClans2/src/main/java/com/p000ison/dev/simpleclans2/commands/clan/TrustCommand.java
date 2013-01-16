@@ -33,8 +33,7 @@ import org.bukkit.entity.Player;
  */
 public class TrustCommand extends GenericPlayerCommand {
 
-    public TrustCommand(SimpleClans plugin)
-    {
+    public TrustCommand(SimpleClans plugin) {
         super("Trust", plugin);
         setArgumentRange(1, 1);
         setUsages(Language.getTranslation(("usage.trust"), plugin.getSettingsManager().getClanCommand()));
@@ -43,8 +42,7 @@ public class TrustCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public String getMenu(ClanPlayer cp)
-    {
+    public String getMenu(ClanPlayer cp) {
         if (cp != null && cp.isLeader() && cp.getClan().isVerified()) {
             return Language.getTranslation("menu.trust", plugin.getSettingsManager().getClanCommand());
         }
@@ -52,8 +50,7 @@ public class TrustCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public void execute(Player player, String[] args)
-    {
+    public void execute(Player player, String[] args) {
         ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
 
         if (cp != null) {

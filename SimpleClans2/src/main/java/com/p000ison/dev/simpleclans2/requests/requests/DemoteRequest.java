@@ -36,21 +36,18 @@ public class DemoteRequest extends MultipleRequest {
 
     private ClanPlayer targetPlayer;
 
-    public DemoteRequest(SimpleClans plugin, Set<ClanPlayer> acceptors, ClanPlayer requester, ClanPlayer targetPlayer)
-    {
+    public DemoteRequest(SimpleClans plugin, Set<ClanPlayer> acceptors, ClanPlayer requester, ClanPlayer targetPlayer) {
         super(plugin, acceptors, requester);
         this.targetPlayer = targetPlayer;
     }
 
     @Override
-    public void onRequesting()
-    {
+    public void onRequesting() {
         sendAcceptorMessage(ChatColor.AQUA + Language.getTranslation("asking.for.the.demotion", requester.getName(), targetPlayer.getName()));
     }
 
     @Override
-    public boolean onAccepted()
-    {
+    public boolean onAccepted() {
         Clan clan = requester.getClan();
 
         clan.addBBMessage(ChatColor.AQUA + MessageFormat.format(Language.getTranslation("demoted.back.to.member"), targetPlayer.getName()));
@@ -61,8 +58,7 @@ public class DemoteRequest extends MultipleRequest {
     }
 
     @Override
-    public void onDenied()
-    {
+    public void onDenied() {
         sendAcceptorMessage(ChatColor.DARK_RED + Language.getTranslation("demotion.denied"));
     }
 }

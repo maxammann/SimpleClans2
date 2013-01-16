@@ -37,14 +37,12 @@ public class JSONFlags implements Flags {
     private Map<String, Object> data = new HashMap<String, Object>();
 
     @Override
-    public Map<String, Object> getData()
-    {
+    public Map<String, Object> getData() {
         return data;
     }
 
     @Override
-    public void deserialize(String jsonString)
-    {
+    public void deserialize(String jsonString) {
         if (jsonString == null || jsonString.isEmpty()) {
             return;
         }
@@ -89,8 +87,7 @@ public class JSONFlags implements Flags {
     }
 
     @Override
-    public String serialize()
-    {
+    public String serialize() {
         if (data.isEmpty()) {
             return null;
         }
@@ -121,14 +118,12 @@ public class JSONFlags implements Flags {
     }
 
     @Override
-    public boolean hasFlags()
-    {
+    public boolean hasFlags() {
         return data != null && !data.isEmpty();
     }
 
     @Override
-    public boolean getBoolean(String key)
-    {
+    public boolean getBoolean(String key) {
         Object bool = data.get(key);
 
         if (bool instanceof Boolean) {
@@ -140,8 +135,7 @@ public class JSONFlags implements Flags {
 
 
     @Override
-    public double getDouble(String key)
-    {
+    public double getDouble(String key) {
         Object doubl = data.get(key);
 
         if (doubl instanceof Double) {
@@ -152,8 +146,7 @@ public class JSONFlags implements Flags {
     }
 
     @Override
-    public byte getByte(String key)
-    {
+    public byte getByte(String key) {
         Object bytee = data.get(key);
 
         if (bytee instanceof Byte) {
@@ -164,8 +157,7 @@ public class JSONFlags implements Flags {
     }
 
     @Override
-    public short getShort(String key)
-    {
+    public short getShort(String key) {
         Object shorty = data.get(key);
 
         if (shorty instanceof Short) {
@@ -176,8 +168,7 @@ public class JSONFlags implements Flags {
     }
 
     @Override
-    public long getLong(String key)
-    {
+    public long getLong(String key) {
         Object longy = data.get(key);
 
         if (longy instanceof Long) {
@@ -188,8 +179,7 @@ public class JSONFlags implements Flags {
     }
 
     @Override
-    public int getInteger(String key)
-    {
+    public int getInteger(String key) {
         Object integer = data.get(key);
 
         if (integer instanceof Integer) {
@@ -200,8 +190,7 @@ public class JSONFlags implements Flags {
     }
 
     @Override
-    public float getFloat(String key)
-    {
+    public float getFloat(String key) {
         Object floaty = data.get(key);
 
         if (floaty instanceof Float) {
@@ -212,8 +201,7 @@ public class JSONFlags implements Flags {
     }
 
     @Override
-    public char getChar(String key)
-    {
+    public char getChar(String key) {
         Object character = data.get(key);
 
         if (character instanceof Character) {
@@ -224,14 +212,12 @@ public class JSONFlags implements Flags {
     }
 
     @Override
-    public boolean removeEntry(String key)
-    {
+    public boolean removeEntry(String key) {
         return data.remove(key) != null;
     }
 
     @Override
-    public <T> Set<T> getSet(String key)
-    {
+    public <T> Set<T> getSet(String key) {
         Object set = data.get(key);
 
         if (set instanceof Set) {
@@ -246,8 +232,7 @@ public class JSONFlags implements Flags {
     }
 
     @Override
-    public Set<String> getStringSet(String key)
-    {
+    public Set<String> getStringSet(String key) {
         Object set = data.get(key);
 
         if (set instanceof Set) {
@@ -262,20 +247,17 @@ public class JSONFlags implements Flags {
     }
 
     @Override
-    public void set(String key, Object obj)
-    {
+    public void set(String key, Object obj) {
         data.put(key, obj);
     }
 
     @Override
-    public void setBoolean(String key, boolean bool)
-    {
+    public void setBoolean(String key, boolean bool) {
         data.put(key, bool);
     }
 
     @Override
-    public String getString(String key)
-    {
+    public String getString(String key) {
         Object string = data.get(key);
 
         if (string == null) {
@@ -286,14 +268,12 @@ public class JSONFlags implements Flags {
     }
 
     @Override
-    public void setString(String key, String value)
-    {
+    public void setString(String key, String value) {
         data.put(key, value);
     }
 
     @Override
-    public Object get(String key)
-    {
+    public Object get(String key) {
         return data.get(key);
     }
 }

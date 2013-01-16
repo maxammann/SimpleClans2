@@ -34,21 +34,18 @@ public class CraftOnlineClanPlayer implements com.p000ison.dev.simpleclans2.api.
     private ClanPlayer clanPlayer;
     private PermissionAttachment attachment;
 
-    public CraftOnlineClanPlayer(SimpleClans plugin, ClanPlayer clanPlayer)
-    {
+    public CraftOnlineClanPlayer(SimpleClans plugin, ClanPlayer clanPlayer) {
         this.plugin = plugin;
         this.clanPlayer = clanPlayer;
     }
 
     @Override
-    public Player toPlayer()
-    {
+    public Player toPlayer() {
         return plugin.getServer().getPlayerExact(clanPlayer.getName());
     }
 
     @Override
-    public void setupPermissions()
-    {
+    public void setupPermissions() {
         if (clanPlayer.isTrusted()) {
             registerPermission("SCTrusted");
         } else {
@@ -65,8 +62,7 @@ public class CraftOnlineClanPlayer implements com.p000ison.dev.simpleclans2.api.
         }
     }
 
-    private void registerPermission(String perm)
-    {
+    private void registerPermission(String perm) {
         if (plugin.getServer().getPluginManager().getPermission(perm) != null) {
             if (attachment == null) {
                 attachment = toPlayer().addAttachment(plugin);
@@ -77,8 +73,7 @@ public class CraftOnlineClanPlayer implements com.p000ison.dev.simpleclans2.api.
     }
 
     @Override
-    public void removePermissions()
-    {
+    public void removePermissions() {
         if (attachment != null) {
             attachment.remove();
             attachment = null;

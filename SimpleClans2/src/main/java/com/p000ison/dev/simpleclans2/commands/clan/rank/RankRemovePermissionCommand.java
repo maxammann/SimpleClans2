@@ -35,8 +35,7 @@ import org.bukkit.entity.Player;
 public class RankRemovePermissionCommand extends GenericPlayerCommand {
 
 
-    public RankRemovePermissionCommand(SimpleClans plugin)
-    {
+    public RankRemovePermissionCommand(SimpleClans plugin) {
         super("RankRemovePermission", plugin);
         setArgumentRange(2, 2);
         setUsages(Language.getTranslation("usage.rank.remove.permission", plugin.getSettingsManager().getRankCommand()));
@@ -46,8 +45,7 @@ public class RankRemovePermissionCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public String getMenu(ClanPlayer clanPlayer)
-    {
+    public String getMenu(ClanPlayer clanPlayer) {
         if (clanPlayer != null && (clanPlayer.isLeader() || clanPlayer.hasRankPermission("manage.ranks"))) {
             return Language.getTranslation("menu.rank.remove.permission", plugin.getSettingsManager().getRankCommand());
         }
@@ -55,8 +53,7 @@ public class RankRemovePermissionCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public void execute(Player player, String[] args)
-    {
+    public void execute(Player player, String[] args) {
         ClanPlayer clanPlayer = plugin.getClanPlayerManager().getClanPlayer(player);
 
         if (clanPlayer == null) {

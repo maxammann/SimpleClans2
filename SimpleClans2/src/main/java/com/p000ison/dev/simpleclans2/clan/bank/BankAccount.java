@@ -29,24 +29,20 @@ public class BankAccount implements Balance {
 
     public static final double MAX_BALANCE = 10E20;
 
-    public BankAccount(double balance)
-    {
+    public BankAccount(double balance) {
         this.balance = balance;
     }
 
-    public BankAccount()
-    {
+    public BankAccount() {
         this(0.0D);
     }
 
     @Override
-    public double getBalance()
-    {
+    public double getBalance() {
         return balance;
     }
 
-    public void setBalance(double balance)
-    {
+    public void setBalance(double balance) {
         if (balance < 0.0D) {
             throw new IllegalArgumentException("The balance can not be negative!");
         } else if (balance > MAX_BALANCE) {
@@ -57,8 +53,7 @@ public class BankAccount implements Balance {
     }
 
     @Override
-    public boolean withdraw(double amount)
-    {
+    public boolean withdraw(double amount) {
         if (amount < 0.0D) {
             throw new IllegalArgumentException("The amount can not be negative if you withdraw something!");
         }
@@ -72,8 +67,7 @@ public class BankAccount implements Balance {
     }
 
     @Override
-    public void deposit(double amount)
-    {
+    public void deposit(double amount) {
         if (amount < 0.0D) {
             throw new IllegalArgumentException("The amount can not be negative if you withdraw something!");
         }
@@ -88,8 +82,7 @@ public class BankAccount implements Balance {
     }
 
     @Override
-    public boolean transfer(Balance account, double amount)
-    {
+    public boolean transfer(Balance account, double amount) {
         if (amount > 0.0D) {
             amount = Math.abs(amount);
 

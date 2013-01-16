@@ -55,8 +55,7 @@ public class SimpleClansChat extends JavaPlugin {
     private ChatCore chatSuite;
 
     @Override
-    public void onEnable()
-    {
+    public void onEnable() {
         Logging.setInstance(getLogger());
 
         if (!hookSimpleClans()) {
@@ -89,22 +88,19 @@ public class SimpleClansChat extends JavaPlugin {
     }
 
     @Override
-    public void onDisable()
-    {
+    public void onDisable() {
         permissions = null;
         chat = null;
         Logging.close();
     }
 
-    private boolean setupPermissions()
-    {
+    private boolean setupPermissions() {
         RegisteredServiceProvider rsp = getServer().getServicesManager().getRegistration(Permission.class);
         permissions = (Permission) rsp.getProvider();
         return permissions != null;
     }
 
-    public boolean setupHeroChat()
-    {
+    public boolean setupHeroChat() {
         try {
             for (Plugin plugin : this.getServer().getPluginManager().getPlugins()) {
                 if (plugin instanceof Herochat) {
@@ -116,8 +112,7 @@ public class SimpleClansChat extends JavaPlugin {
         return false;
     }
 
-    private ChatCore setupChatSuite()
-    {
+    private ChatCore setupChatSuite() {
         Plugin plugin = getServer().getPluginManager().getPlugin("ChatSuite");
 
         return (ChatCore) plugin;
@@ -125,8 +120,7 @@ public class SimpleClansChat extends JavaPlugin {
 
     @SuppressWarnings("unchecked")
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
-    {
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player) {
             Player player = (Player) sender;
 
@@ -160,16 +154,13 @@ public class SimpleClansChat extends JavaPlugin {
             }
 
             cp.update();
-
-            System.out.println(flags.getData());
         }
 
         return true;
     }
 
     @SuppressWarnings("unchecked")
-    private void handleChannelCommand(Channel channel, PlayerFlags flags, String[] args, CommandSender player)
-    {
+    private void handleChannelCommand(Channel channel, PlayerFlags flags, String[] args, CommandSender player) {
         if (args[0].equalsIgnoreCase("join")) {
             flags.set("channel", channel.getId());
             player.sendMessage("You entered the " + channel.name().toLowerCase() + " channel! All messages go now there!");
@@ -197,8 +188,7 @@ public class SimpleClansChat extends JavaPlugin {
         }
     }
 
-    private boolean setupChat()
-    {
+    private boolean setupChat() {
         RegisteredServiceProvider rsp = getServer().getServicesManager().getRegistration(Chat.class);
         if (rsp == null) {
             return false;
@@ -207,8 +197,7 @@ public class SimpleClansChat extends JavaPlugin {
         return chat != null;
     }
 
-    private boolean hookSimpleClans()
-    {
+    private boolean hookSimpleClans() {
         try {
             for (Plugin plugin : getServer().getPluginManager().getPlugins()) {
                 if (plugin instanceof SCCore) {
@@ -223,8 +212,7 @@ public class SimpleClansChat extends JavaPlugin {
         return false;
     }
 
-    public static String getGroup(Player player)
-    {
+    public static String getGroup(Player player) {
         if (permissions == null) {
             Logging.debug(Level.SEVERE, "Failed to get group! No permissions plugin found!");
             return null;
@@ -238,8 +226,7 @@ public class SimpleClansChat extends JavaPlugin {
         return null;
     }
 
-    public static String getPrefix(Player player)
-    {
+    public static String getPrefix(Player player) {
         if (chat == null) {
             Logging.debug(Level.SEVERE, "Failed to get prefix! No chat plugin found!");
             return null;
@@ -253,23 +240,19 @@ public class SimpleClansChat extends JavaPlugin {
         return null;
     }
 
-    public ClanPlayerManager getClanPlayerManager()
-    {
+    public ClanPlayerManager getClanPlayerManager() {
         return this.core.getClanPlayerManager();
     }
 
-    public SettingsManager getSettingsManager()
-    {
+    public SettingsManager getSettingsManager() {
         return this.settingsManager;
     }
 
-    public ChatCore getChatSuite()
-    {
+    public ChatCore getChatSuite() {
         return chatSuite;
     }
 
-    public String formatComplete(String format, Player player, String message)
-    {
+    public String formatComplete(String format, Player player, String message) {
         ClanPlayer clanPlayer = this.getClanPlayerManager().getClanPlayer(player);
 
         String clanTag = null;
@@ -325,14 +308,12 @@ public class SimpleClansChat extends JavaPlugin {
         return format;
     }
 
-    public String formatVariable(String variable, String input)
-    {
+    public String formatVariable(String variable, String input) {
         SettingsManager settings = this.getSettingsManager();
         return settings.getVariable(variable).format(input);
     }
 
-    public String formatCompatibility(String format, String playerName)
-    {
+    public String formatCompatibility(String format, String playerName) {
         ClanPlayer clanPlayer = this.getClanPlayerManager().getClanPlayerExact(playerName);
 
         String clanTag = null;

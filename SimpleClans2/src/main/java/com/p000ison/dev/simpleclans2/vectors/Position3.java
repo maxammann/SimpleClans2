@@ -25,98 +25,82 @@ package com.p000ison.dev.simpleclans2.vectors;
 public class Position3 {
     protected double x, y, z;
 
-    public Position3()
-    {
+    public Position3() {
     }
 
-    public Position3(double x, double y, double z)
-    {
+    public Position3(double x, double y, double z) {
         this.x = x;
         this.y = y;
         this.z = z;
     }
 
-    public Position3(Position3 other)
-    {
+    public Position3(Position3 other) {
         this.x = other.x;
         this.y = other.y;
         this.z = other.z;
     }
 
-    public Position3 copy()
-    {
+    public Position3 copy() {
         return new Position3(x, y, z);
     }
 
-    public Position3 set(double x, double y, double z)
-    {
+    public Position3 set(double x, double y, double z) {
         this.x = x;
         this.y = y;
         this.z = z;
         return this;
     }
 
-    public Position3 set(Position3 other)
-    {
+    public Position3 set(Position3 other) {
         return set(other.x, other.y, other.z);
     }
 
-    public Position3 add(double x, double y, double z)
-    {
+    public Position3 add(double x, double y, double z) {
         this.x += x;
         this.y += y;
         this.z += z;
         return this;
     }
 
-    public Position3 add(Position3 other)
-    {
+    public Position3 add(Position3 other) {
         return add(other.x, other.y, other.z);
     }
 
-    public Position3 subtract(double x, double y, double z)
-    {
+    public Position3 subtract(double x, double y, double z) {
         this.x -= x;
         this.y -= y;
         this.z -= z;
         return this;
     }
 
-    public Position3 subtract(Position3 other)
-    {
+    public Position3 subtract(Position3 other) {
         return subtract(other.x, other.y, other.z);
     }
 
-    public double distance(Position3 other)
-    {
+    public double distance(Position3 other) {
         return Math.sqrt(distanceSquared(other));
     }
 
-    public double distance(double x, double y, double z)
-    {
+    public double distance(double x, double y, double z) {
         return Math.sqrt(distanceSquared(x, y, z));
     }
 
-    public double distanceSquared(Position3 other)
-    {
+    public double distanceSquared(Position3 other) {
         return distanceSquared(other.x, other.y, other.z);
     }
 
-    public double distanceSquared(double x, double y, double z)
-    {
+    public double distanceSquared(double x, double y, double z) {
         double distX = this.x - x;
         double distY = this.y - y;
         double distZ = this.z - z;
         return distX * distX + distY * distY + distZ * distZ;
     }
 
-    public String serialize()
-    {
+    public String serialize() {
         return getX() + ":" + getY() + ":" + getZ();
     }
 
-    public static Position3 deserialize(String deserialize)
-    {
+    public static Position3 deserialize(String deserialize) {
         String[] coords = deserialize.split(":");
         Position3 position3 = new Position3();
 
@@ -127,18 +111,15 @@ public class Position3 {
         return position3;
     }
 
-    public double getX()
-    {
+    public double getX() {
         return x;
     }
 
-    public double getY()
-    {
+    public double getY() {
         return y;
     }
 
-    public double getZ()
-    {
+    public double getZ() {
         return z;
     }
 }

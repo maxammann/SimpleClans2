@@ -37,8 +37,7 @@ public class AutoUpdater {
     private static final String JOB = "SimpleClans2";
     private Build toUpdate = null;
 
-    public AutoUpdater(Plugin plugin, UpdateType type, boolean longReport)
-    {
+    public AutoUpdater(Plugin plugin, UpdateType type, boolean longReport) {
         String version = plugin.getDescription().getVersion();
 
         if (version.equals("unknown-version")) {
@@ -75,8 +74,7 @@ public class AutoUpdater {
     }
 
 
-    public static String getBuildInfo(Build build, boolean longReport)
-    {
+    public static String getBuildInfo(Build build, boolean longReport) {
         if (build == null) {
             return null;
         }
@@ -95,13 +93,11 @@ public class AutoUpdater {
         return updateInfo.toString();
     }
 
-    public boolean isUpdate()
-    {
+    public boolean isUpdate() {
         return toUpdate != null;
     }
 
-    public boolean update()
-    {
+    public boolean update() {
         if (toUpdate == null) {
             return false;
         }
@@ -127,8 +123,7 @@ public class AutoUpdater {
         return true;
     }
 
-    private static int parseVersion(String version)
-    {
+    private static int parseVersion(String version) {
         char[] versionArray = version.toCharArray();
 
         int versionNumber = 0;
@@ -161,8 +156,7 @@ public class AutoUpdater {
         return versionNumber;
     }
 
-    public static Build getBuild(UpdateType type)
-    {
+    public static Build getBuild(UpdateType type) {
         return new Build(JOB, type);
     }
 }

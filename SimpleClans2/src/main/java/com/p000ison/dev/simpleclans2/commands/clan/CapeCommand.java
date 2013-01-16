@@ -36,8 +36,7 @@ import java.text.MessageFormat;
  */
 public class CapeCommand extends GenericPlayerCommand {
 
-    public CapeCommand(SimpleClans plugin)
-    {
+    public CapeCommand(SimpleClans plugin) {
         super("Cape", plugin);
         setArgumentRange(1, 1);
         setUsages(MessageFormat.format(Language.getTranslation("usage.cape"), plugin.getSettingsManager().getClanCommand()));
@@ -46,8 +45,7 @@ public class CapeCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public String getMenu(ClanPlayer cp)
-    {
+    public String getMenu(ClanPlayer cp) {
         if (cp != null && cp.getClan().isVerified() && cp.isLeader() && plugin.getSpoutSupport().isEnabled() && plugin.getSettingsManager().isCapesEnabled()) {
             return MessageFormat.format(Language.getTranslation("menu.cape"), plugin.getSettingsManager().getClanCommand());
         }
@@ -55,8 +53,7 @@ public class CapeCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public void execute(Player player, String[] args)
-    {
+    public void execute(Player player, String[] args) {
         if (!plugin.getSettingsManager().isCapesEnabled()) {
             return;
         }

@@ -31,31 +31,26 @@ public final class ClanCreateEvent extends ClanEvent implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
     private boolean cancelled;
 
-    public ClanCreateEvent(Clan clan)
-    {
+    public ClanCreateEvent(Clan clan) {
         super(clan);
     }
 
     @Override
-    public boolean isCancelled()
-    {
+    public boolean isCancelled() {
         return cancelled;
     }
 
     @Override
-    public HandlerList getHandlers()
-    {
+    public HandlerList getHandlers() {
         return handlers;
     }
 
-    public static HandlerList getHandlerList()
-    {
+    public static HandlerList getHandlerList() {
         return handlers;
     }
 
     @Override
-    public void setCancelled(boolean cancelled)
-    {
+    public void setCancelled(boolean cancelled) {
         this.cancelled = cancelled;
     }
 }

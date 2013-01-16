@@ -40,8 +40,7 @@ import java.util.List;
  */
 public class StatsCommand extends GenericPlayerCommand {
 
-    public StatsCommand(SimpleClans plugin)
-    {
+    public StatsCommand(SimpleClans plugin) {
         super("Stats", plugin);
         setArgumentRange(0, 0);
         setUsages(Language.getTranslation("usage.stats", plugin.getSettingsManager().getClanCommand()));
@@ -50,8 +49,7 @@ public class StatsCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public String getMenu(ClanPlayer cp)
-    {
+    public String getMenu(ClanPlayer cp) {
         if (cp != null && cp.isTrusted() && cp.getClan().isVerified()) {
             return Language.getTranslation("menu.stats", plugin.getSettingsManager().getClanCommand());
         }
@@ -59,8 +57,7 @@ public class StatsCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public void execute(Player player, String[] args)
-    {
+    public void execute(Player player, String[] args) {
         ChatColor headColor = plugin.getSettingsManager().getHeaderPageColor();
         ChatColor subColor = plugin.getSettingsManager().getSubPageColor();
 

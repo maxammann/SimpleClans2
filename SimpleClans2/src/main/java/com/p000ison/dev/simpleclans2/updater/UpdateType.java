@@ -30,14 +30,12 @@ public enum UpdateType {
     private String type;
     private String name;
 
-    private UpdateType(String type, String name)
-    {
+    private UpdateType(String type, String name) {
         this.type = type;
         this.name = name;
     }
 
-    public static UpdateType getUpdateType(String query)
-    {
+    public static UpdateType getUpdateType(String query) {
         for (UpdateType update : UpdateType.values()) {
             if (update.getName().equalsIgnoreCase(query)) {
                 return update;
@@ -48,13 +46,11 @@ public enum UpdateType {
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return type;
     }
 
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 }

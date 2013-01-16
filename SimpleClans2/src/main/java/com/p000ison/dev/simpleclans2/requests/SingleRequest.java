@@ -32,44 +32,37 @@ public abstract class SingleRequest extends AbstractRequest {
     private final ClanPlayer acceptor;
     private boolean accepted = false;
 
-    public SingleRequest(SimpleClans plugin, ClanPlayer acceptor, ClanPlayer requester)
-    {
+    public SingleRequest(SimpleClans plugin, ClanPlayer acceptor, ClanPlayer requester) {
         super(plugin, requester);
         this.acceptor = acceptor;
     }
 
-    public ClanPlayer getAcceptor()
-    {
+    public ClanPlayer getAcceptor() {
         return acceptor;
     }
 
     @Override
-    public boolean isClanPlayerInvolved(ClanPlayer clanPlayer)
-    {
+    public boolean isClanPlayerInvolved(ClanPlayer clanPlayer) {
         return acceptor.equals(clanPlayer) || requester.equals(clanPlayer);
     }
 
     @Override
-    public boolean checkRequest()
-    {
+    public boolean checkRequest() {
         return accepted;
     }
 
     @Override
-    public boolean hasEveryoneVoted()
-    {
+    public boolean hasEveryoneVoted() {
         return accepted;
     }
 
     @Override
-    public void deny()
-    {
+    public void deny() {
         accepted = false;
     }
 
     @Override
-    public boolean isClanInvolved(Clan clan)
-    {
+    public boolean isClanInvolved(Clan clan) {
         Clan acceptorClan = acceptor.getClan();
         Clan requesterClan = requester.getClan();
 
@@ -77,33 +70,28 @@ public abstract class SingleRequest extends AbstractRequest {
     }
 
     @Override
-    public void accept()
-    {
+    public void accept() {
         accepted = true;
     }
 
     @Override
-    public void abstain()
-    {
+    public void abstain() {
         throw new IllegalArgumentException("You can not abstain a SingleRequest!");
     }
 
     @Override
-    public boolean isAcceptor(ClanPlayer clanPlayer)
-    {
+    public boolean isAcceptor(ClanPlayer clanPlayer) {
         return clanPlayer.equals(acceptor);
     }
 
     @Override
-    public void announceMessage(String message)
-    {
+    public void announceMessage(String message) {
         sendAcceptorMessage(message);
         sendRequesterMessage(message);
     }
 
     @Override
-    public void sendAcceptorMessage(String message)
-    {
+    public void sendAcceptorMessage(String message) {
         Player acceptorPlayer = acceptor.toPlayer();
 
         if (acceptorPlayer != null) {
@@ -112,8 +100,7 @@ public abstract class SingleRequest extends AbstractRequest {
     }
 
     @Override
-    public void sendRequesterMessage(String message)
-    {
+    public void sendRequesterMessage(String message) {
         Player requesterPlayer = requester.toPlayer();
 
         if (requesterPlayer != null) {
@@ -122,26 +109,22 @@ public abstract class SingleRequest extends AbstractRequest {
     }
 
     @Override
-    public int getTimesVoted()
-    {
+    public int getTimesVoted() {
         return !accepted ? 0 : 1;
     }
 
     @Override
-    public int getAcceptorsSize()
-    {
+    public int getAcceptorsSize() {
         return 1;
     }
 
     @Override
-    public boolean isClanPlayerInvolved(Player player)
-    {
+    public boolean isClanPlayerInvolved(Player player) {
         return isAcceptor(player) || isRequester(player);
     }
 
     @Override
-    public boolean isAcceptor(Player player)
-    {
+    public boolean isAcceptor(Player player) {
         return player.getName().equals(acceptor.getName());
     }
 }

@@ -31,8 +31,7 @@ import org.bukkit.scheduler.BukkitTask;
  */
 public class InfoCommand extends GenericConsoleCommand {
     //com.p000ison.dev.simpleclans2.clan
-    public InfoCommand(SimpleClans plugin)
-    {
+    public InfoCommand(SimpleClans plugin) {
         super("Info", plugin);
         setArgumentRange(0, 0);
         setUsages(Language.getTranslation("usage.info", plugin.getSettingsManager().getClanCommand()));
@@ -41,14 +40,12 @@ public class InfoCommand extends GenericConsoleCommand {
     }
 
     @Override
-    public String getMenu()
-    {
+    public String getMenu() {
         return Language.getTranslation("menu.info", plugin.getSettingsManager().getClanCommand());
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args)
-    {
+    public void execute(CommandSender sender, String[] args) {
         int loadedClans = plugin.getClanManager().getClans().size();
         int loadedClanPlayers = plugin.getClanPlayerManager().getClanPlayers().size();
         int dataQueue = plugin.getDataManager().getAutoSaver().size();

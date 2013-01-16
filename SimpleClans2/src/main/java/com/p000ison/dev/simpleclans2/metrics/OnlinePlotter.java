@@ -26,14 +26,12 @@ import org.mcstats.Metrics;
  */
 public class OnlinePlotter extends Metrics.Plotter {
 
-    public OnlinePlotter()
-    {
+    public OnlinePlotter() {
         super("Online");
     }
 
     @Override
-    public int getValue()
-    {
+    public int getValue() {
         return 1;
     }
 }

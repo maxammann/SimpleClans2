@@ -33,14 +33,12 @@ import org.bukkit.event.Listener;
 public class SCCHeroChatListener implements Listener {
     private SimpleClansChat plugin;
 
-    public SCCHeroChatListener(SimpleClansChat plugin)
-    {
+    public SCCHeroChatListener(SimpleClansChat plugin) {
         this.plugin = plugin;
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    private void onHeroChatMessage(ChannelChatEvent event)
-    {
+    private void onHeroChatMessage(ChannelChatEvent event) {
         if (this.plugin.getSettingsManager().isCompatibilityMode()) {
             String format = event.getFormat();
 

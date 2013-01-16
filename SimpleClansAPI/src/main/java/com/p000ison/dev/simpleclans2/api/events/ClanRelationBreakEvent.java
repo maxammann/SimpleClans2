@@ -30,19 +30,16 @@ public final class ClanRelationBreakEvent extends ClanRelationEvent {
 
     private static final HandlerList handlers = new HandlerList();
 
-    public ClanRelationBreakEvent(Clan clan, Clan otherClan, RelationType type)
-    {
+    public ClanRelationBreakEvent(Clan clan, Clan otherClan, RelationType type) {
         super(clan, otherClan, type);
     }
 
     @Override
-    public HandlerList getHandlers()
-    {
+    public HandlerList getHandlers() {
         return handlers;
     }
 
-    public static HandlerList getHandlerList()
-    {
+    public static HandlerList getHandlerList() {
         return handlers;
     }
 }

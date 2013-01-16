@@ -47,8 +47,7 @@ import java.text.MessageFormat;
 
 public class CopyCommand extends GenericConsoleCommand {
 
-    public CopyCommand(SimpleClans plugin)
-    {
+    public CopyCommand(SimpleClans plugin) {
         super("Copy", plugin);
         setArgumentRange(2, 5);
         setUsages(MessageFormat.format(Language.getTranslation("usage.copy"), plugin.getSettingsManager().getClanCommand()));
@@ -57,14 +56,12 @@ public class CopyCommand extends GenericConsoleCommand {
     }
 
     @Override
-    public String getMenu()
-    {
+    public String getMenu() {
         return MessageFormat.format(Language.getTranslation("menu.copy"), plugin.getSettingsManager().getClanCommand());
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args)
-    {
+    public void execute(CommandSender sender, String[] args) {
         long start = System.currentTimeMillis();
 
         Database from = plugin.getClanDatabase();
@@ -122,8 +119,7 @@ public class CopyCommand extends GenericConsoleCommand {
         ChatBlock.sendMessage(sender, ChatColor.AQUA + MessageFormat.format(Language.getTranslation("data.copied"), end - start));
     }
 
-    private static <T extends TableObject> void copyFixed(Class<T> table, Database from, Database to)
-    {
+    private static <T extends TableObject> void copyFixed(Class<T> table, Database from, Database to) {
         RegisteredTable registeredTable = to.getRegisteredTable(table);
         if (registeredTable == null) {
             registeredTable = to.registerTable(table);
@@ -166,8 +162,7 @@ public class CopyCommand extends GenericConsoleCommand {
         prepare.close();
     }
 
-    private static PreparedQuery createFullInsertStatement(Database database, RegisteredTable table, boolean id)
-    {
+    private static PreparedQuery createFullInsertStatement(Database database, RegisteredTable table, boolean id) {
         StringBuilder query = new StringBuilder();
         query.append("INSERT INTO ").append(table.getName()).append(" (");
 

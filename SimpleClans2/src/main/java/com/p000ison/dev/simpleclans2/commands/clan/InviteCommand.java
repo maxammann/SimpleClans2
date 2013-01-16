@@ -36,8 +36,7 @@ import java.text.MessageFormat;
 public class InviteCommand extends GenericPlayerCommand {
 
 
-    public InviteCommand(SimpleClans plugin)
-    {
+    public InviteCommand(SimpleClans plugin) {
         super("Invite", plugin);
         setArgumentRange(1, 1);
         setUsages(MessageFormat.format(Language.getTranslation("usage.invite"), plugin.getSettingsManager().getClanCommand()));
@@ -46,8 +45,7 @@ public class InviteCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public String getMenu(ClanPlayer cp)
-    {
+    public String getMenu(ClanPlayer cp) {
         if (cp != null && cp.isLeader()) {
             return MessageFormat.format(Language.getTranslation("menu.invite"), plugin.getSettingsManager().getClanCommand());
         }
@@ -56,8 +54,7 @@ public class InviteCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public void execute(Player player, String[] args)
-    {
+    public void execute(Player player, String[] args) {
         ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
 
         if (cp != null) {

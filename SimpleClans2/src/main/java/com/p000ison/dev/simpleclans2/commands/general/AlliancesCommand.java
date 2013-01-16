@@ -42,8 +42,7 @@ import java.util.Set;
 public class AlliancesCommand extends GenericConsoleCommand {
 
 
-    public AlliancesCommand(SimpleClans plugin)
-    {
+    public AlliancesCommand(SimpleClans plugin) {
         super("Alliances", plugin);
         setArgumentRange(0, 1);
         setUsages(MessageFormat.format(Language.getTranslation("usage.alliances"), plugin.getSettingsManager().getClanCommand()));
@@ -52,14 +51,12 @@ public class AlliancesCommand extends GenericConsoleCommand {
     }
 
     @Override
-    public String getMenu()
-    {
+    public String getMenu() {
         return MessageFormat.format(Language.getTranslation("menu.alliances"), plugin.getSettingsManager().getClanCommand());
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args)
-    {
+    public void execute(CommandSender sender, String[] args) {
         ChatColor headColor = plugin.getSettingsManager().getHeaderPageColor();
         ChatColor subColor = plugin.getSettingsManager().getSubPageColor();
 

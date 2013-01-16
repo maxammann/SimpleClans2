@@ -35,21 +35,18 @@ public class RivalryBreakRequest extends MultipleRequest {
 
     private Clan rival;
 
-    public RivalryBreakRequest(SimpleClans plugin, Set<ClanPlayer> acceptors, ClanPlayer requester, Clan rival)
-    {
+    public RivalryBreakRequest(SimpleClans plugin, Set<ClanPlayer> acceptors, ClanPlayer requester, Clan rival) {
         super(plugin, acceptors, requester);
         this.rival = rival;
     }
 
     @Override
-    public void onRequesting()
-    {
+    public void onRequesting() {
         sendAcceptorMessage(ChatColor.AQUA + Language.getTranslation("proposing.to.end.the.rivalry", requester.getClan().getTag(), rival.getTag()));
     }
 
     @Override
-    public boolean onAccepted()
-    {
+    public boolean onAccepted() {
         ClanPlayer cp = getRequester();
         Clan clan = requester.getClan();
 
@@ -69,8 +66,7 @@ public class RivalryBreakRequest extends MultipleRequest {
     }
 
     @Override
-    public void onDenied()
-    {
+    public void onDenied() {
         sendRequesterMessage(ChatColor.DARK_RED + Language.getTranslation("rivalry.request.denied", rival.getTag()));
         sendAcceptorMessage(ChatColor.DARK_RED + Language.getTranslation("rivalry.request.denied", requester.getClan().getTag()));
     }

@@ -14,15 +14,13 @@ import java.io.InputStream;
 public class Configuration extends YamlConfiguration {
     private File file;
 
-    public Configuration(File file) throws IOException, InvalidConfigurationException
-    {
+    public Configuration(File file) throws IOException, InvalidConfigurationException {
         this.file = file;
 
         load();
     }
 
-    private void load() throws IOException, InvalidConfigurationException
-    {
+    private void load() throws IOException, InvalidConfigurationException {
         if (!file.getParentFile().exists() && !file.getParentFile().mkdir()) {
             throw new IOException("Failed at creating SimpleClans folder!");
         }
@@ -36,14 +34,12 @@ public class Configuration extends YamlConfiguration {
         load(file);
     }
 
-    public void setDefault(File file) throws IOException, InvalidConfigurationException
-    {
+    public void setDefault(File file) throws IOException, InvalidConfigurationException {
         setDefaults(new Configuration(file));
         this.options().copyDefaults(true);
     }
 
-    public void setDefault(String jarPath, Plugin plugin) throws IOException, InvalidConfigurationException
-    {
+    public void setDefault(String jarPath, Plugin plugin) throws IOException, InvalidConfigurationException {
         InputStream defConfigStream = plugin.getResource(jarPath);
 
         if (defConfigStream != null) {
@@ -53,13 +49,11 @@ public class Configuration extends YamlConfiguration {
         this.options().copyDefaults(true);
     }
 
-    public void reload() throws IOException, InvalidConfigurationException
-    {
+    public void reload() throws IOException, InvalidConfigurationException {
         load();
     }
 
-    public void save() throws IOException
-    {
+    public void save() throws IOException {
         this.save(file);
     }
 }

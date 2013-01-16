@@ -42,8 +42,7 @@ import java.util.TreeMap;
 public class CraftRank implements Rank, TableObject {
     private static final Map<java.lang.Integer, String> availablePermissions = new TreeMap<java.lang.Integer, String>(new Comparator<Integer>() {
         @Override
-        public int compare(Integer o1, Integer o2)
-        {
+        public int compare(Integer o1, Integer o2) {
             return o1.compareTo(o2);
         }
     });
@@ -75,8 +74,7 @@ public class CraftRank implements Rank, TableObject {
     private long clanId;
     private boolean update;
 
-    public CraftRank()
-    {
+    public CraftRank() {
     }
 
     /**
@@ -86,8 +84,7 @@ public class CraftRank implements Rank, TableObject {
      * @param name The name of the rank.
      * @param tag  The tag
      */
-    public CraftRank(long id, String name, String tag)
-    {
+    public CraftRank(long id, String name, String tag) {
         this.tag = tag;
         this.setId(id);
         this.name = name;
@@ -100,8 +97,7 @@ public class CraftRank implements Rank, TableObject {
      * @param tag      The tag
      * @param priority The priority
      */
-    public CraftRank(String name, String tag, int priority, long clanId)
-    {
+    public CraftRank(String name, String tag, int priority, long clanId) {
         this.name = name;
         this.priority = priority;
         this.tag = tag;
@@ -117,8 +113,7 @@ public class CraftRank implements Rank, TableObject {
      * @param priority    The priority
      * @param permissions The permissions of this rank
      */
-    public CraftRank(int id, String name, String tag, int priority, Map<Integer, Boolean> permissions, int clanId)
-    {
+    public CraftRank(int id, String name, String tag, int priority, Map<Integer, Boolean> permissions, int clanId) {
         this(name, tag, priority, clanId);
         if (permissions == null) {
             this.permissions = new HashMap<Integer, Boolean>();
@@ -135,8 +130,7 @@ public class CraftRank implements Rank, TableObject {
      * @param permission The permission.
      * @param id         The assigned id.
      */
-    public static void addAvailablePermission(String permission, int id)
-    {
+    public static void addAvailablePermission(String permission, int id) {
         availablePermissions.put(id, permission);
     }
 
@@ -145,13 +139,11 @@ public class CraftRank implements Rank, TableObject {
      *
      * @return The available permissions.
      */
-    public static Map<Integer, String> getAvailablePermissions()
-    {
+    public static Map<Integer, String> getAvailablePermissions() {
         return availablePermissions;
     }
 
-    public static int getID(String permission)
-    {
+    public static int getID(String permission) {
         for (Map.Entry<Integer, String> entry : availablePermissions.entrySet()) {
             if (entry.getValue().equals(permission)) {
                 return entry.getKey();
@@ -160,8 +152,7 @@ public class CraftRank implements Rank, TableObject {
         return -1;
     }
 
-    public static String getByID(int id)
-    {
+    public static String getByID(int id) {
         for (Map.Entry<Integer, String> entry : availablePermissions.entrySet()) {
             if (entry.getKey().equals(id)) {
                 return entry.getValue();
@@ -171,8 +162,7 @@ public class CraftRank implements Rank, TableObject {
     }
 
     @Override
-    public String removePermission(String permission)
-    {
+    public String removePermission(String permission) {
         if (permissions == null || permissions.isEmpty()) {
             return null;
         }
@@ -189,8 +179,7 @@ public class CraftRank implements Rank, TableObject {
     }
 
     @Override
-    public boolean hasPermission(int id)
-    {
+    public boolean hasPermission(int id) {
         if (permissions == null) {
             return false;
         }
@@ -199,14 +188,12 @@ public class CraftRank implements Rank, TableObject {
     }
 
     @Override
-    public boolean hasPermission(String permission)
-    {
+    public boolean hasPermission(String permission) {
         return hasPermission(getID(permission));
     }
 
     @Override
-    public boolean isNegative(int id)
-    {
+    public boolean isNegative(int id) {
         if (permissions == null) {
             return false;
         }
@@ -218,20 +205,17 @@ public class CraftRank implements Rank, TableObject {
     }
 
     @Override
-    public boolean isNegative(String permission)
-    {
+    public boolean isNegative(String permission) {
         return isNegative(getID(permission));
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
     @Override
-    public String addPermission(String permission, boolean positive)
-    {
+    public String addPermission(String permission, boolean positive) {
         if (permissions == null) {
             permissions = new HashMap<Integer, Boolean>();
         }
@@ -247,8 +231,7 @@ public class CraftRank implements Rank, TableObject {
     }
 
     @Override
-    public long getClanID()
-    {
+    public long getClanID() {
         return clanId;
     }
 
@@ -256,8 +239,7 @@ public class CraftRank implements Rank, TableObject {
         private String permission;
         private int id;
 
-        private PermissionFinder(String permission)
-        {
+        private PermissionFinder(String permission) {
             String nearest = null;
             int id = -1;
             int smallest = Integer.MAX_VALUE;
@@ -277,57 +259,48 @@ public class CraftRank implements Rank, TableObject {
             this.permission = nearest;
         }
 
-        public String getPermission()
-        {
+        public String getPermission() {
             return permission;
         }
 
 
-        public int getId()
-        {
+        public int getId() {
             return id;
         }
     }
 
     @Override
-    public boolean isMorePowerful(Rank rank)
-    {
+    public boolean isMorePowerful(Rank rank) {
         return priority > rank.getPriority();
     }
 
     @Override
-    public Map<Integer, Boolean> getPermissions()
-    {
+    public Map<Integer, Boolean> getPermissions() {
         return permissions;
     }
 
     @Override
-    public int getPriority()
-    {
+    public int getPriority() {
         return priority;
     }
 
     @Override
-    public void setPriority(int priority)
-    {
+    public void setPriority(int priority) {
         this.priority = priority;
     }
 
     @Override
-    public long getID()
-    {
+    public long getID() {
         return id;
     }
 
     @Override
-    public void setId(long id)
-    {
+    public void setId(long id) {
         this.id = id;
     }
 
     @Override
-    public boolean equals(Object o)
-    {
+    public boolean equals(Object o) {
         if (this == o) {
             return true;
         }
@@ -341,14 +314,12 @@ public class CraftRank implements Rank, TableObject {
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return (int) (id ^ (id >>> 32));
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "CraftRank{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
@@ -358,52 +329,44 @@ public class CraftRank implements Rank, TableObject {
     }
 
     @Override
-    public boolean needsUpdate()
-    {
+    public boolean needsUpdate() {
         return update;
     }
 
     @Override
-    public void update()
-    {
+    public void update() {
         update(true);
     }
 
     @Override
-    public void update(boolean update)
-    {
+    public void update(boolean update) {
         this.update = update;
     }
 
     @Override
-    public long getLastUpdated()
-    {
+    public long getLastUpdated() {
         return UpdateAble.NEVER_UPDATED;
     }
 
     @Override
-    public String getTag()
-    {
+    public String getTag() {
         return tag;
     }
 
     @Override
-    public void setTag(String tag)
-    {
+    public void setTag(String tag) {
         this.tag = tag;
     }
 
     @Override
-    public int compareTo(Rank anotherRank)
-    {
+    public int compareTo(Rank anotherRank) {
         int thisPriority = this.getPriority();
         int anotherPriority = anotherRank.getPriority();
         return (thisPriority < anotherPriority ? -1 : (thisPriority == anotherPriority ? 0 : 1));
     }
 
     @DatabaseColumnGetter(databaseName = "permissions")
-    private String getDatabasePermissions()
-    {
+    private String getDatabasePermissions() {
         if (permissions == null) {
             return null;
         }
@@ -411,8 +374,7 @@ public class CraftRank implements Rank, TableObject {
     }
 
     @DatabaseColumnSetter(position = 4, databaseName = "permissions")
-    private void setDatabasePermissions(String json)
-    {
+    private void setDatabasePermissions(String json) {
         if (json == null) {
             permissions = null;
             return;

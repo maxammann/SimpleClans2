@@ -30,53 +30,43 @@ public class ConvertedClan {
     private String tag;
     private List<String> rawRivals, rawAllies, rawWarring;
 
-    public ConvertedClan(String tag)
-    {
+    public ConvertedClan(String tag) {
         this.tag = tag;
     }
 
-    public void serPackedRivals(String packed)
-    {
+    public void serPackedRivals(String packed) {
         rawRivals = Arrays.asList(packed.split("\\s*(\\||$)"));
     }
 
-    public void setPackedAllies(String packed)
-    {
+    public void setPackedAllies(String packed) {
         rawAllies = Arrays.asList(packed.split("\\s*(\\||$)"));
     }
 
-    public long getId()
-    {
+    public long getId() {
         return id;
     }
 
-    public void setId(long id)
-    {
+    public void setId(long id) {
         this.id = id;
     }
 
-    public List<String> getRawRivals()
-    {
+    public List<String> getRawRivals() {
         return rawRivals;
     }
 
-    public List<String> getRawAllies()
-    {
+    public List<String> getRawAllies() {
         return rawAllies;
     }
 
-    public String getTag()
-    {
+    public String getTag() {
         return tag;
     }
 
-    public List<String> getRawWarring()
-    {
+    public List<String> getRawWarring() {
         return rawWarring;
     }
 
-    public void setRawWarring(List<String> rawWarring)
-    {
+    public void setRawWarring(List<String> rawWarring) {
         this.rawWarring = rawWarring;
     }
 }

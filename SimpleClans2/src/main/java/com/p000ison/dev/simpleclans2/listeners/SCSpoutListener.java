@@ -33,14 +33,12 @@ public class SCSpoutListener {
 
     private SimpleClans plugin;
 
-    public SCSpoutListener(SimpleClans plugin)
-    {
+    public SCSpoutListener(SimpleClans plugin) {
         this.plugin = plugin;
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
-    public void onSpoutPlayerJoin(SpoutCraftEnableEvent event)
-    {
+    public void onSpoutPlayerJoin(SpoutCraftEnableEvent event) {
         SpoutPlayer spoutPlayer = event.getPlayer();
 
         ClanPlayer clanPlayer = plugin.getClanPlayerManager().getClanPlayerExact(spoutPlayer.getName());

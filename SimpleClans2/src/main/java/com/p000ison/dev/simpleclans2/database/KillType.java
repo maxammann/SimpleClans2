@@ -34,19 +34,16 @@ public enum KillType {
     private byte type;
 
 
-    private KillType(byte type)
-    {
+    private KillType(byte type) {
         this.type = type;
     }
 
-    public byte getType()
-    {
+    public byte getType() {
         return type;
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "KillType{" +
                 "type=" + this.name().toLowerCase(Locale.US) +
                 '}';

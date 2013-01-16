@@ -33,81 +33,66 @@ public final class DateHelper {
     public static final long MINUTE = 60000L;
     public static final long SECOND = 1000L;
 
-    private DateHelper()
-    {
+    private DateHelper() {
     }
 
-    public static double differenceInMonths(Date date1, Date date2)
-    {
+    public static double differenceInMonths(Date date1, Date date2) {
         return differenceInYears(date1, date2) * 12D;
     }
 
-    public static double differenceInYears(Date date1, Date date2)
-    {
+    public static double differenceInYears(Date date1, Date date2) {
         double days = differenceInDays(date1, date2);
         return days / 365.2425D;
     }
 
-    public static double differenceInDays(Date date1, Date date2)
-    {
+    public static double differenceInDays(Date date1, Date date2) {
         return differenceInHours(date1, date2) / 24.0D;
     }
 
 
-    public static double differenceInHours(Date date1, Date date2)
-    {
+    public static double differenceInHours(Date date1, Date date2) {
         return differenceInMinutes(date1, date2) / 60.0D;
     }
 
 
-    public static double differenceInMinutes(Date date1, Date date2)
-    {
+    public static double differenceInMinutes(Date date1, Date date2) {
         return differenceInSeconds(date1, date2) / 60.0D;
     }
 
-    public static double differenceInSeconds(Date date1, Date date2)
-    {
+    public static double differenceInSeconds(Date date1, Date date2) {
         return differenceInMilliseconds(date1, date2) / 1000.0D;
     }
 
-    private static double differenceInMilliseconds(Date date1, Date date2)
-    {
+    private static double differenceInMilliseconds(Date date1, Date date2) {
         return differenceInMilliseconds(date1.getTime(), date2.getTime());
     }
 
-    public static double differenceInMonths(long date1, long date2)
-    {
+    public static double differenceInMonths(long date1, long date2) {
         return differenceInYears(date1, date2) * 12D;
     }
 
-    public static double differenceInYears(long date1, long date2)
-    {
+    public static double differenceInYears(long date1, long date2) {
         double days = differenceInDays(date1, date2);
         return days / 365.2425D;
     }
 
-    public static double differenceInDays(long date1, long date2)
-    {
+    public static double differenceInDays(long date1, long date2) {
         return differenceInHours(date1, date2) / 24.0D;
     }
 
-    public static double differenceInHours(long date1, long date2)
-    {
+    public static double differenceInHours(long date1, long date2) {
         return differenceInMinutes(date1, date2) / 60.0D;
     }
 
-    public static double differenceInMinutes(long date1, long date2)
-    {
+    public static double differenceInMinutes(long date1, long date2) {
         return differenceInSeconds(date1, date2) / 60.0D;
     }
 
-    public static double differenceInSeconds(long date1, long date2)
-    {
+    public static double differenceInSeconds(long date1, long date2) {
         return differenceInMilliseconds(date1, date2) / 1000.0D;
     }
 
-    public static long differenceInMilliseconds(long date1, long date2)
-    {
+    public static long differenceInMilliseconds(long date1, long date2) {
         return Math.abs(date1 - date2);
     }
 
@@ -121,8 +106,7 @@ public final class DateHelper {
      * @param time The string to parse
      * @return The duration in ms
      */
-    public static long parseTime(String time)
-    {
+    public static long parseTime(String time) {
         char[] chars = time.toCharArray();
 
         long duration = 0;
@@ -184,8 +168,7 @@ public final class DateHelper {
      * @param character The character to parse
      * @return The integer which matches, or -1 if the parse fails
      */
-    public static int getDigit(int character)
-    {
+    public static int getDigit(int character) {
         final int MINIMAL_DIGIT = 48, MAXIMAL_DIGIT = 57;
 
         if (character >= MINIMAL_DIGIT && character <= MAXIMAL_DIGIT) {

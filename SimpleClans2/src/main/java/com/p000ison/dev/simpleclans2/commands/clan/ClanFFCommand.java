@@ -35,8 +35,7 @@ import java.text.MessageFormat;
  */
 public class ClanFFCommand extends GenericPlayerCommand {
 
-    public ClanFFCommand(SimpleClans plugin)
-    {
+    public ClanFFCommand(SimpleClans plugin) {
         super("Clanff", plugin);
         setArgumentRange(1, 1);
         setUsages(MessageFormat.format(Language.getTranslation("usage.clanff"), plugin.getSettingsManager().getClanCommand()));
@@ -45,8 +44,7 @@ public class ClanFFCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public String getMenu(ClanPlayer cp)
-    {
+    public String getMenu(ClanPlayer cp) {
         if (cp != null && (cp.isLeader() || cp.hasRankPermission("manage.clanff"))) {
             return MessageFormat.format(Language.getTranslation("menu.clanff"), plugin.getSettingsManager().getClanCommand());
         }
@@ -54,8 +52,7 @@ public class ClanFFCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public void execute(Player player, String[] args)
-    {
+    public void execute(Player player, String[] args) {
 
         if (player.hasPermission("simpleclans.leader.ff")) {
             ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);

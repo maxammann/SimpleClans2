@@ -25,13 +25,11 @@ package com.p000ison.dev.simpleclans2.api.chat;
 public class Row {
     private StringBuilder[] columns;
 
-    public Row(StringBuilder... columns)
-    {
+    public Row(StringBuilder... columns) {
         this.columns = columns;
     }
 
-    public Row(Object... columns)
-    {
+    public Row(Object... columns) {
         this.columns = new StringBuilder[columns.length];
 
         for (int i = 0; i < columns.length; i++) {
@@ -45,13 +43,11 @@ public class Row {
         }
     }
 
-    public StringBuilder[] getColumns()
-    {
+    public StringBuilder[] getColumns() {
         return columns;
     }
 
-    public void setColumn(int index, StringBuilder text)
-    {
+    public void setColumn(int index, StringBuilder text) {
         if (index < 0) {
             throw new ArrayIndexOutOfBoundsException("The index can not less than/equal 0!");
         } else if (index >= columns.length) {
@@ -61,13 +57,11 @@ public class Row {
         columns[index] = text;
     }
 
-    public void setColumn(int index, String text)
-    {
+    public void setColumn(int index, String text) {
         setColumn(index, new StringBuilder(text));
     }
 
-    public int getLenght()
-    {
+    public int getLenght() {
         return columns.length;
     }
 }

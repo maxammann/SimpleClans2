@@ -36,8 +36,7 @@ public class TeleportState {
     private String msg;
     private boolean processing;
 
-    public TeleportState(Player player, Location destination, String msg, int waiting)
-    {
+    public TeleportState(Player player, Location destination, String msg, int waiting) {
         this.destination = destination;
         this.playerLocation = player.getLocation();
         this.playerName = player.getName();
@@ -50,8 +49,7 @@ public class TeleportState {
      *
      * @return The location.
      */
-    public Location getLocation()
-    {
+    public Location getLocation() {
         return playerLocation;
     }
 
@@ -60,8 +58,7 @@ public class TeleportState {
      *
      * @return Whether its time for teleport.
      */
-    public boolean isTeleportTime()
-    {
+    public boolean isTeleportTime() {
         if (counter > 1) {
             counter--;
             return false;
@@ -75,8 +72,7 @@ public class TeleportState {
      *
      * @return The player that is waiting for teleport
      */
-    public Player getPlayer()
-    {
+    public Player getPlayer() {
         return Bukkit.getPlayer(playerName);
     }
 
@@ -85,8 +81,7 @@ public class TeleportState {
      *
      * @return Get seconds left before teleport.
      */
-    public int getCounter()
-    {
+    public int getCounter() {
         return counter;
     }
 
@@ -95,8 +90,7 @@ public class TeleportState {
      *
      * @return The message the player will get.
      */
-    public String getMessage()
-    {
+    public String getMessage() {
         return msg;
     }
 
@@ -105,18 +99,15 @@ public class TeleportState {
      *
      * @return The location.
      */
-    public Location getDestination()
-    {
+    public Location getDestination() {
         return destination;
     }
 
-    public boolean isProcessing()
-    {
+    public boolean isProcessing() {
         return processing;
     }
 
-    public void setProcessing(boolean processing)
-    {
+    public void setProcessing(boolean processing) {
         this.processing = processing;
     }
 }

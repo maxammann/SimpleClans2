@@ -37,8 +37,7 @@ import java.text.MessageFormat;
  */
 public class BBCommand extends GenericPlayerCommand {
 
-    public BBCommand(SimpleClans plugin)
-    {
+    public BBCommand(SimpleClans plugin) {
         super("BB", plugin);
         setArgumentRange(0, 1);
         setUsages(MessageFormat.format(Language.getTranslation("usage.bb"), plugin.getSettingsManager().getBBCommand()));
@@ -48,8 +47,7 @@ public class BBCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public String getMenu(ClanPlayer cp)
-    {
+    public String getMenu(ClanPlayer cp) {
         if (cp != null && cp.getClan().isVerified()) {
             return MessageFormat.format(Language.getTranslation("menu.bb.view"), plugin.getSettingsManager().getBBCommand());
         }
@@ -57,8 +55,7 @@ public class BBCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public void execute(Player player, String[] args)
-    {
+    public void execute(Player player, String[] args) {
         ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
 
         if (cp == null) {

@@ -35,14 +35,12 @@ public class PHPConnection {
     private URLConnection connection;
     private boolean read = false;
 
-    public PHPConnection(String protocol, String host, int port, String file, boolean read) throws IOException
-    {
+    public PHPConnection(String protocol, String host, int port, String file, boolean read) throws IOException {
         this(protocol, host, port, file);
         this.read = read;
     }
 
-    public PHPConnection(String protocol, String host, int port, String file) throws IOException
-    {
+    public PHPConnection(String protocol, String host, int port, String file) throws IOException {
 
         connection = new URL(protocol, host, port, file).openConnection();
         connection.setDoOutput(true);
@@ -55,8 +53,7 @@ public class PHPConnection {
      * @param data The data which should be send
      * @throws IOException
      */
-    public void write(String data) throws IOException
-    {
+    public void write(String data) throws IOException {
         final OutputStream out = connection.getOutputStream();
         Writer writer = new BufferedWriter(new OutputStreamWriter(out, Charset.forName("UTF-8")));
         writer.write(data);
@@ -67,8 +64,7 @@ public class PHPConnection {
         }
     }
 
-    public String getResponse() throws IOException
-    {
+    public String getResponse() throws IOException {
         final BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), Charset.forName("UTF-8")));
         String response = reader.readLine();
         reader.close();
@@ -81,8 +77,7 @@ public class PHPConnection {
      * @return The incoming data
      * @throws IOException
      */
-    public String read() throws IOException
-    {
+    public String read() throws IOException {
         final BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), Charset.forName("UTF-8")));
         final StringBuilder incoming = new StringBuilder();
 

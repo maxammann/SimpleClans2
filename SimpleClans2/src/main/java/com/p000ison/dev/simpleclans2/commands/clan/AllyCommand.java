@@ -37,8 +37,7 @@ import java.util.Set;
  * Represents a AllyCommand
  */
 public class AllyCommand extends GenericPlayerCommand {
-    public AllyCommand(SimpleClans plugin)
-    {
+    public AllyCommand(SimpleClans plugin) {
         super("Ally", plugin);
         this.plugin = plugin;
         setArgumentRange(2, 2);
@@ -48,8 +47,7 @@ public class AllyCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public String getMenu(ClanPlayer clanPlayer)
-    {
+    public String getMenu(ClanPlayer clanPlayer) {
 
         if (clanPlayer != null) {
             Clan clan = clanPlayer.getClan();
@@ -61,8 +59,7 @@ public class AllyCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public void execute(Player player, String[] args)
-    {
+    public void execute(Player player, String[] args) {
         ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
 
         if (cp == null) {

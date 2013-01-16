@@ -40,15 +40,13 @@ public class AutoSaver implements Runnable {
     private SimpleClans plugin;
     private DatabaseManager dataManager;
 
-    public AutoSaver(SimpleClans simpleClans, DatabaseManager dataManager)
-    {
+    public AutoSaver(SimpleClans simpleClans, DatabaseManager dataManager) {
         this.plugin = simpleClans;
         this.dataManager = dataManager;
     }
 
     @Override
-    public synchronized void run()
-    {
+    public synchronized void run() {
         for (Clan clan : plugin.getClanManager().getModifyAbleClans()) {
             CraftClan craftClan = (CraftClan) clan;
             if (craftClan.needsUpdate()) {
@@ -81,13 +79,11 @@ public class AutoSaver implements Runnable {
         }
     }
 
-    public synchronized void addExecutable(Executable executable)
-    {
+    public synchronized void addExecutable(Executable executable) {
         queue.add(executable);
     }
 
-    public int size()
-    {
+    public int size() {
         return queue.size();
     }
 }

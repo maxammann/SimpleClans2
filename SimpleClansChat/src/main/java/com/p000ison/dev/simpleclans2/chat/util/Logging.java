@@ -25,53 +25,43 @@ import java.util.logging.Logger;
 public class Logging {
     private static Logger instance;
 
-    public static void setInstance(Logger instance)
-    {
+    public static void setInstance(Logger instance) {
         Logging.instance = instance;
     }
 
-    public static void close()
-    {
+    public static void close() {
         instance = null;
     }
 
-    public static void debug(String msg, Object[] args)
-    {
+    public static void debug(String msg, Object[] args) {
         debug(Level.INFO, String.format(msg, args), null);
     }
 
-    public static void debug(String msg, Level level, Object[] args)
-    {
+    public static void debug(String msg, Level level, Object[] args) {
         debug(Level.SEVERE, String.format(msg, args), null);
     }
 
-    public static void debug(String msg)
-    {
+    public static void debug(String msg) {
         debug(Level.INFO, msg, null);
     }
 
-    public static void debug(Level level, String msg)
-    {
+    public static void debug(Level level, String msg) {
         debug(Level.SEVERE, msg, null);
     }
 
-    public static void debug(Throwable ex)
-    {
+    public static void debug(Throwable ex) {
         debug(Level.SEVERE, null, ex);
     }
 
-    public static void debug(Throwable ex, String msg)
-    {
+    public static void debug(Throwable ex, String msg) {
         debug(Level.SEVERE, msg, ex);
     }
 
-    public static void debug(Throwable ex, String msg, Object[] args)
-    {
+    public static void debug(Throwable ex, String msg, Object[] args) {
         debug(Level.SEVERE, String.format(msg, args), ex);
     }
 
-    public static void debug(Level level, String msg, Throwable ex)
-    {
+    public static void debug(Level level, String msg, Throwable ex) {
         if (instance == null) {
             return;
         }

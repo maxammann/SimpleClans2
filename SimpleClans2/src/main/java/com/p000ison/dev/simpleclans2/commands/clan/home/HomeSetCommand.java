@@ -37,8 +37,7 @@ import java.text.MessageFormat;
  */
 public class HomeSetCommand extends GenericPlayerCommand {
 
-    public HomeSetCommand(SimpleClans plugin)
-    {
+    public HomeSetCommand(SimpleClans plugin) {
         super("HomeSet", plugin);
         setArgumentRange(0, 0);
         setUsages(MessageFormat.format(Language.getTranslation("usage.home.set"), plugin.getSettingsManager().getClanCommand()));
@@ -47,8 +46,7 @@ public class HomeSetCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public String getMenu(ClanPlayer cp)
-    {
+    public String getMenu(ClanPlayer cp) {
         if (cp != null && cp.getClan().isVerified()) {
             return MessageFormat.format(Language.getTranslation("menu.home.set"), plugin.getSettingsManager().getClanCommand());
         }
@@ -56,8 +54,7 @@ public class HomeSetCommand extends GenericPlayerCommand {
     }
 
     @Override
-    public void execute(Player player, String[] args)
-    {
+    public void execute(Player player, String[] args) {
 
         ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
 

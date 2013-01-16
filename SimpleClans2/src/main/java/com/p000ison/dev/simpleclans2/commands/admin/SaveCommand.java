@@ -31,8 +31,7 @@ import java.text.MessageFormat;
 
 public class SaveCommand extends GenericConsoleCommand {
 
-    public SaveCommand(SimpleClans plugin)
-    {
+    public SaveCommand(SimpleClans plugin) {
         super("Save", plugin);
         setArgumentRange(0, 0);
         setUsages(MessageFormat.format(Language.getTranslation("usage.save"), plugin.getSettingsManager().getClanCommand()));
@@ -41,14 +40,12 @@ public class SaveCommand extends GenericConsoleCommand {
     }
 
     @Override
-    public String getMenu()
-    {
+    public String getMenu() {
         return MessageFormat.format(Language.getTranslation("menu.save"), plugin.getSettingsManager().getClanCommand());
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args)
-    {
+    public void execute(CommandSender sender, String[] args) {
         long start = System.currentTimeMillis();
 
         plugin.getDataManager().getAutoSaver().run();

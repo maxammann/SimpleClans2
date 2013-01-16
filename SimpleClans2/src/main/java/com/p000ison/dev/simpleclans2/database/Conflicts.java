@@ -26,31 +26,26 @@ public class Conflicts implements Comparable<Conflicts> {
     private long attacker, victim;
     private int conflicts;
 
-    public Conflicts(long attacker, long victim, int conflicts)
-    {
+    public Conflicts(long attacker, long victim, int conflicts) {
         this.attacker = attacker;
         this.victim = victim;
         this.conflicts = conflicts;
     }
 
-    public long getAttacker()
-    {
+    public long getAttacker() {
         return attacker;
     }
 
-    public long getVictim()
-    {
+    public long getVictim() {
         return victim;
     }
 
-    public int getConflicts()
-    {
+    public int getConflicts() {
         return conflicts;
     }
 
     @Override
-    public boolean equals(Object o)
-    {
+    public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
@@ -60,16 +55,14 @@ public class Conflicts implements Comparable<Conflicts> {
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         int result = (int) (attacker ^ (attacker >>> 32));
         result = 31 * result + (int) (victim ^ (victim >>> 32));
         return result;
     }
 
     @Override
-    public int compareTo(Conflicts o)
-    {
+    public int compareTo(Conflicts o) {
         int thisVal = this.conflicts;
         int anotherVal = o.conflicts;
         return (thisVal < anotherVal ? 1 : (thisVal == anotherVal ? 0 : -1));

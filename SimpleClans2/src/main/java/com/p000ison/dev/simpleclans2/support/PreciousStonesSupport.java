@@ -37,8 +37,7 @@ public class PreciousStonesSupport {
 
     private PreciousStones preciousStones;
 
-    public PreciousStonesSupport()
-    {
+    public PreciousStonesSupport() {
         Plugin preciousStonesRaw = Bukkit.getServer().getPluginManager().getPlugin("PreciousStones");
 
         if (!(preciousStonesRaw instanceof PreciousStones)) {
@@ -52,8 +51,7 @@ public class PreciousStonesSupport {
     }
 
 
-    public boolean isTeleportAllowed(Player player, Location location)
-    {
+    public boolean isTeleportAllowed(Player player, Location location) {
         if (preciousStones == null) {
             return true;
         }

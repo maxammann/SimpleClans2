@@ -41,15 +41,13 @@ public class LanguageMap {
     private ColorizedMap map;
     private Charset charset;
 
-    public LanguageMap(String location, boolean inJar, Charset charset)
-    {
+    public LanguageMap(String location, boolean inJar, Charset charset) {
         this.location = location;
         this.inJar = inJar;
         this.charset = charset;
     }
 
-    private Reader getReader(Charset charset) throws IOException
-    {
+    private Reader getReader(Charset charset) throws IOException {
         File file = new File(location);
         InputStream stream;
         if (inJar) {
@@ -67,8 +65,7 @@ public class LanguageMap {
         return new InputStreamReader(stream, charset);
     }
 
-    public static InputStream getResource(String filename) throws IOException
-    {
+    public static InputStream getResource(String filename) throws IOException {
         if (filename == null) {
             throw new IllegalArgumentException("The path can not be null");
         }
@@ -84,13 +81,11 @@ public class LanguageMap {
         return connection.getInputStream();
     }
 
-    private Writer getWriter(Charset charset) throws IOException
-    {
+    private Writer getWriter(Charset charset) throws IOException {
         return new OutputStreamWriter(new FileOutputStream(new File(location), true), charset);
     }
 
-    public static void copy(InputStream input, File target) throws IOException
-    {
+    public static void copy(InputStream input, File target) throws IOException {
         if (target.exists()) {
             throw new IOException("File already exists!");
         }
@@ -132,8 +127,7 @@ public class LanguageMap {
         }
     }
 
-    public void load()
-    {
+    public void load() {
         Reader reader = null;
 
         try {
@@ -157,8 +151,7 @@ public class LanguageMap {
         }
     }
 
-    public void save()
-    {
+    public void save() {
         Writer writer = null;
         try {
             writer = getWriter(charset);
@@ -188,23 +181,19 @@ public class LanguageMap {
         }
     }
 
-    public LanguageMap getDefaultMap()
-    {
+    public LanguageMap getDefaultMap() {
         return defaultMap;
     }
 
-    public void setDefault(LanguageMap defaultMap)
-    {
+    public void setDefault(LanguageMap defaultMap) {
         this.defaultMap = defaultMap;
     }
 
-    public String put(String key, String value)
-    {
+    public String put(String key, String value) {
         return map.put(key, ChatBlock.parseColors(value));
     }
 
-    public Set<Map.Entry<String, String>> getEntries()
-    {
+    public Set<Map.Entry<String, String>> getEntries() {
         if (map == null) {
             return null;
         }
@@ -212,21 +201,18 @@ public class LanguageMap {
         return map.entrySet();
     }
 
-    public boolean contains(String key)
-    {
+    public boolean contains(String key) {
         return map.containsKey(key);
     }
 
-    public void clear()
-    {
+    public void clear() {
         if (map == null) {
             return;
         }
         map.clear();
     }
 
-    public String getValue(String key)
-    {
+    public String getValue(String key) {
         return map.get(key);
     }
 }

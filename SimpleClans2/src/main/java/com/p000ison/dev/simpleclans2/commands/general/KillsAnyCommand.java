@@ -34,8 +34,7 @@ import org.bukkit.command.CommandSender;
  */
 public class KillsAnyCommand extends GenericConsoleCommand {
 
-    public KillsAnyCommand(SimpleClans plugin)
-    {
+    public KillsAnyCommand(SimpleClans plugin) {
         super("KillsAnyone", plugin);
         setArgumentRange(1, 2);
         setUsages(Language.getTranslation("usage.kills.any", plugin.getSettingsManager().getClanCommand()));
@@ -44,14 +43,12 @@ public class KillsAnyCommand extends GenericConsoleCommand {
     }
 
     @Override
-    public String getMenu()
-    {
+    public String getMenu() {
         return Language.getTranslation("menu.kills.any", plugin.getSettingsManager().getClanCommand());
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args)
-    {
+    public void execute(CommandSender sender, String[] args) {
         ClanPlayer cp = plugin.getClanPlayerManager().getAnyClanPlayer(args[0]);
 
         if (cp == null) {

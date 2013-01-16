@@ -41,8 +41,7 @@ import java.util.Set;
  */
 public class RivalriesCommand extends GenericConsoleCommand {
 
-    public RivalriesCommand(SimpleClans plugin)
-    {
+    public RivalriesCommand(SimpleClans plugin) {
         super("Rivalries", plugin);
         setArgumentRange(0, 1);
         setUsages(MessageFormat.format(Language.getTranslation("usage.rivalries"), plugin.getSettingsManager().getClanColor()));
@@ -51,14 +50,12 @@ public class RivalriesCommand extends GenericConsoleCommand {
     }
 
     @Override
-    public String getMenu()
-    {
+    public String getMenu() {
         return MessageFormat.format(Language.getTranslation("menu.rivalries"), plugin.getSettingsManager().getClanCommand());
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args)
-    {
+    public void execute(CommandSender sender, String[] args) {
         ChatColor headColor = plugin.getSettingsManager().getHeaderPageColor();
 
         if (sender.hasPermission("simpleclans.anyone.rivalries")) {

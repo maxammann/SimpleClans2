@@ -34,34 +34,29 @@ public abstract class AbstractRequest implements Request {
     private long created;
     protected SimpleClans plugin;
 
-    protected AbstractRequest(SimpleClans plugin, ClanPlayer requester)
-    {
+    protected AbstractRequest(SimpleClans plugin, ClanPlayer requester) {
         this.plugin = plugin;
         this.requester = requester;
         this.created = System.currentTimeMillis();
     }
 
     @Override
-    public ClanPlayer getRequester()
-    {
+    public ClanPlayer getRequester() {
         return requester;
     }
 
     @Override
-    public long getCreatedDate()
-    {
+    public long getCreatedDate() {
         return created;
     }
 
     @Override
-    public boolean isRequester(ClanPlayer clanPlayer)
-    {
+    public boolean isRequester(ClanPlayer clanPlayer) {
         return requester.equals(clanPlayer);
     }
 
     @Override
-    public boolean isRequester(Player player)
-    {
+    public boolean isRequester(Player player) {
         return player.getName().equals(requester.getName());
     }
 }

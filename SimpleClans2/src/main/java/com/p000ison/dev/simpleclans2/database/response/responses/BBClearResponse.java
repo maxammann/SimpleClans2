@@ -35,15 +35,13 @@ public class BBClearResponse extends Response {
 
     private Clan clan;
 
-    public BBClearResponse(SimpleClans plugin, CommandSender sender, Clan clan)
-    {
+    public BBClearResponse(SimpleClans plugin, CommandSender sender, Clan clan) {
         super(plugin, sender);
         this.clan = clan;
     }
 
     @Override
-    public boolean response()
-    {
+    public boolean response() {
         DatabaseManager dataManager = plugin.getDataManager();
 
         dataManager.purgeBB(clan);
@@ -52,8 +50,7 @@ public class BBClearResponse extends Response {
     }
 
     @Override
-    public boolean needsRetriever()
-    {
+    public boolean needsRetriever() {
         return false;
     }
 }

@@ -44,14 +44,12 @@ public class SCPlayerListener implements Listener {
 
     private SimpleClans plugin;
 
-    public SCPlayerListener(SimpleClans plugin)
-    {
+    public SCPlayerListener(SimpleClans plugin) {
         this.plugin = plugin;
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onPlayerDisconnect(PlayerQuitEvent event)
-    {
+    public void onPlayerDisconnect(PlayerQuitEvent event) {
         Player player = event.getPlayer();
 
         ClanPlayer clanPlayer = plugin.getClanPlayerManager().getAnyClanPlayer(player);
@@ -66,8 +64,7 @@ public class SCPlayerListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onPlayerLogin(PlayerJoinEvent event)
-    {
+    public void onPlayerLogin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
 
         ClanPlayer clanPlayer = plugin.getClanPlayerManager().getClanPlayer(player);
@@ -93,8 +90,7 @@ public class SCPlayerListener implements Listener {
 
 
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onCommandPreprocess(PlayerCommandPreprocessEvent event)
-    {
+    public void onCommandPreprocess(PlayerCommandPreprocessEvent event) {
         Player player = event.getPlayer();
         String message = event.getMessage();
 

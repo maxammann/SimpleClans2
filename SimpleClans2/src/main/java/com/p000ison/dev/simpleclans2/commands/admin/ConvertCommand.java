@@ -42,8 +42,7 @@ import java.text.MessageFormat;
  */
 public class ConvertCommand extends GenericConsoleCommand {
 
-    public ConvertCommand(SimpleClans plugin)
-    {
+    public ConvertCommand(SimpleClans plugin) {
         super("ConvertCommand", plugin);
         setArgumentRange(2, 5);
         setUsages(MessageFormat.format(Language.getTranslation("usage.convert"), plugin.getSettingsManager().getClanCommand()));
@@ -52,14 +51,12 @@ public class ConvertCommand extends GenericConsoleCommand {
     }
 
     @Override
-    public String getMenu()
-    {
+    public String getMenu() {
         return MessageFormat.format(Language.getTranslation("menu.convert"), plugin.getSettingsManager().getClanCommand());
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args)
-    {
+    public void execute(CommandSender sender, String[] args) {
         String action = args[0];
         JBDCDatabase database = null;
         DatabaseConfiguration config = null;

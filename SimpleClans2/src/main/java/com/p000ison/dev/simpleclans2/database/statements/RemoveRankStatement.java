@@ -29,14 +29,12 @@ public class RemoveRankStatement implements Executable {
 
     private long id;
 
-    public RemoveRankStatement(long id)
-    {
+    public RemoveRankStatement(long id) {
         this.id = id;
     }
 
     @Override
-    public boolean execute(DatabaseManager dataManager)
-    {
+    public boolean execute(DatabaseManager dataManager) {
         return dataManager.deleteRankById(id);
     }
 }

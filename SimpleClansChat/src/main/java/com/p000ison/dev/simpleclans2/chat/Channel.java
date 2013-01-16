@@ -29,13 +29,11 @@ public enum Channel {
 
     private byte id;
 
-    private Channel(byte id)
-    {
+    private Channel(byte id) {
         this.id = id;
     }
 
-    public static Channel getById(byte id)
-    {
+    public static Channel getById(byte id) {
         for (Channel channel : values()) {
             if (channel.id == id) {
                 return channel;
@@ -45,8 +43,7 @@ public enum Channel {
         return null;
     }
 
-    public byte getId()
-    {
+    public byte getId() {
         return id;
     }
 }

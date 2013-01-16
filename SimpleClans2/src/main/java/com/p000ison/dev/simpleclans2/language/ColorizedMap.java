@@ -31,16 +31,14 @@ public class ColorizedMap extends HashMap<String, String> {
 
     private static final long serialVersionUID = 2539590894611232409L;
 
-    public void importMap(Map<Object, Object> otherMap)
-    {
+    public void importMap(Map<Object, Object> otherMap) {
         for (Map.Entry<Object, Object> current : otherMap.entrySet()) {
             this.put(current.getKey().toString(), current.getValue().toString());
         }
     }
 
     @Override
-    public String put(String key, String value)
-    {
+    public String put(String key, String value) {
         return super.put(key, ChatBlock.parseColors(value));
     }
 }

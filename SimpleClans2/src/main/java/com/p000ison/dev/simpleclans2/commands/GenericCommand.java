@@ -34,33 +34,28 @@ abstract class GenericCommand implements Command {
     private String[] permissions;
     private Type type = Type.CLAN;
 
-    protected GenericCommand(String name, SimpleClans plugin)
-    {
+    protected GenericCommand(String name, SimpleClans plugin) {
         this.name = name;
         this.plugin = plugin;
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
     @Override
-    public void setUsages(String... text)
-    {
+    public void setUsages(String... text) {
         this.usage = text;
     }
 
     @Override
-    public void setIdentifiers(String... identifiers)
-    {
+    public void setIdentifiers(String... identifiers) {
         this.identifiers = identifiers;
     }
 
     @Override
-    public boolean isIdentifier(String cmd)
-    {
+    public boolean isIdentifier(String cmd) {
         if (cmd == null) {
             return false;
         }
@@ -74,38 +69,32 @@ abstract class GenericCommand implements Command {
     }
 
     @Override
-    public String[] getUsages()
-    {
+    public String[] getUsages() {
         return usage;
     }
 
     @Override
-    public int getMaxArguments()
-    {
+    public int getMaxArguments() {
         return maxArgs;
     }
 
     @Override
-    public int getMinArguments()
-    {
+    public int getMinArguments() {
         return minArgs;
     }
 
     @Override
-    public void setArgumentRange(int min, int max)
-    {
+    public void setArgumentRange(int min, int max) {
         minArgs = min;
         maxArgs = max;
     }
 
-    public int[] getBoundings(int completeSize, int page)
-    {
+    public int[] getBoundings(int completeSize, int page) {
         return plugin.getCommandManager().getBoundings(completeSize, page);
     }
 
     @Override
-    public boolean hasPermission(Permissible sender)
-    {
+    public boolean hasPermission(Permissible sender) {
         if (permissions == null) {
             return true;
         }
@@ -119,26 +108,22 @@ abstract class GenericCommand implements Command {
         return false;
     }
 
-    public void setPermission(String... permissions)
-    {
+    public void setPermission(String... permissions) {
         this.permissions = permissions;
     }
 
     @Override
-    public boolean equals(Object obj)
-    {
+    public boolean equals(Object obj) {
         return obj instanceof GenericCommand && name.equals(((GenericCommand) obj).getName());
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return name.hashCode();
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "GenericCommand{" +
                 "name='" + name + '\'' +
                 ", minArgs=" + minArgs +
@@ -149,13 +134,11 @@ abstract class GenericCommand implements Command {
     }
 
     @Override
-    public Type getType()
-    {
+    public Type getType() {
         return type;
     }
 
-    public void setType(Type type)
-    {
+    public void setType(Type type) {
         this.type = type;
     }
 }

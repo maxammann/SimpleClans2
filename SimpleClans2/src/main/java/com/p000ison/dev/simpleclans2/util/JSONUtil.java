@@ -33,12 +33,10 @@ import java.util.*;
 @SuppressWarnings("unchecked")
 public final class JSONUtil {
 
-    private JSONUtil()
-    {
+    private JSONUtil() {
     }
 
-    public static String clansToJSON(Collection<Clan> clans)
-    {
+    public static String clansToJSON(Collection<Clan> clans) {
         if (clans == null) {
             return null;
         }
@@ -52,8 +50,7 @@ public final class JSONUtil {
         return array.toJSONString();
     }
 
-    public static String collectionToJSON(Collection collection)
-    {
+    public static String collectionToJSON(Collection collection) {
         if (collection == null) {
             return null;
         }
@@ -65,8 +62,7 @@ public final class JSONUtil {
         return array.toJSONString();
     }
 
-    public static String mapToJSON(Map map)
-    {
+    public static String mapToJSON(Map map) {
         JSONObject JSONMap = new JSONObject();
 
         JSONMap.putAll(map);
@@ -74,8 +70,7 @@ public final class JSONUtil {
         return JSONMap.toJSONString();
     }
 
-    public static List<String> JSONToStringList(String json)
-    {
+    public static List<String> JSONToStringList(String json) {
         if (json == null || json.isEmpty()) {
             return null;
         }
@@ -95,8 +90,7 @@ public final class JSONUtil {
         return list;
     }
 
-    public static Map<Integer, Boolean> JSONToPermissionMap(String json)
-    {
+    public static Map<Integer, Boolean> JSONToPermissionMap(String json) {
         if (json == null || json.isEmpty()) {
             return null;
         }
@@ -126,8 +120,7 @@ public final class JSONUtil {
         return map;
     }
 
-    public static Set<String> JSONToStringSet(String json)
-    {
+    public static Set<String> JSONToStringSet(String json) {
         if (json == null || json.isEmpty()) {
             return null;
         }
@@ -147,8 +140,7 @@ public final class JSONUtil {
         return set;
     }
 
-    public static List<Long> JSONToLongList(String json)
-    {
+    public static List<Long> JSONToLongList(String json) {
         if (json == null || json.isEmpty()) {
             return null;
         }
@@ -168,8 +160,7 @@ public final class JSONUtil {
         return list;
     }
 
-    public static Set<Long> JSONToLongSet(String json)
-    {
+    public static Set<Long> JSONToLongSet(String json) {
         if (json == null || json.isEmpty()) {
             return null;
         }
@@ -189,8 +180,7 @@ public final class JSONUtil {
         return set;
     }
 
-    public static <T> Set<T> JSONToSet(String json, Set<T> set)
-    {
+    public static <T> Set<T> JSONToSet(String json, Set<T> set) {
         if (json == null || json.isEmpty()) {
             return null;
         }
@@ -209,8 +199,7 @@ public final class JSONUtil {
     }
 
 
-    public static <T> List<T> JSONToList(String json, List<T> list)
-    {
+    public static <T> List<T> JSONToList(String json, List<T> list) {
         if (json == null || json.isEmpty()) {
             return null;
         }

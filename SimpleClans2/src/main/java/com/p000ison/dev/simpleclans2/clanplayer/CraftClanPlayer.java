@@ -80,14 +80,12 @@ public class CraftClanPlayer implements ClanPlayer, TableObject {
 
     private boolean update;
 
-    public CraftClanPlayer(SimpleClans plugin)
-    {
+    public CraftClanPlayer(SimpleClans plugin) {
         flags = new CraftPlayerFlags();
         this.plugin = plugin;
     }
 
-    public CraftClanPlayer(SimpleClans plugin, String name)
-    {
+    public CraftClanPlayer(SimpleClans plugin, String name) {
         flags = new CraftPlayerFlags();
         this.plugin = plugin;
         this.name = name;
@@ -95,15 +93,13 @@ public class CraftClanPlayer implements ClanPlayer, TableObject {
 
     @Override
     @DatabaseColumnGetter(databaseName = "clan")
-    public long getClanID()
-    {
+    public long getClanID() {
         return clan == null ? -1L : clan.getID();
     }
 
     @DatabaseColumnSetter(position = 3, databaseName = "clan", defaultValue = "-1")
     @SuppressWarnings("unused")
-    private void setClanId(long id)
-    {
+    private void setClanId(long id) {
         if (id <= 0) {
             this.clan = null;
         }
@@ -111,192 +107,160 @@ public class CraftClanPlayer implements ClanPlayer, TableObject {
     }
 
     @Override
-    public Clan getClan()
-    {
+    public Clan getClan() {
         return clan;
     }
 
     @Override
-    public void setClan(Clan clan)
-    {
+    public void setClan(Clan clan) {
         this.clan = clan;
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
     @Override
-    public boolean isBanned()
-    {
+    public boolean isBanned() {
         return banned;
     }
 
     @Override
-    public void setBanned(boolean banned)
-    {
+    public void setBanned(boolean banned) {
         this.banned = banned;
     }
 
     @Override
-    public boolean isLeader()
-    {
+    public boolean isLeader() {
         return leader;
     }
 
     @Override
-    public void setLeader(boolean leader)
-    {
+    public void setLeader(boolean leader) {
         this.leader = leader;
     }
 
     @Override
-    public boolean isTrusted()
-    {
+    public boolean isTrusted() {
         return trusted;
     }
 
     @Override
-    public void setTrusted(boolean trusted)
-    {
+    public void setTrusted(boolean trusted) {
         this.trusted = trusted;
     }
 
     @Override
-    public boolean isFriendlyFireOn()
-    {
+    public boolean isFriendlyFireOn() {
         return getFlags().isFriendlyFireEnabled();
     }
 
     @Override
-    public void setFriendlyFire(boolean friendlyFire)
-    {
+    public void setFriendlyFire(boolean friendlyFire) {
         getFlags().setFriendlyFire(friendlyFire);
     }
 
     @Override
-    public Date getLastSeenDate()
-    {
+    public Date getLastSeenDate() {
         return !this.isOnline() ? new Date(lastSeen) : new Date();
     }
 
-    public long getLastSeenTime()
-    {
+    public long getLastSeenTime() {
         return !this.isOnline() ? lastSeen : System.currentTimeMillis();
     }
 
     @Override
-    public void updateLastSeen()
-    {
+    public void updateLastSeen() {
         this.lastSeen = System.currentTimeMillis();
     }
 
     @Override
-    public Date getJoinDate()
-    {
+    public Date getJoinDate() {
         return new Date(joinDate);
     }
 
-    public void setJoinTime(long joinDate)
-    {
+    public void setJoinTime(long joinDate) {
         this.joinDate = joinDate;
     }
 
     @Override
-    public int getNeutralKills()
-    {
+    public int getNeutralKills() {
         return neutralKills;
     }
 
     @Override
-    public void addNeutralKill()
-    {
+    public void addNeutralKill() {
         neutralKills++;
     }
 
     @Override
-    public int getRivalKills()
-    {
+    public int getRivalKills() {
         return rivalKills;
     }
 
     @Override
-    public void addRivalKill()
-    {
+    public void addRivalKill() {
         rivalKills++;
     }
 
     @Override
-    public int getCivilianKills()
-    {
+    public int getCivilianKills() {
         return civilianKills;
     }
 
     @Override
-    public void addCivilianKill()
-    {
+    public void addCivilianKill() {
         civilianKills++;
     }
 
     @Override
-    public int getDeaths()
-    {
+    public int getDeaths() {
         return deaths;
     }
 
     @Override
-    public void addDeath()
-    {
+    public void addDeath() {
         this.setDeaths(this.getDeaths() + 1);
     }
 
     @Override
-    public long getID()
-    {
+    public long getID() {
         return id;
     }
 
     @Override
-    public PlayerFlags getFlags()
-    {
+    public PlayerFlags getFlags() {
         return flags;
     }
 
     @Override
-    public void addPastClan(String string)
-    {
+    public void addPastClan(String string) {
         flags.addPastClan(string);
     }
 
     @Override
-    public Set<String> getPastClans()
-    {
+    public Set<String> getPastClans() {
         return flags.getPastClans();
     }
 
     @Override
-    public void setFlags(PlayerFlags flags)
-    {
+    public void setFlags(PlayerFlags flags) {
         this.flags = flags;
     }
 
     @Override
-    public int getInactiveDays()
-    {
+    public int getInactiveDays() {
         return (int) Math.round(DateHelper.differenceInDays(lastSeen, System.currentTimeMillis()));
     }
 
     @Override
-    public double getWeightedKills()
-    {
+    public double getWeightedKills() {
         return (getRivalKills() * plugin.getSettingsManager().getKillWeightRival()) + (getNeutralKills() * plugin.getSettingsManager().getKillWeightNeutral()) + (getCivilianKills() * plugin.getSettingsManager().getKillWeightCivilian());
     }
 
     @Override
-    public float getKDR()
-    {
+    public float getKDR() {
         int totalDeaths = getDeaths();
 
         if (totalDeaths == 0) {
@@ -307,19 +271,16 @@ public class CraftClanPlayer implements ClanPlayer, TableObject {
     }
 
     @Override
-    public Player toPlayer()
-    {
+    public Player toPlayer() {
         return plugin.getServer().getPlayerExact(name);
     }
 
     @Override
-    public boolean isOnline()
-    {
+    public boolean isOnline() {
         return onlineVersion != null && GeneralHelper.isOnline(toPlayer());
     }
 
-    public boolean equals(Object obj)
-    {
+    public boolean equals(Object obj) {
         if (obj instanceof ClanPlayer) {
             ClanPlayer clanPlayer = ((ClanPlayer) obj);
 
@@ -330,97 +291,81 @@ public class CraftClanPlayer implements ClanPlayer, TableObject {
         return false;
     }
 
-    public int hashCode()
-    {
+    public int hashCode() {
         return (int) id;
     }
 
     @Override
-    public void setNeutralKills(int neutralKills)
-    {
+    public void setNeutralKills(int neutralKills) {
         this.neutralKills = neutralKills;
     }
 
     @Override
-    public void setRivalKills(int rivalKills)
-    {
+    public void setRivalKills(int rivalKills) {
         this.rivalKills = rivalKills;
     }
 
     @Override
-    public void setCivilianKills(int civilianKills)
-    {
+    public void setCivilianKills(int civilianKills) {
         this.civilianKills = civilianKills;
     }
 
     @Override
-    public void setDeaths(int deaths)
-    {
+    public void setDeaths(int deaths) {
         this.deaths = deaths;
     }
 
     @Override
-    public Rank getRank()
-    {
+    public Rank getRank() {
         return rank;
     }
 
     @Override
-    public boolean hasRankPermission(String permission)
-    {
+    public boolean hasRankPermission(String permission) {
         return rank != null && getRank().hasPermission(permission);
     }
 
     @Override
-    public boolean hasRankPermission(int id)
-    {
+    public boolean hasRankPermission(int id) {
         return rank != null && getRank().hasPermission(id);
     }
 
     @Override
-    public boolean isRankPermissionNegative(int id)
-    {
+    public boolean isRankPermissionNegative(int id) {
         return rank != null && getRank().isNegative(id);
     }
 
     @Override
-    public boolean isRankPermissionNegative(String permission)
-    {
+    public boolean isRankPermissionNegative(String permission) {
         return rank != null && getRank().isNegative(permission);
     }
 
     @Override
-    public void assignRank(Rank rank)
-    {
+    public void assignRank(Rank rank) {
         this.rank = rank;
     }
 
     @Override
-    public void unassignRank()
-    {
+    public void unassignRank() {
         this.rank = null;
     }
 
     @Override
-    public void update()
-    {
+    public void update() {
         this.update = true;
     }
 
-    public boolean needsUpdate()
-    {
+    public boolean needsUpdate() {
         return this.update;
     }
 
     @Override
-    public void update(boolean update)
-    {
+    public void update(boolean update) {
         this.update = update;
     }
 
     @Override
-    public String getLastSeenFormatted()
-    {
+    public String getLastSeenFormatted() {
         long current = System.currentTimeMillis();
         long difference = DateHelper.differenceInMilliseconds(getLastSeenTime(), current);
 
@@ -449,8 +394,7 @@ public class CraftClanPlayer implements ClanPlayer, TableObject {
     }
 
     @Override
-    public boolean unset()
-    {
+    public boolean unset() {
         boolean change = false;
         if (getClan() != null) {
             setClan(null);
@@ -468,8 +412,7 @@ public class CraftClanPlayer implements ClanPlayer, TableObject {
         return change;
     }
 
-    public String toString()
-    {
+    public String toString() {
         return "ClanPlayer{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
@@ -487,24 +430,20 @@ public class CraftClanPlayer implements ClanPlayer, TableObject {
                 '}';
     }
 
-    public void removeOnlineVersion()
-    {
+    public void removeOnlineVersion() {
         this.onlineVersion = null;
     }
 
-    public void setupOnlineVersion()
-    {
+    public void setupOnlineVersion() {
         this.onlineVersion = new CraftOnlineClanPlayer(plugin, this);
     }
 
     @Override
-    public com.p000ison.dev.simpleclans2.api.clanplayer.OnlineClanPlayer getOnlineVersion()
-    {
+    public com.p000ison.dev.simpleclans2.api.clanplayer.OnlineClanPlayer getOnlineVersion() {
         return onlineVersion;
     }
 
-    public void updatePermissions()
-    {
+    public void updatePermissions() {
         if (onlineVersion == null) {
             return;
         }
@@ -513,8 +452,7 @@ public class CraftClanPlayer implements ClanPlayer, TableObject {
         onlineVersion.setupPermissions();
     }
 
-    public void removePermissions()
-    {
+    public void removePermissions() {
         if (onlineVersion == null) {
             return;
 
@@ -523,20 +461,17 @@ public class CraftClanPlayer implements ClanPlayer, TableObject {
     }
 
     @Override
-    public void serverAnnounce(String message)
-    {
+    public void serverAnnounce(String message) {
         SimpleClans.serverAnnounceRaw(ChatBlock.parseColors(plugin.getSettingsManager().getClanPlayerAnnounce().replace("+player", this.getName()).replace("+message", message)));
     }
 
     @Override
-    public String getRankedName()
-    {
+    public String getRankedName() {
         return (this.isLeader() ? plugin.getSettingsManager().getLeaderColor() : ((this.isTrusted() ? plugin.getSettingsManager().getTrustedColor() : plugin.getSettingsManager().getUntrustedColor()))) + this.getName();
     }
 
     @Override
-    public Row getStatisticRow()
-    {
+    public Row getStatisticRow() {
         String name = this.getRankedName();
         int rival = this.getRivalKills();
         int neutral = this.getNeutralKills();
@@ -548,8 +483,7 @@ public class CraftClanPlayer implements ClanPlayer, TableObject {
     }
 
     @Override
-    public void showProfile(CommandSender sender, Clan clan)
-    {
+    public void showProfile(CommandSender sender, Clan clan) {
         ChatColor headColor = plugin.getSettingsManager().getHeaderPageColor();
         ChatColor subColor = plugin.getSettingsManager().getSubPageColor();
 
@@ -612,20 +546,17 @@ public class CraftClanPlayer implements ClanPlayer, TableObject {
     }
 
     @Override
-    public String getFormattedJoinDate()
-    {
+    public String getFormattedJoinDate() {
         return new java.text.SimpleDateFormat("MMM dd, yyyy h:mm a").format(new Date(this.joinDate));
     }
 
     @Override
-    public String getFormattedLastSeenDate()
-    {
+    public String getFormattedLastSeenDate() {
         return new java.text.SimpleDateFormat("MMM dd, yyyy h:mm a").format(new Date(this.lastSeen));
     }
 
     @Override
-    public boolean withdraw(double amount)
-    {
+    public boolean withdraw(double amount) {
         if (amount < 0.0D) {
             throw new IllegalArgumentException("The amount can not be negative if you withdraw something!");
         }
@@ -636,8 +567,7 @@ public class CraftClanPlayer implements ClanPlayer, TableObject {
     }
 
     @Override
-    public void deposit(double amount)
-    {
+    public void deposit(double amount) {
         if (amount < 0.0D) {
             throw new IllegalArgumentException("The amount can not be negative if you deposit something!");
         }
@@ -645,8 +575,7 @@ public class CraftClanPlayer implements ClanPlayer, TableObject {
     }
 
     @Override
-    public boolean transfer(Balance account, double amount)
-    {
+    public boolean transfer(Balance account, double amount) {
         if (amount > 0.0D) {
             amount = Math.abs(amount);
 
@@ -668,40 +597,34 @@ public class CraftClanPlayer implements ClanPlayer, TableObject {
     }
 
     @Override
-    public double getBalance()
-    {
+    public double getBalance() {
         return SimpleClans.getBalance(name);
     }
 
     @Override
-    public Row getRosterRow()
-    {
+    public Row getRosterRow() {
         String name = this.getColor() + this.getName();
         String lastSeen = (GeneralHelper.isOnline(toPlayer()) ? ChatColor.GREEN + Language.getTranslation("online") : ChatColor.WHITE + this.getLastSeenFormatted());
         return new Row(name, ChatColor.YELLOW + (getRank() == null ? Language.getTranslation("none") : getRank().getTag()), lastSeen);
     }
 
     @Override
-    public ChatColor getColor()
-    {
+    public ChatColor getColor() {
         return this.isTrusted() ? this.isLeader() ? plugin.getSettingsManager().getLeaderColor() : plugin.getSettingsManager().getTrustedColor() : plugin.getSettingsManager().getUntrustedColor();
     }
 
     @Override
-    public long getLastUpdated()
-    {
+    public long getLastUpdated() {
         return getLastSeenTime();
     }
 
     @Override
-    public boolean isCapeEnabled()
-    {
+    public boolean isCapeEnabled() {
         return getFlags() == null || getFlags().isCapeEnabled();
     }
 
     @Override
-    public void setCapeEnabled(boolean enabled)
-    {
+    public void setCapeEnabled(boolean enabled) {
         if (getFlags() == null) {
             return;
         }
@@ -709,14 +632,12 @@ public class CraftClanPlayer implements ClanPlayer, TableObject {
     }
 
     @Override
-    public boolean isBBEnabled()
-    {
+    public boolean isBBEnabled() {
         return getFlags() == null || getFlags().isBBEnabled();
     }
 
     @Override
-    public void setBBEnabled(boolean enabled)
-    {
+    public void setBBEnabled(boolean enabled) {
         if (getFlags() == null) {
             return;
         }
@@ -724,8 +645,7 @@ public class CraftClanPlayer implements ClanPlayer, TableObject {
     }
 
     @DatabaseColumnSetter(position = 4, databaseName = "ranks", saveValueAfterLoading = true)
-    private void setDatabaseRank(String json)
-    {
+    private void setDatabaseRank(String json) {
         if (json == null || getClan() == null) {
             return;
         }
@@ -734,20 +654,17 @@ public class CraftClanPlayer implements ClanPlayer, TableObject {
     }
 
     @DatabaseColumnGetter(databaseName = "ranks")
-    private String getDatabaseRank()
-    {
+    private String getDatabaseRank() {
         return getRank() == null ? null : ('[' + String.valueOf(getRank().getID()) + ']');
     }
 
     @DatabaseColumnGetter(databaseName = "join_date")
-    private Date getDatabaseJoinDate()
-    {
+    private Date getDatabaseJoinDate() {
         return new Date(joinDate);
     }
 
     @DatabaseColumnSetter(position = 7, databaseName = "join_date")
-    private void setDatabaseJoinDate(Date date)
-    {
+    private void setDatabaseJoinDate(Date date) {
         if (date == null) {
             this.joinDate = System.currentTimeMillis();
             return;
@@ -756,14 +673,12 @@ public class CraftClanPlayer implements ClanPlayer, TableObject {
     }
 
     @DatabaseColumnGetter(databaseName = "last_seen")
-    private Date getDatabaseLastSeen()
-    {
+    private Date getDatabaseLastSeen() {
         return new Date(lastSeen);
     }
 
     @DatabaseColumnSetter(position = 7, databaseName = "last_seen")
-    private void setDatabaseLastSeen(Date date)
-    {
+    private void setDatabaseLastSeen(Date date) {
         if (date == null) {
             this.lastSeen = System.currentTimeMillis();
             return;
@@ -772,8 +687,7 @@ public class CraftClanPlayer implements ClanPlayer, TableObject {
     }
 
     @DatabaseColumnGetter(databaseName = "flags")
-    private String getDatabaseFlags()
-    {
+    private String getDatabaseFlags() {
         if (getFlags() == null) {
             return null;
         }
@@ -781,8 +695,7 @@ public class CraftClanPlayer implements ClanPlayer, TableObject {
     }
 
     @DatabaseColumnSetter(position = 12, databaseName = "flags")
-    private void setDatabaseFlags(String json)
-    {
+    private void setDatabaseFlags(String json) {
         if (flags == null) {
             this.flags = new CraftPlayerFlags();
         }

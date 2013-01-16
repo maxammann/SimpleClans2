@@ -40,31 +40,26 @@ public class CraftClanPlayerManager implements ClanPlayerManager {
     private Set<ClanPlayer> players = new HashSet<ClanPlayer>();
     private SimpleClans plugin;
 
-    public CraftClanPlayerManager(SimpleClans plugin)
-    {
+    public CraftClanPlayerManager(SimpleClans plugin) {
         this.plugin = plugin;
     }
 
-    public void importClanPlayers(Set<CraftClanPlayer> clanPlayers)
-    {
+    public void importClanPlayers(Set<CraftClanPlayer> clanPlayers) {
         this.players.addAll(clanPlayers);
     }
 
     @Override
-    public ClanPlayer createClanPlayer(Player player)
-    {
+    public ClanPlayer createClanPlayer(Player player) {
         return createClanPlayer(player.getName());
     }
 
     @Override
-    public ClanPlayer createClanPlayer(String player)
-    {
+    public ClanPlayer createClanPlayer(String player) {
         return createClanPlayer(new CraftClanPlayer(plugin, player));
     }
 
     @Override
-    public ClanPlayer createClanPlayer(ClanPlayer clanPlayer)
-    {
+    public ClanPlayer createClanPlayer(ClanPlayer clanPlayer) {
         ClanPlayerCreateEvent event = new ClanPlayerCreateEvent(clanPlayer);
         plugin.getServer().getPluginManager().callEvent(event);
 
@@ -92,8 +87,7 @@ public class CraftClanPlayerManager implements ClanPlayerManager {
     }
 
     @Override
-    public ClanPlayer getCreateClanPlayerExact(String name)
-    {
+    public ClanPlayer getCreateClanPlayerExact(String name) {
         ClanPlayer clanPlayer = getAnyClanPlayerExact(name);
 
         if (clanPlayer != null) {
@@ -104,8 +98,7 @@ public class CraftClanPlayerManager implements ClanPlayerManager {
     }
 
     @Override
-    public void ban(ClanPlayer clanPlayer)
-    {
+    public void ban(ClanPlayer clanPlayer) {
         if (clanPlayer == null) {
             return;
         }
@@ -125,20 +118,17 @@ public class CraftClanPlayerManager implements ClanPlayerManager {
     }
 
     @Override
-    public Set<ClanPlayer> getClanPlayers()
-    {
+    public Set<ClanPlayer> getClanPlayers() {
         return Collections.unmodifiableSet(players);
     }
 
     @Override
-    public ClanPlayer getCreateClanPlayerExact(Player player)
-    {
+    public ClanPlayer getCreateClanPlayerExact(Player player) {
         return getCreateClanPlayerExact(player.getName());
     }
 
     @Override
-    public ClanPlayer getAnyClanPlayer(String name)
-    {
+    public ClanPlayer getAnyClanPlayer(String name) {
 
         if (name == null) {
             return null;
@@ -155,8 +145,7 @@ public class CraftClanPlayerManager implements ClanPlayerManager {
     }
 
     @Override
-    public ClanPlayer getClanPlayer(String name)
-    {
+    public ClanPlayer getClanPlayer(String name) {
 
         if (name == null) {
             return null;
@@ -177,8 +166,7 @@ public class CraftClanPlayerManager implements ClanPlayerManager {
     }
 
     @Override
-    public ClanPlayer getClanPlayer(long id)
-    {
+    public ClanPlayer getClanPlayer(long id) {
 
         if (id == -1) {
             return null;
@@ -192,20 +180,17 @@ public class CraftClanPlayerManager implements ClanPlayerManager {
     }
 
     @Override
-    public ClanPlayer getClanPlayer(Player player)
-    {
+    public ClanPlayer getClanPlayer(Player player) {
         return getClanPlayerExact(player.getName());
     }
 
     @Override
-    public ClanPlayer getAnyClanPlayer(Player player)
-    {
+    public ClanPlayer getAnyClanPlayer(Player player) {
         return getAnyClanPlayerExact(player.getName());
     }
 
     @Override
-    public ClanPlayer getAnyClanPlayerExact(String name)
-    {
+    public ClanPlayer getAnyClanPlayerExact(String name) {
         if (name == null) {
             return null;
         }
@@ -220,8 +205,7 @@ public class CraftClanPlayerManager implements ClanPlayerManager {
     }
 
     @Override
-    public ClanPlayer getClanPlayerExact(String name)
-    {
+    public ClanPlayer getClanPlayerExact(String name) {
         if (name == null) {
             return null;
         }
@@ -239,8 +223,7 @@ public class CraftClanPlayerManager implements ClanPlayerManager {
         return null;
     }
 
-    public void updateOnlinePlayers()
-    {
+    public void updateOnlinePlayers() {
         for (Player player : plugin.getServer().getOnlinePlayers()) {
             CraftClanPlayer clanPlayer = (CraftClanPlayer) getClanPlayer(player);
             if (clanPlayer != null) {
