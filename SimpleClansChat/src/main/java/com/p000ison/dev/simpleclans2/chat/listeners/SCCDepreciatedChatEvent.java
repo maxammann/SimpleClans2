@@ -19,10 +19,12 @@
 
 package com.p000ison.dev.simpleclans2.chat.listeners;
 
+import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayer;
+import com.p000ison.dev.simpleclans2.chat.SimpleClansChat;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerChatEvent;
 
 /**
@@ -31,16 +33,30 @@ import org.bukkit.event.player.PlayerChatEvent;
 @SuppressWarnings("deprecation")
 public class SCCDepreciatedChatEvent implements Listener {
 
-    private SCCPlayerListener listener;
+    private SimpleClansChat plugin;
 
-    public SCCDepreciatedChatEvent(SCCPlayerListener listener) {
-        this.listener = listener;
+    public SCCDepreciatedChatEvent(SimpleClansChat plugin) {
+        this.plugin = plugin;
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerChat(PlayerChatEvent event) {
-        AsyncPlayerChatEvent async = listener.onPlayerChat(new AsyncPlayerChatEvent(false, event.getPlayer(), event.getFormat(), event.getRecipients()));
-        event.setFormat(async.getFormat());
-        event.setCancelled(async.isCancelled());
+        String out = null;
+        Player player = event.getPlayer();
+        ClanPlayer clanPlayer = plugin.getClanPlayerManager().getClanPlayer(player);
+
+        if (this.plugin.getSettingsManager().isCompatibilityMode()) {
+            out = plugin.formatCompatibility(event.getFormat(), player.getName());
+        } else if (this.plugin.getSettingsManager().isCompleteMode()) {
+            out = plugin.formatComplete(plugin.getSettingsManager().getCompleteModeFormat(), player, clanPlayer);
+        }
+
+        if (out == null) {
+            return;
+        }
+
+        event.setFormat(String.format(out, player.getDisplayName(), event.getMessage()));
+
+        plugin.removeRetrievers(event.getRecipients(), clanPlayer, player);
     }
 }

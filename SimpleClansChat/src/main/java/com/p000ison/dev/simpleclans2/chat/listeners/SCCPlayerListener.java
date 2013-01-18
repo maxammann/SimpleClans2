@@ -21,7 +21,6 @@ package com.p000ison.dev.simpleclans2.chat.listeners;
 
 
 import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayer;
-import com.p000ison.dev.simpleclans2.chat.Channel;
 import com.p000ison.dev.simpleclans2.chat.SimpleClansChat;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -40,7 +39,7 @@ public class SCCPlayerListener implements Listener {
 
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public AsyncPlayerChatEvent onPlayerChat(AsyncPlayerChatEvent event) {
+    public void onPlayerChat(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
 
         ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
@@ -50,73 +49,15 @@ public class SCCPlayerListener implements Listener {
         if (this.plugin.getSettingsManager().isCompatibilityMode()) {
             out = plugin.formatCompatibility(event.getFormat(), player.getName());
         } else if (this.plugin.getSettingsManager().isCompleteMode()) {
-            out = plugin.formatComplete(plugin.getSettingsManager().getCompleteModeFormat(), player, event.getMessage());
+            out = plugin.formatComplete(plugin.getSettingsManager().getCompleteModeFormat(), player, cp);
         }
 
         if (out == null) {
-            return event;
+            return;
         }
 
-        event.setFormat(out);
+        event.setFormat(String.format(out, player.getDisplayName(), event.getMessage()));
 
-        //channels
-
-        if (cp == null || cp.getFlags() == null) {
-            return event;
-        }
-
-        byte flag = cp.getFlags().getByte("channel");
-
-        if (flag == -1) {
-            return event;
-        }
-
-        Channel channel = Channel.getById(flag);
-
-        switch (channel) {
-            case ALLY:
-                //format for allies
-                String formattedAlly = plugin.formatComplete(plugin.getSettingsManager().getAllyChannelFormat(), player, event.getMessage());
-
-                for (Player other : plugin.getServer().getOnlinePlayers()) {
-                    if (!isChannelDisabled(player, Channel.ALLY)) {
-                        other.sendMessage(formattedAlly);
-                    }
-                }
-
-                event.setCancelled(true);
-                return event;
-            case CLAN:
-                //format for clan
-
-                String formattedClan = plugin.formatComplete(plugin.getSettingsManager().getClanChannelFormat(), player, event.getMessage());
-
-                for (Player other : plugin.getServer().getOnlinePlayers()) {
-                    if (!isChannelDisabled(player, Channel.CLAN)) {
-                        other.sendMessage(formattedClan);
-                    }
-                }
-
-                event.setCancelled(true);
-                return event;
-        }
-
-
-        for (Player other : plugin.getServer().getOnlinePlayers()) {
-            if (!isChannelDisabled(player, Channel.GLOBAL)) {
-                other.sendMessage(event.getFormat());
-            }
-        }
-
-        event.setCancelled(true);
-        return event;
-    }
-
-    private boolean isChannelDisabled(Player player, Channel channel) {
-        return isChannelDisabled(plugin.getClanPlayerManager().getClanPlayer(player), channel);
-    }
-
-    private boolean isChannelDisabled(ClanPlayer player, Channel channel) {
-        return player != null && player.getFlags() != null && player.getFlags().<Byte>getSet("disabledChannels").contains(channel.getId());
+        plugin.removeRetrievers(event.getRecipients(), cp, player);
     }
 }

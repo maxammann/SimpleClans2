@@ -44,6 +44,7 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 import java.util.logging.Level;
 
@@ -74,11 +75,10 @@ public class SimpleClansChat extends JavaPlugin {
             pluginManager.registerEvents(new SCCHeroChatListener(this), this);
             Logging.debug("Hooked Herochat!");
         } else {
-            SCCPlayerListener listener = new SCCPlayerListener(this);
             if (settingsManager.isDepreciationMode()) {
-                pluginManager.registerEvents(new SCCDepreciatedChatEvent(listener), this);
+                pluginManager.registerEvents(new SCCDepreciatedChatEvent(this), this);
             } else {
-                pluginManager.registerEvents(listener, this);
+                pluginManager.registerEvents( new SCCPlayerListener(this), this);
             }
 
         }
@@ -95,8 +95,8 @@ public class SimpleClansChat extends JavaPlugin {
     }
 
     private boolean setupPermissions() {
-        RegisteredServiceProvider rsp = getServer().getServicesManager().getRegistration(Permission.class);
-        permissions = (Permission) rsp.getProvider();
+        RegisteredServiceProvider<Permission> rsp = getServer().getServicesManager().getRegistration(Permission.class);
+        permissions = rsp.getProvider();
         return permissions != null;
     }
 
@@ -133,9 +133,9 @@ public class SimpleClansChat extends JavaPlugin {
                 handleChannelCommand(Channel.ALLY, flags, args, player);
             } else if (cmd.equalsIgnoreCase("global")) {
                 if (args[0].equalsIgnoreCase("on")) {
-                    Set set = flags.getSet("disabledChannels");
+                    Set<Byte> set = flags.getSet("disabledChannels");
                     if (set == null) {
-                        set = new HashSet();
+                        set = new HashSet<Byte>();
                         flags.set("disabledChannels", set);
                     }
                     set.add(Channel.GLOBAL.getId());
@@ -159,7 +159,7 @@ public class SimpleClansChat extends JavaPlugin {
         return true;
     }
 
-    @SuppressWarnings("unchecked")
+
     private void handleChannelCommand(Channel channel, PlayerFlags flags, String[] args, CommandSender player) {
         if (args[0].equalsIgnoreCase("join")) {
             flags.set("channel", channel.getId());
@@ -168,17 +168,17 @@ public class SimpleClansChat extends JavaPlugin {
             flags.removeEntry("channel");
             player.sendMessage("You left the " + channel.name().toLowerCase() + " channel!");
         } else if (args[0].equalsIgnoreCase("on")) {
-            Set set = flags.getSet("disabledChannels");
+            Set<Byte> set = flags.getSet("disabledChannels");
             if (set == null) {
-                set = new HashSet();
+                set = new HashSet<Byte>();
                 flags.set("disabledChannels", set);
             }
             set.add(channel.getId());
             player.sendMessage("You turned the global chat on!");
         } else if (args[0].equalsIgnoreCase("off")) {
-            Set set = flags.getSet("disabledChannels");
+            Set<Byte> set = flags.getSet("disabledChannels");
             if (set == null) {
-                set = new HashSet();
+                set = new HashSet<Byte>();
                 flags.set("disabledChannels", set);
             }
             set.remove(channel.getId());
@@ -189,11 +189,11 @@ public class SimpleClansChat extends JavaPlugin {
     }
 
     private boolean setupChat() {
-        RegisteredServiceProvider rsp = getServer().getServicesManager().getRegistration(Chat.class);
+        RegisteredServiceProvider<Chat> rsp = getServer().getServicesManager().getRegistration(Chat.class);
         if (rsp == null) {
             return false;
         }
-        chat = (Chat) rsp.getProvider();
+        chat = rsp.getProvider();
         return chat != null;
     }
 
@@ -252,8 +252,10 @@ public class SimpleClansChat extends JavaPlugin {
         return chatSuite;
     }
 
-    public String formatComplete(String format, Player player, String message) {
-        ClanPlayer clanPlayer = this.getClanPlayerManager().getClanPlayer(player);
+    public String formatComplete(String format, Player player, ClanPlayer clanPlayer) {
+        if (clanPlayer == null) {
+            clanPlayer = this.getClanPlayerManager().getClanPlayer(player);
+        }
 
         String clanTag = null;
         String rankTag = null;
@@ -280,7 +282,7 @@ public class SimpleClansChat extends JavaPlugin {
 
 
         if (format.contains(playerVariable)) {
-            format = format.replace(playerVariable, player.getDisplayName());
+            format = format.replace(playerVariable, "%1$s");
         }
 
         if (format.contains(clanVariable)) {
@@ -302,10 +304,69 @@ public class SimpleClansChat extends JavaPlugin {
         }
 
         if (format.contains(messageVariable)) {
-            format = format.replace(messageVariable, message);
+            format = format.replace(messageVariable, "%2$s");
         }
 
         return format;
+    }
+
+    public void removeRetrievers(Set<Player> retrievers, ClanPlayer cp, Player player) {
+        if (cp == null || cp.getFlags() == null) {
+            return;
+        }
+
+        byte flag = cp.getFlags().getByte("channel");
+
+        Iterator<Player> players;
+
+        if (flag != -1) {
+
+            Channel channel = Channel.getById(flag);
+
+            switch (channel) {
+                case ALLY:
+                    //format for allies
+                    String formattedAlly = formatComplete(getSettingsManager().getAllyChannelFormat(), player, cp);
+
+                    players = retrievers.iterator();
+                    while (players.hasNext()) {
+                        Player retriever = players.next();
+                        if (isChannelDisabled(retriever, Channel.ALLY)) {
+                            players.remove();
+                        }
+                    }
+                case CLAN:
+                    //format for clan
+
+                    String formattedClan = formatComplete(getSettingsManager().getClanChannelFormat(), player, cp);
+
+                    players = retrievers.iterator();
+                    while (players.hasNext()) {
+                        Player retriever = players.next();
+                        if (isChannelDisabled(retriever, Channel.CLAN)) {
+                            players.remove();
+                        }
+                    }
+            }
+        }
+
+        players = retrievers.iterator();
+        while (players.hasNext()) {
+            Player retriever = players.next();
+            if (isChannelDisabled(retriever, Channel.GLOBAL)) {
+                players.remove();
+            }
+        }
+    }
+
+
+    private boolean isChannelDisabled(Player player, Channel channel) {
+        return isChannelDisabled(getClanPlayerManager().getClanPlayer(player), channel);
+    }
+
+    private boolean isChannelDisabled(ClanPlayer player, Channel channel) {
+        System.out.println(player.getFlags().<Byte>getSet("disabledChannels"));
+        return player.getFlags() != null && player.getFlags().<Byte>getSet("disabledChannels").contains(channel.getId());
     }
 
     public String formatVariable(String variable, String input) {

@@ -221,6 +221,7 @@ public final class GeneralHelper {
             return false;
         }
 
+        File[] files = path.listFiles();
         for (File file : path.listFiles()) {
 
             if (file.isDirectory()) {
