@@ -23,7 +23,9 @@ import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.api.clan.Clan;
 import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayer;
+import com.p000ison.dev.simpleclans2.clan.CraftClan;
 import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
+import com.p000ison.dev.simpleclans2.database.response.responses.ClanCreateResponse;
 import com.p000ison.dev.simpleclans2.language.Language;
 import com.p000ison.dev.simpleclans2.util.GeneralHelper;
 import org.bukkit.ChatColor;
@@ -87,20 +89,13 @@ public class CreateCommand extends GenericPlayerCommand {
             return;
         }
 
-        Clan clan = plugin.getClanManager().createClan(tag, name);
+        Clan clan = new CraftClan(plugin, tag, name);
 
-        if (clan == null) {
-            player.sendMessage(ChatColor.DARK_RED + Language.getTranslation("clan.creation.failed"));
-            return;
-        }
+        plugin.getDataManager().addResponse(new ClanCreateResponse(plugin, clan, player, cp));
 
         cp.setLeader(true);
         cp.setTrusted(true);
         clan.addMember(cp);
-
-        player.sendMessage(ChatColor.GREEN + Language.getTranslation("clan.created", clan.getName()));
-        clan.addBBMessage(cp, MessageFormat.format(Language.getTranslation("clan.created"), name));
-        plugin.broadcast(ChatColor.AQUA + Language.getTranslation("broadcast.clan.created", name, tag));
 
         cp.update();
 

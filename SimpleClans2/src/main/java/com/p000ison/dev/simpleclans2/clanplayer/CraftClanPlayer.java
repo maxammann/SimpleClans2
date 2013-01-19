@@ -51,12 +51,12 @@ import java.util.Set;
 @DatabaseTable(name = "sc2_players")
 public class CraftClanPlayer implements ClanPlayer, TableObject {
 
-    private SimpleClans plugin;
+    private transient SimpleClans plugin;
 
     private PlayerFlags flags;
     private Clan clan;
     private Rank rank;
-    private OnlineClanPlayer onlineVersion = null;
+    private transient OnlineClanPlayer onlineVersion = null;
 
     @DatabaseColumn(position = 0, databaseName = "id", id = true)
     private long id = -1;

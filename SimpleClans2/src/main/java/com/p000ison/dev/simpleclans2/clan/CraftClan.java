@@ -891,6 +891,7 @@ public class CraftClan implements Clan, TableObject {
 
         plugin.getRequestManager().clearRequests(this);
         plugin.getClanManager().removeClan(this);
+
         plugin.getDataManager().getDatabase().delete(this);
     }
 
