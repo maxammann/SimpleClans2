@@ -35,14 +35,14 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * The ClanManager handels everything with clans.
  */
 public class CraftClanManager implements ClanManager {
     private SimpleClans plugin;
-    private Set<Clan> clans = new HashSet<Clan>();
-
+    private Set<Clan> clans = Collections.newSetFromMap(new ConcurrentHashMap<Clan, Boolean>());
 
     public CraftClanManager(SimpleClans plugin) {
         this.plugin = plugin;

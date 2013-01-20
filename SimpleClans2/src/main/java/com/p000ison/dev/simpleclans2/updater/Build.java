@@ -30,6 +30,7 @@ import java.net.URLConnection;
 import java.nio.charset.Charset;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.logging.Level;
 
 /**
  * Represents a Build
@@ -122,7 +123,7 @@ public class Build {
         Object parse = JSONValue.parse(reader);
 
         if (!(parse instanceof JSONObject)) {
-            throw new RuntimeException("Failed at reading from the reader!");
+            Logging.debug(Level.SEVERE, "Failed at reading the update info! Please contact the developers!");
         }
 
         return (JSONObject) parse;

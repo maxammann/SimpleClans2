@@ -28,16 +28,16 @@ import com.p000ison.dev.simpleclans2.api.events.ClanPlayerCreateEvent;
 import org.bukkit.entity.Player;
 
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Represents a ClanPlayerManager
  */
 public class CraftClanPlayerManager implements ClanPlayerManager {
 
-    private Set<ClanPlayer> players = new HashSet<ClanPlayer>();
+    private Set<ClanPlayer> players = Collections.newSetFromMap(new ConcurrentHashMap<ClanPlayer, Boolean>());
     private SimpleClans plugin;
 
     public CraftClanPlayerManager(SimpleClans plugin) {

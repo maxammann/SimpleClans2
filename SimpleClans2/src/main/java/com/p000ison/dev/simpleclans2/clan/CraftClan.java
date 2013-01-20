@@ -31,7 +31,6 @@ import com.p000ison.dev.simpleclans2.api.clanplayer.OnlineClanPlayer;
 import com.p000ison.dev.simpleclans2.api.events.ClanRelationBreakEvent;
 import com.p000ison.dev.simpleclans2.api.events.ClanRelationCreateEvent;
 import com.p000ison.dev.simpleclans2.api.rank.Rank;
-import com.p000ison.dev.simpleclans2.clan.bank.BankAccount;
 import com.p000ison.dev.simpleclans2.clan.ranks.CraftRank;
 import com.p000ison.dev.simpleclans2.clanplayer.CraftClanPlayer;
 import com.p000ison.dev.simpleclans2.database.response.responses.BBAddResponse;
@@ -107,8 +106,8 @@ public class CraftClan implements Clan, TableObject {
     public CraftClan(SimpleClans plugin, String tag, String name) {
         this(plugin);
         flags = new CraftClanFlags();
-        this.tag = tag;
-        this.name = name;
+        setTag(tag);
+        setName(name);
     }
 
     public CraftClan() {

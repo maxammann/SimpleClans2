@@ -130,16 +130,16 @@ public class LanguageMap {
     public void load() {
         Reader reader = null;
 
+        Properties properties;
         try {
             reader = getReader(charset);
 
-            Properties properties = new Properties();
+            properties = new Properties();
             properties.load(reader);
-            map = new ColorizedMap();
-            map.importMap(properties);
         } catch (IOException e) {
             e.printStackTrace();
             Logging.debug(e, false, "Failed at loading the language file!");
+            return;
         } finally {
             try {
                 if (reader != null) {
@@ -149,6 +149,9 @@ public class LanguageMap {
                 Logging.debug(e, false, "Failed at closing the stream for the language file!");
             }
         }
+
+        map = new ColorizedMap();
+        map.importMap(properties);
     }
 
     public void save() {

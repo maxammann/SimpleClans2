@@ -17,7 +17,7 @@
  *     Last modified: 29.10.12 23:52
  */
 
-package com.p000ison.dev.simpleclans2.clan.bank;
+package com.p000ison.dev.simpleclans2.clan;
 
 import com.p000ison.dev.simpleclans2.api.Balance;
 
