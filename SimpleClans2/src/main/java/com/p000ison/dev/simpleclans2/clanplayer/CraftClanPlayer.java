@@ -44,6 +44,9 @@ import org.bukkit.entity.Player;
 import java.text.MessageFormat;
 import java.util.Date;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Represents a ClanPlayer
@@ -56,29 +59,30 @@ public class CraftClanPlayer implements ClanPlayer, TableObject {
     private PlayerFlags flags;
     private Clan clan;
     private Rank rank;
-    private transient OnlineClanPlayer onlineVersion = null;
 
     @DatabaseColumn(position = 0, databaseName = "id", id = true)
-    private long id = -1;
+    private AtomicLong id = new AtomicLong(-1);
     @DatabaseColumn(position = 1, databaseName = "name", lenght = 16, unique = true)
     private String name;
     @DatabaseColumn(position = 6, databaseName = "banned", defaultValue = "0")
-    private boolean banned;
+    private AtomicBoolean banned = new AtomicBoolean(false);
     @DatabaseColumn(position = 5, databaseName = "trusted", defaultValue = "0")
-    private boolean trusted;
+    private AtomicBoolean trusted = new AtomicBoolean(false);
     @DatabaseColumn(position = 2, databaseName = "leader", defaultValue = "0")
-    private boolean leader;
-    private long lastSeen, joinDate;
+    private AtomicBoolean leader = new AtomicBoolean(false);
+    private AtomicLong lastSeen = new AtomicLong(0), joinDate = new AtomicLong(0);
     @DatabaseColumn(position = 8, databaseName = "neutral_kills", defaultValue = "0")
-    private int neutralKills;
+    private AtomicInteger neutralKills = new AtomicInteger(0);
     @DatabaseColumn(position = 9, databaseName = "rival_kills", defaultValue = "0")
-    private int rivalKills;
+    private AtomicInteger rivalKills = new AtomicInteger(0);
     @DatabaseColumn(position = 10, databaseName = "civilian_kills", defaultValue = "0")
-    private int civilianKills;
+    private AtomicInteger civilianKills = new AtomicInteger(0);
     @DatabaseColumn(position = 11, databaseName = "deaths", defaultValue = "0")
-    private int deaths;
+    private AtomicInteger deaths = new AtomicInteger(0);
 
-    private boolean update;
+    private transient OnlineClanPlayer onlineVersion = null;
+
+    private AtomicBoolean update = new AtomicBoolean(false);
 
     public CraftClanPlayer(SimpleClans plugin) {
         flags = new CraftPlayerFlags();
@@ -123,32 +127,32 @@ public class CraftClanPlayer implements ClanPlayer, TableObject {
 
     @Override
     public boolean isBanned() {
-        return banned;
+        return banned.get();
     }
 
     @Override
     public void setBanned(boolean banned) {
-        this.banned = banned;
+        this.banned.set(banned);
     }
 
     @Override
     public boolean isLeader() {
-        return leader;
+        return leader.get();
     }
 
     @Override
     public void setLeader(boolean leader) {
-        this.leader = leader;
+        this.leader.set(leader);
     }
 
     @Override
     public boolean isTrusted() {
-        return trusted;
+        return trusted.get();
     }
 
     @Override
     public void setTrusted(boolean trusted) {
-        this.trusted = trusted;
+        this.trusted.set(trusted);
     }
 
     @Override
@@ -163,60 +167,60 @@ public class CraftClanPlayer implements ClanPlayer, TableObject {
 
     @Override
     public Date getLastSeenDate() {
-        return !this.isOnline() ? new Date(lastSeen) : new Date();
+        return !this.isOnline() ? new Date(lastSeen.get()) : new Date();
     }
 
     public long getLastSeenTime() {
-        return !this.isOnline() ? lastSeen : System.currentTimeMillis();
+        return !this.isOnline() ? lastSeen.get() : System.currentTimeMillis();
     }
 
     @Override
     public void updateLastSeen() {
-        this.lastSeen = System.currentTimeMillis();
+        this.lastSeen.set(System.currentTimeMillis());
     }
 
     @Override
     public Date getJoinDate() {
-        return new Date(joinDate);
+        return new Date(joinDate.get());
     }
 
     public void setJoinTime(long joinDate) {
-        this.joinDate = joinDate;
+        this.joinDate.set(joinDate);
     }
 
     @Override
     public int getNeutralKills() {
-        return neutralKills;
+        return neutralKills.get();
     }
 
     @Override
     public void addNeutralKill() {
-        neutralKills++;
+        neutralKills.getAndIncrement();
     }
 
     @Override
     public int getRivalKills() {
-        return rivalKills;
+        return rivalKills.get();
     }
 
     @Override
     public void addRivalKill() {
-        rivalKills++;
+        rivalKills.getAndIncrement();
     }
 
     @Override
     public int getCivilianKills() {
-        return civilianKills;
+        return civilianKills.get();
     }
 
     @Override
     public void addCivilianKill() {
-        civilianKills++;
+        civilianKills.getAndIncrement();
     }
 
     @Override
     public int getDeaths() {
-        return deaths;
+        return deaths.get();
     }
 
     @Override
@@ -226,7 +230,7 @@ public class CraftClanPlayer implements ClanPlayer, TableObject {
 
     @Override
     public long getID() {
-        return id;
+        return id.get();
     }
 
     @Override
@@ -251,7 +255,7 @@ public class CraftClanPlayer implements ClanPlayer, TableObject {
 
     @Override
     public int getInactiveDays() {
-        return (int) Math.round(DateHelper.differenceInDays(lastSeen, System.currentTimeMillis()));
+        return (int) Math.round(DateHelper.differenceInDays(lastSeen.get(), System.currentTimeMillis()));
     }
 
     @Override
@@ -284,7 +288,7 @@ public class CraftClanPlayer implements ClanPlayer, TableObject {
         if (obj instanceof ClanPlayer) {
             ClanPlayer clanPlayer = ((ClanPlayer) obj);
 
-            if (clanPlayer.getID() == id || clanPlayer.getName().equals(name)) {
+            if (clanPlayer.getID() == id.get() || clanPlayer.getName().equals(name)) {
                 return true;
             }
         }
@@ -292,27 +296,27 @@ public class CraftClanPlayer implements ClanPlayer, TableObject {
     }
 
     public int hashCode() {
-        return (int) id;
+        return (int) id.get();
     }
 
     @Override
     public void setNeutralKills(int neutralKills) {
-        this.neutralKills = neutralKills;
+        this.neutralKills.set(neutralKills);
     }
 
     @Override
     public void setRivalKills(int rivalKills) {
-        this.rivalKills = rivalKills;
+        this.rivalKills.set(rivalKills);
     }
 
     @Override
     public void setCivilianKills(int civilianKills) {
-        this.civilianKills = civilianKills;
+        this.civilianKills.set(civilianKills);
     }
 
     @Override
     public void setDeaths(int deaths) {
-        this.deaths = deaths;
+        this.deaths.set(deaths);
     }
 
     @Override
@@ -352,16 +356,16 @@ public class CraftClanPlayer implements ClanPlayer, TableObject {
 
     @Override
     public void update() {
-        this.update = true;
+        this.update.set(true);
     }
 
     public boolean needsUpdate() {
-        return this.update;
+        return this.update.get();
     }
 
     @Override
     public void update(boolean update) {
-        this.update = update;
+        this.update.set(update);
     }
 
     @Override
@@ -547,12 +551,12 @@ public class CraftClanPlayer implements ClanPlayer, TableObject {
 
     @Override
     public String getFormattedJoinDate() {
-        return new java.text.SimpleDateFormat("MMM dd, yyyy h:mm a").format(new Date(this.joinDate));
+        return CraftClan.DATE_FORMAT.format(new Date(this.joinDate.get()));
     }
 
     @Override
     public String getFormattedLastSeenDate() {
-        return new java.text.SimpleDateFormat("MMM dd, yyyy h:mm a").format(new Date(this.lastSeen));
+        return CraftClan.DATE_FORMAT.format(new Date(this.lastSeen.get()));
     }
 
     @Override
@@ -660,30 +664,30 @@ public class CraftClanPlayer implements ClanPlayer, TableObject {
 
     @DatabaseColumnGetter(databaseName = "join_date")
     private Date getDatabaseJoinDate() {
-        return new Date(joinDate);
+        return new Date(joinDate.get());
     }
 
     @DatabaseColumnSetter(position = 7, databaseName = "join_date")
     private void setDatabaseJoinDate(Date date) {
         if (date == null) {
-            this.joinDate = System.currentTimeMillis();
+            this.joinDate.set(System.currentTimeMillis());
             return;
         }
-        this.joinDate = date.getTime();
+        this.joinDate.set(date.getTime());
     }
 
     @DatabaseColumnGetter(databaseName = "last_seen")
     private Date getDatabaseLastSeen() {
-        return new Date(lastSeen);
+        return new Date(lastSeen.get());
     }
 
     @DatabaseColumnSetter(position = 7, databaseName = "last_seen")
     private void setDatabaseLastSeen(Date date) {
         if (date == null) {
-            this.lastSeen = System.currentTimeMillis();
+            this.lastSeen.set(System.currentTimeMillis());
             return;
         }
-        this.lastSeen = date.getTime();
+        this.lastSeen.set(date.getTime());
     }
 
     @DatabaseColumnGetter(databaseName = "flags")

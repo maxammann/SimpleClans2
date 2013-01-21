@@ -26,6 +26,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Represents a ClanFlags
@@ -34,7 +35,7 @@ import java.util.*;
 public class JSONFlags implements Flags {
 
     private static final long serialVersionUID = -6017717945327866795L;
-    private Map<String, Object> data = new HashMap<String, Object>();
+    private Map<String, Object> data = new ConcurrentHashMap<String, Object>();
 
     @Override
     public Map<String, Object> getData() {

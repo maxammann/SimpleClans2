@@ -38,11 +38,11 @@ public class BankAccount implements Balance {
     }
 
     @Override
-    public double getBalance() {
+    public synchronized double getBalance() {
         return balance;
     }
 
-    public void setBalance(double balance) {
+    public synchronized void setBalance(double balance) {
         if (balance < 0.0D) {
             throw new IllegalArgumentException("The balance can not be negative!");
         } else if (balance > MAX_BALANCE) {
@@ -53,7 +53,7 @@ public class BankAccount implements Balance {
     }
 
     @Override
-    public boolean withdraw(double amount) {
+    public synchronized boolean withdraw(double amount) {
         if (amount < 0.0D) {
             throw new IllegalArgumentException("The amount can not be negative if you withdraw something!");
         }
@@ -67,7 +67,7 @@ public class BankAccount implements Balance {
     }
 
     @Override
-    public void deposit(double amount) {
+    public synchronized void deposit(double amount) {
         if (amount < 0.0D) {
             throw new IllegalArgumentException("The amount can not be negative if you withdraw something!");
         }
@@ -78,7 +78,7 @@ public class BankAccount implements Balance {
             throw new IllegalArgumentException(String.format("The balance passed the maximum of %s", MAX_BALANCE));
         }
 
-        balance = test;
+        setBalance(test);
     }
 
     @Override

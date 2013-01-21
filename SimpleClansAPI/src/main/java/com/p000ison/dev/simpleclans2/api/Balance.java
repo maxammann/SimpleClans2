@@ -20,7 +20,7 @@
 package com.p000ison.dev.simpleclans2.api;
 
 /**
- *
+ * If a object implements this, you can deposit money to the object or withdraw. Mostly this are players or organizations.
  */
 public interface Balance {
 

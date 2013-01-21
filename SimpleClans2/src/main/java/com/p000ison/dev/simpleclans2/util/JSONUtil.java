@@ -90,7 +90,7 @@ public final class JSONUtil {
         return list;
     }
 
-    public static Map<Integer, Boolean> JSONToPermissionMap(String json) {
+    public static Map<Integer, Boolean> JSONToPermissionMap(String json, Map<Integer, Boolean> output) {
         if (json == null || json.isEmpty()) {
             return null;
         }
@@ -101,7 +101,6 @@ public final class JSONUtil {
             return null;
         }
 
-        Map<Integer, Boolean> map = new HashMap<Integer, Boolean>();
         for (Object obj : parser.entrySet()) {
             Map.Entry entry = (Map.Entry) obj;
             Integer integer;
@@ -113,11 +112,11 @@ public final class JSONUtil {
             } else {
                 integer = (Integer) entry.getKey();
             }
-            map.put(integer, (Boolean) entry.getValue());
+            output.put(integer, (Boolean) entry.getValue());
         }
 
 
-        return map;
+        return output;
     }
 
     public static Set<String> JSONToStringSet(String json) {

@@ -108,7 +108,7 @@ public interface Rank extends Comparable<Rank>, UpdateAble {
      *
      * @param id The id to set
      */
-    void setId(long id);
+    void setID(long id);
 
     /**
      * Checks if 2 ranks equal.
