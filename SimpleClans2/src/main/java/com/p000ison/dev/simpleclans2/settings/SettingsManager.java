@@ -82,7 +82,7 @@ public class SettingsManager {
     private char[] disallowedColors;
     private Set<String> disallowedTags;
     private boolean requireVerification;
-    private double purchaseCreationPrice, purchaseVerificationPrice, purchaseTeleportPrice, purchaseInvite;
+    private double purchaseCreationPrice, purchaseVerificationPrice, purchaseTeleportPrice, purchaseTeleportSetPrice, purchaseInvite;
     private int purgeInactivePlayersDays, purgeInactiveClansDays, purgeUnverifiedClansDays;
     private boolean showUnverifiedClansOnList;
     private int minimalSizeToAlly, minimalSizeToRival;
@@ -104,7 +104,6 @@ public class SettingsManager {
     private boolean motdBBEnabled;
     private int motdBBLines;
     private String motdBBFormat;
-
 
     private ChatColor headingPageColor, subPageColor, clanColor, leaderColor, trustedColor, untrustedColor;
     private boolean trustMembersByDefault;
@@ -246,6 +245,7 @@ public class SettingsManager {
             purchaseCreationPrice = clanEconomy.getDouble("purchase-creation");
             purchaseVerificationPrice = clanEconomy.getDouble("purchase-verification");
             purchaseTeleportPrice = clanEconomy.getDouble("purchase-teleport");
+            purchaseTeleportSetPrice = clanEconomy.getInt("purchase-teleport-set");
             purchaseInvite = clanEconomy.getDouble("purchase-invite");
 
             ConfigurationSection clanPurge = clan.getConfigurationSection("purge");
@@ -624,6 +624,10 @@ public class SettingsManager {
         return purchaseTeleportPrice;
     }
 
+    public double getPurchaseTeleportSetPrice() {
+        return purchaseTeleportSetPrice;
+    }
+
     public boolean isPurchaseCreation() {
         return purchaseCreationPrice > 0D;
     }
@@ -638,6 +642,10 @@ public class SettingsManager {
 
     public boolean isPurchaseTeleport() {
         return purchaseTeleportPrice > 0D;
+    }
+
+    public boolean isPurchaseSetTeleport() {
+        return purchaseTeleportSetPrice > 0D;
     }
 
     public boolean isCapesEnabled() {

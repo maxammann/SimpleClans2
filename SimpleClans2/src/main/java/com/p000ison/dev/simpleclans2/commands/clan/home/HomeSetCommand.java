@@ -73,6 +73,11 @@ public class HomeSetCommand extends GenericPlayerCommand {
                                 return;
                             }
 
+                            if (SimpleClans.hasEconomy() && plugin.getSettingsManager().isPurchaseSetTeleport() && !cp.withdraw(plugin.getSettingsManager().getPurchaseTeleportPrice())) {
+                                ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("not.sufficient.money"));
+                                return;
+                            }
+
                             clan.getFlags().setHomeLocation(loc);
                             clan.update();
                             ChatBlock.sendMessage(player, ChatColor.AQUA + MessageFormat.format(Language.getTranslation("hombase.set"), ChatColor.YELLOW + GeneralHelper.locationToString(loc)));

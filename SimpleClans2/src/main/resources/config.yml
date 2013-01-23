@@ -118,6 +118,8 @@ clan:
     purchase-creation: 20
     # The price for teleporting or -1
     purchase-teleport: -1
+     # The price for settings the teleport point or -1
+    purchase-teleport-set: -1
   voting:
     demote: true
     promote: true
