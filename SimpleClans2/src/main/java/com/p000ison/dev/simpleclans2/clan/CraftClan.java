@@ -86,7 +86,6 @@ public class CraftClan implements Clan, TableObject, UpdateAble {
 
     private AtomicBoolean update = new AtomicBoolean(false);
 
-
     //Locks
     private final static Object nameLock = new Object();
 
@@ -1074,5 +1073,10 @@ public class CraftClan implements Clan, TableObject, UpdateAble {
             this.allMembers = new HashSet<ClanPlayer>();
         }
         this.allMembers.add(cp);
+    }
+
+    @Override
+    public Iterator<ClanPlayer> iterator() {
+        return allMembers.iterator();
     }
 }
