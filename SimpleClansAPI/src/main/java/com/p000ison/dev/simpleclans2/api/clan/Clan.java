@@ -33,7 +33,7 @@ import java.util.Set;
 /**
  *
  */
-public interface Clan extends KDR, Comparable<Clan>, Balance, UpdateAble, Serializable {
+public interface Clan extends KDR, Comparable<Clan>, Balance, UpdateAble, Serializable, Iterable<ClanPlayer> {
 
     /**
      * Returns a formated string of the date this clan was founded
