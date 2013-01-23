@@ -66,9 +66,7 @@ public class CraftRank implements Rank, TableObject {
 
     @DatabaseColumn(position = 0, databaseName = "id", id = true)
     private AtomicLong id = new AtomicLong();
-    @DatabaseColumn(position = 2, databaseName = "name", lenght = 16)
     private String name;
-    @DatabaseColumn(position = 1, databaseName = "tag", lenght = 16)
     private String tag;
     private Map<Integer, Boolean> permissions;
     @DatabaseColumn(position = 4, databaseName = "priority", lenght = 3)
@@ -153,6 +151,7 @@ public class CraftRank implements Rank, TableObject {
         return null;
     }
 
+    @DatabaseColumnSetter(position = 2, databaseName = "name", lenght = 16)
     public void setName(String name) {
         synchronized (nameLock) {
             this.name = name;
@@ -208,6 +207,7 @@ public class CraftRank implements Rank, TableObject {
     }
 
     @Override
+    @DatabaseColumnGetter(databaseName = "name")
     public String getName() {
         return name;
     }
@@ -347,11 +347,13 @@ public class CraftRank implements Rank, TableObject {
     }
 
     @Override
+    @DatabaseColumnGetter(databaseName = "tag")
     public String getTag() {
         return tag;
     }
 
     @Override
+    @DatabaseColumnSetter(position = 1, databaseName = "tag", lenght = 16)
     public void setTag(String tag) {
         synchronized (nameLock) {
             this.tag = tag;

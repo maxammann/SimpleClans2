@@ -78,7 +78,7 @@ public class SimpleClansChat extends JavaPlugin {
             if (settingsManager.isDepreciationMode()) {
                 pluginManager.registerEvents(new SCCDepreciatedChatEvent(this), this);
             } else {
-                pluginManager.registerEvents( new SCCPlayerListener(this), this);
+                pluginManager.registerEvents(new SCCPlayerListener(this), this);
             }
 
         }

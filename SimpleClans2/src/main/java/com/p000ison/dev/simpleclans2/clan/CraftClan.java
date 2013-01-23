@@ -71,9 +71,7 @@ public class CraftClan implements Clan, TableObject, UpdateAble {
     @DatabaseColumn(position = 0, databaseName = "id", id = true)
     private long id = -1;
 
-    @DatabaseColumn(position = 1, databaseName = "tag", notNull = true, lenght = 26, unique = true)
     private String tag;
-    @DatabaseColumn(position = 2, databaseName = "name", notNull = true, lenght = 100, unique = true)
     private String name;
 
     private AtomicLong foundedDate = new AtomicLong(-1L);
@@ -130,11 +128,15 @@ public class CraftClan implements Clan, TableObject, UpdateAble {
     }
 
     @Override
+    @DatabaseColumnGetter(databaseName = "tag")
     public String getTag() {
-        return tag;
+        synchronized (nameLock) {
+            return tag;
+        }
     }
 
     @Override
+    @DatabaseColumnSetter(position = 1, databaseName = "tag", notNull = true, lenght = 26, unique = true)
     public void setTag(String tag) {
         Validate.notNull(tag, "The clan tag must not be null!");
         synchronized (nameLock) {
@@ -153,11 +155,15 @@ public class CraftClan implements Clan, TableObject, UpdateAble {
     }
 
     @Override
+    @DatabaseColumnGetter(databaseName = "name")
     public String getName() {
-        return name;
+        synchronized (nameLock) {
+            return name;
+        }
     }
 
     @Override
+    @DatabaseColumnSetter(position = 2, databaseName = "name", notNull = true, lenght = 100, unique = true)
     public void setName(String name) {
         Validate.notNull(tag, "The clan name must not be null!");
         synchronized (nameLock) {
