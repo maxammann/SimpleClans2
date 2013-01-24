@@ -650,11 +650,17 @@ public class CraftClanPlayer implements ClanPlayer, TableObject {
 
     @DatabaseColumnSetter(position = 4, databaseName = "ranks", saveValueAfterLoading = true)
     private void setDatabaseRank(String json) {
-        if (json == null || getClan() == null) {
+        if (json == null || json.isEmpty() || getClan() == null) {
             return;
         }
+
         int rankId = Integer.valueOf(json.substring(1, json.length() - 1));
         this.rank = getClan().getRank(rankId);
+    }
+
+    public static void main(String[] args) {
+        String json = "";
+        System.out.println(Integer.valueOf(json.substring(1, json.length() - 1)));
     }
 
     @DatabaseColumnGetter(databaseName = "ranks")
