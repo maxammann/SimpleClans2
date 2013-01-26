@@ -28,16 +28,18 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Represents a AutoUpdater
  */
 public class AutoUpdater {
-    private static final String JOB = "SimpleClans2";
     private Build toUpdate = null;
+    private static String[] addons = {"SimpleClans2", "SimpleClansChat"};
 
-    public AutoUpdater(Plugin plugin, UpdateType type, boolean longReport) {
+    public AutoUpdater(Plugin plugin, String job, UpdateType type, boolean longReport) {
         String version = plugin.getDescription().getVersion();
 
         if (version.equals("unknown-version")) {
@@ -56,7 +58,7 @@ public class AutoUpdater {
         }
 
         try {
-            Build update = getBuild(type);
+            Build update = getBuild(type, job, getAddonArtifacts());
 
             update.fetchInformation();
 
@@ -71,6 +73,19 @@ public class AutoUpdater {
         } catch (IOException e) {
             Logging.debug(e, true, "Failed at fetching the Update information! Maybe something is down. Please contact the developers");
         }
+    }
+
+    private Artifact[] getAddonArtifacts() {
+        List<Artifact> artifacts = new ArrayList<Artifact>();
+
+        for (String addon : addons) {
+            String path = getFileName(addon);
+            if (path != null) {
+                artifacts.add(new Artifact(addon, path));
+            }
+        }
+
+        return artifacts.toArray(new Artifact[artifacts.size()]);
     }
 
 
@@ -110,10 +125,7 @@ public class AutoUpdater {
                 return false;
             }
 
-            String absolutePath = getClass().getProtectionDomain().getCodeSource().getLocation().getFile();
-            String name = absolutePath.substring(absolutePath.lastIndexOf('/') + 1);
-
-            if (!toUpdate.saveToDirectory(updateDirectory, name)) {
+            if (!toUpdate.saveArtifactsToDirectory(updateDirectory)) {
                 return false;
             }
         } catch (IOException e) {
@@ -121,6 +133,22 @@ public class AutoUpdater {
             return false;
         }
         return true;
+    }
+
+    public static String getFileName(Class<?> clazz) {
+        String path = clazz.getProtectionDomain().getCodeSource().getLocation().getFile();
+        return path.substring(path.lastIndexOf('/') + 1);
+    }
+
+    public static String getFileName(Plugin plugin) {
+        if (plugin == null) {
+            return null;
+        }
+        return getFileName(plugin.getClass());
+    }
+
+    public static String getFileName(String plugin) {
+        return getFileName(Bukkit.getPluginManager().getPlugin(plugin));
     }
 
     private static int parseVersion(String version) {
@@ -156,7 +184,7 @@ public class AutoUpdater {
         return versionNumber;
     }
 
-    public static Build getBuild(UpdateType type) {
-        return new Build(JOB, type);
+    public static Build getBuild(UpdateType type, String job, Artifact... artifacts) {
+        return new Build(job, type, artifacts);
     }
 }

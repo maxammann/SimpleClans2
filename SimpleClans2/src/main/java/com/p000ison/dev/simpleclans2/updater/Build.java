@@ -28,7 +28,9 @@ import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.Charset;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 
@@ -44,7 +46,7 @@ public class Build {
     private static final byte httpLength = 7;
 
     private int buildNumber;
-    private String fetchFile;
+    private List<Artifact> artifacts;
 
     private String job;
     private UpdateType updateType;
@@ -57,9 +59,9 @@ public class Build {
     private Set<String> createdFiles = new HashSet<String>();
     private Set<String> deletedFiles = new HashSet<String>();
 
-
-    public Build(String job, UpdateType updateType) {
+    public Build(String job, UpdateType updateType, Artifact... artifacts) {
         this.job = job;
+        this.artifacts = Arrays.asList(artifacts);
         this.updateType = updateType;
     }
 
@@ -76,22 +78,23 @@ public class Build {
         this.duration = (Long) content.get("duration");
 
         try {
-            JSONArray artifacts = (JSONArray) content.get("artifacts");
-            if (artifacts == null || artifacts.isEmpty()) {
+            JSONArray artifactsInfo = (JSONArray) content.get("artifacts");
+            if (artifactsInfo == null || artifactsInfo.isEmpty()) {
                 return;
             }
 
-            String finalPath = null;
-            for (Object rawArtifact : artifacts) {
-                JSONObject artifact = (JSONObject) rawArtifact;
-                String path = (String) artifact.get("relativePath");
+            final String artifactURL = content.get("url").toString().substring(httpLength + JENKINS_HOST.length()) + "artifact/";
 
-                if (path.contains(job)) {
-                    finalPath = path;
+            for (Object rawArtifact : artifactsInfo) {
+                JSONObject artifactInfo = (JSONObject) rawArtifact;
+                String path = (String) artifactInfo.get("relativePath");
+
+                for (Artifact artifact : artifacts) {
+                    if (path.contains(artifact.getName())) {
+                        artifact.setURL(new URL("http", JENKINS_HOST, 80, artifactURL + path));
+                    }
                 }
             }
-
-            this.fetchFile = content.get("url").toString().substring(httpLength + JENKINS_HOST.length()) + "artifact/" + finalPath;
 
             JSONObject changes = (JSONObject) content.get("changeSet");
             JSONArray items = (JSONArray) changes.get("items");
@@ -119,7 +122,7 @@ public class Build {
         }
     }
 
-    public static JSONObject parseJSON(Reader reader) {
+    private static JSONObject parseJSON(Reader reader) {
         Object parse = JSONValue.parse(reader);
 
         if (!(parse instanceof JSONObject)) {
@@ -129,17 +132,15 @@ public class Build {
         return (JSONObject) parse;
     }
 
-    public InputStream getDownloadStream() throws IOException {
-        URL downloadURL = new URL("http", JENKINS_HOST, 80, fetchFile);
-
-        return downloadURL.openConnection().getInputStream();
+    public List<Artifact> getDownloadURLs() throws IOException {
+        return artifacts;
     }
 
-    public void saveToFile(File file) throws IOException {
-        InputStream input = getDownloadStream();
+    private void saveArtifact(Artifact artifact, File alternateLocation) throws IOException {
+        InputStream input = artifact.getURL().openConnection().getInputStream();
         OutputStream output = null;
         try {
-            output = new FileOutputStream(file);
+            output = new FileOutputStream(alternateLocation == null ? artifact.getDestinationFile() : alternateLocation);
 
             byte[] buffer = new byte[1024];
 
@@ -150,18 +151,23 @@ public class Build {
             }
             output.flush();
             output.close();
-        } catch (IOException e) {
-            throw e;
+            input.close();
         } finally {
             if (output != null) {
                 output.flush();
                 output.close();
+                input.close();
             }
-
         }
     }
 
-    public boolean saveToDirectory(File directory, String name) throws IOException {
+    public void saveArtifacts() throws IOException {
+        for (Artifact artifact : artifacts) {
+            saveArtifact(artifact, null);
+        }
+    }
+
+    public boolean saveArtifactsToDirectory(File directory) throws IOException {
         if (!directory.exists()) {
             if (!directory.mkdirs()) {
                 return false;
@@ -173,9 +179,11 @@ public class Build {
             return false;
         }
 
-        File file = new File(directory, name);
 
-        saveToFile(file);
+        for (Artifact artifact : artifacts) {
+            saveArtifact(artifact, new File(directory, artifact.getDestination()));
+        }
+
         return true;
     }
 
