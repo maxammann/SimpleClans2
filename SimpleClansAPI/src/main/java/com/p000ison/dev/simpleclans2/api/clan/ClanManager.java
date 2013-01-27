@@ -19,8 +19,6 @@
 
 package com.p000ison.dev.simpleclans2.api.clan;
 
-import org.bukkit.command.CommandSender;
-
 import java.util.Set;
 
 /**
@@ -81,16 +79,4 @@ public interface ClanManager {
     Clan getClanExact(String tag);
 
     int getRivalAbleClanCount();
-
-    /**
-     * Verifies the change or the set of a clan
-     *
-     * @param reportTo  The sender to report the errors
-     * @param tag       The tag to change
-     * @param tagBefore If there was a tag before, else null
-     * @return Weather this tag is valid
-     */
-    boolean verifyClanTag(CommandSender reportTo, String tag, String tagBefore, boolean mod);
-
-    boolean verifyClanName(CommandSender reportTo, String name, boolean mod);
 }

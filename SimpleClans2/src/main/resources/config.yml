@@ -70,13 +70,13 @@ pvp:
     civilian: 1
 clan:
   # The max length of a tag
-  max-tag-lenght: 3
+  max-tag-length: 3
   # The min length of a tag
-  min-tag-lenght: 3
+  min-tag-length: 3
   # The max length of a name
-  max-name-lenght: 15
+  max-name-length: 15
   # The min length of a name
-  min-name-lenght: 5
+  min-name-length: 5
   # Whether a clan is not allowed to change the home after it setted it once before.
   set-home-only-once: false
   # The minimal clan size to create an alliance
@@ -136,6 +136,15 @@ clan:
     lines: 5
     # The format for the bb
     format: '&4- -%s'
+  rank:
+    # The max length of a tag
+    max-tag-length: 3
+    # The min length of a tag
+    min-tag-length: 3
+    # The max length of a name
+    max-name-length: 15
+    # The min length of a name
+    min-name-length: 5
   # Clans which can not rivaled like admin clans.
   unrivalable-clans: [ ]
   # Whether clan leaders are allowed to change their tag completly

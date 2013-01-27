@@ -189,18 +189,17 @@ public class CraftClanManager implements ClanManager {
         return i;
     }
 
-    @Override
     public boolean verifyClanTag(CommandSender reportTo, String tag, String tagBefore, boolean mod) {
         String cleanTag = ChatColor.stripColor(tag).toLowerCase(Locale.US);
 
         if (!mod) {
-            if (cleanTag.length() > plugin.getSettingsManager().getMaxTagLenght()) {
-                reportTo.sendMessage(ChatColor.RED + MessageFormat.format(Language.getTranslation("your.clan.tag.cannot.be.longer.than.characters"), plugin.getSettingsManager().getMaxTagLenght()));
+            if (cleanTag.length() > plugin.getSettingsManager().getMaxTagLength()) {
+                reportTo.sendMessage(ChatColor.RED + MessageFormat.format(Language.getTranslation("your.clan.tag.cannot.be.longer.than.characters"), plugin.getSettingsManager().getMaxTagLength()));
                 return false;
             }
 
-            if (cleanTag.length() < plugin.getSettingsManager().getMinTagLenght()) {
-                reportTo.sendMessage(ChatColor.RED + MessageFormat.format(Language.getTranslation("your.clan.tag.must.be.longer.than.characters"), plugin.getSettingsManager().getMinTagLenght()));
+            if (cleanTag.length() < plugin.getSettingsManager().getMinTagLength()) {
+                reportTo.sendMessage(ChatColor.RED + MessageFormat.format(Language.getTranslation("your.clan.tag.must.be.longer.than.characters"), plugin.getSettingsManager().getMinTagLength()));
                 return false;
             }
 
@@ -231,16 +230,15 @@ public class CraftClanManager implements ClanManager {
         return true;
     }
 
-    @Override
     public boolean verifyClanName(CommandSender reportTo, String name, boolean mod) {
         if (!mod) {
-            if (ChatColor.stripColor(name).length() > plugin.getSettingsManager().getMaxNameLenght()) {
-                reportTo.sendMessage(ChatColor.RED + MessageFormat.format(Language.getTranslation("your.clan.name.cannot.be.longer.than.characters"), plugin.getSettingsManager().getMaxTagLenght()));
+            if (ChatColor.stripColor(name).length() > plugin.getSettingsManager().getMaxNameLength()) {
+                reportTo.sendMessage(ChatColor.RED + MessageFormat.format(Language.getTranslation("your.clan.name.cannot.be.longer.than.characters"), plugin.getSettingsManager().getMaxTagLength()));
                 return false;
             }
 
-            if (ChatColor.stripColor(name).length() < plugin.getSettingsManager().getMinNameLenght()) {
-                reportTo.sendMessage(ChatColor.RED + MessageFormat.format(Language.getTranslation("your.clan.name.must.be.longer.than.characters"), plugin.getSettingsManager().getMinTagLenght()));
+            if (ChatColor.stripColor(name).length() < plugin.getSettingsManager().getMinNameLength()) {
+                reportTo.sendMessage(ChatColor.RED + MessageFormat.format(Language.getTranslation("your.clan.name.must.be.longer.than.characters"), plugin.getSettingsManager().getMinTagLength()));
                 return false;
             }
         }

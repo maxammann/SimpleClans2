@@ -91,6 +91,7 @@ public class CraftClan implements Clan, TableObject, UpdateAble {
 
     public static final NumberFormat DECIMAL_FORMAT = new DecimalFormat("#.#");
     public static final FastDateFormat DATE_FORMAT = FastDateFormat.getInstance("MMM dd, yyyy h:mm a");
+    public static final int MAX_NAME_LENGTH = 100, MAX_TAG_LENGTH = 26;
     private static final long serialVersionUID = 2276260953605541164L;
 
     /**
@@ -135,10 +136,11 @@ public class CraftClan implements Clan, TableObject, UpdateAble {
     }
 
     @Override
-    @DatabaseColumnSetter(position = 1, databaseName = "tag", notNull = true, lenght = 26, unique = true)
+    @DatabaseColumnSetter(position = 1, databaseName = "tag", notNull = true, lenght = CraftClan.MAX_TAG_LENGTH, unique = true)
     public void setTag(String tag) {
         Validate.notNull(tag, "The clan tag must not be null!");
         synchronized (nameLock) {
+            Validate.isTrue(tag.length() <= MAX_TAG_LENGTH, "The clan tag is too long!");
             this.tag = tag;
         }
     }
@@ -162,10 +164,11 @@ public class CraftClan implements Clan, TableObject, UpdateAble {
     }
 
     @Override
-    @DatabaseColumnSetter(position = 2, databaseName = "name", notNull = true, lenght = 100, unique = true)
+    @DatabaseColumnSetter(position = 2, databaseName = "name", notNull = true, lenght = CraftClan.MAX_NAME_LENGTH, unique = true)
     public void setName(String name) {
         Validate.notNull(tag, "The clan name must not be null!");
         synchronized (nameLock) {
+            Validate.isTrue(name.length() <= MAX_NAME_LENGTH, "The clan name is too long!");
             this.name = name;
         }
     }
@@ -849,6 +852,21 @@ public class CraftClan implements Clan, TableObject, UpdateAble {
             }
         }
 
+        return null;
+    }
+
+    @Override
+    public Rank getRankByName(String name) {
+        if (ranks == null) {
+            return null;
+        }
+
+        String cleanQuery = name.toLowerCase(Locale.US);
+        for (Rank rank : ranks) {
+            if (rank.getName().toLowerCase(Locale.US).startsWith(cleanQuery)) {
+                return rank;
+            }
+        }
         return null;
     }
 

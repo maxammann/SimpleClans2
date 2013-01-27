@@ -78,7 +78,7 @@ public class SettingsManager {
     private boolean reportErrors;
     private String email;
 
-    private int maxTagLenght, minTagLenght, maxNameLenght, minNameLenght;
+    private int maxTagLength, minTagLength, maxNameLength, minNameLength;
     private char[] disallowedColors;
     private Set<String> disallowedTags;
     private boolean requireVerification;
@@ -90,6 +90,8 @@ public class SettingsManager {
     private Set<Long> unRivalAbleClans;
     private double rivalLimitPercent;
     private boolean modifyTagCompletely;
+
+    private int maxRankTagLength, minRankTagLength, maxRankNameLength, minRankNameLength;
 
     private String clanBB, clanPlayerBB, defaultBB;
     private int maxBBDisplayLines, maxBBLenght;
@@ -107,6 +109,7 @@ public class SettingsManager {
 
     private ChatColor headingPageColor, subPageColor, clanColor, leaderColor, trustedColor, untrustedColor;
     private boolean trustMembersByDefault;
+    private HashSet<String> disallowedRankTags;
 
     public SettingsManager(SimpleClans plugin) {
         this.plugin = plugin;
@@ -223,10 +226,10 @@ public class SettingsManager {
 
             ConfigurationSection clan = config.getConfigurationSection("clan");
 
-            maxTagLenght = clan.getInt("max-tag-lenght");
-            minTagLenght = clan.getInt("min-tag-lenght");
-            maxNameLenght = clan.getInt("max-name-lenght");
-            minNameLenght = clan.getInt("min-name-lenght");
+            maxTagLength = clan.getInt("max-tag-length");
+            minTagLength = clan.getInt("min-tag-length");
+            maxNameLength = clan.getInt("max-name-length");
+            minNameLength = clan.getInt("min-name-length");
             List<Character> disallowedColorsList = clan.getCharacterList("disallowed-colors");
             disallowedTags = new HashSet<String>(config.getStringList("disallowed-tags"));
             maxBBLenght = clan.getInt("max-bb-lenght");
@@ -278,6 +281,14 @@ public class SettingsManager {
             ConfigurationSection voting = clan.getConfigurationSection("voting");
             voteForDemote = voting.getBoolean("demote");
             voteForPromote = voting.getBoolean("promote");
+
+            ConfigurationSection rank = clan.getConfigurationSection("rank");
+
+            maxRankTagLength = rank.getInt("max-tag-length");
+            minRankTagLength = rank.getInt("min-tag-length");
+            maxRankNameLength = rank.getInt("max-name-length");
+            minRankNameLength = rank.getInt("min-name-length");
+            disallowedRankTags = new HashSet<String>(config.getStringList("disallowed-tags"));
 
             ConfigurationSection paging = config.getConfigurationSection("paging");
 
@@ -490,12 +501,12 @@ public class SettingsManager {
         return elementsPerPage;
     }
 
-    public int getMaxTagLenght() {
-        return maxTagLenght;
+    public int getMaxTagLength() {
+        return maxTagLength;
     }
 
-    public int getMinTagLenght() {
-        return minTagLenght;
+    public int getMinTagLength() {
+        return minTagLength;
     }
 
     public char[] getDisallowedColors() {
@@ -504,6 +515,10 @@ public class SettingsManager {
 
     public boolean isTagDisallowed(String tag) {
         return disallowedTags.contains(tag);
+    }
+
+    public boolean isRankTagDisallowed(String tag) {
+        return disallowedRankTags.contains(tag);
     }
 
     public int getMaxBBLenght() {
@@ -660,12 +675,12 @@ public class SettingsManager {
         return autoSave;
     }
 
-    public int getMaxNameLenght() {
-        return maxNameLenght;
+    public int getMaxNameLength() {
+        return maxNameLength;
     }
 
-    public int getMinNameLenght() {
-        return minNameLenght;
+    public int getMinNameLength() {
+        return minNameLength;
     }
 
     public boolean isMotdBBEnabled() {
@@ -746,5 +761,21 @@ public class SettingsManager {
 
     public Charset getCharset() {
         return charset;
+    }
+
+    public int getMinRankNameLength() {
+        return minRankNameLength;
+    }
+
+    public int getMaxRankNameLength() {
+        return maxRankNameLength;
+    }
+
+    public int getMinRankTagLength() {
+        return minRankTagLength;
+    }
+
+    public int getMaxRankTagLength() {
+        return maxRankTagLength;
     }
 }

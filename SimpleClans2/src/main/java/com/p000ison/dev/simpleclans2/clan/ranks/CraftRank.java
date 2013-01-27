@@ -28,6 +28,7 @@ import com.p000ison.dev.sqlapi.annotation.DatabaseColumnGetter;
 import com.p000ison.dev.sqlapi.annotation.DatabaseColumnSetter;
 import com.p000ison.dev.sqlapi.annotation.DatabaseTable;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.Validate;
 import org.json.simple.JSONObject;
 
 import java.util.Comparator;
@@ -43,6 +44,9 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 @DatabaseTable(name = "sc2_ranks")
 public class CraftRank implements Rank, TableObject {
+
+    public static final int MAX_NAME_LENGTH = 26, MAX_TAG_LENGTH = 16;
+
     private static final Map<java.lang.Integer, String> availablePermissions = new TreeMap<java.lang.Integer, String>(new Comparator<Integer>() {
         @Override
         public int compare(Integer o1, Integer o2) {
@@ -151,9 +155,10 @@ public class CraftRank implements Rank, TableObject {
         return null;
     }
 
-    @DatabaseColumnSetter(position = 2, databaseName = "name", lenght = 16)
+    @DatabaseColumnSetter(position = 2, databaseName = "name", lenght = CraftRank.MAX_NAME_LENGTH)
     public void setName(String name) {
         synchronized (nameLock) {
+            Validate.isTrue(name.length() <= MAX_NAME_LENGTH, "The rank name is too long!");
             this.name = name;
         }
     }
@@ -353,9 +358,10 @@ public class CraftRank implements Rank, TableObject {
     }
 
     @Override
-    @DatabaseColumnSetter(position = 1, databaseName = "tag", lenght = 16)
+    @DatabaseColumnSetter(position = 1, databaseName = "tag", lenght = CraftRank.MAX_TAG_LENGTH)
     public void setTag(String tag) {
         synchronized (nameLock) {
+            Validate.isTrue(tag.length() <= MAX_TAG_LENGTH, "The rank tag is too long!");
             this.tag = tag;
         }
     }

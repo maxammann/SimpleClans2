@@ -478,6 +478,8 @@ public interface Clan extends KDR, Comparable<Clan>, Balance, UpdateAble, Serial
      */
     Rank getRank(String tag);
 
+    Rank getRankByName(String name);
+
     /**
      * Turns the most important information about this clan into a string
      *

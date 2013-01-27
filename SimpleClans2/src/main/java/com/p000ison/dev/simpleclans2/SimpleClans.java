@@ -23,7 +23,6 @@ package com.p000ison.dev.simpleclans2;
 import com.p000ison.dev.simpleclans2.api.SCCore;
 import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.api.command.Command;
-import com.p000ison.dev.simpleclans2.api.rank.RankManager;
 import com.p000ison.dev.simpleclans2.clan.CraftClanManager;
 import com.p000ison.dev.simpleclans2.clan.ranks.CraftRankManager;
 import com.p000ison.dev.simpleclans2.clanplayer.CraftClanPlayerManager;
@@ -93,7 +92,7 @@ public class SimpleClans extends JavaPlugin implements SCCore {
     private CraftRequestManager requestManager;
     private CraftCommandManager commandManager;
     private DatabaseManager dataManager;
-    private RankManager rankManager;
+    private CraftRankManager rankManager;
     private TeleportManager teleportManager;
     private PreciousStonesSupport preciousStonesSupport;
     private SpoutSupport spoutSupport;
@@ -481,7 +480,7 @@ public class SimpleClans extends JavaPlugin implements SCCore {
     }
 
     @Override
-    public RankManager getRankManager() {
+    public CraftRankManager getRankManager() {
         return rankManager;
     }
 

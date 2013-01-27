@@ -22,6 +22,13 @@ package com.p000ison.dev.simpleclans2.clan.ranks;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.api.clan.Clan;
 import com.p000ison.dev.simpleclans2.api.rank.RankManager;
+import com.p000ison.dev.simpleclans2.language.Language;
+import com.p000ison.dev.simpleclans2.util.GeneralHelper;
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
+
+import java.text.MessageFormat;
+import java.util.Locale;
 
 /**
  * Represents a CraftRankManager
@@ -39,5 +46,55 @@ public class CraftRankManager implements RankManager {
 
         plugin.getDataManager().getDatabase().save(rank);
         return rank;
+    }
+
+    public boolean verifyRankTag(CommandSender reportTo, String tag) {
+        String cleanTag = ChatColor.stripColor(tag).toLowerCase(Locale.US);
+
+        if (cleanTag.length() > plugin.getSettingsManager().getMaxRankTagLength()) {
+            reportTo.sendMessage(ChatColor.RED + MessageFormat.format(Language.getTranslation("your.rank.tag.cannot.be.longer.than.characters"), plugin.getSettingsManager().getMaxTagLength()));
+            return false;
+        }
+
+        if (cleanTag.length() < plugin.getSettingsManager().getMinRankTagLength()) {
+            reportTo.sendMessage(ChatColor.RED + MessageFormat.format(Language.getTranslation("your.rank.tag.must.be.longer.than.characters"), plugin.getSettingsManager().getMinTagLength()));
+            return false;
+        }
+
+        if (GeneralHelper.containsColor(tag, '§', plugin.getSettingsManager().getDisallowedColors())) {
+            reportTo.sendMessage(ChatColor.RED + MessageFormat.format(Language.getTranslation("your.tag.cannot.contain.the.following.colors"), GeneralHelper.arrayToString(plugin.getSettingsManager().getDisallowedColors())));
+            return false;
+        }
+
+        if (plugin.getSettingsManager().isRankTagDisallowed(cleanTag)) {
+            reportTo.sendMessage(ChatColor.RED + Language.getTranslation("that.tag.name.is.disallowed"));
+            return false;
+        }
+
+        if (!cleanTag.matches("[0-9a-zA-Z]*")) {
+            reportTo.sendMessage(ChatColor.RED + Language.getTranslation("your.rank.tag.can.only.contain.letters.numbers.and.color.codes"));
+            return false;
+        }
+
+        return true;
+    }
+
+    public boolean verifyRankName(CommandSender reportTo, String name) {
+        if (ChatColor.stripColor(name).length() > plugin.getSettingsManager().getMaxRankNameLength()) {
+            reportTo.sendMessage(ChatColor.RED + MessageFormat.format(Language.getTranslation("your.rank.name.cannot.be.longer.than.characters"), plugin.getSettingsManager().getMaxTagLength()));
+            return false;
+        }
+
+        if (ChatColor.stripColor(name).length() < plugin.getSettingsManager().getMinRankNameLength()) {
+            reportTo.sendMessage(ChatColor.RED + MessageFormat.format(Language.getTranslation("your.rank.name.must.be.longer.than.characters"), plugin.getSettingsManager().getMinTagLength()));
+            return false;
+        }
+
+        if (name.contains("§")) {
+            reportTo.sendMessage(ChatColor.RED + Language.getTranslation("your.rank.name.cannot.contain.color.codes"));
+            return false;
+        }
+
+        return true;
     }
 }

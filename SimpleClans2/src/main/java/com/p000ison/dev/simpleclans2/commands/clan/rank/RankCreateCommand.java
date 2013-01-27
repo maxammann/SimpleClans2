@@ -74,9 +74,23 @@ public class RankCreateCommand extends GenericPlayerCommand {
             return;
         }
 
-        String name = GeneralHelper.arrayBoundsToString(2, args);
+        String name = ChatBlock.parseColors(GeneralHelper.arrayBoundsToString(2, args));
+        String tag = ChatBlock.parseColors(args[1]);
 
-        clan.addRank(plugin.getRankManager().createRank(clan, name, args[1], priority));
+        if (!plugin.getRankManager().verifyRankTag(player, tag)) {
+            return;
+        }
+
+        if (!plugin.getRankManager().verifyRankName(player, name)) {
+            return;
+        }
+
+        if (clan.getRank(tag) != null || clan.getRankByName(name) != null) {
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("rank.exists.already"));
+            return;
+        }
+
+        clan.addRank(plugin.getRankManager().createRank(clan, name, tag, priority));
         ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("rank.created", name));
     }
 }
