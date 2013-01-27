@@ -52,12 +52,12 @@ public class CraftRankManager implements RankManager {
         String cleanTag = ChatColor.stripColor(tag).toLowerCase(Locale.US);
 
         if (cleanTag.length() > plugin.getSettingsManager().getMaxRankTagLength()) {
-            reportTo.sendMessage(ChatColor.RED + MessageFormat.format(Language.getTranslation("your.rank.tag.cannot.be.longer.than.characters"), plugin.getSettingsManager().getMaxTagLength()));
+            reportTo.sendMessage(ChatColor.RED + MessageFormat.format(Language.getTranslation("your.rank.tag.cannot.be.longer.than.characters"), plugin.getSettingsManager().getMaxRankTagLength()));
             return false;
         }
 
         if (cleanTag.length() < plugin.getSettingsManager().getMinRankTagLength()) {
-            reportTo.sendMessage(ChatColor.RED + MessageFormat.format(Language.getTranslation("your.rank.tag.must.be.longer.than.characters"), plugin.getSettingsManager().getMinTagLength()));
+            reportTo.sendMessage(ChatColor.RED + MessageFormat.format(Language.getTranslation("your.rank.tag.must.be.longer.than.characters"), plugin.getSettingsManager().getMinRankTagLength()));
             return false;
         }
 
@@ -81,12 +81,12 @@ public class CraftRankManager implements RankManager {
 
     public boolean verifyRankName(CommandSender reportTo, String name) {
         if (ChatColor.stripColor(name).length() > plugin.getSettingsManager().getMaxRankNameLength()) {
-            reportTo.sendMessage(ChatColor.RED + MessageFormat.format(Language.getTranslation("your.rank.name.cannot.be.longer.than.characters"), plugin.getSettingsManager().getMaxTagLength()));
+            reportTo.sendMessage(ChatColor.RED + MessageFormat.format(Language.getTranslation("your.rank.name.cannot.be.longer.than.characters"), plugin.getSettingsManager().getMaxRankNameLength()));
             return false;
         }
 
         if (ChatColor.stripColor(name).length() < plugin.getSettingsManager().getMinRankNameLength()) {
-            reportTo.sendMessage(ChatColor.RED + MessageFormat.format(Language.getTranslation("your.rank.name.must.be.longer.than.characters"), plugin.getSettingsManager().getMinTagLength()));
+            reportTo.sendMessage(ChatColor.RED + MessageFormat.format(Language.getTranslation("your.rank.name.must.be.longer.than.characters"), plugin.getSettingsManager().getMinRankNameLength()));
             return false;
         }
 

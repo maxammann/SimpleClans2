@@ -233,12 +233,12 @@ public class CraftClanManager implements ClanManager {
     public boolean verifyClanName(CommandSender reportTo, String name, boolean mod) {
         if (!mod) {
             if (ChatColor.stripColor(name).length() > plugin.getSettingsManager().getMaxNameLength()) {
-                reportTo.sendMessage(ChatColor.RED + MessageFormat.format(Language.getTranslation("your.clan.name.cannot.be.longer.than.characters"), plugin.getSettingsManager().getMaxTagLength()));
+                reportTo.sendMessage(ChatColor.RED + MessageFormat.format(Language.getTranslation("your.clan.name.cannot.be.longer.than.characters"), plugin.getSettingsManager().getMaxNameLength()));
                 return false;
             }
 
             if (ChatColor.stripColor(name).length() < plugin.getSettingsManager().getMinNameLength()) {
-                reportTo.sendMessage(ChatColor.RED + MessageFormat.format(Language.getTranslation("your.clan.name.must.be.longer.than.characters"), plugin.getSettingsManager().getMinTagLength()));
+                reportTo.sendMessage(ChatColor.RED + MessageFormat.format(Language.getTranslation("your.clan.name.must.be.longer.than.characters"), plugin.getSettingsManager().getMinNameLength()));
                 return false;
             }
         }
