@@ -125,6 +125,10 @@ public class SimpleClansChat extends JavaPlugin {
             Player player = (Player) sender;
 
             ClanPlayer cp = this.getClanPlayerManager().getClanPlayer(player);
+            if (cp == null) {
+                player.sendMessage("You need to be a member of a clan!");
+                return true;
+            }
             PlayerFlags flags = this.getClanPlayerManager().getClanPlayer(player).getFlags();
             String cmd = command.getName();
             if (cmd.equalsIgnoreCase(".")) {
@@ -365,7 +369,7 @@ public class SimpleClansChat extends JavaPlugin {
     }
 
     private boolean isChannelDisabled(ClanPlayer player, Channel channel) {
-        if (player.getFlags() == null) {
+        if (player == null || player.getFlags() == null) {
             return false;
         }
         Set<Byte> disabled = player.getFlags().getSet("disabledChannels");
