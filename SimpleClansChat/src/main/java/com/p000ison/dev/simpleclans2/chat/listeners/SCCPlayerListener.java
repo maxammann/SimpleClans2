@@ -56,7 +56,7 @@ public class SCCPlayerListener implements Listener {
             return;
         }
 
-        event.setFormat(String.format(out, player.getDisplayName(), event.getMessage()));
+        event.setFormat(out);
 
         plugin.removeRetrievers(event.getRecipients(), cp, player);
     }

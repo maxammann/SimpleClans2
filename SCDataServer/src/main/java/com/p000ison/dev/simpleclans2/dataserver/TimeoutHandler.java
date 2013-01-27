@@ -54,6 +54,12 @@ public class TimeoutHandler implements Runnable {
     public void run() {
 
         while (true) {
+            try {
+                Thread.sleep(50);
+            } catch (InterruptedException e) {
+                Logging.debug(e);
+            }
+
             if (channels.isEmpty()) {
                 continue;
             }
@@ -66,12 +72,6 @@ public class TimeoutHandler implements Runnable {
                     channel.getGoal().run();
                     it.remove();
                 }
-            }
-
-            try {
-                Thread.sleep(1);
-            } catch (InterruptedException e) {
-                Logging.debug(e);
             }
         }
     }
