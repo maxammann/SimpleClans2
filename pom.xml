@@ -12,8 +12,8 @@
         <module>SimpleClans2</module>
         <module>SimpleClansChat</module>
         <module>Test</module>
-        <module>Distribution</module>
         <module>SCDataServer</module>
+        <module>Distribution</module>
     </modules>
 
     <name>SimpleClans</name>
