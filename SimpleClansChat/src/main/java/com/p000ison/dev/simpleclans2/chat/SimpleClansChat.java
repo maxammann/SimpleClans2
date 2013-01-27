@@ -365,7 +365,6 @@ public class SimpleClansChat extends JavaPlugin {
     }
 
     private boolean isChannelDisabled(ClanPlayer player, Channel channel) {
-        System.out.println(player.getFlags().<Byte>getSet("disabledChannels"));
         return player.getFlags() != null && player.getFlags().<Byte>getSet("disabledChannels").contains(channel.getId());
     }
 
