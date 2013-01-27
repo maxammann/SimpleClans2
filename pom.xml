@@ -13,6 +13,7 @@
         <module>SimpleClansChat</module>
         <module>Test</module>
         <module>Distribution</module>
+        <module>SCDataServer</module>
     </modules>
 
     <name>SimpleClans</name>
