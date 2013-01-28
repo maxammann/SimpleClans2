@@ -117,8 +117,6 @@ public class LanguageMap {
 
             output.flush();
             output.close();
-        } catch (IOException e) {
-            throw e;
         } finally {
             if (output != null) {
                 output.flush();

@@ -25,12 +25,16 @@ import com.p000ison.dev.simpleclans2.api.clan.Clan;
 import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayerManager;
 import com.p000ison.dev.simpleclans2.api.events.ClanPlayerCreateEvent;
+import com.p000ison.dev.simpleclans2.util.Logging;
+import com.p000ison.dev.sqlapi.exception.QueryException;
 import org.bukkit.entity.Player;
 
+import java.sql.SQLException;
 import java.util.Collections;
 import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
 
 /**
  * Represents a ClanPlayerManager
@@ -76,7 +80,20 @@ public class CraftClanPlayerManager implements ClanPlayerManager {
         clanPlayer.updateLastSeen();
         ((CraftClanPlayer) clanPlayer).setJoinTime(System.currentTimeMillis());
 
-        plugin.getDataManager().getDatabase().save((CraftClanPlayer) clanPlayer);
+        try {
+            plugin.getDataManager().getDatabase().save((CraftClanPlayer) clanPlayer);
+        } catch (QueryException e) {
+            Throwable cause = e.getCause();
+
+            if (cause instanceof SQLException) {
+                if (cause.getMessage().toLowerCase().contains("duplicate") || cause.getMessage().toLowerCase().contains("constraint")) {
+                    Logging.debug(Level.SEVERE, "**********************************\n" +
+                            "Failed at inserting player because it already exists! Please follow the instructions on the jenkins page or on the devbukkit page else your data may get corrupted!" +
+                            "\n**********************************");
+                    return null;
+                }
+            }
+        }
         players.add(clanPlayer);
 
         clanPlayer.update();

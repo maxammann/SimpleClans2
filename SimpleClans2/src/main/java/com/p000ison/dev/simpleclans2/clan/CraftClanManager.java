@@ -27,15 +27,19 @@ import com.p000ison.dev.simpleclans2.api.clan.ClanManager;
 import com.p000ison.dev.simpleclans2.api.events.ClanCreateEvent;
 import com.p000ison.dev.simpleclans2.language.Language;
 import com.p000ison.dev.simpleclans2.util.GeneralHelper;
+import com.p000ison.dev.simpleclans2.util.Logging;
+import com.p000ison.dev.sqlapi.exception.QueryException;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
+import java.sql.SQLException;
 import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
 
 /**
  * The ClanManager handels everything with clans.
@@ -96,7 +100,21 @@ public class CraftClanManager implements ClanManager {
 
         clan.updateLastAction();
         ((CraftClan) clan).setFoundedTime(System.currentTimeMillis());
-        plugin.getDataManager().getDatabase().save((CraftClan) clan);
+        try {
+            plugin.getDataManager().getDatabase().save((CraftClan) clan);
+        } catch (QueryException e) {
+            Throwable cause = e.getCause();
+
+            if (cause instanceof SQLException) {
+                if (cause.getMessage().toLowerCase().contains("duplicate") || cause.getMessage().toLowerCase().contains("constraint")) {
+                    Logging.debug(Level.SEVERE, "**********************************\n" +
+                            "Failed at inserting clan because it already exists! Please follow the instructions on the jenkins page or on the devbukkit page else your data may get corrupted!" +
+                            "\n**********************************");
+                    return null;
+                }
+            }
+        }
+
         clan.update();
         clans.add(clan);
         return clan;
