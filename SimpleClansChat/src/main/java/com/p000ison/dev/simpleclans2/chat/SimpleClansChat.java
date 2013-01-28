@@ -353,6 +353,9 @@ public class SimpleClansChat extends JavaPlugin {
                             players.remove();
                         }
                     }
+                    break;
+                case GLOBAL:
+                    break;
             }
         }
 

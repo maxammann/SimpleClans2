@@ -78,12 +78,21 @@ public class PHPConnection {
      * @throws IOException
      */
     public String read() throws IOException {
-        final BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), Charset.forName("UTF-8")));
-        final StringBuilder incoming = new StringBuilder();
+        BufferedReader reader = null;
+        StringBuilder incoming;
+        try {
+            reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), Charset.forName("UTF-8")));
+            incoming = new StringBuilder();
 
-        String response;
-        while ((response = reader.readLine()) != null) {
-            incoming.append(response);
+            String response;
+            while ((response = reader.readLine()) != null) {
+                incoming.append(response);
+            }
+        } catch (IOException e) {
+            if (reader != null) {
+                reader.close();
+            }
+            throw e;
         }
 
         return incoming.toString();

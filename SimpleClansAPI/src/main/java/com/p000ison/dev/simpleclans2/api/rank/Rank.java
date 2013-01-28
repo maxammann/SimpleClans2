@@ -21,12 +21,13 @@ package com.p000ison.dev.simpleclans2.api.rank;
 
 import com.p000ison.dev.simpleclans2.api.UpdateAble;
 
+import java.io.Serializable;
 import java.util.Map;
 
 /**
  *
  */
-public interface Rank extends Comparable<Rank>, UpdateAble {
+public interface Rank extends Comparable<Rank>, UpdateAble, Serializable {
 
     String removePermission(String permission);
 

@@ -25,6 +25,7 @@ import com.p000ison.dev.simpleclans2.api.Balance;
  * Represents a DepositCommand
  */
 public class BankAccount implements Balance {
+    private static final long serialVersionUID = 6122101277174747202L;
     private double balance;
 
     public static final double MAX_BALANCE = 10E20;

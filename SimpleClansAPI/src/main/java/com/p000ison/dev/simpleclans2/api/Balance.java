@@ -19,10 +19,12 @@
 
 package com.p000ison.dev.simpleclans2.api;
 
+import java.io.Serializable;
+
 /**
  * If a object implements this, you can deposit money to the object or withdraw. Mostly this are players or organizations.
  */
-public interface Balance {
+public interface Balance extends Serializable {
 
     /**
      * Withdraws money from a account for example. Please use only positive values!

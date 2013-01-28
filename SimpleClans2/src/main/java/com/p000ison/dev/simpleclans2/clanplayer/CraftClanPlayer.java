@@ -54,6 +54,7 @@ import java.util.concurrent.atomic.AtomicLong;
 @DatabaseTable(name = "sc2_players")
 public class CraftClanPlayer implements ClanPlayer, TableObject {
 
+    private static final long serialVersionUID = 4306607277936293741L;
     private transient SimpleClans plugin;
 
     private PlayerFlags flags;
@@ -656,11 +657,6 @@ public class CraftClanPlayer implements ClanPlayer, TableObject {
 
         int rankId = Integer.valueOf(json.substring(1, json.length() - 1));
         this.rank = getClan().getRank(rankId);
-    }
-
-    public static void main(String[] args) {
-        String json = "";
-        System.out.println(Integer.valueOf(json.substring(1, json.length() - 1)));
     }
 
     @DatabaseColumnGetter(databaseName = "ranks")

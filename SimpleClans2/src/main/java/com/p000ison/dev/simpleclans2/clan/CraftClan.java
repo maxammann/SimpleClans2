@@ -99,7 +99,7 @@ public class CraftClan implements Clan, TableObject, UpdateAble {
      *
      * @param plugin The plugin
      */
-    public CraftClan(SimpleClans plugin) {
+    public CraftClan( SimpleClans plugin) {
         flags = new CraftClanFlags();
         this.plugin = plugin;
     }

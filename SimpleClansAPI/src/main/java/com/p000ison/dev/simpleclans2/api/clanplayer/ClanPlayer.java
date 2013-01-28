@@ -29,13 +29,14 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
 /**
  *
  */
-public interface ClanPlayer extends KDR, Balance, UpdateAble {
+public interface ClanPlayer extends KDR, Balance, UpdateAble, Serializable {
     /**
      * Returns the id of the clan the player is in
      *

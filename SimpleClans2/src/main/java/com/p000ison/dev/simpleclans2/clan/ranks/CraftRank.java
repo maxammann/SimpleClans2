@@ -48,6 +48,7 @@ public class CraftRank implements Rank, TableObject {
     public static final int MAX_NAME_LENGTH = 26, MAX_TAG_LENGTH = 16;
 
     private static final Map<java.lang.Integer, String> availablePermissions = new TreeMap<java.lang.Integer, String>(new Comparator<Integer>() {
+
         @Override
         public int compare(Integer o1, Integer o2) {
             return o1.compareTo(o2);
