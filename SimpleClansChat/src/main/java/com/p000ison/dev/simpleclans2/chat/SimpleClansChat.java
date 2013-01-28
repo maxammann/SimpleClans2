@@ -118,7 +118,6 @@ public class SimpleClansChat extends JavaPlugin {
         return (ChatCore) plugin;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player) {
@@ -145,9 +144,9 @@ public class SimpleClansChat extends JavaPlugin {
                     set.add(Channel.GLOBAL.getId());
                     sender.sendMessage("You turned the global chat on!");
                 } else if (args[0].equalsIgnoreCase("off")) {
-                    Set set = flags.getSet("disabledChannels");
+                    Set<Byte> set = flags.getSet("disabledChannels");
                     if (set == null) {
-                        set = new HashSet();
+                        set = new HashSet<Byte>();
                         flags.set("disabledChannels", set);
                     }
                     set.remove(Channel.GLOBAL.getId());
@@ -314,14 +313,16 @@ public class SimpleClansChat extends JavaPlugin {
         return format;
     }
 
-    public void removeRetrievers(Set<Player> retrievers, ClanPlayer cp, Player player) {
+    public String removeRetrievers(Set<Player> retrievers, ClanPlayer cp, Player player) {
         if (cp == null || cp.getFlags() == null) {
-            return;
+            return null;
         }
 
         byte flag = cp.getFlags().getByte("channel");
 
         Iterator<Player> players;
+
+        String format = null;
 
         if (flag != -1) {
 
@@ -330,7 +331,7 @@ public class SimpleClansChat extends JavaPlugin {
             switch (channel) {
                 case ALLY:
                     //format for allies
-                    String formattedAlly = formatComplete(getSettingsManager().getAllyChannelFormat(), player, cp);
+                    format = formatComplete(getSettingsManager().getAllyChannelFormat(), player, cp);
 
                     players = retrievers.iterator();
                     while (players.hasNext()) {
@@ -339,10 +340,11 @@ public class SimpleClansChat extends JavaPlugin {
                             players.remove();
                         }
                     }
+                    break;
                 case CLAN:
                     //format for clan
 
-                    String formattedClan = formatComplete(getSettingsManager().getClanChannelFormat(), player, cp);
+                    format = formatComplete(getSettingsManager().getClanChannelFormat(), player, cp);
 
                     players = retrievers.iterator();
                     while (players.hasNext()) {
@@ -361,6 +363,8 @@ public class SimpleClansChat extends JavaPlugin {
                 players.remove();
             }
         }
+
+        return format;
     }
 
 

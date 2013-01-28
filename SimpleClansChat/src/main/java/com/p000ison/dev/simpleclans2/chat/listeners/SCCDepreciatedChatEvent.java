@@ -41,22 +41,24 @@ public class SCCDepreciatedChatEvent implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerChat(PlayerChatEvent event) {
-        String out = null;
+        String format;
         Player player = event.getPlayer();
         ClanPlayer clanPlayer = plugin.getClanPlayerManager().getClanPlayer(player);
 
-        if (this.plugin.getSettingsManager().isCompatibilityMode()) {
-            out = plugin.formatCompatibility(event.getFormat(), player.getName());
-        } else if (this.plugin.getSettingsManager().isCompleteMode()) {
-            out = plugin.formatComplete(plugin.getSettingsManager().getCompleteModeFormat(), player, clanPlayer);
+        format = plugin.removeRetrievers(event.getRecipients(), clanPlayer, player);
+
+        if (format == null) {
+            if (this.plugin.getSettingsManager().isCompatibilityMode()) {
+                format = plugin.formatCompatibility(event.getFormat(), player.getName());
+            } else if (this.plugin.getSettingsManager().isCompleteMode()) {
+                format = plugin.formatComplete(plugin.getSettingsManager().getCompleteModeFormat(), player, clanPlayer);
+            }
         }
 
-        if (out == null) {
+        if (format == null) {
             return;
         }
 
-        event.setFormat(out);
-
-        plugin.removeRetrievers(event.getRecipients(), clanPlayer, player);
+        event.setFormat(format);
     }
 }

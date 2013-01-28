@@ -40,24 +40,24 @@ public class SCCPlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerChat(AsyncPlayerChatEvent event) {
+        String format;
         Player player = event.getPlayer();
+        ClanPlayer clanPlayer = plugin.getClanPlayerManager().getClanPlayer(player);
 
-        ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
+        format = plugin.removeRetrievers(event.getRecipients(), clanPlayer, player);
 
-        String out = null;
-
-        if (this.plugin.getSettingsManager().isCompatibilityMode()) {
-            out = plugin.formatCompatibility(event.getFormat(), player.getName());
-        } else if (this.plugin.getSettingsManager().isCompleteMode()) {
-            out = plugin.formatComplete(plugin.getSettingsManager().getCompleteModeFormat(), player, cp);
+        if (format == null) {
+            if (this.plugin.getSettingsManager().isCompatibilityMode()) {
+                format = plugin.formatCompatibility(event.getFormat(), player.getName());
+            } else if (this.plugin.getSettingsManager().isCompleteMode()) {
+                format = plugin.formatComplete(plugin.getSettingsManager().getCompleteModeFormat(), player, clanPlayer);
+            }
         }
 
-        if (out == null) {
+        if (format == null) {
             return;
         }
 
-        event.setFormat(out);
-
-        plugin.removeRetrievers(event.getRecipients(), cp, player);
+        event.setFormat(format);
     }
 }
