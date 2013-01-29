@@ -180,6 +180,7 @@ public class CraftRequestManager implements RequestManager {
         }
 
         Iterator<Request> it = requests.iterator();
+        ClanPlayer clanPlayer = plugin.getClanPlayerManager().getAnyClanPlayer(player);
 
         while (it.hasNext()) {
             Request request = it.next();
@@ -188,7 +189,6 @@ public class CraftRequestManager implements RequestManager {
                 it.remove();
                 return;
             } else if (request.isAcceptor(player)) {
-                ClanPlayer clanPlayer = plugin.getClanPlayerManager().getClanPlayer(player);
                 if (request instanceof SingleRequest) {
                     this.vote(clanPlayer, Result.DENY);
                 } else if (request instanceof MultipleRequest) {
