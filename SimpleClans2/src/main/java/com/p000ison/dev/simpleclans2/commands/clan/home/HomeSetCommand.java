@@ -73,7 +73,7 @@ public class HomeSetCommand extends GenericPlayerCommand {
                                 return;
                             }
 
-                            if (SimpleClans.hasEconomy() && plugin.getSettingsManager().isPurchaseSetTeleport() && !cp.withdraw(plugin.getSettingsManager().getPurchaseTeleportPrice())) {
+                            if (SimpleClans.hasEconomy() && plugin.getSettingsManager().isPurchaseSetTeleport() && !cp.withdraw(plugin.getSettingsManager().getPurchaseTeleportSetPrice())) {
                                 ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("not.sufficient.money"));
                                 return;
                             }

@@ -64,4 +64,6 @@ public interface SCCore {
      * @return The command manager or SimpleClans.
      */
     CommandManager getCommandManager();
+
+    String getTranslation(String key, Object... args);
 }

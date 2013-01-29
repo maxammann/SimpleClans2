@@ -21,14 +21,17 @@ package com.p000ison.dev.simpleclans2.language;
 
 import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.util.Logging;
+import org.bukkit.ChatColor;
 
 import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.Charset;
+import java.text.MessageFormat;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.logging.Level;
 
 /**
  * Represents a LanguageMap
@@ -215,5 +218,33 @@ public class LanguageMap {
 
     public String getValue(String key) {
         return map.get(key);
+    }
+
+    public String getTranslation(String key, Object... args) {
+        String bundleOutput = getValue(key);
+
+        if (bundleOutput == null) {
+            Logging.debug(Level.WARNING, ChatColor.RED + "The language for the key %s was not found!", key);
+
+            if (defaultMap != null) {
+                String defaultBundleOutput = defaultMap.getValue(key);
+                if (defaultBundleOutput == null) {
+                    Logging.debug(Level.WARNING, ChatColor.RED + "The language for the key %s was not found in the default bundle!", key);
+                    return "Error!";
+                }
+
+                if (args.length > 0) {
+                    return MessageFormat.format(defaultBundleOutput, args);
+                }
+                return defaultBundleOutput;
+            }
+
+            return "Error!";
+        }
+
+        if (args.length > 0) {
+            return MessageFormat.format(bundleOutput, args);
+        }
+        return bundleOutput;
     }
 }
