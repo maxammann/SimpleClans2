@@ -25,7 +25,7 @@ import com.p000ison.dev.simpleclans2.api.clan.Clan;
 import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayerManager;
 import com.p000ison.dev.simpleclans2.api.events.ClanPlayerCreateEvent;
-import com.p000ison.dev.simpleclans2.util.Logging;
+import com.p000ison.dev.simpleclans2.api.logging.Logging;
 import com.p000ison.dev.sqlapi.exception.QueryException;
 import org.bukkit.entity.Player;
 

@@ -41,4 +41,8 @@ public abstract class GenericPlayerCommand extends com.p000ison.dev.simpleclans2
 
     @Override
     public abstract String getMenu(ClanPlayer clanPlayer);
+
+    protected int[] getBoundings(int completeSize, int page) {
+        return plugin.getCommandManager().getBoundings(completeSize, page);
+    }
 }

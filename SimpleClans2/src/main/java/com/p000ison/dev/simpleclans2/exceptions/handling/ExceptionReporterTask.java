@@ -19,7 +19,7 @@
 
 package com.p000ison.dev.simpleclans2.exceptions.handling;
 
-import com.p000ison.dev.simpleclans2.util.Logging;
+import com.p000ison.dev.simpleclans2.api.logging.Logging;
 import org.json.simple.JSONArray;
 
 import java.io.IOException;

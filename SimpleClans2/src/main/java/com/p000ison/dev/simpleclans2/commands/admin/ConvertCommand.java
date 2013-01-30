@@ -20,10 +20,10 @@
 package com.p000ison.dev.simpleclans2.commands.admin;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
+import com.p000ison.dev.simpleclans2.api.logging.Logging;
 import com.p000ison.dev.simpleclans2.commands.GenericConsoleCommand;
 import com.p000ison.dev.simpleclans2.converter.Converter;
 import com.p000ison.dev.simpleclans2.language.Language;
-import com.p000ison.dev.simpleclans2.util.Logging;
 import com.p000ison.dev.sqlapi.DatabaseConfiguration;
 import com.p000ison.dev.sqlapi.DatabaseManager;
 import com.p000ison.dev.sqlapi.exception.DatabaseConnectionException;

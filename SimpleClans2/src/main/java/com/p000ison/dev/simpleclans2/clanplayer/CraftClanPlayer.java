@@ -103,7 +103,6 @@ public class CraftClanPlayer implements ClanPlayer, TableObject {
     }
 
     @DatabaseColumnSetter(position = 3, databaseName = "clan", defaultValue = "-1")
-    @SuppressWarnings("unused")
     private void setClanId(long id) {
         if (id <= 0) {
             this.clan = null;

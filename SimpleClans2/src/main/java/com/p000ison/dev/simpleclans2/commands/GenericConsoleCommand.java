@@ -37,4 +37,8 @@ public abstract class GenericConsoleCommand extends com.p000ison.dev.simpleclans
 
     @Override
     public abstract String getMenu();
+
+    protected int[] getBoundings(int completeSize, int page) {
+        return plugin.getCommandManager().getBoundings(completeSize, page);
+    }
 }

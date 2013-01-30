@@ -33,8 +33,9 @@ public class SimpleClansLogger extends ReportableLogger {
 
     private static SimpleClans plugin;
 
-    public SimpleClansLogger(Logger logger) {
+    public SimpleClansLogger(Logger logger, SimpleClans plugin) {
         super(logger);
+        SimpleClansLogger.plugin = plugin;
     }
 
     @Override

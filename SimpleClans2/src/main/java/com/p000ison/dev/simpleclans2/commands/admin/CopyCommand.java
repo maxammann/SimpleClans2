@@ -21,6 +21,7 @@ package com.p000ison.dev.simpleclans2.commands.admin;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
+import com.p000ison.dev.simpleclans2.api.logging.Logging;
 import com.p000ison.dev.simpleclans2.clan.CraftClan;
 import com.p000ison.dev.simpleclans2.clan.ranks.CraftRank;
 import com.p000ison.dev.simpleclans2.clanplayer.CraftClanPlayer;
@@ -28,7 +29,6 @@ import com.p000ison.dev.simpleclans2.commands.GenericConsoleCommand;
 import com.p000ison.dev.simpleclans2.database.BBTable;
 import com.p000ison.dev.simpleclans2.database.statements.KillStatement;
 import com.p000ison.dev.simpleclans2.language.Language;
-import com.p000ison.dev.simpleclans2.util.Logging;
 import com.p000ison.dev.sqlapi.*;
 import com.p000ison.dev.sqlapi.exception.DatabaseConnectionException;
 import com.p000ison.dev.sqlapi.jbdc.JBDCDatabase;

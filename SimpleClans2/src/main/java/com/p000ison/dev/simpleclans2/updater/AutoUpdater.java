@@ -19,8 +19,8 @@
 
 package com.p000ison.dev.simpleclans2.updater;
 
+import com.p000ison.dev.simpleclans2.api.logging.Logging;
 import com.p000ison.dev.simpleclans2.util.DateHelper;
-import com.p000ison.dev.simpleclans2.util.Logging;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 

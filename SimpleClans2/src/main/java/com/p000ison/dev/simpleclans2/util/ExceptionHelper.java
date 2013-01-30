@@ -19,6 +19,7 @@
 
 package com.p000ison.dev.simpleclans2.util;
 
+import com.p000ison.dev.simpleclans2.api.logging.Logging;
 import org.bukkit.ChatColor;
 
 import java.util.logging.Level;

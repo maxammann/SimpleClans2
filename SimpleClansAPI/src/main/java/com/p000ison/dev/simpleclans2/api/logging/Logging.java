@@ -77,4 +77,9 @@ public class Logging {
     public static void debug(Throwable ex, boolean reportException, String msg, Object... args) {
         getDefaultLogger().debug(ex, reportException, msg, args);
     }
+
+    public static void clear() {
+        apiLogger.clear();
+        defaultLogger.clear();
+    }
 }

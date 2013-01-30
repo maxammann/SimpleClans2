@@ -19,7 +19,7 @@
 
 package com.p000ison.dev.simpleclans2.support;
 
-import com.p000ison.dev.simpleclans2.util.Logging;
+import com.p000ison.dev.simpleclans2.api.logging.Logging;
 import net.sacredlabyrinth.Phaed.PreciousStones.FieldFlag;
 import net.sacredlabyrinth.Phaed.PreciousStones.PreciousStones;
 import net.sacredlabyrinth.Phaed.PreciousStones.vectors.Field;

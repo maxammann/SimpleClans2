@@ -22,6 +22,7 @@ package com.p000ison.dev.simpleclans2.database;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.api.clan.Clan;
+import com.p000ison.dev.simpleclans2.api.logging.Logging;
 import com.p000ison.dev.simpleclans2.clan.CraftClan;
 import com.p000ison.dev.simpleclans2.clan.ranks.CraftRank;
 import com.p000ison.dev.simpleclans2.clanplayer.CraftClanPlayer;
@@ -29,7 +30,6 @@ import com.p000ison.dev.simpleclans2.database.response.Response;
 import com.p000ison.dev.simpleclans2.database.response.ResponseTask;
 import com.p000ison.dev.simpleclans2.database.statements.KillStatement;
 import com.p000ison.dev.simpleclans2.util.DateHelper;
-import com.p000ison.dev.simpleclans2.util.Logging;
 import com.p000ison.dev.simpleclans2.util.comparators.ReverseIntegerComparator;
 import com.p000ison.dev.sqlapi.Database;
 import com.p000ison.dev.sqlapi.DatabaseConfiguration;
@@ -64,7 +64,7 @@ public class DatabaseManager {
     public DatabaseManager(SimpleClans plugin) throws DatabaseConnectionException {
         this.plugin = plugin;
 
-        Database.setLogger(Logging.getInstance());
+        Database.setLogger(Logging.getDefaultLogger().getLogger());
 
         DatabaseConfiguration config = plugin.getSettingsManager().getDatabaseConfiguration();
         if (config instanceof MySQLConfiguration) {

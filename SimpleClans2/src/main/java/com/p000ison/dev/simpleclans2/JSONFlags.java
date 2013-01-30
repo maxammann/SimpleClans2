@@ -21,6 +21,7 @@
 package com.p000ison.dev.simpleclans2;
 
 import com.p000ison.dev.simpleclans2.api.Flags;
+import com.p000ison.dev.simpleclans2.api.logging.Logging;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
@@ -85,7 +86,7 @@ public class JSONFlags implements Flags {
                 }
 
             } catch (Exception ex) {
-//                Logging.debug(ex, true, "Failed at loading the flags");
+                Logging.debug(ex, true, "Failed at loading the flags");
             }
         }
     }

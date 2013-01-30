@@ -23,6 +23,7 @@ package com.p000ison.dev.simpleclans2;
 import com.p000ison.dev.simpleclans2.api.SCCore;
 import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.api.command.Command;
+import com.p000ison.dev.simpleclans2.api.logging.Logging;
 import com.p000ison.dev.simpleclans2.clan.CraftClanManager;
 import com.p000ison.dev.simpleclans2.clan.ranks.CraftRankManager;
 import com.p000ison.dev.simpleclans2.clanplayer.CraftClanPlayerManager;
@@ -59,7 +60,7 @@ import com.p000ison.dev.simpleclans2.support.PreciousStonesSupport;
 import com.p000ison.dev.simpleclans2.support.SpoutSupport;
 import com.p000ison.dev.simpleclans2.teleportation.TeleportManager;
 import com.p000ison.dev.simpleclans2.updater.AutoUpdater;
-import com.p000ison.dev.simpleclans2.util.Logging;
+import com.p000ison.dev.simpleclans2.util.SimpleClansLogger;
 import com.p000ison.dev.sqlapi.exception.DatabaseConnectionException;
 import com.p000ison.dev.sqlapi.jbdc.JBDCDatabase;
 import com.p000ison.dev.sqlapi.mysql.MySQLConfiguration;
@@ -106,7 +107,8 @@ public class SimpleClans extends JavaPlugin implements SCCore {
 
         try {
             exceptionReporterTask = new ExceptionReporterTask();
-            Logging.setInstance(getLogger(), this);
+            Logging.setAPILogger(getLogger());
+            Logging.setDefaultLogger(new SimpleClansLogger(getLogger(), this));
 
             //we need to load the settingsManager already here, because we need the data!
             settingsManager = new SettingsManager(this);
@@ -256,7 +258,7 @@ public class SimpleClans extends JavaPlugin implements SCCore {
         }
 
         Language.clear();
-        Logging.close();
+        Logging.clear();
     }
 
     private void registerEvents() {
