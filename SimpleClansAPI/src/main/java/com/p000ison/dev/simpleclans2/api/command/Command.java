@@ -43,6 +43,8 @@ public interface Command {
 
     boolean hasPermission(Permissible sender);
 
+    void setPermission(String... permissions);
+
     void setArgumentRange(int min, int max);
 
     public static enum Type {
@@ -81,4 +83,6 @@ public interface Command {
     }
 
     Type getType();
+
+    void setType(Type type);
 }

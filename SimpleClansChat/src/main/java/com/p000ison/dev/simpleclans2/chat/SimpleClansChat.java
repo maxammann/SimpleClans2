@@ -20,13 +20,14 @@
 package com.p000ison.dev.simpleclans2.chat;
 
 import com.dthielke.herochat.Herochat;
+import com.p000ison.dev.simpleclans2.api.Flags;
 import com.p000ison.dev.simpleclans2.api.SCCore;
 import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.api.clan.Clan;
 import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayerManager;
-import com.p000ison.dev.simpleclans2.api.clanplayer.PlayerFlags;
 import com.p000ison.dev.simpleclans2.api.rank.Rank;
+import com.p000ison.dev.simpleclans2.chat.commands.AllyChannelCommand;
 import com.p000ison.dev.simpleclans2.chat.listeners.SCCDepreciatedChatEvent;
 import com.p000ison.dev.simpleclans2.chat.listeners.SCCHeroChatListener;
 import com.p000ison.dev.simpleclans2.chat.listeners.SCCPlayerListener;
@@ -35,8 +36,6 @@ import net.krinsoft.chat.ChatCore;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
@@ -83,6 +82,8 @@ public class SimpleClansChat extends JavaPlugin {
 
         }
 
+        core.getCommandManager().addCommand(new AllyChannelCommand("AllyChannel", core));
+
         setupPermissions();
         setupChat();
     }
@@ -118,76 +119,46 @@ public class SimpleClansChat extends JavaPlugin {
         return (ChatCore) plugin;
     }
 
-    @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (sender instanceof Player) {
-            Player player = (Player) sender;
-
-            ClanPlayer cp = this.getClanPlayerManager().getClanPlayer(player);
-            if (cp == null) {
-                player.sendMessage("You need to be a member of a clan!");
-                return true;
-            }
-            PlayerFlags flags = this.getClanPlayerManager().getClanPlayer(player).getFlags();
-            String cmd = command.getName();
-            if (cmd.equalsIgnoreCase(".")) {
-                handleChannelCommand(Channel.CLAN, flags, args, player);
-            } else if (cmd.equalsIgnoreCase("ally")) {
-                handleChannelCommand(Channel.ALLY, flags, args, player);
-            } else if (cmd.equalsIgnoreCase("global")) {
-                if (args[0].equalsIgnoreCase("on")) {
-                    Set<Byte> set = flags.getSet("disabledChannels");
-                    if (set == null) {
-                        set = new HashSet<Byte>();
-                        flags.set("disabledChannels", set);
-                    }
-                    set.add(Channel.GLOBAL.getId());
-                    sender.sendMessage("You turned the global chat on!");
-                } else if (args[0].equalsIgnoreCase("off")) {
-                    Set<Byte> set = flags.getSet("disabledChannels");
-                    if (set == null) {
-                        set = new HashSet<Byte>();
-                        flags.set("disabledChannels", set);
-                    }
-                    set.remove(Channel.GLOBAL.getId());
-                    sender.sendMessage("You turned the global chat off!");
-                } else {
-                    player.sendMessage("Command not found!");
-                }
-            }
-
-            cp.update();
+    public static void addDisabledChannel(ClanPlayer clanPlayer, Channel channel, boolean removeFromDisabled) {
+        if (clanPlayer == null) {
+            return;
         }
 
-        return true;
+        Flags flags = clanPlayer.getFlags();
+
+        if (flags == null) {
+            return;
+        }
+
+        Set<Byte> set = flags.getSet("disabledChannels");
+
+        if (set == null) {
+            set = new HashSet<Byte>();
+            flags.set("disabledChannels", set);
+        }
+
+        if (removeFromDisabled) {
+            set.remove(channel.getId());
+        } else {
+            set.add(channel.getId());
+        }
     }
 
+    public static void setChannel(ClanPlayer clanPlayer, Channel channel) {
+        if (clanPlayer == null) {
+            return;
+        }
 
-    private void handleChannelCommand(Channel channel, PlayerFlags flags, String[] args, CommandSender player) {
-        if (args[0].equalsIgnoreCase("join")) {
-            flags.set("channel", channel.getId());
-            player.sendMessage("You entered the " + channel.name().toLowerCase() + " channel! All messages go now there!");
-        } else if (args[0].equalsIgnoreCase("leave")) {
+        Flags flags = clanPlayer.getFlags();
+
+        if (flags == null) {
+            return;
+        }
+
+        if (channel == null) {
             flags.removeEntry("channel");
-            player.sendMessage("You left the " + channel.name().toLowerCase() + " channel!");
-        } else if (args[0].equalsIgnoreCase("on")) {
-            Set<Byte> set = flags.getSet("disabledChannels");
-            if (set == null) {
-                set = new HashSet<Byte>();
-                flags.set("disabledChannels", set);
-            }
-            set.add(channel.getId());
-            player.sendMessage("You turned the global chat on!");
-        } else if (args[0].equalsIgnoreCase("off")) {
-            Set<Byte> set = flags.getSet("disabledChannels");
-            if (set == null) {
-                set = new HashSet<Byte>();
-                flags.set("disabledChannels", set);
-            }
-            set.remove(channel.getId());
-            player.sendMessage("You turned the global chat off!");
         } else {
-            player.sendMessage("Command not found!");
+            flags.set("channel", channel.getId());
         }
     }
 

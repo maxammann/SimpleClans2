@@ -14,13 +14,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with SimpleClans2.  If not, see <http://www.gnu.org/licenses/>.
  *
- *     Last modified: 10.10.12 21:57
+ *     Last modified: 29.01.13 20:55
  */
 
-package com.p000ison.dev.simpleclans2.commands;
+package com.p000ison.dev.simpleclans2.api.command;
 
-import com.p000ison.dev.simpleclans2.SimpleClans;
-import com.p000ison.dev.simpleclans2.api.command.Command;
 import org.bukkit.permissions.Permissible;
 
 import java.util.Arrays;
@@ -30,13 +28,11 @@ abstract class GenericCommand implements Command {
     private int minArgs, maxArgs;
     private String[] identifiers;
     private String[] usage;
-    protected SimpleClans plugin;
     private String[] permissions;
     private Type type = Type.CLAN;
 
-    protected GenericCommand(String name, SimpleClans plugin) {
+    protected GenericCommand(String name) {
         this.name = name;
-        this.plugin = plugin;
     }
 
     @Override
@@ -89,10 +85,6 @@ abstract class GenericCommand implements Command {
         maxArgs = max;
     }
 
-    public int[] getBoundings(int completeSize, int page) {
-        return plugin.getCommandManager().getBoundings(completeSize, page);
-    }
-
     @Override
     public boolean hasPermission(Permissible sender) {
         if (permissions == null) {
@@ -108,6 +100,7 @@ abstract class GenericCommand implements Command {
         return false;
     }
 
+    @Override
     public void setPermission(String... permissions) {
         this.permissions = permissions;
     }
@@ -138,6 +131,7 @@ abstract class GenericCommand implements Command {
         return type;
     }
 
+    @Override
     public void setType(Type type) {
         this.type = type;
     }

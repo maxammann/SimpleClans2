@@ -14,31 +14,31 @@
  *     You should have received a copy of the GNU General Public License
  *     along with SimpleClans2.  If not, see <http://www.gnu.org/licenses/>.
  *
- *     Last modified: 10.10.12 21:57
+ *     Last modified: 13.10.12 15:05
  */
 
+package com.p000ison.dev.simpleclans2.api.util;
 
-package com.p000ison.dev.simpleclans2.commands;
+import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
 
-import com.p000ison.dev.simpleclans2.SimpleClans;
-import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayer;
-import org.bukkit.entity.Player;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * Represents a GenericPlayerCommand
+ * Represents a ColorizedMap
  */
-public abstract class GenericPlayerCommand extends com.p000ison.dev.simpleclans2.api.command.GenericPlayerCommand {
+public class ColorizedMap extends HashMap<String, String> {
 
-    protected SimpleClans plugin;
+    private static final long serialVersionUID = 2539590894611232409L;
 
-    public GenericPlayerCommand(String name, SimpleClans plugin) {
-        super(name);
-        this.plugin = plugin;
+    public void importMap(Map<Object, Object> otherMap) {
+        for (Map.Entry<Object, Object> current : otherMap.entrySet()) {
+            this.put(current.getKey().toString(), current.getValue().toString());
+        }
     }
 
     @Override
-    public abstract void execute(Player player, String[] args);
-
-    @Override
-    public abstract String getMenu(ClanPlayer clanPlayer);
+    public String put(String key, String value) {
+        return super.put(key, ChatBlock.parseColors(value));
+    }
 }

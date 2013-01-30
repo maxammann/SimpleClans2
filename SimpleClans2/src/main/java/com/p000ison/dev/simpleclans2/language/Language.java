@@ -1,5 +1,7 @@
 package com.p000ison.dev.simpleclans2.language;
 
+import com.p000ison.dev.simpleclans2.api.util.LanguageMap;
+
 import java.io.File;
 import java.nio.charset.Charset;
 

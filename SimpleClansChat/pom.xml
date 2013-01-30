@@ -90,7 +90,7 @@
         </dependency>
         <dependency>
             <groupId>com.p000ison.dev.simpleclans2</groupId>
-            <artifactId>SimpleClans2</artifactId>
+            <artifactId>SimpleClansAPI</artifactId>
             <version>1.0</version>
             <type>jar</type>
             <scope>compile</scope>

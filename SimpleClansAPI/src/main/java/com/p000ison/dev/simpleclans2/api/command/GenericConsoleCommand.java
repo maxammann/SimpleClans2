@@ -14,31 +14,21 @@
  *     You should have received a copy of the GNU General Public License
  *     along with SimpleClans2.  If not, see <http://www.gnu.org/licenses/>.
  *
- *     Last modified: 10.10.12 21:57
+ *     Last modified: 29.01.13 20:55
  */
 
 
-package com.p000ison.dev.simpleclans2.commands;
+package com.p000ison.dev.simpleclans2.api.command;
 
-import com.p000ison.dev.simpleclans2.SimpleClans;
-import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayer;
-import org.bukkit.entity.Player;
+import org.bukkit.command.CommandSender;
 
-/**
- * Represents a GenericPlayerCommand
- */
-public abstract class GenericPlayerCommand extends com.p000ison.dev.simpleclans2.api.command.GenericPlayerCommand {
+public abstract class GenericConsoleCommand extends GenericCommand {
 
-    protected SimpleClans plugin;
-
-    public GenericPlayerCommand(String name, SimpleClans plugin) {
+    public GenericConsoleCommand(String name) {
         super(name);
-        this.plugin = plugin;
     }
 
-    @Override
-    public abstract void execute(Player player, String[] args);
+    public abstract void execute(CommandSender sender, String[] args);
 
-    @Override
-    public abstract String getMenu(ClanPlayer clanPlayer);
+    public abstract String getMenu();
 }

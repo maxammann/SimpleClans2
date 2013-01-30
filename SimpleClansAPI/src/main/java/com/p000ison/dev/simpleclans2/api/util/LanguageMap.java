@@ -17,10 +17,10 @@
  *     Last modified: 10.10.12 21:57
  */
 
-package com.p000ison.dev.simpleclans2.language;
+package com.p000ison.dev.simpleclans2.api.util;
 
 import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
-import com.p000ison.dev.simpleclans2.util.Logging;
+import com.p000ison.dev.simpleclans2.api.logging.Logging;
 import org.bukkit.ChatColor;
 
 import java.io.*;

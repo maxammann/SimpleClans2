@@ -14,31 +14,23 @@
  *     You should have received a copy of the GNU General Public License
  *     along with SimpleClans2.  If not, see <http://www.gnu.org/licenses/>.
  *
- *     Last modified: 10.10.12 21:57
+ *     Last modified: 30.01.13 18:15
  */
 
-
-package com.p000ison.dev.simpleclans2.commands;
-
-import com.p000ison.dev.simpleclans2.SimpleClans;
-import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayer;
-import org.bukkit.entity.Player;
+package com.p000ison.dev.simpleclans2.api.logging;
 
 /**
- * Represents a GenericPlayerCommand
+ * Represents a ReportableLogger
  */
-public abstract class GenericPlayerCommand extends com.p000ison.dev.simpleclans2.api.command.GenericPlayerCommand {
+public abstract class ReportableLogger extends Logger {
 
-    protected SimpleClans plugin;
-
-    public GenericPlayerCommand(String name, SimpleClans plugin) {
-        super(name);
-        this.plugin = plugin;
+    public ReportableLogger(java.util.logging.Logger logger) {
+        super(logger);
     }
 
-    @Override
-    public abstract void execute(Player player, String[] args);
+    public abstract void debug(Throwable ex, boolean reportException);
 
-    @Override
-    public abstract String getMenu(ClanPlayer clanPlayer);
+    public abstract void debug(Throwable ex, String msg, boolean reportException);
+
+    public abstract void debug(Throwable ex, boolean reportException, String msg, Object... args);
 }
