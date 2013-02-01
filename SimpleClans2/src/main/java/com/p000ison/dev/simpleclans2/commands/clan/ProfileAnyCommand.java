@@ -27,8 +27,6 @@ import com.p000ison.dev.simpleclans2.language.Language;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
-import java.text.MessageFormat;
-
 /**
  * Represents a ProfileAnyCommand
  */
@@ -37,14 +35,14 @@ public class ProfileAnyCommand extends GenericConsoleCommand {
     public ProfileAnyCommand(SimpleClans plugin) {
         super("ProfileAnyCommand", plugin);
         setArgumentRange(1, 1);
-        setUsages(MessageFormat.format(Language.getTranslation("usage.profile"), plugin.getSettingsManager().getClanCommand()));
+        setUsages(Language.getTranslation("usage.profile"));
         setIdentifiers(Language.getTranslation("profile.command"));
         setPermission("simpleclans.anyone.profile");
     }
 
     @Override
     public String getMenu() {
-        return MessageFormat.format(Language.getTranslation("menu.profile"), plugin.getSettingsManager().getClanCommand());
+        return Language.getTranslation("menu.profile");
     }
 
     @Override

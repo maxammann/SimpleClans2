@@ -36,7 +36,7 @@ public class ResignCommand extends GenericPlayerCommand {
     public ResignCommand(SimpleClans plugin) {
         super("Resign", plugin);
         setArgumentRange(0, 0);
-        setUsages(MessageFormat.format(Language.getTranslation("usage.resign"), plugin.getSettingsManager().getClanCommand()));
+        setUsages(Language.getTranslation("usage.resign"));
         setIdentifiers(Language.getTranslation("resign.command"));
         setPermission("simpleclans.member.resign");
     }
@@ -44,7 +44,7 @@ public class ResignCommand extends GenericPlayerCommand {
     @Override
     public String getMenu(ClanPlayer cp) {
         if (cp != null) {
-            return MessageFormat.format(Language.getTranslation("menu.resign"), plugin.getSettingsManager().getClanCommand());
+            return Language.getTranslation("menu.resign");
         }
         return null;
     }

@@ -39,6 +39,18 @@ public class AllyChannelCommand extends GenericPlayerCommand {
     public AllyChannelCommand(String name, SCCore sccore) {
         super(name);
         this.sccore = sccore;
+        setArgumentRange(1, 1);
+        setUsages(SCChatLanguage.getTranslation("usage.ally"));
+        setIdentifiers(SCChatLanguage.getTranslation("ally.command"));
+        setPermission("simpleclans.member.channels.ally");
+    }
+
+    @Override
+    public String getMenu(ClanPlayer cp) {
+        if (cp != null) {
+            return SCChatLanguage.getTranslation("menu.ally");
+        }
+        return null;
     }
 
     @Override
@@ -65,10 +77,5 @@ public class AllyChannelCommand extends GenericPlayerCommand {
             SimpleClansChat.addDisabledChannel(clanPlayer, Channel.ALLY, false);
             ChatBlock.sendMessage(player, ChatColor.AQUA + SCChatLanguage.getTranslation("ally.channel.off"));
         }
-    }
-
-    @Override
-    public String getMenu(ClanPlayer clanPlayer) {
-        return null;
     }
 }

@@ -31,7 +31,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,7 +42,7 @@ public class CoordsCommand extends GenericPlayerCommand {
     public CoordsCommand(SimpleClans plugin) {
         super("Coords", plugin);
         setArgumentRange(0, 0);
-        setUsages(MessageFormat.format(Language.getTranslation("usage.coords"), plugin.getSettingsManager().getClanCommand()));
+        setUsages(Language.getTranslation("usage.coords"));
         setIdentifiers(Language.getTranslation("coords.command"));
         setPermission("simpleclans.member.coords");
     }
@@ -51,7 +50,7 @@ public class CoordsCommand extends GenericPlayerCommand {
     @Override
     public String getMenu(ClanPlayer cp) {
         if (cp != null && cp.getClan().isVerified() && cp.isTrusted()) {
-            return MessageFormat.format(Language.getTranslation("menu.coords"), plugin.getSettingsManager().getClanCommand());
+            return Language.getTranslation("menu.coords");
         }
         return null;
     }

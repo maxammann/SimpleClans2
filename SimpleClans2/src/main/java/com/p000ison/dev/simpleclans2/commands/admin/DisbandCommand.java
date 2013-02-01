@@ -37,14 +37,14 @@ public class DisbandCommand extends GenericConsoleCommand {
     public DisbandCommand(SimpleClans plugin) {
         super("Disband", plugin);
         setArgumentRange(1, 1);
-        setUsages(MessageFormat.format(Language.getTranslation("usage.disband"), plugin.getSettingsManager().getClanCommand()));
+        setUsages(Language.getTranslation("usage.disband"));
         setIdentifiers(Language.getTranslation("disband.command"));
         setPermission("simpleclans.mod.disband");
     }
 
     @Override
     public String getMenu() {
-        return MessageFormat.format(Language.getTranslation("menu.disband"), plugin.getSettingsManager().getClanCommand());
+        return Language.getTranslation("menu.disband");
     }
 
     @Override

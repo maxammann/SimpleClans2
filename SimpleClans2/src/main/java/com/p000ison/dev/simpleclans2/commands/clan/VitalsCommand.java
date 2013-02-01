@@ -32,7 +32,6 @@ import com.p000ison.dev.simpleclans2.util.StringHelper;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import java.text.MessageFormat;
 import java.util.Set;
 
 /**
@@ -43,7 +42,7 @@ public class VitalsCommand extends GenericPlayerCommand {
     public VitalsCommand(SimpleClans plugin) {
         super("Vitals", plugin);
         setArgumentRange(0, 0);
-        setUsages(MessageFormat.format(Language.getTranslation("usage.vitals"), plugin.getSettingsManager().getClanCommand()));
+        setUsages(Language.getTranslation("usage.vitals"));
         setIdentifiers(Language.getTranslation("vitals.command"));
         setPermission("simpleclans.member.vitals");
     }
@@ -51,7 +50,7 @@ public class VitalsCommand extends GenericPlayerCommand {
     @Override
     public String getMenu(ClanPlayer cp) {
         if (cp != null && cp.isTrusted() && cp.getClan().isVerified()) {
-            return MessageFormat.format(Language.getTranslation("menu.vitals"), plugin.getSettingsManager().getClanCommand());
+            return Language.getTranslation("menu.vitals");
         }
         return null;
     }

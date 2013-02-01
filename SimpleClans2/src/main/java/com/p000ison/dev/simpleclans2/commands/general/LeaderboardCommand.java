@@ -47,14 +47,14 @@ public class LeaderboardCommand extends GenericConsoleCommand {
         super("Leaderboard", plugin);
         this.plugin = plugin;
         setArgumentRange(0, 1);
-        setUsages(MessageFormat.format(Language.getTranslation("usage.leaderboard"), plugin.getSettingsManager().getClanCommand()));
+        setUsages(Language.getTranslation("usage.leaderboard"));
         setIdentifiers(Language.getTranslation("leaderboard.command"));
         setPermission("simpleclans.anyone.leaderboard");
     }
 
     @Override
     public String getMenu() {
-        return MessageFormat.format(Language.getTranslation("menu.leaderboard"), plugin.getSettingsManager().getClanCommand());
+        return Language.getTranslation("menu.leaderboard");
     }
 
     @Override

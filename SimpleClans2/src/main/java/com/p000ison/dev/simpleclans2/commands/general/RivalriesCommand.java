@@ -51,7 +51,7 @@ public class RivalriesCommand extends GenericConsoleCommand {
 
     @Override
     public String getMenu() {
-        return MessageFormat.format(Language.getTranslation("menu.rivalries"), plugin.getSettingsManager().getClanCommand());
+        return Language.getTranslation("menu.rivalries");
     }
 
     @Override

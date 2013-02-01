@@ -35,7 +35,6 @@ import com.p000ison.dev.sqlapi.sqlite.SQLiteDatabase;
 import org.bukkit.command.CommandSender;
 
 import java.io.File;
-import java.text.MessageFormat;
 
 /**
  * Represents a ConvertCommand
@@ -45,14 +44,14 @@ public class ConvertCommand extends GenericConsoleCommand {
     public ConvertCommand(SimpleClans plugin) {
         super("ConvertCommand", plugin);
         setArgumentRange(2, 5);
-        setUsages(MessageFormat.format(Language.getTranslation("usage.convert"), plugin.getSettingsManager().getClanCommand()));
+        setUsages(Language.getTranslation("usage.convert"));
         setIdentifiers(Language.getTranslation("convert.command"));
         setPermission("simpleclans.admin.convert");
     }
 
     @Override
     public String getMenu() {
-        return MessageFormat.format(Language.getTranslation("menu.convert"), plugin.getSettingsManager().getClanCommand());
+        return Language.getTranslation("menu.convert");
     }
 
     @Override

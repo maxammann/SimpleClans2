@@ -30,7 +30,6 @@ import com.p000ison.dev.simpleclans2.util.comparators.KDRComparator;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -45,14 +44,14 @@ public class AlliancesCommand extends GenericConsoleCommand {
     public AlliancesCommand(SimpleClans plugin) {
         super("Alliances", plugin);
         setArgumentRange(0, 1);
-        setUsages(MessageFormat.format(Language.getTranslation("usage.alliances"), plugin.getSettingsManager().getClanCommand()));
+        setUsages(Language.getTranslation("usage.alliances"));
         setIdentifiers(Language.getTranslation("alliances.command"));
         setPermission("simpleclans.anyone.alliances");
     }
 
     @Override
     public String getMenu() {
-        return MessageFormat.format(Language.getTranslation("menu.alliances"), plugin.getSettingsManager().getClanCommand());
+        return Language.getTranslation("menu.alliances");
     }
 
     @Override

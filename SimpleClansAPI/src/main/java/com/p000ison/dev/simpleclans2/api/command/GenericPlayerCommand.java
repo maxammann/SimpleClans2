@@ -35,5 +35,10 @@ public abstract class GenericPlayerCommand extends GenericCommand {
 
     public abstract void execute(Player player, String[] args);
 
+    /**
+     * Gets the menu of this clan. This is unformatted and maybe contains a "{0}" for the base command.
+     *
+     * @return The menu for this command
+     */
     public abstract String getMenu(ClanPlayer clanPlayer);
 }

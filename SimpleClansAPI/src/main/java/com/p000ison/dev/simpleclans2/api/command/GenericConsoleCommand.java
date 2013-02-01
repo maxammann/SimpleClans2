@@ -30,5 +30,10 @@ public abstract class GenericConsoleCommand extends GenericCommand {
 
     public abstract void execute(CommandSender sender, String[] args);
 
+    /**
+     * Gets the menu of this clan. This is unformatted and maybe contains a "{0}" for the base command.
+     *
+     * @return The menu for this command
+     */
     public abstract String getMenu();
 }

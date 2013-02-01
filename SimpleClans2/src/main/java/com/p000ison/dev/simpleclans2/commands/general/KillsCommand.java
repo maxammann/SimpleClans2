@@ -37,14 +37,14 @@ public class KillsCommand extends GenericPlayerCommand {
     public KillsCommand(SimpleClans plugin) {
         super("Kills", plugin);
         setArgumentRange(0, 1);
-        setUsages(Language.getTranslation("usage.kills", plugin.getSettingsManager().getClanCommand()));
+        setUsages(Language.getTranslation("usage.kills"));
         setIdentifiers(Language.getTranslation("kills.command"));
         setPermission("simpleclans.member.kills");
     }
 
     @Override
     public String getMenu(ClanPlayer cp) {
-        return Language.getTranslation("menu.kills", plugin.getSettingsManager().getClanCommand());
+        return Language.getTranslation("menu.kills");
     }
 
     @Override

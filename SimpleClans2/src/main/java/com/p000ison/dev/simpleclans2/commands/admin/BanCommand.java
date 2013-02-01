@@ -28,8 +28,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.text.MessageFormat;
-
 /**
  * Represents a BanCommand
  */
@@ -38,14 +36,14 @@ public class BanCommand extends GenericConsoleCommand {
     public BanCommand(SimpleClans plugin) {
         super("Ban", plugin);
         setArgumentRange(1, 1);
-        setUsages(MessageFormat.format(Language.getTranslation("usage.ban"), plugin.getSettingsManager().getClanCommand()));
+        setUsages(Language.getTranslation("usage.ban"));
         setIdentifiers(Language.getTranslation("ban.command"));
         setPermission("simpleclans.mod.ban");
     }
 
     @Override
     public String getMenu() {
-        return MessageFormat.format(Language.getTranslation("menu.ban"), plugin.getSettingsManager().getClanCommand());
+        return Language.getTranslation("menu.ban");
     }
 
     @Override

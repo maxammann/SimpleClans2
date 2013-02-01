@@ -37,7 +37,7 @@ public class ToggleCommand extends GenericPlayerCommand {
     public ToggleCommand(SimpleClans plugin) {
         super("Command", plugin);
         setArgumentRange(1, 1);
-        setUsages(Language.getTranslation("usage.toggle", plugin.getSettingsManager().getClanCommand()));
+        setUsages(Language.getTranslation("usage.toggle"));
         setIdentifiers(Language.getTranslation("toggle.command"));
         setPermission("simpleclans.member.toggle.cape", "simpleclans.member.toggle.bb");
     }
@@ -45,7 +45,7 @@ public class ToggleCommand extends GenericPlayerCommand {
     @Override
     public String getMenu(ClanPlayer cp) {
         if (cp != null) {
-            return Language.getTranslation("menu.toggle", plugin.getSettingsManager().getClanCommand());
+            return Language.getTranslation("menu.toggle");
         }
 
         return null;

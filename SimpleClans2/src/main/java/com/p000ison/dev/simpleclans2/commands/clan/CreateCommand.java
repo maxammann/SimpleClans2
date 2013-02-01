@@ -41,7 +41,7 @@ public class CreateCommand extends GenericPlayerCommand {
     public CreateCommand(SimpleClans plugin) {
         super("CreateCommand", plugin);
         setArgumentRange(2, 20);
-        setUsages(MessageFormat.format(Language.getTranslation("usage.create"), plugin.getSettingsManager().getClanCommand()), Language.getTranslation("example.clan.create"));
+        setUsages(Language.getTranslation("usage.create"), Language.getTranslation("example.clan.create"));
         setIdentifiers(Language.getTranslation("create.command"));
         setPermission("simpleclans.leader.create");
     }
@@ -50,9 +50,9 @@ public class CreateCommand extends GenericPlayerCommand {
     public String getMenu(ClanPlayer cp) {
         if (cp == null) {
             if (plugin.getSettingsManager().isPurchaseCreation()) {
-                return MessageFormat.format(Language.getTranslation("menu.create.purchase"), plugin.getSettingsManager().getClanCommand());
+                return Language.getTranslation("menu.create.purchase");
             } else {
-                return MessageFormat.format(Language.getTranslation("menu.create.default"), plugin.getSettingsManager().getClanCommand());
+                return Language.getTranslation("menu.create.default");
             }
         }
         return null;

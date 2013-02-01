@@ -28,8 +28,6 @@ import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
 import com.p000ison.dev.simpleclans2.language.Language;
 import org.bukkit.entity.Player;
 
-import java.text.MessageFormat;
-
 /**
  * Represents a AcceptCommand
  */
@@ -38,7 +36,7 @@ public class DenyCommand extends GenericPlayerCommand {
     public DenyCommand(SimpleClans plugin) {
         super("Deny", plugin);
         setArgumentRange(0, 0);
-        setUsages(MessageFormat.format(Language.getTranslation("usage.deny"), plugin.getSettingsManager().getClanCommand()));
+        setUsages(Language.getTranslation("usage.deny"));
         setIdentifiers(Language.getTranslation("deny.command"));
         setPermission("simpleclans.member.deny");
     }
@@ -54,10 +52,6 @@ public class DenyCommand extends GenericPlayerCommand {
         Request request = plugin.getRequestManager().vote(clanPlayer, RequestManager.Result.DENY);
 
         if (request == null) {
-//            if (request instanceof MultipleRequest) {
-//                request.announceMessage(Language.getTranslation("voted.to.deny", player.getDisplayName()));
-//            }
-//        } else {
             ChatBlock.sendMessage(player, Language.getTranslation("nothing.to.deny"));
         }
     }

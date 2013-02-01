@@ -28,22 +28,20 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.text.MessageFormat;
-
 
 public class UnbanCommand extends GenericConsoleCommand {
 
     public UnbanCommand(SimpleClans plugin) {
         super("Unban", plugin);
         setArgumentRange(1, 1);
-        setUsages(MessageFormat.format(Language.getTranslation("usage.unban"), plugin.getSettingsManager().getClanCommand()));
+        setUsages(Language.getTranslation("usage.unban"));
         setIdentifiers(Language.getTranslation("unban.command"));
         setPermission("simpleclans.mod.unban");
     }
 
     @Override
     public String getMenu() {
-        return MessageFormat.format(Language.getTranslation("menu.unban"), plugin.getSettingsManager().getClanCommand());
+        return Language.getTranslation("menu.unban");
     }
 
     @Override

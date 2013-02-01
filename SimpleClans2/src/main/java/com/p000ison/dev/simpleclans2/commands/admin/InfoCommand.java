@@ -34,14 +34,14 @@ public class InfoCommand extends GenericConsoleCommand {
     public InfoCommand(SimpleClans plugin) {
         super("Info", plugin);
         setArgumentRange(0, 0);
-        setUsages(Language.getTranslation("usage.info", plugin.getSettingsManager().getClanCommand()));
+        setUsages(Language.getTranslation("usage.info"));
         setIdentifiers(Language.getTranslation("info.command"));
         setPermission("simpleclans.admin.info");
     }
 
     @Override
     public String getMenu() {
-        return Language.getTranslation("menu.info", plugin.getSettingsManager().getClanCommand());
+        return Language.getTranslation("menu.info");
     }
 
     @Override

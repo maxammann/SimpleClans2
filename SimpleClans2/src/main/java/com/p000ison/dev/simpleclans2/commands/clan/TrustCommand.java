@@ -36,7 +36,7 @@ public class TrustCommand extends GenericPlayerCommand {
     public TrustCommand(SimpleClans plugin) {
         super("Trust", plugin);
         setArgumentRange(1, 1);
-        setUsages(Language.getTranslation(("usage.trust"), plugin.getSettingsManager().getClanCommand()));
+        setUsages(Language.getTranslation(("usage.trust")));
         setIdentifiers(Language.getTranslation("trust.command"));
         setPermission("simpleclans.leader.settrust");
     }
@@ -44,7 +44,7 @@ public class TrustCommand extends GenericPlayerCommand {
     @Override
     public String getMenu(ClanPlayer cp) {
         if (cp != null && cp.isLeader() && cp.getClan().isVerified()) {
-            return Language.getTranslation("menu.trust", plugin.getSettingsManager().getClanCommand());
+            return Language.getTranslation("menu.trust");
         }
         return null;
     }

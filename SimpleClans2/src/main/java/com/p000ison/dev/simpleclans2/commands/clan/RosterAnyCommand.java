@@ -31,7 +31,6 @@ import com.p000ison.dev.simpleclans2.util.comparators.LastSeenComparator;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -44,14 +43,14 @@ public class RosterAnyCommand extends GenericPlayerCommand {
     public RosterAnyCommand(SimpleClans plugin) {
         super("Roster", plugin);
         setArgumentRange(1, 2);
-        setUsages(MessageFormat.format(Language.getTranslation("usage.roster"), plugin.getSettingsManager().getClanCommand()));
+        setUsages(Language.getTranslation("usage.roster"));
         setIdentifiers(Language.getTranslation("roster.command"));
         setPermission("simpleclans.member.roster");
     }
 
     @Override
     public String getMenu(ClanPlayer cp) {
-        return MessageFormat.format(Language.getTranslation("menu.roster.any"), plugin.getSettingsManager().getClanCommand());
+        return Language.getTranslation("menu.roster.any");
     }
 
     @Override

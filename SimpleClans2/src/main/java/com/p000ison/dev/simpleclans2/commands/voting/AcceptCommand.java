@@ -28,8 +28,6 @@ import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
 import com.p000ison.dev.simpleclans2.language.Language;
 import org.bukkit.entity.Player;
 
-import java.text.MessageFormat;
-
 /**
  * Represents a AcceptCommand
  */
@@ -38,7 +36,7 @@ public class AcceptCommand extends GenericPlayerCommand {
     public AcceptCommand(SimpleClans plugin) {
         super("Accept", plugin);
         setArgumentRange(0, 0);
-        setUsages(MessageFormat.format(Language.getTranslation("usage.accept"), plugin.getSettingsManager().getClanCommand()));
+        setUsages(Language.getTranslation("usage.accept"));
         setIdentifiers(Language.getTranslation("accept.command"));
         setPermission("simpleclans.member.accept");
     }
@@ -54,10 +52,6 @@ public class AcceptCommand extends GenericPlayerCommand {
         Request request = plugin.getRequestManager().vote(clanPlayer, RequestManager.Result.ACCEPT);
 
         if (request == null) {
-//            if (request instanceof MultipleRequest) {
-//                request.announceMessage(Language.getTranslation("voted.to.accept", player.getDisplayName()));
-//            }
-//        } else {
             ChatBlock.sendMessage(player, Language.getTranslation("nothing.to.accept"));
         }
     }

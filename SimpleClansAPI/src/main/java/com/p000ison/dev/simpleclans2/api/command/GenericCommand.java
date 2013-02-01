@@ -23,7 +23,7 @@ import org.bukkit.permissions.Permissible;
 
 import java.util.Arrays;
 
-abstract class GenericCommand implements Command {
+public abstract class GenericCommand implements Command {
     private String name;
     private int minArgs, maxArgs;
     private String[] identifiers;
@@ -52,6 +52,9 @@ abstract class GenericCommand implements Command {
 
     @Override
     public boolean isIdentifier(String cmd) {
+        if (identifiers == null) {
+            throw new IllegalArgumentException("The identifiers are null!");
+        }
         if (cmd == null) {
             return false;
         }

@@ -42,7 +42,7 @@ public class DemoteCommand extends GenericPlayerCommand {
         super("Demote", plugin);
         this.plugin = plugin;
         setArgumentRange(1, 1);
-        setUsages(MessageFormat.format(Language.getTranslation("usage.demote"), plugin.getSettingsManager().getClanCommand()));
+        setUsages(Language.getTranslation("usage.demote"));
         setIdentifiers(Language.getTranslation("demote.command"));
         setPermission("simpleclans.leader.demote");
     }
@@ -50,7 +50,7 @@ public class DemoteCommand extends GenericPlayerCommand {
     @Override
     public String getMenu(ClanPlayer cp) {
         if (cp != null) {
-            return MessageFormat.format(Language.getTranslation("menu.demote"), plugin.getSettingsManager().getClanCommand());
+            return Language.getTranslation("menu.demote");
         }
         return null;
     }

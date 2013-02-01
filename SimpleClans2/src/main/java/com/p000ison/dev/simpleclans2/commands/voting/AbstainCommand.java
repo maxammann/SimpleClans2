@@ -29,8 +29,6 @@ import com.p000ison.dev.simpleclans2.language.Language;
 import com.p000ison.dev.simpleclans2.requests.MultipleRequest;
 import org.bukkit.entity.Player;
 
-import java.text.MessageFormat;
-
 /**
  * Represents a AcceptCommand
  */
@@ -39,7 +37,7 @@ public class AbstainCommand extends GenericPlayerCommand {
     public AbstainCommand(SimpleClans plugin) {
         super("Abstain", plugin);
         setArgumentRange(0, 0);
-        setUsages(MessageFormat.format(Language.getTranslation("usage.abstain"), plugin.getSettingsManager().getClanCommand()));
+        setUsages(Language.getTranslation("usage.abstain"));
         setIdentifiers(Language.getTranslation("abstain.command"));
         setPermission("simpleclans.member.abstain");
     }

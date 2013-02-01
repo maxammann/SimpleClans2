@@ -36,7 +36,7 @@ public class KickCommand extends GenericPlayerCommand {
     public KickCommand(SimpleClans plugin) {
         super("Kick", plugin);
         setArgumentRange(1, 1);
-        setUsages(MessageFormat.format(Language.getTranslation("usage.kick"), plugin.getSettingsManager().getClanCommand()));
+        setUsages(Language.getTranslation("usage.kick"));
         setIdentifiers(Language.getTranslation("kick.command"));
         setPermission("simpleclans.leader.kick");
     }
@@ -44,7 +44,7 @@ public class KickCommand extends GenericPlayerCommand {
     @Override
     public String getMenu(ClanPlayer cp) {
         if (cp != null && cp.isLeader()) {
-            return MessageFormat.format(Language.getTranslation("menu.kick"), plugin.getSettingsManager().getClanCommand());
+            return Language.getTranslation("menu.kick");
         }
         return null;
     }

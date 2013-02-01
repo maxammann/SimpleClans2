@@ -21,7 +21,6 @@
 package com.p000ison.dev.simpleclans2.commands;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
-import org.bukkit.command.CommandSender;
 
 public abstract class GenericConsoleCommand extends com.p000ison.dev.simpleclans2.api.command.GenericConsoleCommand {
 
@@ -31,12 +30,6 @@ public abstract class GenericConsoleCommand extends com.p000ison.dev.simpleclans
         super(name);
         this.plugin = plugin;
     }
-
-    @Override
-    public abstract void execute(CommandSender sender, String[] args);
-
-    @Override
-    public abstract String getMenu();
 
     protected int[] getBoundings(int completeSize, int page) {
         return plugin.getCommandManager().getBoundings(completeSize, page);

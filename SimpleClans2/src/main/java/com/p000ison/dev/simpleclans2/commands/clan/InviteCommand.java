@@ -41,7 +41,7 @@ public class InviteCommand extends GenericPlayerCommand {
     public InviteCommand(SimpleClans plugin) {
         super("Invite", plugin);
         setArgumentRange(1, 1);
-        setUsages(MessageFormat.format(Language.getTranslation("usage.invite"), plugin.getSettingsManager().getClanCommand()));
+        setUsages(Language.getTranslation("usage.invite"));
         setIdentifiers(Language.getTranslation("invite.command"));
         setPermission("simpleclans.leader.invite");
     }
@@ -49,7 +49,7 @@ public class InviteCommand extends GenericPlayerCommand {
     @Override
     public String getMenu(ClanPlayer cp) {
         if (cp != null && cp.isLeader()) {
-            return MessageFormat.format(Language.getTranslation("menu.invite"), plugin.getSettingsManager().getClanCommand());
+            return Language.getTranslation("menu.invite");
         }
 
         return null;

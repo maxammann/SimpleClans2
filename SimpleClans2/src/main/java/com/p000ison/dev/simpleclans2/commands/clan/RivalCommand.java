@@ -40,7 +40,7 @@ public class RivalCommand extends GenericPlayerCommand {
     public RivalCommand(SimpleClans plugin) {
         super("Rival", plugin);
         setArgumentRange(2, 2);
-        setUsages(Language.getTranslation("usage.rival", plugin.getSettingsManager().getClanCommand()));
+        setUsages(Language.getTranslation("usage.rival"));
         setIdentifiers(Language.getTranslation("rival.command"));
         setPermission("simpleclans.leader.rival");
     }
@@ -48,7 +48,7 @@ public class RivalCommand extends GenericPlayerCommand {
     @Override
     public String getMenu(ClanPlayer cp) {
         if (cp != null && cp.isLeader() && cp.getClan().isVerified()) {
-            return Language.getTranslation("menu.rival", plugin.getSettingsManager().getClanCommand());
+            return Language.getTranslation("menu.rival");
         }
         return null;
     }
@@ -119,7 +119,7 @@ public class RivalCommand extends GenericPlayerCommand {
                         ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("your.clans.are.no.rivals"));
                     }
                 } else {
-                    ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("usage.ally", plugin.getSettingsManager().getClanCommand()));
+                    ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("usage.ally"));
                 }
             } else {
                 ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("the.clan.cannot.be.rivaled"));

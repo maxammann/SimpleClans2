@@ -27,8 +27,6 @@ import com.p000ison.dev.simpleclans2.language.Language;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import java.text.MessageFormat;
-
 /**
  * @author phaed
  */
@@ -37,7 +35,7 @@ public class FFCommand extends GenericPlayerCommand {
     public FFCommand(SimpleClans plugin) {
         super("FFCommand", plugin);
         setArgumentRange(1, 1);
-        setUsages(MessageFormat.format(Language.getTranslation("usage.ff"), plugin.getSettingsManager().getClanCommand()));
+        setUsages(Language.getTranslation("usage.ff"));
         setIdentifiers(Language.getTranslation("ff.command"));
         setPermission("simpleclans.member.ff");
     }
@@ -45,7 +43,7 @@ public class FFCommand extends GenericPlayerCommand {
     @Override
     public String getMenu(ClanPlayer cp) {
         if (cp != null) {
-            return MessageFormat.format(Language.getTranslation("menu.ff"), plugin.getSettingsManager().getClanCommand());
+            return Language.getTranslation("menu.ff");
         }
         return null;
     }
@@ -67,7 +65,7 @@ public class FFCommand extends GenericPlayerCommand {
                 cp.update();
                 ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("friendy.fire.is.now.managed.by.your.clan"));
             } else {
-                ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(Language.getTranslation("usage.ff"), plugin.getSettingsManager().getClanCommand()));
+                ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("usage.ff"));
             }
         } else {
             ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));

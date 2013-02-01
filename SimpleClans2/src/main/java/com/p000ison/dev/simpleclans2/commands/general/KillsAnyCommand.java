@@ -37,14 +37,14 @@ public class KillsAnyCommand extends GenericConsoleCommand {
     public KillsAnyCommand(SimpleClans plugin) {
         super("KillsAnyone", plugin);
         setArgumentRange(1, 2);
-        setUsages(Language.getTranslation("usage.kills.any", plugin.getSettingsManager().getClanCommand()));
+        setUsages(Language.getTranslation("usage.kills.any"));
         setIdentifiers(Language.getTranslation("kills.command"));
         setPermission("simpleclans.anyone.kills");
     }
 
     @Override
     public String getMenu() {
-        return Language.getTranslation("menu.kills.any", plugin.getSettingsManager().getClanCommand());
+        return Language.getTranslation("menu.kills.any");
     }
 
     @Override

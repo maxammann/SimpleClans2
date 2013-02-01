@@ -42,7 +42,7 @@ public class PromoteCommand extends GenericPlayerCommand {
     public PromoteCommand(SimpleClans plugin) {
         super("Promote", plugin);
         setArgumentRange(1, 1);
-        setUsages(Language.getTranslation("usage.promote", plugin.getSettingsManager().getClanCommand()));
+        setUsages(Language.getTranslation("usage.promote"));
         setIdentifiers(Language.getTranslation("promote.command"));
         setPermission("simpleclans.leader.promote");
     }
@@ -51,7 +51,7 @@ public class PromoteCommand extends GenericPlayerCommand {
     @Override
     public String getMenu(ClanPlayer cp) {
         if (cp != null && cp.isLeader()) {
-            return MessageFormat.format(Language.getTranslation("menu.promote"), plugin.getSettingsManager().getClanCommand());
+            return Language.getTranslation("menu.promote");
         }
         return null;
     }

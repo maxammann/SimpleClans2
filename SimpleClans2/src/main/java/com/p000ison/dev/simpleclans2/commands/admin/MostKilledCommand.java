@@ -36,14 +36,14 @@ public class MostKilledCommand extends GenericConsoleCommand {
     public MostKilledCommand(SimpleClans plugin) {
         super("MostKilled", plugin);
         setArgumentRange(0, 0);
-        setUsages(Language.getTranslation("usage.mostkilled", plugin.getSettingsManager().getClanCommand()));
+        setUsages(Language.getTranslation("usage.mostkilled"));
         setIdentifiers(Language.getTranslation("mostkilled.command"));
         setPermission("simpleclans.mod.mostkilled");
     }
 
     @Override
     public String getMenu() {
-        return Language.getTranslation("menu.mostkilled", plugin.getSettingsManager().getClanCommand());
+        return Language.getTranslation("menu.mostkilled");
     }
 
     @Override

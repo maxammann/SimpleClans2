@@ -34,14 +34,14 @@ public class SaveCommand extends GenericConsoleCommand {
     public SaveCommand(SimpleClans plugin) {
         super("Save", plugin);
         setArgumentRange(0, 0);
-        setUsages(MessageFormat.format(Language.getTranslation("usage.save"), plugin.getSettingsManager().getClanCommand()));
+        setUsages(Language.getTranslation("usage.save"));
         setIdentifiers(Language.getTranslation("command.save"));
         setPermission("simpleclans.admin.save");
     }
 
     @Override
     public String getMenu() {
-        return MessageFormat.format(Language.getTranslation("menu.save"), plugin.getSettingsManager().getClanCommand());
+        return Language.getTranslation("menu.save");
     }
 
     @Override

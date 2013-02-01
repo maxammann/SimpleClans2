@@ -44,7 +44,7 @@ public class HomeRegroupCommand extends GenericPlayerCommand {
     public HomeRegroupCommand(SimpleClans plugin) {
         super("HomeRegroup", plugin);
         setArgumentRange(0, 2);
-        setUsages(MessageFormat.format(Language.getTranslation("usage.home.regroup"), plugin.getSettingsManager().getClanCommand()));
+        setUsages(Language.getTranslation("usage.home.regroup"));
         setIdentifiers(Language.getTranslation("home.regroup.command"));
         setPermission("simpleclans.leader.regroup");
     }
@@ -52,7 +52,7 @@ public class HomeRegroupCommand extends GenericPlayerCommand {
     @Override
     public String getMenu(ClanPlayer cp) {
         if (cp != null && cp.getClan().isVerified()) {
-            return MessageFormat.format(Language.getTranslation("menu.home.regroup"), plugin.getSettingsManager().getClanCommand());
+            return Language.getTranslation("menu.home.regroup");
         }
         return null;
     }

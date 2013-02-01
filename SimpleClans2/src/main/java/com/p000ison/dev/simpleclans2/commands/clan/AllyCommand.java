@@ -41,7 +41,7 @@ public class AllyCommand extends GenericPlayerCommand {
         super("Ally", plugin);
         this.plugin = plugin;
         setArgumentRange(2, 2);
-        setUsages(MessageFormat.format(Language.getTranslation("usage.ally"), plugin.getSettingsManager().getClanCommand()));
+        setUsages(Language.getTranslation("usage.ally"));
         setIdentifiers(Language.getTranslation("ally.command"));
         setPermission("simpleclans.leader.ally");
     }
@@ -52,7 +52,7 @@ public class AllyCommand extends GenericPlayerCommand {
         if (clanPlayer != null) {
             Clan clan = clanPlayer.getClan();
             if (clan != null && (clanPlayer.isLeader() || clanPlayer.hasRankPermission("manage.ally")) && clan.isVerified()) {
-                return MessageFormat.format(Language.getTranslation("menu.ally"), plugin.getSettingsManager().getClanCommand());
+                return Language.getTranslation("menu.ally");
             }
         }
         return null;
@@ -123,7 +123,7 @@ public class AllyCommand extends GenericPlayerCommand {
                 ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("your.clans.are.not.allies"));
             }
         } else {
-            ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(Language.getTranslation("usage.ally"), plugin.getSettingsManager().getClanCommand()));
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("usage.ally"));
         }
 
     }

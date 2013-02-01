@@ -43,7 +43,7 @@ public class StatsCommand extends GenericPlayerCommand {
     public StatsCommand(SimpleClans plugin) {
         super("Stats", plugin);
         setArgumentRange(0, 0);
-        setUsages(Language.getTranslation("usage.stats", plugin.getSettingsManager().getClanCommand()));
+        setUsages(Language.getTranslation("usage.stats"));
         setIdentifiers(Language.getTranslation("stats.command"));
         setPermission("simpleclans.member.stats");
     }
@@ -51,7 +51,7 @@ public class StatsCommand extends GenericPlayerCommand {
     @Override
     public String getMenu(ClanPlayer cp) {
         if (cp != null && cp.isTrusted() && cp.getClan().isVerified()) {
-            return Language.getTranslation("menu.stats", plugin.getSettingsManager().getClanCommand());
+            return Language.getTranslation("menu.stats");
         }
         return null;
     }

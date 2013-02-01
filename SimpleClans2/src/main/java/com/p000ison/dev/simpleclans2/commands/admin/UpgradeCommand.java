@@ -26,8 +26,6 @@ import com.p000ison.dev.simpleclans2.language.Language;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
-import java.text.MessageFormat;
-
 /**
  * Represents a ConvertCommand
  */
@@ -36,14 +34,14 @@ public class UpgradeCommand extends GenericConsoleCommand {
     public UpgradeCommand(SimpleClans plugin) {
         super("UpgradeCommand", plugin);
         setArgumentRange(0, 0);
-        setUsages(MessageFormat.format(Language.getTranslation("usage.upgrade"), plugin.getSettingsManager().getClanCommand()));
+        setUsages(Language.getTranslation("usage.upgrade"));
         setIdentifiers(Language.getTranslation("upgrade.command"));
         setPermission("simpleclans.admin.upgrade");
     }
 
     @Override
     public String getMenu() {
-        return Language.getTranslation("menu.upgrade", plugin.getSettingsManager().getClanCommand());
+        return Language.getTranslation("menu.upgrade");
     }
 
     @Override

@@ -28,8 +28,6 @@ import com.p000ison.dev.simpleclans2.language.Language;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import java.text.MessageFormat;
-
 /**
  * Represents a ProfileCommand
  */
@@ -38,7 +36,7 @@ public class ProfileCommand extends GenericPlayerCommand {
     public ProfileCommand(SimpleClans plugin) {
         super("ProfileCommand", plugin);
         setArgumentRange(0, 0);
-        setUsages(MessageFormat.format(Language.getTranslation("usage.profile"), plugin.getSettingsManager().getClanCommand()));
+        setUsages(Language.getTranslation("usage.profile"));
         setIdentifiers(Language.getTranslation("profile.command"));
         setPermission("simpleclans.member.profile");
     }
@@ -46,7 +44,7 @@ public class ProfileCommand extends GenericPlayerCommand {
     @Override
     public String getMenu(ClanPlayer cp) {
         if (cp != null && cp.getClan().isVerified()) {
-            return MessageFormat.format(Language.getTranslation("menu.profile.own"), plugin.getSettingsManager().getClanCommand());
+            return Language.getTranslation("menu.profile.own");
         }
         return null;
     }

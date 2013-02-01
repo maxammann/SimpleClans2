@@ -44,7 +44,7 @@ public class WarCommand extends GenericPlayerCommand {
         super("War", plugin);
         this.plugin = plugin;
         setArgumentRange(2, 2);
-        setUsages(Language.getTranslation("usage.war", plugin.getSettingsManager().getClanCommand()));
+        setUsages(Language.getTranslation("usage.war"));
         setIdentifiers(Language.getTranslation("war.command"));
         setPermission("simpleclans.leader.war");
     }
@@ -53,7 +53,7 @@ public class WarCommand extends GenericPlayerCommand {
     public String getMenu(ClanPlayer cp) {
         if (cp != null) {
             if (cp.isLeader() && cp.getClan().isVerified()) {
-                return Language.getTranslation("menu.war", plugin.getSettingsManager().getClanCommand());
+                return Language.getTranslation("menu.war");
             }
         }
         return null;
@@ -121,7 +121,7 @@ public class WarCommand extends GenericPlayerCommand {
                 ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("clans.not.at.war"));
             }
         } else {
-            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("usage.war", plugin.getSettingsManager().getClanCommand()));
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("usage.war"));
         }
     }
 }

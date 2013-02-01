@@ -36,7 +36,7 @@ public class LookupCommand extends GenericPlayerCommand {
     public LookupCommand(SimpleClans plugin) {
         super("LookupCommand", plugin);
         setArgumentRange(0, 0);
-        setUsages(Language.getTranslation("usage.lookup", plugin.getSettingsManager().getClanCommand()));
+        setUsages(Language.getTranslation("usage.lookup"));
         setIdentifiers(Language.getTranslation("lookup.command"));
         setPermission("simpleclans.member.lookup");
     }
@@ -44,7 +44,7 @@ public class LookupCommand extends GenericPlayerCommand {
     @Override
     public String getMenu(ClanPlayer clanplayer) {
         if (clanplayer != null) {
-            return Language.getTranslation("menu.lookup", plugin.getSettingsManager().getClanCommand());
+            return Language.getTranslation("menu.lookup");
         }
         return null;
     }

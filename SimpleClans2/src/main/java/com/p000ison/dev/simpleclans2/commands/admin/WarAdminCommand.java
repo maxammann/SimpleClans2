@@ -35,7 +35,7 @@ public class WarAdminCommand extends GenericConsoleCommand {
     public WarAdminCommand(SimpleClans plugin) {
         super("WarAdmin", plugin);
         setArgumentRange(3, 3);
-        setUsages(Language.getTranslation("usage.war.admin", plugin.getSettingsManager().getClanCommand()));
+        setUsages(Language.getTranslation("usage.war.admin"));
         setIdentifiers(Language.getTranslation("war.admin.command"));
         setPermission("simpleclans.admin.warcontrol");
     }
@@ -43,7 +43,7 @@ public class WarAdminCommand extends GenericConsoleCommand {
     @Override
     public String getMenu() {
         if (plugin.isUpdate()) {
-            return Language.getTranslation("menu.war.admin", plugin.getSettingsManager().getClanCommand());
+            return Language.getTranslation("menu.war.admin");
         }
 
         return null;

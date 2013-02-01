@@ -27,8 +27,6 @@ import com.p000ison.dev.simpleclans2.language.Language;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
-import java.text.MessageFormat;
-
 /**
  * Represents a VerifyModCommand
  */
@@ -37,7 +35,7 @@ public class VerifyModCommand extends GenericConsoleCommand {
     public VerifyModCommand(SimpleClans plugin) {
         super("VerifyMod", plugin);
         setArgumentRange(1, 1);
-        setUsages(Language.getTranslation("usage.verifyclan", plugin.getSettingsManager().getClanCommand()));
+        setUsages(Language.getTranslation("usage.verifyclan"));
         setIdentifiers(Language.getTranslation("verifyclan.command"));
         setPermission("simpleclans.mod.verify");
     }
@@ -45,7 +43,7 @@ public class VerifyModCommand extends GenericConsoleCommand {
     @Override
     public String getMenu() {
         if (plugin.getSettingsManager().requireVerification()) {
-            return ChatColor.DARK_RED + MessageFormat.format(Language.getTranslation("menu.verifyclan"), plugin.getSettingsManager().getClanCommand());
+            return ChatColor.DARK_RED + Language.getTranslation("menu.verifyclan");
         }
         return null;
     }

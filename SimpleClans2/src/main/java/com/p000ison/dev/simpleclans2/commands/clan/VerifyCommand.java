@@ -38,7 +38,7 @@ public class VerifyCommand extends GenericPlayerCommand {
     public VerifyCommand(SimpleClans plugin) {
         super("Verify", plugin);
         setArgumentRange(0, 0);
-        setUsages(MessageFormat.format(Language.getTranslation("usage.verify"), plugin.getSettingsManager().getClanCommand()));
+        setUsages(Language.getTranslation("usage.verify"));
         setPermission("simpleclans.member.verify");
         setIdentifiers(Language.getTranslation("verify.command"));
     }
@@ -46,7 +46,7 @@ public class VerifyCommand extends GenericPlayerCommand {
     @Override
     public String getMenu(ClanPlayer cp) {
         if (cp != null && !cp.getClan().isVerified() && plugin.getSettingsManager().requireVerification() && plugin.getSettingsManager().isPurchaseVerification()) {
-            return MessageFormat.format(Language.getTranslation("menu.verify"), plugin.getSettingsManager().getClanCommand());
+            return Language.getTranslation("menu.verify");
         }
         return null;
     }

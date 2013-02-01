@@ -28,6 +28,8 @@ import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayerManager;
 import com.p000ison.dev.simpleclans2.api.rank.Rank;
 import com.p000ison.dev.simpleclans2.chat.commands.AllyChannelCommand;
+import com.p000ison.dev.simpleclans2.chat.commands.ClanChannelCommand;
+import com.p000ison.dev.simpleclans2.chat.commands.GlobalChannelCommand;
 import com.p000ison.dev.simpleclans2.chat.listeners.SCCDepreciatedChatEvent;
 import com.p000ison.dev.simpleclans2.chat.listeners.SCCHeroChatListener;
 import com.p000ison.dev.simpleclans2.chat.listeners.SCCPlayerListener;
@@ -42,6 +44,8 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
+import java.nio.charset.Charset;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -57,6 +61,7 @@ public class SimpleClansChat extends JavaPlugin {
     @Override
     public void onEnable() {
         Logging.setInstance(getLogger());
+        SCChatLanguage.setInstance(new File(getDataFolder(), "languages"), Charset.defaultCharset());
 
         if (!hookSimpleClans()) {
             Logging.debug(Level.SEVERE, ChatColor.RED + "SimpleClans was not found! Disabling...");
@@ -82,6 +87,8 @@ public class SimpleClansChat extends JavaPlugin {
 
         }
 
+        core.getCommandManager().addCommand(new GlobalChannelCommand("GlobalChannel", core));
+        core.getCommandManager().addCommand(new ClanChannelCommand("ClanChannel", core));
         core.getCommandManager().addCommand(new AllyChannelCommand("AllyChannel", core));
 
         setupPermissions();

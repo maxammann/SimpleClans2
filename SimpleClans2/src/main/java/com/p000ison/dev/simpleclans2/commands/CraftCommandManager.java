@@ -25,6 +25,8 @@ import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.api.command.Command;
 import com.p000ison.dev.simpleclans2.api.command.CommandManager;
+import com.p000ison.dev.simpleclans2.api.command.GenericConsoleCommand;
+import com.p000ison.dev.simpleclans2.api.command.GenericPlayerCommand;
 import com.p000ison.dev.simpleclans2.api.logging.Logging;
 import com.p000ison.dev.simpleclans2.language.Language;
 import org.bukkit.ChatColor;
@@ -163,7 +165,6 @@ public class CraftCommandManager implements CommandManager {
                 return;
             }
 
-
             if (!noPermission) {
                 ChatBlock.sendMessage(sender, ChatColor.DARK_RED + "Command not found!");
             }
@@ -206,17 +207,16 @@ public class CraftCommandManager implements CommandManager {
 
             if (cmd instanceof GenericConsoleCommand) {
                 String menu = ((GenericConsoleCommand) cmd).getMenu();
-                if (((GenericConsoleCommand) cmd).getMenu() != null) {
-                    commands.add(menu);
+                if (menu != null) {
+                    commands.add(MessageFormat.format(menu, MessageFormat.format(menu, cmd.getType() == null ? Command.Type.CLAN.getCommands()[0] : cmd.getType().getCommands()[0])));
                 }
             } else {
                 String menu = ((GenericPlayerCommand) cmd).getMenu(cp);
                 if (menu != null) {
-                    commands.add(menu);
+                    commands.add(MessageFormat.format(menu, MessageFormat.format(menu, cmd.getType() == null ? Command.Type.CLAN.getCommands()[0] : cmd.getType().getCommands()[0])));
                 }
             }
         }
-
 
         int size = commands.size();
 
@@ -231,7 +231,6 @@ public class CraftCommandManager implements CommandManager {
 
         StringBuilder menu = new StringBuilder("\n");
 
-
         for (int c = boundings[0]; c < boundings[1]; c++) {
             String cmdMenu = commands.get(c);
 
@@ -241,7 +240,6 @@ public class CraftCommandManager implements CommandManager {
                 menu.append('\n');
             }
         }
-
 
         ChatBlock.sendMessage(sender, menu.toString());
         ChatBlock.sendBlank(sender, 2);

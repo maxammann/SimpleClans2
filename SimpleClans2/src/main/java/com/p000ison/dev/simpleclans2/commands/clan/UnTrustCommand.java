@@ -36,7 +36,7 @@ public class UnTrustCommand extends GenericPlayerCommand {
     public UnTrustCommand(SimpleClans plugin) {
         super("Untrust", plugin);
         setArgumentRange(1, 1);
-        setUsages(Language.getTranslation("usage.untrust", plugin.getSettingsManager().getClanCommand()));
+        setUsages(Language.getTranslation("usage.untrust"));
         setIdentifiers(Language.getTranslation("untrust.command"));
         setPermission("simpleclans.leader.settrust");
     }
@@ -44,7 +44,7 @@ public class UnTrustCommand extends GenericPlayerCommand {
     @Override
     public String getMenu(ClanPlayer cp) {
         if (cp != null && cp.isLeader() && cp.getClan().isVerified()) {
-            return Language.getTranslation("menu.untrust", plugin.getSettingsManager().getClanCommand());
+            return Language.getTranslation("menu.untrust");
         }
         return null;
     }

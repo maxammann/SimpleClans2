@@ -34,14 +34,14 @@ public class ReloadCommand extends GenericConsoleCommand {
     public ReloadCommand(SimpleClans plugin) {
         super("Reload", plugin);
         setArgumentRange(0, 0);
-        setUsages(MessageFormat.format(Language.getTranslation("usage.reload"), plugin.getSettingsManager().getClanCommand()));
+        setUsages(Language.getTranslation("usage.reload"));
         setIdentifiers(Language.getTranslation("reload.command"));
         setPermission("simpleclans.admin.reload");
     }
 
     @Override
     public String getMenu() {
-        return MessageFormat.format(Language.getTranslation("menu.reload"), plugin.getSettingsManager().getClanCommand());
+        return Language.getTranslation("menu.reload");
     }
 
     @Override

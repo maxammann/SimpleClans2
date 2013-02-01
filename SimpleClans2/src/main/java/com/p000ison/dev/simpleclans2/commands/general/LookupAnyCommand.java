@@ -36,14 +36,14 @@ public class LookupAnyCommand extends GenericConsoleCommand {
     public LookupAnyCommand(SimpleClans plugin) {
         super("LookupAnyCommand", plugin);
         setArgumentRange(1, 1);
-        setUsages(Language.getTranslation("usage.lookup.any", plugin.getSettingsManager().getClanCommand()));
+        setUsages(Language.getTranslation("usage.lookup.any"));
         setIdentifiers(Language.getTranslation("lookup.command"));
         setPermission("simpleclans.anyone.lookup");
     }
 
     @Override
     public String getMenu() {
-        return Language.getTranslation("menu.lookup.any", plugin.getSettingsManager().getClanCommand());
+        return Language.getTranslation("menu.lookup.any");
     }
 
     @Override

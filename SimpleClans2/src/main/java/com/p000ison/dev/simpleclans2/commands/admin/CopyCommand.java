@@ -50,14 +50,14 @@ public class CopyCommand extends GenericConsoleCommand {
     public CopyCommand(SimpleClans plugin) {
         super("Copy", plugin);
         setArgumentRange(2, 5);
-        setUsages(MessageFormat.format(Language.getTranslation("usage.copy"), plugin.getSettingsManager().getClanCommand()));
+        setUsages(Language.getTranslation("usage.copy"));
         setIdentifiers(Language.getTranslation("copy.command"));
         setPermission("simpleclans.admin.copy");
     }
 
     @Override
     public String getMenu() {
-        return MessageFormat.format(Language.getTranslation("menu.copy"), plugin.getSettingsManager().getClanCommand());
+        return Language.getTranslation("menu.copy");
     }
 
     @Override

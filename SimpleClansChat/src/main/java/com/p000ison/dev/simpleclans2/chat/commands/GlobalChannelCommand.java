@@ -39,7 +39,20 @@ public class GlobalChannelCommand extends GenericPlayerCommand {
     public GlobalChannelCommand(String name, SCCore sccore) {
         super(name);
         this.sccore = sccore;
+        setArgumentRange(1, 1);
+        setUsages(SCChatLanguage.getTranslation("usage.global"));
+        setIdentifiers(SCChatLanguage.getTranslation("global.command"));
+        setPermission("simpleclans.member.channels.global");
     }
+
+    @Override
+    public String getMenu(ClanPlayer cp) {
+        if (cp != null) {
+            return SCChatLanguage.getTranslation("menu.global");
+        }
+        return null;
+    }
+
 
     @Override
     public void execute(Player player, String[] args) {
@@ -59,11 +72,5 @@ public class GlobalChannelCommand extends GenericPlayerCommand {
             SimpleClansChat.addDisabledChannel(clanPlayer, Channel.ALLY, false);
             ChatBlock.sendMessage(player, ChatColor.AQUA + SCChatLanguage.getTranslation("global.channel.off"));
         }
-    }
-
-    @Override
-    public String getMenu(ClanPlayer clanPlayer) {
-
-        return null;
     }
 }

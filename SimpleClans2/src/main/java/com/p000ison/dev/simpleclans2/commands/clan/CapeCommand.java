@@ -39,7 +39,7 @@ public class CapeCommand extends GenericPlayerCommand {
     public CapeCommand(SimpleClans plugin) {
         super("Cape", plugin);
         setArgumentRange(1, 1);
-        setUsages(MessageFormat.format(Language.getTranslation("usage.cape"), plugin.getSettingsManager().getClanCommand()));
+        setUsages(Language.getTranslation("usage.cape"));
         setIdentifiers(Language.getTranslation("cape.command"));
         setPermission("simpleclans.leader.cape");
     }
@@ -47,7 +47,7 @@ public class CapeCommand extends GenericPlayerCommand {
     @Override
     public String getMenu(ClanPlayer cp) {
         if (cp != null && cp.getClan().isVerified() && cp.isLeader() && plugin.getSpoutSupport().isEnabled() && plugin.getSettingsManager().isCapesEnabled()) {
-            return MessageFormat.format(Language.getTranslation("menu.cape"), plugin.getSettingsManager().getClanCommand());
+            return Language.getTranslation("menu.cape");
         }
         return null;
     }

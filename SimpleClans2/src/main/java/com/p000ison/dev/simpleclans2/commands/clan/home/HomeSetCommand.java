@@ -40,7 +40,7 @@ public class HomeSetCommand extends GenericPlayerCommand {
     public HomeSetCommand(SimpleClans plugin) {
         super("HomeSet", plugin);
         setArgumentRange(0, 0);
-        setUsages(MessageFormat.format(Language.getTranslation("usage.home.set"), plugin.getSettingsManager().getClanCommand()));
+        setUsages(Language.getTranslation("usage.home.set"));
         setIdentifiers(Language.getTranslation("home.set.command"));
         setPermission("simpleclans.leader.home-set");
     }
@@ -48,7 +48,7 @@ public class HomeSetCommand extends GenericPlayerCommand {
     @Override
     public String getMenu(ClanPlayer cp) {
         if (cp != null && cp.getClan().isVerified()) {
-            return MessageFormat.format(Language.getTranslation("menu.home.set"), plugin.getSettingsManager().getClanCommand());
+            return Language.getTranslation("menu.home.set");
         }
         return null;
     }

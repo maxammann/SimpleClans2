@@ -28,8 +28,6 @@ import com.p000ison.dev.simpleclans2.language.Language;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import java.text.MessageFormat;
-
 /**
  * Represents a ClanFFCommand
  */
@@ -38,7 +36,7 @@ public class ClanFFCommand extends GenericPlayerCommand {
     public ClanFFCommand(SimpleClans plugin) {
         super("Clanff", plugin);
         setArgumentRange(1, 1);
-        setUsages(MessageFormat.format(Language.getTranslation("usage.clanff"), plugin.getSettingsManager().getClanCommand()));
+        setUsages(Language.getTranslation("usage.clanff"));
         setIdentifiers(Language.getTranslation("clanff.command"));
         setPermission("simpleclans.leader.ff");
     }
@@ -46,7 +44,7 @@ public class ClanFFCommand extends GenericPlayerCommand {
     @Override
     public String getMenu(ClanPlayer cp) {
         if (cp != null && (cp.isLeader() || cp.hasRankPermission("manage.clanff"))) {
-            return MessageFormat.format(Language.getTranslation("menu.clanff"), plugin.getSettingsManager().getClanCommand());
+            return Language.getTranslation("menu.clanff");
         }
         return null;
     }
@@ -73,7 +71,7 @@ public class ClanFFCommand extends GenericPlayerCommand {
                             clan.setFriendlyFire(false);
                             clan.update();
                         } else {
-                            ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(Language.getTranslation("usage.clanff"), plugin.getSettingsManager().getClanCommand()));
+                            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("usage.clanff"));
                         }
                     }
                 } else {
