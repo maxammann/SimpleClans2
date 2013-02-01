@@ -43,22 +43,24 @@ public class LanguageMap {
     private final boolean inJar;
     private ColorizedMap map;
     private Charset charset;
+    private Class<?> anyProjectClazz;
 
-    public LanguageMap(String location, boolean inJar, Charset charset) {
+    public LanguageMap(String location, boolean inJar, Charset charset, Class<?> anyProjectClazz) {
         this.location = location;
         this.inJar = inJar;
         this.charset = charset;
+        this.anyProjectClazz = anyProjectClazz;
     }
 
     private Reader getReader(Charset charset) throws IOException {
         File file = new File(location);
         InputStream stream;
         if (inJar) {
-            stream = getResource(location);
+            stream = getResource(location, anyProjectClazz);
         } else {
             if (!file.exists()) {
                 String DEFAULT_LOCATION = "/languages/lang.properties";
-                InputStream fromJar = getResource(DEFAULT_LOCATION);
+                InputStream fromJar = getResource(DEFAULT_LOCATION, anyProjectClazz);
                 copy(fromJar, file);
                 fromJar.close();
             }
@@ -68,12 +70,12 @@ public class LanguageMap {
         return new InputStreamReader(stream, charset);
     }
 
-    public static InputStream getResource(String filename) throws IOException {
+    public static InputStream getResource(String filename, Class<?> projectClazz) throws IOException {
         if (filename == null) {
             throw new IllegalArgumentException("The path can not be null");
         }
 
-        URL url = LanguageMap.class.getResource(filename);
+        URL url = projectClazz.getResource(filename);
 
         if (url == null) {
             return null;
@@ -95,8 +97,10 @@ public class LanguageMap {
 
         File parentDir = target.getParentFile();
 
-        if (!parentDir.mkdirs()) {
-            throw new IOException("Failed at creating directories!");
+        if (!parentDir.exists()) {
+            if (!parentDir.mkdirs()) {
+                throw new IOException("Failed at creating directories!");
+            }
         }
 
         if (!parentDir.isDirectory()) {

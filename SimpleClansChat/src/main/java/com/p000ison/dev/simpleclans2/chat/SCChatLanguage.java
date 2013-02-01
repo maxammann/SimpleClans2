@@ -32,9 +32,9 @@ public class SCChatLanguage {
     private static final String DEFAULT_FILE_NAME = "lang.properties";
 
     public static void setInstance(File folder, Charset charset) {
-        LanguageMap defaultBundle = new LanguageMap("/languages/" + DEFAULT_FILE_NAME, true, charset);
+        LanguageMap defaultBundle = new LanguageMap("/languages/" + DEFAULT_FILE_NAME, true, charset, SCChatLanguage.class);
         defaultBundle.load();
-        bundle = new LanguageMap(new File(folder, DEFAULT_FILE_NAME).getAbsolutePath(), false, charset);
+        bundle = new LanguageMap(new File(folder, DEFAULT_FILE_NAME).getAbsolutePath(), false, charset, SCChatLanguage.class);
         bundle.setDefault(defaultBundle);
         bundle.load();
         bundle.save();

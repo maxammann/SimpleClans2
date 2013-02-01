@@ -10,9 +10,9 @@ public class Language {
     private static final String DEFAULT_FILE_NAME = "lang.properties";
 
     public static void setInstance(File folder, Charset charset) {
-        LanguageMap defaultBundle = new LanguageMap("/languages/" + DEFAULT_FILE_NAME, true, charset);
+        LanguageMap defaultBundle = new LanguageMap("/languages/" + DEFAULT_FILE_NAME, true, charset, Language.class);
         defaultBundle.load();
-        bundle = new LanguageMap(new File(folder, DEFAULT_FILE_NAME).getAbsolutePath(), false, charset);
+        bundle = new LanguageMap(new File(folder, DEFAULT_FILE_NAME).getAbsolutePath(), false, charset, Language.class);
         bundle.setDefault(defaultBundle);
         bundle.load();
         bundle.save();
