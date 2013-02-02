@@ -23,7 +23,6 @@ import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.api.clan.Clan;
 import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayer;
-import com.p000ison.dev.simpleclans2.api.logging.Logging;
 import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
 import com.p000ison.dev.simpleclans2.language.Language;
 import com.p000ison.dev.simpleclans2.requests.requests.InviteRequest;
@@ -32,7 +31,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.text.MessageFormat;
-import java.util.logging.Level;
 
 
 public class InviteCommand extends GenericPlayerCommand {
@@ -57,14 +55,13 @@ public class InviteCommand extends GenericPlayerCommand {
 
     @Override
     public void execute(Player player, String[] args) {
-        ClanPlayer cp = plugin.getClanPlayerManager().getCreateClanPlayerExact(player);
+        ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
 
         if (cp == null) {
-            final String error = "Failed to invite because the creation of the player failed!";
-            ChatBlock.sendMessage(player, ChatColor.RED + error);
-            Logging.debug(Level.SEVERE, error);
+            ChatBlock.sendMessage(player, Language.getTranslation("not.a.member.of.any.clan"));
             return;
         }
+
         Clan clan = cp.getClan();
 
         if (!clan.isLeader(cp) && !cp.hasRankPermission("manage.invites")) {
@@ -94,7 +91,7 @@ public class InviteCommand extends GenericPlayerCommand {
             return;
         }
 
-        ClanPlayer invitedClanPlayer = plugin.getClanPlayerManager().createClanPlayer(invited);
+        ClanPlayer invitedClanPlayer = plugin.getClanPlayerManager().getCreateClanPlayerExact(invited);
 
         if (invitedClanPlayer.getClan() == null) {
 
