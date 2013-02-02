@@ -6,7 +6,6 @@ import java.io.StringWriter;
  * Represents a PrettyJSONWriter
  */
 public class PrettyJSONWriter extends StringWriter {
-
     private int indent = 0;
 
     @Override

@@ -298,11 +298,12 @@ public class SimpleClansChat extends JavaPlugin {
 
         byte flag = cp.getFlags().getByte("channel");
 
-        Iterator<Player> players;
+
 
         String format = null;
 
         if (flag != -1) {
+            Iterator<Player> players;
 
             Channel channel = Channel.getById(flag);
 
@@ -314,7 +315,10 @@ public class SimpleClansChat extends JavaPlugin {
                     players = retrievers.iterator();
                     while (players.hasNext()) {
                         Player retriever = players.next();
-                        if (isChannelDisabled(retriever, Channel.ALLY)) {
+                        ClanPlayer iCP = getClanPlayerManager().getClanPlayer(retriever);
+                        if (isChannelDisabled(iCP, Channel.ALLY)|| !cp.getClan().isAlly(iCP.getClan())) {
+                            players.remove();
+                        }  else if (isChannelDisabled(retriever, Channel.GLOBAL)) {
                             players.remove();
                         }
                     }
@@ -327,21 +331,16 @@ public class SimpleClansChat extends JavaPlugin {
                     players = retrievers.iterator();
                     while (players.hasNext()) {
                         Player retriever = players.next();
-                        if (isChannelDisabled(retriever, Channel.CLAN)) {
+                        ClanPlayer iCP = getClanPlayerManager().getClanPlayer(retriever);
+                        if (isChannelDisabled(iCP, Channel.CLAN) || !cp.getClan().isAnyMember(iCP)) {
+                            players.remove();
+                        } else if (isChannelDisabled(retriever, Channel.GLOBAL)) {
                             players.remove();
                         }
                     }
                     break;
                 case GLOBAL:
                     break;
-            }
-        }
-
-        players = retrievers.iterator();
-        while (players.hasNext()) {
-            Player retriever = players.next();
-            if (isChannelDisabled(retriever, Channel.GLOBAL)) {
-                players.remove();
             }
         }
 

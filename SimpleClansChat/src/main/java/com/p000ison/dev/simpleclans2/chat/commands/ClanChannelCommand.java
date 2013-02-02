@@ -65,16 +65,16 @@ public class ClanChannelCommand extends GenericPlayerCommand {
         String action = args[0];
 
         if (action.equalsIgnoreCase("join")) {
-            SimpleClansChat.setChannel(clanPlayer, Channel.ALLY);
+            SimpleClansChat.setChannel(clanPlayer, Channel.CLAN);
             ChatBlock.sendMessage(player, ChatColor.AQUA + SCChatLanguage.getTranslation("clan.channel.joined"));
         } else if (action.equalsIgnoreCase("leave")) {
             SimpleClansChat.setChannel(clanPlayer, null);
             ChatBlock.sendMessage(player, ChatColor.AQUA + SCChatLanguage.getTranslation("clan.channel.leaved"));
         } else if (action.equalsIgnoreCase("on")) {
-            SimpleClansChat.addDisabledChannel(clanPlayer, Channel.ALLY, true);
+            SimpleClansChat.addDisabledChannel(clanPlayer, Channel.CLAN, true);
             ChatBlock.sendMessage(player, ChatColor.AQUA + SCChatLanguage.getTranslation("clan.channel.on"));
         } else if (action.equalsIgnoreCase("off")) {
-            SimpleClansChat.addDisabledChannel(clanPlayer, Channel.ALLY, false);
+            SimpleClansChat.addDisabledChannel(clanPlayer, Channel.CLAN, false);
             ChatBlock.sendMessage(player, ChatColor.AQUA + SCChatLanguage.getTranslation("clan.channel.off"));
         }
     }

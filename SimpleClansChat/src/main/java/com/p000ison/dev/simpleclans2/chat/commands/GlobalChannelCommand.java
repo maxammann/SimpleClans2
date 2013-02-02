@@ -69,7 +69,7 @@ public class GlobalChannelCommand extends GenericPlayerCommand {
             SimpleClansChat.addDisabledChannel(clanPlayer, Channel.GLOBAL, true);
             ChatBlock.sendMessage(player, ChatColor.AQUA + SCChatLanguage.getTranslation("global.channel.on"));
         } else if (action.equalsIgnoreCase("off")) {
-            SimpleClansChat.addDisabledChannel(clanPlayer, Channel.ALLY, false);
+            SimpleClansChat.addDisabledChannel(clanPlayer, Channel.GLOBAL, false);
             ChatBlock.sendMessage(player, ChatColor.AQUA + SCChatLanguage.getTranslation("global.channel.off"));
         }
     }
