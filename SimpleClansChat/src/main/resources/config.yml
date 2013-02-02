@@ -11,5 +11,5 @@ format:
        player: '[%s]'
        rank: '[%s]'
 channels:
-   clan: '-rank-player -message'
-   ally: 'ally-player -message'
+   clan: '[CLAN]-rank-player -message'
+   ally: '[ALLY]-player -message'
