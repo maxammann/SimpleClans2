@@ -98,30 +98,32 @@ public class SCEntityListener implements Listener {
                 return;
             }
 
-            if (victimClan != null && attackerClan != null) {
-                // personal ff enabled, allow damage
-                //skip if globalff is on
-                if (plugin.getSettingsManager().isGlobalFFForced() || victim.isFriendlyFireOn()) {
-                    return;
-                }
+            if (victimClan != null) {
+                if (attackerClan != null) {
+                    // personal ff enabled, allow damage
+                    //skip if globalff is on
+                    if (plugin.getSettingsManager().isGlobalFFForced() || victim.isFriendlyFireOn()) {
+                        return;
+                    }
 
-                // clan ff enabled, allow damage
+                    // clan ff enabled, allow damage
 
-                if (plugin.getSettingsManager().isGlobalFFForced() || victimClan.isFriendlyFireOn()) {
-                    return;
-                }
+                    if (plugin.getSettingsManager().isGlobalFFForced() || victimClan.isFriendlyFireOn()) {
+                        return;
+                    }
 
-                // same clan, deny damage
+                    // same clan, deny damage
 
-                if (victimClan.equals(attackerClan)) {
-                    event.setCancelled(true);
-                    return;
-                }
+                    if (victimClan.equals(attackerClan)) {
+                        event.setCancelled(true);
+                        return;
+                    }
 
-                // ally clan, deny damage
+                    // ally clan, deny damage
 
-                if (victimClan.isAlly(attackerClan)) {
-                    event.setCancelled(true);
+                    if (victimClan.isAlly(attackerClan)) {
+                        event.setCancelled(true);
+                    }
                 }
             } else {
                 // not part of a clan - check if safeCivilians is set
