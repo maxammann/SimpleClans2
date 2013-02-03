@@ -298,8 +298,6 @@ public class SimpleClansChat extends JavaPlugin {
 
         byte flag = cp.getFlags().getByte("channel");
 
-
-
         String format = null;
 
         if (flag != -1) {
@@ -316,9 +314,10 @@ public class SimpleClansChat extends JavaPlugin {
                     while (players.hasNext()) {
                         Player retriever = players.next();
                         ClanPlayer iCP = getClanPlayerManager().getClanPlayer(retriever);
-                        if (isChannelDisabled(iCP, Channel.ALLY)|| !cp.getClan().isAlly(iCP.getClan())) {
+                        boolean isAllSeeing = retriever.hasPermission("simpleclans.admin.all-seeing-eye");
+                        if (isChannelDisabled(iCP, Channel.ALLY) && (isAllSeeing || !cp.getClan().isAlly(iCP.getClan()))) {
                             players.remove();
-                        }  else if (isChannelDisabled(retriever, Channel.GLOBAL)) {
+                        } else if (isChannelDisabled(retriever, Channel.GLOBAL)) {
                             players.remove();
                         }
                     }
@@ -332,7 +331,8 @@ public class SimpleClansChat extends JavaPlugin {
                     while (players.hasNext()) {
                         Player retriever = players.next();
                         ClanPlayer iCP = getClanPlayerManager().getClanPlayer(retriever);
-                        if (isChannelDisabled(iCP, Channel.CLAN) || !cp.getClan().isAnyMember(iCP)) {
+                        boolean isAllSeeing = retriever.hasPermission("simpleclans.admin.all-seeing-eye");
+                        if (isChannelDisabled(iCP, Channel.CLAN) && (isAllSeeing || !cp.getClan().isAnyMember(iCP))) {
                             players.remove();
                         } else if (isChannelDisabled(retriever, Channel.GLOBAL)) {
                             players.remove();

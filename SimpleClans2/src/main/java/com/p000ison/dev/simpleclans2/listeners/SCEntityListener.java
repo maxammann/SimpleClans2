@@ -98,8 +98,7 @@ public class SCEntityListener implements Listener {
                 return;
             }
 
-            if (victimClan != null) {
-                if (attackerClan != null) {
+            if (victimClan != null && attackerClan != null) {
                     // personal ff enabled, allow damage
                     //skip if globalff is on
                     if (plugin.getSettingsManager().isGlobalFFForced() || victim.isFriendlyFireOn()) {
@@ -124,7 +123,6 @@ public class SCEntityListener implements Listener {
                     if (victimClan.isAlly(attackerClan)) {
                         event.setCancelled(true);
                     }
-                }
             } else {
                 // not part of a clan - check if safeCivilians is set
                 // ignore setting if he has a specific permissions

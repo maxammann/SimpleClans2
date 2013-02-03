@@ -69,7 +69,7 @@ public class AutoUpdater {
         } catch (UnknownHostException e) {
             Logging.debug(e, true, "The jenkins is down! Please contact the developers!");
         } catch (FileNotFoundException e) {
-            Logging.debug("The file was not found on the jenkins server! Please contact the developers");
+            Logging.debug(e, true, "The file was not found on the jenkins server! Please contact the developers");
         } catch (IOException e) {
             Logging.debug(e, true, "Failed at fetching the Update information! Maybe something is down. Please contact the developers");
         }
