@@ -26,6 +26,8 @@ import com.p000ison.dev.simpleclans2.api.rank.Rank;
 import com.p000ison.dev.simpleclans2.clan.CraftClan;
 import com.p000ison.dev.simpleclans2.clan.ranks.CraftRank;
 import com.p000ison.dev.simpleclans2.clanplayer.CraftClanPlayer;
+import com.p000ison.dev.sqlapi.Database;
+import com.p000ison.dev.sqlapi.exception.QueryException;
 
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -47,30 +49,51 @@ public class AutoSaver implements Runnable {
 
     @Override
     public synchronized void run() {
+        Database db = dataManager.getDatabase();
         for (Clan clan : plugin.getClanManager().getModifyAbleClans()) {
             CraftClan craftClan = (CraftClan) clan;
+
             if (craftClan.needsUpdate()) {
-                dataManager.getDatabase().update(craftClan);
-                clan.update(false);
+                try {
+                    db.addUpdateBatch(craftClan);
+                    clan.update(false);
+                } catch (QueryException e) {
+                    clan.update(true);
+                    throw e;
+                }
             }
 
             for (Rank rank : clan.getRanks()) {
                 CraftRank craftRank = (CraftRank) rank;
                 if (craftRank.needsUpdate()) {
-                    dataManager.getDatabase().update(craftRank);
-                    rank.update(false);
+                    try {
+                        db.addUpdateBatch(craftRank);
+                        rank.update(false);
+                    } catch (QueryException e) {
+                        rank.update(true);
+                        throw e;
+                    }
                 }
             }
         }
 
         for (ClanPlayer clanPlayer : plugin.getClanPlayerManager().getClanPlayers()) {
-            CraftClanPlayer craftRank = (CraftClanPlayer) clanPlayer;
-            if (craftRank.needsUpdate()) {
-                dataManager.getDatabase().update(craftRank);
-                clanPlayer.update(false);
+            CraftClanPlayer craftClanPlayer = (CraftClanPlayer) clanPlayer;
+            if (craftClanPlayer.needsUpdate()) {
+
+                try {
+                    db.addUpdateBatch(craftClanPlayer);
+                    clanPlayer.update(false);
+                } catch (QueryException e) {
+                    clanPlayer.update(true);
+                    throw e;
+                }
             }
         }
 
+        db.executeBatch(CraftRank.class, (byte) 1);
+        db.executeBatch(CraftClan.class, (byte) 1);
+        db.executeBatch(CraftClanPlayer.class, (byte) 1);
 
         Executable executable;
 
