@@ -67,6 +67,7 @@ public class DatabaseManager {
         Database.setLogger(Logging.getDefaultLogger().getLogger());
 
         DatabaseConfiguration config = plugin.getSettingsManager().getDatabaseConfiguration();
+        config.setAutoReconnect(true);
         if (config instanceof MySQLConfiguration) {
             database = (JBDCDatabase) com.p000ison.dev.sqlapi.DatabaseManager.registerConnection(new MySQLDatabase(config));
         } else if (config instanceof SQLiteConfiguration) {
