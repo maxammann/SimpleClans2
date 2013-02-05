@@ -63,6 +63,7 @@
                 </executions>
 
                 <configuration>
+                    <stylesheetfile>${main.basedir}/jd_style.css</stylesheetfile>
                     <quiet>true</quiet>
                 </configuration>
             </plugin>
