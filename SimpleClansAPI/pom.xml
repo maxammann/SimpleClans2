@@ -65,6 +65,10 @@
                 <configuration>
                     <stylesheetfile>${main.basedir}/jd_style.css</stylesheetfile>
                     <quiet>true</quiet>
+                    <links>
+                        <link>http://jd.bukkit.org/apidocs/</link>
+                    </links>
+                    <linksource>true</linksource>
                 </configuration>
             </plugin>
 
