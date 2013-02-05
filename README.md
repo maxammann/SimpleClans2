@@ -27,6 +27,6 @@ Currently Maven 3 is being used to compile SimpleClans.
 ### Links
 * Project page: http://dev.bukkit.org/server-mods/simpleclans/
 * Jenkins: http://jenkins.greatmancode.com/job/SimpleClans2/
-* Javadocs: http://jenkins.greatmancode.com/job/SimpleClans2/javadoc/?
+* Javadocs: http://bit.ly/SC-javadocs
 * Bug tracker: http://bug.greatmancode.com/browse/SC
 * IRC channel: #SimpleClans on esper.net
