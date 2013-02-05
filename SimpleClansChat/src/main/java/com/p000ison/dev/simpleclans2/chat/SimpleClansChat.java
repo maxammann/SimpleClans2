@@ -288,7 +288,7 @@ public class SimpleClansChat extends JavaPlugin {
             format = format.replace(messageVariable, "%2$s");
         }
 
-        return format;
+        return ChatBlock.parseColors(format);
     }
 
     public String removeRetrievers(Set<Player> retrievers, ClanPlayer cp, Player player) {
