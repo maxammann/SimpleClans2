@@ -8,6 +8,7 @@ format:
        clan: '[%s]'
        group: '[%s]'
        prefix: '[%s]'
+       suffix: '[%s]'
        player: '[%s]'
        rank: '[%s]'
 channels:

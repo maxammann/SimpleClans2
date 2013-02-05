@@ -221,6 +221,20 @@ public class SimpleClansChat extends JavaPlugin {
         return null;
     }
 
+    public static String getSuffix(Player player) {
+        if (chat == null) {
+            Logging.debug(Level.SEVERE, "Failed to get suffix! No chat plugin found!");
+            return null;
+        }
+
+        try {
+            return chat.getPlayerSuffix(player);
+        } catch (Exception e) {
+            Logging.debug(Level.SEVERE, "Failed to get suffix! (Problem with Vault!)");
+        }
+        return null;
+    }
+
     public ClanPlayerManager getClanPlayerManager() {
         return this.core.getClanPlayerManager();
     }
@@ -259,6 +273,7 @@ public class SimpleClansChat extends JavaPlugin {
         final String rankVariable = "-rank";
         final String groupVariable = "-group";
         final String prefixVariable = "-prefix";
+        final String suffixVariable = "-suffix";
         final String messageVariable = "-message";
 
 
@@ -283,6 +298,12 @@ public class SimpleClansChat extends JavaPlugin {
             final String prefix = SimpleClansChat.getPrefix(player);
             format = format.replace(prefixVariable, prefix == null ? "" : formatVariable(prefixVariable, prefix));
         }
+
+        if (format.contains(suffixVariable)) {
+            final String suffix = SimpleClansChat.getSuffix(player);
+            format = format.replace(suffixVariable, suffix == null ? "" : formatVariable(suffixVariable, suffix));
+        }
+
 
         if (format.contains(messageVariable)) {
             format = format.replace(messageVariable, "%2$s");
