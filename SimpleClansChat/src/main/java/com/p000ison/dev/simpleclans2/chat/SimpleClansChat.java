@@ -100,6 +100,7 @@ public class SimpleClansChat extends JavaPlugin {
         permissions = null;
         chat = null;
         Logging.close();
+        SCChatLanguage.clear();
     }
 
     private boolean setupPermissions() {
