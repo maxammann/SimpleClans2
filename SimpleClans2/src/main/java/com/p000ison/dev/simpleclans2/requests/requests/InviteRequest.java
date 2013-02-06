@@ -39,7 +39,10 @@ public class InviteRequest extends SingleRequest {
 
     @Override
     public void onRequesting() {
-        sendAcceptorMessage(ChatColor.AQUA + Language.getTranslation("you.have.been.invited", getAcceptor().getName()));
+        if (requester.getClan() == null) {
+            return;
+        }
+        sendAcceptorMessage(ChatColor.AQUA + Language.getTranslation("you.have.been.invited", requester.getClan().getName()));
     }
 
     @Override
