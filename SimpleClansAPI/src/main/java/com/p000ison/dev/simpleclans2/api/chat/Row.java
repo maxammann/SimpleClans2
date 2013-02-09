@@ -44,7 +44,7 @@ public class Row {
     }
 
     public StringBuilder[] getColumns() {
-        return columns;
+        return columns.clone();
     }
 
     public void setColumn(int index, StringBuilder text) {

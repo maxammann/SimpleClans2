@@ -69,7 +69,7 @@ public abstract class GenericCommand implements Command {
 
     @Override
     public String[] getUsages() {
-        return usage;
+        return usage.clone();
     }
 
     @Override
