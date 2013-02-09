@@ -26,6 +26,7 @@ import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.api.clan.Clan;
 import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayerManager;
+import com.p000ison.dev.simpleclans2.api.logging.Logging;
 import com.p000ison.dev.simpleclans2.api.rank.Rank;
 import com.p000ison.dev.simpleclans2.chat.commands.AllyChannelCommand;
 import com.p000ison.dev.simpleclans2.chat.commands.ClanChannelCommand;
@@ -33,7 +34,6 @@ import com.p000ison.dev.simpleclans2.chat.commands.GlobalChannelCommand;
 import com.p000ison.dev.simpleclans2.chat.listeners.SCCDepreciatedChatEvent;
 import com.p000ison.dev.simpleclans2.chat.listeners.SCCHeroChatListener;
 import com.p000ison.dev.simpleclans2.chat.listeners.SCCPlayerListener;
-import com.p000ison.dev.simpleclans2.chat.util.Logging;
 import net.krinsoft.chat.ChatCore;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.permission.Permission;
@@ -60,7 +60,6 @@ public class SimpleClansChat extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        Logging.setInstance(getLogger());
         SCChatLanguage.setInstance(new File(getDataFolder(), "languages"), Charset.defaultCharset());
 
         if (!hookSimpleClans()) {
@@ -99,7 +98,6 @@ public class SimpleClansChat extends JavaPlugin {
     public void onDisable() {
         permissions = null;
         chat = null;
-        Logging.close();
         SCChatLanguage.clear();
     }
 
@@ -203,7 +201,7 @@ public class SimpleClansChat extends JavaPlugin {
         try {
             return permissions.getPrimaryGroup(player);
         } catch (Exception e) {
-            Logging.debug(e, "Failed to get group! (Problem with Vault!)");
+            Logging.debug(Level.SEVERE, "Failed to get group! (Problem with Vault!)");
         }
         return null;
     }

@@ -85,4 +85,9 @@ public class ExceptionReporterTask implements Runnable {
             Logging.debug(e, false);
         }
     }
+
+
+    public int getPendingExceptions() {
+        return queue.size();
+    }
 }

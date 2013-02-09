@@ -24,7 +24,6 @@ import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.commands.GenericConsoleCommand;
 import com.p000ison.dev.simpleclans2.language.Language;
 import org.bukkit.command.CommandSender;
-import org.bukkit.scheduler.BukkitTask;
 
 /**
  * Represents a InfoCommand
@@ -56,15 +55,6 @@ public class InfoCommand extends GenericConsoleCommand {
         ChatBlock.sendMessage(sender, "Data in queue: " + dataQueue);
         ChatBlock.sendMessage(sender, "Teleporting: " + teleporting);
         ChatBlock.sendMessage(sender, "Requests: " + plugin.getRequestManager().getRequests());
-
-        for (BukkitTask task : plugin.getServer().getScheduler().getPendingTasks()) {
-            if (!task.getOwner().equals(plugin)) {
-                continue;
-            }
-
-            ChatBlock.sendMessage(sender, "-----------------------------------------------------");
-            ChatBlock.sendMessage(sender, "ID: " + task.getTaskId());
-            ChatBlock.sendMessage(sender, "Sync: " + task.isSync());
-        }
+        ChatBlock.sendMessage(sender, "Exceptions in queue: " + plugin.getExceptionReporter().getPendingExceptions());
     }
 }
