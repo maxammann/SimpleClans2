@@ -5,42 +5,78 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.p000ison.dev.simpleclans2</groupId>
     <artifactId>SimpleClans-aggregator</artifactId>
-    <packaging>pom</packaging>
     <version>1.0</version>
+    <packaging>pom</packaging>
+    <name>SimpleClans</name>
+    <url>http://dev.bukkit.org/server-mods/simpleclans/</url>
+    <properties>
+        <main.basedir>${project.basedir}</main.basedir>
+        <project.build.number>UNKNOWN</project.build.number>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
     <modules>
         <module>SimpleClansAPI</module>
         <module>SimpleClans2</module>
         <module>SimpleClansChat</module>
         <module>Test</module>
         <module>SCDataServer</module>
-        <module>Distribution</module>
         <module>SimpleClansRewards</module>
+        <module>Distribution</module>
     </modules>
+    <!-- Default dependencies for bukkit plugins -->
+    <dependencies>
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.3</version>
+        </dependency>
+        <dependency>
+            <groupId>net.milkbowl.vault</groupId>
+            <artifactId>Vault</artifactId>
+            <version>1.2.22-SNAPSHOT</version>
+            <scope>compile</scope>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.bukkit</groupId>
+            <artifactId>bukkit</artifactId>
+            <version>1.4.7-R1.0</version>
+            <scope>compile</scope>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.mcstats</groupId>
+            <artifactId>metrics</artifactId>
+            <version>1.1</version>
+            <scope>compile</scope>
+            <type>jar</type>
+        </dependency>
+    </dependencies>
+    <build>
+        <!--The final output name-->
+        <finalName>${project.artifactId}-${project.version}</finalName>
+        <!-- Default resources settings -->
+        <resources>
+            <resource>
+                <directory>${basedir}/src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+                <inherited>false</inherited>
+            </plugin>
+        </plugins>
 
-    <name>SimpleClans</name>
-    <url>http://dev.bukkit.org/server-mods/simpleclans/</url>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.build.number>UNKNOWN</project.build.number>
-        <main.basedir>${project.basedir}</main.basedir>
-    </properties>
-
-    <!-- Source code -->
-    <scm>
-        <connection>scm:git:git://github.com/p000ison/${project.name}.git</connection>
-        <developerConnection>scm:git:git@github.com:p000ison/${project.name}.git</developerConnection>
-        <url>https://github.com/p000ison/${project.name}</url>
-    </scm>
-
-    <!-- SimpleClans's repository -->
-    <distributionManagement>
-        <snapshotRepository>
-            <id>repo-snap</id>
-            <name>SimpleClans Snapshots</name>
-            <url>http://jenkins.greatmancode.com/plugin/repository/everything/</url>
-        </snapshotRepository>
-    </distributionManagement>
+        <!-- Clean and install by default -->
+        <defaultGoal>clean install</defaultGoal>
+    </build>
 
     <!-- Continuous integration -->
     <ciManagement>
@@ -48,101 +84,12 @@
         <url>http://jenkins.greatmancode.com/job/${project.name}</url>
     </ciManagement>
 
-    <!-- Manager Profiles-->
-    <profiles>
-        <profile>
-            <id>jenkins</id>
-            <activation>
-                <property>
-                    <name>env.BUILD_NUMBER</name>
-                </property>
-            </activation>
-            <properties>
-                <project.build.number>${env.BUILD_NUMBER}</project.build.number>
-            </properties>
-        </profile>
-    </profiles>
-
-    <build>
-        <!--The final output name-->
-        <finalName>
-            ${project.artifactId}-${project.version}
-        </finalName>
-
-        <!-- Clean and install by default -->
-        <defaultGoal>clean install</defaultGoal>
-
-        <!-- Default resources settings -->
-        <resources>
-            <resource>
-                <filtering>true</filtering>
-                <directory>${basedir}/src/main/resources</directory>
-            </resource>
-        </resources>
-
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <version>2.4</version>
-                <inherited>false</inherited>
-                <configuration>
-                    <skip>true</skip>
-                </configuration>
-            </plugin>
-            <!--<plugin>-->
-                <!--<groupId>org.apache.maven.plugins</groupId>-->
-                <!--<artifactId>maven-javadoc-plugin</artifactId>-->
-                <!--<version>2.8.1</version>-->
-                <!--<inherited>false</inherited>-->
-                <!--<executions>-->
-                    <!--<execution>-->
-                        <!--<id>javadoc-jar</id>-->
-                        <!--<phase>verify</phase>-->
-                        <!--<goals>-->
-                            <!--<goal>javadoc</goal>-->
-                        <!--</goals>-->
-                    <!--</execution>-->
-                <!--</executions>-->
-
-                <!--<configuration>-->
-                    <!--<quiet>true</quiet>-->
-                    <!--<docfilessubdirs>true</docfilessubdirs>-->
-                    <!--<sourcepath>${basedir}/SimpleClansAPI/src/main/java/com/p000ison/dev/simpleclans2/api</sourcepath>-->
-                <!--</configuration>-->
-            <!--</plugin>-->
-        </plugins>
-    </build>
-
-    <!-- Default dependencies for bukkit plugins -->
-    <dependencies>
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>bukkit</artifactId>
-            <version>1.4.2-R0.2-SNAPSHOT</version>
-            <type>jar</type>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>net.milkbowl.vault</groupId>
-            <artifactId>Vault</artifactId>
-            <version>1.2.18-SNAPSHOT</version>
-            <type>jar</type>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>commons-lang</groupId>
-            <artifactId>commons-lang</artifactId>
-            <version>2.3</version>
-        </dependency>
-        <dependency>
-            <groupId>org.mcstats</groupId>
-            <artifactId>metrics</artifactId>
-            <version>1.1</version>
-            <type>jar</type>
-            <scope>compile</scope>
-        </dependency>
-    </dependencies>
+    <!-- Source code -->
+    <scm>
+        <connection>scm:git:git://github.com/p000ison/${project.name}.git</connection>
+        <developerConnection>scm:git:git@github.com:p000ison/${project.name}.git</developerConnection>
+        <url>https://github.com/p000ison/${project.name}</url>
+    </scm>
 
     <!-- Default repositories for dependencies -->
     <repositories>
@@ -159,4 +106,39 @@
             <url>http://repo.mcstats.org/content/repositories/releases/</url>
         </repository>
     </repositories>
+
+    <!-- SimpleClans's repository -->
+    <distributionManagement>
+        <snapshotRepository>
+            <id>repo-snap</id>
+            <name>SimpleClans Snapshots</name>
+            <url>http://jenkins.greatmancode.com/plugin/repository/everything/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+    <!-- Manager Profiles-->
+    <profiles>
+        <profile>
+            <id>jenkins</id>
+            <activation>
+                <property>
+                    <name>env.BUILD_NUMBER</name>
+                </property>
+            </activation>
+            <properties>
+                <project.build.number>${env.BUILD_NUMBER}</project.build.number>
+            </properties>
+        </profile>
+        <profile>
+            <id>bamboo</id>
+            <activation>
+                <property>
+                    <name>bamboo.buildNumber</name>
+                </property>
+            </activation>
+            <properties>
+                <project.build.number>${bamboo.buildNumber}</project.build.number>
+            </properties>
+        </profile>
+    </profiles>
 </project>
