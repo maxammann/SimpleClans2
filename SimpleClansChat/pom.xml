@@ -27,7 +27,7 @@
         <version>1.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <version>1.0</version>
+    <version>1.0.1</version>
 
     <artifactId>SimpleClansChat</artifactId>
 
@@ -64,7 +64,7 @@
                     <file>target/classes/plugin.yml</file>
                     <replacements>
                         <replacement>
-                            <token>maven-version-number</token>
+                            <token>unknown-version</token>
                             <value>${project.version}-b${project.build.number}</value>
                         </replacement>
                     </replacements>
