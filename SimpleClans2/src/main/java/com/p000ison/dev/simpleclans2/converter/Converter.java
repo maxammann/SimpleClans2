@@ -19,8 +19,8 @@
 
 package com.p000ison.dev.simpleclans2.converter;
 
+import com.p000ison.dev.simpleclans2.api.KillType;
 import com.p000ison.dev.simpleclans2.api.logging.Logging;
-import com.p000ison.dev.simpleclans2.database.KillType;
 import com.p000ison.dev.sqlapi.jbdc.JBDCDatabase;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;

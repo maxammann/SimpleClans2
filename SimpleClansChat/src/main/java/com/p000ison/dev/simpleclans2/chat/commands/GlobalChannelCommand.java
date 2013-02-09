@@ -41,7 +41,7 @@ public class GlobalChannelCommand extends GenericPlayerCommand {
         this.sccore = sccore;
         setArgumentRange(1, 1);
         setUsages(SCChatLanguage.getTranslation("usage.global"));
-        setIdentifiers(SCChatLanguage.getTranslation("global.command"));
+        setIdentifiers(SCChatLanguage.getTranslation("global.chat.command"));
         setPermission("simpleclans.member.channels.global");
     }
 

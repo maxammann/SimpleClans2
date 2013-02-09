@@ -41,7 +41,7 @@ public class ClanChannelCommand extends GenericPlayerCommand {
         this.sccore = sccore;
         setArgumentRange(1, 1);
         setUsages(SCChatLanguage.getTranslation("usage.clan"));
-        setIdentifiers(SCChatLanguage.getTranslation("clan.command"));
+        setIdentifiers(SCChatLanguage.getTranslation("clan.chat.command"));
         setPermission("simpleclans.member.channels.clan");
     }
 

@@ -176,10 +176,11 @@ public class CraftCommandManager implements CommandManager {
     private void displayCommandHelp(Command cmd, CommandSender sender) {
         ChatBlock.sendMessage(sender, "§cCommand:§e " + cmd.getName());
         String[] usages = cmd.getUsages();
-        StringBuilder sb = new StringBuilder("§cUsage:§e ").append(usages[0]).append("\n");
+        String baseCommand = cmd.getType() == null ? Command.Type.CLAN.getCommands()[0] : cmd.getType().getCommands()[0];
+        StringBuilder sb = new StringBuilder("§cUsage:§e ").append(MessageFormat.format(usages[0], baseCommand)).append("\n");
 
         for (int i = 1; i < usages.length; i++) {
-            sb.append("           ").append(usages[i]).append("\n");
+            sb.append("           ").append(MessageFormat.format(usages[i], baseCommand)).append("\n");
         }
 
         ChatBlock.sendMessage(sender, sb.toString());

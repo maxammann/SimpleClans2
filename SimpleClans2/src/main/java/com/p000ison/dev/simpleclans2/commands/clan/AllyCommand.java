@@ -42,7 +42,7 @@ public class AllyCommand extends GenericPlayerCommand {
         this.plugin = plugin;
         setArgumentRange(2, 2);
         setUsages(Language.getTranslation("usage.ally"));
-        setIdentifiers(Language.getTranslation("ally.command"));
+        setIdentifiers(Language.getTranslation("ally.chat.command"));
         setPermission("simpleclans.leader.ally");
     }
 

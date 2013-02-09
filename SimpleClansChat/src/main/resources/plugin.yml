@@ -1,10 +1,5 @@
 name: SimpleClansChat
 main: com.p000ison.dev.simpleclans2.chat.SimpleClansChat
 version: maven-version-number
-commands:
-  scc:
-  ally:
-  .:
-  global:
-depends: [ SimpleClans ]
+depends: [ SimpleClans2 ]
 softdepend: [ ChatSuite, Herochat ]

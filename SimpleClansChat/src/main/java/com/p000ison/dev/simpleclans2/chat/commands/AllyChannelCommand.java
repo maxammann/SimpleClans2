@@ -41,7 +41,7 @@ public class AllyChannelCommand extends GenericPlayerCommand {
         this.sccore = sccore;
         setArgumentRange(1, 1);
         setUsages(SCChatLanguage.getTranslation("usage.ally"));
-        setIdentifiers(SCChatLanguage.getTranslation("ally.command"));
+        setIdentifiers(SCChatLanguage.getTranslation("ally.chat.command"));
         setPermission("simpleclans.member.channels.ally");
     }
 

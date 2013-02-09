@@ -21,9 +21,10 @@
 package com.p000ison.dev.simpleclans2.listeners;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
+import com.p000ison.dev.simpleclans2.api.KillType;
 import com.p000ison.dev.simpleclans2.api.clan.Clan;
 import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayer;
-import com.p000ison.dev.simpleclans2.database.KillType;
+import com.p000ison.dev.simpleclans2.api.events.ClanPlayerKillEvent;
 import com.p000ison.dev.simpleclans2.database.statements.KillStatement;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -99,30 +100,30 @@ public class SCEntityListener implements Listener {
             }
 
             if (victimClan != null && attackerClan != null) {
-                    // personal ff enabled, allow damage
-                    //skip if globalff is on
-                    if (plugin.getSettingsManager().isGlobalFFForced() || victim.isFriendlyFireOn()) {
-                        return;
-                    }
+                // personal ff enabled, allow damage
+                //skip if globalff is on
+                if (plugin.getSettingsManager().isGlobalFFForced() || victim.isFriendlyFireOn()) {
+                    return;
+                }
 
-                    // clan ff enabled, allow damage
+                // clan ff enabled, allow damage
 
-                    if (plugin.getSettingsManager().isGlobalFFForced() || victimClan.isFriendlyFireOn()) {
-                        return;
-                    }
+                if (plugin.getSettingsManager().isGlobalFFForced() || victimClan.isFriendlyFireOn()) {
+                    return;
+                }
 
-                    // same clan, deny damage
+                // same clan, deny damage
 
-                    if (victimClan.equals(attackerClan)) {
-                        event.setCancelled(true);
-                        return;
-                    }
+                if (victimClan.equals(attackerClan)) {
+                    event.setCancelled(true);
+                    return;
+                }
 
-                    // ally clan, deny damage
+                // ally clan, deny damage
 
-                    if (victimClan.isAlly(attackerClan)) {
-                        event.setCancelled(true);
-                    }
+                if (victimClan.isAlly(attackerClan)) {
+                    event.setCancelled(true);
+                }
             } else {
                 // not part of a clan - check if safeCivilians is set
                 // ignore setting if he has a specific permissions
@@ -190,6 +191,8 @@ public class SCEntityListener implements Listener {
                 }
 
                 attacker.update();
+
+                plugin.getServer().getPluginManager().callEvent(new ClanPlayerKillEvent(attacker, victim, type));
 
                 plugin.getDataManager().addStatement(new KillStatement(attacker.getID(), attackerClan == null ? -1L : attackerClan.getID(),
                         victim.getID(), victimClan == null ? -1L : victimClan.getID(), war, type));

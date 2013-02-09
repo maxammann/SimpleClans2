@@ -20,9 +20,9 @@
 package com.p000ison.dev.simpleclans2.database.statements;
 
 
+import com.p000ison.dev.simpleclans2.api.KillType;
 import com.p000ison.dev.simpleclans2.database.DatabaseManager;
 import com.p000ison.dev.simpleclans2.database.Executable;
-import com.p000ison.dev.simpleclans2.database.KillType;
 import com.p000ison.dev.sqlapi.TableObject;
 import com.p000ison.dev.sqlapi.annotation.DatabaseColumn;
 import com.p000ison.dev.sqlapi.annotation.DatabaseTable;

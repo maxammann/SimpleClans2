@@ -14,38 +14,20 @@
  *     You should have received a copy of the GNU General Public License
  *     along with SimpleClans2.  If not, see <http://www.gnu.org/licenses/>.
  *
- *     Last modified: 10.10.12 21:57
+ *     Last modified: 08.02.13 17:12
  */
 
+package com.p000ison.dev.simpleclans2.rewards;
 
-package com.p000ison.dev.simpleclans2.database;
-
-import java.util.Locale;
+import org.bukkit.plugin.java.JavaPlugin;
 
 /**
- * Represents a KillType
+ * Represents a SimpleClansRewards
  */
-public enum KillType {
-
-    CIVILIAN((byte) 0),
-    NEUTRAL((byte) 1),
-    RIVAL((byte) 2);
-
-    private byte type;
-
-
-    private KillType(byte type) {
-        this.type = type;
-    }
-
-    public byte getType() {
-        return type;
-    }
+public class SimpleClansRewards extends JavaPlugin {
 
     @Override
-    public String toString() {
-        return "KillType{" +
-                "type=" + this.name().toLowerCase(Locale.US) +
-                '}';
+    public void onEnable() {
+        super.getServer().getPluginManager().registerEvents(new SimpleClansListener(), this);
     }
 }
