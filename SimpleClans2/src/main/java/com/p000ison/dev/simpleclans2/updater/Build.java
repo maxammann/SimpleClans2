@@ -136,57 +136,6 @@ public class Build {
         return artifacts;
     }
 
-    private void saveArtifact(Artifact artifact, File alternateLocation) throws IOException {
-        InputStream input = artifact.getURL().openConnection().getInputStream();
-        OutputStream output = null;
-        try {
-            output = new FileOutputStream(alternateLocation == null ? artifact.getDestinationFile() : alternateLocation);
-
-            byte[] buffer = new byte[1024];
-
-            int realLength;
-
-            while ((realLength = input.read(buffer)) > 0) {
-                output.write(buffer, 0, realLength);
-            }
-            output.flush();
-            output.close();
-            input.close();
-        } finally {
-            if (output != null) {
-                output.flush();
-                output.close();
-                input.close();
-            }
-        }
-    }
-
-    public void saveArtifacts() throws IOException {
-        for (Artifact artifact : artifacts) {
-            saveArtifact(artifact, null);
-        }
-    }
-
-    public boolean saveArtifactsToDirectory(File directory) throws IOException {
-        if (!directory.exists()) {
-            if (!directory.mkdirs()) {
-                return false;
-            }
-        }
-
-        if (!directory.isDirectory()) {
-            Logging.debug("The update folder is no directory?!");
-            return false;
-        }
-
-
-        for (Artifact artifact : artifacts) {
-            saveArtifact(artifact, new File(directory, artifact.getDestination()));
-        }
-
-        return true;
-    }
-
     public UpdateType getUpdateType() {
         return updateType;
     }

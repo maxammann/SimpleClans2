@@ -59,7 +59,7 @@ import com.p000ison.dev.simpleclans2.settings.SettingsManager;
 import com.p000ison.dev.simpleclans2.support.PreciousStonesSupport;
 import com.p000ison.dev.simpleclans2.support.SpoutSupport;
 import com.p000ison.dev.simpleclans2.teleportation.TeleportManager;
-import com.p000ison.dev.simpleclans2.updater.AutoUpdater;
+import com.p000ison.dev.simpleclans2.updater.UpdateInformer;
 import com.p000ison.dev.simpleclans2.util.SimpleClansLogger;
 import com.p000ison.dev.sqlapi.exception.DatabaseConnectionException;
 import com.p000ison.dev.sqlapi.jbdc.JBDCDatabase;
@@ -98,7 +98,7 @@ public class SimpleClans extends JavaPlugin implements SCCore {
     private PreciousStonesSupport preciousStonesSupport;
     private SpoutSupport spoutSupport;
     private ExceptionReporterTask exceptionReporterTask;
-    private AutoUpdater updater;
+    private UpdateInformer updater;
     private static Economy economy;
 
     @Override
@@ -134,7 +134,7 @@ public class SimpleClans extends JavaPlugin implements SCCore {
             ChatBlock.setSubColor(getSettingsManager().getSubPageColor());
 
             if (getSettingsManager().isUpdaterEnabled()) {
-                this.updater = new AutoUpdater(this, "SimpleClans2", getSettingsManager().getBuildChannel(), getSettingsManager().isLongBuildReport());
+                this.updater = new UpdateInformer(this, "SimpleClans2", getSettingsManager().getBuildChannel(), getSettingsManager().isLongBuildReport());
             }
 
             registerEvents();
@@ -199,14 +199,14 @@ public class SimpleClans extends JavaPlugin implements SCCore {
         return updater != null && updater.isUpdate();
     }
 
-    /**
-     * Updates this plugin
-     *
-     * @return Weather a update was performed or not.
-     */
-    public boolean update() {
-        return updater != null && updater.update();
-    }
+//    /**
+//     * Updates this plugin
+//     *
+//     * @return Weather a update was performed or not.
+//     */
+//    public boolean update() {
+//        return updater != null && updater.update();
+//    }
 
     public void setupMetrics() {
         try {
@@ -357,7 +357,6 @@ public class SimpleClans extends JavaPlugin implements SCCore {
         commandManager.addCommand(new SaveCommand(this));
         commandManager.addCommand(new ReloadCommand(this));
         commandManager.addCommand(new InfoCommand(this));
-        commandManager.addCommand(new UpgradeCommand(this));
         commandManager.addCommand(new ConvertCommand(this));
         commandManager.addCommand(new CopyCommand(this));
 

@@ -19,7 +19,7 @@ general:
     # problem.
     email: ''
 updater:
-  # Whether the updater is enabled or not. The command to update is /sc update
+  # Whether the updater is enabled or not.
   enabled: true
   # The channel of the updates. Use dev for development builds, rb for stable builds or beta for beta builds.
   build-channel: 'dev'

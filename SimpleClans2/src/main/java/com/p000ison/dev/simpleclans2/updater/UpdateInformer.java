@@ -24,7 +24,6 @@ import com.p000ison.dev.simpleclans2.util.DateHelper;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.UnknownHostException;
@@ -33,13 +32,13 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Represents a AutoUpdater
+ * Represents a UpdateInformer
  */
-public class AutoUpdater {
+public class UpdateInformer {
     private Build toUpdate = null;
     private static String[] addons = {"SimpleClans2", "SimpleClansChat"};
 
-    public AutoUpdater(Plugin plugin, String job, UpdateType type, boolean longReport) {
+    public UpdateInformer(Plugin plugin, String job, UpdateType type, boolean longReport) {
         String version = plugin.getDescription().getVersion();
 
         if (version.equals("unknown-version")) {
@@ -110,29 +109,6 @@ public class AutoUpdater {
 
     public boolean isUpdate() {
         return toUpdate != null;
-    }
-
-    public boolean update() {
-        if (toUpdate == null) {
-            return false;
-        }
-
-        try {
-            File updateDirectory = Bukkit.getUpdateFolderFile();
-            File pluginDirectory = updateDirectory.getParentFile();
-
-            if (pluginDirectory.listFiles() == null || !pluginDirectory.isDirectory()) {
-                return false;
-            }
-
-            if (!toUpdate.saveArtifactsToDirectory(updateDirectory)) {
-                return false;
-            }
-        } catch (IOException e) {
-            Logging.debug(e, true);
-            return false;
-        }
-        return true;
     }
 
     public static String getFileName(Class<?> clazz) {
