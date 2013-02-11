@@ -60,6 +60,13 @@ public class SimpleClansChat extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        PluginManager pluginManager = getServer().getPluginManager();
+
+        if (!findSimpleClans()) {
+            getLogger().log(Level.SEVERE, "Could not find SimpleClans! Disabling...");
+            pluginManager.disablePlugin(this);
+            return;
+        }
         SCChatLanguage.setInstance(new File(getDataFolder(), "languages"), Charset.defaultCharset());
 
         if (!hookSimpleClans()) {
@@ -72,7 +79,6 @@ public class SimpleClansChat extends JavaPlugin {
 
         chatSuite = setupChatSuite();
 
-        PluginManager pluginManager = getServer().getPluginManager();
 
         if (setupHeroChat()) {
             pluginManager.registerEvents(new SCCHeroChatListener(this), this);
@@ -98,7 +104,10 @@ public class SimpleClansChat extends JavaPlugin {
     public void onDisable() {
         permissions = null;
         chat = null;
-        SCChatLanguage.clear();
+        try {
+            SCChatLanguage.clear();
+        } catch (NoClassDefFoundError ignored) {
+        }
     }
 
     private boolean setupPermissions() {
@@ -111,6 +120,18 @@ public class SimpleClansChat extends JavaPlugin {
         try {
             for (Plugin plugin : this.getServer().getPluginManager().getPlugins()) {
                 if (plugin instanceof Herochat) {
+                    return true;
+                }
+            }
+        } catch (NoClassDefFoundError ignored) {
+        }
+        return false;
+    }
+
+    public boolean findSimpleClans() {
+        try {
+            for (Plugin plugin : this.getServer().getPluginManager().getPlugins()) {
+                if (plugin instanceof SCCore) {
                     return true;
                 }
             }
