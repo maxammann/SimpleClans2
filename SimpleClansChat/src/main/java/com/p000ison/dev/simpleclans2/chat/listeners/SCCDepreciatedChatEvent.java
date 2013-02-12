@@ -19,6 +19,7 @@
 
 package com.p000ison.dev.simpleclans2.chat.listeners;
 
+import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.chat.SimpleClansChat;
 import org.bukkit.entity.Player;
@@ -60,5 +61,9 @@ public class SCCDepreciatedChatEvent implements Listener {
         }
 
         event.setFormat(format);
+
+        if (player.hasPermission("simpleclans.chat.color")) {
+            event.setMessage(ChatBlock.parseColors(event.getMessage()));
+        }
     }
 }
