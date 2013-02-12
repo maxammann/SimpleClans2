@@ -134,7 +134,7 @@ public class VitalsCommand extends GenericPlayerCommand {
                     ChatBlock.sendBlank(player);
 
                 } else {
-                    ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("only.trusted.players.can.access.clan.vitals"));
+                    ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("only.trusted.players.can.do.this"));
                 }
             } else {
                 ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("clan.is.not.verified"));

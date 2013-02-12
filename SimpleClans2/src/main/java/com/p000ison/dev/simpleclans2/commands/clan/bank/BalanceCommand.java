@@ -70,7 +70,7 @@ public class BalanceCommand extends GenericPlayerCommand {
         }
 
         if (!cp.isTrusted()) {
-            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("only.trusted.players.can.access.clan.bank"));
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("only.trusted.players.can.do.this"));
             return;
         }
 
