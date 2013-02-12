@@ -84,17 +84,16 @@ public class DatabaseManager {
         database.registerTable(CraftClanPlayer.class).registerConstructor(plugin);
         database.registerTable(CraftRank.class);
 
-        autoSaver = new AutoSaver(plugin, this);
-        responseTask = new ResponseTask();
-
-        plugin.getServer().getScheduler().scheduleAsyncRepeatingTask(plugin, responseTask, 0L, 5L);
-
-
-        //convert to minutes
+        //convert from minutes
         long autoSave = plugin.getSettingsManager().getAutoSave() * 1200L;
 
+        autoSaver = new AutoSaver(plugin, this, autoSave);
+        responseTask = new ResponseTask();
+
+        plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, responseTask, 0L, 5L);
+
         if (autoSave > 0) {
-            plugin.getServer().getScheduler().scheduleAsyncRepeatingTask(plugin, autoSaver, autoSave, autoSave);
+            plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, autoSaver, autoSave, autoSave);
         }
 
         retrieveKillsPerPlayer = database.createPreparedStatement("SELECT victim, count(victim) AS kills FROM `sc2_kills` WHERE attacker = ? GROUP BY victim ORDER BY count(victim) DESC;");

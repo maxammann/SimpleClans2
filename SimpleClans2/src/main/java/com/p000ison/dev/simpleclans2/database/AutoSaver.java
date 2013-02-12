@@ -42,14 +42,24 @@ public class AutoSaver implements Runnable {
     private SimpleClans plugin;
     private DatabaseManager dataManager;
 
-    public AutoSaver(SimpleClans simpleClans, DatabaseManager dataManager) {
+    private long time;
+    private long loopedTime;
+
+    public AutoSaver(SimpleClans simpleClans, DatabaseManager dataManager, long loopedTime) {
         this.plugin = simpleClans;
         this.dataManager = dataManager;
+        this.loopedTime = loopedTime;
     }
 
     @Override
     public synchronized void run() {
         Database db = dataManager.getDatabase();
+        time += loopedTime;
+        if (time >= 12000) {
+            time = 0;
+            db.sendKeepAliveQuery();
+        }
+
         for (Clan clan : plugin.getClanManager().getModifyAbleClans()) {
             CraftClan craftClan = (CraftClan) clan;
 
