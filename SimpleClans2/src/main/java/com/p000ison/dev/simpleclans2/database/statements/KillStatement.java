@@ -53,6 +53,9 @@ public class KillStatement implements Executable, TableObject {
     @DatabaseColumn(position = 7, databaseName = "type")
     private byte killType;
 
+    public KillStatement() {
+    }
+
     public KillStatement(long attacker, long attackerTag, long victim, long victimTag, boolean war, KillType killType) {
         this.attacker = attacker;
         this.attackerClan = attackerTag;

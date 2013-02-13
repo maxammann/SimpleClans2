@@ -84,23 +84,23 @@ public class CopyCommand extends GenericConsoleCommand {
                 }
                 config = new MySQLConfiguration(args[3], args[4], address[0], port, args[2]);
 
-                to = (JBDCDatabase) DatabaseManager.getConnection(config);
-                if (to == null) {
-                    to = new MySQLDatabase(config);
-                }
+                to = new MySQLDatabase(config);
             } else if (action.equalsIgnoreCase("sqlite")) {
                 File file = new File(args[1]);
                 config = new SQLiteConfiguration(file);
-                to = (JBDCDatabase) DatabaseManager.getConnection(config);
-                if (to == null) {
-                    to = new SQLiteDatabase(config);
-                }
+                to = new SQLiteDatabase(config);
             }
 
             if (config == null) {
                 sender.sendMessage("Database type not supported!");
                 return;
             }
+
+            to.registerTable(CraftClan.class);
+            to.registerTable(CraftClanPlayer.class);
+            to.registerTable(CraftRank.class);
+            to.registerTable(BBTable.class);
+            to.registerTable(KillStatement.class);
 
             sender.sendMessage("Starting converting!");
             copyFixed(CraftClan.class, from, to);
