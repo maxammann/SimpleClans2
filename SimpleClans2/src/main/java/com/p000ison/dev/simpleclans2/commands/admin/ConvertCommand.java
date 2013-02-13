@@ -25,7 +25,6 @@ import com.p000ison.dev.simpleclans2.commands.GenericConsoleCommand;
 import com.p000ison.dev.simpleclans2.converter.Converter;
 import com.p000ison.dev.simpleclans2.language.Language;
 import com.p000ison.dev.sqlapi.DatabaseConfiguration;
-import com.p000ison.dev.sqlapi.DatabaseManager;
 import com.p000ison.dev.sqlapi.exception.DatabaseConnectionException;
 import com.p000ison.dev.sqlapi.jbdc.JBDCDatabase;
 import com.p000ison.dev.sqlapi.mysql.MySQLConfiguration;
@@ -74,10 +73,7 @@ public class ConvertCommand extends GenericConsoleCommand {
                 }
                 config = new MySQLConfiguration(args[3], args[4], address[0], port, args[2]);
 
-                database = (JBDCDatabase) DatabaseManager.getConnection(config);
-                if (database == null) {
-                    database = new MySQLDatabase(config);
-                }
+                database = new MySQLDatabase(config);
             } else if (action.equalsIgnoreCase("sqlite")) {
                 File file = new File(args[1]);
                 if (!file.exists()) {
@@ -88,10 +84,7 @@ public class ConvertCommand extends GenericConsoleCommand {
                     return;
                 }
                 config = new SQLiteConfiguration(file);
-                database = (JBDCDatabase) DatabaseManager.getConnection(config);
-                if (database == null) {
-                    database = new SQLiteDatabase(config);
-                }
+                database = new SQLiteDatabase(config);
             }
 
             if (config == null) {
