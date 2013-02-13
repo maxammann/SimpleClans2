@@ -39,6 +39,7 @@ import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.Permissible;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -265,6 +266,30 @@ public class SimpleClansChat extends JavaPlugin {
 
     public ChatCore getChatSuite() {
         return chatSuite;
+    }
+
+    public static String parseColors(Permissible permissible, String input) {
+        char[] charArray = input.toCharArray();
+
+        for (int i = 0; i < charArray.length - 1; i++) {
+            if (charArray[i] == '&') {
+                ChatColor color = getSupportedChatColor(charArray[i + 1]);
+                if (color != null && (permissible.hasPermission("simpleclans.chat.color") || permissible.hasPermission("simpleclans.chat.color." + color.name()))) {
+                    charArray[i] = ChatColor.COLOR_CHAR;
+                }
+            }
+        }
+        return new String(charArray);
+    }
+
+    private static ChatColor getSupportedChatColor(char charr) {
+        for (ChatColor color : ChatColor.values()) {
+            if (color.getChar() == charr) {
+                return color;
+            }
+        }
+
+        return null;
     }
 
     public String formatComplete(String format, Player player, ClanPlayer clanPlayer) {
