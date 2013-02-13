@@ -56,7 +56,7 @@ public class Logger {
     }
 
     public void debug(Throwable ex, String msg, Object... args) {
-        debugRaw(Level.SEVERE, String.format(msg, args), ex);
+        debugRaw(Level.SEVERE, msg == null ? null : String.format(msg, args), ex);
     }
 
     public java.util.logging.Logger getLogger() {
