@@ -3,7 +3,7 @@ main: com.p000ison.dev.simpleclans2.SimpleClans
 authors: [p000ison]
 description: 'SimpleClans2 is a clan-management plugin.'
 load: 'POSTWORLD'
-version: 'unknown-version'
+version: '1.0-b475'
 website: 'http://dev.bukkit.org/server-mods/simpleclans/'
 prefix: 'SC'
 commands:

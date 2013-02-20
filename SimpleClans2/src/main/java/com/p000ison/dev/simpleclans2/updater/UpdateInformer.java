@@ -26,6 +26,7 @@ import org.bukkit.plugin.Plugin;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.util.Date;
 
@@ -55,13 +56,13 @@ public class UpdateInformer {
 
         try {
             Build update = getBuild(type, job);
-
             update.fetchInformation();
-
             if (versionValue < update.getBuildNumber()) {
                 Logging.debug(getBuildInfo(update, longReport));
                 toUpdate = update;
             }
+        } catch (SocketTimeoutException e) {
+            Logging.debug("Failed at contacting the update service! Maybe it is a bit slow.-------------------------------------------");
         } catch (UnknownHostException e) {
             Logging.debug(e, true, "The jenkins is down! Please contact the developers!");
         } catch (FileNotFoundException e) {

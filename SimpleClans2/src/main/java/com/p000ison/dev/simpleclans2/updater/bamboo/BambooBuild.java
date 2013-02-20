@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
+import java.net.URLConnection;
 import java.nio.charset.Charset;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -45,6 +46,7 @@ import java.util.logging.Level;
 public class BambooBuild implements Build {
 
     private static final String BAMBOO_HOST = "build.greatmancode.com";
+    private static final String PROJECT_GITHUB_URL = "https://github.com/p000ison/SimpleClans2/commit/";
     private static final String API_FILE = "/rest/api/latest/result/%s/%s.json?expand=labels,changes";
     private static final String LATEST_BUILD = "/rest/api/latest/result.json?label=%s";
     private static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
@@ -72,6 +74,7 @@ public class BambooBuild implements Build {
         JSONObject results = (JSONObject) content.get("results");
         JSONArray result = (JSONArray) results.get("result");
         if (result.isEmpty()) {
+            Logging.debug("No build found in this channel!");
             return;
         }
 
@@ -108,7 +111,10 @@ public class BambooBuild implements Build {
 
     private Reader connect(String file) throws IOException {
         URL buildAPIURL = new URL("http", BAMBOO_HOST, 80, file);
-        return new InputStreamReader(buildAPIURL.openStream(), Charset.forName("UTF-8"));
+        URLConnection connection = buildAPIURL.openConnection();
+        connection.setReadTimeout(1000);
+        connection.setConnectTimeout(1000);
+        return new InputStreamReader(connection.getInputStream(), Charset.forName("UTF-8"));
     }
 
     private static JSONObject parseJSON(Reader reader) {
@@ -119,19 +125,6 @@ public class BambooBuild implements Build {
         }
 
         return (JSONObject) parse;
-    }
-
-    public static void main(String[] args) {
-        Build build = new BambooBuild("SIMPLECLANS-SIMPLECLANS2", UpdateType.STABLE);
-
-        try {
-            build.fetchInformation();
-
-        } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        } catch (FailedBuildException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
@@ -166,7 +159,7 @@ public class BambooBuild implements Build {
 
     @Override
     public String getCommitURL() {
-        return commitId;
+        return PROJECT_GITHUB_URL + commitId;
     }
 
     @Override
