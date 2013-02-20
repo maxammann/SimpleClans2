@@ -78,6 +78,19 @@
         <defaultGoal>clean install</defaultGoal>
     </build>
 
+    <distributionManagement>
+        <repository>
+            <id>upstream</id>
+            <name>greatmancode-releases</name>
+            <url>http://repo.greatmancode.com/content/repositories/releases</url>
+        </repository>
+        <snapshotRepository>
+            <id>upstream</id>
+            <name>greatmancode-snapshots</name>
+            <url>http://repo.greatmancode.com/content/repositories/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
+
     <!-- Continuous integration -->
     <ciManagement>
         <system>jenkins</system>
