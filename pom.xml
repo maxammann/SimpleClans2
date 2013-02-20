@@ -11,7 +11,7 @@
     <url>http://dev.bukkit.org/server-mods/simpleclans/</url>
     <properties>
         <main.basedir>${project.basedir}</main.basedir>
-        <project.build.number>${env.bambooBuildNumber}</project.build.number>
+        <project.build.number>${bambooBuildNumber}</project.build.number>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <modules>
@@ -119,13 +119,4 @@
             <url>http://repo.mcstats.org/content/repositories/releases/</url>
         </repository>
     </repositories>
-
-    <!-- SimpleClans's repository -->
-    <distributionManagement>
-        <snapshotRepository>
-            <id>repo-snap</id>
-            <name>SimpleClans Snapshots</name>
-            <url>http://jenkins.greatmancode.com/plugin/repository/everything/</url>
-        </snapshotRepository>
-    </distributionManagement>
 </project>
