@@ -11,7 +11,7 @@
     <url>http://dev.bukkit.org/server-mods/simpleclans/</url>
     <properties>
         <main.basedir>${project.basedir}</main.basedir>
-        <project.build.number>UNKNOWN</project.build.number>
+        <project.build.number>${env.bambooBuildNumber}</project.build.number>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <modules>
@@ -115,30 +115,4 @@
             <url>http://jenkins.greatmancode.com/plugin/repository/everything/</url>
         </snapshotRepository>
     </distributionManagement>
-
-    <!-- Manager Profiles-->
-    <profiles>
-        <profile>
-            <id>jenkins</id>
-            <activation>
-                <property>
-                    <name>env.BUILD_NUMBER</name>
-                </property>
-            </activation>
-            <properties>
-                <project.build.number>${env.BUILD_NUMBER}</project.build.number>
-            </properties>
-        </profile>
-        <profile>
-            <id>bamboo</id>
-            <activation>
-                <property>
-                    <name>bamboo.buildNumber</name>
-                </property>
-            </activation>
-            <properties>
-                <project.build.number>${bamboo.buildNumber}</project.build.number>
-            </properties>
-        </profile>
-    </profiles>
 </project>
