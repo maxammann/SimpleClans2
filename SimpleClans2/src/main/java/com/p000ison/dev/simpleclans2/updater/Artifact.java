@@ -14,7 +14,7 @@
  *     You should have received a copy of the GNU General Public License
  *     along with SimpleClans2.  If not, see <http://www.gnu.org/licenses/>.
  *
- *     Last modified: 26.01.13 15:28
+ *     Last modified: 19.02.13 21:17
  */
 
 package com.p000ison.dev.simpleclans2.updater;
@@ -23,52 +23,17 @@ import java.io.File;
 import java.net.URL;
 
 /**
- * Represents a Artifact
+ * Represents a JenkinsArtifact
  */
-public class Artifact {
-    private String name;
-    private URL url;
-    private String destination;
+public interface Artifact {
 
-    public Artifact(String name, String destination) {
-        this.name = name;
-        this.destination = destination;
-    }
+    URL getURL();
 
-    public URL getURL() {
-        return url;
-    }
+    String getName();
 
-    public String getName() {
-        return name;
-    }
+    String getDestination();
 
-    public String getDestination() {
-        return destination;
-    }
+    File getDestinationFile();
 
-    public File getDestinationFile() {
-        return new File(destination);
-    }
-
-    public void setURL(URL url) {
-        this.url = url;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Artifact artifact = (Artifact) o;
-
-        if (name != null ? !name.equals(artifact.name) : artifact.name != null) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        return name != null ? name.hashCode() : 0;
-    }
+    void setURL(URL url);
 }

@@ -20,23 +20,20 @@
 package com.p000ison.dev.simpleclans2.updater;
 
 import com.p000ison.dev.simpleclans2.api.logging.Logging;
+import com.p000ison.dev.simpleclans2.updater.bamboo.BambooBuild;
 import com.p000ison.dev.simpleclans2.util.DateHelper;
-import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Represents a UpdateInformer
  */
 public class UpdateInformer {
     private Build toUpdate = null;
-    private static String[] addons = {"SimpleClans2", "SimpleClansChat"};
 
     public UpdateInformer(Plugin plugin, String job, UpdateType type, boolean longReport) {
         String version = plugin.getDescription().getVersion();
@@ -57,7 +54,7 @@ public class UpdateInformer {
         }
 
         try {
-            Build update = getBuild(type, job, getAddonArtifacts());
+            Build update = getBuild(type, job);
 
             update.fetchInformation();
 
@@ -71,22 +68,10 @@ public class UpdateInformer {
             Logging.debug(e, true, "The file was not found on the jenkins server! Please contact the developers");
         } catch (IOException e) {
             Logging.debug(e, true, "Failed at fetching the Update information! Maybe something is down. Please contact the developers");
+        } catch (FailedBuildException e) {
+            Logging.debug("The last build failed! Sorry but I was unable to find a new build!");
         }
     }
-
-    private Artifact[] getAddonArtifacts() {
-        List<Artifact> artifacts = new ArrayList<Artifact>();
-
-        for (String addon : addons) {
-            String path = getFileName(addon);
-            if (path != null) {
-                artifacts.add(new Artifact(addon, path));
-            }
-        }
-
-        return artifacts.toArray(new Artifact[artifacts.size()]);
-    }
-
 
     public static String getBuildInfo(Build build, boolean longReport) {
         if (build == null) {
@@ -101,7 +86,7 @@ public class UpdateInformer {
             updateInfo.append("Build:  ").append(build.getBuildNumber()).append('\n');
             updateInfo.append("Type:  ").append(build.getUpdateType() == UpdateType.LATEST ? "Unofficial\n" : "Official\n");
             updateInfo.append("Release date:  ").append(new Date(build.getStarted())).append('\n');
-            updateInfo.append("Comment:  ").append(build.getComment()).append(" (").append(build.getCommitURL()).append(")\n");
+            updateInfo.append("Commit:  ").append(build.getCommitURL()).append("\n");
         }
         updateInfo.append("------------------------------------------------------------------------------------------------------\n");
         return updateInfo.toString();
@@ -109,22 +94,6 @@ public class UpdateInformer {
 
     public boolean isUpdate() {
         return toUpdate != null;
-    }
-
-    public static String getFileName(Class<?> clazz) {
-        String path = clazz.getProtectionDomain().getCodeSource().getLocation().getFile();
-        return path.substring(path.lastIndexOf('/') + 1);
-    }
-
-    public static String getFileName(Plugin plugin) {
-        if (plugin == null) {
-            return null;
-        }
-        return getFileName(plugin.getClass());
-    }
-
-    public static String getFileName(String plugin) {
-        return getFileName(Bukkit.getPluginManager().getPlugin(plugin));
     }
 
     private static int parseVersion(String version) {
@@ -160,7 +129,7 @@ public class UpdateInformer {
         return versionNumber;
     }
 
-    public static Build getBuild(UpdateType type, String job, Artifact... artifacts) {
-        return new Build(job, type, artifacts);
+    public static Build getBuild(UpdateType type, String job) {
+        return new BambooBuild(job, type);
     }
 }

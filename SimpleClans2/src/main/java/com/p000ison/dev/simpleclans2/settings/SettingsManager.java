@@ -160,6 +160,7 @@ public class SettingsManager {
             ConfigurationSection updater = config.getConfigurationSection("updater");
 
             UpdateType updateType = UpdateType.getUpdateType(updater.getString("build-channel"));
+
             this.longBuildReport = updater.getBoolean("long-build-report");
             this.updaterEnabled = updater.getBoolean("enabled");
 

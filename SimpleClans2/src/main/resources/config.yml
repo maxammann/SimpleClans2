@@ -19,10 +19,10 @@ general:
     # problem.
     email: ''
 updater:
-  # Whether the updater is enabled or not.
+  # Whether the jenkins is enabled or not.
   enabled: true
   # The channel of the updates. Use dev for development builds, rb for stable builds or beta for beta builds.
-  build-channel: 'dev'
+  build-channel: 'stable'
   # Whether you want to view additional info about an update
   long-build-report: true
 commands:

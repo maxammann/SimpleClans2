@@ -14,37 +14,20 @@
  *     You should have received a copy of the GNU General Public License
  *     along with SimpleClans2.  If not, see <http://www.gnu.org/licenses/>.
  *
- *     Last modified: 04.11.12 14:53
+ *     Last modified: 20.02.13 15:51
  */
 
 package com.p000ison.dev.simpleclans2.updater;
 
 /**
- * Represents a UpdateType
+ * Represents a FailedBuildException
  */
-public enum UpdateType {
-    LATEST("dev"),
-    STABLE("stable"),
-    BETA("beta");
+public class FailedBuildException extends Exception {
 
-    private String type;
-
-    private UpdateType(String type) {
-        this.type = type;
+    public FailedBuildException() {
     }
 
-    public static UpdateType getUpdateType(String query) {
-        for (UpdateType update : UpdateType.values()) {
-            if (update.toString().equalsIgnoreCase(query)) {
-                return update;
-            }
-        }
-
-        return null;
-    }
-
-    @Override
-    public String toString() {
-        return type;
+    public FailedBuildException(String message) {
+        super(message);
     }
 }

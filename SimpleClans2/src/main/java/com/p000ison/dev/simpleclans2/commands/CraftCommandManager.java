@@ -88,7 +88,7 @@ public class CraftCommandManager implements CommandManager {
             String identifier;
             String[] realArgs;
 
-            //Build the args; if the args length is 0 then build if from the base command
+            //JenkinsBuild the args; if the args length is 0 then build if from the base command
             if (args.length == 0) {
                 identifier = command;
                 realArgs = new String[0];
@@ -196,7 +196,7 @@ public class CraftCommandManager implements CommandManager {
             cp = plugin.getClanPlayerManager().getClanPlayer(sender.getName());
         }
 
-        // Build list of permitted commands
+        // JenkinsBuild list of permitted commands
         for (Command cmd : sortCommands) {
             if (!cmd.hasPermission(sender)) {
                 continue;

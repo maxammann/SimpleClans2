@@ -14,37 +14,42 @@
  *     You should have received a copy of the GNU General Public License
  *     along with SimpleClans2.  If not, see <http://www.gnu.org/licenses/>.
  *
- *     Last modified: 04.11.12 14:53
+ *     Last modified: 19.02.13 21:27
  */
 
-package com.p000ison.dev.simpleclans2.updater;
+package com.p000ison.dev.simpleclans2.updater.bamboo;
+
+import com.p000ison.dev.simpleclans2.updater.Artifact;
+
+import java.io.File;
+import java.net.URL;
 
 /**
- * Represents a UpdateType
+ * Represents a BambooArtifact
  */
-public enum UpdateType {
-    LATEST("dev"),
-    STABLE("stable"),
-    BETA("beta");
+public class BambooArtifact implements Artifact {
 
-    private String type;
-
-    private UpdateType(String type) {
-        this.type = type;
-    }
-
-    public static UpdateType getUpdateType(String query) {
-        for (UpdateType update : UpdateType.values()) {
-            if (update.toString().equalsIgnoreCase(query)) {
-                return update;
-            }
-        }
-
+    @Override
+    public URL getURL() {
         return null;
     }
 
     @Override
-    public String toString() {
-        return type;
+    public String getName() {
+        return null;
+    }
+
+    @Override
+    public String getDestination() {
+        return null;
+    }
+
+    @Override
+    public File getDestinationFile() {
+        return null;
+    }
+
+    @Override
+    public void setURL(URL url) {
     }
 }
