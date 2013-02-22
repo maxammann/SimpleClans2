@@ -179,4 +179,9 @@ public class JenkinsBuild implements Build {
     public String getAuthor() {
         return pusher == null ? "None" : pusher;
     }
+
+    @Override
+    public String getDownloadLink() {
+        return null;
+    }
 }

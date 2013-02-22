@@ -88,6 +88,7 @@ public class UpdateInformer {
             updateInfo.append("Type:  ").append(build.getUpdateType() == UpdateType.LATEST ? "Unofficial\n" : "Official\n");
             updateInfo.append("Release date:  ").append(new Date(build.getStarted())).append('\n');
             updateInfo.append("Commit:  ").append(build.getCommitURL()).append("\n");
+            updateInfo.append("Download link:  ").append(build.getDownloadLink()).append("\n");
         }
         updateInfo.append("------------------------------------------------------------------------------------------------------\n");
         return updateInfo.toString();

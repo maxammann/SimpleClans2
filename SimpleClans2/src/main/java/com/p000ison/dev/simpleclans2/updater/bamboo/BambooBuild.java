@@ -49,6 +49,7 @@ public class BambooBuild implements Build {
     private static final String PROJECT_GITHUB_URL = "https://github.com/p000ison/SimpleClans2/commit/";
     private static final String API_FILE = "/rest/api/latest/result/%s/%s.json?expand=labels,changes";
     private static final String LATEST_BUILD = "/rest/api/latest/result.json?label=%s";
+    private static final String ARTIFACT_LINK = "http://build.greatmancode.com/browse/%s-%s/artifact";
     private static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
     private final String job;
@@ -180,5 +181,10 @@ public class BambooBuild implements Build {
     @Override
     public String getAuthor() {
         return pusher;
+    }
+
+    @Override
+    public String getDownloadLink() {
+        return String.format(ARTIFACT_LINK, job, buildNumber);
     }
 }

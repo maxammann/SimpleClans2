@@ -53,4 +53,6 @@ public interface Build {
     Set<String> getCreatedFiles();
 
     String getAuthor();
+
+    String getDownloadLink();
 }
