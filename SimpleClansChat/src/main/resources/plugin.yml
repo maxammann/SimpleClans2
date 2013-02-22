@@ -3,3 +3,17 @@ main: com.p000ison.dev.simpleclans2.chat.SimpleClansChat
 version: unknown-version
 depends: [ SimpleClans2 ]
 softdepend: [ ChatSuite, Herochat ]
+permissions:
+  simpleclans.member.channels.clan:
+    description: Allows to manage clan chat
+  simpleclans.member.channels.ally:
+    description: Allows to manage ally chat
+  simpleclans.member.channels.global:
+    description: Allows to manage global chat
+  simpleclans.member.channels:
+    description: Default channel permissions
+    default: false
+    children:
+      simpleclans.member.channels.clan: true
+      simpleclans.member.channels.ally: true
+      simpleclans.member.channels.global: true

@@ -69,6 +69,7 @@ public class JenkinsBuild implements Build {
         this.updateType = updateType;
     }
 
+    @Override
     public void fetchInformation() throws IOException {
         URL buildAPIURL = new URL("http", JENKINS_HOST, 80, "/job/" + job + "/" + updateType + "/" + API_FILE);
 
@@ -136,46 +137,57 @@ public class JenkinsBuild implements Build {
         return (JSONObject) parse;
     }
 
+    @Override
     public List<JenkinsArtifact> getDownloadURLs() throws IOException {
         return artifacts;
     }
 
+    @Override
     public UpdateType getUpdateType() {
         return updateType;
     }
 
+    @Override
     public long getDuration() {
         return duration;
     }
 
+    @Override
     public long getStarted() {
         return started;
     }
 
+    @Override
     public int getBuildNumber() {
         return buildNumber;
     }
 
+    @Override
     public Set<String> getDeletedFiles() {
         return deletedFiles;
     }
 
+    @Override
     public String getCommitURL() {
         return commitId == null ? "None" : PROJECT_GITHUB_URL + commitId;
     }
 
+    @Override
     public String getComment() {
         return comment == null ? "None" : comment;
     }
 
+    @Override
     public Set<String> getModifiedFiles() {
         return modifiedFiles;
     }
 
+    @Override
     public Set<String> getCreatedFiles() {
         return createdFiles;
     }
 
+    @Override
     public String getAuthor() {
         return pusher == null ? "None" : pusher;
     }
