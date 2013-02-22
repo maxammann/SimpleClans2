@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.p000ison.dev.simpleclans2</groupId>
     <artifactId>SimpleClans-aggregator</artifactId>
-    <version>1.0</version>
+    <version>1.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>SimpleClans</name>
     <url>http://dev.bukkit.org/server-mods/simpleclans/</url>

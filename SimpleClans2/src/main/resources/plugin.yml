@@ -8,8 +8,11 @@ website: 'http://dev.bukkit.org/server-mods/simpleclans/'
 prefix: 'SC'
 commands:
   sc:
+    description: Default clan command
   rank:
+    description: Default command for rank management
   bb:
+    description: Default bb management
 permissions:
   simpleclans.admin.permissions:
     description: Can grant clans permissions

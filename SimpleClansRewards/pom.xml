@@ -25,10 +25,10 @@
     <parent>
         <artifactId>SimpleClans-aggregator</artifactId>
         <groupId>com.p000ison.dev.simpleclans2</groupId>
-        <version>1.0</version>
+        <version>1.0.1-SNAPSHOT</version>
     </parent>
     <artifactId>SimpleClansRewards</artifactId>
-    <version>1.0</version>
+    <version>1.0-SNAPSHOT</version>
     <dependencies>
         <dependency>
             <groupId>com.p000ison.dev.simpleclans2</groupId>

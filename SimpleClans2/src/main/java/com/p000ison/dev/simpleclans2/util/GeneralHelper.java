@@ -222,7 +222,7 @@ public final class GeneralHelper {
         }
 
         File[] files = path.listFiles();
-        for (File file : path.listFiles()) {
+        for (File file : files) {
 
             if (file.isDirectory()) {
                 deleteDir(file);
