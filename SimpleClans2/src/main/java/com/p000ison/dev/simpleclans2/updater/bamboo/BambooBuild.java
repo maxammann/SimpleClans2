@@ -28,6 +28,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -48,7 +49,8 @@ public class BambooBuild implements Build {
     private static final String BAMBOO_HOST = "build.greatmancode.com";
     private static final String PROJECT_GITHUB_URL = "https://github.com/p000ison/SimpleClans2/commit/";
     private static final String API_FILE = "/rest/api/latest/result/%s/%s.json?expand=labels,changes";
-    private static final String LATEST_BUILD = "/rest/api/latest/result.json?label=%s";
+    private static final String LATEST_BUILD_BY_LABEL = "/rest/api/latest/result.json?label=%s";
+    private static final String LATEST_BUILD = "/rest/api/latest/result.json";
     private static final String ARTIFACT_LINK = "http://build.greatmancode.com/browse/%s-%s/artifact";
     private static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
@@ -70,7 +72,13 @@ public class BambooBuild implements Build {
         Reader reader;
         JSONObject content;
 
-        reader = connect(String.format(LATEST_BUILD, updateType.toString()));
+        String latestBuild = updateType == UpdateType.LATEST ? LATEST_BUILD : String.format(LATEST_BUILD_BY_LABEL, updateType.toString());
+        try {
+            reader = connect(latestBuild);
+        } catch (FileNotFoundException e) {
+            Logging.debug("No build found in this channel!");
+            return;
+        }
         content = parseJSON(reader);
         JSONObject results = (JSONObject) content.get("results");
         JSONArray result = (JSONArray) results.get("result");
