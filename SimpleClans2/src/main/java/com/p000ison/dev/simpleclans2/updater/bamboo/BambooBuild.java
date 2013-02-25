@@ -49,8 +49,8 @@ public class BambooBuild implements Build {
     private static final String BAMBOO_HOST = "build.greatmancode.com";
     private static final String PROJECT_GITHUB_URL = "https://github.com/p000ison/SimpleClans2/commit/";
     private static final String API_FILE = "/rest/api/latest/result/%s/%s.json?expand=labels,changes";
-    private static final String LATEST_BUILD_BY_LABEL = "/rest/api/latest/result.json?label=%s";
-    private static final String LATEST_BUILD = "/rest/api/latest/result.json";
+    private static final String LATEST_BUILD_BY_LABEL = "/rest/api/latest/result/%s.json?label=%s";
+    private static final String LATEST_BUILD = "/rest/api/latest/result/%s.json";
     private static final String ARTIFACT_LINK = "http://build.greatmancode.com/browse/%s-%s/artifact";
     private static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
@@ -72,7 +72,7 @@ public class BambooBuild implements Build {
         Reader reader;
         JSONObject content;
 
-        String latestBuild = updateType == UpdateType.LATEST ? LATEST_BUILD : String.format(LATEST_BUILD_BY_LABEL, updateType.toString());
+        String latestBuild = updateType == UpdateType.LATEST ? String.format(LATEST_BUILD, job) : String.format(LATEST_BUILD_BY_LABEL, job, updateType.toString());
         try {
             reader = connect(latestBuild);
         } catch (FileNotFoundException e) {
