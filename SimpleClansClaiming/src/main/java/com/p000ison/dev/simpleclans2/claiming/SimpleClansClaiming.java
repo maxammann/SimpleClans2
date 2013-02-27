@@ -1,16 +1,23 @@
 package com.p000ison.dev.simpleclans2.claiming;
 
 import com.p000ison.dev.simpleclans2.api.SCCore;
+import com.p000ison.dev.simpleclans2.api.clan.ClanManager;
+import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayerManager;
+import com.p000ison.dev.simpleclans2.claiming.data.DatabaseManager;
 import com.p000ison.dev.sqlapi.Database;
+import com.p000ison.dev.sqlapi.mysql.MySQLConfiguration;
+import com.p000ison.dev.sqlapi.mysql.MySQLDatabase;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  * Represents a SimpleClansClaiming
  */
+// Permissions for claiming: build, destroy, interact -> clan permissions, allies, rivals, neutral
 public class SimpleClansClaiming extends JavaPlugin {
     private SCCore core;
     private DatabaseManager databaseManager;
+
 
     @Override
     public void onEnable() {
@@ -47,5 +54,22 @@ public class SimpleClansClaiming extends JavaPlugin {
 
     public DatabaseManager getDatabaseManager() {
         return databaseManager;
+    }
+
+
+    public ClanPlayerManager getClanPlayerManager() {
+        return this.core.getClanPlayerManager();
+    }
+
+    public ClanManager getClanManager() {
+        return this.core.getClanManager();
+    }
+
+    public static void main(String[] args) {
+        Database database = new MySQLDatabase(new MySQLConfiguration("root", "m1nt", "localhost", 3306, "sc"));
+
+        DatabaseManager db = new DatabaseManager(database);
+
+        System.out.println(db.getStoredClaim(new ChunkLocation(0, 0)).getClanID());
     }
 }

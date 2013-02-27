@@ -20,10 +20,25 @@
 package com.p000ison.dev.simpleclans2.claiming;
 
 import com.p000ison.dev.sqlapi.TableObject;
+import com.p000ison.dev.sqlapi.annotation.DatabaseColumn;
+import com.p000ison.dev.sqlapi.annotation.DatabaseTable;
 
 /**
  * Represents a Claim
  */
+@DatabaseTable(name = "sc2_claiming")
 public class Claim implements TableObject {
+    @DatabaseColumn(position = 0, databaseName = "id", autoIncrement = true, notNull = true, id = true)
+    private long id;
 
+    @DatabaseColumn(position = 1, databaseName = "clan", notNull = true)
+    private long clanId;
+
+    public long getClanID() {
+        return clanId;
+    }
+
+    public long getID() {
+        return id;
+    }
 }

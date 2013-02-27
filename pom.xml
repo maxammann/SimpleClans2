@@ -21,8 +21,8 @@
         <module>Test</module>
         <module>SCDataServer</module>
         <module>SimpleClansRewards</module>
-        <module>SimpleClansClaiming</module>
         <module>Distribution</module>
+        <module>SimpleClansClaiming</module>
     </modules>
     <!-- Default dependencies for bukkit plugins -->
     <dependencies>
