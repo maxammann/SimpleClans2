@@ -24,6 +24,7 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Represents a ChunkCache
@@ -36,25 +37,21 @@ public abstract class ChunkCache<V> extends CacheLoader<ChunkLocation, V> {
         CacheBuilder<Object, Object> builder = CacheBuilder.newBuilder();
 
         builder.maximumSize(maxSize);
-//        builder.expireAfterAccess(duration, TimeUnit.SECONDS);
+        builder.expireAfterAccess(duration, TimeUnit.SECONDS);
         builder.initialCapacity(initial);
         cache = builder.build(this);
     }
 
-    public void load(Map<ChunkLocation, ? extends V> data) {
-        cache.asMap().putAll(data);
-    }
-
     public void load(ChunkLocation location, V data) {
-        cache.asMap().put(location, data);
+        cache.put(location, data);
     }
 
     public V getData(ChunkLocation location) {
-//        try {
         return cache.getUnchecked(location);
-//        } catch (ExecutionException e) {
-//            throw new RuntimeException(e.getCause());
-//        }
+    }
+
+    public Map<ChunkLocation, V> getData() {
+        return cache.asMap();
     }
 
     public void clean() {

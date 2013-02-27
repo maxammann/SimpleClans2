@@ -76,6 +76,13 @@
     <!-- Dependencies for SimpleClansClaiming -->
     <dependencies>
         <dependency>
+            <groupId>com.p000ison.dev.sqlapi</groupId>
+            <artifactId>SQLDatabaseAPI</artifactId>
+            <version>1.0</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>14.0-rc3</version>
@@ -85,7 +92,7 @@
         <dependency>
             <groupId>com.p000ison.dev.simpleclans2</groupId>
             <artifactId>SimpleClansAPI</artifactId>
-            <version>1.0</version>
+            <version>1.0.1</version>
             <type>jar</type>
             <scope>compile</scope>
         </dependency>

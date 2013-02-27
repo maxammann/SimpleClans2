@@ -430,6 +430,11 @@ public class SimpleClans extends JavaPlugin implements SCCore {
     }
 
     @Override
+    public Object getSimpleClansDatabase() {
+        return getClanDatabase();
+    }
+
+    @Override
     public String getTranslation(String key, Object... args) {
         return Language.getTranslation(key, args);
     }

@@ -65,5 +65,12 @@ public interface SCCore {
      */
     CommandManager getCommandManager();
 
+    /**
+     * Gets the database of this API implementation. Maybe this is a Database from the SQLDatabaseAPI.
+     *
+     * @return a link to a database
+     */
+    Object getSimpleClansDatabase();
+
     String getTranslation(String key, Object... args);
 }
