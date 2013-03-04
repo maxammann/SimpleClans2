@@ -17,6 +17,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class SimpleClansClaiming extends JavaPlugin {
     private SCCore core;
     private DatabaseManager databaseManager;
+    private ClaimingManager claimingManager;
 
 
     @Override
@@ -71,5 +72,9 @@ public class SimpleClansClaiming extends JavaPlugin {
         DatabaseManager db = new DatabaseManager(database);
 
         System.out.println(db.getStoredClaim(new ChunkLocation(0, 0)).getClanID());
+    }
+
+    public ClaimingManager getClaimingManager() {
+        return claimingManager;
     }
 }

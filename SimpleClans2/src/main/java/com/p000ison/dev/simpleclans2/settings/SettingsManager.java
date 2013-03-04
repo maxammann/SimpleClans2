@@ -91,6 +91,8 @@ public class SettingsManager {
     private double rivalLimitPercent;
     private boolean modifyTagCompletely;
 
+    private int maxClanSize;
+
     private int maxRankTagLength, minRankTagLength, maxRankNameLength, minRankNameLength;
 
     private String clanBB, clanPlayerBB, defaultBB;
@@ -243,6 +245,7 @@ public class SettingsManager {
             rivalLimitPercent = clan.getDouble("rival-limit-percent");
             modifyTagCompletely = clan.getBoolean("modify-tag-completely");
             trustMembersByDefault = clan.getBoolean("trust-members-by-default");
+            maxClanSize = clan.getInt("max-clan-size");
 
             ConfigurationSection clanEconomy = clan.getConfigurationSection("economy");
 
@@ -778,5 +781,9 @@ public class SettingsManager {
 
     public int getMaxRankTagLength() {
         return maxRankTagLength;
+    }
+
+    public int getMaxClanSize() {
+        return maxClanSize;
     }
 }

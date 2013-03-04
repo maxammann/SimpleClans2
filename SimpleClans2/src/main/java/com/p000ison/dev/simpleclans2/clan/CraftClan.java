@@ -418,6 +418,11 @@ public class CraftClan implements Clan, TableObject, UpdateAble {
 
     @Override
     public void addMember(ClanPlayer clanPlayer) {
+
+        if (getSize() + 1 > plugin.getSettingsManager().getMaxClanSize()) {
+            throw new IllegalArgumentException(getName() + " reached the maximium clan size!");
+        }
+
         Clan previous = clanPlayer.getClan();
 
         if (previous != null && isVerified()) {

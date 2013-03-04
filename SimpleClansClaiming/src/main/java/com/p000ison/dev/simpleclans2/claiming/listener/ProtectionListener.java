@@ -19,10 +19,32 @@
 
 package com.p000ison.dev.simpleclans2.claiming.listener;
 
+import com.p000ison.dev.simpleclans2.claiming.Claim;
+import com.p000ison.dev.simpleclans2.claiming.SimpleClansClaiming;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
 
 /**
  * Represents a ProtectionListener
  */
 public class ProtectionListener implements Listener {
+
+    private SimpleClansClaiming plugin;
+
+    public ProtectionListener(SimpleClansClaiming plugin) {
+        this.plugin = plugin;
+    }
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = false)
+    public void onBlockBreak(BlockBreakEvent event) {
+        Player player = event.getPlayer();
+
+
+        Claim claim = plugin.getClaimingManager().getClaimAt(player.getLocation());
+
+
+    }
 }

@@ -73,4 +73,8 @@ public class ChunkLocation {
         result = 31 * result + z;
         return result;
     }
+
+    public static ChunkLocation toLocation(String data) {
+        return null;
+    }
 }

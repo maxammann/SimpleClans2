@@ -20,6 +20,7 @@
 package com.p000ison.dev.simpleclans2.claiming;
 
 import com.p000ison.dev.simpleclans2.api.clan.Clan;
+import com.p000ison.dev.simpleclans2.api.clan.ClanFlags;
 import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.api.clanplayer.PlayerFlags;
 import org.bukkit.Location;
@@ -29,30 +30,21 @@ import org.bukkit.Location;
  */
 public class ClaimingManager {
 
-    private static final String POWER_KEY = "power";
+    private static final String POWER_KEY = "power", HOME_CHUNK_KEY = "homechunk";
     private final SimpleClansClaiming plugin;
 
     public ClaimingManager(SimpleClansClaiming plugin) {
         this.plugin = plugin;
     }
 
-
     public void setPower(ClanPlayer cp, double value) {
         PlayerFlags flags = cp.getFlags();
-
-        if (flags == null) {
-            return;
-        }
 
         flags.set(POWER_KEY, value);
     }
 
     public double getPower(ClanPlayer cp) {
         PlayerFlags flags = cp.getFlags();
-
-        if (flags == null) {
-            return 0.0;
-        }
 
         return flags.getDouble(POWER_KEY);
     }
@@ -67,12 +59,15 @@ public class ClaimingManager {
     }
 
     public void setHomeChunk(Clan clan, ChunkLocation location) {
+        ClanFlags flags = clan.getFlags();
 
+        flags.setString(HOME_CHUNK_KEY, location.toString());
     }
 
-//    public ChunkLocation getHomeChunk(Clan clan) {
-//
-//    }
+    public ChunkLocation getHomeChunk(Clan clan) {
+        ClanFlags flags = clan.getFlags();
+        return ChunkLocation.toLocation(flags.getString(HOME_CHUNK_KEY));
+    }
 
     public Clan getClanAt(Location location) {
         Claim claim = getClaimAt(location);

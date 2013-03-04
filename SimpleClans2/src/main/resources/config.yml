@@ -88,6 +88,8 @@ clan:
   rival-limit-percent: 20
   # Whether a clan needs a verification from a mod for example.
   require-verification: true
+  # The maximal size of a clan
+  max-clan-size: 200
   purge:
     # How long the data of a inactive player is kept
     inactive-player-data-days: 30

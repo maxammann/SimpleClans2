@@ -53,11 +53,16 @@ public class InviteRequest extends SingleRequest {
             return false;
         }
 
+        if (clan.getSize() + 1 > plugin.getSettingsManager().getMaxClanSize()) {
+            sendAcceptorMessage(Language.getTranslation("reached.max.size", clan.getTag()));
+            sendRequesterMessage(Language.getTranslation("your.clan.reached.max.size"));
+            return false;
+        }
+
         ClanPlayer acceptor = getAcceptor();
 
         clan.addMember(acceptor);
         acceptor.setLeader(false);
-        acceptor.setClan(clan);
 
         clan.addBBMessage(MessageFormat.format(Language.getTranslation("joined.the.clan"), acceptor.getName()));
         plugin.serverAnnounce(MessageFormat.format(Language.getTranslation("has.joined"), acceptor.getName(), clan.getName()));
