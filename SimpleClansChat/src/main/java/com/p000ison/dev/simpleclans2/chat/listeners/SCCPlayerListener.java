@@ -43,14 +43,24 @@ public class SCCPlayerListener implements Listener {
         String format;
         Player player = event.getPlayer();
         ClanPlayer clanPlayer = plugin.getClanPlayerManager().getClanPlayer(player);
+        int initialRetrieversSize = event.getRecipients().size();
 
         format = plugin.removeRetrievers(event.getRecipients(), clanPlayer, player);
 
         if (format == null) {
             if (this.plugin.getSettingsManager().isCompatibilityMode()) {
                 format = plugin.formatCompatibility(event.getFormat(), player.getName());
+                if (plugin.getSettingsManager().isCancellingMode() && event.getRecipients().size() != initialRetrieversSize) {
+                    String finalOutput = String.format(format, player.getDisplayName(), event.getMessage());
+                    for (Player recipient : event.getRecipients()) {
+                        recipient.sendMessage(finalOutput);
+                    }
+                    event.setCancelled(true);
+                }
             } else if (this.plugin.getSettingsManager().isCompleteMode()) {
                 format = plugin.formatComplete(plugin.getSettingsManager().getCompleteModeFormat(), player, clanPlayer);
+                //colorize
+                event.setMessage(SimpleClansChat.parseColors(player, event.getMessage()));
             }
         }
 
@@ -59,7 +69,5 @@ public class SCCPlayerListener implements Listener {
         }
 
         event.setFormat(format);
-
-        event.setMessage(SimpleClansChat.parseColors(player, event.getMessage()));
     }
 }

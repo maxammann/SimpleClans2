@@ -28,7 +28,7 @@ import java.util.Set;
 public class SettingsManager {
     private SimpleClansChat plugin;
     private FileConfiguration config;
-    private boolean compatibilityMode;
+    private boolean compatibilityMode, cancellingMode;
     private boolean completeMode;
     private String completeModeFormat;
     private String clanChannelFormat;
@@ -60,6 +60,7 @@ public class SettingsManager {
 
         this.compatibilityMode = settings.getBoolean("compatibility-mode");
         this.completeMode = settings.getBoolean("complete-mode");
+        this.cancellingMode = settings.getBoolean("cancelling-mode");
         this.depreciationMode = settings.getBoolean("depreciation-mode");
 
         ConfigurationSection format = this.config.getConfigurationSection("format");
@@ -113,5 +114,9 @@ public class SettingsManager {
 
     public boolean isDepreciationMode() {
         return depreciationMode;
+    }
+
+    public boolean isCancellingMode() {
+        return cancellingMode;
     }
 }

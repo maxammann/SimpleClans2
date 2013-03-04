@@ -1,5 +1,6 @@
 settings:
    compatibility-mode: false
+   cancelling-mode: false
    complete-mode: true
    depreciation-mode: false
 format:
