@@ -75,7 +75,7 @@
             <plugin>
                 <groupId>com.google.code.maven-replacer-plugin</groupId>
                 <artifactId>replacer</artifactId>
-                <version>1.5.1</version>
+                <version>1.5.2</version>
                 <executions>
                     <execution>
                         <phase>prepare-package</phase>
@@ -85,7 +85,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <file>target/classes/plugin.yml</file>
+                    <file>SimpleClans2/target/classes/plugin.yml</file>
                     <replacements>
                         <replacement>
                             <token>unknown-version</token>
