@@ -21,6 +21,7 @@ package com.p000ison.dev.simpleclans2.chat;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.event.EventPriority;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -35,6 +36,7 @@ public class SettingsManager {
     private String allyChannelFormat;
     private boolean depreciationMode;
     private Set<Variable> variables = new HashSet<Variable>();
+    private EventPriority priority;
 
     public SettingsManager(SimpleClansChat plugin) {
         this.plugin = plugin;
@@ -62,6 +64,7 @@ public class SettingsManager {
         this.completeMode = settings.getBoolean("complete-mode");
         this.cancellingMode = settings.getBoolean("cancelling-mode");
         this.depreciationMode = settings.getBoolean("depreciation-mode");
+        priority = EventPriority.valueOf(settings.getString("priority").toUpperCase());
 
         ConfigurationSection format = this.config.getConfigurationSection("format");
 
@@ -118,5 +121,9 @@ public class SettingsManager {
 
     public boolean isCancellingMode() {
         return cancellingMode;
+    }
+
+    public EventPriority getPriority() {
+        return priority;
     }
 }

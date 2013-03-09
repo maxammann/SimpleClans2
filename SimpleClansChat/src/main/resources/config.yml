@@ -3,6 +3,8 @@ settings:
    cancelling-mode: false
    complete-mode: true
    depreciation-mode: false
+   # LOWEST,LOW,NORMAL,HIGH,HIGHEST
+   priority: HIGHEST
 format:
    complete-mode: '-clan-group-prefix-player: -message'
    variables:

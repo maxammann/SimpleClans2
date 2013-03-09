@@ -22,8 +22,6 @@ package com.p000ison.dev.simpleclans2.chat.listeners;
 import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.chat.SimpleClansChat;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChatEvent;
 
@@ -39,7 +37,6 @@ public class SCCDepreciatedChatEvent implements Listener {
         this.plugin = plugin;
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerChat(PlayerChatEvent event) {
         String format;
         Player player = event.getPlayer();

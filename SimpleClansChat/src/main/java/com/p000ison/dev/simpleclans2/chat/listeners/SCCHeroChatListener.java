@@ -43,10 +43,14 @@ public class SCCHeroChatListener implements Listener {
             String format = event.getFormat();
 
             if (format.equals("{default}")) {
-                format = Herochat.getChannelManager().getStandardFormat();
+                format =  Herochat.getChannelManager().getStandardFormat();
             }
 
             event.setFormat(plugin.formatCompatibility(format, event.getSender().getName()));
         }
+    }
+
+    public static void main(String[] args) {
+        System.out.println("test");
     }
 }

@@ -39,13 +39,21 @@ import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
+import org.bukkit.event.EventException;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.permissions.Permissible;
+import org.bukkit.plugin.EventExecutor;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.Charset;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -80,17 +88,16 @@ public class SimpleClansChat extends JavaPlugin {
 
         chatSuite = setupChatSuite();
 
-
+        System.out.println(AsyncPlayerChatEvent.getHandlerList().getRegisteredListeners().length);
         if (setupHeroChat()) {
             pluginManager.registerEvents(new SCCHeroChatListener(this), this);
             Logging.debug("Hooked Herochat!");
         } else {
             if (settingsManager.isDepreciationMode()) {
-                pluginManager.registerEvents(new SCCDepreciatedChatEvent(this), this);
+                registerChatEvent(new SCCDepreciatedChatEvent(this), settingsManager.getPriority(), PlayerChatEvent.class);
             } else {
-                pluginManager.registerEvents(new SCCPlayerListener(this), this);
+                registerChatEvent(new SCCPlayerListener(this), settingsManager.getPriority(), AsyncPlayerChatEvent.class);
             }
-
         }
 
         core.getCommandManager().addCommand(new GlobalChannelCommand("GlobalChannel", core));
@@ -99,6 +106,26 @@ public class SimpleClansChat extends JavaPlugin {
 
         setupPermissions();
         setupChat();
+    }
+
+    private void registerChatEvent(Listener listener, EventPriority priority, final Class<? extends Event> eventClass) {
+        PluginManager pluginManager = getServer().getPluginManager();
+        pluginManager.registerEvent(eventClass, listener, settingsManager.getPriority(), new EventExecutor() {
+
+            @Override
+            public void execute(Listener listener, Event event) throws EventException {
+                try {
+                    if (!eventClass.isAssignableFrom(event.getClass())) {
+                        return;
+                    }
+                    listener.getClass().getMethod("onPlayerChat", eventClass).invoke(listener, event);
+                } catch (InvocationTargetException ex) {
+                    throw new EventException(ex.getCause());
+                } catch (Throwable t) {
+                    throw new EventException(t);
+                }
+            }
+        }, this);
     }
 
     @Override
