@@ -118,6 +118,8 @@ clan:
   economy:
     # The price for a clan creation or -1
     purchase-creation: 20
+    # The price for a clan verification or -1
+    purchase-verification: -1
     # The price for teleporting or -1
     purchase-teleport: -1
      # The price for settings the teleport point or -1
