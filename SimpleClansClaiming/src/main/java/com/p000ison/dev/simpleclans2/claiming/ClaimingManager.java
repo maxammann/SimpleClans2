@@ -58,15 +58,15 @@ public class ClaimingManager {
         return power;
     }
 
-    public void setHomeChunk(Clan clan, ChunkLocation location) {
+    public void setHomeChunk(Clan clan, ClaimLocation location) {
         ClanFlags flags = clan.getFlags();
 
         flags.setString(HOME_CHUNK_KEY, location.toString());
     }
 
-    public ChunkLocation getHomeChunk(Clan clan) {
+    public ClaimLocation getHomeChunk(Clan clan) {
         ClanFlags flags = clan.getFlags();
-        return ChunkLocation.toLocation(flags.getString(HOME_CHUNK_KEY));
+        return ClaimLocation.toLocation(flags.getString(HOME_CHUNK_KEY));
     }
 
     public Clan getClanAt(Location location) {
@@ -85,7 +85,7 @@ public class ClaimingManager {
     }
 
     public Claim getClaimAt(Location location) {
-        return plugin.getDatabaseManager().getStoredClaim(ChunkLocation.toChunkLocation(location));
+        return plugin.getDatabaseManager().getStoredClaim(ClaimLocation.toClaimLocation(location,16,256));
     }
 
     public boolean isClanAt(Location location) {

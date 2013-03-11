@@ -1,0 +1,4 @@
+name: SimpleClansClaiming
+main: com.p000ison.dev.simpleclans2.claiming.SimpleClansClaiming
+version: unknown-version
+depends: [ SimpleClans2 ]

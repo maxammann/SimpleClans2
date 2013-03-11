@@ -71,7 +71,7 @@ public class SimpleClansClaiming extends JavaPlugin {
 
         DatabaseManager db = new DatabaseManager(database);
 
-        System.out.println(db.getStoredClaim(new ChunkLocation(0, 0)).getClanID());
+        System.out.println(db.getStoredClaim(new ClaimLocation(0, 0, (short)0)).getClanID());
     }
 
     public ClaimingManager getClaimingManager() {

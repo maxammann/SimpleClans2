@@ -19,7 +19,7 @@
 
 package com.p000ison.dev.simpleclans2.claiming.data;
 
-import com.p000ison.dev.simpleclans2.claiming.ChunkLocation;
+import com.p000ison.dev.simpleclans2.claiming.ClaimLocation;
 import com.p000ison.dev.simpleclans2.claiming.Claim;
 import com.p000ison.dev.sqlapi.Database;
 import com.p000ison.dev.sqlapi.query.PreparedSelectQuery;
@@ -40,7 +40,7 @@ public class DatabaseManager {
 
         this.cache = new ChunkCache<Claim>(10, 300, 60) {
             @Override
-            public Claim load(ChunkLocation key) throws Exception {
+            public Claim load(ClaimLocation key) throws Exception {
                 selectClaim.set(0, key.getX());
                 selectClaim.set(1, key.getZ());
                 return selectClaim.getResults().get(0);
@@ -52,7 +52,7 @@ public class DatabaseManager {
         cache.clean();
     }
 
-    public Claim getStoredClaim(ChunkLocation location) {
+    public Claim getStoredClaim(ClaimLocation location) {
         return cache.getData(location);
     }
 

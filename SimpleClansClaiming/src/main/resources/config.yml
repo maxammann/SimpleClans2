@@ -1,0 +1,5 @@
+claim:
+    size: 16
+    height: 256
+taxes:
+    per-chunk: 5
