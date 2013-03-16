@@ -32,13 +32,22 @@ import com.p000ison.dev.sqlapi.annotation.DatabaseTable;
 @SuppressWarnings("unused")
 public class Claim implements TableObject {
 
-    @DatabaseColumn(position = 0, databaseName = "id", autoIncrement = true, notNull = true, id = true)
+    @DatabaseColumn(position = 0, databaseName = "id", notNull = true, id = true)
     private long id;
 
     @DatabaseColumn(position = 1, databaseName = "clan", notNull = true)
     private long clanId;
 
-    private final ClaimLocation location = new ClaimLocation();
+    private final ClaimLocation location;
+
+    public Claim() {
+        this.location = new ClaimLocation();
+    }
+
+    public Claim(long clanId, ClaimLocation location) {
+        this.clanId = clanId;
+        this.location = location;
+    }
 
     public long getClanID() {
         return clanId;
@@ -64,17 +73,17 @@ public class Claim implements TableObject {
     }
 
     @DatabaseColumnGetter(databaseName = "x")
-    private int getDatabaseX() {
+    public int getX() {
         return location.getX();
     }
 
     @DatabaseColumnGetter(databaseName = "z")
-    private int getDatabaseZ() {
+    public int getZ() {
         return location.getZ();
     }
 
     @DatabaseColumnGetter(databaseName = "y")
-    private short getDatabaseY() {
+    public short getY() {
         return (short) location.getY();
     }
 }

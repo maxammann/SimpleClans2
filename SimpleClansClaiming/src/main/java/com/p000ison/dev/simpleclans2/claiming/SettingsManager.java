@@ -21,6 +21,7 @@ package com.p000ison.dev.simpleclans2.claiming;
 
 import com.p000ison.dev.simpleclans2.api.Configuration;
 import com.p000ison.dev.simpleclans2.api.logging.Logging;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 
 import java.io.File;
@@ -34,10 +35,15 @@ public class SettingsManager {
     private SimpleClansClaiming plugin;
     private Configuration config;
 
+    private int claimSize, claimHeigth;
+
+    private double taxesPerChunk;
+
+
     public SettingsManager(SimpleClansClaiming plugin) {
         this.plugin = plugin;
+        init();
     }
-
 
     public boolean init() {
         try {
@@ -59,7 +65,14 @@ public class SettingsManager {
     }
 
     private void load() {
+        ConfigurationSection claim = config.getConfigurationSection("claim");
 
+        claimSize = claim.getInt("size");
+        claimHeigth = claim.getInt("height");
+
+        ConfigurationSection taxes = config.getConfigurationSection("taxes");
+
+        taxesPerChunk = taxes.getDouble("per-chunk");
     }
 
     public void save() {
@@ -81,5 +94,17 @@ public class SettingsManager {
             return;
         }
         load();
+    }
+
+    public int getClaimSize() {
+        return claimSize;
+    }
+
+    public int getClaimHeigth() {
+        return claimHeigth;
+    }
+
+    public double getTaxesPerChunk() {
+        return taxesPerChunk;
     }
 }

@@ -19,9 +19,9 @@
 
 package com.p000ison.dev.simpleclans2.claiming.data;
 
+import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
 import com.p000ison.dev.simpleclans2.claiming.ClaimLocation;
 
 import java.util.Map;
@@ -32,7 +32,7 @@ import java.util.concurrent.TimeUnit;
  */
 public abstract class ChunkCache<V> extends CacheLoader<ClaimLocation, V> {
 
-    private LoadingCache<ClaimLocation, V> cache;
+    private Cache<ClaimLocation, V> cache;
 
     public ChunkCache(int initial, int maxSize, long duration) {
         CacheBuilder<Object, Object> builder = CacheBuilder.newBuilder();
@@ -44,7 +44,7 @@ public abstract class ChunkCache<V> extends CacheLoader<ClaimLocation, V> {
     }
 
     public void load(ClaimLocation location, V data) {
-        cache.put(location, data);
+        cache.asMap().put(location, data);
     }
 
     public V getData(ClaimLocation location) {
