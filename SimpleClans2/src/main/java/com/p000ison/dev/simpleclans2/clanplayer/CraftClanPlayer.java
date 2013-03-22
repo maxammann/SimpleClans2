@@ -170,6 +170,15 @@ public class CraftClanPlayer implements ClanPlayer, TableObject {
         return !this.isOnline() ? new Date(lastSeen.get()) : new Date();
     }
 
+    @Override
+    public void sendMessage(String message) {
+        Player player = toPlayer();
+
+        if (player != null) {
+            player.sendMessage(message);
+        }
+    }
+
     public long getLastSeenTime() {
         return !this.isOnline() ? lastSeen.get() : System.currentTimeMillis();
     }

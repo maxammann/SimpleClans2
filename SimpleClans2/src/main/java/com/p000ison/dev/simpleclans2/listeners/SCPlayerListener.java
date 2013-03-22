@@ -89,7 +89,7 @@ public class SCPlayerListener implements Listener {
     }
 
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onCommandPreprocess(PlayerCommandPreprocessEvent event) {
         Player player = event.getPlayer();
         String message = event.getMessage();

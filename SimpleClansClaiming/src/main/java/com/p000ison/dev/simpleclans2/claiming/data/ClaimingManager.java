@@ -19,6 +19,7 @@
 
 package com.p000ison.dev.simpleclans2.claiming.data;
 
+import com.p000ison.dev.simpleclans2.api.SCCore;
 import com.p000ison.dev.simpleclans2.api.clan.Clan;
 import com.p000ison.dev.simpleclans2.api.clan.ClanFlags;
 import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayer;
@@ -38,7 +39,7 @@ import java.util.Set;
  */
 public class ClaimingManager {
 
-    private static final String POWER_KEY = "power", HOME_CHUNK_KEY = "homechunk";
+    private static final String POWER_KEY = "power", HOME_CHUNK_KEY = "homechunk", TAXES_PER_MEMBER = "taxes_per_member", TIMES_NOT_PAYED ="not_payed";
     private final SimpleClansClaiming plugin;
 
     private final Database database;
@@ -142,38 +143,6 @@ public class ClaimingManager {
         return i;
     }
 
-    public void setPower(ClanPlayer cp, double value) {
-        PlayerFlags flags = cp.getFlags();
-
-        flags.set(POWER_KEY, value);
-    }
-
-    public double getPower(ClanPlayer cp) {
-        PlayerFlags flags = cp.getFlags();
-
-        return flags.getDouble(POWER_KEY);
-    }
-
-    public double getPower(Clan clan) {
-        double power = 0;
-
-        for (ClanPlayer cp : clan.getAllMembers()) {
-            power += getPower(cp);
-        }
-        return power;
-    }
-
-    public void setHomeChunk(Clan clan, ClaimLocation location) {
-        ClanFlags flags = clan.getFlags();
-
-        flags.setString(HOME_CHUNK_KEY, location.toString());
-    }
-
-    public ClaimLocation getHomeChunk(Clan clan) {
-        ClanFlags flags = clan.getFlags();
-        return ClaimLocation.toLocation(flags.getString(HOME_CHUNK_KEY));
-    }
-
     public Clan getClanAt(Location location) {
         Claim claim = getClaimAt(location);
         if (claim == null) {
@@ -199,5 +168,69 @@ public class ClaimingManager {
 
     public boolean isClanAt(Location location) {
         return getClanAt(location) != null;
+    }
+
+
+
+    public void setPower(ClanPlayer cp, double value) {
+        PlayerFlags flags = cp.getFlags();
+
+        flags.set(POWER_KEY, value);
+    }
+
+    public double getPower(ClanPlayer cp) {
+        PlayerFlags flags = cp.getFlags();
+
+        return flags.getDouble(POWER_KEY);
+    }
+
+    public void addTimeNotPayed(ClanPlayer cp) {
+        PlayerFlags flags = cp.getFlags();
+
+        int times = getTimesNotPayed(cp);
+
+        flags.set(TIMES_NOT_PAYED, times +1);
+    }
+
+    public int getTimesNotPayed(ClanPlayer cp) {
+        PlayerFlags flags = cp.getFlags();
+
+        return flags.getInteger(TIMES_NOT_PAYED);
+    }
+
+    public void setTaxesPerMember(Clan clan, double value) {
+        ClanFlags flags = clan.getFlags();
+
+        flags.set(TAXES_PER_MEMBER, value);
+    }
+
+    public double getTaxesPerMember(Clan clan) {
+        ClanFlags flags = clan.getFlags();
+
+        return flags.getDouble(TAXES_PER_MEMBER);
+    }
+
+    public double getPower(Clan clan) {
+        double power = 0;
+
+        for (ClanPlayer cp : clan.getAllMembers()) {
+            power += getPower(cp);
+        }
+        return power;
+    }
+
+    public void setHomeChunk(Clan clan, ClaimLocation location) {
+        ClanFlags flags = clan.getFlags();
+
+        flags.setString(HOME_CHUNK_KEY, location.toString());
+    }
+
+    public ClaimLocation getHomeChunk(Clan clan) {
+        ClanFlags flags = clan.getFlags();
+        return ClaimLocation.toLocation(flags.getString(HOME_CHUNK_KEY));
+    }
+
+    public SCCore getCore() {
+        return plugin.getCore();
     }
 }

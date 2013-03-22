@@ -19,12 +19,56 @@
 
 package com.p000ison.dev.simpleclans2.claiming.tax;
 
+import com.p000ison.dev.simpleclans2.api.clan.Clan;
+import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayer;
+import com.p000ison.dev.simpleclans2.claiming.data.ClaimingManager;
+
 /**
  * Represents a TaxesTask
  */
-public class TaxesTask implements Runnable{
+public class TaxesTask implements Runnable {
+
+    private ClaimingManager manager;
 
     @Override
     public void run() {
+
+
+        for (Clan clan : manager.getCore().getClanManager().getClans()) {
+            double taxesPerMember = manager.getTaxesPerMember(clan);
+
+            if (taxesPerMember > 0.0D) {
+
+                collectTaxes(clan, taxesPerMember);
+            }
+        }
+    }
+
+    public double collectTaxes(final Clan clan, final double taxes) {
+        int timesCollected = 0;
+
+        StringBuilder notPayed = new StringBuilder();
+
+        for (ClanPlayer cp : clan.getMembers()) {
+
+            boolean success = cp.withdraw(taxes);
+
+            if (!success) {
+                //not enough money
+
+                manager.addTimeNotPayed(cp);
+                notPayed.append(cp.getName()).append(" ,");
+
+                if (manager.getTimesNotPayed(cp) >= 3) {
+                    cp.getClan().removeMember(cp);
+                }
+            } else {
+                timesCollected++;
+            }
+        }
+
+        notPayed.delete(notPayed.length() - 2, notPayed.length());
+
+        return taxes * timesCollected;
     }
 }

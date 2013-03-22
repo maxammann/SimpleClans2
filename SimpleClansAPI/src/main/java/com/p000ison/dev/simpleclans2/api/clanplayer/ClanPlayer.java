@@ -126,6 +126,8 @@ public interface ClanPlayer extends KDR, Balance, UpdateAble, Serializable {
      */
     Date getLastSeenDate();
 
+    void sendMessage(String message);
+
     void updateLastSeen();
 
     Date getJoinDate();
