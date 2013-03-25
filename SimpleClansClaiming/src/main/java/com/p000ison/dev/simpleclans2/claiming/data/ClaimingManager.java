@@ -26,12 +26,16 @@ import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.api.clanplayer.PlayerFlags;
 import com.p000ison.dev.simpleclans2.claiming.Claim;
 import com.p000ison.dev.simpleclans2.claiming.ClaimLocation;
+import com.p000ison.dev.simpleclans2.claiming.SettingsManager;
 import com.p000ison.dev.simpleclans2.claiming.SimpleClansClaiming;
+import com.p000ison.dev.simpleclans2.claiming.tax.TaxesTask;
 import com.p000ison.dev.sqlapi.Database;
 import com.p000ison.dev.sqlapi.query.PreparedSelectQuery;
 import org.bukkit.Location;
+import org.bukkit.World;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -39,17 +43,22 @@ import java.util.Set;
  */
 public class ClaimingManager {
 
-    private static final String POWER_KEY = "power", HOME_CHUNK_KEY = "homechunk", TAXES_PER_MEMBER = "taxes_per_member", TIMES_NOT_PAYED ="not_payed";
+    private static final String POWER_KEY = "power", HOME_CHUNK_KEY = "homechunk", TAXES_PER_MEMBER = "taxes_per_member", KICK_PLAYER = "kick_player";
     private final SimpleClansClaiming plugin;
 
     private final Database database;
     private final ChunkCache<Claim> cache;
+
+    private final TaxesTask taxesTask;
+
+    private final SettingsManager settingsManager;
 
     private final PreparedSelectQuery<Claim> selectClaimByCoords, selectClaimsByClan;
 
     public ClaimingManager(SimpleClansClaiming plugin, Database database) {
         this.plugin = plugin;
         this.database = database;
+        settingsManager = new SettingsManager(plugin);
         database.registerTable(Claim.class);
         selectClaimByCoords = database.<Claim>select().from(Claim.class).where().preparedEquals("x").and().preparedEquals("y").and().preparedEquals("z").select().prepare();
         selectClaimsByClan = database.<Claim>select().from(Claim.class).where().preparedEquals("clan").select().prepare();
@@ -60,9 +69,13 @@ public class ClaimingManager {
                 selectClaimByCoords.set(0, key.getX());
                 selectClaimByCoords.set(1, key.getY());
                 selectClaimByCoords.set(2, key.getZ());
-                return selectClaimByCoords.getResults().get(0);
+                List<Claim> results = selectClaimByCoords.getResults();
+                System.out.println(results);
+                return results.isEmpty() ? null : results.get(0);
             }
         };
+
+        plugin.getServer().getScheduler().runTaskTimer(plugin, taxesTask = new TaxesTask(this), 0L, 20L);
     }
 
     public void clean() {
@@ -159,17 +172,17 @@ public class ClaimingManager {
     }
 
     public Claim getClaimAt(Location location) {
+        System.out.println(toClaimLocation(location));
         return getStoredClaim(toClaimLocation(location));
     }
 
     public ClaimLocation toClaimLocation(Location location) {
-        return ClaimLocation.toClaimLocation(location, 16, 256);
+        return ClaimLocation.toClaimLocation(location, getIDByWorld(location.getWorld()), 16, 256);
     }
 
     public boolean isClanAt(Location location) {
         return getClanAt(location) != null;
     }
-
 
 
     public void setPower(ClanPlayer cp, double value) {
@@ -184,18 +197,16 @@ public class ClaimingManager {
         return flags.getDouble(POWER_KEY);
     }
 
-    public void addTimeNotPayed(ClanPlayer cp) {
-        PlayerFlags flags = cp.getFlags();
+    public void setKickPlayers(Clan clan, boolean kick) {
+        ClanFlags flags = clan.getFlags();
 
-        int times = getTimesNotPayed(cp);
-
-        flags.set(TIMES_NOT_PAYED, times +1);
+        flags.setBoolean(KICK_PLAYER, kick);
     }
 
-    public int getTimesNotPayed(ClanPlayer cp) {
-        PlayerFlags flags = cp.getFlags();
+    public boolean isKickPlayers(Clan clan) {
+        ClanFlags flags = clan.getFlags();
 
-        return flags.getInteger(TIMES_NOT_PAYED);
+        return flags.getBoolean(KICK_PLAYER);
     }
 
     public void setTaxesPerMember(Clan clan, double value) {
@@ -232,5 +243,21 @@ public class ClaimingManager {
 
     public SCCore getCore() {
         return plugin.getCore();
+    }
+
+    public SimpleClansClaiming getPlugin() {
+        return plugin;
+    }
+
+    public SettingsManager getSettingsManager() {
+        return settingsManager;
+    }
+
+    public int getIDByWorld(String world) {
+        return settingsManager.getMapIDs().inverse().get(world);
+    }
+
+    public int getIDByWorld(World world) {
+        return getIDByWorld(world.getName());
     }
 }

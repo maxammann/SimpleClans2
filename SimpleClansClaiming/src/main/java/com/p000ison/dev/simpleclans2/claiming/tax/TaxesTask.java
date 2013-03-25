@@ -28,18 +28,31 @@ import com.p000ison.dev.simpleclans2.claiming.data.ClaimingManager;
  */
 public class TaxesTask implements Runnable {
 
-    private ClaimingManager manager;
+    private final ClaimingManager manager;
+    private final long interval;
+    private long time;
+
+    public TaxesTask(ClaimingManager manager) {
+        this.manager = manager;
+
+        interval = manager.getSettingsManager().getTaxesInterval();
+    }
 
     @Override
     public void run() {
 
+        time++;
 
-        for (Clan clan : manager.getCore().getClanManager().getClans()) {
-            double taxesPerMember = manager.getTaxesPerMember(clan);
+        if (time >= interval) {
+            time = 0;
 
-            if (taxesPerMember > 0.0D) {
+            for (Clan clan : manager.getCore().getClanManager().getClans()) {
+                double taxesPerMember = manager.getTaxesPerMember(clan);
 
-                collectTaxes(clan, taxesPerMember);
+                if (taxesPerMember > 0.0D) {
+
+                    collectTaxes(clan, taxesPerMember);
+                }
             }
         }
     }
@@ -56,10 +69,9 @@ public class TaxesTask implements Runnable {
             if (!success) {
                 //not enough money
 
-                manager.addTimeNotPayed(cp);
                 notPayed.append(cp.getName()).append(" ,");
 
-                if (manager.getTimesNotPayed(cp) >= 3) {
+                if (manager.isKickPlayers(clan)) {
                     cp.getClan().removeMember(cp);
                 }
             } else {
@@ -68,6 +80,8 @@ public class TaxesTask implements Runnable {
         }
 
         notPayed.delete(notPayed.length() - 2, notPayed.length());
+
+        clan.addBBMessage(notPayed.toString());
 
         return taxes * timesCollected;
     }

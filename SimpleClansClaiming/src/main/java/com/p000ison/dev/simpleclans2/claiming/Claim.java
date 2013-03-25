@@ -86,4 +86,28 @@ public class Claim implements TableObject {
     public short getY() {
         return (short) location.getY();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Claim claim = (Claim) o;
+
+        if (id != claim.id) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return (int) (id ^ (id >>> 32));
+    }
+
+    @Override
+    public String toString() {
+        return "Claim{" +
+                "location=" + location +
+                '}';
+    }
 }

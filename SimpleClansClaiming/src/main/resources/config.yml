@@ -3,3 +3,9 @@ claim:
     height: 256
 taxes:
     per-chunk: 5
+    # Interval in seconds (default 24 hours)
+    interval: 86400
+worlds:
+    world: 0
+    nether: 1
+    end: 2

@@ -78,7 +78,7 @@ public class ClaimCreateCommand extends GenericPlayerCommand {
             return;
         }
 
-       manager.claimArea(clan, claimLocation);
+        manager.claimArea(clan, claimLocation);
         player.sendMessage("claimed");
     }
 }

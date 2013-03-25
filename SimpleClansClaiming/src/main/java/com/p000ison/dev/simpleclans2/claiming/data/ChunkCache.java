@@ -25,6 +25,7 @@ import com.google.common.cache.CacheLoader;
 import com.p000ison.dev.simpleclans2.claiming.ClaimLocation;
 
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -48,7 +49,14 @@ public abstract class ChunkCache<V> extends CacheLoader<ClaimLocation, V> {
     }
 
     public V getData(ClaimLocation location) {
-        return cache.getUnchecked(location);
+        try {
+            return cache.get(location);
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (NullPointerException e) {
+               return null;
+        }
+        return null;
     }
 
     public Map<ClaimLocation, V> getData() {

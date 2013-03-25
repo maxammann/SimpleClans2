@@ -4,6 +4,7 @@ import com.p000ison.dev.simpleclans2.api.SCCore;
 import com.p000ison.dev.simpleclans2.api.clan.ClanManager;
 import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayerManager;
 import com.p000ison.dev.simpleclans2.claiming.commands.ClaimCreateCommand;
+import com.p000ison.dev.simpleclans2.claiming.commands.ClaimMapCommand;
 import com.p000ison.dev.simpleclans2.claiming.data.ClaimingManager;
 import com.p000ison.dev.sqlapi.Database;
 import org.bukkit.plugin.Plugin;
@@ -27,6 +28,7 @@ public class SimpleClansClaiming extends JavaPlugin {
         claimingManager = new ClaimingManager(this, getSCDatabase());
 
         core.getCommandManager().addCommand(new ClaimCreateCommand(core, claimingManager));
+        core.getCommandManager().addCommand(new ClaimMapCommand(core, claimingManager));
     }
 
     private boolean hookSimpleClans() {

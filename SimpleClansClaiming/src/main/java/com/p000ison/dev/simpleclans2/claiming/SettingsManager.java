@@ -19,6 +19,8 @@
 
 package com.p000ison.dev.simpleclans2.claiming;
 
+import com.google.common.collect.BiMap;
+import com.google.common.collect.ImmutableBiMap;
 import com.p000ison.dev.simpleclans2.api.Configuration;
 import com.p000ison.dev.simpleclans2.api.logging.Logging;
 import org.bukkit.configuration.ConfigurationSection;
@@ -26,6 +28,8 @@ import org.bukkit.configuration.InvalidConfigurationException;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 
 /**
@@ -38,7 +42,9 @@ public class SettingsManager {
     private int claimSize, claimHeigth;
 
     private double taxesPerChunk;
+    private long taxesInterval;
 
+    private BiMap<Byte, String> mapIDs;
 
     public SettingsManager(SimpleClansClaiming plugin) {
         this.plugin = plugin;
@@ -73,6 +79,18 @@ public class SettingsManager {
         ConfigurationSection taxes = config.getConfigurationSection("taxes");
 
         taxesPerChunk = taxes.getDouble("per-chunk");
+        taxesInterval = taxes.getLong("interval");
+
+
+        ConfigurationSection worlds = config.getConfigurationSection("worlds");
+
+        Map<Byte, String> tempMapIDs = new HashMap<Byte, String>();
+
+        for (String world : worlds.getKeys(false)) {
+            tempMapIDs.put((byte) worlds.getInt(world), world);
+        }
+
+        mapIDs = ImmutableBiMap.copyOf(tempMapIDs);
     }
 
     public void save() {
@@ -106,5 +124,13 @@ public class SettingsManager {
 
     public double getTaxesPerChunk() {
         return taxesPerChunk;
+    }
+
+    public long getTaxesInterval() {
+        return taxesInterval;
+    }
+
+    public BiMap<Byte, String> getMapIDs() {
+        return mapIDs;
     }
 }

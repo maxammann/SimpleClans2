@@ -25,25 +25,29 @@ import org.bukkit.Location;
  * Represents a ClaimLocation
  */
 public class ClaimLocation {
+    private byte worldID;
     private int x, z;
     private short y;
 
     public ClaimLocation() {
     }
 
-    public ClaimLocation(int x, int z) {
+    public ClaimLocation(int worldID, int x, int z) {
+        this.worldID = (byte) worldID;
         this.x = x;
         this.z = z;
         this.y = 0;
     }
 
-    public ClaimLocation(int x, int z, short y) {
+    public ClaimLocation(int worldID, int x, int z, short y) {
+        this.worldID = (byte) worldID;
         this.x = x;
         this.z = z;
         this.y = y;
     }
 
-    public ClaimLocation(int x, int z, int y) {
+    public ClaimLocation(int worldID, int x, int z, int y) {
+        this.worldID = (byte) worldID;
         this.x = x;
         this.z = z;
         this.y = (short) y;
@@ -81,18 +85,19 @@ public class ClaimLocation {
         return (int) Math.round(distance(location));
     }
 
-    public static ClaimLocation toClaimLocation(Location location, int size, int height) {
-        return new ClaimLocation(location.getBlockX() / size, location.getBlockZ() / size, (short) (location.getBlockY() / height));
+    public static ClaimLocation toClaimLocation(Location location, int world, int size, int height) {
+        return new ClaimLocation(world, location.getBlockX() / size, location.getBlockZ() / size, (short) (location.getBlockY() / height));
     }
 
-    public static ClaimLocation toClaimLocation(Location location) {
-        return toClaimLocation(location, 16, 256);
+    public static ClaimLocation toClaimLocation(Location location, int world) {
+        return toClaimLocation(location, world, 16, 256);
     }
 
     @Override
     public String toString() {
         return "ClaimLocation{" +
-                "x=" + x +
+                "worldID=" + worldID +
+                ", x=" + x +
                 ", z=" + z +
                 ", y=" + y +
                 '}';
@@ -105,14 +110,20 @@ public class ClaimLocation {
 
         ClaimLocation that = (ClaimLocation) o;
 
-        return x == that.x && y == that.y && z == that.z;
+        if (worldID != that.worldID) return false;
+        if (x != that.x) return false;
+        if (y != that.y) return false;
+        if (z != that.z) return false;
+
+        return true;
     }
 
     @Override
     public int hashCode() {
-        int result = x;
+        int result = (int) worldID;
+        result = 31 * result + x;
         result = 31 * result + z;
-        result = 31 * result + y;
+        result = 31 * result + (int) y;
         return result;
     }
 
@@ -121,6 +132,12 @@ public class ClaimLocation {
     }
 
     public static void main(String[] args) {
-        System.out.println(toClaimLocation(new Location(null, 20, 19, 20), 16, 10));
+        System.out.println(9 >> 1 );
     }
+
+    public byte getWorld() {
+        return worldID;
+    }
+
+
 }
