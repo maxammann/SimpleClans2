@@ -54,7 +54,7 @@ public abstract class ChunkCache<V> extends CacheLoader<ClaimLocation, V> {
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (NullPointerException e) {
-               return null;
+            return null;
         }
         return null;
     }

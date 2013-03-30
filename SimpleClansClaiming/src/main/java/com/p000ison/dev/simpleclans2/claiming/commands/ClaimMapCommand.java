@@ -105,39 +105,42 @@ public class ClaimMapCommand extends GenericPlayerCommand {
         int chunkX = x >> 4;
         int chunkZ = z >> 4;
 
+        ClaimLocation homeChunk = manager.getHomeChunk(playerClan);
+
         for (int xMap = 0; xMap < MAX_ROWS; xMap++) {
             StringBuilder row = new StringBuilder().append(' ');
             for (int yMap = MAX_COLUMNS; yMap > 0; yMap--) {
                 //calculate map coordinates to real ones
                 ClaimLocation chunk = new ClaimLocation(world, xMap + chunkX - (MAX_ROWS >> 1), yMap + chunkZ - (MAX_COLUMNS >> 1));
-//                Clan clan = plugin.getClanManager().getClanAt(chunk);
+                Clan clan = manager.getClanAt(chunk);
 
-//                if (chunk.equals(playerChunk)) {
-//                    //- Nothing
-//                    row.append("P");
-//                } else if (clan == null) {
-//                    //is player location
-//                    row.append("-");
-//                } else if (playerClan.isClaimed(chunk)) {
-//                    //is own
-//                    if (playerClan.getHomeChunk().equals(chunk)) {
-//                        //is homeblock
-//                        row.append(ChatColor.GREEN).append("+").append(ChatColor.GRAY);
-//                    } else {
-//                        row.append(ChatColor.GREEN).append("/").append(ChatColor.GRAY);
-//                    }
-//                } else if (clan.getWarringClans().contains(playerClan)) {
-//                    //is enemy
-//                    if (clan.getHomeChunk().equals(chunk)) {
-//                        //is homeblock
-//                        row.append(ChatColor.DARK_RED).append("+").append(ChatColor.GRAY);
-//                    } else {
-//                        row.append(ChatColor.DARK_RED).append("/").append(ChatColor.GRAY);
-//                    }
-//                } else {
-                row.append("X");
-//                }
-
+                if (chunk.equals(playerChunk)) {
+                    //- Nothing
+                    row.append('P');
+                } else if (clan == null) {
+                    //is player location
+                    row.append("-");
+                } else {
+                    if (playerClan == clan) {
+                        //is own
+                        if (homeChunk == chunk) {
+                            //is homeblock
+                            row.append(ChatColor.GREEN).append("+").append(ChatColor.GRAY);
+                        } else {
+                            row.append(ChatColor.GREEN).append("/").append(ChatColor.GRAY);
+                        }
+                    } else if (clan.getWarringClans().contains(playerClan)) {
+                        //is enemy
+                        if (homeChunk.equals(chunk)) {
+                            //is homeblock
+                            row.append(ChatColor.DARK_RED).append("+").append(ChatColor.GRAY);
+                        } else {
+                            row.append(ChatColor.DARK_RED).append("/").append(ChatColor.GRAY);
+                        }
+                    } else {
+                        row.append('X');
+                    }
+                }
             }
             out[xMap + 1] = row;
         }

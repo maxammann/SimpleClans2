@@ -74,11 +74,11 @@ public class ClaimCreateCommand extends GenericPlayerCommand {
         boolean surrounding = manager.isSurrounding(claimLocation, clan);
 
         if (claims != 0 && !surrounding) {
-            player.sendMessage("failed");
+            player.sendMessage(SCClaimingLanguage.getTranslation("surrounding.chunks"));
             return;
         }
 
         manager.claimArea(clan, claimLocation);
-        player.sendMessage("claimed");
+        player.sendMessage(SCClaimingLanguage.getTranslation("chunk.claimed"));
     }
 }

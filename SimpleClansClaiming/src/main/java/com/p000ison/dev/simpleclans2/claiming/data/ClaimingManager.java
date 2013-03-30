@@ -82,7 +82,7 @@ public class ClaimingManager {
         cache.clean();
     }
 
-    public Claim getStoredClaim(ClaimLocation location) {
+    public Claim getClaimAt(ClaimLocation location) {
         return cache.getData(location);
     }
 
@@ -171,9 +171,23 @@ public class ClaimingManager {
         return clan;
     }
 
+    public Clan getClanAt(ClaimLocation location) {
+        Claim claim = getClaimAt(location);
+        if (claim == null) {
+            return null;
+        }
+
+        Clan clan = plugin.getClanManager().getClan(claim.getClanID());
+
+        if (clan == null) {
+            //delete claim
+        }
+
+        return clan;
+    }
+
     public Claim getClaimAt(Location location) {
-        System.out.println(toClaimLocation(location));
-        return getStoredClaim(toClaimLocation(location));
+        return getClaimAt(toClaimLocation(location));
     }
 
     public ClaimLocation toClaimLocation(Location location) {
