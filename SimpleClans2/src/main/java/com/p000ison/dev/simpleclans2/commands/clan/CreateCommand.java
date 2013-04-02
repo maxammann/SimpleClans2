@@ -100,7 +100,7 @@ public class CreateCommand extends GenericPlayerCommand {
         cp.update();
 
         if (plugin.getSettingsManager().requireVerification()) {
-            boolean verified = !plugin.getSettingsManager().requireVerification() || player.hasPermission("simpleclans.mod.verify");
+            boolean verified = player.hasPermission("simpleclans.mod.verify");
 
             if (!verified) {
                 ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("get.your.clan.verified.to.access.advanced.features"));
