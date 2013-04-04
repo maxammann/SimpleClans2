@@ -18,6 +18,7 @@ general:
     # If you set here an e-mail it will be sent with a error report so I can get with you in contact if there is a critical
     # problem.
     email: ''
+    disabled-worlds: [ ]
 updater:
   # Whether the jenkins is enabled or not.
   enabled: true

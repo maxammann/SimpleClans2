@@ -21,6 +21,7 @@ package com.p000ison.dev.simpleclans2.listeners;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayer;
+import com.p000ison.dev.simpleclans2.language.Language;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.getspout.spoutapi.event.spout.SpoutCraftEnableEvent;
@@ -40,6 +41,11 @@ public class SCSpoutListener {
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public void onSpoutPlayerJoin(SpoutCraftEnableEvent event) {
         SpoutPlayer spoutPlayer = event.getPlayer();
+
+        if (plugin.getSettingsManager().isWorldDisabled(spoutPlayer.getWorld())) {
+            spoutPlayer.sendMessage(Language.getTranslation("world.disabled"));
+            return;
+        }
 
         ClanPlayer clanPlayer = plugin.getClanPlayerManager().getClanPlayerExact(spoutPlayer.getName());
 

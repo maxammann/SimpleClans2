@@ -84,6 +84,16 @@ public class CraftCommandManager implements CommandManager {
     }
 
     public synchronized void execute(CommandSender sender, String command, Command.Type cmdType, String[] args) {
+
+        if (sender instanceof Player) {
+            Player player = (Player) sender;
+
+            if (plugin.getSettingsManager().isWorldDisabled(player.getWorld())) {
+                player.sendMessage(Language.getTranslation("world.disabled"));
+                return;
+            }
+        }
+
         try {
             String identifier;
             String[] realArgs;

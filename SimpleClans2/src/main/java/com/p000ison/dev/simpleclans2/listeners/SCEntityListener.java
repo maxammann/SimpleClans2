@@ -55,6 +55,11 @@ public class SCEntityListener implements Listener {
 
         if (victimEntity instanceof Player) {
             Player victimPlayer = (Player) victimEntity;
+
+            if (plugin.getSettingsManager().isWorldDisabled(victimPlayer.getWorld())) {
+                return;
+            }
+
             Player attackerPlayer = null;
             Entity attackerEntity = event.getDamager();
 
@@ -139,6 +144,10 @@ public class SCEntityListener implements Listener {
         Player victimPlayer = event.getEntity();
 
         if (victimPlayer != null) {
+
+            if (plugin.getSettingsManager().isWorldDisabled(victimPlayer.getWorld())) {
+                return;
+            }
 
             ClanPlayer victim = plugin.getClanPlayerManager().getCreateClanPlayerExact(victimPlayer);
 

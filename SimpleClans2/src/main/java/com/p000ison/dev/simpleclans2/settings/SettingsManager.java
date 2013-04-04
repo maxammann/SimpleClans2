@@ -34,6 +34,7 @@ import com.p000ison.dev.sqlapi.mysql.MySQLConfiguration;
 import com.p000ison.dev.sqlapi.sqlite.SQLiteConfiguration;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 
@@ -90,6 +91,7 @@ public class SettingsManager {
     private Set<Long> unRivalAbleClans;
     private double rivalLimitPercent;
     private boolean modifyTagCompletely;
+    private Set<String> disabledWorlds;
 
     private int maxClanSize;
 
@@ -180,6 +182,8 @@ public class SettingsManager {
             if (tmpEmail != null && !tmpEmail.isEmpty() && GeneralHelper.isValidEmailAddress(tmpEmail)) {
                 email = tmpEmail;
             }
+
+            disabledWorlds = new HashSet<String>(general.getStringList("disabled-worlds"));
 
             ConfigurationSection commands = config.getConfigurationSection("commands");
 
@@ -785,5 +789,9 @@ public class SettingsManager {
 
     public int getMaxClanSize() {
         return maxClanSize;
+    }
+
+    public boolean isWorldDisabled(World world) {
+        return disabledWorlds.contains(world.getName());
     }
 }
