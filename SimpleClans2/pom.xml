@@ -66,6 +66,12 @@
                                     <include>com.p000ison.dev.sqlapi:SQLDatabaseAPI</include>
                                 </includes>
                             </artifactSet>
+                            <relocations>
+                                    <relocation>
+                                          <pattern>org.mcstats</pattern>
+                                          <shadedPattern>com.p000ison.dev.simpleclans2.libs.org.mcstats</shadedPattern>
+                                    </relocation>
+                            </relocations>
                         </configuration>
                     </execution>
                 </executions>
