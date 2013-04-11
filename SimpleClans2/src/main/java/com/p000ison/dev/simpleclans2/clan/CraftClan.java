@@ -637,6 +637,7 @@ public class CraftClan implements Clan, TableObject, UpdateAble {
             if (clanPlayer.isLeader()) {
                 disband();
             }
+            ((CraftClanPlayer)clanPlayer).updatePermissions();
             plugin.getRequestManager().clearRequests(clanPlayer);
         }
     }
@@ -655,6 +656,7 @@ public class CraftClan implements Clan, TableObject, UpdateAble {
 
                 clanPlayer.addPastClan(pastClan);
                 clanPlayer.update();
+                ((CraftClanPlayer)clanPlayer).updatePermissions();
             }
         }
 
