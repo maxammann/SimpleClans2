@@ -287,7 +287,6 @@ public class SimpleClans extends JavaPlugin implements SCCore {
     private void loadManagers() {
         clanManager = new CraftClanManager(this);
         clanPlayerManager = new CraftClanPlayerManager(this);
-        settingsManager.loadPermissions();
 
         try {
             dataManager = new DatabaseManager(this);
@@ -301,6 +300,8 @@ public class SimpleClans extends JavaPlugin implements SCCore {
             disable();
             return;
         }
+
+        settingsManager.loadPermissions();
 
         requestManager = new CraftRequestManager(this);
         teleportManager = new TeleportManager(this);

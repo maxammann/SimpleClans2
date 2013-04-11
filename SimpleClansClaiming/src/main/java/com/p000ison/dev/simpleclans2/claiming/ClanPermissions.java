@@ -24,14 +24,29 @@ import java.lang.reflect.Field;
 /**
  * Represents a ClanPermissions
  */
+
+/*
+MEMBERS  ALLIES   RIVALS   OUTSIDERS
+00000000 00000000 00000000 00000000 | 00000000 00000000 00000000 00000000
+                                                        > BUILD
+                                                         > BREAK
+                                                          > SWITCH
+                                                           > ITEM_USE
+                                                            > ?
+                                                             > ?
+                                                              > ?
+                                                               > ?
+ */
 public final class ClanPermissions {
 
-    private long permissions = 0;
+    private long permissions;
 
     /**
-     * The amount of permissions, currently: {@link #PERM_BREAK}, {@link #PERM_BUILD}, {@link #PERM_INTERACT}
+     * The amount of permissions, currently: 4
      */
-    private static final int PERMISSIONS;
+    private static final int PERMISSIONS = Byte.SIZE;
+
+    private static final int CLEAR_MASK;
 
     static {
         int perms = 0;
@@ -42,27 +57,50 @@ public final class ClanPermissions {
             }
         }
 
-        PERMISSIONS = perms;
+        if (perms >= PERMISSIONS) {
+            throw new IllegalArgumentException("There are too many permissions defined!");
+        }
+
+        int mask = 0;
+
+        for (int i = 0; i < PERMISSIONS; i++) {
+            mask |= i;
+        }
+
+        CLEAR_MASK = mask;
     }
 
     /**
      * The different permissions
      */
-    public static final int PERM_BUILD = 1, PERM_BREAK = 1 << 1, PERM_INTERACT = 1 << 2;
+    public static final int PERM_BUILD = 1, PERM_BREAK = 1 << 1, PERM_SWITCH = 1 << 2, PERM_ITEM_USE = 1 << 3;
+
     /**
      * The different groups
      */
-    public static final int ALLIES = 0, RIVALS = 1, OUTSIDERS = 2;
+    public static final int MEMBERS = 0, ALLIES = 1, OUTSIDERS = 2, RIVALS = 3;
 
-    public void setPermissions(int group, int permission) {
-        this.permissions |= permissions << group * PERMISSIONS;
+    public void setPermissions(int group, int permission, boolean value) {
+        if (value) {
+            this.permissions |= permission << group * PERMISSIONS;
+        } else {
+            togglePermissions(group, permission);
+        }
+    }
+
+    public void togglePermissions(int group, int permission) {
+        this.permissions ^= permission << group * PERMISSIONS;
     }
 
     public void clearPermissions(int group) {
-        this.permissions &= ~(7 << group * PERMISSIONS);
+        this.permissions &= ~(CLEAR_MASK << group * PERMISSIONS);
     }
 
-    public boolean hasPermission(int permission, int group) {
+    public boolean hasPermission(int group, int permission) {
         return ((permissions >> group * PERMISSIONS) & permission) == permission;
+    }
+
+    public long getValue() {
+        return permissions;
     }
 }

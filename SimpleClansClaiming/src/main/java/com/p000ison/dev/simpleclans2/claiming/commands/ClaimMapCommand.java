@@ -105,7 +105,7 @@ public class ClaimMapCommand extends GenericPlayerCommand {
         int chunkX = x >> 4;
         int chunkZ = z >> 4;
 
-        ClaimLocation homeChunk = manager.getHomeChunk(playerClan);
+        ClaimLocation homeChunk = ClaimingManager.getHomeChunk(playerClan);
 
         for (int xMap = 0; xMap < MAX_ROWS; xMap++) {
             StringBuilder row = new StringBuilder().append(' ');

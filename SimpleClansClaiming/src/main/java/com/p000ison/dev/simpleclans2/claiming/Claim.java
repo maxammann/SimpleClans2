@@ -57,17 +57,21 @@ public class Claim implements TableObject {
         return id;
     }
 
-    @DatabaseColumnSetter(position = 2, databaseName = "x", notNull = true)
+    public ClaimLocation getLocation() {
+        return location;
+    }
+
+    @DatabaseColumnSetter(position = 3, databaseName = "x", notNull = true)
     private void setDatabaseX(int x) {
         location.setX(x);
     }
 
-    @DatabaseColumnSetter(position = 3, databaseName = "y", notNull = true)
+    @DatabaseColumnSetter(position = 4, databaseName = "y", notNull = true)
     private void setDatabaseY(short y) {
         location.setY(y);
     }
 
-    @DatabaseColumnSetter(position = 4, databaseName = "z", notNull = true)
+    @DatabaseColumnSetter(position = 5, databaseName = "z", notNull = true)
     private void setDatabaseZ(int z) {
         location.setZ(z);
     }
@@ -94,9 +98,7 @@ public class Claim implements TableObject {
 
         Claim claim = (Claim) o;
 
-        if (id != claim.id) return false;
-
-        return true;
+        return id == claim.id;
     }
 
     @Override

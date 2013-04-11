@@ -47,7 +47,7 @@ public class TaxesTask implements Runnable {
             time = 0;
 
             for (Clan clan : manager.getCore().getClanManager().getClans()) {
-                double taxesPerMember = manager.getTaxesPerMember(clan);
+                double taxesPerMember = ClaimingManager.getTaxesPerMember(clan);
 
                 if (taxesPerMember > 0.0D) {
 
@@ -71,7 +71,7 @@ public class TaxesTask implements Runnable {
 
                 notPayed.append(cp.getName()).append(" ,");
 
-                if (manager.isKickPlayers(clan)) {
+                if (ClaimingManager.isKickPlayers(clan)) {
                     cp.getClan().removeMember(cp);
                 }
             } else {

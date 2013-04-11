@@ -1,8 +1,6 @@
 package com.p000ison.dev.simpleclans2.claiming;
 
 import com.p000ison.dev.simpleclans2.api.SCCore;
-import com.p000ison.dev.simpleclans2.api.clan.ClanManager;
-import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayerManager;
 import com.p000ison.dev.simpleclans2.claiming.commands.ClaimCreateCommand;
 import com.p000ison.dev.simpleclans2.claiming.commands.ClaimMapCommand;
 import com.p000ison.dev.simpleclans2.claiming.data.ClaimingManager;
@@ -55,14 +53,6 @@ public class SimpleClansClaiming extends JavaPlugin {
             throw new IllegalArgumentException("The database api of your simpleclans implementation is not supported!");
         }
         return (Database) core.getSimpleClansDatabase();
-    }
-
-    public ClanPlayerManager getClanPlayerManager() {
-        return this.core.getClanPlayerManager();
-    }
-
-    public ClanManager getClanManager() {
-        return this.core.getClanManager();
     }
 
     public ClaimingManager getClaimingManager() {

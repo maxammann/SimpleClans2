@@ -14,47 +14,57 @@
  *     You should have received a copy of the GNU General Public License
  *     along with SimpleClans2.  If not, see <http://www.gnu.org/licenses/>.
  *
- *     Last modified: 27.02.13 17:12
+ *     Last modified: 06.04.13 19:11
  */
 
-package com.p000ison.dev.simpleclans2.claiming.listener;
+package com.p000ison.dev.simpleclans2.claiming;
 
 import com.p000ison.dev.simpleclans2.api.clan.Clan;
 import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.claiming.data.ClaimingManager;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockBreakEvent;
 
 /**
- * Represents a ProtectionListener
+ * Represents a PositionTask
  */
-public class ProtectionListener implements Listener {
+public class PositionTask implements Runnable {
 
-    private ClaimingManager manager;
+    private final ClaimingManager manager;
 
-    public ProtectionListener(ClaimingManager manager) {
+    public PositionTask(ClaimingManager manager) {
         this.manager = manager;
     }
 
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = false)
-    public void onBlockBreak(BlockBreakEvent event) {
-        Player player = event.getPlayer();
-        ClanPlayer clanPlayer = manager.getCore().getClanPlayerManager().getClanPlayer(player);
+    @Override
+    public void run() {
 
-        if (clanPlayer == null) {
-            return;
-        }
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            ClanPlayer clanPlayer = manager.getClanPlayerManager().getClanPlayer(player);
 
-        Clan clan = clanPlayer.getClan();
-        Clan clanHere = manager.getClanAt(player.getLocation());
+            if (clanPlayer == null) {
+                continue;
+            }
 
-        if (clan.equals(clanHere)) {
-            //allow
-        } else {
-            //disallow
+            Claim claim = manager.getClaimAt(player.getLocation());
+
+            if (claim == null) {
+                continue;
+            }
+
+            Clan clan = manager.getClanManager().getClan(claim.getClanID());
+
+            if (clan == null) {
+                //todo fix
+                continue;
+            }
+
+            ClaimLocation location = ClaimingManager.getHomeChunk(clan);
+
+
+            if (claim.getLocation().equals(location)) {
+
+            }
         }
     }
 }

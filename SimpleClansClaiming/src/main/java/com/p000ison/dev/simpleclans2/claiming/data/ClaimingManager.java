@@ -22,7 +22,9 @@ package com.p000ison.dev.simpleclans2.claiming.data;
 import com.p000ison.dev.simpleclans2.api.SCCore;
 import com.p000ison.dev.simpleclans2.api.clan.Clan;
 import com.p000ison.dev.simpleclans2.api.clan.ClanFlags;
+import com.p000ison.dev.simpleclans2.api.clan.ClanManager;
 import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayer;
+import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayerManager;
 import com.p000ison.dev.simpleclans2.api.clanplayer.PlayerFlags;
 import com.p000ison.dev.simpleclans2.claiming.Claim;
 import com.p000ison.dev.simpleclans2.claiming.ClaimLocation;
@@ -70,7 +72,6 @@ public class ClaimingManager {
                 selectClaimByCoords.set(1, key.getY());
                 selectClaimByCoords.set(2, key.getZ());
                 List<Claim> results = selectClaimByCoords.getResults();
-                System.out.println(results);
                 return results.isEmpty() ? null : results.get(0);
             }
         };
@@ -162,7 +163,7 @@ public class ClaimingManager {
             return null;
         }
 
-        Clan clan = plugin.getClanManager().getClan(claim.getClanID());
+        Clan clan = getClanManager().getClan(claim.getClanID());
 
         if (clan == null) {
             //delete claim
@@ -177,7 +178,7 @@ public class ClaimingManager {
             return null;
         }
 
-        Clan clan = plugin.getClanManager().getClan(claim.getClanID());
+        Clan clan = getClanManager().getClan(claim.getClanID());
 
         if (clan == null) {
             //delete claim
@@ -198,44 +199,70 @@ public class ClaimingManager {
         return getClanAt(location) != null;
     }
 
+    public SCCore getCore() {
+        return plugin.getCore();
+    }
 
-    public void setPower(ClanPlayer cp, double value) {
+    public SettingsManager getSettingsManager() {
+        return settingsManager;
+    }
+
+    public ClanPlayerManager getClanPlayerManager() {
+        return this.getCore().getClanPlayerManager();
+    }
+
+    public ClanManager getClanManager() {
+        return this.getCore().getClanManager();
+    }
+
+
+
+    public int getIDByWorld(String world) {
+        return settingsManager.getMapIDs().inverse().get(world);
+    }
+
+    public int getIDByWorld(World world) {
+        return getIDByWorld(world.getName());
+    }
+
+
+    public static void setPower(ClanPlayer cp, double value) {
         PlayerFlags flags = cp.getFlags();
 
         flags.set(POWER_KEY, value);
     }
 
-    public double getPower(ClanPlayer cp) {
+    public static double getPower(ClanPlayer cp) {
         PlayerFlags flags = cp.getFlags();
 
         return flags.getDouble(POWER_KEY);
     }
 
-    public void setKickPlayers(Clan clan, boolean kick) {
+    public static void setKickPlayers(Clan clan, boolean kick) {
         ClanFlags flags = clan.getFlags();
 
         flags.setBoolean(KICK_PLAYER, kick);
     }
 
-    public boolean isKickPlayers(Clan clan) {
+    public static boolean isKickPlayers(Clan clan) {
         ClanFlags flags = clan.getFlags();
 
         return flags.getBoolean(KICK_PLAYER);
     }
 
-    public void setTaxesPerMember(Clan clan, double value) {
+    public static void setTaxesPerMember(Clan clan, double value) {
         ClanFlags flags = clan.getFlags();
 
         flags.set(TAXES_PER_MEMBER, value);
     }
 
-    public double getTaxesPerMember(Clan clan) {
+    public static double getTaxesPerMember(Clan clan) {
         ClanFlags flags = clan.getFlags();
 
         return flags.getDouble(TAXES_PER_MEMBER);
     }
 
-    public double getPower(Clan clan) {
+    public static double getPower(Clan clan) {
         double power = 0;
 
         for (ClanPlayer cp : clan.getAllMembers()) {
@@ -244,34 +271,14 @@ public class ClaimingManager {
         return power;
     }
 
-    public void setHomeChunk(Clan clan, ClaimLocation location) {
+    public static void setHomeChunk(Clan clan, ClaimLocation location) {
         ClanFlags flags = clan.getFlags();
 
         flags.setString(HOME_CHUNK_KEY, location.toString());
     }
 
-    public ClaimLocation getHomeChunk(Clan clan) {
+    public static ClaimLocation getHomeChunk(Clan clan) {
         ClanFlags flags = clan.getFlags();
         return ClaimLocation.toLocation(flags.getString(HOME_CHUNK_KEY));
-    }
-
-    public SCCore getCore() {
-        return plugin.getCore();
-    }
-
-    public SimpleClansClaiming getPlugin() {
-        return plugin;
-    }
-
-    public SettingsManager getSettingsManager() {
-        return settingsManager;
-    }
-
-    public int getIDByWorld(String world) {
-        return settingsManager.getMapIDs().inverse().get(world);
-    }
-
-    public int getIDByWorld(World world) {
-        return getIDByWorld(world.getName());
     }
 }
