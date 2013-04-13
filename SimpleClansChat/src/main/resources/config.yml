@@ -1,19 +1,29 @@
 settings:
-   compatibility-mode: false
-   cancelling-mode: false
-   complete-mode: true
-   depreciation-mode: false
-   # LOWEST,LOW,NORMAL,HIGH,HIGHEST
-   priority: HIGHEST
+    # Use this if you want to have a second chat plugin running parallel
+    compatibility-mode: false
+    # Use this if there is no other chat plugin and you only want to use SCC
+    complete-mode: true
+    # If this is enabled the chat event gets cancelled and
+    # the messages get send to the player by this plugin.
+    # This is for better compatibility! Use this only if you know what is does!
+    cancelling-mode: false
+    # Used for compatibility-mode if a plugin is very outdated, consider
+    # changing to an other chat-plugin
+    depreciation-mode: false
+    # The priority of the chat event: LOWEST,LOW,NORMAL,HIGH,HIGHEST
+    priority: HIGHEST
 format:
-   complete-mode: '-clan-group-prefix-player: -message'
-   variables:
-       clan: '[%s]'
-       group: '[%s]'
-       prefix: '[%s]'
-       suffix: '[%s]'
-       player: '[%s]'
-       rank: '[%s]'
+    # Format for the complete-mode
+    complete-mode: '-clan-group-prefix-player: -message'
+    # Format for the variables
+    variables:
+        clan: '[%s]'
+        group: '[%s]'
+        prefix: '[%s]'
+        suffix: '[%s]'
+        player: '[%s]'
+        rank: '[%s]'
+    # Format for the channels
 channels:
-   clan: '[CLAN]-rank-player -message'
-   ally: '[ALLY]-player -message'
+    clan: '[CLAN]-rank-player -message'
+    ally: '[ALLY]-player -message'
