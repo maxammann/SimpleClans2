@@ -29,7 +29,7 @@ import org.bukkit.command.CommandSender;
  * Represents a InfoCommand
  */
 public class InfoCommand extends GenericConsoleCommand {
-    //com.p000ison.dev.simpleclans2.clan
+
     public InfoCommand(SimpleClans plugin) {
         super("Info", plugin);
         setArgumentRange(0, 0);
@@ -55,6 +55,6 @@ public class InfoCommand extends GenericConsoleCommand {
         ChatBlock.sendMessage(sender, "Data in queue: " + dataQueue);
         ChatBlock.sendMessage(sender, "Teleporting: " + teleporting);
         ChatBlock.sendMessage(sender, "Requests: " + plugin.getRequestManager().getRequests());
-        ChatBlock.sendMessage(sender, "Exceptions in queue: " + plugin.getExceptionReporter().getPendingExceptions());
+        ChatBlock.sendMessage(sender, "Exceptions in queue: " + (plugin.getExceptionReporter() == null ? 0 : plugin.getExceptionReporter().getPendingExceptions()));
     }
 }
