@@ -644,6 +644,11 @@ public class CraftClan implements Clan, TableObject, UpdateAble {
 
     @Override
     public void disband() {
+
+        if (plugin.getSettingsManager().isAnnounceSpecialEvents()) {
+            plugin.serverAnnounce(ChatColor.AQUA + MessageFormat.format(Language.getTranslation("clan.has.been.disbanded"), this.getName()));
+        }
+
         if (allMembers != null) {
             for (ClanPlayer clanPlayer : allMembers) {
                 clanPlayer.unset();

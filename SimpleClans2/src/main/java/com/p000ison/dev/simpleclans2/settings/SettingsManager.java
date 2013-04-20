@@ -71,6 +71,7 @@ public class SettingsManager {
     private int autoSave;
     private String helpFormat;
     private Charset charset;
+    private boolean announceSpecialEvents;
 
     private UpdateType buildChannel;
     private boolean longBuildReport;
@@ -160,6 +161,8 @@ public class SettingsManager {
                 Logging.debug(Level.WARNING, "The charset is not supported! Using default!");
                 charset = Charset.defaultCharset();
             }
+
+            announceSpecialEvents = general.getBoolean("announce-special-events");
 
             ConfigurationSection updater = config.getConfigurationSection("updater");
 
@@ -793,5 +796,9 @@ public class SettingsManager {
 
     public boolean isWorldDisabled(World world) {
         return disabledWorlds.contains(world.getName());
+    }
+
+    public boolean isAnnounceSpecialEvents() {
+        return announceSpecialEvents;
     }
 }

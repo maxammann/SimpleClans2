@@ -19,6 +19,7 @@ general:
     # problem.
     email: ''
     disabled-worlds: [ ]
+    announce-special-events: true
 updater:
   # Whether the jenkins is enabled or not.
   enabled: true

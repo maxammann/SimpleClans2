@@ -65,7 +65,9 @@ public class InviteRequest extends SingleRequest {
         acceptor.setLeader(false);
 
         clan.addBBMessage(MessageFormat.format(Language.getTranslation("joined.the.clan"), acceptor.getName()));
-        plugin.serverAnnounce(MessageFormat.format(Language.getTranslation("has.joined"), acceptor.getName(), clan.getName()));
+        if (plugin.getSettingsManager().isAnnounceSpecialEvents()) {
+            plugin.serverAnnounce(MessageFormat.format(Language.getTranslation("has.joined"), acceptor.getName(), clan.getName()));
+        }
 
         acceptor.update(true);
         return true;
