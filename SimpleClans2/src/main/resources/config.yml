@@ -48,9 +48,9 @@ database:
 teleportation:
   # Whether you want to drop items on teleport
   drop-items-on-teleport: false
-   # Whether you want to drop ALL items on teleport
+  # Whether you want to drop ALL items on teleport
   drop-all-items-on-teleport: false
-   # Put the ids or the names of the items in this list to keep them on teleport.
+  # Put the ids or the names of the items in this list to keep them on teleport.
   keep-items-on-teleport: [ ]
   # The distance of blocks you are allowed to walk if a teleport is pending.
   teleport-fuzzyness: 1.5
@@ -79,6 +79,8 @@ clan:
   max-name-length: 15
   # The min length of a name
   min-name-length: 5
+  # Disallowed colors in clan tags
+  disallowed-colors: [ ]
   # Whether a clan is not allowed to change the home after it setted it once before.
   set-home-only-once: false
   # The minimal clan size to create an alliance
