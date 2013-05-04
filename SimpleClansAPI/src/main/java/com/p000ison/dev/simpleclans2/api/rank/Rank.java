@@ -105,11 +105,11 @@ public interface Rank extends Comparable<Rank>, UpdateAble, Serializable {
     long getID();
 
     /**
-     * Sets the id of this clan
+     * Sets the id of this clan of this rank
      *
      * @param id The id to set
      */
-    void setID(long id);
+    void setClanID(long id);
 
     /**
      * Checks if 2 ranks equal.

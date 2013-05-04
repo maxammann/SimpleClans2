@@ -96,7 +96,7 @@ public class CraftRank implements Rank, TableObject {
         setName(name);
         setPriority(priority);
         setTag(tag);
-        setID(clanId);
+        setClanID(clanId);
     }
 
     /**
@@ -116,7 +116,7 @@ public class CraftRank implements Rank, TableObject {
             this.permissions = permissions;
         }
 
-        setID(id);
+        setClanID(id);
     }
 
     /**
@@ -299,8 +299,8 @@ public class CraftRank implements Rank, TableObject {
     }
 
     @Override
-    public void setID(long id) {
-        this.id.set(id);
+    public void setClanID(long id) {
+        this.clanId.set(id);
     }
 
     @Override

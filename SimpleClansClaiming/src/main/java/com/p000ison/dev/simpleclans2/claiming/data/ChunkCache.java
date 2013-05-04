@@ -41,11 +41,11 @@ public abstract class ChunkCache<V> extends CacheLoader<ClaimLocation, V> {
         builder.maximumSize(maxSize);
         builder.expireAfterAccess(duration, TimeUnit.SECONDS);
         builder.initialCapacity(initial);
-        cache = builder.build(this);
+//        cache = builder.build(this);
     }
 
     public void load(ClaimLocation location, V data) {
-        cache.put(location, data);
+//        cache.put(location, data);
     }
 
     public V getData(ClaimLocation location) {
