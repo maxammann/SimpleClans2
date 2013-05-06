@@ -133,9 +133,9 @@ public class SimpleClans extends JavaPlugin implements SCCore {
             ChatBlock.setHeadColor(getSettingsManager().getHeaderPageColor());
             ChatBlock.setSubColor(getSettingsManager().getSubPageColor());
 
-            if (getSettingsManager().isUpdaterEnabled()) {
-                this.updater = new UpdateInformer(this, "SIMPLECLANS-SIMPLECLANS2", getSettingsManager().getBuildChannel(), getSettingsManager().isLongBuildReport());
-            }
+//            if (getSettingsManager().isUpdaterEnabled()) {
+//                this.updater = new UpdateInformer(this, "SIMPLECLANS-SIMPLECLANS2", getSettingsManager().getBuildChannel(), getSettingsManager().isLongBuildReport());
+//            }
 
             registerEvents();
 
