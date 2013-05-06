@@ -71,7 +71,7 @@ public class CraftRankManager implements RankManager {
             return false;
         }
 
-        if (!cleanTag.matches("[0-9a-zA-Z]*")) {
+        if (!cleanTag.matches("[0-9a-zA-Z§]*")) {
             reportTo.sendMessage(ChatColor.RED + Language.getTranslation("your.rank.tag.can.only.contain.letters.numbers.and.color.codes"));
             return false;
         }
