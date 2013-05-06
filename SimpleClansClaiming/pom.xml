@@ -112,7 +112,7 @@
         <dependency>
             <groupId>com.p000ison.dev.simpleclans2</groupId>
             <artifactId>SimpleClansAPI</artifactId>
-            <version>1.0.1</version>
+            <version>1.0.2</version>
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
