@@ -46,13 +46,6 @@ public class SCCPlayerListener implements Listener {
         if (format == null) {
             if (this.plugin.getSettingsManager().isCompatibilityMode()) {
                 format = plugin.formatCompatibility(event.getFormat(), player.getName());
-                if (plugin.getSettingsManager().isCancellingMode() && event.getRecipients().size() != initialRetrieversSize) {
-                    String finalOutput = String.format(format, player.getDisplayName(), event.getMessage());
-                    for (Player recipient : event.getRecipients()) {
-                        recipient.sendMessage(finalOutput);
-                    }
-                    event.setCancelled(true);
-                }
             } else if (this.plugin.getSettingsManager().isCompleteMode()) {
                 format = plugin.formatComplete(plugin.getSettingsManager().getCompleteModeFormat(), player, clanPlayer);
                 //colorize
@@ -62,6 +55,14 @@ public class SCCPlayerListener implements Listener {
 
         if (format == null) {
             return;
+        }
+
+        if (plugin.getSettingsManager().isCancellingMode() && event.getRecipients().size() != initialRetrieversSize) {
+            String finalOutput = String.format(format, player.getDisplayName(), event.getMessage());
+            for (Player recipient : event.getRecipients()) {
+                recipient.sendMessage(finalOutput);
+            }
+            event.setCancelled(true);
         }
 
         event.setFormat(format);

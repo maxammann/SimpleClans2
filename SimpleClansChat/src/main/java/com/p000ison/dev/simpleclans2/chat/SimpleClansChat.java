@@ -407,7 +407,7 @@ public class SimpleClansChat extends JavaPlugin {
                     while (players.hasNext()) {
                         Player retriever = players.next();
                         ClanPlayer iCP = getClanPlayerManager().getClanPlayer(retriever);
-                        boolean isAllSeeing = retriever.hasPermission("simpleclans.admin.all-seeing-eye");
+                        boolean isAllSeeing = false/*retriever.hasPermission("simpleclans.admin.all-seeing-eye")*/;
                         if (isChannelDisabled(iCP, Channel.ALLY)) {
                             //if the clan ally is disabled
                             players.remove();
@@ -428,7 +428,7 @@ public class SimpleClansChat extends JavaPlugin {
                     while (players.hasNext()) {
                         Player retriever = players.next();
                         ClanPlayer iCP = getClanPlayerManager().getClanPlayer(retriever);
-                        boolean isAllSeeing = retriever.hasPermission("simpleclans.admin.all-seeing-eye");
+                        boolean isAllSeeing = false/*retriever.hasPermission("simpleclans.admin.all-seeing-eye")*/;
                         if (isChannelDisabled(iCP, Channel.CLAN)) {
                             //if the clan chat is disabled
                             players.remove();
