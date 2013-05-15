@@ -49,8 +49,4 @@ public class SCCHeroChatListener implements Listener {
             event.setFormat(plugin.formatCompatibility(format, event.getSender().getName()));
         }
     }
-
-    public static void main(String[] args) {
-        System.out.println("test");
-    }
 }

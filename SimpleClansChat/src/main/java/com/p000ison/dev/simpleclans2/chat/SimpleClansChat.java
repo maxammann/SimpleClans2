@@ -88,7 +88,6 @@ public class SimpleClansChat extends JavaPlugin {
 
         chatSuite = setupChatSuite();
 
-        System.out.println(AsyncPlayerChatEvent.getHandlerList().getRegisteredListeners().length);
         if (setupHeroChat()) {
             pluginManager.registerEvents(new SCCHeroChatListener(this), this);
             Logging.debug("Hooked Herochat!");
