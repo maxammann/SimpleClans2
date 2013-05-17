@@ -97,11 +97,13 @@ public class CraftRequestManager implements RequestManager {
                         request.announceMessage(Language.getTranslation("voted.to.deny", acceptor.getName()));
                         break;
                     case ABSTAIN:
-                        if (request instanceof SingleRequest) {
+                        if (request instanceof MultipleRequest) {
                             request.announceMessage(Language.getTranslation("voted.to.abstain", acceptor.getName()));
+                            request
+                                    .abstain();
+
                             return request;
                         }
-                        request.abstain();
                         break;
                     default:
                         return null;

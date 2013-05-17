@@ -54,7 +54,7 @@ public class AbstainCommand extends GenericPlayerCommand {
 
         if (request != null) {
             if (!(request instanceof MultipleRequest)) {
-                ChatBlock.sendMessage(player, "You can only abstein if multi");
+                ChatBlock.sendMessage(player, Language.getTranslation("can.not.abstain.if.only.one"));
             }
         } else {
             ChatBlock.sendMessage(player, Language.getTranslation("nothing.to.abstain"));

@@ -30,6 +30,7 @@ import org.bukkit.entity.Player;
  */
 public abstract class SingleRequest extends AbstractRequest {
     private final ClanPlayer acceptor;
+    private boolean voted = false;
     private boolean accepted = false;
 
     public SingleRequest(SimpleClans plugin, ClanPlayer acceptor, ClanPlayer requester) {
@@ -53,12 +54,13 @@ public abstract class SingleRequest extends AbstractRequest {
 
     @Override
     public boolean hasEveryoneVoted() {
-        return accepted;
+        return voted;
     }
 
     @Override
     public void deny() {
         accepted = false;
+        voted = true;
     }
 
     @Override
@@ -72,6 +74,7 @@ public abstract class SingleRequest extends AbstractRequest {
     @Override
     public void accept() {
         accepted = true;
+        voted = true;
     }
 
     @Override
@@ -110,7 +113,7 @@ public abstract class SingleRequest extends AbstractRequest {
 
     @Override
     public int getTimesVoted() {
-        return !accepted ? 0 : 1;
+        return voted ? 1 : 0;
     }
 
     @Override

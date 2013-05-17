@@ -526,6 +526,7 @@ public class CraftClan implements Clan, TableObject, UpdateAble {
 
     @Override
     public void addBBMessage(String msg) {
+        announce(msg);
         addBBRawMessage(ChatBlock.parseColors(plugin.getSettingsManager().getDefaultBB().replace("+message", msg)));
     }
 

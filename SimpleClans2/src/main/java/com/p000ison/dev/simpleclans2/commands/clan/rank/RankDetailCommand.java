@@ -63,10 +63,6 @@ public class RankDetailCommand extends GenericPlayerCommand {
             return;
         }
 
-        if (!clanPlayer.isLeader() && !clanPlayer.hasRankPermission("manage.ranks")) {
-            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("no.leader.permissions"));
-            return;
-        }
         Clan clan = clanPlayer.getClan();
         ChatColor subColor = plugin.getSettingsManager().getSubPageColor();
 
