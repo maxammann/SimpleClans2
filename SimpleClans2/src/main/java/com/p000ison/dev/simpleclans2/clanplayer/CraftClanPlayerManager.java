@@ -211,7 +211,7 @@ public class CraftClanPlayerManager implements ClanPlayerManager {
         }
 
         for (ClanPlayer clanPlayer : players) {
-            if (clanPlayer.getName().equals(name)) {
+            if (clanPlayer.getName().equalsIgnoreCase(name)) {
                 return clanPlayer;
             }
         }
@@ -226,7 +226,7 @@ public class CraftClanPlayerManager implements ClanPlayerManager {
         }
 
         for (ClanPlayer clanPlayer : players) {
-            if (clanPlayer.getName().equals(name)) {
+            if (clanPlayer.getName().equalsIgnoreCase(name)) {
                 if (clanPlayer.getClan() == null) {
                     return null;
                 } else {
