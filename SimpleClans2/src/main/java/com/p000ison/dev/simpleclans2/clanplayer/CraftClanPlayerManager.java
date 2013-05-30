@@ -88,7 +88,7 @@ public class CraftClanPlayerManager implements ClanPlayerManager {
             if (cause instanceof SQLException) {
                 if (cause.getMessage().toLowerCase().contains("duplicate") || cause.getMessage().toLowerCase().contains("constraint")) {
                     Logging.debug(Level.SEVERE, "**********************************\n" +
-                            "Failed at inserting player because it already exists! Please follow the instructions on the jenkins page or on the devbukkit page else your data may get corrupted!" +
+                            "Failed at inserting player " + clanPlayer.getName() + " because it already exists! Please follow the instructions on the jenkins page or on the devbukkit page else your data may get corrupted!" +
                             "\n**********************************");
                     return null;
                 }
