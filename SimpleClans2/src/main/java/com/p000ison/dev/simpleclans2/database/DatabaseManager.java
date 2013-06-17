@@ -30,7 +30,6 @@ import com.p000ison.dev.simpleclans2.database.response.Response;
 import com.p000ison.dev.simpleclans2.database.response.ResponseTask;
 import com.p000ison.dev.simpleclans2.database.statements.KillStatement;
 import com.p000ison.dev.simpleclans2.util.DateHelper;
-import com.p000ison.dev.simpleclans2.util.comparators.ReverseIntegerComparator;
 import com.p000ison.dev.sqlapi.Database;
 import com.p000ison.dev.sqlapi.DatabaseConfiguration;
 import com.p000ison.dev.sqlapi.exception.DatabaseConnectionException;
@@ -120,8 +119,10 @@ public class DatabaseManager {
     }
 
     public void importAll() {
-        Set<CraftClan> clans = database.<CraftClan>select().from(CraftClan.class).prepare().getResults(new HashSet<CraftClan>());
         long currentTime = System.currentTimeMillis();
+
+        Set<CraftClan> clans = database.<CraftClan>select().from(CraftClan.class).prepare().getResults(new HashSet<CraftClan>());
+
         PreparedSelectQuery<CraftRank> rankQuery = database.<CraftRank>select().from(CraftRank.class).where().preparedEquals("clan").select().prepare();
 
         Iterator<CraftClan> craftClanIterator = clans.iterator();
@@ -149,6 +150,7 @@ public class DatabaseManager {
         Iterator<CraftClanPlayer> clanPlayerIterator = clanPlayers.iterator();
         while (clanPlayerIterator.hasNext()) {
             CraftClanPlayer cp = clanPlayerIterator.next();
+
             if (!cp.isBanned() && DateHelper.differenceInDays(cp.getLastSeenTime(), currentTime) > plugin.getSettingsManager().getPurgeInactivePlayersDays()) {
                 Logging.debug("Purging player %s because it was too long inactive! (id=%s)", cp.getName(), cp.getID());
                 getDatabase().delete(cp);
@@ -162,7 +164,6 @@ public class DatabaseManager {
                 }
             } else {
                 ((CraftClan) cp.getClan()).addMemberInternally(cp);
-                cp.getClan().getSize();
             }
         }
 
@@ -231,8 +232,8 @@ public class DatabaseManager {
      * @param playerId The player to look for
      * @return A map of victims and a count
      */
-    public SortedMap<Integer, Long> getKillsPerPlayer(long playerId) {
-        TreeMap<Integer, Long> out = new TreeMap<Integer, Long>(new ReverseIntegerComparator());
+    public Map<Integer, Long> getKillsPerPlayer(long playerId) {
+        LinkedHashMap<Integer, Long> out = new LinkedHashMap<Integer, Long>();
         ResultSet res = null;
         try {
             retrieveKillsPerPlayer.set(0, playerId);

@@ -494,7 +494,11 @@ public class ChatBlock {
      * @param subtitle The sub-title
      */
     public static void sendHead(CommandSender sender, String head, String subtitle) {
-        StringBuilder header = new StringBuilder(head).append(' ');
+        StringBuilder header = new StringBuilder();
+        if (headColor != null) {
+            header.append(headColor.toString());
+        }
+        header.append(head).append(' ');
 
         if (subtitle != null) {
             if (subColor != null) {
@@ -508,19 +512,16 @@ public class ChatBlock {
             header.append(headColor);
         }
 
-        while (msgLength(header) < MAX_LINE_LENGTH) {
-            header.append('-');
-        }
-
-        StringBuilder sb = new StringBuilder();
-
-        while (msgLength(sb) < MAX_LINE_LENGTH) {
-            sb.append('a');
-        }
+        appendLine(header);
 
         ChatBlock.sendMessage(sender, header.toString());
     }
 
+    public static void appendLine(StringBuilder builder) {
+        while (msgLength(builder) < MAX_LINE_LENGTH) {
+            builder.append('-');
+        }
+    }
 
     /**
      * Sets the color of the header

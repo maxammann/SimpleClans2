@@ -19,6 +19,7 @@
 
 package com.p000ison.dev.simpleclans2.commands.clan.home;
 
+import com.p000ison.dev.commandlib.CallInformation;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.api.clan.Clan;
@@ -39,56 +40,31 @@ public class HomeCommand extends GenericPlayerCommand {
 
     public HomeCommand(SimpleClans plugin) {
         super("Home", plugin);
-        setArgumentRange(0, 0);
-        setUsages(Language.getTranslation("usage.home"));
+        setDescription(Language.getTranslation("description.home"));
         setIdentifiers(Language.getTranslation("home.command"));
-        setPermission("simpleclans.member.home");
+        addPermission("simpleclans.member.home");
+
+        setNeedsClan();
+        setNeedsClanVerified();
     }
 
-    @Override
-    public String getMenu(ClanPlayer cp) {
-        if (cp != null && cp.getClan().isVerified()) {
-            return Language.getTranslation("menu.home");
-        }
-        return null;
-    }
 
     @Override
-    public void execute(Player player, String[] args) {
-        ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
+    public void execute(Player player, ClanPlayer cp, String[] arguments, CallInformation info) {
+        Clan clan = cp.getClan();
 
-        if (cp != null) {
-            Clan clan = cp.getClan();
-
-            if (clan.isVerified()) {
-                if (cp.isTrusted()) {
-                    if (player.hasPermission("simpleclans.member.home")) {
-
-                        if (SimpleClans.hasEconomy() && plugin.getSettingsManager().isPurchaseTeleport() && !cp.withdraw(plugin.getSettingsManager().getPurchaseTeleportPrice())) {
-                            ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("not.sufficient.money"));
-                            return;
-                        }
-
-                        Location loc = clan.getFlags().getHomeLocation();
-
-                        if (loc == null) {
-                            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("hombase.not.set"));
-                            return;
-                        }
-
-                        plugin.getTeleportManager().addPlayer(player, loc, ChatColor.AQUA + MessageFormat.format(Language.getTranslation("now.at.homebase"), clan.getName()));
-
-                    } else {
-                        ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("insufficient.permissions"));
-                    }
-                } else {
-                    ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("only.trusted.players.can.do.this"));
-                }
-            } else {
-                ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("clan.is.not.verified"));
-            }
-        } else {
-            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
+        if (SimpleClans.hasEconomy() && getPlugin().getSettingsManager().isPurchaseTeleport() && !cp.withdraw(getPlugin().getSettingsManager().getPurchaseTeleportPrice())) {
+            ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("not.sufficient.money"));
+            return;
         }
+
+        Location loc = clan.getFlags().getHomeLocation();
+
+        if (loc == null) {
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("hombase.not.set"));
+            return;
+        }
+
+        getPlugin().getTeleportManager().addPlayer(player, loc, ChatColor.AQUA + MessageFormat.format(Language.getTranslation("now.at.homebase"), clan.getName()));
     }
 }

@@ -25,7 +25,6 @@ import com.p000ison.dev.simpleclans2.api.clan.Clan;
 import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayerManager;
 import com.p000ison.dev.simpleclans2.api.events.ClanPlayerCreateEvent;
-import com.p000ison.dev.simpleclans2.api.logging.Logging;
 import com.p000ison.dev.sqlapi.exception.QueryException;
 import org.bukkit.entity.Player;
 
@@ -34,216 +33,214 @@ import java.util.Collections;
 import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Level;
 
 /**
  * Represents a ClanPlayerManager
  */
 public class CraftClanPlayerManager implements ClanPlayerManager {
 
-    private Set<ClanPlayer> players = Collections.newSetFromMap(new ConcurrentHashMap<ClanPlayer, Boolean>());
-    private SimpleClans plugin;
+	private Set<ClanPlayer> players = Collections.newSetFromMap(new ConcurrentHashMap<ClanPlayer, Boolean>());
+	private SimpleClans plugin;
 
-    public CraftClanPlayerManager(SimpleClans plugin) {
-        this.plugin = plugin;
-    }
+	public CraftClanPlayerManager(SimpleClans plugin) {
+		this.plugin = plugin;
+	}
 
-    public void importClanPlayers(Set<CraftClanPlayer> clanPlayers) {
-        this.players.addAll(clanPlayers);
-    }
+	public void importClanPlayers(Set<CraftClanPlayer> clanPlayers) {
+		this.players.addAll(clanPlayers);
+	}
 
-    @Override
-    public ClanPlayer createClanPlayer(Player player) {
-        return createClanPlayer(player.getName());
-    }
+	@Override
+	public ClanPlayer createClanPlayer(Player player) {
+		return createClanPlayer(player.getName());
+	}
 
-    @Override
-    public ClanPlayer createClanPlayer(String player) {
-        return createClanPlayer(new CraftClanPlayer(plugin, player));
-    }
+	@Override
+	public ClanPlayer createClanPlayer(String player) {
+		return createClanPlayer(new CraftClanPlayer(plugin, player));
+	}
 
-    @Override
-    public ClanPlayer createClanPlayer(ClanPlayer clanPlayer) {
-        ClanPlayerCreateEvent event = new ClanPlayerCreateEvent(clanPlayer);
-        plugin.getServer().getPluginManager().callEvent(event);
+	@Override
+	public ClanPlayer createClanPlayer(ClanPlayer clanPlayer) {
+		ClanPlayerCreateEvent event = new ClanPlayerCreateEvent(clanPlayer);
+		plugin.getServer().getPluginManager().callEvent(event);
 
-        if (event.isCancelled()) {
-            return null;
-        }
+		if (event.isCancelled()) {
+			return null;
+		}
 
-        for (ClanPlayer cp : players) {
-            if (cp.equals(clanPlayer)) {
-                return cp;
-            }
-        }
+		for (ClanPlayer cp : players) {
+			if (cp.equals(clanPlayer)) {
+				return cp;
+			}
+		}
 
-        clanPlayer.updateLastSeen();
-        ((CraftClanPlayer) clanPlayer).setJoinTime(System.currentTimeMillis());
+		clanPlayer.updateLastSeen();
+		((CraftClanPlayer) clanPlayer).setJoinTime(System.currentTimeMillis());
 
-        try {
-            plugin.getDataManager().getDatabase().save((CraftClanPlayer) clanPlayer);
-        } catch (QueryException e) {
-            Throwable cause = e.getCause();
+		try {
+			plugin.getDataManager().getDatabase().save((CraftClanPlayer) clanPlayer);
+		} catch (QueryException e) {
+			Throwable cause = e.getCause();
 
-            if (cause instanceof SQLException) {
-                if (cause.getMessage().toLowerCase().contains("duplicate") || cause.getMessage().toLowerCase().contains("constraint")) {
-                    Logging.debug(Level.SEVERE, "**********************************\n" +
-                            "Failed at inserting player " + clanPlayer.getName() + " because it already exists! Please follow the instructions on the jenkins page or on the devbukkit page else your data may get corrupted!" +
-                            "\n**********************************");
-                    return null;
-                }
-            }
-        }
-        players.add(clanPlayer);
+			if (cause instanceof SQLException) {
+				if (cause.getMessage().toLowerCase().contains("duplicate") || cause.getMessage().toLowerCase().contains("constraint")) {
+					throw new IllegalStateException("**********************************\n" +
+							"Failed at inserting player " + clanPlayer.getName() + " because it already exists! Please follow the instructions on the jenkins page or on the devbukkit page else your data may get corrupted!" +
+							"\n**********************************");
+				}
+			}
+		}
+		players.add(clanPlayer);
 
-        clanPlayer.update();
+		clanPlayer.update();
 
-        return clanPlayer;
-    }
+		return clanPlayer;
+	}
 
-    @Override
-    public ClanPlayer getCreateClanPlayerExact(String name) {
-        ClanPlayer clanPlayer = getAnyClanPlayerExact(name);
+	@Override
+	public ClanPlayer getCreateClanPlayerExact(String name) {
+		ClanPlayer clanPlayer = getAnyClanPlayerExact(name);
 
-        if (clanPlayer != null) {
-            return clanPlayer;
-        }
+		if (clanPlayer != null) {
+			return clanPlayer;
+		}
 
-        return createClanPlayer(name);
-    }
+		return createClanPlayer(name);
+	}
 
-    @Override
-    public void ban(ClanPlayer clanPlayer) {
-        if (clanPlayer == null) {
-            return;
-        }
+	@Override
+	public void ban(ClanPlayer clanPlayer) {
+		if (clanPlayer == null) {
+			return;
+		}
 
-        Clan clan = clanPlayer.getClan();
+		Clan clan = clanPlayer.getClan();
 
-        if (clan != null) {
-            if (clan.isLeader(clanPlayer) && clan.getLeaders().size() == 1) {
-                clan.disband();
-            } else {
-                clan.removeMember(clanPlayer);
-                clanPlayer.setBanned(true);
+		if (clan != null) {
+			if (clan.isLeader(clanPlayer) && clan.getLeaders().size() == 1) {
+				clan.disband();
+			} else {
+				clan.removeMember(clanPlayer);
+				clanPlayer.setBanned(true);
 
-                clanPlayer.update();
-            }
-        }
-    }
+				clanPlayer.update();
+			}
+		}
+	}
 
-    @Override
-    public Set<ClanPlayer> getClanPlayers() {
-        return Collections.unmodifiableSet(players);
-    }
+	@Override
+	public Set<ClanPlayer> getClanPlayers() {
+		return Collections.unmodifiableSet(players);
+	}
 
-    @Override
-    public ClanPlayer getCreateClanPlayerExact(Player player) {
-        return getCreateClanPlayerExact(player.getName());
-    }
+	@Override
+	public ClanPlayer getCreateClanPlayerExact(Player player) {
+		return getCreateClanPlayerExact(player.getName());
+	}
 
-    @Override
-    public ClanPlayer getAnyClanPlayer(String name) {
+	@Override
+	public ClanPlayer getAnyClanPlayer(String name) {
 
-        if (name == null) {
-            return null;
-        }
+		if (name == null) {
+			return null;
+		}
 
-        String lowerName = name.toLowerCase(Locale.US);
+		String lowerName = name.toLowerCase(Locale.US);
 
-        for (ClanPlayer clanPlayer : players) {
-            if (clanPlayer.getName().toLowerCase(Locale.US).startsWith(lowerName)) {
-                return clanPlayer;
-            }
-        }
-        return null;
-    }
+		for (ClanPlayer clanPlayer : players) {
+			if (clanPlayer.getName().toLowerCase(Locale.US).startsWith(lowerName)) {
+				return clanPlayer;
+			}
+		}
+		return null;
+	}
 
-    @Override
-    public ClanPlayer getClanPlayer(String name) {
+	@Override
+	public ClanPlayer getClanPlayer(String name) {
 
-        if (name == null) {
-            return null;
-        }
+		if (name == null) {
+			return null;
+		}
 
-        String lowerName = name.toLowerCase(Locale.US);
+		String lowerName = name.toLowerCase(Locale.US);
 
-        for (ClanPlayer clanPlayer : players) {
-            if (clanPlayer.getName().toLowerCase(Locale.US).startsWith(lowerName)) {
-                if (clanPlayer.getClan() == null) {
-                    return null;
-                } else {
-                    return clanPlayer;
-                }
-            }
-        }
-        return null;
-    }
+		for (ClanPlayer clanPlayer : players) {
+			if (clanPlayer.getName().toLowerCase(Locale.US).startsWith(lowerName)) {
+				if (clanPlayer.getClan() == null) {
+					return null;
+				} else {
+					return clanPlayer;
+				}
+			}
+		}
+		return null;
+	}
 
-    @Override
-    public ClanPlayer getClanPlayer(long id) {
+	@Override
+	public ClanPlayer getClanPlayer(long id) {
 
-        if (id == -1) {
-            return null;
-        }
-        for (ClanPlayer clanPlayer : players) {
-            if (clanPlayer.getID() == id) {
-                return clanPlayer;
-            }
-        }
-        return null;
-    }
+		if (id == -1) {
+			return null;
+		}
+		for (ClanPlayer clanPlayer : players) {
+			if (clanPlayer.getID() == id) {
+				return clanPlayer;
+			}
+		}
+		return null;
+	}
 
-    @Override
-    public ClanPlayer getClanPlayer(Player player) {
-        return getClanPlayerExact(player.getName());
-    }
+	@Override
+	public ClanPlayer getClanPlayer(Player player) {
+		return getClanPlayerExact(player.getName());
+	}
 
-    @Override
-    public ClanPlayer getAnyClanPlayer(Player player) {
-        return getAnyClanPlayerExact(player.getName());
-    }
+	@Override
+	public ClanPlayer getAnyClanPlayer(Player player) {
+		return getAnyClanPlayerExact(player.getName());
+	}
 
-    @Override
-    public ClanPlayer getAnyClanPlayerExact(String name) {
-        if (name == null) {
-            return null;
-        }
+	@Override
+	public ClanPlayer getAnyClanPlayerExact(String name) {
+		if (name == null) {
+			return null;
+		}
 
-        for (ClanPlayer clanPlayer : players) {
-            if (clanPlayer.getName().equalsIgnoreCase(name)) {
-                return clanPlayer;
-            }
-        }
+		for (ClanPlayer clanPlayer : players) {
+			if (clanPlayer.getName().equalsIgnoreCase(name)) {
+				return clanPlayer;
+			}
+		}
 
-        return null;
-    }
+		return null;
+	}
 
-    @Override
-    public ClanPlayer getClanPlayerExact(String name) {
-        if (name == null) {
-            return null;
-        }
+	@Override
+	public ClanPlayer getClanPlayerExact(String name) {
+		if (name == null) {
+			return null;
+		}
 
-        for (ClanPlayer clanPlayer : players) {
-            if (clanPlayer.getName().equalsIgnoreCase(name)) {
-                if (clanPlayer.getClan() == null) {
-                    return null;
-                } else {
-                    return clanPlayer;
-                }
-            }
-        }
+		for (ClanPlayer clanPlayer : players) {
+			if (clanPlayer.getName().equalsIgnoreCase(name)) {
+				if (clanPlayer.getClan() == null) {
+					return null;
+				} else {
+					return clanPlayer;
+				}
+			}
+		}
 
-        return null;
-    }
+		return null;
+	}
 
-    public void updateOnlinePlayers() {
-        for (Player player : plugin.getServer().getOnlinePlayers()) {
-            CraftClanPlayer clanPlayer = (CraftClanPlayer) getClanPlayer(player);
-            if (clanPlayer != null) {
-                clanPlayer.setupOnlineVersion();
-            }
-        }
-    }
+	public void updateOnlinePlayers() {
+		for (Player player : plugin.getServer().getOnlinePlayers()) {
+			CraftClanPlayer clanPlayer = (CraftClanPlayer) getClanPlayer(player);
+			if (clanPlayer != null) {
+				clanPlayer.setupOnlineVersion();
+			}
+		}
+	}
 }

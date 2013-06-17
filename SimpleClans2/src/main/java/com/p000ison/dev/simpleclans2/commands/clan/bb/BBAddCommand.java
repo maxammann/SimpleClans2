@@ -19,6 +19,7 @@
 
 package com.p000ison.dev.simpleclans2.commands.clan.bb;
 
+import com.p000ison.dev.commandlib.CallInformation;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.api.clan.Clan;
@@ -32,55 +33,34 @@ import org.bukkit.entity.Player;
 import java.text.MessageFormat;
 
 /**
- * Represents a BBCommand
+ * Represents a ViewBBCommand
  */
 public class BBAddCommand extends GenericPlayerCommand {
 
-
     public BBAddCommand(SimpleClans plugin) {
-        super("BBAdd", plugin);
-        setArgumentRange(0, 500);
-        setUsages(MessageFormat.format(Language.getTranslation("usage.bb.add"), plugin.getSettingsManager().getBBCommand()));
+        super("Add message to BB", plugin);
+        setInfinite(true);
+        addArgument(Language.getTranslation("argument.message"));
+        setDescription(MessageFormat.format(Language.getTranslation("description.bb.add"), plugin.getSettingsManager().getBBCommand()));
         setIdentifiers(Language.getTranslation("bb.add.command"));
-        setPermission("simpleclans.member.bb-add");
-        setType(Type.BB);
+        addPermission("simpleclans.member.bb-add");
+
+        setNeedsClan();
+        setNeedsClanVerified();
+        setNeedsTrusted();
     }
 
     @Override
-    public String getMenu(ClanPlayer cp) {
-        if (cp != null && cp.getClan().isVerified()) {
-            return MessageFormat.format(Language.getTranslation("menu.bb.add"), plugin.getSettingsManager().getBBCommand());
-        }
-        return null;
-    }
-
-    @Override
-    public void execute(Player player, String[] args) {
-        ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
-
-        if (cp == null) {
-            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
-            return;
-        }
-
+    public void execute(Player player, ClanPlayer cp, String[] arguments, CallInformation info) {
         Clan clan = cp.getClan();
 
-        if (!clan.isVerified()) {
-            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("clan.is.not.verified"));
-
+        String msg = GeneralHelper.arrayToString(arguments);
+        if (msg == null) {
+            ChatBlock.sendMessage(player, ChatColor.DARK_RED + Language.getTranslation("please.enter.message"));
             return;
         }
 
-        if (cp.isTrusted()) {
-            String msg = GeneralHelper.arrayToString(args);
-            if (msg == null) {
-                ChatBlock.sendMessage(player, ChatColor.DARK_RED + Language.getTranslation("please.enter.message"));
-                return;
-            }
-            clan.addBBMessage(cp, msg);
-            ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("bb.added"));
-        } else {
-            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("no.leader.permissions"));
-        }
+        clan.addBBMessage(cp, msg);
+        ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("bb.added"));
     }
 }

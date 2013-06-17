@@ -19,6 +19,7 @@
 
 package com.p000ison.dev.simpleclans2.commands.clan;
 
+import com.p000ison.dev.commandlib.CallInformation;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.api.clan.Clan;
@@ -40,58 +41,40 @@ public class DemoteCommand extends GenericPlayerCommand {
 
     public DemoteCommand(SimpleClans plugin) {
         super("Demote", plugin);
-        this.plugin = plugin;
-        setArgumentRange(1, 1);
-        setUsages(Language.getTranslation("usage.demote"));
+        addArgument(Language.getTranslation("argument.leader"));
+        setDescription(Language.getTranslation("description.demote"));
         setIdentifiers(Language.getTranslation("demote.command"));
-        setPermission("simpleclans.leader.demote");
+        addPermission("simpleclans.leader.demote");
+
+        setNeedsClan();
+        setRankPermission("leader.demote");
     }
 
     @Override
-    public String getMenu(ClanPlayer cp) {
-        if (cp != null) {
-            return Language.getTranslation("menu.demote");
+    public void execute(Player player, ClanPlayer cp, String[] arguments, CallInformation info) {
+        Clan clan = cp.getClan();
+
+        ClanPlayer demoted = getPlugin().getClanPlayerManager().getClanPlayer(arguments[0]);
+
+        if (!clan.allLeadersOnline(demoted)) {
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("leaders.must.be.online.to.vote.on.demotion"));
+            return;
         }
-        return null;
-    }
 
-    @Override
-    public void execute(Player player, String[] args) {
+        if (!clan.isLeader(demoted)) {
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("player.is.not.a.leader.of.your.clan"));
+            return;
+        }
 
-        ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
-
-        if (cp != null) {
-            Clan clan = cp.getClan();
-
-            if (clan.isLeader(cp) || cp.hasRankPermission("leader.demote")) {
-                ClanPlayer demoted = plugin.getClanPlayerManager().getClanPlayer(args[0]);
-
-                if (!clan.allLeadersOnline(demoted)) {
-                    ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("leaders.must.be.online.to.vote.on.demotion"));
-                    return;
-                }
-
-                if (!clan.isLeader(demoted)) {
-                    ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("player.is.not.a.leader.of.your.clan"));
-                    return;
-                }
-
-                if (!plugin.getSettingsManager().isVoteForDemote()) {
-                    clan.addBBMessage(cp, MessageFormat.format(Language.getTranslation("demoted.back.to.member"), demoted.getName()));
-                    clan.demote(demoted);
-                } else {
-                    Set<ClanPlayer> acceptors = GeneralHelper.stripOfflinePlayers(clan.getLeaders());
-                    acceptors.remove(demoted);
-
-                    plugin.getRequestManager().createRequest(new DemoteRequest(plugin, acceptors, cp, demoted));
-                    ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("demotion.vote.has.been.requested.from.all.leaders"));
-                }
-
-            } else {
-                ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("no.leader.permissions"));
-            }
+        if (!getPlugin().getSettingsManager().isVoteForDemote()) {
+            clan.addBBMessage(cp, MessageFormat.format(Language.getTranslation("demoted.back.to.member"), demoted.getName()));
+            clan.demote(demoted);
         } else {
-            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
+            Set<ClanPlayer> acceptors = GeneralHelper.stripOfflinePlayers(clan.getLeaders());
+            acceptors.remove(demoted);
+
+            getPlugin().getRequestManager().createRequest(new DemoteRequest(getPlugin(), acceptors, cp, demoted));
+            ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("demotion.vote.has.been.requested.from.all.leaders"));
         }
     }
 }

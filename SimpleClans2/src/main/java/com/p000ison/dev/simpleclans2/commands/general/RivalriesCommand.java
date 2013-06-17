@@ -19,6 +19,7 @@
 
 package com.p000ison.dev.simpleclans2.commands.general;
 
+import com.p000ison.dev.commandlib.CallInformation;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.api.chat.Align;
 import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
@@ -43,70 +44,49 @@ public class RivalriesCommand extends GenericConsoleCommand {
 
     public RivalriesCommand(SimpleClans plugin) {
         super("Rivalries", plugin);
-        setArgumentRange(0, 1);
-        setUsages(MessageFormat.format(Language.getTranslation("usage.rivalries"), plugin.getSettingsManager().getClanColor()));
+        addArgument(Language.getTranslation("argument.page"), true, true);
+        setDescription(MessageFormat.format(Language.getTranslation("description.rivalries"), plugin.getSettingsManager().getClanColor()));
         setIdentifiers(Language.getTranslation("rivalries.command"));
-        setPermission("simpleclans.anyone.rivalries");
+        addPermission("simpleclans.anyone.rivalries");
     }
 
     @Override
-    public String getMenu() {
-        return Language.getTranslation("menu.rivalries");
-    }
+    public void execute(CommandSender sender, String[] arguments, CallInformation info) {
+        ChatColor headColor = getPlugin().getSettingsManager().getHeaderPageColor();
 
-    @Override
-    public void execute(CommandSender sender, String[] args) {
-        ChatColor headColor = plugin.getSettingsManager().getHeaderPageColor();
 
-        if (sender.hasPermission("simpleclans.anyone.rivalries")) {
+        Set<Clan> unsortedClans = getPlugin().getClanManager().getClans();
+        int completeSize = unsortedClans.size();
 
-            Set<Clan> unsortedClans = plugin.getClanManager().getClans();
+        List<Clan> clans = new ArrayList<Clan>(unsortedClans);
+        Collections.sort(clans, new KDRComparator());
 
-            int page = 0;
-            int completeSize = unsortedClans.size();
+        ChatBlock chatBlock = new ChatBlock();
 
-            if (args.length == 1) {
-                try {
-                    page = Integer.parseInt(args[0]) - 1;
-                } catch (NumberFormatException e) {
-                    ChatBlock.sendMessage(sender, Language.getTranslation("number.format"));
-                    return;
-                }
+        ChatBlock.sendBlank(sender);
+        ChatBlock.sendMessage(sender, headColor + Language.getTranslation("legend") + ChatColor.DARK_RED + " [" + Language.getTranslation("war") + "]");
+        ChatBlock.sendBlank(sender);
+
+        chatBlock.setAlignment(Align.LEFT, Align.LEFT);
+        chatBlock.addRow(Language.getTranslation("clan"), Language.getTranslation("rivals"));
+
+        int page = info.getPage(completeSize);
+        int start = info.getStartIndex(page, completeSize);
+        int end = info.getEndIndex(page, completeSize);
+
+        for (int i = start; i < end; i++) {
+            Clan clan = clans.get(i);
+            if (!clan.isVerified()) {
+                continue;
             }
 
+            Set<Clan> rivals = clan.getRivals();
 
-            List<Clan> clans = new ArrayList<Clan>(unsortedClans);
-            Collections.sort(clans, new KDRComparator());
-
-            ChatBlock chatBlock = new ChatBlock();
-
-            ChatBlock.sendBlank(sender);
-            ChatBlock.sendHead(sender, plugin.getSettingsManager().getServerName(), Language.getTranslation("rivalries"));
-            ChatBlock.sendBlank(sender);
-            ChatBlock.sendMessage(sender, headColor + Language.getTranslation("legend") + ChatColor.DARK_RED + " [" + Language.getTranslation("war") + "]");
-            ChatBlock.sendBlank(sender);
-
-            chatBlock.setAlignment(Align.LEFT, Align.LEFT);
-            chatBlock.addRow(Language.getTranslation("clan"), Language.getTranslation("rivals"));
-
-            int[] boundings = getBoundings(completeSize, page);
-
-            for (int i = boundings[0]; i < boundings[1]; i++) {
-                Clan clan = clans.get(i);
-                if (!clan.isVerified()) {
-                    continue;
-                }
-
-                Set<Clan> rivals = clan.getRivals();
-
-                chatBlock.addRow(ChatColor.AQUA + clan.getTag(), rivals == null || rivals.isEmpty() ? Language.getTranslation("none") : GeneralHelper.clansToString(rivals, ","));
-            }
-
-            chatBlock.sendBlock(sender);
-
-            ChatBlock.sendBlank(sender);
-        } else {
-            ChatBlock.sendMessage(sender, ChatColor.RED + Language.getTranslation("insufficient.permissions"));
+            chatBlock.addRow(ChatColor.AQUA + clan.getTag(), rivals == null || rivals.isEmpty() ? Language.getTranslation("none") : GeneralHelper.clansToString(rivals, ","));
         }
+
+        chatBlock.sendBlock(sender);
+
+        ChatBlock.sendBlank(sender);
     }
 }

@@ -216,7 +216,6 @@ public class ClaimingManager {
     }
 
 
-
     public int getIDByWorld(String world) {
         return settingsManager.getMapIDs().inverse().get(world);
     }

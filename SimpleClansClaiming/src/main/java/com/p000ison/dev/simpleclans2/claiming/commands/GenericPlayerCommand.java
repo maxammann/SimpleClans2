@@ -14,16 +14,15 @@
  *     You should have received a copy of the GNU General Public License
  *     along with SimpleClans2.  If not, see <http://www.gnu.org/licenses/>.
  *
- *     Last modified: 29.01.13 20:55
+ *     Last modified: 31.05.13 14:32
  */
 
 
-package com.p000ison.dev.simpleclans2.commands;
+package com.p000ison.dev.simpleclans2.claiming.commands;
 
-import com.p000ison.dev.simpleclans2.SimpleClans;
+import com.p000ison.dev.simpleclans2.api.SCCore;
 import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.api.commands.ClanPlayerCommand;
-import com.p000ison.dev.simpleclans2.language.Language;
 import org.bukkit.ChatColor;
 
 import java.text.MessageFormat;
@@ -33,11 +32,11 @@ import java.text.MessageFormat;
  */
 public abstract class GenericPlayerCommand extends ClanPlayerCommand {
 
-    private SimpleClans plugin;
+    protected SCCore sccore;
 
-    public GenericPlayerCommand(String name, SimpleClans plugin) {
+    public GenericPlayerCommand(String name, SCCore sccore) {
         super(name);
-        this.plugin = plugin;
+        this.sccore = sccore;
     }
 
     @Override
@@ -45,57 +44,53 @@ public abstract class GenericPlayerCommand extends ClanPlayerCommand {
         if (cp != null) {
             if (noClan) {
                 if (sender != null) {
-                    sender.sendMessage(ChatColor.RED + MessageFormat.format(Language.getTranslation("you.must.first.resign"), cp.getClan().getName()));
+                    sender.sendMessage(ChatColor.RED + MessageFormat.format(sccore.getTranslation("you.must.first.resign"), cp.getClan().getName()));
                 }
                 return false;
             }
 
             if (trusted && !cp.isTrusted()) {
                 if (sender != null) {
-                    sender.sendMessage(ChatColor.RED + Language.getTranslation("only.trusted.players.can.do.this"));
+                    sender.sendMessage(ChatColor.RED + sccore.getTranslation("only.trusted.players.can.do.this"));
                 }
                 return false;
             }
             if (leader && !cp.isLeader()) {
                 if (sender != null) {
-                    sender.sendMessage(ChatColor.RED + Language.getTranslation("no.leader.permissions"));
+                    sender.sendMessage(ChatColor.RED + sccore.getTranslation("no.leader.permissions"));
                 }
                 return false;
             }
 
             if (clanVerified && !cp.getClan().isVerified()) {
                 if (sender != null) {
-                    sender.sendMessage(ChatColor.RED + Language.getTranslation("get.your.clan.verified.to.access.advanced.features"));
+                    sender.sendMessage(ChatColor.RED + sccore.getTranslation("get.your.clan.verified.to.access.advanced.features"));
                 }
                 return false;
             }
 
             if (clanNotVerified && cp.getClan().isVerified()) {
                 if (sender != null) {
-                    sender.sendMessage(ChatColor.GRAY + Language.getTranslation("your.clan.is.already.verified"));
+                    sender.sendMessage(ChatColor.GRAY + sccore.getTranslation("your.clan.is.already.verified"));
                 }
                 return false;
             }
 
             if (rankPerm != null && (!cp.hasRankPermission(rankPerm) || !cp.isLeader())) {
                 if (sender != null) {
-                    sender.sendMessage(ChatColor.RED + Language.getTranslation("no.rank.permissions"));
+                    sender.sendMessage(ChatColor.RED + sccore.getTranslation("no.rank.permissions"));
                 }
                 return false;
             }
         } else {
             if (hasClan) {
                 if (sender != null) {
-                    sender.sendMessage(ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
+                    sender.sendMessage(ChatColor.RED + sccore.getTranslation("not.a.member.of.any.clan"));
                 }
                 return false;
             }
         }
 
         return true;
-    }
-
-    public SimpleClans getPlugin() {
-        return plugin;
     }
 }

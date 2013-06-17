@@ -19,6 +19,7 @@
 
 package com.p000ison.dev.simpleclans2.commands.general;
 
+import com.p000ison.dev.commandlib.CallInformation;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.api.chat.Align;
 import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
@@ -43,57 +44,41 @@ public class AlliancesCommand extends GenericConsoleCommand {
 
     public AlliancesCommand(SimpleClans plugin) {
         super("Alliances", plugin);
-        setArgumentRange(0, 1);
-        setUsages(Language.getTranslation("usage.alliances"));
+        addArgument(Language.getTranslation("argument.page"), true, true);
+        setDescription(Language.getTranslation("description.alliances"));
         setIdentifiers(Language.getTranslation("alliances.command"));
-        setPermission("simpleclans.anyone.alliances");
+        addPermission("simpleclans.anyone.alliances");
     }
 
     @Override
-    public String getMenu() {
-        return Language.getTranslation("menu.alliances");
-    }
-
-    @Override
-    public void execute(CommandSender sender, String[] args) {
-        ChatColor headColor = plugin.getSettingsManager().getHeaderPageColor();
-        ChatColor subColor = plugin.getSettingsManager().getSubPageColor();
+    public void execute(CommandSender sender, String[] arguments, CallInformation info) {
+        ChatColor headColor = getPlugin().getSettingsManager().getHeaderPageColor();
+        ChatColor subColor = getPlugin().getSettingsManager().getSubPageColor();
 
 
-        List<Clan> clans = new ArrayList<Clan>(plugin.getClanManager().getClans());
+        List<Clan> clans = new ArrayList<Clan>(getPlugin().getClanManager().getClans());
 
         if (clans.isEmpty()) {
             ChatBlock.sendMessage(sender, ChatColor.RED + Language.getTranslation("no.clans.have.been.created"));
             return;
         }
 
-        int page = 0;
         int completeSize = clans.size();
-
-        if (args.length == 1) {
-            try {
-                page = Integer.parseInt(args[0]) - 1;
-            } catch (NumberFormatException e) {
-                ChatBlock.sendMessage(sender, Language.getTranslation("number.format"));
-                return;
-            }
-        }
-
 
         Collections.sort(clans, new KDRComparator());
 
         ChatBlock chatBlock = new ChatBlock();
 
         ChatBlock.sendBlank(sender);
-        ChatBlock.sendHead(sender, plugin.getSettingsManager().getServerName(), Language.getTranslation("alliances"));
-        ChatBlock.sendBlank(sender, 2);
 
         chatBlock.setAlignment(Align.LEFT, Align.LEFT);
         chatBlock.addRow(headColor + Language.getTranslation("clan"), Language.getTranslation("allies"));
 
-        int[] boundings = getBoundings(completeSize, page);
+        int page = info.getPage(completeSize);
+        int start = info.getStartIndex(page, completeSize);
+        int end = info.getEndIndex(page, completeSize);
 
-        for (int i = boundings[0]; i < boundings[1]; i++) {
+        for (int i = start; i < end; i++) {
             Clan clan = clans.get(i);
             if (!clan.isVerified()) {
                 completeSize--;

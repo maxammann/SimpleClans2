@@ -14,10 +14,10 @@
  *     You should have received a copy of the GNU General Public License
  *     along with SimpleClans2.  If not, see <http://www.gnu.org/licenses/>.
  *
- *     Last modified: 10/20/12 5:08 PM
+ *     Last modified: 10.10.12 21:57
  */
 
-package com.p000ison.dev.simpleclans2.commands.clan.rank;
+package com.p000ison.dev.simpleclans2.commands.clan.bb;
 
 import com.p000ison.dev.commandlib.CallInformation;
 import com.p000ison.dev.simpleclans2.SimpleClans;
@@ -25,41 +25,43 @@ import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.api.clan.Clan;
 import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
-import com.p000ison.dev.simpleclans2.database.statements.RemoveRankStatement;
+import com.p000ison.dev.simpleclans2.database.response.responses.BBRetrieveResponse;
 import com.p000ison.dev.simpleclans2.language.Language;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-/**
- * Represents a RankCreateCommand
- */
-public class RankDeleteCommand extends GenericPlayerCommand {
+import java.text.MessageFormat;
 
-    public RankDeleteCommand(SimpleClans plugin) {
-        super("Delete rank", plugin);
-        addArgument(Language.getTranslation("argument.rank"));
-        setDescription(Language.getTranslation("description.rank.delete", plugin.getSettingsManager().getRankCommand()));
-        setIdentifiers(Language.getTranslation("rank.delete.command"));
-        addPermission("simpleclans.leader.rank.delete");
+/**
+ * Represents a ViewBBCommand
+ */
+public class ViewBBCommand extends GenericPlayerCommand {
+
+    public ViewBBCommand(SimpleClans plugin) {
+        super("View BB", plugin);
+        addArgument(Language.getTranslation("argument.page"), true, true);
+        setDescription(MessageFormat.format(Language.getTranslation("description.bb"), plugin.getSettingsManager().getBBCommand()));
+        setIdentifiers(Language.getTranslation("view.command"));
+        addPermission("simpleclans.member.bb");
 
         setNeedsClan();
-        setRankPermission("manage.ranks");
+        setNeedsClanVerified();
     }
-
 
     @Override
     public void execute(Player player, ClanPlayer cp, String[] arguments, CallInformation info) {
         Clan clan = cp.getClan();
 
-        long response = clan.deleteRank(arguments[0]);
-
-        if (response == -1) {
-            ChatBlock.sendMessage(player, ChatColor.DARK_RED + Language.getTranslation("rank.not.found"));
-            return;
+        int page = 0;
+        if (arguments.length > 0) {
+            try {
+                page = Integer.parseInt(arguments[0]);
+            } catch (NumberFormatException e) {
+                ChatBlock.sendMessage(player, ChatColor.DARK_RED + Language.getTranslation("number.format"));
+                return;
+            }
         }
 
-        getPlugin().getDataManager().addStatement(new RemoveRankStatement(response));
-
-        ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("rank.deleted"));
+        getPlugin().getDataManager().addResponse(new BBRetrieveResponse(getPlugin(), player, clan, page, -1, true));
     }
 }

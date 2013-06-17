@@ -19,6 +19,7 @@
 
 package com.p000ison.dev.simpleclans2.commands.admin;
 
+import com.p000ison.dev.commandlib.CallInformation;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.api.clan.Clan;
@@ -33,24 +34,16 @@ import org.bukkit.command.CommandSender;
 public class VerifyModCommand extends GenericConsoleCommand {
 
     public VerifyModCommand(SimpleClans plugin) {
-        super("VerifyMod", plugin);
-        setArgumentRange(1, 1);
-        setUsages(Language.getTranslation("usage.verifyclan"));
+        super("Verify (Mod)", plugin);
+        addArgument(Language.getTranslation("argument.tag"));
+        setDescription(Language.getTranslation("description.verifyclan"));
         setIdentifiers(Language.getTranslation("verifyclan.command"));
-        setPermission("simpleclans.mod.verify");
+        addPermission("simpleclans.mod.verify");
     }
 
     @Override
-    public String getMenu() {
-        if (plugin.getSettingsManager().requireVerification()) {
-            return ChatColor.DARK_RED + Language.getTranslation("menu.verifyclan");
-        }
-        return null;
-    }
-
-    @Override
-    public void execute(CommandSender sender, String[] args) {
-        Clan clan = plugin.getClanManager().getClan(args[0]);
+    public void execute(CommandSender sender, String[] arguments, CallInformation info) {
+        Clan clan = getPlugin().getClanManager().getClan(arguments[0]);
 
         if (clan != null) {
             if (!clan.isVerified()) {
@@ -64,5 +57,10 @@ public class VerifyModCommand extends GenericConsoleCommand {
         } else {
             ChatBlock.sendMessage(sender, ChatColor.RED + Language.getTranslation("the.clan.does.not.exist"));
         }
+    }
+
+    @Override
+    public boolean allowExecution(com.p000ison.dev.commandlib.CommandSender sender) {
+        return getPlugin().getSettingsManager().requireVerification();
     }
 }

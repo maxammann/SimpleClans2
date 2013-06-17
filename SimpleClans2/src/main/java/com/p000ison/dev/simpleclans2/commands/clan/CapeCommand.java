@@ -19,6 +19,7 @@
 
 package com.p000ison.dev.simpleclans2.commands.clan;
 
+import com.p000ison.dev.commandlib.CallInformation;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.api.clan.Clan;
@@ -27,6 +28,7 @@ import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
 import com.p000ison.dev.simpleclans2.language.Language;
 import com.p000ison.dev.simpleclans2.util.GeneralHelper;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.text.MessageFormat;
@@ -38,46 +40,30 @@ public class CapeCommand extends GenericPlayerCommand {
 
     public CapeCommand(SimpleClans plugin) {
         super("Cape", plugin);
-        setArgumentRange(1, 1);
-        setUsages(Language.getTranslation("usage.cape"));
+        addArgument(Language.getTranslation("argument.url"));
+        setDescription(Language.getTranslation("description.cape"));
         setIdentifiers(Language.getTranslation("cape.command"));
-        setPermission("simpleclans.leader.cape");
+        addPermission("simpleclans.leader.cape");
+
+        setNeedsClan();
+        setNeedsClanVerified();
+        setNeedsLeader();
     }
 
     @Override
-    public String getMenu(ClanPlayer cp) {
-        if (cp != null && cp.getClan().isVerified() && cp.isLeader() && plugin.getSpoutSupport().isEnabled() && plugin.getSettingsManager().isCapesEnabled()) {
-            return Language.getTranslation("menu.cape");
-        }
-        return null;
+    protected boolean displayHelpEntry(ClanPlayer cp, CommandSender sender) {
+        return getPlugin().getSpoutSupport().isEnabled() && getPlugin().getSettingsManager().isCapesEnabled();
     }
 
     @Override
-    public void execute(Player player, String[] args) {
-        if (!plugin.getSettingsManager().isCapesEnabled()) {
-            return;
-        }
-
-        ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
-
-        if (cp == null) {
-            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
+    public void execute(Player player, ClanPlayer cp, String[] arguments, CallInformation info) {
+        if (!getPlugin().getSettingsManager().isCapesEnabled()) {
             return;
         }
 
         Clan clan = cp.getClan();
 
-        if (!clan.isVerified()) {
-            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("clan.is.not.verified"));
-            return;
-        }
-
-        if (!clan.isLeader(cp)) {
-            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("no.leader.permissions"));
-            return;
-        }
-
-        String url = args[0];
+        String url = arguments[0];
 
         if (url.length() > 5 && url.length() < 255 && url.substring(url.length() - 4, url.length()).equalsIgnoreCase(".png")) {
             if (GeneralHelper.checkConnection(url)) {

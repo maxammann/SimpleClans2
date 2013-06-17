@@ -19,6 +19,7 @@
 
 package com.p000ison.dev.simpleclans2.commands.clan;
 
+import com.p000ison.dev.commandlib.CallInformation;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.api.clan.Clan;
@@ -29,9 +30,8 @@ import com.p000ison.dev.simpleclans2.database.response.responses.ClanCreateRespo
 import com.p000ison.dev.simpleclans2.language.Language;
 import com.p000ison.dev.simpleclans2.util.GeneralHelper;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import java.text.MessageFormat;
 
 /**
  * Represents a CreateCommand
@@ -39,59 +39,48 @@ import java.text.MessageFormat;
 public class CreateCommand extends GenericPlayerCommand {
 
     public CreateCommand(SimpleClans plugin) {
-        super("CreateCommand", plugin);
-        setArgumentRange(2, 20);
-        setUsages(Language.getTranslation("usage.create"), Language.getTranslation("example.clan.create"));
+        super("Create", plugin);
+        addArgument(Language.getTranslation("argument.tag")).addArgument(Language.getTranslation("argument.name"));
+        setInfinite(true);
+        setDescription(Language.getTranslation("description.create"));
         setIdentifiers(Language.getTranslation("create.command"));
-        setPermission("simpleclans.leader.create");
+        addPermission("simpleclans.leader.create");
     }
 
     @Override
-    public String getMenu(ClanPlayer cp) {
-        if (cp == null) {
-            if (plugin.getSettingsManager().isPurchaseCreation()) {
-                return Language.getTranslation("menu.create.purchase");
-            } else {
-                return Language.getTranslation("menu.create.default");
-            }
-        }
-        return null;
+    protected boolean displayHelpEntry(ClanPlayer cp, CommandSender sender) {
+        return getPlugin().getSettingsManager().isPurchaseCreation();
     }
 
     @Override
-    public void execute(Player player, String[] args) {
-        ClanPlayer cp = plugin.getClanPlayerManager().getCreateClanPlayerExact(player);
+    public void execute(Player player, ClanPlayer ignored, String[] arguments, CallInformation info) {
+        ClanPlayer cp = getPlugin().getClanPlayerManager().getCreateClanPlayerExact(player);
 
-        if (cp.getClan() != null) {
-            ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(Language.getTranslation("you.must.first.resign"), cp.getClan().getName()));
-            return;
-        }
-
-        String tag = ChatBlock.parseColors(args[0]);
-        String name = ChatBlock.parseColors(GeneralHelper.arrayBoundsToString(1, args));
+        String tag = ChatBlock.parseColors(arguments[0]);
+        String name = ChatBlock.parseColors(GeneralHelper.arrayBoundsToString(1, arguments));
         boolean bypass = player.hasPermission("simpleclans.mod.bypass");
 
-        if (!plugin.getClanManager().verifyClanTag(player, tag, null, bypass)) {
+        if (!getPlugin().getClanManager().verifyClanTag(player, tag, null, bypass)) {
             return;
         }
 
-        if (!plugin.getClanManager().verifyClanName(player, name, bypass)) {
+        if (!getPlugin().getClanManager().verifyClanName(player, name, bypass)) {
             return;
         }
 
-        if (plugin.getClanManager().existsClan(tag, name)) {
+        if (getPlugin().getClanManager().existsClan(tag, name)) {
             player.sendMessage(ChatColor.RED + Language.getTranslation("clan.already.exists"));
             return;
         }
 
-        if (SimpleClans.hasEconomy() && plugin.getSettingsManager().isPurchaseCreation() && !cp.withdraw(plugin.getSettingsManager().getPurchaseCreationPrice())) {
+        if (SimpleClans.hasEconomy() && getPlugin().getSettingsManager().isPurchaseCreation() && !cp.withdraw(getPlugin().getSettingsManager().getPurchaseCreationPrice())) {
             ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("not.sufficient.money"));
             return;
         }
 
-        Clan clan = new CraftClan(plugin, tag, name);
+        Clan clan = new CraftClan(getPlugin(), tag, name);
 
-        plugin.getDataManager().addResponse(new ClanCreateResponse(plugin, clan, player, cp));
+        getPlugin().getDataManager().addResponse(new ClanCreateResponse(getPlugin(), clan, player, cp));
 
         cp.setLeader(true);
         cp.setTrusted(true);
@@ -99,7 +88,7 @@ public class CreateCommand extends GenericPlayerCommand {
 
         cp.update();
 
-        if (plugin.getSettingsManager().requireVerification()) {
+        if (getPlugin().getSettingsManager().requireVerification()) {
             boolean verified = player.hasPermission("simpleclans.mod.verify");
 
             if (!verified) {
@@ -113,6 +102,5 @@ public class CreateCommand extends GenericPlayerCommand {
         }
 
         clan.update();
-
     }
 }

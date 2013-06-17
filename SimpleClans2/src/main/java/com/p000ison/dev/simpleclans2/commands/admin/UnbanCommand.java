@@ -19,6 +19,7 @@
 
 package com.p000ison.dev.simpleclans2.commands.admin;
 
+import com.p000ison.dev.commandlib.CallInformation;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayer;
@@ -33,21 +34,16 @@ public class UnbanCommand extends GenericConsoleCommand {
 
     public UnbanCommand(SimpleClans plugin) {
         super("Unban", plugin);
-        setArgumentRange(1, 1);
-        setUsages(Language.getTranslation("usage.unban"));
+        addArgument(Language.getTranslation("argument.member"));
+        setDescription(Language.getTranslation("description.unban"));
         setIdentifiers(Language.getTranslation("unban.command"));
-        setPermission("simpleclans.mod.unban");
+        addPermission("simpleclans.mod.unban");
     }
 
     @Override
-    public String getMenu() {
-        return Language.getTranslation("menu.unban");
-    }
+    public void execute(CommandSender sender, String[] arguments, CallInformation info) {
 
-    @Override
-    public void execute(CommandSender sender, String[] args) {
-
-        ClanPlayer banned = plugin.getClanPlayerManager().getAnyClanPlayerExact(args[0]);
+        ClanPlayer banned = getPlugin().getClanPlayerManager().getAnyClanPlayerExact(arguments[0]);
 
         if (banned == null) {
             ChatBlock.sendMessage(sender, Language.getTranslation("no.player.matched"));

@@ -19,6 +19,7 @@
 
 package com.p000ison.dev.simpleclans2.commands.clan;
 
+import com.p000ison.dev.commandlib.CallInformation;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.api.clan.Clan;
@@ -41,45 +42,27 @@ public class PromoteCommand extends GenericPlayerCommand {
 
     public PromoteCommand(SimpleClans plugin) {
         super("Promote", plugin);
-        setArgumentRange(1, 1);
-        setUsages(Language.getTranslation("usage.promote"));
+        addArgument(Language.getTranslation("argument.member"));
+        setDescription(Language.getTranslation("description.promote"));
         setIdentifiers(Language.getTranslation("promote.command"));
-        setPermission("simpleclans.leader.promote");
-    }
+        addPermission("simpleclans.leader.promote");
 
-
-    @Override
-    public String getMenu(ClanPlayer cp) {
-        if (cp != null && cp.isLeader()) {
-            return Language.getTranslation("menu.promote");
-        }
-        return null;
+        setNeedsClan();
+        setNeedsLeader();
     }
 
     @Override
-    public void execute(Player player, String[] args) {
-        ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
-
-        if (cp == null) {
-            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
-            return;
-        }
-
+    public void execute(Player player, ClanPlayer cp, String[] arguments, CallInformation info) {
         Clan clan = cp.getClan();
 
-        if (!clan.isLeader(cp)) {
-            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("no.leader.permissions"));
-            return;
-        }
-
-        Player promotedPlayer = Bukkit.getPlayer(args[0]);
+        Player promotedPlayer = Bukkit.getPlayer(arguments[0]);
 
         if (promotedPlayer == null) {
             ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("the.player.does.not.have.the.permissions.to.lead.a.clan"));
             return;
         }
 
-        ClanPlayer promoted = plugin.getClanPlayerManager().getClanPlayer(promotedPlayer);
+        ClanPlayer promoted = getPlugin().getClanPlayerManager().getClanPlayer(promotedPlayer);
 
 
         if (promotedPlayer.equals(player)) {
@@ -107,14 +90,14 @@ public class PromoteCommand extends GenericPlayerCommand {
             return;
         }
 
-        if (!plugin.getSettingsManager().isVoteForPromote()) {
+        if (!getPlugin().getSettingsManager().isVoteForPromote()) {
             clan.addBBMessage(cp, MessageFormat.format(Language.getTranslation("promoted.to.leader"), promotedPlayer.getName()));
             promoted.setLeader(true);
             promoted.update(true);
         } else {
             Set<ClanPlayer> acceptors = GeneralHelper.stripOfflinePlayers(clan.getLeaders());
 
-            plugin.getRequestManager().createRequest(new PromoteRequest(plugin, acceptors, cp, promoted));
+            getPlugin().getRequestManager().createRequest(new PromoteRequest(getPlugin(), acceptors, cp, promoted));
             ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("promote.vote.has.been.requested.from.all.leaders"));
         }
     }

@@ -14,24 +14,26 @@
  *     You should have received a copy of the GNU General Public License
  *     along with SimpleClans2.  If not, see <http://www.gnu.org/licenses/>.
  *
- *     Last modified: 10.10.12 21:57
+ *     Last modified: 29.01.13 20:55
  */
 
 
 package com.p000ison.dev.simpleclans2.commands;
 
 import com.p000ison.dev.simpleclans2.SimpleClans;
+import com.p000ison.dev.simpleclans2.api.commands.ConsoleCommand;
 
-public abstract class GenericConsoleCommand extends com.p000ison.dev.simpleclans2.api.command.GenericConsoleCommand {
 
-    protected SimpleClans plugin;
+public abstract class GenericConsoleCommand extends ConsoleCommand {
 
-    public GenericConsoleCommand(String name, SimpleClans plugin) {
+    private final SimpleClans plugin;
+
+    protected GenericConsoleCommand(String name, SimpleClans plugin) {
         super(name);
         this.plugin = plugin;
     }
 
-    protected int[] getBoundings(int completeSize, int page) {
-        return plugin.getCommandManager().getBoundings(completeSize, page);
+    public SimpleClans getPlugin() {
+        return plugin;
     }
 }

@@ -19,10 +19,10 @@
 
 package com.p000ison.dev.simpleclans2.chat.commands;
 
+import com.p000ison.dev.commandlib.CallInformation;
 import com.p000ison.dev.simpleclans2.api.SCCore;
 import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayer;
-import com.p000ison.dev.simpleclans2.api.command.GenericPlayerCommand;
 import com.p000ison.dev.simpleclans2.chat.Channel;
 import com.p000ison.dev.simpleclans2.chat.SCChatLanguage;
 import com.p000ison.dev.simpleclans2.chat.SimpleClansChat;
@@ -34,47 +34,31 @@ import org.bukkit.entity.Player;
  */
 public class AllyChannelCommand extends GenericPlayerCommand {
 
-    private final SCCore sccore;
-
     public AllyChannelCommand(String name, SCCore sccore) {
-        super(name);
-        this.sccore = sccore;
-        setArgumentRange(1, 1);
-        setUsages(SCChatLanguage.getTranslation("usage.ally"));
+        super(name, sccore);
+//        setArgumentRange(1, 1);
+        setDescription(SCChatLanguage.getTranslation("description.ally"));
         setIdentifiers(SCChatLanguage.getTranslation("ally.chat.command"));
-        setPermission("simpleclans.member.channels.ally");
+        addPermission("simpleclans.member.channels.ally");
+
+        setNeedsClan();
     }
 
     @Override
-    public String getMenu(ClanPlayer cp) {
-        if (cp != null) {
-            return SCChatLanguage.getTranslation("menu.ally");
-        }
-        return null;
-    }
-
-    @Override
-    public void execute(Player player, String[] args) {
-        ClanPlayer clanPlayer = sccore.getClanPlayerManager().getClanPlayer(player);
-
-        if (clanPlayer == null) {
-            ChatBlock.sendMessage(player, ChatColor.RED + sccore.getTranslation("not.a.member.of.any.clan"));
-            return;
-        }
-
-        String action = args[0];
+    public void execute(Player player, ClanPlayer cp, String[] arguments, CallInformation info) {
+        String action = arguments[0];
 
         if (action.equalsIgnoreCase("join")) {
-            SimpleClansChat.setChannel(clanPlayer, Channel.ALLY);
+            SimpleClansChat.setChannel(cp, Channel.ALLY);
             ChatBlock.sendMessage(player, ChatColor.AQUA + SCChatLanguage.getTranslation("ally.channel.join"));
         } else if (action.equalsIgnoreCase("leave")) {
-            SimpleClansChat.setChannel(clanPlayer, null);
+            SimpleClansChat.setChannel(cp, null);
             ChatBlock.sendMessage(player, ChatColor.AQUA + SCChatLanguage.getTranslation("ally.channel.leaved"));
         } else if (action.equalsIgnoreCase("on")) {
-            SimpleClansChat.addDisabledChannel(clanPlayer, Channel.ALLY, true);
+            SimpleClansChat.addDisabledChannel(cp, Channel.ALLY, true);
             ChatBlock.sendMessage(player, ChatColor.AQUA + SCChatLanguage.getTranslation("ally.channel.on"));
         } else if (action.equalsIgnoreCase("off")) {
-            SimpleClansChat.addDisabledChannel(clanPlayer, Channel.ALLY, false);
+            SimpleClansChat.addDisabledChannel(cp, Channel.ALLY, false);
             ChatBlock.sendMessage(player, ChatColor.AQUA + SCChatLanguage.getTranslation("ally.channel.off"));
         }
     }

@@ -19,6 +19,7 @@
 
 package com.p000ison.dev.simpleclans2.commands.clan;
 
+import com.p000ison.dev.commandlib.CallInformation;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.api.chat.Align;
 import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
@@ -41,97 +42,65 @@ public class CoordsCommand extends GenericPlayerCommand {
 
     public CoordsCommand(SimpleClans plugin) {
         super("Coords", plugin);
-        setArgumentRange(0, 0);
-        setUsages(Language.getTranslation("usage.coords"));
+        setDescription(Language.getTranslation("description.coords"));
         setIdentifiers(Language.getTranslation("coords.command"));
-        setPermission("simpleclans.member.coords");
+        addPermission("simpleclans.member.coords");
+
+        setNeedsClan();
+        setNeedsClanVerified();
+        setNeedsTrusted();
     }
 
     @Override
-    public String getMenu(ClanPlayer cp) {
-        if (cp != null && cp.getClan().isVerified() && cp.isTrusted()) {
-            return Language.getTranslation("menu.coords");
+    public void execute(Player player, ClanPlayer cp, String[] arguments, CallInformation info) {
+        ChatColor headColor = getPlugin().getSettingsManager().getHeaderPageColor();
+        ChatColor subColor = getPlugin().getSettingsManager().getSubPageColor();
+
+        Clan clan = cp.getClan();
+
+        List<ClanPlayer> members = new ArrayList<ClanPlayer>(GeneralHelper.stripOfflinePlayers(clan.getMembers()));
+
+        if (members.isEmpty()) {
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("you.are.the.only.member.online"));
+            return;
         }
-        return null;
-    }
 
-    @Override
-    public void execute(Player player, String[] args) {
-        ChatColor headColor = plugin.getSettingsManager().getHeaderPageColor();
-        ChatColor subColor = plugin.getSettingsManager().getSubPageColor();
+        int completeSize = members.size();
 
-        ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
+        ChatBlock chatBlock = new ChatBlock();
 
+        chatBlock.setAlignment(Align.LEFT, Align.CENTER, Align.CENTER, Align.CENTER);
 
-        if (cp != null) {
-            Clan clan = cp.getClan();
+        chatBlock.addRow(headColor + Language.getTranslation("name"), Language.getTranslation("distance"), Language.getTranslation("coords.upper"), Language.getTranslation("world"));
 
-            if (clan.isVerified()) {
-                if (cp.isTrusted()) {
+        int page = info.getPage(completeSize);
+        int start = info.getStartIndex(page, completeSize);
+        int end = info.getEndIndex(page, completeSize);
 
-                    List<ClanPlayer> members = new ArrayList<ClanPlayer>(GeneralHelper.stripOfflinePlayers(clan.getMembers()));
+        for (int i = start; i < end; i++) {
+            ClanPlayer clanPlayer = members.get(i);
+            Player iPlayer = clanPlayer.toPlayer();
 
-                    if (members.isEmpty()) {
-                        ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("you.are.the.only.member.online"));
-                        return;
-                    }
-
-                    int page = 0;
-                    int completeSize = members.size();
-
-                    if (args.length == 1) {
-                        try {
-                            page = Integer.parseInt(args[0]) - 1;
-                        } catch (NumberFormatException e) {
-                            ChatBlock.sendMessage(player, Language.getTranslation("number.format"));
-                            return;
-                        }
-                    }
-
-                    ChatBlock chatBlock = new ChatBlock();
-
-                    chatBlock.setAlignment(Align.LEFT, Align.CENTER, Align.CENTER, Align.CENTER);
-
-                    chatBlock.addRow(headColor + Language.getTranslation("name"), Language.getTranslation("distance"), Language.getTranslation("coords.upper"), Language.getTranslation("world"));
-
-                    int[] boundings = getBoundings(completeSize, page);
-
-                    for (int i = boundings[0]; i < boundings[1]; i++) {
-                        ClanPlayer clanPlayer = members.get(i);
-                        Player iPlayer = clanPlayer.toPlayer();
-
-                        if (iPlayer == null) {
-                            continue;
-                        }
-
-
-                        String name = clanPlayer.getColor() + clanPlayer.getName();
-                        Location loc = iPlayer.getLocation();
-                        int distance = (int) Math.ceil(loc.toVector().distance(player.getLocation().toVector()));
-                        String coords = loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ();
-                        String world = loc.getWorld().getName();
-
-                        chatBlock.addRow(name, ChatColor.AQUA.toString() + distance, ChatColor.WHITE.toString() + coords, world);
-                    }
-
-
-                    ChatBlock.sendBlank(player);
-                    ChatBlock.sendSingle(player, plugin.getSettingsManager().getClanColor() + clan.getName() + subColor + " " + Language.getTranslation("coords"));
-                    ChatBlock.sendBlank(player);
-
-
-                    chatBlock.sendBlock(player);
-
-
-                } else {
-                    ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("only.trusted.players.can.do.this"));
-                }
-            } else {
-                ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("clan.is.not.verified"));
+            if (iPlayer == null) {
+                continue;
             }
 
-        } else {
-            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
+
+            String name = clanPlayer.getColor() + clanPlayer.getName();
+            Location loc = iPlayer.getLocation();
+            int distance = (int) Math.ceil(loc.toVector().distance(player.getLocation().toVector()));
+            String coords = loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ();
+            String world = loc.getWorld().getName();
+
+            chatBlock.addRow(name, ChatColor.AQUA.toString() + distance, ChatColor.WHITE.toString() + coords, world);
         }
+
+
+        ChatBlock.sendBlank(player);
+        ChatBlock.sendSingle(player, getPlugin().getSettingsManager().getClanColor() + clan.getName() + subColor + " " + Language.getTranslation("coords"));
+        ChatBlock.sendBlank(player);
+
+
+        chatBlock.sendBlock(player);
     }
 }

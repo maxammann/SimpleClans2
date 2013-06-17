@@ -19,6 +19,7 @@
 
 package com.p000ison.dev.simpleclans2.commands.voting;
 
+import com.p000ison.dev.commandlib.CallInformation;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayer;
@@ -36,21 +37,15 @@ public class AbstainCommand extends GenericPlayerCommand {
 
     public AbstainCommand(SimpleClans plugin) {
         super("Abstain", plugin);
-        setArgumentRange(0, 0);
-        setUsages(Language.getTranslation("usage.abstain"));
+        setDescription(Language.getTranslation("description.abstain"));
         setIdentifiers(Language.getTranslation("abstain.command"));
-        setPermission("simpleclans.member.abstain");
+        addPermission("simpleclans.member.abstain");
     }
 
     @Override
-    public String getMenu(ClanPlayer clanPlayer) {
-        return null;
-    }
-
-    @Override
-    public void execute(Player player, String[] args) {
-        ClanPlayer clanPlayer = plugin.getClanPlayerManager().getCreateClanPlayerExact(player);
-        Request request = plugin.getRequestManager().vote(clanPlayer, RequestManager.Result.ABSTAIN);
+    public void execute(Player player, ClanPlayer cp, String[] arguments, CallInformation info) {
+        ClanPlayer clanPlayer = getPlugin().getClanPlayerManager().getCreateClanPlayerExact(player);
+        Request request = getPlugin().getRequestManager().vote(clanPlayer, RequestManager.Result.ABSTAIN);
 
         if (request != null) {
             if (!(request instanceof MultipleRequest)) {

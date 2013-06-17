@@ -19,6 +19,7 @@
 
 package com.p000ison.dev.simpleclans2.commands.admin;
 
+import com.p000ison.dev.commandlib.CallInformation;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.commands.GenericConsoleCommand;
@@ -33,26 +34,20 @@ public class ReloadCommand extends GenericConsoleCommand {
 
     public ReloadCommand(SimpleClans plugin) {
         super("Reload", plugin);
-        setArgumentRange(0, 0);
-        setUsages(Language.getTranslation("usage.reload"));
+        setDescription(Language.getTranslation("description.reload"));
         setIdentifiers(Language.getTranslation("reload.command"));
-        setPermission("simpleclans.admin.reload");
+        addPermission("simpleclans.admin.reload");
     }
 
     @Override
-    public String getMenu() {
-        return Language.getTranslation("menu.reload");
-    }
-
-    @Override
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(CommandSender sender, String[] arguments, CallInformation info) {
         long start = System.currentTimeMillis();
 
-        plugin.getSettingsManager().reload();
-        plugin.getSettingsManager().loadPermissions();
-        plugin.getDataManager().getAutoSaver().run();
-        plugin.getDataManager().importAll();
-        plugin.getClanPlayerManager().updateOnlinePlayers();
+        getPlugin().getSettingsManager().reload();
+        getPlugin().getSettingsManager().loadPermissions();
+        getPlugin().getDataManager().getAutoSaver().run();
+        getPlugin().getDataManager().importAll();
+        getPlugin().getClanPlayerManager().updateOnlinePlayers();
 
         long end = System.currentTimeMillis();
         ChatBlock.sendMessage(sender, ChatColor.AQUA + MessageFormat.format(Language.getTranslation("configuration.reloaded"), end - start));

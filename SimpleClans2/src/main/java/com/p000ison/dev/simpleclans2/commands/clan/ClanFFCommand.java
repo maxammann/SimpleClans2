@@ -19,13 +19,12 @@
 
 package com.p000ison.dev.simpleclans2.commands.clan;
 
+import com.p000ison.dev.commandlib.*;
 import com.p000ison.dev.simpleclans2.SimpleClans;
-import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.api.clan.Clan;
 import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
 import com.p000ison.dev.simpleclans2.language.Language;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 /**
@@ -34,54 +33,56 @@ import org.bukkit.entity.Player;
 public class ClanFFCommand extends GenericPlayerCommand {
 
     public ClanFFCommand(SimpleClans plugin) {
-        super("Clanff", plugin);
-        setArgumentRange(1, 1);
-        setUsages(Language.getTranslation("usage.clanff"));
+        super("Clan FF", plugin);
+        setDescription(Language.getTranslation("description.clanff"));
         setIdentifiers(Language.getTranslation("clanff.command"));
-        setPermission("simpleclans.leader.ff");
-    }
 
-    @Override
-    public String getMenu(ClanPlayer cp) {
-        if (cp != null && (cp.isLeader() || cp.hasRankPermission("manage.clanff"))) {
-            return Language.getTranslation("menu.clanff");
-        }
-        return null;
-    }
+        setNeedsClan();
+        setRankPermission("manage.clanff");
 
-    @Override
-    public void execute(Player player, String[] args) {
+        CommandExecutor executor = plugin.getCommandManager();
+        AnnotatedCommand.ExecutionRestriction restriction = new AnnotatedCommand.ExecutionRestriction() {
 
-        if (player.hasPermission("simpleclans.leader.ff")) {
-            ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
-
-            if (cp != null) {
-                Clan clan = cp.getClan();
-
-                if (clan.isLeader(cp) || cp.hasRankPermission("manage.clanff")) {
-                    if (args.length == 1) {
-                        String action = args[0];
-
-                        if (action.equalsIgnoreCase(Language.getTranslation("allow"))) {
-                            clan.addBBMessage(cp, Language.getTranslation("clan.wide.friendly.fire.is.allowed"));
-                            clan.setFriendlyFire(true);
-                            clan.update();
-                        } else if (action.equalsIgnoreCase(Language.getTranslation("block"))) {
-                            clan.addBBMessage(cp, Language.getTranslation("clan.wide.friendly.fire.blocked"));
-                            clan.setFriendlyFire(false);
-                            clan.update();
-                        } else {
-                            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("usage.clanff"));
-                        }
-                    }
-                } else {
-                    ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("no.leader.permissions"));
-                }
-            } else {
-                ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
+            @Override
+            public boolean allowExecution(CommandSender commandSender, Command command) {
+                ClanPlayer cp = getClanPlayer(commandSender);
+                return cp != null && cp.hasRankPermission("manage.clanff");
             }
-        } else {
-            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("insufficient.permissions"));
-        }
+        };
+
+        Command allow = executor.buildByMethod(this, "allow").setExecutionRestriction(restriction)
+                .setDescription(Language.getTranslation("description.clanff.allow"))
+                .addPermission("simpleclans.leader.ff")
+                .setIdentifiers(Language.getTranslation("allow.command"));
+        this.addSubCommand(allow);
+        Command block = executor.buildByMethod(this, "block").setExecutionRestriction(restriction)
+                .setDescription(Language.getTranslation("description.clanff.block"))
+                .addPermission("simpleclans.leader.ff")
+                .setIdentifiers(Language.getTranslation("block.command"));
+        this.addSubCommand(block);
+    }
+
+    @Override
+    public void execute(Player player, ClanPlayer cp, String[] arguments, CallInformation info) {
+    }
+
+    @CommandHandler(name = "Allow clan FF")
+    public void allow(CommandSender sender, CallInformation info) {
+        ClanPlayer cp = getClanPlayer(sender);
+        Clan clan = cp.getClan();
+
+        clan.addBBMessage(cp, Language.getTranslation("clan.wide.friendly.fire.is.allowed"));
+        clan.setFriendlyFire(true);
+        clan.update();
+    }
+
+    @CommandHandler(name = "Block clan FF")
+    public void block(CommandSender sender, CallInformation info) {
+        ClanPlayer cp = getClanPlayer(sender);
+        Clan clan = cp.getClan();
+
+        clan.addBBMessage(cp, Language.getTranslation("clan.wide.friendly.fire.blocked"));
+        clan.setFriendlyFire(false);
+        clan.update();
     }
 }

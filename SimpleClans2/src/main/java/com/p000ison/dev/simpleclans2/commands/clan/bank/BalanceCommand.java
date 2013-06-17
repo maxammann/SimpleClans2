@@ -19,6 +19,7 @@
 
 package com.p000ison.dev.simpleclans2.commands.clan.bank;
 
+import com.p000ison.dev.commandlib.CallInformation;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.api.clan.Clan;
@@ -37,42 +38,19 @@ import java.text.NumberFormat;
 public class BalanceCommand extends GenericPlayerCommand {
 
     public BalanceCommand(SimpleClans plugin) {
-        super("BalanceCommand", plugin);
-        setArgumentRange(0, 0);
-        setUsages(MessageFormat.format(Language.getTranslation("usage.bank.balance"), plugin.getSettingsManager().getBankCommand()));
+        super("Bank Balance", plugin);
+        setDescription(MessageFormat.format(Language.getTranslation("description.bank.balance"), plugin.getSettingsManager().getBankCommand()));
         setIdentifiers(Language.getTranslation("bank.balance.command"));
-        setPermission("simpleclans.member.bank.balance");
-        setType(Type.BANK);
+        addPermission("simpleclans.member.bank.balance");
+
+        setNeedsClanVerified();
+        setNeedsTrusted();
+        setNeedsClan();
     }
 
     @Override
-    public String getMenu(ClanPlayer cp) {
-        if (cp != null && cp.getClan().isVerified() && cp.isTrusted()) {
-            return MessageFormat.format(Language.getTranslation("menu.bank.balance"), plugin.getSettingsManager().getBankCommand());
-        }
-        return null;
-    }
-
-    @Override
-    public void execute(Player player, String[] args) {
-        ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
-
-        if (cp == null) {
-            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
-            return;
-        }
-
+    public void execute(Player player, ClanPlayer cp, String[] arguments, CallInformation info) {
         Clan clan = cp.getClan();
-
-        if (!clan.isVerified()) {
-            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("clan.is.not.verified"));
-            return;
-        }
-
-        if (!cp.isTrusted()) {
-            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("only.trusted.players.can.do.this"));
-            return;
-        }
 
         ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("current.clan.balance", NumberFormat.getNumberInstance().format(clan.getBalance())));
     }

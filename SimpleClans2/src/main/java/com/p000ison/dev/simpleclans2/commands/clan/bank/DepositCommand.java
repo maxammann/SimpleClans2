@@ -19,6 +19,7 @@
 
 package com.p000ison.dev.simpleclans2.commands.clan.bank;
 
+import com.p000ison.dev.commandlib.CallInformation;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.api.clan.Clan;
@@ -38,52 +39,26 @@ import java.text.ParseException;
 public class DepositCommand extends GenericPlayerCommand {
 
     public DepositCommand(SimpleClans plugin) {
-        super("DepositCommand", plugin);
-        setArgumentRange(1, 1);
-        setUsages(MessageFormat.format(Language.getTranslation("usage.bank.deposit"), plugin.getSettingsManager().getBankCommand()));
+        super("Bank Deposit", plugin);
+        addArgument(Language.getTranslation("argument.amount"), true);
+        setDescription(MessageFormat.format(Language.getTranslation("description.bank.deposit"), plugin.getSettingsManager().getBankCommand()));
         setIdentifiers(Language.getTranslation("bank.deposit.command"));
-        setPermission("simpleclans.member.bank.deposit");
-        setType(Type.BANK);
+        addPermission("simpleclans.member.bank.deposit");
+
+        setNeedsClan();
+        setNeedsClanVerified();
+        setNeedsTrusted();
+        setRankPermission("bank.deposit");
     }
 
     @Override
-    public String getMenu(ClanPlayer cp) {
-        if (cp != null && cp.getClan().isVerified() && cp.isTrusted()) {
-            return MessageFormat.format(Language.getTranslation("menu.bank.deposit"), plugin.getSettingsManager().getBankCommand());
-        }
-        return null;
-    }
-
-    @Override
-    public void execute(Player player, String[] args) {
-        ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
-
-        if (cp == null) {
-            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
-            return;
-        }
-
-        if (cp.isRankPermissionNegative("bank.deposit")) {
-            player.sendMessage(ChatColor.DARK_RED + Language.getTranslation("no.rank.permissions"));
-            return;
-        }
-
+    public void execute(Player player, ClanPlayer cp, String[] arguments, CallInformation info) {
         Clan clan = cp.getClan();
-
-        if (!clan.isVerified()) {
-            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("clan.is.not.verified"));
-            return;
-        }
-
-        if (!cp.isTrusted()) {
-            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("only.trusted.players.can.do.this"));
-            return;
-        }
 
         double amount;
 
         try {
-            amount = NumberFormat.getNumberInstance().parse(args[0]).doubleValue();
+            amount = NumberFormat.getNumberInstance().parse(arguments[0]).doubleValue();
         } catch (ParseException e) {
             ChatBlock.sendMessage(player, ChatColor.DARK_RED + Language.getTranslation("number.format"));
             return;
@@ -106,6 +81,5 @@ public class DepositCommand extends GenericPlayerCommand {
         ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("now.player.balance", cp.getBalance()));
 
         clan.update();
-
     }
 }

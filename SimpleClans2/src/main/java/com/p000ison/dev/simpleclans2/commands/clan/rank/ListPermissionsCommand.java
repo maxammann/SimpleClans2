@@ -19,6 +19,7 @@
 
 package com.p000ison.dev.simpleclans2.commands.clan.rank;
 
+import com.p000ison.dev.commandlib.CallInformation;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.api.chat.Align;
 import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
@@ -36,24 +37,15 @@ import java.util.Map;
 public class ListPermissionsCommand extends GenericConsoleCommand {
 
     public ListPermissionsCommand(SimpleClans plugin) {
-        super("ViewPermissions", plugin);
-        setArgumentRange(0, 0);
-        setUsages(Language.getTranslation("usage.view.permissions", plugin.getSettingsManager().getRankCommand()));
+        super("View rank permissions", plugin);
+        setDescription(Language.getTranslation("description.rank.permissions"));
         setIdentifiers(Language.getTranslation("view.permissions.command"));
-        setPermission("simpleclans.leader.rank.permissions.list");
-        setType(Type.RANK);
+        addPermission("simpleclans.leader.rank.permissions.list");
     }
 
     @Override
-    public String getMenu() {
-        return Language.getTranslation("menu.rank.permissions", plugin.getSettingsManager().getRankCommand());
-    }
-
-    @Override
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(CommandSender sender, String[] arguments, CallInformation info) {
         ChatBlock chatBlock = new ChatBlock();
-
-        ChatBlock.sendHead(sender, Language.getTranslation("global"), Language.getTranslation("permissions"));
 
         ChatBlock.sendBlank(sender);
 

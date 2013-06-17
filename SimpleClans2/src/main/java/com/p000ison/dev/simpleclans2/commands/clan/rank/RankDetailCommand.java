@@ -19,6 +19,7 @@
 
 package com.p000ison.dev.simpleclans2.commands.clan.rank;
 
+import com.p000ison.dev.commandlib.CallInformation;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.api.clan.Clan;
@@ -38,36 +39,22 @@ import java.util.Map;
 public class RankDetailCommand extends GenericPlayerCommand {
 
     public RankDetailCommand(SimpleClans plugin) {
-        super("ViewRank", plugin);
-        setArgumentRange(1, 1);
-        setUsages(Language.getTranslation("usage.view.rank", plugin.getSettingsManager().getRankCommand()));
+        super("Rank details", plugin);
+        addArgument(Language.getTranslation("argument.rank"));
+        setDescription(Language.getTranslation("description.rank.view", plugin.getSettingsManager().getRankCommand()));
         setIdentifiers(Language.getTranslation("view.rank.command"));
-        setPermission("simpleclans.leader.rank.detail");
-        setType(Type.RANK);
+        addPermission("simpleclans.leader.rank.detail");
+
+        setNeedsClan();
     }
 
     @Override
-    public String getMenu(ClanPlayer clanPlayer) {
-        if (clanPlayer != null) {
-            return Language.getTranslation("menu.rank.view", plugin.getSettingsManager().getRankCommand());
-        }
-        return null;
-    }
-
-    @Override
-    public void execute(Player player, String[] args) {
-        ClanPlayer clanPlayer = plugin.getClanPlayerManager().getClanPlayer(player);
-
-        if (clanPlayer == null) {
-            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
-            return;
-        }
-
-        Clan clan = clanPlayer.getClan();
-        ChatColor subColor = plugin.getSettingsManager().getSubPageColor();
+    public void execute(Player player, ClanPlayer cp, String[] arguments, CallInformation info) {
+        Clan clan = cp.getClan();
+        ChatColor subColor = getPlugin().getSettingsManager().getSubPageColor();
 
         Rank queried;
-        String query = args[0];
+        String query = arguments[0];
 
         try {
             long id = Long.parseLong(query);
@@ -82,10 +69,6 @@ public class RankDetailCommand extends GenericPlayerCommand {
         }
 
         ChatBlock.sendBlank(player);
-        ChatBlock.sendHead(player, plugin.getSettingsManager().getClanColor() + Language.getTranslation("rank.head", clan.getTag()), null);
-
-        ChatBlock.sendBlank(player, 2);
-
 
         String id = String.valueOf(queried.getID());
         String tag = queried.getTag();

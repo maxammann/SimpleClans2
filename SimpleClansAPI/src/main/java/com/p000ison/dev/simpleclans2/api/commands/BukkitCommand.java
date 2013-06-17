@@ -14,31 +14,38 @@
  *     You should have received a copy of the GNU General Public License
  *     along with SimpleClans2.  If not, see <http://www.gnu.org/licenses/>.
  *
- *     Last modified: 29.01.13 20:55
+ *     Last modified: 31.05.13 12:24
  */
 
+package com.p000ison.dev.simpleclans2.api.commands;
 
-package com.p000ison.dev.simpleclans2.api.command;
-
+import com.p000ison.dev.commandlib.Command;
+import com.p000ison.dev.commandlib.CommandSender;
 import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayer;
 import org.bukkit.entity.Player;
 
 /**
- * Represents a GenericPlayerCommand
+ * Represents a BukkitCommand
  */
-public abstract class GenericPlayerCommand extends GenericCommand {
+public class BukkitCommand extends Command {
 
-
-    public GenericPlayerCommand(String name) {
+    public BukkitCommand(String name) {
         super(name);
     }
 
-    public abstract void execute(Player player, String[] args);
+    protected ClanPlayer getClanPlayer(CommandSender sender) {
+        if (sender instanceof ClanPlayerSender) {
+            return ((ClanPlayerSender) sender).getClanPlayer();
+        }
 
-    /**
-     * Gets the menu of this clan. This is unformatted and maybe contains a "{0}" for the base command.
-     *
-     * @return The menu for this command
-     */
-    public abstract String getMenu(ClanPlayer clanPlayer);
+        return null;
+    }
+
+    protected Player getPlayer(CommandSender sender) {
+        if (sender instanceof ClanPlayerSender) {
+            return ((ClanPlayerSender) sender).getSender();
+        }
+
+        return null;
+    }
 }

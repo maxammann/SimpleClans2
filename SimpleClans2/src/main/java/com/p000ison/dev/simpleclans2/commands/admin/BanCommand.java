@@ -19,6 +19,7 @@
 
 package com.p000ison.dev.simpleclans2.commands.admin;
 
+import com.p000ison.dev.commandlib.CallInformation;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayer;
@@ -35,29 +36,24 @@ public class BanCommand extends GenericConsoleCommand {
 
     public BanCommand(SimpleClans plugin) {
         super("Ban", plugin);
-        setArgumentRange(1, 1);
-        setUsages(Language.getTranslation("usage.ban"));
+        addArgument(Language.getTranslation("argument.player"));
+        setDescription(Language.getTranslation("description.ban"));
         setIdentifiers(Language.getTranslation("ban.command"));
-        setPermission("simpleclans.mod.ban");
+        addPermission("simpleclans.mod.ban");
     }
 
     @Override
-    public String getMenu() {
-        return Language.getTranslation("menu.ban");
-    }
-
-    @Override
-    public void execute(CommandSender sender, String[] args) {
-        ClanPlayer clanPlayer = plugin.getClanPlayerManager().getCreateClanPlayerExact(args[0]);
+    public void execute(CommandSender sender, String[] arguments, CallInformation info) {
+        ClanPlayer clanPlayer = getPlugin().getClanPlayerManager().getCreateClanPlayerExact(arguments[0]);
 
         if (!clanPlayer.isBanned()) {
-            Player player = plugin.getServer().getPlayerExact(clanPlayer.getName());
+            Player player = getPlugin().getServer().getPlayerExact(clanPlayer.getName());
 
             if (player != null) {
                 ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("you.banned"));
             }
 
-            plugin.getClanPlayerManager().ban(clanPlayer);
+            getPlugin().getClanPlayerManager().ban(clanPlayer);
             ChatBlock.sendMessage(sender, ChatColor.AQUA + Language.getTranslation("player.added.to.banned.list"));
         } else {
             ChatBlock.sendMessage(sender, ChatColor.RED + Language.getTranslation("this.player.is.already.banned"));

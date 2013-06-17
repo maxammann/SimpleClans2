@@ -19,8 +19,8 @@
 
 package com.p000ison.dev.simpleclans2.commands.clan;
 
+import com.p000ison.dev.commandlib.*;
 import com.p000ison.dev.simpleclans2.SimpleClans;
-import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.api.clan.Clan;
 import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
@@ -38,90 +38,110 @@ import java.util.Set;
  */
 public class WarCommand extends GenericPlayerCommand {
 
-    private SimpleClans plugin;
-
     public WarCommand(SimpleClans plugin) {
         super("War", plugin);
-        this.plugin = plugin;
-        setArgumentRange(2, 2);
-        setUsages(Language.getTranslation("usage.war"));
+        setDescription(Language.getTranslation("description.war"));
         setIdentifiers(Language.getTranslation("war.command"));
-        setPermission("simpleclans.leader.war");
-    }
 
-    @Override
-    public String getMenu(ClanPlayer cp) {
-        if (cp != null) {
-            if (cp.isLeader() && cp.getClan().isVerified()) {
-                return Language.getTranslation("menu.war");
+        setNeedsClan();
+        setNeedsLeader();
+        setNeedsClanVerified();
+
+        CommandExecutor executor = plugin.getCommandManager();
+
+        AnnotatedCommand.ExecutionRestriction restriction = new AnnotatedCommand.ExecutionRestriction() {
+            @Override
+            public boolean allowExecution(CommandSender sender, Command command) {
+                ClanPlayer cp = getClanPlayer(sender);
+                return cp != null && cp.getClan().isVerified();
             }
-        }
-        return null;
+        };
+
+        Command start = executor.buildByMethod(this, "start").setExecutionRestriction(restriction)
+                .setDescription(Language.getTranslation("description.war.start"))
+                .addPermission("simpleclans.leader.war")
+                .setIdentifiers(Language.getTranslation("start.command"))
+                .addArgument(Language.getTranslation("argument.tag"));
+        this.addSubCommand(start);
+        Command end = executor.buildByMethod(this, "end").setExecutionRestriction(restriction)
+                .setDescription(Language.getTranslation("description.war.end"))
+                .addPermission("simpleclans.leader.war")
+                .setIdentifiers(Language.getTranslation("end.command"))
+                .addArgument(Language.getTranslation("argument.tag"));
+        this.addSubCommand(end);
     }
 
     @Override
-    public void execute(Player player, String[] args) {
-        ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
+    public void execute(Player player, ClanPlayer cp, String[] arguments, CallInformation info) {
+    }
 
-        if (cp == null) {
-            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
-            return;
-        }
+    @Override
+    protected boolean displayHelpEntry(ClanPlayer cp, org.bukkit.command.CommandSender sender) {
+        return false;
+    }
 
+    @CommandHandler(name = "Start war")
+    public void start(CommandSender sender, CallInformation info) {
+        ClanPlayer cp = getClanPlayer(sender);
         Clan clan = cp.getClan();
+        String[] arguments = info.getArguments();
 
-        if (!clan.isVerified()) {
-            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("clan.is.not.verified"));
-            return;
-        }
-
-        if (!clan.isLeader(cp)) {
-            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("no.leader.permissions"));
-            return;
-        }
-
-        String action = args[0];
-        Clan toWarring = plugin.getClanManager().getClan(args[1]);
+        Clan toWarring = getPlugin().getClanManager().getClan(arguments[0]);
 
         if (toWarring == null) {
-            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("no.clan.matched"));
+            sender.sendMessage(ChatColor.RED + Language.getTranslation("no.clan.matched"));
             return;
         }
 
         if (!clan.isRival(toWarring)) {
-            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("you.can.only.start.war.with.rivals"));
+            sender.sendMessage(ChatColor.RED + Language.getTranslation("you.can.only.start.war.with.rivals"));
             return;
         }
 
-        if (action.equalsIgnoreCase(Language.getTranslation("start"))) {
-            if (!clan.isWarring(toWarring)) {
-                Set<ClanPlayer> onlineLeaders = GeneralHelper.stripOfflinePlayers(toWarring.getLeaders());
+        if (!clan.isWarring(toWarring)) {
+            Set<ClanPlayer> onlineLeaders = GeneralHelper.stripOfflinePlayers(toWarring.getLeaders());
 
-                if (!onlineLeaders.isEmpty()) {
-                    plugin.getRequestManager().createRequest(new WarStartRequest(plugin, onlineLeaders, cp, toWarring));
-                    ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("leaders.have.been.asked.to.accept.the.war.request", toWarring.getName()));
-                } else {
-                    ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("at.least.one.leader.accept.the.war.start"));
-                }
-
+            if (!onlineLeaders.isEmpty()) {
+                getPlugin().getRequestManager().createRequest(new WarStartRequest(getPlugin(), onlineLeaders, cp, toWarring));
+                sender.sendMessage(ChatColor.AQUA + Language.getTranslation("leaders.have.been.asked.to.accept.the.war.request", toWarring.getName()));
             } else {
-                ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("clans.already.at.war"));
+                sender.sendMessage(ChatColor.RED + Language.getTranslation("at.least.one.leader.accept.the.war.start"));
             }
-        } else if (action.equalsIgnoreCase(Language.getTranslation("end"))) {
-            if (clan.isWarring(toWarring)) {
 
-                Set<ClanPlayer> onlineLeaders = GeneralHelper.stripOfflinePlayers(toWarring.getLeaders());
-                if (!onlineLeaders.isEmpty()) {
-                    plugin.getRequestManager().createRequest(new WarStopRequest(plugin, onlineLeaders, cp, toWarring));
-                    ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("leaders.asked.to.end.rivalry", toWarring.getName()));
-                } else {
-                    ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("at.least.one.leader.accept.the.war.stop"));
-                }
+        } else {
+            sender.sendMessage(ChatColor.RED + Language.getTranslation("clans.already.at.war"));
+        }
+    }
+
+    @CommandHandler(name = "End war")
+    public void end(CommandSender sender, CallInformation info) {
+        ClanPlayer cp = getClanPlayer(sender);
+        Clan clan = cp.getClan();
+        String[] arguments = info.getArguments();
+
+        Clan toWarring = getPlugin().getClanManager().getClan(arguments[0]);
+
+        if (toWarring == null) {
+            sender.sendMessage(ChatColor.RED + Language.getTranslation("no.clan.matched"));
+            return;
+        }
+
+        if (!clan.isRival(toWarring)) {
+            sender.sendMessage(ChatColor.RED + Language.getTranslation("you.can.only.start.war.with.rivals"));
+            return;
+        }
+
+        if (clan.isWarring(toWarring)) {
+
+            Set<ClanPlayer> onlineLeaders = GeneralHelper.stripOfflinePlayers(toWarring.getLeaders());
+            if (!onlineLeaders.isEmpty()) {
+                getPlugin().getRequestManager().createRequest(new WarStopRequest(getPlugin(), onlineLeaders, cp, toWarring));
+                sender.sendMessage(ChatColor.AQUA + Language.getTranslation("leaders.asked.to.end.rivalry", toWarring.getName()));
             } else {
-                ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("clans.not.at.war"));
+                sender.sendMessage(ChatColor.RED + Language.getTranslation("at.least.one.leader.accept.the.war.stop"));
             }
         } else {
-            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("usage.war"));
+            sender.sendMessage(ChatColor.RED + Language.getTranslation("clans.not.at.war"));
         }
     }
 }

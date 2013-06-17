@@ -19,6 +19,7 @@
 
 package com.p000ison.dev.simpleclans2.commands.admin;
 
+import com.p000ison.dev.commandlib.CallInformation;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.commands.GenericConsoleCommand;
@@ -33,22 +34,16 @@ public class SaveCommand extends GenericConsoleCommand {
 
     public SaveCommand(SimpleClans plugin) {
         super("Save", plugin);
-        setArgumentRange(0, 0);
-        setUsages(Language.getTranslation("usage.save"));
+        setDescription(Language.getTranslation("description.save"));
         setIdentifiers(Language.getTranslation("command.save"));
-        setPermission("simpleclans.admin.save");
+        addPermission("simpleclans.admin.save");
     }
 
     @Override
-    public String getMenu() {
-        return Language.getTranslation("menu.save");
-    }
-
-    @Override
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(CommandSender sender, String[] arguments, CallInformation info) {
         long start = System.currentTimeMillis();
 
-        plugin.getDataManager().getAutoSaver().run();
+        getPlugin().getDataManager().getAutoSaver().run();
 
         long end = System.currentTimeMillis();
         ChatBlock.sendMessage(sender, ChatColor.AQUA + MessageFormat.format(Language.getTranslation("data.saved"), end - start));

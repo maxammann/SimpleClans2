@@ -19,6 +19,7 @@
 
 package com.p000ison.dev.simpleclans2.commands.admin;
 
+import com.p000ison.dev.commandlib.CallInformation;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.api.logging.Logging;
 import com.p000ison.dev.simpleclans2.commands.GenericConsoleCommand;
@@ -41,27 +42,26 @@ import java.io.File;
 public class ConvertCommand extends GenericConsoleCommand {
 
     public ConvertCommand(SimpleClans plugin) {
-        super("ConvertCommand", plugin);
-        setArgumentRange(2, 5);
-        setUsages(Language.getTranslation("usage.convert"));
+        super("Convert", plugin);
+        addArgument(Language.getTranslation("argument.mysql.sqlite"))
+                .addArgument(Language.getTranslation("argument.host.file"))
+                .addArgument(Language.getTranslation("argument.db"), true)
+                .addArgument(Language.getTranslation("argument.user"), true)
+                .addArgument(Language.getTranslation("argument.pw"), true);
+        setDescription(Language.getTranslation("description.convert"));
         setIdentifiers(Language.getTranslation("convert.command"));
-        setPermission("simpleclans.admin.convert");
+        addPermission("simpleclans.admin.convert");
     }
 
     @Override
-    public String getMenu() {
-        return Language.getTranslation("menu.convert");
-    }
-
-    @Override
-    public void execute(CommandSender sender, String[] args) {
-        String action = args[0];
+    public void execute(CommandSender sender, String[] arguments, CallInformation info) {
+        String action = arguments[0];
         JBDCDatabase database = null;
         DatabaseConfiguration config = null;
 
         try {
             if (action.equalsIgnoreCase("mysql")) {
-                String[] address = args[1].split(":");
+                String[] address = arguments[1].split(":");
                 int port = 3306;
                 if (address.length == 2) {
                     try {
@@ -71,11 +71,11 @@ public class ConvertCommand extends GenericConsoleCommand {
                         return;
                     }
                 }
-                config = new MySQLConfiguration(args[3], args[4], address[0], port, args[2]);
+                config = new MySQLConfiguration(arguments[3], arguments[4], address[0], port, arguments[2]);
 
                 database = new MySQLDatabase(config);
             } else if (action.equalsIgnoreCase("sqlite")) {
-                File file = new File(args[1]);
+                File file = new File(arguments[1]);
                 if (!file.exists()) {
                     sender.sendMessage("The file does not exist!");
                     return;
@@ -92,7 +92,7 @@ public class ConvertCommand extends GenericConsoleCommand {
                 return;
             }
 
-            Converter converter = new Converter(database, plugin.getClanDatabase());
+            Converter converter = new Converter(database, getPlugin().getClanDatabase());
             sender.sendMessage("Starting converting!");
             converter.convertAll();
             sender.sendMessage("Successfully converted!");

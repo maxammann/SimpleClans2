@@ -90,7 +90,8 @@
                             <relocations>
                                 <relocation>
                                     <pattern>com.google.common</pattern>
-                                    <shadedPattern>com.p000ison.dev.simpleclans2.claiming.libs.com.google.common</shadedPattern>
+                                    <shadedPattern>com.p000ison.dev.simpleclans2.claiming.libs.com.google.common
+                                    </shadedPattern>
                                 </relocation>
                             </relocations>
                         </configuration>

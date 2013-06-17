@@ -19,11 +19,10 @@
 
 package com.p000ison.dev.simpleclans2.claiming.commands;
 
+import com.p000ison.dev.commandlib.CallInformation;
 import com.p000ison.dev.simpleclans2.api.SCCore;
-import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.api.clan.Clan;
 import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayer;
-import com.p000ison.dev.simpleclans2.api.command.GenericPlayerCommand;
 import com.p000ison.dev.simpleclans2.claiming.ClaimLocation;
 import com.p000ison.dev.simpleclans2.claiming.SCClaimingLanguage;
 import com.p000ison.dev.simpleclans2.claiming.data.ClaimingManager;
@@ -37,7 +36,6 @@ import org.bukkit.entity.Player;
  */
 public class ClaimMapCommand extends GenericPlayerCommand {
 
-    private final SCCore sccore;
     private final ClaimingManager manager;
 
     private static final char NORTH_WEST = '\\';
@@ -54,41 +52,26 @@ public class ClaimMapCommand extends GenericPlayerCommand {
     private static final int MAX_COLUMNS = 41;
 
     public ClaimMapCommand(SCCore sccore, ClaimingManager manager) {
-        super("ClaimMap");
-        this.sccore = sccore;
+        super("ClaimMap", sccore);
         this.manager = manager;
-        setArgumentRange(1, 1);
-        setUsages(SCClaimingLanguage.getTranslation("usage.claim.map"));
+        // setArgumentRange(1, 1);
+        setDescription(SCClaimingLanguage.getTranslation("usage.claim.map"));
         setIdentifiers(SCClaimingLanguage.getTranslation("claim.map.command"));
-        setPermission("simpleclans.member.claim.map");
+        addPermission("simpleclans.member.claim.map");
+
+        setNeedsClan();
     }
 
     @Override
-    public void execute(Player player, String[] args) {
-        ClanPlayer clanPlayer = sccore.getClanPlayerManager().getClanPlayer(player);
-
-        if (clanPlayer == null) {
-            ChatBlock.sendMessage(player, ChatColor.RED + sccore.getTranslation("not.a.member.of.any.clan"));
-            return;
-        }
-
-        Clan clan = clanPlayer.getClan();
+    public void execute(Player player, ClanPlayer cp, String[] arguments, CallInformation info) {
+        Clan clan = cp.getClan();
         Location location = player.getLocation();
 
         sendMap(player, location, clan);
 
     }
 
-    @Override
-    public String getMenu(ClanPlayer cp) {
-        if (cp != null) {
-            return SCClaimingLanguage.getTranslation("menu.claim.map");
-        }
-        return null;
-    }
-
     public void sendMap(Player player, Location loc, Clan playerClan) {
-
         int x = loc.getBlockX();
         int z = loc.getBlockZ();
         int world = manager.getIDByWorld(loc.getWorld());

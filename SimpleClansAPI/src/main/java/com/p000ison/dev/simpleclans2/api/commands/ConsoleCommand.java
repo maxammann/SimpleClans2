@@ -14,24 +14,27 @@
  *     You should have received a copy of the GNU General Public License
  *     along with SimpleClans2.  If not, see <http://www.gnu.org/licenses/>.
  *
- *     Last modified: 17.10.12 17:26
+ *     Last modified: 31.05.13 12:23
  */
 
-package com.p000ison.dev.simpleclans2.metrics;
+package com.p000ison.dev.simpleclans2.api.commands;
 
-import org.mcstats.Metrics;
+import com.p000ison.dev.commandlib.CallInformation;
+import com.p000ison.dev.commandlib.CommandSender;
 
 /**
- * Represents a OfflinePlotter
+ * Represents a ConsoleCommand
  */
-public class OfflinePlotter extends Metrics.Plotter {
+public abstract class ConsoleCommand extends BukkitCommand {
 
-    public OfflinePlotter() {
-        super("Offline");
+    public ConsoleCommand(String name) {
+        super(name);
     }
 
     @Override
-    public int getValue() {
-        return 1;
+    public final void execute(CommandSender sender, CallInformation information) {
+        this.execute(((BukkitSender) sender).getSender(), information.getArguments(), information);
     }
+
+    public abstract void execute(org.bukkit.command.CommandSender sender, String[] arguments, CallInformation info);
 }

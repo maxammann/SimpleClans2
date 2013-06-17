@@ -19,8 +19,11 @@
 
 package com.p000ison.dev.simpleclans2.commands.admin;
 
+import com.p000ison.dev.commandlib.CallInformation;
+import com.p000ison.dev.commandlib.Command;
+import com.p000ison.dev.commandlib.CommandExecutor;
+import com.p000ison.dev.commandlib.CommandHandler;
 import com.p000ison.dev.simpleclans2.SimpleClans;
-import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.api.clan.Clan;
 import com.p000ison.dev.simpleclans2.commands.GenericConsoleCommand;
 import com.p000ison.dev.simpleclans2.language.Language;
@@ -33,51 +36,59 @@ import org.bukkit.command.CommandSender;
 public class WarAdminCommand extends GenericConsoleCommand {
 
     public WarAdminCommand(SimpleClans plugin) {
-        super("WarAdmin", plugin);
-        setArgumentRange(3, 3);
-        setUsages(Language.getTranslation("usage.war.admin"));
+        super("War (Admin)", plugin);
+        setDescription(Language.getTranslation("description.war.admin"));
         setIdentifiers(Language.getTranslation("war.admin.command"));
-        setPermission("simpleclans.admin.warcontrol");
+
+        CommandExecutor executor = plugin.getCommandManager();
+
+        Command cancel = executor.buildByMethod(this, "cancel")
+                .setDescription(Language.getTranslation("description.war.admin.cancel"))
+                .setIdentifiers(Language.getTranslation("cancel.command"))
+                .addPermission("simpleclans.admin.warcontrol")
+
+                .addArgument(Language.getTranslation("argument.tag"))
+                .addArgument(Language.getTranslation("argument.tag"));
+
+        this.addSubCommand(cancel);
     }
 
     @Override
-    public String getMenu() {
-        if (plugin.isUpdate()) {
-            return Language.getTranslation("menu.war.admin");
-        }
-
-        return null;
+    public void execute(CommandSender sender, String[] arguments, CallInformation info) {
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args) {
-        Clan clan1 = plugin.getClanManager().getClan(args[1]);
-        Clan clan2 = plugin.getClanManager().getClan(args[2]);
+    public boolean allowExecution(com.p000ison.dev.commandlib.CommandSender sender) {
+        return false;
+    }
+
+    @CommandHandler(name = "Cancel war")
+    public void cancel(com.p000ison.dev.commandlib.CommandSender sender, CallInformation info) {
+        String[] arguments = info.getArguments();
+        Clan clan1 = getPlugin().getClanManager().getClan(arguments[0]);
+        Clan clan2 = getPlugin().getClanManager().getClan(arguments[1]);
 
         if (clan1 == null || clan2 == null) {
-            ChatBlock.sendMessage(sender, ChatColor.DARK_RED + Language.getTranslation("no.clan.matched"));
+            sender.sendMessage(ChatColor.DARK_RED + Language.getTranslation("no.clan.matched"));
             return;
         }
 
-        if (args[0].equalsIgnoreCase("cancel")) {
+        boolean clan1War = clan1.isWarring(clan2);
+        boolean clan2War = clan2.isWarring(clan1);
 
-            boolean clan1War = clan1.isWarring(clan2);
-            boolean clan2War = clan2.isWarring(clan1);
+        if (clan1War || clan2War) {
+            sender.sendMessage(ChatColor.AQUA + Language.getTranslation("you.are.no.longer.at.war", clan1.getTag(), clan2.getTag()));
 
-            if (clan1War || clan2War) {
-                ChatBlock.sendMessage(sender, ChatColor.AQUA + Language.getTranslation("you.are.no.longer.at.war", clan1.getTag(), clan2.getTag()));
-
-                if (clan1War) {
-                    clan1.removeWarringClan(clan2);
-                }
-
-                if (clan2War) {
-                    clan2.removeWarringClan(clan1);
-                }
-
-            } else {
-                ChatBlock.sendMessage(sender, ChatColor.DARK_RED + Language.getTranslation("clans.not.at.war"));
+            if (clan1War) {
+                clan1.removeWarringClan(clan2);
             }
+
+            if (clan2War) {
+                clan2.removeWarringClan(clan1);
+            }
+
+        } else {
+            sender.sendMessage(ChatColor.DARK_RED + Language.getTranslation("clans.not.at.war"));
         }
     }
 }

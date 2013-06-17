@@ -19,12 +19,12 @@
 
 package com.p000ison.dev.simpleclans2.commands.clan;
 
+import com.p000ison.dev.commandlib.CallInformation;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.api.chat.Align;
 import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.api.clan.Clan;
 import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayer;
-import com.p000ison.dev.simpleclans2.commands.CraftCommandManager;
 import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
 import com.p000ison.dev.simpleclans2.language.Language;
 import com.p000ison.dev.simpleclans2.util.comparators.LastSeenComparator;
@@ -42,81 +42,56 @@ public class RosterCommand extends GenericPlayerCommand {
 
     public RosterCommand(SimpleClans plugin) {
         super("Roster", plugin);
-        setArgumentRange(0, 0);
-        setUsages(Language.getTranslation("usage.roster"));
+        setDescription(Language.getTranslation("description.roster"));
         setIdentifiers(Language.getTranslation("roster.command"));
-        setPermission("simpleclans.member.roster");
+        addPermission("simpleclans.member.roster");
+
+        setNeedsClan();
+        setNeedsClanVerified();
     }
 
     @Override
-    public String getMenu(ClanPlayer cp) {
-        if (cp != null) {
-            if (cp.getClan().isVerified()) {
-                return Language.getTranslation("menu.roster");
-            }
-        }
-        return null;
-    }
+    public void execute(Player player, ClanPlayer cp, String[] arguments, CallInformation info) {
 
-    @Override
-    public void execute(Player player, String[] args) {
-        int page = CraftCommandManager.getPage(args);
+        ChatColor headColor = getPlugin().getSettingsManager().getHeaderPageColor();
 
-        if (page == -1) {
-            ChatBlock.sendMessage(player, Language.getTranslation("number.format"));
-            return;
-        }
-
-        ChatColor headColor = plugin.getSettingsManager().getHeaderPageColor();
-
-        ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
-
-        if (cp == null) {
-            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
-            return;
-        }
 
         Clan clan = cp.getClan();
 
-        if (clan.isVerified()) {
-            ChatBlock chatBlock = new ChatBlock();
+        ChatBlock chatBlock = new ChatBlock();
 
-            chatBlock.setAlignment(Align.LEFT, Align.LEFT, Align.LEFT);
+        chatBlock.setAlignment(Align.LEFT, Align.LEFT, Align.LEFT);
 
-            ChatBlock.sendBlank(player);
-            ChatBlock.sendHead(player, plugin.getSettingsManager().getClanColor() + clan.getName(), Language.getTranslation("roster"));
-            ChatBlock.sendBlank(player);
-            ChatBlock.sendMessage(player, headColor + Language.getTranslation("legend") + " " + plugin.getSettingsManager().getLeaderColor() + Language.getTranslation("leader") + headColor + ", " + plugin.getSettingsManager().getTrustedColor() + Language.getTranslation("trusted") + headColor + ", " + plugin.getSettingsManager().getUntrustedColor() + Language.getTranslation("untrusted"));
-            ChatBlock.sendBlank(player);
+        ChatBlock.sendBlank(player);
+        ChatBlock.sendMessage(player, headColor + Language.getTranslation("legend") + " " + getPlugin().getSettingsManager().getLeaderColor() + Language.getTranslation("leader") + headColor + ", " + getPlugin().getSettingsManager().getTrustedColor() + Language.getTranslation("trusted") + headColor + ", " + getPlugin().getSettingsManager().getUntrustedColor() + Language.getTranslation("untrusted"));
+        ChatBlock.sendBlank(player);
 
-            chatBlock.addRow(headColor + Language.getTranslation("player"), Language.getTranslation("rank"), Language.getTranslation("seen"));
+        chatBlock.addRow(headColor + Language.getTranslation("player"), Language.getTranslation("rank"), Language.getTranslation("seen"));
 
-            List<ClanPlayer> leaders = new ArrayList<ClanPlayer>(clan.getLeaders());
-            Collections.sort(leaders, new LastSeenComparator());
+        List<ClanPlayer> leaders = new ArrayList<ClanPlayer>(clan.getLeaders());
+        Collections.sort(leaders, new LastSeenComparator());
 
-            List<ClanPlayer> members = new ArrayList<ClanPlayer>(clan.getMembers());
-            Collections.sort(members, new LastSeenComparator());
+        List<ClanPlayer> members = new ArrayList<ClanPlayer>(clan.getMembers());
+        Collections.sort(members, new LastSeenComparator());
 
-            int[] boundings = getBoundings(leaders.size() + members.size(), page);
+        int page = info.getPage(leaders.size() + members.size());
+        int start = info.getStartIndex(page, leaders.size() + members.size());
+        int end = info.getEndIndex(page, leaders.size() + members.size());
 
-            int i = boundings[0];
-            int end = boundings[1];
+        int i = start;
 
-            for (; i < end && i < leaders.size(); i++) {
-                chatBlock.addRow(leaders.get(i).getRosterRow());
-            }
-
-            i = 0;
-
-            for (; i < end && i < members.size(); i++) {
-                chatBlock.addRow(members.get(i).getRosterRow());
-            }
-
-            chatBlock.sendBlock(player);
-
-            ChatBlock.sendBlank(player);
-        } else {
-            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("clan.is.not.verified"));
+        for (; i < end && i < leaders.size(); i++) {
+            chatBlock.addRow(leaders.get(i).getRosterRow());
         }
+
+        i = 0;
+
+        for (; i < end && i < members.size(); i++) {
+            chatBlock.addRow(members.get(i).getRosterRow());
+        }
+
+        chatBlock.sendBlock(player);
+
+        ChatBlock.sendBlank(player);
     }
 }

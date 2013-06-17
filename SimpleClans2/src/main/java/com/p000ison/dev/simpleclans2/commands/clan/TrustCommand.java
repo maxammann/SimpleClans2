@@ -19,6 +19,7 @@
 
 package com.p000ison.dev.simpleclans2.commands.clan;
 
+import com.p000ison.dev.commandlib.CallInformation;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.api.clan.Clan;
@@ -35,61 +36,47 @@ public class TrustCommand extends GenericPlayerCommand {
 
     public TrustCommand(SimpleClans plugin) {
         super("Trust", plugin);
-        setArgumentRange(1, 1);
-        setUsages(Language.getTranslation(("usage.trust")));
+        addArgument(Language.getTranslation("argument.member"));
+        setDescription(Language.getTranslation(("description.trust")));
         setIdentifiers(Language.getTranslation("trust.command"));
-        setPermission("simpleclans.leader.settrust");
+        addPermission("simpleclans.leader.settrust");
+
+        setNeedsClan();
+        setRankPermission("manage.trusted");
+        setNeedsClanVerified();
     }
 
     @Override
-    public String getMenu(ClanPlayer cp) {
-        if (cp != null && cp.isLeader() && cp.getClan().isVerified()) {
-            return Language.getTranslation("menu.trust");
+    public void execute(Player player, ClanPlayer cp, String[] arguments, CallInformation info) {
+        Clan clan = cp.getClan();
+
+        ClanPlayer trusted = getPlugin().getClanPlayerManager().getClanPlayer(arguments[0]);
+
+        if (trusted == null) {
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("no.player.matched"));
+            return;
         }
-        return null;
-    }
 
-    @Override
-    public void execute(Player player, String[] args) {
-        ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
+        if (trusted.equals(cp)) {
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("you.cannot.trust.yourself"));
+            return;
+        }
 
-        if (cp != null) {
-            Clan clan = cp.getClan();
+        if (!clan.isMember(trusted)) {
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("the.player.is.not.a.member.of.your.clan"));
+            return;
+        }
 
-            if (!clan.isLeader(cp) && !cp.hasRankPermission("manage.trusted")) {
-                ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("no.leader.permissions"));
-                return;
-            }
-            ClanPlayer trusted = plugin.getClanPlayerManager().getClanPlayer(args[0]);
+        if (clan.isLeader(trusted)) {
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("leaders.are.already.trusted"));
+        }
 
-            if (trusted == null) {
-                ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("no.player.matched"));
-                return;
-            }
-
-            if (trusted.equals(cp)) {
-                ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("you.cannot.trust.yourself"));
-                return;
-            }
-
-            if (!clan.isMember(trusted)) {
-                ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("the.player.is.not.a.member.of.your.clan"));
-                return;
-            }
-
-            if (clan.isLeader(trusted)) {
-                ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("leaders.are.already.trusted"));
-            }
-
-            if (!trusted.isTrusted()) {
-                clan.addBBMessage(cp, Language.getTranslation("has.been.given.trusted.status.by", trusted.getName(), player.getName()));
-                trusted.setTrusted(true);
-                trusted.update();
-            } else {
-                ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("this.player.is.already.trusted"));
-            }
+        if (!trusted.isTrusted()) {
+            clan.addBBMessage(cp, Language.getTranslation("has.been.given.trusted.status.by", trusted.getName(), player.getName()));
+            trusted.setTrusted(true);
+            trusted.update();
         } else {
-            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("this.player.is.already.trusted"));
         }
     }
 }

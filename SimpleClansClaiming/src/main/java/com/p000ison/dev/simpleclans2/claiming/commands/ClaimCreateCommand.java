@@ -19,15 +19,13 @@
 
 package com.p000ison.dev.simpleclans2.claiming.commands;
 
+import com.p000ison.dev.commandlib.CallInformation;
 import com.p000ison.dev.simpleclans2.api.SCCore;
-import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.api.clan.Clan;
 import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayer;
-import com.p000ison.dev.simpleclans2.api.command.GenericPlayerCommand;
 import com.p000ison.dev.simpleclans2.claiming.ClaimLocation;
 import com.p000ison.dev.simpleclans2.claiming.SCClaimingLanguage;
 import com.p000ison.dev.simpleclans2.claiming.data.ClaimingManager;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -36,37 +34,22 @@ import org.bukkit.entity.Player;
  */
 public class ClaimCreateCommand extends GenericPlayerCommand {
 
-    private final SCCore sccore;
     private final ClaimingManager manager;
 
     public ClaimCreateCommand(SCCore sccore, ClaimingManager manager) {
-        super("ClaimCreate");
-        this.sccore = sccore;
+        super("ClaimCreate", sccore);
         this.manager = manager;
-        setArgumentRange(1, 1);
-        setUsages(SCClaimingLanguage.getTranslation("usage.claim.create"));
+        //setArgumentRange(1, 1);
+        setDescription(SCClaimingLanguage.getTranslation("usage.claim.create"));
         setIdentifiers(SCClaimingLanguage.getTranslation("claim.create.command"));
-        setPermission("simpleclans.leader.claim.create");
+        addPermission("simpleclans.leader.claim.create");
+
+        setNeedsClan();
     }
 
     @Override
-    public String getMenu(ClanPlayer cp) {
-        if (cp != null) {
-            return SCClaimingLanguage.getTranslation("menu.claim.create");
-        }
-        return null;
-    }
-
-    @Override
-    public void execute(Player player, String[] args) {
-        ClanPlayer clanPlayer = sccore.getClanPlayerManager().getClanPlayer(player);
-
-        if (clanPlayer == null) {
-            ChatBlock.sendMessage(player, ChatColor.RED + sccore.getTranslation("not.a.member.of.any.clan"));
-            return;
-        }
-
-        Clan clan = clanPlayer.getClan();
+    public void execute(Player player, ClanPlayer cp, String[] arguments, CallInformation info) {
+        Clan clan = cp.getClan();
         Location location = player.getLocation();
         ClaimLocation claimLocation = manager.toClaimLocation(location);
 

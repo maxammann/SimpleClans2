@@ -99,9 +99,9 @@ public class SimpleClansChat extends JavaPlugin {
             }
         }
 
-        core.getCommandManager().addCommand(new GlobalChannelCommand("GlobalChannel", core));
-        core.getCommandManager().addCommand(new ClanChannelCommand("ClanChannel", core));
-        core.getCommandManager().addCommand(new AllyChannelCommand("AllyChannel", core));
+        core.getCommandManager().register(new GlobalChannelCommand("GlobalChannel", core));
+        core.getCommandManager().register(new ClanChannelCommand("ClanChannel", core));
+        core.getCommandManager().register(new AllyChannelCommand("AllyChannel", core));
 
         setupPermissions();
         setupChat();

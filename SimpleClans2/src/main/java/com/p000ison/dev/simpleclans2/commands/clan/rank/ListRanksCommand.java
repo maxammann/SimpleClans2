@@ -19,6 +19,7 @@
 
 package com.p000ison.dev.simpleclans2.commands.clan.rank;
 
+import com.p000ison.dev.commandlib.CallInformation;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.api.chat.Align;
 import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
@@ -41,35 +42,20 @@ import java.util.Set;
 public class ListRanksCommand extends GenericPlayerCommand {
 
     public ListRanksCommand(SimpleClans plugin) {
-        super("ListRanks", plugin);
-        setArgumentRange(0, 0);
-        setUsages(Language.getTranslation("usage.view.ranks", plugin.getSettingsManager().getRankCommand()));
+        super("View ranks", plugin);
+        setDescription(Language.getTranslation("description.ranks.view", plugin.getSettingsManager().getRankCommand()));
         setIdentifiers(Language.getTranslation("view.ranks.command"));
-        setPermission("simpleclans.leader.rank.list");
-        setType(Type.RANK);
+        addPermission("simpleclans.leader.rank.list");
+
+        setNeedsClan();
     }
 
     @Override
-    public String getMenu(ClanPlayer clanPlayer) {
-        if (clanPlayer != null) {
-            return Language.getTranslation("menu.ranks.view", plugin.getSettingsManager().getRankCommand());
-        }
-        return null;
-    }
-
-    @Override
-    public void execute(Player player, String[] args) {
-        ClanPlayer clanPlayer = plugin.getClanPlayerManager().getClanPlayer(player);
-
-        if (clanPlayer == null) {
-            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
-            return;
-        }
-
-        Clan clan = clanPlayer.getClan();
+    public void execute(Player player, ClanPlayer cp, String[] arguments, CallInformation info) {
+        Clan clan = cp.getClan();
 
         Set<Rank> ranks = clan.getRanks();
-
+        int completeSize = ranks.size();
         List<Rank> sorted = new ArrayList<Rank>(ranks);
 
         Collections.sort(sorted);
@@ -79,36 +65,24 @@ public class ListRanksCommand extends GenericPlayerCommand {
             return;
         }
 
-        int page = 0;
-        int completeSize = ranks.size();
-
-        if (args.length == 1) {
-            try {
-                page = Integer.parseInt(args[0]) - 1;
-            } catch (NumberFormatException e) {
-                ChatBlock.sendMessage(player, Language.getTranslation("number.format"));
-                return;
-            }
-        }
-
         ChatBlock chatBlock = new ChatBlock();
 
-        ChatBlock.sendHead(player, plugin.getSettingsManager().getClanColor() + clan.getTag(), Language.getTranslation("ranks"));
-
-        ChatBlock.sendBlank(player);
 
         chatBlock.setAlignment(Align.CENTER, Align.LEFT, Align.LEFT, Align.CENTER);
         chatBlock.addRow(Language.getTranslation("id"), Language.getTranslation("tag"), Language.getTranslation("name"), Language.getTranslation("priority"));
 
-        int[] boundings = getBoundings(completeSize, page);
+        int page = info.getPage(completeSize);
+        int start = info.getStartIndex(page, completeSize);
+        int end = info.getEndIndex(page, completeSize);
 
-        for (int i = boundings[0]; i < boundings[1]; i++) {
+        for (int i = start; i < end; i++) {
             Rank rank = sorted.get(i);
 
             chatBlock.addRow(ChatColor.GRAY.toString() + rank.getID(), ChatColor.GRAY + rank.getTag(), ChatColor.GRAY + rank.getName(), ChatColor.GRAY.toString() + rank.getPriority());
         }
 
-
+        ChatBlock.sendBlank(player);
         chatBlock.sendBlock(player);
+        ChatBlock.sendBlank(player);
     }
 }

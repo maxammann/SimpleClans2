@@ -19,8 +19,8 @@
 
 package com.p000ison.dev.simpleclans2.commands.clan;
 
+import com.p000ison.dev.commandlib.*;
 import com.p000ison.dev.simpleclans2.SimpleClans;
-import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.api.clan.Clan;
 import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
@@ -35,74 +35,72 @@ import org.bukkit.entity.Player;
 public class ToggleCommand extends GenericPlayerCommand {
 
     public ToggleCommand(SimpleClans plugin) {
-        super("Command", plugin);
-        setArgumentRange(1, 1);
-        setUsages(Language.getTranslation("usage.toggle"));
+        super("Toggle", plugin);
+        setDescription(Language.getTranslation("description.toggle"));
         setIdentifiers(Language.getTranslation("toggle.command"));
-        setPermission("simpleclans.member.toggle.cape", "simpleclans.member.toggle.bb");
+
+        CommandExecutor executor = plugin.getCommandManager();
+        AnnotatedCommand.ExecutionRestriction restriction = new AnnotatedCommand.ExecutionRestriction() {
+
+            @Override
+            public boolean allowExecution(CommandSender commandSender, Command command) {
+                ClanPlayer cp = getClanPlayer(commandSender);
+                return cp != null && cp.getClan().isVerified();
+            }
+        };
+
+        Command bb = executor.buildByMethod(this, "bb").setExecutionRestriction(restriction)
+                .setIdentifiers(Language.getTranslation("bb.command"))
+                .setDescription(Language.getTranslation("description.toggle.bb"))
+                .addPermission("simpleclans.member.toggle.bb");
+        this.addSubCommand(bb);
+        Command cape = executor.buildByMethod(this, "cape").setExecutionRestriction(restriction)
+                .setIdentifiers(Language.getTranslation("cape.command"))
+                .setDescription(Language.getTranslation("description.toggle.cape"))
+                .addPermission("simpleclans.member.toggle.cape");
+        this.addSubCommand(cape);
     }
 
     @Override
-    public String getMenu(ClanPlayer cp) {
-        if (cp != null) {
-            return Language.getTranslation("menu.toggle");
-        }
-
-        return null;
+    public void execute(Player player, ClanPlayer cp, String[] arguments, CallInformation info) {
     }
 
     @Override
-    public void execute(Player player, String[] args) {
-        String action = args[0];
+    protected boolean displayHelpEntry(ClanPlayer cp, org.bukkit.command.CommandSender sender) {
+        return false;
+    }
 
-        if (action.equalsIgnoreCase("cape")) {
-            if (player.hasPermission("simpleclans.member.toggle.cape")) {
-                ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
+    @CommandHandler(name = "Toggle bb")
+    public void bb(CommandSender sender, CallInformation info) {
+        ClanPlayer cp = getClanPlayer(sender);
+        Clan clan = cp.getClan();
 
-                if (cp != null) {
-                    Clan clan = cp.getClan();
-
-                    if (clan.isVerified()) {
-                        if (cp.isCapeEnabled()) {
-                            ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("capeoff"));
-                            cp.setCapeEnabled(false);
-                            SpoutSupport spout = plugin.getSpoutSupport();
-                            if (spout.isEnabled()) {
-                                spout.clearCape(cp);
-                            }
-                        } else {
-                            ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("capeon"));
-                            cp.setCapeEnabled(true);
-                        }
-                        clan.update();
-                    } else {
-                        ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("clan.is.not.verified"));
-                    }
-                } else {
-                    ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
-                }
-            } else {
-                ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("insufficient.permissions"));
-            }
-        } else if (action.equalsIgnoreCase("bb")) {
-            if (player.hasPermission("simpleclans.member.toggle.bb")) {
-                ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
-
-                if (cp != null) {
-                    Clan clan = cp.getClan();
-
-                    if (clan.isVerified()) {
-                        if (cp.isBBEnabled()) {
-                            ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("bboff"));
-                            cp.setBBEnabled(false);
-                        } else {
-                            ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("bbon"));
-                            cp.setBBEnabled(true);
-                        }
-                        clan.update();
-                    }
-                }
-            }
+        if (cp.isBBEnabled()) {
+            sender.sendMessage(ChatColor.AQUA + Language.getTranslation("bboff"));
+            cp.setBBEnabled(false);
+        } else {
+            sender.sendMessage(ChatColor.AQUA + Language.getTranslation("bbon"));
+            cp.setBBEnabled(true);
         }
+        clan.update();
+    }
+
+    @CommandHandler(name = "Toggle cape")
+    public void cape(CommandSender sender, CallInformation info) {
+        ClanPlayer cp = getClanPlayer(sender);
+        Clan clan = cp.getClan();
+
+        if (cp.isCapeEnabled()) {
+            sender.sendMessage(ChatColor.AQUA + Language.getTranslation("capeoff"));
+            cp.setCapeEnabled(false);
+            SpoutSupport spout = getPlugin().getSpoutSupport();
+            if (spout.isEnabled()) {
+                spout.clearCape(cp);
+            }
+        } else {
+            sender.sendMessage(ChatColor.AQUA + Language.getTranslation("capeon"));
+            cp.setCapeEnabled(true);
+        }
+        clan.update();
     }
 }

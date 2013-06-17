@@ -19,12 +19,13 @@
 
 package com.p000ison.dev.simpleclans2.commands.clan.bb;
 
+import com.p000ison.dev.commandlib.CallInformation;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.api.clan.Clan;
 import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
-import com.p000ison.dev.simpleclans2.database.response.responses.BBClearResponse;
+import com.p000ison.dev.simpleclans2.database.DatabaseManager;
 import com.p000ison.dev.simpleclans2.language.Language;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -32,49 +33,32 @@ import org.bukkit.entity.Player;
 import java.text.MessageFormat;
 
 /**
- * Represents a BBCommand
+ * Represents a ViewBBCommand
  */
 public class BBClearCommand extends GenericPlayerCommand {
 
-
     public BBClearCommand(SimpleClans plugin) {
-        super("BBClear", plugin);
-        setArgumentRange(0, 0);
-        setUsages(MessageFormat.format(Language.getTranslation("usage.bb.clear"), plugin.getSettingsManager().getBBCommand()));
+        super("Clear BB", plugin);
+        setDescription(MessageFormat.format(Language.getTranslation("description.bb.clear"), plugin.getSettingsManager().getBBCommand()));
         setIdentifiers(Language.getTranslation("bb.clear.command"));
-        setPermission("simpleclans.member.bb-clear");
-        setType(Type.BB);
+        addPermission("simpleclans.member.bb-clear");
+
+        setNeedsClan();
+        setNeedsClanVerified();
+        setNeedsTrusted();
+        setAsynchronous(true);
+
+        setRankPermission("manage.bb");
     }
 
     @Override
-    public String getMenu(ClanPlayer cp) {
-        if (cp != null && cp.getClan().isVerified()) {
-            return MessageFormat.format(Language.getTranslation("menu.bb.clear"), plugin.getSettingsManager().getBBCommand());
-        }
-        return null;
-    }
-
-    @Override
-    public void execute(Player player, String[] args) {
-
-        ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
-
-        if (cp == null) {
-            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("clan.is.not.verified"));
-            return;
-        }
+    public void execute(Player player, ClanPlayer cp, String[] arguments, CallInformation info) {
 
         Clan clan = cp.getClan();
 
-        if (!clan.isVerified()) {
-            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
-            return;
-        }
+        DatabaseManager dataManager = getPlugin().getDataManager();
 
-        if (cp.isTrusted() && (cp.isLeader() || cp.hasRankPermission("manage.bb"))) {
-            plugin.getDataManager().addResponse(new BBClearResponse(plugin, player, clan));
-        } else {
-            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("no.leader.permissions"));
-        }
+        dataManager.purgeBB(clan);
+        ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("cleared.bb"));
     }
 }

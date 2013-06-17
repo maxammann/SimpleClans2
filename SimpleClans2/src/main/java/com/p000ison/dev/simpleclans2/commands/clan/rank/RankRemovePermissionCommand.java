@@ -19,6 +19,7 @@
 
 package com.p000ison.dev.simpleclans2.commands.clan.rank;
 
+import com.p000ison.dev.commandlib.CallInformation;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.api.clan.Clan;
@@ -34,48 +35,30 @@ import org.bukkit.entity.Player;
  */
 public class RankRemovePermissionCommand extends GenericPlayerCommand {
 
-
     public RankRemovePermissionCommand(SimpleClans plugin) {
-        super("RankRemovePermission", plugin);
-        setArgumentRange(2, 2);
-        setUsages(Language.getTranslation("usage.rank.remove.permission", plugin.getSettingsManager().getRankCommand()));
+        super("Remove rank permission", plugin);
+        addArgument(Language.getTranslation("argument.rank"))
+                .addArgument(Language.getTranslation("argument.permission"));
+        setDescription(Language.getTranslation("description.rank.remove.permission", plugin.getSettingsManager().getRankCommand()));
         setIdentifiers(Language.getTranslation("rank.remove.permission.command"));
-        setPermission("simpleclans.leader.rank.permissions.remove");
-        setType(Type.RANK);
+        addPermission("simpleclans.leader.rank.permissions.remove");
+
+        setNeedsClan();
+        setRankPermission("manage.ranks");
     }
 
     @Override
-    public String getMenu(ClanPlayer clanPlayer) {
-        if (clanPlayer != null && (clanPlayer.isLeader() || clanPlayer.hasRankPermission("manage.ranks"))) {
-            return Language.getTranslation("menu.rank.remove.permission", plugin.getSettingsManager().getRankCommand());
-        }
-        return null;
-    }
+    public void execute(Player player, ClanPlayer cp, String[] arguments, CallInformation info) {
+        Clan clan = cp.getClan();
 
-    @Override
-    public void execute(Player player, String[] args) {
-        ClanPlayer clanPlayer = plugin.getClanPlayerManager().getClanPlayer(player);
-
-        if (clanPlayer == null) {
-            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
-            return;
-        }
-
-        Clan clan = clanPlayer.getClan();
-
-        if (!clan.isLeader(clanPlayer) && !clanPlayer.hasRankPermission("manage.ranks")) {
-            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("no.leader.permissions"));
-            return;
-        }
-
-        Rank rank = clan.getRank(args[0]);
+        Rank rank = clan.getRank(arguments[0]);
 
         if (rank == null) {
             ChatBlock.sendMessage(player, ChatColor.DARK_RED + Language.getTranslation("rank.not.found"));
             return;
         }
 
-        String permission = args[1];
+        String permission = arguments[1];
 
         String removed = rank.removePermission(permission);
 

@@ -19,6 +19,7 @@
 
 package com.p000ison.dev.simpleclans2.commands.admin;
 
+import com.p000ison.dev.commandlib.CallInformation;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.api.logging.Logging;
@@ -49,30 +50,29 @@ public class CopyCommand extends GenericConsoleCommand {
 
     public CopyCommand(SimpleClans plugin) {
         super("Copy", plugin);
-        setArgumentRange(2, 5);
-        setUsages(Language.getTranslation("usage.copy"));
+        addArgument(Language.getTranslation("argument.mysql.sqlite"))
+                .addArgument(Language.getTranslation("argument.host.file"))
+                .addArgument(Language.getTranslation("argument.db"), true)
+                .addArgument(Language.getTranslation("argument.user"), true)
+                .addArgument(Language.getTranslation("argument.pw"), true);
+        setDescription(Language.getTranslation("description.copy"));
         setIdentifiers(Language.getTranslation("copy.command"));
-        setPermission("simpleclans.admin.copy");
+        addPermission("simpleclans.admin.copy");
     }
 
     @Override
-    public String getMenu() {
-        return Language.getTranslation("menu.copy");
-    }
-
-    @Override
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(CommandSender sender, String[] arguments, CallInformation info) {
         long start = System.currentTimeMillis();
 
-        Database from = plugin.getClanDatabase();
+        Database from = getPlugin().getClanDatabase();
         JBDCDatabase to = null;
         DatabaseConfiguration config = null;
 
-        String action = args[0];
+        String action = arguments[0];
 
         try {
             if (action.equalsIgnoreCase("mysql")) {
-                String[] address = args[1].split(":");
+                String[] address = arguments[1].split(":");
                 int port = 3306;
                 if (address.length == 2) {
                     try {
@@ -82,11 +82,11 @@ public class CopyCommand extends GenericConsoleCommand {
                         return;
                     }
                 }
-                config = new MySQLConfiguration(args[3], args[4], address[0], port, args[2]);
+                config = new MySQLConfiguration(arguments[3], arguments[4], address[0], port, arguments[2]);
 
                 to = new MySQLDatabase(config);
             } else if (action.equalsIgnoreCase("sqlite")) {
-                File file = new File(args[1]);
+                File file = new File(arguments[1]);
                 config = new SQLiteConfiguration(file);
                 to = new SQLiteDatabase(config);
             }

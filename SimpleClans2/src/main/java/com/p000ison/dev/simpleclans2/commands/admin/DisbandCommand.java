@@ -19,6 +19,7 @@
 
 package com.p000ison.dev.simpleclans2.commands.admin;
 
+import com.p000ison.dev.commandlib.CallInformation;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.api.clan.Clan;
@@ -33,20 +34,15 @@ public class DisbandCommand extends GenericConsoleCommand {
 
     public DisbandCommand(SimpleClans plugin) {
         super("Disband", plugin);
-        setArgumentRange(1, 1);
-        setUsages(Language.getTranslation("usage.disband"));
+        addArgument(Language.getTranslation("argument.member"));
+        setDescription(Language.getTranslation("description.disband"));
         setIdentifiers(Language.getTranslation("disband.command"));
-        setPermission("simpleclans.mod.disband");
+        addPermission("simpleclans.mod.disband");
     }
 
     @Override
-    public String getMenu() {
-        return Language.getTranslation("menu.disband");
-    }
-
-    @Override
-    public void execute(CommandSender sender, String[] args) {
-        Clan clan = plugin.getClanManager().getClan(args[0]);
+    public void execute(CommandSender sender, String[] arguments, CallInformation info) {
+        Clan clan = getPlugin().getClanManager().getClan(arguments[0]);
 
         if (clan != null) {
             clan.disband();

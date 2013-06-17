@@ -19,6 +19,7 @@
 
 package com.p000ison.dev.simpleclans2.commands.admin;
 
+import com.p000ison.dev.commandlib.CallInformation;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.commands.GenericConsoleCommand;
@@ -32,29 +33,23 @@ public class InfoCommand extends GenericConsoleCommand {
 
     public InfoCommand(SimpleClans plugin) {
         super("Info", plugin);
-        setArgumentRange(0, 0);
-        setUsages(Language.getTranslation("usage.info"));
+        setDescription(Language.getTranslation("description.info"));
         setIdentifiers(Language.getTranslation("info.command"));
-        setPermission("simpleclans.admin.info");
+        addPermission("simpleclans.admin.info");
     }
 
     @Override
-    public String getMenu() {
-        return Language.getTranslation("menu.info");
-    }
-
-    @Override
-    public void execute(CommandSender sender, String[] args) {
-        int loadedClans = plugin.getClanManager().getClans().size();
-        int loadedClanPlayers = plugin.getClanPlayerManager().getClanPlayers().size();
-        int dataQueue = plugin.getDataManager().getAutoSaver().size();
-        int teleporting = plugin.getTeleportManager().getWaitingPlayers();
+    public void execute(CommandSender sender, String[] arguments, CallInformation info) {
+        int loadedClans = getPlugin().getClanManager().getClans().size();
+        int loadedClanPlayers = getPlugin().getClanPlayerManager().getClanPlayers().size();
+        int dataQueue = getPlugin().getDataManager().getAutoSaver().size();
+        int teleporting = getPlugin().getTeleportManager().getWaitingPlayers();
 
         ChatBlock.sendMessage(sender, "Loaded clans: " + loadedClans);
         ChatBlock.sendMessage(sender, "Loaded clan players: " + loadedClanPlayers);
         ChatBlock.sendMessage(sender, "Data in queue: " + dataQueue);
         ChatBlock.sendMessage(sender, "Teleporting: " + teleporting);
-        ChatBlock.sendMessage(sender, "Requests: " + plugin.getRequestManager().getRequests());
-        ChatBlock.sendMessage(sender, "Exceptions in queue: " + (plugin.getExceptionReporter() == null ? 0 : plugin.getExceptionReporter().getPendingExceptions()));
+        ChatBlock.sendMessage(sender, "Requests: " + getPlugin().getRequestManager().getRequests());
+        ChatBlock.sendMessage(sender, "Exceptions in queue: " + (getPlugin().getExceptionReporter() == null ? 0 : getPlugin().getExceptionReporter().getPendingExceptions()));
     }
 }

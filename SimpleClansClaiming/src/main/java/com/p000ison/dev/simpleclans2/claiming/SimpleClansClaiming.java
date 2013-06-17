@@ -25,8 +25,8 @@ public class SimpleClansClaiming extends JavaPlugin {
 
         claimingManager = new ClaimingManager(this, getSCDatabase());
 
-        core.getCommandManager().addCommand(new ClaimCreateCommand(core, claimingManager));
-        core.getCommandManager().addCommand(new ClaimMapCommand(core, claimingManager));
+        core.getCommandManager().register(new ClaimCreateCommand(core, claimingManager));
+        core.getCommandManager().register(new ClaimMapCommand(core, claimingManager));
     }
 
     private boolean hookSimpleClans() {

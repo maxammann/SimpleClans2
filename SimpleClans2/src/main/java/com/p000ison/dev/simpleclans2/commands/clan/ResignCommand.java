@@ -19,6 +19,7 @@
 
 package com.p000ison.dev.simpleclans2.commands.clan;
 
+import com.p000ison.dev.commandlib.CallInformation;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.api.clan.Clan;
@@ -35,38 +36,24 @@ public class ResignCommand extends GenericPlayerCommand {
 
     public ResignCommand(SimpleClans plugin) {
         super("Resign", plugin);
-        setArgumentRange(0, 0);
-        setUsages(Language.getTranslation("usage.resign"));
+        setDescription(Language.getTranslation("description.resign"));
         setIdentifiers(Language.getTranslation("resign.command"));
-        setPermission("simpleclans.member.resign");
+        addPermission("simpleclans.member.resign");
+
+        setNeedsClan();
     }
 
     @Override
-    public String getMenu(ClanPlayer cp) {
-        if (cp != null) {
-            return Language.getTranslation("menu.resign");
-        }
-        return null;
-    }
+    public void execute(Player player, ClanPlayer cp, String[] arguments, CallInformation info) {
+        Clan clan = cp.getClan();
 
-    @Override
-    public void execute(Player player, String[] args) {
-        ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
-
-        if (cp != null) {
-            Clan clan = cp.getClan();
-
-            if (!clan.isLeader(cp) || clan.getLeaders().size() > 1) {
-                clan.addBBMessage(cp, MessageFormat.format(Language.getTranslation("0.has.resigned"), player.getName()));
-                clan.removeMember(cp);
-            } else if (clan.isLeader(cp) && clan.getLeaders().size() == 1) {
-                clan.disband();
-            } else {
-                ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("last.leader.cannot.resign.you.must.appoint.another.leader.or.disband.the.clan"));
-            }
-
+        if (!clan.isLeader(cp) || clan.getLeaders().size() > 1) {
+            clan.addBBMessage(cp, MessageFormat.format(Language.getTranslation("0.has.resigned"), player.getName()));
+            clan.removeMember(cp);
+        } else if (clan.isLeader(cp) && clan.getLeaders().size() == 1) {
+            clan.disband();
         } else {
-            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("last.leader.cannot.resign.you.must.appoint.another.leader.or.disband.the.clan"));
         }
     }
 }

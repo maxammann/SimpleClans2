@@ -59,6 +59,7 @@ public class CraftRank implements Rank, TableObject {
         availablePermissions.put(0, "leader.demote");
         availablePermissions.put(1, "manage.bb");
         availablePermissions.put(2, "manage.ally");
+        availablePermissions.put(2, "manage.rival");
         availablePermissions.put(3, "manage.clanff");
         availablePermissions.put(4, "manage.ranks");
         availablePermissions.put(5, "manage.trusted");

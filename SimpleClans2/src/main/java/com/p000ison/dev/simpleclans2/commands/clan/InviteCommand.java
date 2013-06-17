@@ -19,6 +19,7 @@
 
 package com.p000ison.dev.simpleclans2.commands.clan;
 
+import com.p000ison.dev.commandlib.CallInformation;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.api.clan.Clan;
@@ -35,41 +36,22 @@ import java.text.MessageFormat;
 
 public class InviteCommand extends GenericPlayerCommand {
 
-
     public InviteCommand(SimpleClans plugin) {
         super("Invite", plugin);
-        setArgumentRange(1, 1);
-        setUsages(Language.getTranslation("usage.invite"));
+        addArgument(Language.getTranslation("argument.player"));
+        setDescription(Language.getTranslation("description.invite"));
         setIdentifiers(Language.getTranslation("invite.command"));
-        setPermission("simpleclans.leader.invite");
+        addPermission("simpleclans.leader.invite");
+
+        setNeedsClan();
+        setRankPermission("manage.invites");
     }
 
     @Override
-    public String getMenu(ClanPlayer cp) {
-        if (cp != null && cp.isLeader()) {
-            return Language.getTranslation("menu.invite");
-        }
-
-        return null;
-    }
-
-    @Override
-    public void execute(Player player, String[] args) {
-        ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
-
-        if (cp == null) {
-            ChatBlock.sendMessage(player, Language.getTranslation("not.a.member.of.any.clan"));
-            return;
-        }
-
+    public void execute(Player player, ClanPlayer cp, String[] arguments, CallInformation info) {
         Clan clan = cp.getClan();
 
-        if (!clan.isLeader(cp) && !cp.hasRankPermission("manage.invites")) {
-            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("no.leader.permissions"));
-            return;
-        }
-
-        Player invited = Bukkit.getPlayer(args[0]);
+        Player invited = Bukkit.getPlayer(arguments[0]);
 
         if (invited == null) {
             ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("no.player.matched"));
@@ -91,22 +73,20 @@ public class InviteCommand extends GenericPlayerCommand {
             return;
         }
 
-        ClanPlayer invitedClanPlayer = plugin.getClanPlayerManager().getCreateClanPlayerExact(invited);
+        ClanPlayer invitedClanPlayer = getPlugin().getClanPlayerManager().getCreateClanPlayerExact(invited);
 
         if (invitedClanPlayer.getClan() == null) {
 
-            if (SimpleClans.hasEconomy() && plugin.getSettingsManager().isPurchaseInvite() && !cp.withdraw(plugin.getSettingsManager().getInvitationPrice())) {
+            if (SimpleClans.hasEconomy() && getPlugin().getSettingsManager().isPurchaseInvite() && !cp.withdraw(getPlugin().getSettingsManager().getInvitationPrice())) {
                 ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("not.sufficient.money"));
                 return;
             }
 
-            plugin.getRequestManager().createRequest(new InviteRequest(plugin, invitedClanPlayer, cp));
+            getPlugin().getRequestManager().createRequest(new InviteRequest(getPlugin(), invitedClanPlayer, cp));
             ChatBlock.sendMessage(player, ChatColor.AQUA + MessageFormat.format(Language.getTranslation("has.been.asked.to.join"), invited.getName(), clan.getName()));
 
         } else {
             ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("the.player.is.already.member.of.another.clan"));
         }
-
-
     }
 }

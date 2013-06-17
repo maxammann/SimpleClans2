@@ -19,6 +19,7 @@
 
 package com.p000ison.dev.simpleclans2.commands.general;
 
+import com.p000ison.dev.commandlib.CallInformation;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.api.chat.Align;
 import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
@@ -45,46 +46,30 @@ public class LeaderboardCommand extends GenericConsoleCommand {
 
     public LeaderboardCommand(SimpleClans plugin) {
         super("Leaderboard", plugin);
-        this.plugin = plugin;
-        setArgumentRange(0, 1);
-        setUsages(Language.getTranslation("usage.leaderboard"));
+        addArgument(Language.getTranslation("argument.page"), true, true);
+        setDescription(Language.getTranslation("description.leaderboard"));
         setIdentifiers(Language.getTranslation("leaderboard.command"));
-        setPermission("simpleclans.anyone.leaderboard");
+        addPermission("simpleclans.anyone.leaderboard");
     }
 
     @Override
-    public String getMenu() {
-        return Language.getTranslation("menu.leaderboard");
-    }
+    public void execute(CommandSender sender, String[] arguments, CallInformation info) {
 
-    @Override
-    public void execute(CommandSender sender, String[] args) {
-
-        ChatColor headColor = plugin.getSettingsManager().getHeaderPageColor();
-        ChatColor subColor = plugin.getSettingsManager().getSubPageColor();
+        ChatColor headColor = getPlugin().getSettingsManager().getHeaderPageColor();
+        ChatColor subColor = getPlugin().getSettingsManager().getSubPageColor();
         NumberFormat formatter = new DecimalFormat("#.#");
 
 
-        List<ClanPlayer> clanPlayers = new ArrayList<ClanPlayer>(plugin.getClanPlayerManager().getClanPlayers());
+        List<ClanPlayer> clanPlayers = new ArrayList<ClanPlayer>(getPlugin().getClanPlayerManager().getClanPlayers());
 
-        int page = 0;
         int completeSize = clanPlayers.size();
-
-        if (args.length == 1) {
-            try {
-                page = Integer.parseInt(args[0]) - 1;
-            } catch (NumberFormatException e) {
-                ChatBlock.sendMessage(sender, Language.getTranslation("number.format"));
-                return;
-            }
-        }
 
         Collections.sort(clanPlayers, new KDRComparator());
 
         ChatBlock chatBlock = new ChatBlock();
 
         ChatBlock.sendBlank(sender);
-        ChatBlock.sendSingle(sender, plugin.getSettingsManager().getServerName() + subColor + " " + Language.getTranslation("leaderboard.command"));
+        ChatBlock.sendSingle(sender, getPlugin().getSettingsManager().getServerName() + subColor + " " + Language.getTranslation("leaderboard.command"));
         ChatBlock.sendBlank(sender);
         ChatBlock.sendMessage(sender, headColor + MessageFormat.format(Language.getTranslation("total.clan.players.0"), subColor.toString() + clanPlayers.size()));
         ChatBlock.sendBlank(sender);
@@ -94,11 +79,11 @@ public class LeaderboardCommand extends GenericConsoleCommand {
 
         int rank = 1;
 
-        int[] boundings = getBoundings(completeSize, page);
+        int page = info.getPage(completeSize);
+        int start = info.getStartIndex(page, completeSize);
+        int end = info.getEndIndex(page, completeSize);
 
-        int end = boundings[1];
-
-        for (int i = boundings[0]; i < end; i++) {
+        for (int i = start; i < end; i++) {
             ClanPlayer clanPlayer = clanPlayers.get(i);
 
             if (clanPlayer.isBanned()) {
@@ -106,7 +91,7 @@ public class LeaderboardCommand extends GenericConsoleCommand {
                 continue;
             }
 
-            String name = (clanPlayer.isLeader() ? plugin.getSettingsManager().getLeaderColor() : ((clanPlayer.isTrusted() ? plugin.getSettingsManager().getTrustedColor() : plugin.getSettingsManager().getUntrustedColor()))) + clanPlayer.getName();
+            String name = (clanPlayer.isLeader() ? getPlugin().getSettingsManager().getLeaderColor() : ((clanPlayer.isTrusted() ? getPlugin().getSettingsManager().getTrustedColor() : getPlugin().getSettingsManager().getUntrustedColor()))) + clanPlayer.getName();
             String lastSeen = (GeneralHelper.isOnline(clanPlayer.toPlayer()) ? ChatColor.GREEN + Language.getTranslation("online") : ChatColor.WHITE + clanPlayer.getLastSeenFormatted());
 
             String clanTag = ChatColor.WHITE + Language.getTranslation("free.agent");

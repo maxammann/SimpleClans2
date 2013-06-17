@@ -19,9 +19,11 @@
 
 package com.p000ison.dev.simpleclans2.commands.members;
 
+import com.p000ison.dev.commandlib.*;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayer;
+import com.p000ison.dev.simpleclans2.api.commands.ClanPlayerCommand;
 import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
 import com.p000ison.dev.simpleclans2.language.Language;
 import org.bukkit.ChatColor;
@@ -33,42 +35,57 @@ import org.bukkit.entity.Player;
 public class FFCommand extends GenericPlayerCommand {
 
     public FFCommand(SimpleClans plugin) {
-        super("FFCommand", plugin);
-        setArgumentRange(1, 1);
-        setUsages(Language.getTranslation("usage.ff"));
+        super("Personal FF", plugin);
+        setDescription(Language.getTranslation("description.ff"));
         setIdentifiers(Language.getTranslation("ff.command"));
-        setPermission("simpleclans.member.ff");
-    }
 
-    @Override
-    public String getMenu(ClanPlayer cp) {
-        if (cp != null) {
-            return Language.getTranslation("menu.ff");
-        }
-        return null;
-    }
+        setNeedsClan();
 
-    @Override
-    public void execute(Player player, String[] args) {
+        CommandExecutor executor = plugin.getCommandManager();
 
-        ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
-
-        if (cp != null) {
-            String action = args[0];
-
-            if (action.equalsIgnoreCase(Language.getTranslation("allow"))) {
-                cp.setFriendlyFire(true);
-                cp.update();
-                ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("personal.friendly.fire.is.set.to.allowed"));
-            } else if (action.equalsIgnoreCase(Language.getTranslation("auto"))) {
-                cp.setFriendlyFire(false);
-                cp.update();
-                ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("friendy.fire.is.now.managed.by.your.clan"));
-            } else {
-                ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("usage.ff"));
+        AnnotatedCommand.ExecutionRestriction restriction = new AnnotatedCommand.ExecutionRestriction() {
+            @Override
+            public boolean allowExecution(CommandSender sender, Command command) {
+                return sender instanceof ClanPlayerCommand;
             }
-        } else {
-            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
-        }
+        };
+
+        Command allow = executor.buildByMethod(this, "allow").setExecutionRestriction(restriction)
+                .setDescription(Language.getTranslation("description.ff.allow"))
+                .setIdentifiers(Language.getTranslation("allow.command"))
+                .addPermission("simpleclans.member.ff");
+        this.addSubCommand(allow);
+        Command auto = executor.buildByMethod(this, "auto").setExecutionRestriction(restriction)
+                .setDescription(Language.getTranslation("description.ff.auto"))
+                .setIdentifiers(Language.getTranslation("auto.command"))
+                .addPermission("simpleclans.member.ff");
+        this.addSubCommand(auto);
+    }
+
+    @Override
+    public void execute(Player player, ClanPlayer cp, String[] arguments, CallInformation info) {
+    }
+
+    @Override
+    protected boolean displayHelpEntry(ClanPlayer cp, org.bukkit.command.CommandSender sender) {
+        return false;
+    }
+
+    @CommandHandler(name = "Allow FF")
+    public void allow(CommandSender sender, CallInformation info) {
+        ClanPlayer cp = getClanPlayer(sender);
+
+        cp.setFriendlyFire(true);
+        cp.update();
+        ChatBlock.sendMessage(getPlayer(sender), ChatColor.AQUA + Language.getTranslation("personal.friendly.fire.is.set.to.allowed"));
+    }
+
+    @CommandHandler(name = "Auto FF")
+    public void auto(CommandSender sender, CallInformation info) {
+        ClanPlayer cp = getClanPlayer(sender);
+
+        cp.setFriendlyFire(false);
+        cp.update();
+        ChatBlock.sendMessage(getPlayer(sender), ChatColor.AQUA + Language.getTranslation("friendy.fire.is.now.managed.by.your.clan"));
     }
 }

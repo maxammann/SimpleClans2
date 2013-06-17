@@ -14,36 +14,48 @@
  *     You should have received a copy of the GNU General Public License
  *     along with SimpleClans2.  If not, see <http://www.gnu.org/licenses/>.
  *
- *     Last modified: 10.10.12 21:57
+ *     Last modified: 31.05.13 12:20
  */
 
-package com.p000ison.dev.simpleclans2.database.response;
+package com.p000ison.dev.simpleclans2.api.commands;
 
-import com.p000ison.dev.simpleclans2.SimpleClans;
+import com.p000ison.dev.commandlib.Command;
 import org.bukkit.command.CommandSender;
 
-/**
- * Represents a Response
- */
-public abstract class Response implements ResponseAble {
-    protected final SimpleClans plugin;
-    protected final CommandSender sender;
 
-    protected Response(SimpleClans plugin, CommandSender sender) {
-        this.plugin = plugin;
+/**
+ * Represents a ConsoleSender
+ */
+public class ConsoleSender implements BukkitSender {
+
+    private final CommandSender sender;
+
+    public ConsoleSender(CommandSender sender) {
         this.sender = sender;
     }
 
-    protected CommandSender getRetriever() {
+    @Override
+    public void sendMessage(String s) {
+        sender.sendMessage(s);
+    }
+
+    @Override
+    public void sendMessage(String s, Object... objects) {
+        sender.sendMessage(String.format(s, objects));
+    }
+
+    @Override
+    public boolean hasPermission(Command command) {
+        return command.hasPermission(this);
+    }
+
+    @Override
+    public boolean hasPermission(String s) {
+        return sender.hasPermission(s);
+    }
+
+    @Override
+    public CommandSender getSender() {
         return sender;
     }
-
-    public int[] getBoundings(int page) {
-        int start = page * plugin.getSettingsManager().getElementsPerPage();
-        int end = start + plugin.getSettingsManager().getElementsPerPage();
-
-        return new int[]{start, end};
-    }
-
-    public abstract boolean needsRetriever();
 }

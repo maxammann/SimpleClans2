@@ -19,14 +19,18 @@
 
 package com.p000ison.dev.simpleclans2.commands.admin;
 
+import com.p000ison.dev.commandlib.CallInformation;
 import com.p000ison.dev.simpleclans2.SimpleClans;
+import com.p000ison.dev.simpleclans2.api.chat.Align;
 import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
-import com.p000ison.dev.simpleclans2.commands.CraftCommandManager;
+import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.commands.GenericConsoleCommand;
-import com.p000ison.dev.simpleclans2.database.response.responses.MostKilledResponse;
+import com.p000ison.dev.simpleclans2.database.Conflicts;
 import com.p000ison.dev.simpleclans2.language.Language;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+
+import java.util.List;
 
 /**
  * Represents a MostKilledCommand
@@ -34,27 +38,50 @@ import org.bukkit.command.CommandSender;
 public class MostKilledCommand extends GenericConsoleCommand {
 
     public MostKilledCommand(SimpleClans plugin) {
-        super("MostKilled", plugin);
-        setArgumentRange(0, 0);
-        setUsages(Language.getTranslation("usage.mostkilled"));
+        super("Most killed players", plugin);
+        addArgument(Language.getTranslation("argument.page"), true, true);
+        setDescription(Language.getTranslation("description.mostkilled"));
         setIdentifiers(Language.getTranslation("mostkilled.command"));
-        setPermission("simpleclans.mod.mostkilled");
+        addPermission("simpleclans.mod.mostkilled");
+
+        setAsynchronous(true);
     }
 
     @Override
-    public String getMenu() {
-        return Language.getTranslation("menu.mostkilled");
-    }
+    public void execute(CommandSender sender, String[] arguments, CallInformation info) {
+        ChatBlock chatBlock = new ChatBlock();
+        ChatColor headColor = getPlugin().getSettingsManager().getHeaderPageColor();
 
-    @Override
-    public void execute(CommandSender sender, String[] args) {
-        int page = CraftCommandManager.getPage(args);
+        chatBlock.setAlignment(Align.LEFT, Align.CENTER, Align.LEFT);
 
-        if (page == -1) {
-            ChatBlock.sendMessage(sender, ChatColor.DARK_RED + Language.getTranslation("number.format"));
+        chatBlock.addRow("  " + headColor + Language.getTranslation("victim"), headColor + Language.getTranslation("killcount"), headColor + Language.getTranslation("attacker"));
+
+        List<Conflicts> mostKilledSet = getPlugin().getDataManager().getMostKilled();
+
+        if (mostKilledSet.isEmpty()) {
+            ChatBlock.sendMessage(sender, ChatColor.RED + Language.getTranslation("nokillsfound"));
             return;
         }
 
-        plugin.getDataManager().addResponse(new MostKilledResponse(plugin, sender, page));
+        int page = info.getPage(mostKilledSet.size());
+        int start = info.getStartIndex(page, mostKilledSet.size());
+        int end = info.getEndIndex(page, mostKilledSet.size());
+
+        for (int i = start; i < end; i++) {
+            Conflicts conflict = mostKilledSet.get(i);
+
+            ClanPlayer attacker = getPlugin().getClanPlayerManager().getClanPlayer(conflict.getAttacker());
+            ClanPlayer victim = getPlugin().getClanPlayerManager().getClanPlayer(conflict.getVictim());
+
+            if (attacker == null || victim == null) {
+                continue;
+            }
+
+            chatBlock.addRow("  " + ChatColor.WHITE + victim.getName(), ChatColor.AQUA.toString() + conflict.getConflicts(), ChatColor.YELLOW + attacker.getName());
+        }
+
+        ChatBlock.sendBlank(sender);
+        chatBlock.sendBlock(sender);
+        ChatBlock.sendBlank(sender);
     }
 }

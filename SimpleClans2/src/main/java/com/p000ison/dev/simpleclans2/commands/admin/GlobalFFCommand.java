@@ -19,8 +19,11 @@
 
 package com.p000ison.dev.simpleclans2.commands.admin;
 
+import com.p000ison.dev.commandlib.CallInformation;
+import com.p000ison.dev.commandlib.Command;
+import com.p000ison.dev.commandlib.CommandExecutor;
+import com.p000ison.dev.commandlib.CommandHandler;
 import com.p000ison.dev.simpleclans2.SimpleClans;
-import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.commands.GenericConsoleCommand;
 import com.p000ison.dev.simpleclans2.language.Language;
 import org.bukkit.command.CommandSender;
@@ -32,38 +35,51 @@ public class GlobalFFCommand extends GenericConsoleCommand {
 
 
     public GlobalFFCommand(SimpleClans plugin) {
-        super("GlobalFF", plugin);
-        setArgumentRange(1, 1);
-        setUsages(Language.getTranslation("usage.globalff"));
+        super("Global FF", plugin);
+        setDescription(Language.getTranslation("description.globalff"));
         setIdentifiers(Language.getTranslation("globalff.command"));
-        setPermission("simpleclans.mod.globalff");
+
+        CommandExecutor executor = plugin.getCommandManager();
+
+        Command allow = executor.buildByMethod(this, "allow")
+                .setDescription(Language.getTranslation("description.globalff.allow"))
+                .setIdentifiers(Language.getTranslation("allow.command"))
+                .addPermission("simpleclans.mod.globalff");
+        this.addSubCommand(allow);
+
+        Command auto = executor.buildByMethod(this, "auto")
+                .setDescription(Language.getTranslation("description.globalff.auto"))
+                .setIdentifiers(Language.getTranslation("auto.command"))
+                .addPermission("simpleclans.mod.globalff");
+        this.addSubCommand(auto);
     }
 
     @Override
-    public String getMenu() {
-        return Language.getTranslation("menu.globalff");
+    public void execute(CommandSender sender, String[] arguments, CallInformation info) {
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args) {
-        String action = args[0];
+    public boolean allowExecution(com.p000ison.dev.commandlib.CommandSender sender) {
+        return false;
+    }
 
-        if (action.equalsIgnoreCase(Language.getTranslation("allow"))) {
-            if (plugin.getSettingsManager().isGlobalFFForced()) {
-                ChatBlock.sendMessage(sender, Language.getTranslation("global.friendly.fire.is.already.being.allowed"));
-            } else {
-                plugin.getSettingsManager().setGlobalFFForced(true);
-                ChatBlock.sendMessage(sender, Language.getTranslation("global.friendly.fire.is.set.to.allowed"));
-            }
-        } else if (action.equalsIgnoreCase(Language.getTranslation("auto"))) {
-            if (!plugin.getSettingsManager().isGlobalFFForced()) {
-                ChatBlock.sendMessage(sender, Language.getTranslation("global.friendy.fire.is.already.being.managed.by.each.clan"));
-            } else {
-                plugin.getSettingsManager().setGlobalFFForced(false);
-                ChatBlock.sendMessage(sender, Language.getTranslation("global.friendy.fire.is.now.managed.by.each.clan"));
-            }
+    @CommandHandler(name = "Allow global FF")
+    public void allow(com.p000ison.dev.commandlib.CommandSender sender, CallInformation info) {
+        if (getPlugin().getSettingsManager().isGlobalFFForced()) {
+            sender.sendMessage(Language.getTranslation("global.friendly.fire.is.already.being.allowed"));
         } else {
-            ChatBlock.sendMessage(sender, Language.getTranslation("usage.globalff"));
+            getPlugin().getSettingsManager().setGlobalFFForced(true);
+            sender.sendMessage(Language.getTranslation("global.friendly.fire.is.set.to.allowed"));
+        }
+    }
+
+    @CommandHandler(name = "Auto global FF")
+    public void auto(com.p000ison.dev.commandlib.CommandSender sender, CallInformation info) {
+        if (!getPlugin().getSettingsManager().isGlobalFFForced()) {
+            sender.sendMessage(Language.getTranslation("global.friendy.fire.is.already.being.managed.by.each.clan"));
+        } else {
+            getPlugin().getSettingsManager().setGlobalFFForced(false);
+            sender.sendMessage(Language.getTranslation("global.friendy.fire.is.now.managed.by.each.clan"));
         }
     }
 }

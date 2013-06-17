@@ -19,15 +19,17 @@
 
 package com.p000ison.dev.simpleclans2.commands.general;
 
+import com.p000ison.dev.commandlib.CallInformation;
 import com.p000ison.dev.simpleclans2.SimpleClans;
+import com.p000ison.dev.simpleclans2.api.chat.Align;
 import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayer;
-import com.p000ison.dev.simpleclans2.commands.CraftCommandManager;
 import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
-import com.p000ison.dev.simpleclans2.database.response.responses.KillsResponse;
 import com.p000ison.dev.simpleclans2.language.Language;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+
+import java.util.Map;
 
 /**
  * Represents a KillsCommand
@@ -36,33 +38,52 @@ public class KillsCommand extends GenericPlayerCommand {
 
     public KillsCommand(SimpleClans plugin) {
         super("Kills", plugin);
-        setArgumentRange(0, 1);
-        setUsages(Language.getTranslation("usage.kills"));
+        addArgument(Language.getTranslation("argument.page"), true);
+        setDescription(Language.getTranslation("description.kills"));
         setIdentifiers(Language.getTranslation("kills.command"));
-        setPermission("simpleclans.member.kills");
+        addPermission("simpleclans.member.kills");
+
+        setAsynchronous(true);
     }
 
     @Override
-    public String getMenu(ClanPlayer cp) {
-        return Language.getTranslation("menu.kills");
-    }
-
-    @Override
-    public void execute(Player player, String[] args) {
-        int page = CraftCommandManager.getPage(args);
-
-        if (page == -1) {
-            ChatBlock.sendMessage(player, ChatColor.DARK_RED + Language.getTranslation("number.format"));
-            return;
-        }
-
-        ClanPlayer cp = plugin.getClanPlayerManager().getAnyClanPlayer(player);
+    public void execute(Player player, ClanPlayer unused, String[] arguments, CallInformation info) {
+        ClanPlayer cp = getPlugin().getClanPlayerManager().getAnyClanPlayer(player);
 
         if (cp == null) {
             player.sendMessage("no.player.data.found");
             return;
         }
 
-        plugin.getDataManager().addResponse(new KillsResponse(plugin, player, cp, page));
+        Map<Integer, Long> killsPerPlayer = getPlugin().getDataManager().getKillsPerPlayer(cp.getID());
+
+        if (killsPerPlayer.isEmpty()) {
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("nokillsfound"));
+            return;
+        }
+
+        ChatBlock chatBlock = new ChatBlock();
+        chatBlock.setAlignment(Align.LEFT, Align.CENTER);
+
+        chatBlock.addRow(Language.getTranslation("victim"), Language.getTranslation("killcount"));
+
+        int page = info.getPage(killsPerPlayer.size());
+        int start = info.getStartIndex(page, killsPerPlayer.size());
+        int end = info.getEndIndex(page, killsPerPlayer.size());
+
+        int i = 0;
+        for (Map.Entry<Integer, Long> entry : killsPerPlayer.entrySet()) {
+            if (i < start) {
+                continue;
+            } else if (i > end) {
+                break;
+            }
+
+            chatBlock.addRow(getPlugin().getClanPlayerManager().getClanPlayer(entry.getValue()).getName(), ChatColor.AQUA.toString() + entry.getKey());
+        }
+
+        ChatBlock.sendBlank(player);
+        chatBlock.sendBlock(player);
+        ChatBlock.sendBlank(player);
     }
 }

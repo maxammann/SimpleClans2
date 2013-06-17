@@ -19,6 +19,7 @@
 
 package com.p000ison.dev.simpleclans2.commands.clan.bank;
 
+import com.p000ison.dev.commandlib.CallInformation;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.api.clan.Clan;
@@ -38,57 +39,27 @@ import java.text.ParseException;
 public class WithdrawCommand extends GenericPlayerCommand {
 
     public WithdrawCommand(SimpleClans plugin) {
-        super("WithdrawCommand", plugin);
-        setArgumentRange(1, 1);
-        setUsages(MessageFormat.format(Language.getTranslation("usage.bank.withdraw"), plugin.getSettingsManager().getBankCommand()));
+        super("Bank Withdraw", plugin);
+        addArgument(Language.getTranslation("argument.amount"), true);
+        setDescription(MessageFormat.format(Language.getTranslation("description.bank.withdraw"), plugin.getSettingsManager().getBankCommand()));
         setIdentifiers(Language.getTranslation("bank.withdraw.command"));
-        setPermission("simpleclans.member.bank.withdraw");
-        setType(Type.BANK);
+        addPermission("simpleclans.member.bank.withdraw");
+
+        setNeedsTrusted();
+        setNeedsClanVerified();
+        setNeedsClan();
+
+        setRankPermission("bank.withdraw");
     }
 
     @Override
-    public String getMenu(ClanPlayer cp) {
-        if (cp != null && cp.getClan().isVerified() && cp.isTrusted()) {
-            return MessageFormat.format(Language.getTranslation("menu.bank.withdraw"), plugin.getSettingsManager().getBankCommand());
-        }
-        return null;
-    }
-
-    @Override
-    public void execute(Player player, String[] args) {
-        ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
-
-        if (cp == null) {
-            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
-            return;
-        }
-
+    public void execute(Player player, ClanPlayer cp, String[] arguments, CallInformation info) {
         Clan clan = cp.getClan();
-
-        if (!cp.hasRankPermission("bank.withdraw")) {
-            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("no.rank.permissions"));
-            return;
-        }
-
-        if (!clan.isLeader(cp)) {
-            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("no.leader.permissions"));
-            return;
-        }
-
-        if (!clan.isVerified()) {
-            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("clan.is.not.verified"));
-            return;
-        }
-
-        if (!cp.isTrusted()) {
-            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("only.trusted.players.can.do.this"));
-            return;
-        }
 
         double amount;
 
         try {
-            amount = NumberFormat.getNumberInstance().parse(args[0]).doubleValue();
+            amount = NumberFormat.getNumberInstance().parse(arguments[0]).doubleValue();
         } catch (ParseException e) {
             ChatBlock.sendMessage(player, ChatColor.DARK_RED + Language.getTranslation("number.format"));
             return;

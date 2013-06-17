@@ -500,8 +500,7 @@ public class CraftClanPlayer implements ClanPlayer, TableObject {
         ChatColor headColor = plugin.getSettingsManager().getHeaderPageColor();
         ChatColor subColor = plugin.getSettingsManager().getSubPageColor();
 
-        ChatBlock.sendBlank(sender);
-        ChatBlock.sendHead(sender, Language.getTranslation("s.player.info", plugin.getSettingsManager().getClanColor() + this.getName()), null);
+        //todo display which player
         ChatBlock.sendBlank(sender);
 
         String clanName;

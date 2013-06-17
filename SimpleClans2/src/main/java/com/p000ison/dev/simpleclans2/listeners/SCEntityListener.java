@@ -37,6 +37,8 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
+import java.util.Random;
+
 /**
  * Represents a SCEntityListener
  */
@@ -47,6 +49,39 @@ public class SCEntityListener implements Listener {
 
     public SCEntityListener(SimpleClans plugin) {
         this.plugin = plugin;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(randomInt(new Random(), 0, 6, new int[]{0, 1, 2, 3, 4}));
+    }
+
+    public static int randomInt(Random random, int from, int to, int... excludes) {
+        if (from > to) {
+            throw new IllegalArgumentException("The from value must be smaller than the to value!");
+        }
+
+        if (to <= excludes.length) {
+            throw new IllegalArgumentException("There are too many excludes!");
+        }
+        to++;
+        int randomInt = random.nextInt(to - excludes.length) + from;
+
+
+        search:
+        for (int i = from; i < to; i++) {
+            for (int exclude : excludes) {
+                if (i == exclude) {
+                    continue search;
+                }
+            }
+
+            randomInt--;
+            if (randomInt <= 0) {
+                return i;
+            }
+        }
+
+        return -1;
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)

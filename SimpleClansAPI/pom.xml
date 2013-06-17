@@ -82,4 +82,13 @@
             </plugin>
         </plugins>
     </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.p000ison.dev.commandlib</groupId>
+            <artifactId>CommandLib</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <type>jar</type>
+        </dependency>
+    </dependencies>
 </project>

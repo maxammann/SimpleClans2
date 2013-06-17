@@ -19,8 +19,8 @@
 
 package com.p000ison.dev.simpleclans2.commands.clan;
 
+import com.p000ison.dev.commandlib.*;
 import com.p000ison.dev.simpleclans2.SimpleClans;
-import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.api.clan.Clan;
 import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
@@ -37,94 +37,107 @@ import java.util.Set;
  * Represents a AllyCommand
  */
 public class AllyCommand extends GenericPlayerCommand {
+
     public AllyCommand(SimpleClans plugin) {
-        super("Ally", plugin);
-        this.plugin = plugin;
-        setArgumentRange(2, 2);
-        setUsages(Language.getTranslation("usage.ally"));
+        super("Manage allies", plugin);
+        setDescription(Language.getTranslation("description.ally"));
         setIdentifiers(Language.getTranslation("ally.command"));
-        setPermission("simpleclans.leader.ally");
-    }
 
-    @Override
-    public String getMenu(ClanPlayer clanPlayer) {
+        CommandExecutor executor = plugin.getCommandManager();
+        AnnotatedCommand.ExecutionRestriction restriction = new AnnotatedCommand.ExecutionRestriction() {
 
-        if (clanPlayer != null) {
-            Clan clan = clanPlayer.getClan();
-            if (clan != null && (clanPlayer.isLeader() || clanPlayer.hasRankPermission("manage.ally")) && clan.isVerified()) {
-                return Language.getTranslation("menu.ally");
+            @Override
+            public boolean allowExecution(CommandSender commandSender, Command command) {
+                ClanPlayer cp = getClanPlayer(commandSender);
+                return cp != null && cp.getClan().isVerified() && cp.hasRankPermission("manage.ally");
             }
-        }
-        return null;
+        };
+
+        Command add = executor.buildByMethod(this, "add").setExecutionRestriction(restriction)
+                .setDescription(Language.getTranslation("description.ally.add"))
+                .setIdentifiers(Language.getTranslation("add.command"))
+                .addArgument(Language.getTranslation("argument.tag"))
+                .addPermission("simpleclans.leader.ally");
+        this.addSubCommand(add);
+        Command remove = executor.buildByMethod(this, "remove").setExecutionRestriction(restriction)
+                .setDescription(Language.getTranslation("description.ally.remove"))
+                .setIdentifiers(Language.getTranslation("remove.command"))
+                .addArgument(Language.getTranslation("argument.tag"))
+                .addPermission("simpleclans.leader.ally");
+        this.addSubCommand(remove);
     }
 
     @Override
-    public void execute(Player player, String[] args) {
-        ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
+    public void execute(Player player, ClanPlayer cp, String[] arguments, CallInformation info) {
+    }
 
-        if (cp == null) {
-            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
-            return;
-        }
+    @Override
+    public boolean allowExecution(com.p000ison.dev.commandlib.CommandSender sender) {
+        return false;
+    }
+
+    @CommandHandler(name = "Add allies")
+    public void add(CommandSender sender, CallInformation info) {
+        ClanPlayer cp = getClanPlayer(sender);
+        String[] arguments = info.getArguments();
 
         Clan clan = cp.getClan();
 
-        if (!clan.isLeader(cp) && !cp.hasRankPermission("manage.ally")) {
-            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("no.leader.permissions"));
+        if (clan.getSize() < getPlugin().getSettingsManager().getMinimalSizeToAlly()) {
+            sender.sendMessage(ChatColor.RED + MessageFormat.format(Language.getTranslation("minimum.to.make.alliance"), getPlugin().getSettingsManager().getMinimalSizeToAlly()));
             return;
         }
 
-        if (!clan.isVerified()) {
-            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("clan.is.not.verified"));
-            return;
-        }
-
-        if (clan.getSize() < plugin.getSettingsManager().getMinimalSizeToAlly()) {
-            ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(Language.getTranslation("minimum.to.make.alliance"), plugin.getSettingsManager().getMinimalSizeToAlly()));
-            return;
-        }
-
-        String action = args[0];
-        Clan ally = plugin.getClanManager().getClan(args[1]);
+        Clan ally = getPlugin().getClanManager().getClan(arguments[0]);
 
         if (ally == null) {
-            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("no.clan.matched"));
+            sender.sendMessage(ChatColor.RED + Language.getTranslation("no.clan.matched"));
             return;
         }
 
-        if (!ally.isVerified()) {
-            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("cannot.ally.with.an.unverified.clan"));
-            return;
-        }
+        if (!clan.isAlly(ally)) {
 
-        if (action.equalsIgnoreCase(Language.getTranslation("add"))) {
-            if (!clan.isAlly(ally)) {
+            Set<ClanPlayer> leaders = GeneralHelper.stripOfflinePlayers(ally.getLeaders());
 
-                Set<ClanPlayer> leaders = GeneralHelper.stripOfflinePlayers(ally.getLeaders());
-
-                if (!leaders.isEmpty()) {
-                    plugin.getRequestManager().createRequest(new AllyCreateRequest(plugin, leaders, cp, ally));
-                    ChatBlock.sendMessage(player, ChatColor.AQUA + MessageFormat.format(Language.getTranslation("leaders.have.been.asked.for.an.alliance"), ally.getName()));
-                } else {
-                    ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("at.least.one.leader.accept.the.alliance"));
-                }
+            if (!leaders.isEmpty()) {
+                getPlugin().getRequestManager().createRequest(new AllyCreateRequest(getPlugin(), leaders, cp, ally));
+                sender.sendMessage(ChatColor.AQUA + MessageFormat.format(Language.getTranslation("leaders.have.been.asked.for.an.alliance"), ally.getName()));
             } else {
-                ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("your.clans.are.already.allies"));
-            }
-        } else if (action.equalsIgnoreCase(Language.getTranslation("remove"))) {
-            if (clan.isAlly(ally)) {
-                clan.removeAlly(ally);
-                ally.removeAlly(clan);
-                ally.addBBMessage(cp, MessageFormat.format(Language.getTranslation("has.broken.the.alliance"), clan.getName(), ally.getName()));
-                clan.addBBMessage(cp, MessageFormat.format(Language.getTranslation("has.broken.the.alliance"), clan.getName(), ally.getName()));
-                clan.update();
-                ally.update();
-            } else {
-                ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("your.clans.are.not.allies"));
+                sender.sendMessage(ChatColor.RED + Language.getTranslation("at.least.one.leader.accept.the.alliance"));
             }
         } else {
-            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("usage.ally"));
+            sender.sendMessage(ChatColor.RED + Language.getTranslation("your.clans.are.already.allies"));
+        }
+    }
+
+    @CommandHandler(name = "Remove allies")
+    public void remove(CommandSender sender, CallInformation info) {
+        ClanPlayer cp = getClanPlayer(sender);
+        String[] arguments = info.getArguments();
+
+        Clan clan = cp.getClan();
+
+        if (clan.getSize() < getPlugin().getSettingsManager().getMinimalSizeToAlly()) {
+            sender.sendMessage(ChatColor.RED + MessageFormat.format(Language.getTranslation("minimum.to.make.alliance"), getPlugin().getSettingsManager().getMinimalSizeToAlly()));
+            return;
         }
 
+        Clan ally = getPlugin().getClanManager().getClan(arguments[0]);
+
+        if (ally == null) {
+            sender.sendMessage(ChatColor.RED + Language.getTranslation("no.clan.matched"));
+            return;
+        }
+
+        if (clan.isAlly(ally)) {
+            clan.removeAlly(ally);
+            ally.removeAlly(clan);
+            ally.addBBMessage(cp, MessageFormat.format(Language.getTranslation("has.broken.the.alliance"), clan.getName(), ally.getName()));
+            clan.addBBMessage(cp, MessageFormat.format(Language.getTranslation("has.broken.the.alliance"), clan.getName(), ally.getName()));
+            clan.update();
+            ally.update();
+        } else {
+            sender.sendMessage(ChatColor.RED + Language.getTranslation("your.clans.are.not.allies"));
+        }
     }
 }

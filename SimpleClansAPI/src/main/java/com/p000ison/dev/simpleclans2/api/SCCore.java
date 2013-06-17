@@ -19,9 +19,9 @@
 
 package com.p000ison.dev.simpleclans2.api;
 
+import com.p000ison.dev.commandlib.CommandExecutor;
 import com.p000ison.dev.simpleclans2.api.clan.ClanManager;
 import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayerManager;
-import com.p000ison.dev.simpleclans2.api.command.CommandManager;
 import com.p000ison.dev.simpleclans2.api.rank.RankManager;
 import com.p000ison.dev.simpleclans2.api.request.RequestManager;
 
@@ -63,7 +63,7 @@ public interface SCCore {
      *
      * @return The command manager or SimpleClans.
      */
-    CommandManager getCommandManager();
+    CommandExecutor getCommandManager();
 
     /**
      * Gets the database of this API implementation. Maybe this is a Database from the SQLDatabaseAPI.

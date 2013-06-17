@@ -19,6 +19,7 @@
 
 package com.p000ison.dev.simpleclans2.commands.clan;
 
+import com.p000ison.dev.commandlib.CallInformation;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.api.clan.Clan;
@@ -33,21 +34,16 @@ import org.bukkit.command.CommandSender;
 public class ProfileAnyCommand extends GenericConsoleCommand {
 
     public ProfileAnyCommand(SimpleClans plugin) {
-        super("ProfileAnyCommand", plugin);
-        setArgumentRange(1, 1);
-        setUsages(Language.getTranslation("usage.profile"));
+        super("Profile (Any)", plugin);
+        addArgument(Language.getTranslation("argument.tag"));
+        setDescription(Language.getTranslation("description.profile"));
         setIdentifiers(Language.getTranslation("profile.command"));
-        setPermission("simpleclans.anyone.profile");
+        addPermission("simpleclans.anyone.profile");
     }
 
     @Override
-    public String getMenu() {
-        return Language.getTranslation("menu.profile");
-    }
-
-    @Override
-    public void execute(CommandSender sender, String[] args) {
-        Clan clan = plugin.getClanManager().getClan(args[0]);
+    public void execute(CommandSender sender, String[] arguments, CallInformation info) {
+        Clan clan = getPlugin().getClanManager().getClan(arguments[0]);
 
         if (clan == null) {
             ChatBlock.sendMessage(sender, ChatColor.RED + Language.getTranslation("no.clan.matched"));

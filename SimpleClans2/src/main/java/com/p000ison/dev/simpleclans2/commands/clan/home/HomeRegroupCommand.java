@@ -19,6 +19,7 @@
 
 package com.p000ison.dev.simpleclans2.commands.clan.home;
 
+import com.p000ison.dev.commandlib.CallInformation;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.api.clan.Clan;
@@ -37,78 +38,52 @@ import java.util.Set;
 /**
  * @author phaed
  */
+//todo add rank permissions
 public class HomeRegroupCommand extends GenericPlayerCommand {
 
     private Random random = new Random();
 
     public HomeRegroupCommand(SimpleClans plugin) {
-        super("HomeRegroup", plugin);
-        setArgumentRange(0, 2);
-        setUsages(Language.getTranslation("usage.home.regroup"));
+        super("Regroup", plugin);
+        setDescription(Language.getTranslation("description.home.regroup"));
         setIdentifiers(Language.getTranslation("home.regroup.command"));
-        setPermission("simpleclans.leader.regroup");
+        addPermission("simpleclans.leader.home-regroup");
+
+        setNeedsClan();
+        setNeedsClanVerified();
+        setNeedsTrusted();
+        setNeedsLeader();
     }
 
     @Override
-    public String getMenu(ClanPlayer cp) {
-        if (cp != null && cp.getClan().isVerified()) {
-            return Language.getTranslation("menu.home.regroup");
-        }
-        return null;
-    }
+    public void execute(Player player, ClanPlayer cp, String[] arguments, CallInformation info) {
+        Clan clan = cp.getClan();
+        Location loc = player.getLocation();
+        Set<ClanPlayer> members = clan.getAllMembers();
 
-    @Override
-    public void execute(Player player, String[] args) {
-        ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
+        for (ClanPlayer clanPlayer : members) {
+            Player iPlayer = clanPlayer.toPlayer();
 
-        if (cp != null) {
-            Clan clan = cp.getClan();
-
-            if (clan.isVerified()) {
-                if (cp.isTrusted()) {
-
-                    Location loc = player.getLocation();
-
-                    if (cp.isLeader()) {
-
-                        Set<ClanPlayer> members = clan.getAllMembers();
-
-                        for (ClanPlayer clanPlayer : members) {
-                            Player iPlayer = clanPlayer.toPlayer();
-
-                            if (iPlayer == null || iPlayer.equals(player)) {
-                                continue;
-                            }
-
-                            int x = loc.getBlockX();
-                            int z = loc.getBlockZ();
-
-                            int xx = random.nextInt(2) - 1;
-                            int zz = random.nextInt(2) - 1;
-
-                            if (xx == 0 && zz == 0) {
-                                xx = 1;
-                            }
-
-                            x = x + xx;
-                            z = z + zz;
-
-                            iPlayer.teleport(new Location(loc.getWorld(), x + .5, loc.getBlockY(), z + .5));
-                        }
-
-                        ChatBlock.sendMessage(player, MessageFormat.format(ChatColor.AQUA + Language.getTranslation("clan.regrouped"), ChatColor.YELLOW + GeneralHelper.locationToString(loc)));
-
-                    } else {
-                        ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("no.leader.permissions"));
-                    }
-                } else {
-                    ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("only.trusted.players.can.do.this"));
-                }
-            } else {
-                ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("clan.is.not.verified"));
+            if (iPlayer == null || iPlayer.equals(player)) {
+                continue;
             }
-        } else {
-            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
+
+            int x = loc.getBlockX();
+            int z = loc.getBlockZ();
+
+            int xx = random.nextInt(2) - 1;
+            int zz = random.nextInt(2) - 1;
+
+            if (xx == 0 && zz == 0) {
+                xx = 1;
+            }
+
+            x = x + xx;
+            z = z + zz;
+
+            iPlayer.teleport(new Location(loc.getWorld(), x + .5, loc.getBlockY(), z + .5));
         }
+
+        ChatBlock.sendMessage(player, MessageFormat.format(ChatColor.AQUA + Language.getTranslation("clan.regrouped"), ChatColor.YELLOW + GeneralHelper.locationToString(loc)));
     }
 }

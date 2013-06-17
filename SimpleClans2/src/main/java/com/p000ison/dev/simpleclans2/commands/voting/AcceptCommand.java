@@ -19,6 +19,7 @@
 
 package com.p000ison.dev.simpleclans2.commands.voting;
 
+import com.p000ison.dev.commandlib.CallInformation;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayer;
@@ -35,21 +36,15 @@ public class AcceptCommand extends GenericPlayerCommand {
 
     public AcceptCommand(SimpleClans plugin) {
         super("Accept", plugin);
-        setArgumentRange(0, 0);
-        setUsages(Language.getTranslation("usage.accept"));
+        setDescription(Language.getTranslation("description.accept"));
         setIdentifiers(Language.getTranslation("accept.command"));
-        setPermission("simpleclans.member.accept");
+        addPermission("simpleclans.member.accept");
     }
 
     @Override
-    public String getMenu(ClanPlayer clanPlayer) {
-        return null;
-    }
-
-    @Override
-    public void execute(Player player, String[] args) {
-        ClanPlayer clanPlayer = plugin.getClanPlayerManager().getCreateClanPlayerExact(player);
-        Request request = plugin.getRequestManager().vote(clanPlayer, RequestManager.Result.ACCEPT);
+    public void execute(Player player, ClanPlayer cp, String[] arguments, CallInformation info) {
+        ClanPlayer clanPlayer = getPlugin().getClanPlayerManager().getCreateClanPlayerExact(player);
+        Request request = getPlugin().getRequestManager().vote(clanPlayer, RequestManager.Result.ACCEPT);
 
         if (request == null) {
             ChatBlock.sendMessage(player, Language.getTranslation("nothing.to.accept"));

@@ -19,15 +19,17 @@
 
 package com.p000ison.dev.simpleclans2.commands.general;
 
+import com.p000ison.dev.commandlib.CallInformation;
 import com.p000ison.dev.simpleclans2.SimpleClans;
+import com.p000ison.dev.simpleclans2.api.chat.Align;
 import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayer;
-import com.p000ison.dev.simpleclans2.commands.CraftCommandManager;
 import com.p000ison.dev.simpleclans2.commands.GenericConsoleCommand;
-import com.p000ison.dev.simpleclans2.database.response.responses.KillsResponse;
 import com.p000ison.dev.simpleclans2.language.Language;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+
+import java.util.Map;
 
 /**
  * Represents a KillsAnyCommand
@@ -35,37 +37,53 @@ import org.bukkit.command.CommandSender;
 public class KillsAnyCommand extends GenericConsoleCommand {
 
     public KillsAnyCommand(SimpleClans plugin) {
-        super("KillsAnyone", plugin);
-        setArgumentRange(1, 2);
-        setUsages(Language.getTranslation("usage.kills.any"));
+        super("Kills (Any)", plugin);
+        addArgument(Language.getTranslation("argument.player")).addArgument(Language.getTranslation("argument.page"), true, true);
+        setDescription(Language.getTranslation("description.kills.any"));
         setIdentifiers(Language.getTranslation("kills.command"));
-        setPermission("simpleclans.anyone.kills");
+        addPermission("simpleclans.anyone.kills");
     }
 
     @Override
-    public String getMenu() {
-        return Language.getTranslation("menu.kills.any");
-    }
-
-    @Override
-    public void execute(CommandSender sender, String[] args) {
-        ClanPlayer cp = plugin.getClanPlayerManager().getAnyClanPlayer(args[0]);
+    public void execute(CommandSender sender, String[] arguments, CallInformation info) {
+        ClanPlayer cp = getPlugin().getClanPlayerManager().getAnyClanPlayer(arguments[0]);
 
         if (cp == null) {
             ChatBlock.sendMessage(sender, ChatColor.DARK_RED + Language.getTranslation("no.player.matched"));
             return;
         }
 
-        int page = 0;
-        if (args.length == 2) {
-            page = CraftCommandManager.getPage(args[1]);
+        //todo duplicate code
+        Map<Integer, Long> killsPerPlayer = getPlugin().getDataManager().getKillsPerPlayer(cp.getID());
 
-            if (page == -1) {
-                ChatBlock.sendMessage(sender, ChatColor.DARK_RED + Language.getTranslation("number.format"));
-                return;
-            }
+        if (killsPerPlayer.isEmpty()) {
+            ChatBlock.sendMessage(sender, ChatColor.RED + Language.getTranslation("nokillsfound"));
+            return;
         }
 
-        plugin.getDataManager().addResponse(new KillsResponse(plugin, sender, cp, page));
+        ChatBlock chatBlock = new ChatBlock();
+        chatBlock.setAlignment(Align.LEFT, Align.CENTER);
+
+        chatBlock.addRow(Language.getTranslation("victim"), Language.getTranslation("killcount"));
+
+        int page = info.getPage(killsPerPlayer.size());
+        int start = info.getStartIndex(page, killsPerPlayer.size());
+        int end = info.getEndIndex(page, killsPerPlayer.size());
+
+        int i = 0;
+        for (Map.Entry<Integer, Long> entry : killsPerPlayer.entrySet()) {
+            if (i < start) {
+                continue;
+            } else if (i > end) {
+                break;
+            }
+
+            chatBlock.addRow(getPlugin().getClanPlayerManager().getClanPlayer(entry.getValue()).getName(), ChatColor.AQUA.toString() + entry.getKey());
+        }
+
+        ChatBlock.sendMessage(sender, Language.getTranslation("displaying.player", cp.getName()));
+        ChatBlock.sendBlank(sender);
+        chatBlock.sendBlock(sender);
+        ChatBlock.sendBlank(sender);
     }
 }

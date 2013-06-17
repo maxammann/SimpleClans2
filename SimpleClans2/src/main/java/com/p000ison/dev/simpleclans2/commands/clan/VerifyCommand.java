@@ -19,6 +19,7 @@
 
 package com.p000ison.dev.simpleclans2.commands.clan;
 
+import com.p000ison.dev.commandlib.CallInformation;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.api.clan.Clan;
@@ -26,6 +27,7 @@ import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
 import com.p000ison.dev.simpleclans2.language.Language;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.text.MessageFormat;
@@ -37,36 +39,27 @@ public class VerifyCommand extends GenericPlayerCommand {
 
     public VerifyCommand(SimpleClans plugin) {
         super("Verify", plugin);
-        setArgumentRange(0, 0);
-        setUsages(Language.getTranslation("usage.verify"));
-        setPermission("simpleclans.member.verify");
+        setDescription(Language.getTranslation("description.verify"));
+        addPermission("simpleclans.member.verify");
         setIdentifiers(Language.getTranslation("verify.command"));
+
+        setNeedsClan();
+        setNeedsClanNotVerified();
     }
 
     @Override
-    public String getMenu(ClanPlayer cp) {
-        if (cp != null && !cp.getClan().isVerified() && plugin.getSettingsManager().requireVerification() && plugin.getSettingsManager().isPurchaseVerification()) {
-            return Language.getTranslation("menu.verify");
-        }
-        return null;
+    protected boolean displayHelpEntry(ClanPlayer cp, CommandSender sender) {
+        return getPlugin().getSettingsManager().requireVerification() && getPlugin().getSettingsManager().isPurchaseVerification();
     }
 
     @Override
-    public void execute(Player player, String[] args) {
-
-        ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
-
-        if (cp == null) {
-            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
-            return;
-        }
-
+    public void execute(Player player, ClanPlayer cp, String[] arguments, CallInformation info) {
         Clan clan = cp.getClan();
 
-        if (plugin.getSettingsManager().requireVerification()) {
+        if (getPlugin().getSettingsManager().requireVerification()) {
             if (!clan.isVerified()) {
 
-                if (SimpleClans.hasEconomy() && plugin.getSettingsManager().isPurchaseVerification() && !cp.withdraw(plugin.getSettingsManager().getPurchaseVerificationPrice())) {
+                if (SimpleClans.hasEconomy() && getPlugin().getSettingsManager().isPurchaseVerification() && !cp.withdraw(getPlugin().getSettingsManager().getPurchaseVerificationPrice())) {
                     ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("not.sufficient.money"));
                     return;
                 }
@@ -76,10 +69,8 @@ public class VerifyCommand extends GenericPlayerCommand {
                 clan.update();
                 ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("the.clan.has.been.verified"));
             } else {
-                ChatBlock.sendMessage(player, ChatColor.GRAY + Language.getTranslation("your.clan.is.already.verified"));
+                ChatBlock.sendMessage(player, ChatColor.GRAY + Language.getTranslation("you.dont.need.to.verify"));
             }
-        } else {
-            ChatBlock.sendMessage(player, ChatColor.GRAY + Language.getTranslation("you.dont.need.to.verify"));
         }
     }
 }

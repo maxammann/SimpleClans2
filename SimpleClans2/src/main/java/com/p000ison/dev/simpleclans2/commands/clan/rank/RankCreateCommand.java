@@ -19,6 +19,7 @@
 
 package com.p000ison.dev.simpleclans2.commands.clan.rank;
 
+import com.p000ison.dev.commandlib.CallInformation;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.api.clan.Clan;
@@ -34,54 +35,38 @@ import org.bukkit.entity.Player;
  */
 public class RankCreateCommand extends GenericPlayerCommand {
     public RankCreateCommand(SimpleClans plugin) {
-        super("RankCreate", plugin);
-        setArgumentRange(3, 50);
-        setUsages(Language.getTranslation("usage.rank.create", plugin.getSettingsManager().getRankCommand()));
+        super("Create rank", plugin);
+        addArgument(Language.getTranslation("argument.tag")).
+                addArgument(Language.getTranslation("argument.name"));
+        setInfinite(true);
+        setDescription(Language.getTranslation("description.rank.create", plugin.getSettingsManager().getRankCommand()));
         setIdentifiers(Language.getTranslation("rank.create.command"));
-        setPermission("simpleclans.leader.rank.create");
-        setType(Type.RANK);
+        addPermission("simpleclans.leader.rank.create");
+
+        setNeedsClan();
+        setRankPermission("manage.ranks");
     }
 
     @Override
-    public String getMenu(ClanPlayer clanPlayer) {
-        if (clanPlayer != null && (clanPlayer.isLeader() || clanPlayer.hasRankPermission("manage.ranks"))) {
-            return Language.getTranslation("menu.rank.create", plugin.getSettingsManager().getRankCommand());
-        }
-        return null;
-    }
-
-    @Override
-    public void execute(Player player, String[] args) {
-        ClanPlayer clanPlayer = plugin.getClanPlayerManager().getClanPlayer(player);
-
-        if (clanPlayer == null) {
-            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
-            return;
-        }
-
-        Clan clan = clanPlayer.getClan();
-
-        if (!clan.isLeader(clanPlayer) && !clanPlayer.hasRankPermission("manage.ranks")) {
-            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("no.leader.permissions"));
-            return;
-        }
+    public void execute(Player player, ClanPlayer cp, String[] arguments, CallInformation info) {
+        Clan clan = cp.getClan();
 
         int priority;
 
         try {
-            priority = Integer.parseInt(args[0]);
+            priority = Integer.parseInt(arguments[0]);
         } catch (NumberFormatException e) {
             return;
         }
 
-        String name = ChatBlock.parseColors(GeneralHelper.arrayBoundsToString(2, args));
-        String tag = ChatBlock.parseColors(args[1]);
+        String name = ChatBlock.parseColors(GeneralHelper.arrayBoundsToString(2, arguments));
+        String tag = ChatBlock.parseColors(arguments[1]);
 
-        if (!plugin.getRankManager().verifyRankTag(player, tag)) {
+        if (!getPlugin().getRankManager().verifyRankTag(player, tag)) {
             return;
         }
 
-        if (!plugin.getRankManager().verifyRankName(player, name)) {
+        if (!getPlugin().getRankManager().verifyRankName(player, name)) {
             return;
         }
 
@@ -90,7 +75,7 @@ public class RankCreateCommand extends GenericPlayerCommand {
             return;
         }
 
-        clan.addRank(plugin.getRankManager().createRank(clan, name, tag, priority));
+        clan.addRank(getPlugin().getRankManager().createRank(clan, name, tag, priority));
         ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("rank.created", name));
     }
 }

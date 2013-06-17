@@ -326,7 +326,7 @@ public class CraftClan implements Clan, TableObject, UpdateAble {
 
     @Override
     public boolean isWarring(Clan clan) {
-        return clan != null && (this.equals(clan) || (warring != null && warring.contains(clan)));
+        return clan != null && !this.equals(clan) && warring != null && warring.contains(clan);
     }
 
     @Override
@@ -638,7 +638,7 @@ public class CraftClan implements Clan, TableObject, UpdateAble {
             if (clanPlayer.isLeader()) {
                 disband();
             }
-            ((CraftClanPlayer)clanPlayer).updatePermissions();
+            ((CraftClanPlayer) clanPlayer).updatePermissions();
             plugin.getRequestManager().clearRequests(clanPlayer);
         }
     }
@@ -662,7 +662,7 @@ public class CraftClan implements Clan, TableObject, UpdateAble {
 
                 clanPlayer.addPastClan(pastClan);
                 clanPlayer.update();
-                ((CraftClanPlayer)clanPlayer).updatePermissions();
+                ((CraftClanPlayer) clanPlayer).updatePermissions();
             }
         }
 
@@ -957,8 +957,7 @@ public class CraftClan implements Clan, TableObject, UpdateAble {
         ChatColor subColor = plugin.getSettingsManager().getSubPageColor();
         ChatColor headColor = plugin.getSettingsManager().getHeaderPageColor();
 
-        ChatBlock.sendBlank(sender);
-        ChatBlock.sendHead(sender, Language.getTranslation("profile", plugin.getSettingsManager().getClanColor() + this.getName()), null);
+        //todo display which clan
         ChatBlock.sendBlank(sender);
 
         String name = this.getName();

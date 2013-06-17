@@ -19,6 +19,7 @@
 
 package com.p000ison.dev.simpleclans2.commands.clan;
 
+import com.p000ison.dev.commandlib.CallInformation;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.api.clan.Clan;
@@ -35,58 +36,41 @@ public class KickCommand extends GenericPlayerCommand {
 
     public KickCommand(SimpleClans plugin) {
         super("Kick", plugin);
-        setArgumentRange(1, 1);
-        setUsages(Language.getTranslation("usage.kick"));
+        addArgument(Language.getTranslation("argument.member"));
+        setDescription(Language.getTranslation("description.kick"));
         setIdentifiers(Language.getTranslation("kick.command"));
-        setPermission("simpleclans.leader.kick");
+        addPermission("simpleclans.leader.kick");
+
+        setNeedsClan();
+        setNeedsLeader();
     }
 
     @Override
-    public String getMenu(ClanPlayer cp) {
-        if (cp != null && cp.isLeader()) {
-            return Language.getTranslation("menu.kick");
+    public void execute(Player player, ClanPlayer cp, String[] arguments, CallInformation info) {
+        Clan clan = cp.getClan();
+
+        ClanPlayer kicked = getPlugin().getClanPlayerManager().getAnyClanPlayer(arguments[0]);
+
+        if (kicked == null) {
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("no.player.matched"));
+            return;
         }
-        return null;
-    }
 
-    @Override
-    public void execute(Player player, String[] args) {
-        ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
+        if (kicked.getName().equals(player.getName())) {
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("you.cannot.kick.yourself"));
+            return;
+        }
 
-        if (cp != null) {
-            Clan clan = cp.getClan();
+        if (!clan.isMember(kicked)) {
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("the.player.is.not.a.member.of.your.clan"));
+            return;
+        }
 
-            if (clan.isLeader(cp)) {
-                ClanPlayer kicked = plugin.getClanPlayerManager().getAnyClanPlayer(args[0]);
-
-                if (kicked == null) {
-                    ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("no.player.matched"));
-                    return;
-                }
-
-                if (kicked.getName().equals(player.getName())) {
-                    ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("you.cannot.kick.yourself"));
-                    return;
-                }
-
-                if (!clan.isMember(kicked)) {
-                    ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("the.player.is.not.a.member.of.your.clan"));
-                    return;
-                }
-
-                if (!clan.isLeader(kicked)) {
-                    clan.addBBMessage(cp, ChatColor.AQUA + MessageFormat.format(Language.getTranslation("has.been.kicked.by"), kicked.getName(), player.getName()));
-                    clan.removeMember(kicked);
-                } else {
-                    ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("you.cannot.kick.another.leader"));
-                }
-
-            } else {
-                ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("no.leader.permissions"));
-            }
+        if (!clan.isLeader(kicked)) {
+            clan.addBBMessage(cp, ChatColor.AQUA + MessageFormat.format(Language.getTranslation("has.been.kicked.by"), kicked.getName(), player.getName()));
+            clan.removeMember(kicked);
         } else {
-            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("you.cannot.kick.another.leader"));
         }
-
     }
 }

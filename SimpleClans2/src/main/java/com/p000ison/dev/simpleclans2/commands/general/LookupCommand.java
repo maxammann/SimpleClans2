@@ -19,13 +19,12 @@
 
 package com.p000ison.dev.simpleclans2.commands.general;
 
+import com.p000ison.dev.commandlib.CallInformation;
 import com.p000ison.dev.simpleclans2.SimpleClans;
-import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.api.clan.Clan;
 import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
 import com.p000ison.dev.simpleclans2.language.Language;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 /**
@@ -34,30 +33,17 @@ import org.bukkit.entity.Player;
 public class LookupCommand extends GenericPlayerCommand {
 
     public LookupCommand(SimpleClans plugin) {
-        super("LookupCommand", plugin);
-        setArgumentRange(0, 0);
-        setUsages(Language.getTranslation("usage.lookup"));
+        super("Lookup", plugin);
+        setDescription(Language.getTranslation("description.lookup"));
         setIdentifiers(Language.getTranslation("lookup.command"));
-        setPermission("simpleclans.member.lookup");
+        addPermission("simpleclans.member.lookup");
+
+        setNeedsClan();
     }
 
     @Override
-    public String getMenu(ClanPlayer clanplayer) {
-        if (clanplayer != null) {
-            return Language.getTranslation("menu.lookup");
-        }
-        return null;
-    }
-
-    @Override
-    public void execute(Player player, String[] args) {
-        ClanPlayer clanPlayer = plugin.getClanPlayerManager().getAnyClanPlayer(player);
-
-        if (clanPlayer != null) {
-            Clan clan = clanPlayer.getClan();
-            clanPlayer.showProfile(player, clan);
-        } else {
-            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("no.player.data.found"));
-        }
+    public void execute(Player player, ClanPlayer cp, String[] arguments, CallInformation info) {
+        Clan clan = cp.getClan();
+        cp.showProfile(player, clan);
     }
 }

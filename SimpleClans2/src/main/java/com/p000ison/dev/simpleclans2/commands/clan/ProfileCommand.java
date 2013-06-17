@@ -19,13 +19,12 @@
 
 package com.p000ison.dev.simpleclans2.commands.clan;
 
+import com.p000ison.dev.commandlib.CallInformation;
 import com.p000ison.dev.simpleclans2.SimpleClans;
-import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.api.clan.Clan;
 import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.commands.GenericPlayerCommand;
 import com.p000ison.dev.simpleclans2.language.Language;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 /**
@@ -34,37 +33,18 @@ import org.bukkit.entity.Player;
 public class ProfileCommand extends GenericPlayerCommand {
 
     public ProfileCommand(SimpleClans plugin) {
-        super("ProfileCommand", plugin);
-        setArgumentRange(0, 0);
-        setUsages(Language.getTranslation("usage.profile"));
+        super("Profile", plugin);
+        setDescription(Language.getTranslation("description.profile"));
         setIdentifiers(Language.getTranslation("profile.command"));
-        setPermission("simpleclans.member.profile");
+        addPermission("simpleclans.member.profile");
+
+        setNeedsClan();
+        setNeedsClanVerified();
     }
 
     @Override
-    public String getMenu(ClanPlayer cp) {
-        if (cp != null && cp.getClan().isVerified()) {
-            return Language.getTranslation("menu.profile.own");
-        }
-        return null;
+    public void execute(Player player, ClanPlayer cp, String[] arguments, CallInformation info) {
+        Clan clan = cp.getClan();
+        clan.showClanProfile(player);
     }
-
-    @Override
-    public void execute(Player player, String[] args) {
-
-        ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
-
-        if (cp == null) {
-            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
-        } else {
-            Clan clan = cp.getClan();
-            if (clan.isVerified()) {
-                clan.showClanProfile(player);
-            } else {
-                ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("clan.is.not.verified"));
-            }
-        }
-    }
-
-
 }

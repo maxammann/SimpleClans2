@@ -14,24 +14,19 @@
  *     You should have received a copy of the GNU General Public License
  *     along with SimpleClans2.  If not, see <http://www.gnu.org/licenses/>.
  *
- *     Last modified: 17.10.12 17:32
+ *     Last modified: 31.05.13 12:17
  */
 
-package com.p000ison.dev.simpleclans2.metrics;
+package com.p000ison.dev.simpleclans2.api.commands;
 
-import org.mcstats.Metrics;
+
+import org.bukkit.command.CommandSender;
 
 /**
- * Represents a OfflinePlotter
+ * Represents a BukkitSender
  */
-public class OnlinePlotter extends Metrics.Plotter {
+public interface BukkitSender extends com.p000ison.dev.commandlib.CommandSender {
 
-    public OnlinePlotter() {
-        super("Online");
-    }
 
-    @Override
-    public int getValue() {
-        return 1;
-    }
+    CommandSender getSender();
 }

@@ -19,6 +19,7 @@
 
 package com.p000ison.dev.simpleclans2.commands.general;
 
+import com.p000ison.dev.commandlib.CallInformation;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.api.clan.Clan;
@@ -34,21 +35,16 @@ import org.bukkit.command.CommandSender;
 public class LookupAnyCommand extends GenericConsoleCommand {
 
     public LookupAnyCommand(SimpleClans plugin) {
-        super("LookupAnyCommand", plugin);
-        setArgumentRange(1, 1);
-        setUsages(Language.getTranslation("usage.lookup.any"));
+        super("Lookup (Any)", plugin);
+        addArgument(Language.getTranslation("argument.player"));
+        setDescription(Language.getTranslation("description.lookup.any"));
         setIdentifiers(Language.getTranslation("lookup.command"));
-        setPermission("simpleclans.anyone.lookup");
+        addPermission("simpleclans.anyone.lookup");
     }
 
     @Override
-    public String getMenu() {
-        return Language.getTranslation("menu.lookup.any");
-    }
-
-    @Override
-    public void execute(CommandSender sender, String[] args) {
-        ClanPlayer clanPlayer = plugin.getClanPlayerManager().getAnyClanPlayer(args[0]);
+    public void execute(CommandSender sender, String[] arguments, CallInformation info) {
+        ClanPlayer clanPlayer = getPlugin().getClanPlayerManager().getAnyClanPlayer(arguments[0]);
 
         if (clanPlayer != null) {
             Clan clan = clanPlayer.getClan();

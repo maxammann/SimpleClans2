@@ -20,10 +20,11 @@
 
 package com.p000ison.dev.simpleclans2.listeners;
 
+import com.p000ison.dev.commandlib.CommandSender;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.api.clan.Clan;
 import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayer;
-import com.p000ison.dev.simpleclans2.api.command.Command;
+import com.p000ison.dev.simpleclans2.api.commands.ClanPlayerSender;
 import com.p000ison.dev.simpleclans2.clanplayer.CraftClanPlayer;
 import com.p000ison.dev.simpleclans2.database.response.responses.BBRetrieveResponse;
 import org.bukkit.entity.Player;
@@ -33,8 +34,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-
-import java.util.Arrays;
 
 /**
  * Internally used
@@ -92,31 +91,27 @@ public class SCPlayerListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onCommandPreprocess(PlayerCommandPreprocessEvent event) {
         Player player = event.getPlayer();
-        String message = event.getMessage();
+        String message = event.getMessage().substring(1);
 
-        String[] args = message.substring(1).split(" ");
-        int lenght = args.length;
+		String[] args = message.substring(1).split(" ");
 
-        String clanCommand = plugin.getSettingsManager().getClanCommand();
-        String rankCommand = plugin.getSettingsManager().getRankCommand();
-        String bbCommand = plugin.getSettingsManager().getBBCommand();
-        String bankCommand = plugin.getSettingsManager().getBankCommand();
+		String clanCommand = plugin.getSettingsManager().getClanCommand();
+		String rankCommand = plugin.getSettingsManager().getRankCommand();
+		String bbCommand = plugin.getSettingsManager().getBBCommand();
+		String bankCommand = plugin.getSettingsManager().getBankCommand();
 
-        Command.Type type = null;
+		if (!(args[0].equalsIgnoreCase(clanCommand)
+				|| args[0].equalsIgnoreCase(rankCommand)
+				|| args[0].equalsIgnoreCase(bbCommand)
+				||args[0].equalsIgnoreCase(bbCommand))) {
+			return;
+		}
 
-        if (args[0].equalsIgnoreCase(clanCommand)) {
-            type = Command.Type.CLAN;
-        } else if (args[0].equalsIgnoreCase(rankCommand)) {
-            type = Command.Type.RANK;
-        } else if (args[0].equalsIgnoreCase(bbCommand)) {
-            type = Command.Type.BB;
-        } else if (args[0].equalsIgnoreCase(bankCommand)) {
-            type = Command.Type.BANK;
-        }
 
-        if (type != null) {
-            plugin.getCommandManager().execute(player, args[0], type, Arrays.copyOfRange(args, 1, lenght));
-            event.setCancelled(true);
-        }
+		ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
+        CommandSender cmdSender = new ClanPlayerSender(player, cp);
+
+        plugin.getCommandManager().executeAll(cmdSender, message);
+        event.setCancelled(true);
     }
 }

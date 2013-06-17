@@ -19,6 +19,7 @@
 
 package com.p000ison.dev.simpleclans2.commands.clan.home;
 
+import com.p000ison.dev.commandlib.CallInformation;
 import com.p000ison.dev.simpleclans2.SimpleClans;
 import com.p000ison.dev.simpleclans2.api.chat.ChatBlock;
 import com.p000ison.dev.simpleclans2.api.clan.Clan;
@@ -35,66 +36,45 @@ import java.text.MessageFormat;
 /**
  * @author phaed
  */
+//todo add rank permissions
 public class HomeSetCommand extends GenericPlayerCommand {
 
     public HomeSetCommand(SimpleClans plugin) {
-        super("HomeSet", plugin);
-        setArgumentRange(0, 0);
-        setUsages(Language.getTranslation("usage.home.set"));
+        super("Set home", plugin);
+        setDescription(Language.getTranslation("description.home.set"));
         setIdentifiers(Language.getTranslation("home.set.command"));
-        setPermission("simpleclans.leader.home-set");
+        addPermission("simpleclans.leader.home-set");
+
+        setNeedsClan();
+        setNeedsClanVerified();
+        setNeedsTrusted();
+
+        setNeedsLeader();
     }
 
     @Override
-    public String getMenu(ClanPlayer cp) {
-        if (cp != null && cp.getClan().isVerified()) {
-            return Language.getTranslation("menu.home.set");
-        }
-        return null;
-    }
+    public void execute(Player player, ClanPlayer cp, String[] arguments, CallInformation info) {
+        Clan clan = cp.getClan();
 
-    @Override
-    public void execute(Player player, String[] args) {
+        Location loc = player.getLocation();
 
-        ClanPlayer cp = plugin.getClanPlayerManager().getClanPlayer(player);
 
-        if (cp != null) {
-            Clan clan = cp.getClan();
-
-            if (clan.isVerified()) {
-                if (cp.isTrusted()) {
-
-                    Location loc = player.getLocation();
-
-                    if (cp.isLeader()) {
-                        if (plugin.getPreciousStonesSupport().isTeleportAllowed(player, loc)) {
-                            if (plugin.getSettingsManager().isSetHomeOnlyOnce() && clan.getFlags().getHomeLocation() != null && !player.hasPermission("simpleclans.mod.home")) {
-                                ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("home.base.only.once"));
-                                return;
-                            }
-
-                            if (SimpleClans.hasEconomy() && plugin.getSettingsManager().isPurchaseSetTeleport() && !cp.withdraw(plugin.getSettingsManager().getPurchaseTeleportSetPrice())) {
-                                ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("not.sufficient.money"));
-                                return;
-                            }
-
-                            clan.getFlags().setHomeLocation(loc);
-                            clan.update();
-                            ChatBlock.sendMessage(player, ChatColor.AQUA + MessageFormat.format(Language.getTranslation("hombase.set"), ChatColor.YELLOW + GeneralHelper.locationToString(loc)));
-                        } else {
-                            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("no.teleport"));
-                        }
-                    } else {
-                        ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("no.leader.permissions"));
-                    }
-                } else {
-                    ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("only.trusted.players.can.do.this"));
-                }
-            } else {
-                ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("clan.is.not.verified"));
+        if (getPlugin().getPreciousStonesSupport().isTeleportAllowed(player, loc)) {
+            if (getPlugin().getSettingsManager().isSetHomeOnlyOnce() && clan.getFlags().getHomeLocation() != null && !player.hasPermission("simpleclans.mod.home")) {
+                ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("home.base.only.once"));
+                return;
             }
+
+            if (SimpleClans.hasEconomy() && getPlugin().getSettingsManager().isPurchaseSetTeleport() && !cp.withdraw(getPlugin().getSettingsManager().getPurchaseTeleportSetPrice())) {
+                ChatBlock.sendMessage(player, ChatColor.AQUA + Language.getTranslation("not.sufficient.money"));
+                return;
+            }
+
+            clan.getFlags().setHomeLocation(loc);
+            clan.update();
+            ChatBlock.sendMessage(player, ChatColor.AQUA + MessageFormat.format(Language.getTranslation("hombase.set"), ChatColor.YELLOW + GeneralHelper.locationToString(loc)));
         } else {
-            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("not.a.member.of.any.clan"));
+            ChatBlock.sendMessage(player, ChatColor.RED + Language.getTranslation("no.teleport"));
         }
     }
 }
