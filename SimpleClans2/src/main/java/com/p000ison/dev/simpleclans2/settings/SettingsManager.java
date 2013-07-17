@@ -634,7 +634,7 @@ public class SettingsManager {
 
     public void setGlobalFFForced(boolean globalFF) {
         this.globalFFForced = globalFF;
-        config.getConfigurationSection("clan").set("global-ff-forced", globalFF);
+        config.getConfigurationSection("pvp").set("global-ff-forced", globalFF);
         save();
     }
 
